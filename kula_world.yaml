@@ -151,7 +151,7 @@ segments:
       - [0x59b48, c, libapi/a08]
       - [0x59b58, c, libapi/a12]
       - [0x59b68, c, libspu/spu]
-      - [0x59b68, c, libspu/s_dcb]
+      - [0x5a6a8, c, libspu/s_dcb]
       - [0x5a6d8, c, libspu/s_sr]
       - [0x5a7a8, c, libspu/s_m_util]
       - [0x5a8b8, c, libspu/s_srmp]
