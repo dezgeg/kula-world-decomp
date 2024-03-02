@@ -216,12 +216,11 @@ segments:
       - [0x61314, c, libcard/a80]
       - [0x61324, c, libcard/card]
       - [0x61364, c, libmcrd/userfunc]
-# something missing from here (0x00071d18)
+      - [0x61478, c, libmcrd/bios]
       - [0x61b18, c, libapi/c112]
       - [0x61b28, c, libapi/a09]
       - [0x61b38, c, libcard/init]
       - [0x61c08, c, libapi/pad]
-# double check
       - [0x61f08, c, libapi/a18]
       - [0x61f18, c, libapi/a19]
       - [0x61f28, c, libapi/a20]
