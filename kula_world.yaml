@@ -81,6 +81,7 @@ segments:
       - [0x500d0, c, libgte/geo_00]
       - [0x501a0, c, libgte/geo_01]
       - [0x50240, c, libgte/geo_03]
+# D_00060DA0 are unknown garbage bytes
       - [0x505a0, c, libgte/msc00]
       - [0x50630, c, libgte/msc01]
       - [0x506c0, c, libgte/msc02]
@@ -102,6 +103,7 @@ segments:
       - [0x51670, c, libgte/fgo_05]
       - [0x51810, c, libgte/fgo_06]
       - [0x519b0, c, libgte/smd_06]
+# func_0006248C is false positive (part of bios patch)
       - [0x51be0, c, libgte/patchgte]
       - [0x51cc0, c, libapi/c68]
       - [0x51cd0, c, libapi/a36]
@@ -111,6 +113,7 @@ segments:
       - [0x51e20, c, libapi/a07]
       - [0x51e30, c, libcd/sys]
       - [0x525c0, c, libcd/bios]
+# D_00066F60 are unknown garbage bytes
       - [0x53d20, c, libcd/iso9660]
       - [0x54690, c, libcd/cdread]
       - [0x54e40, c, libcd/cdread2]
@@ -239,7 +242,9 @@ segments:
       - [0x62058, c, libcard/a74]
       - [0x62068, c, libcard/a75]
       - [0x62078, c, libcard/a76]
+# func_000728B4() is false positive (part of bios patch)
       - [0x62088, c, libcard/patch]
+# func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
       - [0x622d8, data, main]
   - [0x93800]
