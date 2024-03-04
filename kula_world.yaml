@@ -63,7 +63,7 @@ segments:
       - [0x4c740, c, libapi/a81]
       - [0x4c750, c, libgpu/sys]
       - [0x4f760, c, libapi/c73]
-      - [0x4f770, c, libapi/a81]
+      - [0x4f770, c, libapi/ktrans]
       - [0x4fe80, c, libgpu/p00]
       - [0x4fec0, c, libgpu/p01]
       - [0x4fee0, c, libgpu/p06]
