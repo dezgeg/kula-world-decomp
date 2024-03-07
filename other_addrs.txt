@@ -1,1 +1,4 @@
 .L0006F120 = 0x0006F120; // type:jtbl_label
+ISO9660_SIGNATURE = 0x00066f60; // size:8
+LIBGTE_SIGNATURE = 0x00060da0; // size:8
+divZeroCounter = 0x00052d4c; // type:u32

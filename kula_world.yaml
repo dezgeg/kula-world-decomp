@@ -16,6 +16,9 @@ options:
 
   o_as_suffix: True
   use_legacy_include_asm: False
+  include_macro_inc: False
+  migrate_rodata_to_functions: False
+  auto_decompile_empty_functions: False
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
