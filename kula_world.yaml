@@ -84,7 +84,7 @@ segments:
       - [0x1978, rodata, libmcrd/libmcrd]
       - [0x1af0, rodata, libmcrd/userfunc]
       - [0x1b0c, c, part1]
-      - [0x10310, c, lethargy]
+      - [0x102c8, c, lethargy]
       - [0x10330, c, part2]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]

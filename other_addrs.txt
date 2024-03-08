@@ -5,3 +5,4 @@ divZeroCounter = 0x00052d4c; // type:u32
 lethargyMode = 0x000a52b8; // type:u32
 gteXScale = 0x000a2e70; // type:u32
 gteYScale = 0x000a2e78; // type:u32
+numCameras = 0x000a2e64; // type:s32

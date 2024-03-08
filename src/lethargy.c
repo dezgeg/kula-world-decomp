@@ -1,8 +1,21 @@
 #include "common.h"
 
+extern int numCameras;
 extern unsigned lethargyMode;
 extern unsigned gteXScale;
 extern unsigned gteYScale;
+
+void EnableLethargy(int enable) {
+    // HACK: don't use GP-relative for these variables
+    __asm__(".extern numCameras,999");
+    if (numCameras < 2) {
+        if (enable == 1) {
+            lethargyMode = enable;
+        } else if (lethargyMode) {
+            lethargyMode = 3;
+        }
+    }
+}
 
 void ResetLethargyEffect() {
     // HACK: don't use GP-relative for these variables
