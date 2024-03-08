@@ -86,6 +86,8 @@ segments:
       - [0x1b0c, c, part1]
       - [0x102c8, c, lethargy]
       - [0x10330, c, part2]
+      - [0x1541c, c, prim]
+      - [0x15464, c, part3]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]
