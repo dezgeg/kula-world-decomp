@@ -98,7 +98,7 @@ INCLUDE_ASM("asm/nonmatchings/main", DrawFruitWidgets);
 
 INCLUDE_ASM("asm/nonmatchings/main", SetLethargy);
 
-#if 0
+#if 1
 void ResetLethargyEffect() {
     extern unsigned lethargyMode;
     extern unsigned gteXScale;
