@@ -6,7 +6,7 @@
 
 extern long D_000A1FA8;
 
-#if 1
+#if 0
 long SetVideoMode(long mode) {
     long prev = D_000A1FA8;
     D_000A1FA8 = mode;
@@ -16,7 +16,7 @@ long SetVideoMode(long mode) {
 INCLUDE_ASM("asm/nonmatchings/libetc/vmode", SetVideoMode);
 #endif
 
-#if 1
+#if 0
 long GetVideoMode(void) { return D_000A1FA8; }
 #else
 INCLUDE_ASM("asm/nonmatchings/libetc/vmode", GetVideoMode);
