@@ -15,6 +15,9 @@ struct inflate_codes_state {int dummy;}; /* for buggy compilers */
 /* Table for deflate from PKZIP's appnote.txt. */
 local uInt border[] = { /* Order of the bit length code lengths */
         16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
+#else
+extern uInt z_border[19];
+#define border z_border
 #endif
 
 /*
