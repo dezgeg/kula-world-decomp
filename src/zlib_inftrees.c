@@ -305,3 +305,36 @@ z_streamp zs;           /* for zalloc function */
   /* Return Z_BUF_ERROR if we were given an incomplete table */
   return y != 0 && g != 1 ? Z_BUF_ERROR : Z_OK;
 }
+
+
+int inflate_trees_bits(c, bb, tb, z)
+uIntf *c;               /* 19 code lengths */
+uIntf *bb;              /* bits tree desired/actual depth */
+inflate_huft * FAR *tb; /* bits tree result */
+z_streamp z;            /* for zfree function */
+{
+  int r;
+#ifndef RODATA_IN_C
+  extern char S_oversubscribed_dynamic_bit_lengths_tree[];
+  extern char S_incomplete_dynamic_bit_lengths_tree[];
+#endif
+
+  r = huft_build(c, 19, 19, (uIntf*)Z_NULL, (uIntf*)Z_NULL, tb, bb, z);
+  if (r == Z_DATA_ERROR)
+#ifdef RODATA_IN_C
+    z->msg = (char*)"oversubscribed dynamic bit lengths tree";
+#else
+    z->msg = (char*)S_oversubscribed_dynamic_bit_lengths_tree;
+#endif
+  else if (r == Z_BUF_ERROR)
+  {
+    inflate_trees_free(*tb, z);
+#ifdef RODATA_IN_C
+    z->msg = (char*)"incomplete dynamic bit lengths tree";
+#else
+    z->msg = (char*)S_incomplete_dynamic_bit_lengths_tree;
+#endif
+    r = Z_DATA_ERROR;
+  }
+  return r;
+}
