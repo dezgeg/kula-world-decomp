@@ -1,0 +1,548 @@
+// "MDEC_rest:bad option(%d)\n"
+S_MDEC_rest_bad_option_FMTd = 0x00011418;
+// "MDEC_in_sync"
+S_MDEC_in_sync = 0x00011434;
+// "MDEC_out_sync"
+S_MDEC_out_sync = 0x00011444;
+// "%s timeout:\n"
+S_FMTs_timeout = 0x00011454;
+// "0123456789ABCDEF"
+S_0123456789ABCDEF = 0x00011468;
+// "bad sjis code 0x%x\n"
+S_bad_sjis_code_0xFMTx = 0x00011508;
+// "$Id: sys.c,v 1.140 1998/01/12 07:52:27 noda Exp $"
+S_Id_sys_c_v_1_140_1998_01_12_07_52_27_noda_Exp = 0x00011528;
+// "ResetGraph:jtb=%08x,env=%08x\n"
+S_ResetGraph_jtb_FMT08x_env_FMT08x = 0x0001155c;
+// "ResetGraph(%d)...\n"
+S_ResetGraph_FMTd = 0x0001157c;
+// "SetGraphDebug:level:%d,type:%d reverse:%d\n"
+S_SetGraphDebug_level_FMTd_type_FMTd_reverse_FMTd = 0x00011590;
+// "SetGrapQue(%d)...\n"
+S_SetGrapQue_FMTd = 0x000115bc;
+// "DrawSyncCallback(%08x)...\n"
+S_DrawSyncCallback_FMT08x = 0x000115d0;
+// "SetDispMask(%d)...\n"
+S_SetDispMask_FMTd = 0x000115ec;
+// "DrawSync(%d)...\n"
+S_DrawSync_FMTd = 0x00011600;
+// "%s:bad RECT"
+S_FMTs_bad_RECT = 0x00011614;
+// "(%d,%d)-(%d,%d)\n"
+S_FMTd_FMTd_FMTd_FMTd = 0x00011620;
+// "ClearImage"
+S_ClearImage = 0x00011638;
+// "ClearImage2"
+S_ClearImage2 = 0x00011644;
+// "LoadImage"
+S_LoadImage = 0x00011650;
+// "StoreImage"
+S_StoreImage = 0x0001165c;
+// "MoveImage"
+S_MoveImage = 0x00011668;
+// "ClearOTag(%08x,%d)...\n"
+S_ClearOTag_FMT08x_FMTd = 0x00011674;
+// "ClearOTagR(%08x,%d)...\n"
+S_ClearOTagR_FMT08x_FMTd = 0x0001168c;
+// "DrawOTag(%08x)...\n"
+S_DrawOTag_FMT08x = 0x000116a4;
+// "PutDrawEnv(%08x)...\n"
+S_PutDrawEnv_FMT08x = 0x000116b8;
+// "DrawOTagEnv(%08x,&08x)...\n"
+S_DrawOTagEnv_FMT08x_08x = 0x000116d0;
+// "PutDispEnv(%08x)...\n"
+S_PutDispEnv_FMT08x = 0x000116ec;
+// "GPU timeout:que=%d,stat=%08x,chcr=%08x,madr=%08x\n"
+S_GPU_timeout_que_FMTd_stat_FMT08x_chcr_FMT08x_madr_FMT08x = 0x00011704;
+// "LoadImage2"
+S_LoadImage2 = 0x00011738;
+// "bad hankaku code 0x%x\n"
+S_bad_hankaku_code_0xFMTx = 0x00011764;
+// "CdInit: Init failed\n"
+S_CdInit_Init_failed = 0x00011788;
+// "none"
+S_none = 0x000117a8;
+// "CdlReadS"
+S_CdlReadS = 0x000117b8;
+// "CdlSeekP"
+S_CdlSeekP = 0x000117c4;
+// "CdlSeekL"
+S_CdlSeekL = 0x000117d0;
+// "CdlGetTD"
+S_CdlGetTD = 0x000117dc;
+// "CdlGetTN"
+S_CdlGetTN = 0x000117e8;
+// "CdlGetlocP"
+S_CdlGetlocP = 0x000117f4;
+// "CdlGetlocL"
+S_CdlGetlocL = 0x00011800;
+// "CdlSetmode"
+S_CdlSetmode = 0x00011810;
+// "CdlSetfilter"
+S_CdlSetfilter = 0x0001181c;
+// "CdlDemute"
+S_CdlDemute = 0x0001182c;
+// "CdlMute"
+S_CdlMute = 0x00011838;
+// "CdlReset"
+S_CdlReset = 0x00011840;
+// "CdlPause"
+S_CdlPause = 0x0001184c;
+// "CdlStop"
+S_CdlStop = 0x00011858;
+// "CdlStandby"
+S_CdlStandby = 0x00011860;
+// "CdlReadN"
+S_CdlReadN = 0x0001186c;
+// "CdlBackward"
+S_CdlBackward = 0x00011878;
+// "CdlForward"
+S_CdlForward = 0x00011884;
+// "CdlPlay"
+S_CdlPlay = 0x00011890;
+// "CdlSetloc"
+S_CdlSetloc = 0x00011898;
+// "CdlNop"
+S_CdlNop = 0x000118a4;
+// "CdlSync"
+S_CdlSync = 0x000118ac;
+// "DiskError"
+S_DiskError = 0x000118b4;
+// "DataEnd"
+S_DataEnd = 0x000118c0;
+// "Acknowledge"
+S_Acknowledge = 0x000118c8;
+// "Complete"
+S_Complete = 0x000118d4;
+// "DataReady"
+S_DataReady = 0x000118e0;
+// "NoIntr"
+S_NoIntr = 0x000118ec;
+// "CD timeout: "
+S_CD_timeout = 0x000118f4;
+// "%s:(%s) Sync=%s, Ready=%s\n"
+S_FMTs_FMTs_Sync_FMTs_Ready_FMTs = 0x00011904;
+// "DiskError: "
+S_DiskError_2 = 0x00011920;
+// "com=%s,code=(%02x:%02x)\n"
+S_com_FMTs_code_FMT02x_FMT02x = 0x0001192c;
+// "CDROM: unknown intr"
+S_CDROM_unknown_intr = 0x00011948;
+// "(%d)\n"
+S_FMTd = 0x0001195c;
+// "CD_sync"
+S_CD_sync = 0x0001197c;
+// "CD_ready"
+S_CD_ready = 0x00011984;
+// "%s...\n"
+S_FMTs = 0x00011990;
+// "%s: no param\n"
+S_FMTs_no_param = 0x00011998;
+// "CD_cw"
+S_CD_cw = 0x000119a8;
+// "$Id: bios.c,v 1.86 1997/03/28 07:42:42 makoto Exp $"
+S_Id_bios_c_v_1_86_1997_03_28_07_42_42_makoto_Exp = 0x000119b0;
+// "CD_init:"
+S_CD_init = 0x000119e4;
+// "addr=%08x\n"
+S_addr_FMT08x = 0x000119f0;
+// "CD_datasync"
+S_CD_datasync = 0x000119fc;
+// "%s: path level (%d) error\n"
+S_FMTs_path_level_FMTd_error = 0x00011a08;
+// "%s: dir was not found\n"
+S_FMTs_dir_was_not_found = 0x00011a24;
+// "CdSearchFile: disc error\n"
+S_CdSearchFile_disc_error = 0x00011a3c;
+// "CdSearchFile: searching %s...\n"
+S_CdSearchFile_searching_FMTs = 0x00011a58;
+// "%s:  found\n"
+S_FMTs_found = 0x00011a78;
+// "%s: not found\n"
+S_FMTs_not_found = 0x00011a84;
+// "CD_newmedia: Read error in cd_read(PVD)\n"
+S_CD_newmedia_Read_error_in_cd_read_PVD = 0x00011a94;
+// "CD001"
+S_CD001 = 0x00011ac0;
+// "CD_newmedia: Disc format error in cd_read(PVD)\n"
+S_CD_newmedia_Disc_format_error_in_cd_read_PVD = 0x00011ac8;
+// "CD_newmedia: Read error (PT:%08x)\n"
+S_CD_newmedia_Read_error_PT_FMT08x = 0x00011af8;
+// "CD_newmedia: sarching dir..\n"
+S_CD_newmedia_sarching_dir = 0x00011b1c;
+// "\t%08x,%04x,%04x,%s\n"
+S_tFMT08x_FMT04x_FMT04x_FMTs = 0x00011b3c;
+// "CD_newmedia: %d dir entries found\n"
+S_CD_newmedia_FMTd_dir_entries_found = 0x00011b50;
+// "CD_cachefile: dir not found\n"
+S_CD_cachefile_dir_not_found = 0x00011b74;
+// "CD_cachefile: searching...\n"
+S_CD_cachefile_searching = 0x00011b94;
+// "\t(%02x:%02x:%02x) %8d %s\n"
+S_t_FMT02x_FMT02x_FMT02x_FMT8d_FMTs = 0x00011bb8;
+// "CD_cachefile: %d files found\n"
+S_CD_cachefile_FMTd_files_found = 0x00011bd4;
+// "CdRead: sector error\n"
+S_CdRead_sector_error = 0x00011bf8;
+// "CdRead: Shell open...\n"
+S_CdRead_Shell_open = 0x00011c10;
+// "CdRead: retry...\n"
+S_CdRead_retry = 0x00011c28;
+// "DMA STATUS ERROR %x\n"
+S_DMA_STATUS_ERROR_FMTx = 0x00011c48;
+// "VSync: timeout\n"
+S_VSync_timeout = 0x00011c68;
+// "$Id: intr.c,v 1.76 1997/02/12 12:45:05 makoto Exp $"
+S_Id_intr_c_v_1_76_1997_02_12_12_45_05_makoto_Exp = 0x00011c78;
+// "unexpected interrupt(%04x)\n"
+S_unexpected_interrupt_FMT04x = 0x00011cac;
+// "intr timeout(%04x:%04x)\n"
+S_intr_timeout_FMT04x_FMT04x = 0x00011cc8;
+// "DMA bus error: code=%08x\n"
+S_DMA_bus_error_code_FMT08x = 0x00011ce8;
+// "MADR[%d]=%08x\n"
+S_MADR_FMTd_FMT08x = 0x00011d04;
+// "SPU:T/O [%s]\n"
+S_SPU_T_O_FMTs = 0x00011d38;
+// "wait (reset)"
+S_wait_reset = 0x00011d48;
+// "wait (wrdy H -> L)"
+S_wait_wrdy_H_L = 0x00011d58;
+// "wait (dmaf clear/W)"
+S_wait_dmaf_clear_W = 0x00011d6c;
+// "0123456789abcdef"
+S_0123456789abcdef = 0x00011e08;
+// "(null)"
+S_null = 0x00011e1c;
+// "0123456789ABCDEF"
+S_0123456789ABCDEF_2 = 0x00011e24;
+// "0123456789ABCDEF"
+S_0123456789ABCDEF_3 = 0x00012028;
+// "0123456789abcdef"
+S_0123456789abcdef_2 = 0x0001203c;
+// "<NULL>"
+S_NULL = 0x00012108;
+// "SIO console"
+S_SIO_console = 0x0001213c;
+// "tty00:"
+S_tty00 = 0x0001214c;
+// "Access Denied. : event multiple open\n"
+S_Access_Denied_event_multiple_open = 0x00012178;
+// "Access Denied. : file already open.\n"
+S_Access_Denied_file_already_open = 0x00012220;
+// "Access Denied. : file not open.\n"
+S_Access_Denied_file_not_open = 0x00012248;
+// "Access Denied. : invalid data size align\n"
+S_Access_Denied_invalid_data_size_align = 0x0001226c;
+// "Access Denied. : invalid offset value align\n"
+S_Access_Denied_invalid_offset_value_align = 0x00012298;
+// "Access Denied. : system busy\n"
+S_Access_Denied_system_busy = 0x000122c8;
+// "bu00:"
+S_bu00 = 0x000122e8;
+// "libmcrd: event overflow\n"
+S_libmcrd_event_overflow = 0x000122f0;
+// " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}-~"
+S_SPECIAL_CHARS = 0x00073278;
+// "MAX_SORT_OBJ too small!"
+S_MAX_SORT_OBJ_too_small = 0x00099e84;
+// "ot_obj overflow! MRLEN_OBJ too small!"
+S_ot_obj_overflow_MRLEN_OBJ_too_small = 0x00099ea0;
+// "Library Programs (c) 1993-1997 Sony Computer Entertainment Inc., All Rights Reserved."
+S_Library_Programs_c_1993_1997_Sony_Computer_Entertainment_Inc_All_Rights_Reserved = 0x000a0e48;
+// "Fatal error in jens 2d-eng:\n\n"
+S_Fatal_error_in_jens_2d_eng = 0x000a2abc;
+// "1.0.4"
+S_1_0_4 = 0x000a2ae8;
+// "menugfx too high"
+S_menugfx_too_high = 0x000a2b40;
+// "menugfx nr too big"
+S_menugfx_nr_too_big = 0x000a2b54;
+// "sign too high"
+S_sign_too_high = 0x000a2b68;
+// "sign nr too big"
+S_sign_nr_too_big = 0x000a2b78;
+// "rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n"
+S_rescue_session_saved_as_psx_cube_pad_rescue_pad = 0x000a2f0c;
+// "to replay:\n"
+S_to_replay = 0x000a2f40;
+// "replay!\n\n"
+S_replay = 0x000a2f4c;
+// "%x\n"
+S_FMTx = 0x000a2f58;
+// "1.0.4"
+S_1_0_4_2 = 0x000a2f5c;
+// "NO CONTROLLER!\n"
+S_NO_CONTROLLER = 0x000a2f6c;
+// "DEMO MODE\n"
+S_DEMO_MODE = 0x000a2f7c;
+// "recived %d\n"
+S_recived_FMTd = 0x000a2f88;
+// "of %d bytes\n"
+S_of_FMTd_bytes = 0x000a2f94;
+// "BESCES-01000KULA"
+S_BESCES_01000KULA = 0x000a2fb4;
+// "LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n"
+S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD = 0x000a2fd4;
+// "%d \n"
+S_FMTd_2 = 0x000a3000;
+// "READING DATA\n\nDO NOT REMOVE MEMORY CARD\n"
+S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3008;
+// "SAVING\n\nDO NOT REMOVE MEMORY CARD\n"
+S_SAVING_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3034;
+// "CHECKING MEMORY CARD\n\nPLEASE WAIT\n"
+S_CHECKING_MEMORY_CARD_PLEASE_WAIT = 0x000a3058;
+// "REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n"
+S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD = 0x000a307c;
+// "*XYZ"
+S_XYZ = 0x000a30b0;
+// "MEMORY CARD IS FULL.\nYOU MUST REPLACE ANOTHER FILE\n"
+S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE = 0x000a30b8;
+// "NAME:\n"
+S_NAME = 0x000a30ec;
+// "SIZE: %d BLOCK\n"
+S_SIZE_FMTd_BLOCK = 0x000a30f4;
+// "SIZE: %d BLOCKS\n"
+S_SIZE_FMTd_BLOCKS = 0x000a3104;
+// "PLEASE SELECT FILE TO REPLACE\n"
+S_PLEASE_SELECT_FILE_TO_REPLACE = 0x000a3118;
+// "PRESS g TO CONTINUE, e TO CANCEL\n"
+S_PRESS_g_TO_CONTINUE_e_TO_CANCEL = 0x000a3138;
+// "OR h TO RE-READ ANOTHER MEMORY CARD.\n"
+S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD = 0x000a315c;
+// "THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n"
+S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO = 0x000a3184;
+// "FORMATTING MEMORY CARD\n\nPLEASE WAIT\n"
+S_FORMATTING_MEMORY_CARD_PLEASE_WAIT = 0x000a31c8;
+// "KULA WORLD"
+S_KULA_WORLD = 0x000a31f0;
+// "hid"
+S_hid = 0x000a323c;
+// "bon"
+S_bon = 0x000a3240;
+// "xxx"
+S_xxx = 0x000a3244;
+// "hel"
+S_hel = 0x000a3248;
+// "mar"
+S_mar = 0x000a324c;
+// "haz"
+S_haz = 0x000a3250;
+// "atl"
+S_atl = 0x000a3254;
+// "fie"
+S_fie = 0x000a3258;
+// "cow"
+S_cow = 0x000a325c;
+// "arc"
+S_arc = 0x000a3260;
+// "inc"
+S_inc = 0x000a3264;
+// "hil"
+S_hil = 0x000a3268;
+// "hir"
+S_hir = 0x000a326c;
+// "%s"
+S_FMTs_2 = 0x000a32b8;
+// "%s%s"
+S_FMTsFMTs = 0x000a32bc;
+// "can not create file:\n%s\n"
+S_can_not_create_file_FMTs = 0x000a32c4;
+// "error closing file:\n%s\n"
+S_error_closing_file_FMTs = 0x000a32e0;
+// "\\psx\\cube\\pad\\%d.pad"
+S_psx_cube_pad_FMTd_pad = 0x000a32f8;
+// "\\psx\\cube\\pad\\rescue.pad"
+S_psx_cube_pad_rescue_pad = 0x000a3310;
+// "%d \n"
+S_FMTd_3 = 0x000a3358;
+// "%d\n"
+S_FMTd_4 = 0x000a3360;
+// "%d"
+S_FMTd_5 = 0x000a3368;
+// "-"
+S_ = 0x000a3378;
+// "+"
+S__2 = 0x000a337c;
+// "%d:%d%d:%d%d\n"
+S_FMTd_FMTdFMTd_FMTdFMTd = 0x000a3380;
+// "%d:%d%d\n"
+S_FMTd_FMTdFMTd = 0x000a3390;
+// "%d \n%d \n"
+S_FMTd_FMTd = 0x000a339c;
+// "-%d \n"
+S_FMTd_6 = 0x000a33a8;
+// "-:--\n"
+S__3 = 0x000a33b0;
+// "1\n"
+S_1 = 0x000a33b8;
+// "2\n"
+S_2 = 0x000a33bc;
+// "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-<>"
+S_ABCDEFGHIJKLMNOPQRSTUVWXYZ = 0x000a33c0;
+// "LEIF"
+S_LEIF = 0x000a33e0;
+// "SAVE 1"
+S_SAVE_1 = 0x000a33e8;
+// "SAVE 2"
+S_SAVE_2 = 0x000a33f0;
+// "SAVE 3"
+S_SAVE_3 = 0x000a33f8;
+// "SAVE 4"
+S_SAVE_4 = 0x000a3400;
+// "PLAYER"
+S_PLAYER = 0x000a3408;
+// "\n"
+S__4 = 0x000a3414;
+// "-           -\n"
+S__5 = 0x000a3418;
+// "%s\n"
+S_FMTs_3 = 0x000a3428;
+// "SCORE\n"
+S_SCORE = 0x000a342c;
+// "TIMETRIAL\n"
+S_TIMETRIAL = 0x000a3434;
+// "LEVEL\n"
+S_LEVEL = 0x000a3440;
+// "FRUITS\n"
+S_FRUITS = 0x000a3448;
+// "TIME\n"
+S_TIME = 0x000a3450;
+// "\nCONGRATULATIONS,\nPLEASE WRITE YOUR SIGNATURE\n\n"
+S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE = 0x000a3458;
+// "%c\n"
+S_FMTc = 0x000a3488;
+// "\\HIRO\\COPYCAT"
+S_HIRO_COPYCAT = 0x000a348c;
+// "\\HELL\\HELL"
+S_HELL_HELL = 0x000a349c;
+// "\\MARS\\MARS"
+S_MARS_MARS = 0x000a34a8;
+// "\\HAZE\\HAZE"
+S_HAZE_HAZE = 0x000a34b4;
+// "\\ATLANT\\ATLANT"
+S_ATLANT_ATLANT = 0x000a34c0;
+// "\\FIELD\\FIELD"
+S_FIELD_FIELD = 0x000a34d0;
+// "\\COWBOY\\COWBOY"
+S_COWBOY_COWBOY = 0x000a34e0;
+// "\\ARCTIC\\ARCTIC"
+S_ARCTIC_ARCTIC = 0x000a34f0;
+// "\\INCA\\INCA"
+S_INCA_INCA = 0x000a3500;
+// "\\HILLS\\HILLS"
+S_HILLS_HILLS = 0x000a350c;
+// "\\HIRO\\HIRO"
+S_HIRO_HIRO = 0x000a351c;
+// ".PAK;1"
+S_PAK_1 = 0x000a352a;
+// ".GGI;1"
+S_GGI_1 = 0x000a3534;
+// ".PAK;1"
+S_PAK_1_2 = 0x000a353c;
+// ".SFX;1"
+S_SFX_1 = 0x000a3544;
+// ".TGI;1"
+S_TGI_1 = 0x000a354c;
+// "\\KULA\\KULA_PIC.PAK;1"
+S_KULA_KULA_PIC_PAK_1 = 0x000a3554;
+// "\\XA\\MUSIC_0.XA;1"
+S_XA_MUSIC_0_XA_1 = 0x000a3570;
+// "\\XA\\MUSIC_2.XA;1"
+S_XA_MUSIC_2_XA_1 = 0x000a3584;
+// "\\XA\\MUSIC_1.XA;1"
+S_XA_MUSIC_1_XA_1 = 0x000a3598;
+// "\\SAMPLE.XA;1"
+S_SAMPLE_XA_1 = 0x000a35b8;
+// "\\XA\\MUSIC_3.XA;1"
+S_XA_MUSIC_3_XA_1 = 0x000a35c8;
+// "File error:\n\n"
+S_File_error = 0x000a35dc;
+// "could not find "
+S_could_not_find = 0x000a35ec;
+// "seek error "
+S_seek_error = 0x000a35fc;
+// "read error "
+S_read_error = 0x000a3608;
+// "1.0.4"
+S_1_0_4_3 = 0x000a3614;
+// "\\HIRO\\WARNING.TIM;1"
+S_HIRO_WARNING_TIM_1 = 0x000a3624;
+// "could not find music \n"
+S_could_not_find_music = 0x000a363c;
+// "could not start playing \n"
+S_could_not_start_playing = 0x000a3654;
+// "bonus song"
+S_bonus_song = 0x000a3670;
+// "resumed song after bonus"
+S_resumed_song_after_bonus = 0x000a367c;
+// "CD INFO\nSTARTPOS %d\nENDPOS %d\nCURPOS %d\n"
+S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd = 0x000a3698;
+// "\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n"
+S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd = 0x000a36c4;
+// "\\XA\\FINAL.STR;1"
+S_XA_FINAL_STR_1 = 0x000a3710;
+// "file not found\n"
+S_file_not_found = 0x000a3734;
+// "time out in strNext() %d\n"
+S_time_out_in_strNext_FMTd = 0x000a3744;
+// "time out in decoding !\n"
+S_time_out_in_decoding = 0x000a376c;
+// "invalid block type"
+S_invalid_block_type = 0x000a3784;
+// "invalid stored block lengths"
+S_invalid_stored_block_lengths = 0x000a3798;
+// "too many length or distance symbols"
+S_too_many_length_or_distance_symbols = 0x000a37b8;
+// "invalid bit length repeat"
+S_invalid_bit_length_repeat = 0x000a37dc;
+// "unknown compression method"
+S_unknown_compression_method = 0x000a37f8;
+// "invalid window size"
+S_invalid_window_size = 0x000a3814;
+// "incorrect header check"
+S_incorrect_header_check = 0x000a3828;
+// "need dictionary"
+S_need_dictionary = 0x000a3840;
+// "incorrect data check"
+S_incorrect_data_check = 0x000a3850;
+// " inflate 1.0.4 Copyright 1995-1996 Mark Adler "
+S_inflate_1_0_4_Copyright_1995_1996_Mark_Adler = 0x000a3868;
+// "oversubscribed dynamic bit lengths tree"
+S_oversubscribed_dynamic_bit_lengths_tree = 0x000a3a80;
+// "incomplete dynamic bit lengths tree"
+S_incomplete_dynamic_bit_lengths_tree = 0x000a3aa8;
+// "oversubscribed literal/length tree"
+S_oversubscribed_literal_length_tree = 0x000a3acc;
+// "incomplete literal/length tree"
+S_incomplete_literal_length_tree = 0x000a3af0;
+// "invalid literal/length code"
+S_invalid_literal_length_code = 0x000a3b14;
+// "invalid distance code"
+S_invalid_distance_code = 0x000a3b30;
+// "invalid distance code"
+S_invalid_distance_code_2 = 0x000a3b8c;
+// "invalid literal/length code"
+S_invalid_literal_length_code_2 = 0x000a3ba4;
+// "incompatible version"
+S_incompatible_version = 0x000a3be8;
+// "buffer error"
+S_buffer_error = 0x000a3c00;
+// "insufficient memory"
+S_insufficient_memory = 0x000a3c10;
+// "data error"
+S_data_error = 0x000a3c24;
+// "stream error"
+S_stream_error = 0x000a3c30;
+// "file error"
+S_file_error = 0x000a3c40;
+// "stream end"
+S_stream_end = 0x000a3c50;
+// "need dictionary"
+S_need_dictionary_2 = 0x000a3c5c;
+// "1.0.4"
+S_1_0_4_4 = 0x000a3c6c;
+// "Alloc error:\n\n"
+S_Alloc_error = 0x000a3c74;
+// "error in alloc, SIZE_ALLOC too small!\n"
+S_error_in_alloc_SIZE_ALLOC_too_small = 0x000a3c88;
