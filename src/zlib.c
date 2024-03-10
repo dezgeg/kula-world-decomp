@@ -1,4 +1,11 @@
-#include "common.h"
+/* adler32.c -- compute the Adler-32 checksum of a data stream
+ * Copyright (C) 1995-1996 Mark Adler
+ * For conditions of distribution and use, see copyright notice in zlib.h
+ */
+
+/* $Id: adler32.c,v 1.10 1996/05/22 11:52:18 me Exp $ */
+
+#include "zlib.h"
 
 #define BASE 65521L /* largest prime smaller than 65536 */
 #define NMAX 5552
@@ -11,28 +18,28 @@
 #define DO16(buf)   DO8(buf,0); DO8(buf,8);
 
 /* ========================================================================= */
-unsigned long adler32(adler, buf, len)
-    unsigned long adler;
-    const char  *buf;
-    unsigned int len;
+uLong adler32(adler, buf, len)
+    uLong adler;
+    const Bytef *buf;
+    uInt len;
 {
     unsigned long s1 = adler & 0xffff;
     unsigned long s2 = (adler >> 16) & 0xffff;
     int k;
 
-    if (buf == 0) return 1L;
+    if (buf == Z_NULL) return 1L;
 
     while (len > 0) {
         k = len < NMAX ? len : NMAX;
         len -= k;
         while (k >= 16) {
             DO16(buf);
-            buf += 16;
+	    buf += 16;
             k -= 16;
         }
         if (k != 0) do {
             s1 += *buf++;
-            s2 += s1;
+	    s2 += s1;
         } while (--k);
         s1 %= BASE;
         s2 %= BASE;
