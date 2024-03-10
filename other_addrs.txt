@@ -11,3 +11,7 @@ copyrightSprite = 0x000a3fd8; // size:56
 textures = 0x000f9d18;
 z_border = 0x00099f9c;
 inflate_mask = 0x000a3b48;
+cplens = 0x000a3898;
+cplext = 0x000a3914;
+cpdist = 0x000a3990;
+cpdext = 0x000a3a08;

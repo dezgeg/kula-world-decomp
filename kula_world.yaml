@@ -99,7 +99,7 @@ segments:
       - [0x485a8, c, part6]
       - [0x48b3c, c, zlib_inflate2]
       - [0x48db0, c, zlib_inftrees]
-      - [0x49434, c, part7]
+      - [0x495b4, c, part7]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]
