@@ -42,3 +42,13 @@ uLongf *c;
   Trace((stderr, "inflate:   blocks freed\n"));
   return Z_OK;
 }
+
+
+void inflate_set_dictionary(s, d, n)
+inflate_blocks_statef *s;
+const Bytef *d;
+uInt  n;
+{
+  zmemcpy((charf *)s->window, d, n);
+  s->read = s->write = s->window + n;
+}
