@@ -93,6 +93,8 @@ segments:
       - [0x47034, c, zlib_adler32]
       - [0x47218, c, zlib_infblock]
       - [0x47468, c, part5]
+      - [0x480c0, c, zlib_infblock2]
+      - [0x481d4, c, part6]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]
