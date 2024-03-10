@@ -91,7 +91,7 @@ segments:
       - [0x1541c, c, prim]
       - [0x154a8, c, part4]
       - [0x47034, c, zlib]
-      - [0x472fc, c, part5]
+      - [0x47468, c, part5]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]
