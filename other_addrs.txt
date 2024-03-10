@@ -6,3 +6,6 @@ lethargyMode = 0x000a52b8; // type:u32
 gteXScale = 0x000a2e70; // type:u32
 gteYScale = 0x000a2e78; // type:u32
 numCameras = 0x000a2e64; // type:s32
+firstGuiTexture = 0x000a52c4; // type:u32
+copyrightSprite = 0x000a3fd8; // size:56
+textures = 0x000f9d18;
