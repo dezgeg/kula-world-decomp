@@ -95,7 +95,7 @@ segments:
       - [0x47468, c, part5]
       - [0x480c0, c, zlib_infblock2]
       - [0x48220, c, zlib_inflate]
-      - [0x48554, c, part6]
+      - [0x485a8, c, part6]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]

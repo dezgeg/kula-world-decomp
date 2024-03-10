@@ -135,3 +135,16 @@ int stream_size;
   inflateReset(z);
   return Z_OK;
 }
+
+
+int inflateInit_(z, version, stream_size)
+z_streamp z;
+const char *version;
+int stream_size;
+{
+  /* this is clearly a local modification */
+  extern void z_init_kula_allocator(void);
+  z_init_kula_allocator();
+
+  return inflateInit2_(z, DEF_WBITS, version, stream_size);
+}
