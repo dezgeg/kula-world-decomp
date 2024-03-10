@@ -5,6 +5,12 @@
 
 /* $Id: adler32.c,v 1.10 1996/05/22 11:52:18 me Exp $ */
 
+#include "zutil.h"
+#include "infblock.h"
+#include "inftrees.h"
+#include "infcodes.h"
+#include "infutil.h"
+
 #include "zlib.h"
 
 #define BASE 65521L /* largest prime smaller than 65536 */
@@ -45,4 +51,30 @@ uLong adler32(adler, buf, len)
         s2 %= BASE;
     }
     return (s2 << 16) | s1;
+}
+
+/* infblock.c */
+
+void inflate_blocks_reset(s, z, c)
+inflate_blocks_statef *s;
+z_streamp z;
+uLongf *c;
+{
+  if (s->checkfn != Z_NULL)
+    *c = s->check;
+  if (s->mode == BTREE || s->mode == DTREE)
+    ZFREE(z, s->sub.trees.blens);
+  if (s->mode == CODES)
+  {
+    inflate_codes_free(s->sub.decode.codes, z);
+    inflate_trees_free(s->sub.decode.td, z);
+    inflate_trees_free(s->sub.decode.tl, z);
+  }
+  s->mode = TYPE;
+  s->bitk = 0;
+  s->bitb = 0;
+  s->read = s->write = s->window;
+  if (s->checkfn != Z_NULL)
+    z->adler = s->check = (*s->checkfn)(0L, Z_NULL, 0);
+  Trace((stderr, "inflate:   blocks reset\n"));
 }
