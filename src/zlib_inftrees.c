@@ -408,3 +408,22 @@ z_streamp z;            /* for zfree function */
   /* done */
   return Z_OK;
 }
+
+
+/* build fixed tables only once--keep them here */
+#define FIXEDH 530      /* number of hufts used by fixed tables */
+#ifdef DATA_IN_C
+local int fixed_built = 0;
+local inflate_huft fixed_mem[FIXEDH];
+local uInt fixed_bl;
+local uInt fixed_bd;
+local inflate_huft *fixed_tl;
+local inflate_huft *fixed_td;
+#else
+extern int fixed_built;
+extern inflate_huft fixed_mem[FIXEDH];
+extern uInt fixed_bl;
+//extern uInt fixed_bd;
+//extern inflate_huft *fixed_tl;
+//extern inflate_huft *fixed_td;
+#endif
