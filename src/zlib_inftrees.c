@@ -423,7 +423,7 @@ local inflate_huft *fixed_td;
 extern int fixed_built;
 extern inflate_huft fixed_mem[FIXEDH];
 extern uInt fixed_bl;
-//extern uInt fixed_bd;
-//extern inflate_huft *fixed_tl;
-//extern inflate_huft *fixed_td;
+extern uInt fixed_bd;
+extern inflate_huft *fixed_tl;
+extern inflate_huft *fixed_td;
 #endif
