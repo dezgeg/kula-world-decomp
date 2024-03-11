@@ -102,6 +102,8 @@ segments:
       - [0x495b4, c, part7]
       - [0x49854, c, zlib_infcodes]
       - [0x498d0, c, part8]
+      - [0x4a110, c, zlib_infutil]
+      - [0x4a2b4, c, part9]
       - [0x4a950, c, libapi/a95]
       - [0x4a960, c, libpress/libpress]
       - [0x4aff0, c, libpress/vlc_c]
