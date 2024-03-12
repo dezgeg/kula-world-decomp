@@ -69,3 +69,34 @@ void* zcallocUnused(unsigned num, int size) {
 
   return ret;
 }
+
+void* zcalloc(void* opaque, unsigned num, int size) {
+  char* ret = kulaZAllocatorPointer;
+  char* next = kulaZAllocatorPointer + num * size;
+  int i;
+
+  kulaZAllocatorPointer = next;
+  if ((unsigned)next > 0x1fe000) {
+    VSyncCallback(NULL);
+    SetupDisplay(1,128,0,0,0,0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    FntPrint(S_Alloc_error);
+    FntPrint(S_error_in_alloc_SIZE_ALLOC_too_small);
+    FntFlush(-1);
+    whichDrawDispEnv = 1;
+    PutDrawAndDispEnvs();
+    while(1)
+        ;
+  }
+
+  for(i = 0; i < (int)num * size; i++)
+      ret[i] = 0;
+
+  return ret;
+}
+
+void zcfree(void* ptr) {
+}
