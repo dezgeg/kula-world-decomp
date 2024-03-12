@@ -22,3 +22,6 @@ fixed_tl = 0x000a4cd8;
 fixed_td = 0x000a4cdc;
 fixed_mem = 0x000bc598;
 whichDrawDispEnv = 0x000a52bc;
+kulaZAllocatorPointer = 0x000a4ce4;
+kulaZAllocatorHeapUsage = 0x000a3c84;
+kulaZAllocatorHeap = 0x0001f2000;
