@@ -3,7 +3,12 @@
 #include <libetc.h>
 
 extern char S_Alloc_error[];
+extern char S_error_in_alloc_SIZE_ALLOC_too_small[];
+
 extern int whichDrawDispEnv;
+extern void* kulaZAllocatorPointer;
+extern long kulaZAllocatorHeapUsage;
+extern char kulaZAllocatorHeap[];
 
 void z_error(const char* msg) {
   __asm__(".extern whichDrawDispEnv,999"); // hack
@@ -22,10 +27,6 @@ void z_error(const char* msg) {
       ;
 }
 
-extern void* kulaZAllocatorPointer;
-extern long kulaZAllocatorHeapUsage;
-extern char kulaZAllocatorHeap[];
-
 void zcallocInit(void) {
     __asm__(
         "\t.extern kulaZAllocatorHeapUsage, 4\n"
@@ -39,4 +40,32 @@ void zcallocInit(void) {
         "\taddu       $v0,$v0,$a0\n"
         "\tsw         $v0,kulaZAllocatorHeapUsage\n"
     );
+}
+
+void* zcallocUnused(unsigned num, int size) {
+  char* ret = kulaZAllocatorPointer;
+  char* next = kulaZAllocatorPointer + num * size;
+  int i;
+
+  kulaZAllocatorPointer = next;
+  if ((unsigned)next > 0x1fe000) {
+    VSyncCallback(NULL);
+    SetupDisplay(1,128,0,0,0,0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    FntPrint(S_Alloc_error);
+    FntPrint(S_error_in_alloc_SIZE_ALLOC_too_small);
+    FntFlush(-1);
+    whichDrawDispEnv = 1;
+    PutDrawAndDispEnvs();
+    while(1)
+        ;
+  }
+
+  for(i = 0; i < (int)num * size; i++)
+      ret[i] = 0;
+
+  return ret;
 }
