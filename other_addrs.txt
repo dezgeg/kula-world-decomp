@@ -21,3 +21,4 @@ fixed_bd = 0x000a4cd4;
 fixed_tl = 0x000a4cd8;
 fixed_td = 0x000a4cdc;
 fixed_mem = 0x000bc598;
+whichDrawDispEnv = 0x000a52bc;
