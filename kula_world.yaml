@@ -88,7 +88,7 @@ segments:
       - [0x102c8, c, lethargy]
       - [0x10330, c, part2]
       - [0x147b8, c, gui]
-      - [0x14960, c, part3]
+      - [0x14b0c, c, part3]
       - [0x1541c, c, prim]
       - [0x154a8, c, part4]
       - [0x47034, c, zlib_adler32]

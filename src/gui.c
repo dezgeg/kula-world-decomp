@@ -1,9 +1,9 @@
 #include "common.h"
 
 extern unsigned firstGuiTexture;
-extern TSprite copyrightSprite[2];
 extern Texture textures[];
 
+extern TSprite copyrightSprite[2];
 extern TSprite copyrightSprite_[2]; // hack to make gcc not create induction variable of sprt
 __asm__(".set copyrightSprite_, copyrightSprite");
 
@@ -25,5 +25,33 @@ void InitCopyrightSprite(void)
         copyrightSprite[i].sprt.v0 = textures[firstGuiTexture + 17].v;
         copyrightSprite[i].sprt.w = textures[firstGuiTexture + 17].w;
         copyrightSprite[i].sprt.h = textures[firstGuiTexture + 17].h;
+    }
+}
+
+extern TSprite deniedSprite[2];
+extern TSprite deniedSprite_[2]; // hack to make gcc not create induction variable of sprt
+__asm__(".set deniedSprite_, deniedSprite");
+
+extern int DAT_000a4f50 ;
+void InitDeniedSprite(void)
+{
+    int i;
+    SPRT* sprt;
+
+    DAT_000a4f50 = 0;
+    for (i = 0; i < 2; i++) {
+        TSpritePrim(&deniedSprite[i], 0, 0, textures[firstGuiTexture + 19].tpage);
+        sprt = &deniedSprite_[i].sprt;
+        setRGB0(sprt, 128,128,128);
+        sprt->x0 = 140;
+        sprt->y0 = 6;
+
+        SetSemiTrans(&deniedSprite_[i].sprt, textures[firstGuiTexture + 19].semitrans);
+        SetShadeTex(&deniedSprite_[i].sprt, 0);
+        deniedSprite[i].sprt.clut = textures[firstGuiTexture + 19].clut;
+        deniedSprite[i].sprt.u0 = textures[firstGuiTexture + 19].u;
+        deniedSprite[i].sprt.v0 = textures[firstGuiTexture + 19].v;
+        deniedSprite[i].sprt.w = textures[firstGuiTexture + 19].w;
+        deniedSprite[i].sprt.h = textures[firstGuiTexture + 19].h;
     }
 }
