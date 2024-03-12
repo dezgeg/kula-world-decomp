@@ -59,6 +59,9 @@ segments:
     bss_size: 0xa3cb0
     subsegments:
       - [0x800, rodata, main]
+      - [0xb90, rodata, zlib_infblock]
+      - [0xbb8, rodata, zlib_inflate]
+      - [0xbf0, rodata, zlib_infcodes]
       - [0xc18, rodata, libpress/libpress]
       - [0xc68, rodata, libgpu/font]
       - [0xd08, rodata, libgpu/krom2tim]
