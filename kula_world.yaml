@@ -90,7 +90,7 @@ segments:
       - [0x1b0c, c, part1]
       - [0x102c8, c, lethargy]
       - [0x10330, c, part2]
-      - [0x147b8, c, gui]
+      - [0x14610, c, gui]
       - [0x14b0c, c, part3]
       - [0x1541c, c, prim]
       - [0x154a8, c, part4]

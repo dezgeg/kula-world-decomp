@@ -7,6 +7,7 @@ gteXScale = 0x000a2e70; // type:u32
 gteYScale = 0x000a2e78; // type:u32
 numCameras = 0x000a2e64; // type:s32
 firstGuiTexture = 0x000a52c4; // type:u32
+titleSprite = 0x000a3fa0; // size:56
 copyrightSprite = 0x000a3fd8; // size:56
 deniedSprite = 0x000a4010; // size:56
 DAT_000a4f50 = 0x000a4f50;
