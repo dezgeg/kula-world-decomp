@@ -48,3 +48,7 @@ int GetControllerStatus(int slot) {
   }
   return 0;
 }
+
+int Return1(void) {
+    return 1;
+}
