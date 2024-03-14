@@ -3,6 +3,7 @@
 #include <LIBPAD.H>
 
 extern int latestControllerSlotPolled;
+extern int vibrationEnabled;
 extern u_char padData[2][34];
 extern u_char padVibrationModeEntered[];
 extern u_char vibrationBuf[][2];
@@ -51,4 +52,10 @@ int GetControllerStatus(int slot) {
 
 int Return1(void) {
     return 1;
+}
+
+void VibrateDirectlyToBuf(char value) {
+  if (vibrationEnabled != 0) {
+    vibrationBuf[latestControllerSlotPolled][0] = value;
+  }
 }
