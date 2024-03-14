@@ -37,3 +37,18 @@ int GetControllerButtons(int slot) {
   }
     return 0;
 }
+
+int GetControllerStatus(int slot) {
+  unsigned typeMsb;
+
+  if (padData[slot][0] == 0) {
+    typeMsb = (unsigned)((char)padData[slot][1] >> 4);
+    if (!((1 < typeMsb - 4)))
+        return 1;
+
+    if (typeMsb == 7) {
+        return 1;
+    }
+  }
+  return 0;
+}
