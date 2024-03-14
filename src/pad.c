@@ -42,7 +42,7 @@ int GetControllerStatus(int slot) {
   unsigned typeMsb;
 
   if (padData[slot][0] == 0) {
-    typeMsb = (unsigned)((char)padData[slot][1] >> 4);
+    typeMsb = padData[slot][1] >> 4;
     if (typeMsb == 4 || typeMsb == 5 || typeMsb == 7)
         return 1;
   }
