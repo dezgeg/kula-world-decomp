@@ -2,11 +2,19 @@
 
 #include <LIBPAD.H>
 
-extern int latestControllerSlotPolled;
 extern int vibrationEnabled;
-extern u_char padData[2][34];
+extern int vibrationMode;
+extern int vibrationSinPhase;
+extern int vibrationCounter;
+extern int vibrationSinConst;
+extern int vibrationSinMagnitude;
+extern int vibrationAngleIncrement;
+extern int vibrationCounterMax;
 extern u_char padVibrationModeEntered[];
 extern u_char vibrationBuf[][2];
+
+extern int latestControllerSlotPolled;
+extern u_char padData[2][34];
 
 extern void ResetVibration();
 
@@ -19,7 +27,6 @@ int GetControllerButtons(int slot) {
 
   status = GetControllerStatus(slot);
   if (status != 0) {
-
     status = PadGetState(slot << 4);
     if (status == 1) {
         padVibrationModeEntered[slot] = 0;
@@ -50,12 +57,27 @@ int GetControllerStatus(int slot) {
   return 0;
 }
 
+// unused
 int Return1(void) {
     return 1;
 }
 
+// unused
 void VibrateDirectlyToBuf(char value) {
-  if (vibrationEnabled != 0) {
+  if (vibrationEnabled) {
     vibrationBuf[latestControllerSlotPolled][0] = value;
+  }
+}
+
+void Vibrate100(int constant, int magnitude, int angleIncrement, int max) {
+  if (vibrationEnabled) {
+    vibrationBuf[latestControllerSlotPolled][0] = 0;
+    vibrationMode = 100;
+    vibrationSinConst = constant;
+    vibrationSinMagnitude = magnitude;
+    vibrationSinPhase = 0;
+    vibrationAngleIncrement = angleIncrement;
+    vibrationCounterMax = max;
+    vibrationCounter = 1;
   }
 }
