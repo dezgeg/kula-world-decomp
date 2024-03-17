@@ -182,7 +182,12 @@ void UpdateVibration(void) {
   if (vibrationEnabled == 0) {
     return;
   }
-  if (isDemoMode != 1) {
+  if (isDemoMode == 1) {
+            vibrationMode = -1;
+            vibrationBuf[latestControllerSlotPolled][0] = 0;
+            vibrationBuf[latestControllerSlotPolled][1] = 0;
+            return;
+  }
     switch(vibrationMode) {
         case 98:
             if (*vibrationSeqPtr != 0xff) {
@@ -196,12 +201,11 @@ void UpdateVibration(void) {
             return;
         case 99:
             vibrationCounter = vibrationCounter + -1;
-            if (vibrationCounter > -1) {
-                return;
+            if (vibrationCounter <= -1) {
+                vibrationMode = -1;
+                vibrationBuf[latestControllerSlotPolled][0] = 0;
+                vibrationBuf[latestControllerSlotPolled][1] = 0;
             }
-            vibrationMode = -1;
-            vibrationBuf[latestControllerSlotPolled][0] = 0;
-            vibrationBuf[latestControllerSlotPolled][1] = 0;
             return;
         case 100:
             vibrationCounter++;
@@ -231,6 +235,7 @@ void UpdateVibration(void) {
                 vibrationCounter) / vibrationCounterMax);
     vibrationBuf[latestControllerSlotPolled][1] = res;
     return;
-  }
+  //} else {
+  //}
 }
 #endif
