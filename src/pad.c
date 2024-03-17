@@ -112,67 +112,6 @@ void Vibrate98(int seq) {
   }
 }
 
-#if 0
-void UpdateVibration(void) {
-  int amount;
-  int res;
-  int phi;
-  int phi2;
-
-  if (vibrationEnabled == 0) {
-    return;
-  }
-  if (isDemoMode != 1) {
-      if (vibrationMode != 99) {
-        if (vibrationMode < 100) {
-          if (vibrationMode == 98) {
-            if (*vibrationSeqPtr != -1) {
-                vibrationBuf[latestControllerSlotPolled][0] = *vibrationSeqPtr++;
-                vibrationBuf[latestControllerSlotPolled][1] = *vibrationSeqPtr++;
-                return;
-            }
-          } else {
-              return;
-          }
-        } else {
-          if (vibrationMode == 100) {
-              vibrationCounter++;
-              if (vibrationCounterMax < vibrationCounter) {
-                  vibrationCounter = vibrationCounterMax;
-              }
-          } else if (vibrationMode == 101) {
-             vibrationCounter--;
-             if (vibrationCounter < 0) {
-               vibrationMode = -1;
-               return;
-             }
-          }
-
-          phi = vibrationSinPhase + vibrationAngleIncrement;
-          if (phi < 0) {
-            phi2 = phi + 0xfff;
-          } else {
-              phi2 = phi;
-          }
-          vibrationSinPhase = phi + (phi2 >> 0xc) * -0x1000;
-          amount = rsin(vibrationSinPhase);
-          res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) *
-                         vibrationCounter) / vibrationCounterMax);
-          vibrationBuf[latestControllerSlotPolled][1] = res;
-          return;
-        }
-      } else {
-        vibrationCounter = vibrationCounter + -1;
-        if (vibrationCounter > -1) {
-            return;
-        }
-      }
-  }
-  vibrationMode = -1;
-  vibrationBuf[latestControllerSlotPolled][0] = 0;
-  vibrationBuf[latestControllerSlotPolled][1] = 0;
-}
-#else
 void UpdateVibration(void) {
   int amount;
   int res;
@@ -234,8 +173,4 @@ void UpdateVibration(void) {
     res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) *
                 vibrationCounter) / vibrationCounterMax);
     vibrationBuf[latestControllerSlotPolled][1] = res;
-    return;
-  //} else {
-  //}
 }
-#endif
