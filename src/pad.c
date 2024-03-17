@@ -99,6 +99,7 @@ void Vibrate99(int magnitude1, int magnitude2, int count) {
         vibrationBuf[latestControllerSlotPolled][1] = magnitude2;
     }
     // HACK: don't use GP-relative for these variables
+    // This is put into another function or it affects codegen in UpdateVibration
     __asm__(".extern isDemoMode,999");
 }
 
