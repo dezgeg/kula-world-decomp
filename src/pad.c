@@ -89,3 +89,12 @@ void Vibrate101(int param_1) {
     vibrationCounter = param_1;
   }
 }
+
+void Vibrate99(int magnitude1, int magnitude2, int count) {
+  if (vibrationEnabled != 0) {
+    vibrationMode = 99;
+    vibrationCounter = count;
+    vibrationBuf[latestControllerSlotPolled][0] = magnitude1;
+    vibrationBuf[latestControllerSlotPolled][1] = magnitude2;
+  }
+}
