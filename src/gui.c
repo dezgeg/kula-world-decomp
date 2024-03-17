@@ -4,17 +4,16 @@ extern unsigned firstGuiTexture;
 extern Texture textures[];
 
 extern TSprite titleSprite[2];
-extern TSprite titleSprite_[2]; // hack to make gcc not create induction variable of sprt
+extern TSprite titleSprite_[2];  // hack to make gcc not create induction variable of sprt
 __asm__(".set titleSprite_, titleSprite");
 
-void InitTitleSprite(void)
-{
+void InitTitleSprite(void) {
     int i;
     SPRT* sprt;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&titleSprite[i], 0, 0, textures[firstGuiTexture + 16].tpage);
         sprt = &titleSprite_[i].sprt;
-        setRGB0(sprt, 128,128,128);
+        setRGB0(sprt, 128, 128, 128);
         sprt->x0 = 38;
         sprt->y0 = 25;
 
@@ -29,17 +28,16 @@ void InitTitleSprite(void)
 }
 
 extern TSprite copyrightSprite[2];
-extern TSprite copyrightSprite_[2]; // hack to make gcc not create induction variable of sprt
+extern TSprite copyrightSprite_[2];  // hack to make gcc not create induction variable of sprt
 __asm__(".set copyrightSprite_, copyrightSprite");
 
-void InitCopyrightSprite(void)
-{
+void InitCopyrightSprite(void) {
     int i;
     SPRT* sprt;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&copyrightSprite[i], 0, 0, textures[firstGuiTexture + 17].tpage);
         sprt = &copyrightSprite_[i].sprt;
-        setRGB0(sprt, 128,128,128);
+        setRGB0(sprt, 128, 128, 128);
         sprt->x0 = 46;
         sprt->y0 = 218;
 
@@ -54,12 +52,11 @@ void InitCopyrightSprite(void)
 }
 
 extern TSprite deniedSprite[2];
-extern TSprite deniedSprite_[2]; // hack to make gcc not create induction variable of sprt
+extern TSprite deniedSprite_[2];  // hack to make gcc not create induction variable of sprt
 __asm__(".set deniedSprite_, deniedSprite");
 
-extern int DAT_000a4f50 ;
-void InitDeniedSprite(void)
-{
+extern int DAT_000a4f50;
+void InitDeniedSprite(void) {
     int i;
     SPRT* sprt;
 
@@ -67,7 +64,7 @@ void InitDeniedSprite(void)
     for (i = 0; i < 2; i++) {
         TSpritePrim(&deniedSprite[i], 0, 0, textures[firstGuiTexture + 19].tpage);
         sprt = &deniedSprite_[i].sprt;
-        setRGB0(sprt, 128,128,128);
+        setRGB0(sprt, 128, 128, 128);
         sprt->x0 = 140;
         sprt->y0 = 6;
 
