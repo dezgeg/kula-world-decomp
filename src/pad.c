@@ -101,6 +101,8 @@ void Vibrate99(int magnitude1, int magnitude2, int count) {
     vibrationBuf[latestControllerSlotPolled][0] = magnitude1;
     vibrationBuf[latestControllerSlotPolled][1] = magnitude2;
   }
+  // HACK: don't use GP-relative for these variables
+  __asm__(".extern isDemoMode,999");
 }
 
 void Vibrate98(int seq) {
@@ -109,3 +111,126 @@ void Vibrate98(int seq) {
     vibrationSeqPtr = VIBRATION_SEQS[seq];
   }
 }
+
+#if 0
+void UpdateVibration(void) {
+  int amount;
+  int res;
+  int phi;
+  int phi2;
+
+  if (vibrationEnabled == 0) {
+    return;
+  }
+  if (isDemoMode != 1) {
+      if (vibrationMode != 99) {
+        if (vibrationMode < 100) {
+          if (vibrationMode == 98) {
+            if (*vibrationSeqPtr != -1) {
+                vibrationBuf[latestControllerSlotPolled][0] = *vibrationSeqPtr++;
+                vibrationBuf[latestControllerSlotPolled][1] = *vibrationSeqPtr++;
+                return;
+            }
+          } else {
+              return;
+          }
+        } else {
+          if (vibrationMode == 100) {
+              vibrationCounter++;
+              if (vibrationCounterMax < vibrationCounter) {
+                  vibrationCounter = vibrationCounterMax;
+              }
+          } else if (vibrationMode == 101) {
+             vibrationCounter--;
+             if (vibrationCounter < 0) {
+               vibrationMode = -1;
+               return;
+             }
+          }
+
+          phi = vibrationSinPhase + vibrationAngleIncrement;
+          if (phi < 0) {
+            phi2 = phi + 0xfff;
+          } else {
+              phi2 = phi;
+          }
+          vibrationSinPhase = phi + (phi2 >> 0xc) * -0x1000;
+          amount = rsin(vibrationSinPhase);
+          res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) *
+                         vibrationCounter) / vibrationCounterMax);
+          vibrationBuf[latestControllerSlotPolled][1] = res;
+          return;
+        }
+      } else {
+        vibrationCounter = vibrationCounter + -1;
+        if (vibrationCounter > -1) {
+            return;
+        }
+      }
+  }
+  vibrationMode = -1;
+  vibrationBuf[latestControllerSlotPolled][0] = 0;
+  vibrationBuf[latestControllerSlotPolled][1] = 0;
+}
+#else
+void UpdateVibration(void) {
+  int amount;
+  int res;
+  int phi;
+  int phi2;
+
+  if (vibrationEnabled == 0) {
+    return;
+  }
+  if (isDemoMode != 1) {
+    switch(vibrationMode) {
+        case 98:
+            if (*vibrationSeqPtr != 0xff) {
+                vibrationBuf[latestControllerSlotPolled][0] = *vibrationSeqPtr++;
+                vibrationBuf[latestControllerSlotPolled][1] = *vibrationSeqPtr++;
+                return;
+            }
+            vibrationMode = -1;
+            vibrationBuf[latestControllerSlotPolled][0] = 0;
+            vibrationBuf[latestControllerSlotPolled][1] = 0;
+            return;
+        case 99:
+            vibrationCounter = vibrationCounter + -1;
+            if (vibrationCounter > -1) {
+                return;
+            }
+            vibrationMode = -1;
+            vibrationBuf[latestControllerSlotPolled][0] = 0;
+            vibrationBuf[latestControllerSlotPolled][1] = 0;
+            return;
+        case 100:
+            vibrationCounter++;
+            if (vibrationCounterMax < vibrationCounter) {
+                vibrationCounter = vibrationCounterMax;
+            }
+            break;
+        case 101:
+            vibrationCounter--;
+            if (vibrationCounter < 0) {
+                vibrationMode = -1;
+                return;
+            }
+            break;
+        default:
+            return;
+    }
+    phi = vibrationSinPhase + vibrationAngleIncrement;
+    if (phi < 0) {
+    phi2 = phi + 0xfff;
+    } else {
+        phi2 = phi;
+    }
+    vibrationSinPhase = phi + (phi2 >> 0xc) * -0x1000;
+    amount = rsin(vibrationSinPhase);
+    res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) *
+                vibrationCounter) / vibrationCounterMax);
+    vibrationBuf[latestControllerSlotPolled][1] = res;
+    return;
+  }
+}
+#endif
