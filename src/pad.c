@@ -160,6 +160,8 @@ void UpdateVibration(void) {
         default:
             return;
     }
+
+    // looks weird, maybe some simpler expression expanded?
     phi = vibrationSinPhase + vibrationAngleIncrement;
     if (phi < 0) {
         phi2 = phi + 0xfff;
