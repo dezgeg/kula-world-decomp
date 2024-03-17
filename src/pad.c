@@ -2,6 +2,8 @@
 
 #include <LIBPAD.H>
 
+extern int isDemoMode;
+
 extern int vibrationEnabled;
 extern int vibrationMode;
 extern int vibrationSinPhase;
@@ -10,6 +12,7 @@ extern int vibrationSinConst;
 extern int vibrationSinMagnitude;
 extern int vibrationAngleIncrement;
 extern int vibrationCounterMax;
+extern char* vibrationSeqPtr;
 extern u_char padVibrationModeEntered[];
 extern u_char vibrationBuf[][2];
 
@@ -19,6 +22,7 @@ extern u_char padData[2][34];
 extern void ResetVibration();
 
 extern u_char VIBRATION_ACT_ALIGN[];
+extern char* VIBRATION_SEQS[];
 
 int GetControllerButtons(int slot) {
   int status;
@@ -91,10 +95,17 @@ void Vibrate101(int param_1) {
 }
 
 void Vibrate99(int magnitude1, int magnitude2, int count) {
-  if (vibrationEnabled != 0) {
+  if (vibrationEnabled) {
     vibrationMode = 99;
     vibrationCounter = count;
     vibrationBuf[latestControllerSlotPolled][0] = magnitude1;
     vibrationBuf[latestControllerSlotPolled][1] = magnitude2;
+  }
+}
+
+void Vibrate98(int seq) {
+  if (vibrationEnabled) {
+    vibrationMode = 98;
+    vibrationSeqPtr = VIBRATION_SEQS[seq];
   }
 }

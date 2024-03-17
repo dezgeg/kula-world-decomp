@@ -42,3 +42,5 @@ vibrationAngleIncrement = 0x000a4c80;
 vibrationCounterMax = 0x000a4c84;
 vibrationCounter = 0x000a4c88;
 vibrationSeqPtr = 0x000a4c8c;
+isDemoMode = 0x000a566c;
+VIBRATION_SEQS = 0x00073b48;
