@@ -81,3 +81,11 @@ void Vibrate100(int constant, int magnitude, int angleIncrement, int max) {
     vibrationCounter = 1;
   }
 }
+
+void Vibrate101(int param_1) {
+  if (vibrationEnabled && vibrationMode == 100) {
+    vibrationMode = 101;
+    vibrationCounterMax = param_1;
+    vibrationCounter = param_1;
+  }
+}
