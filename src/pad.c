@@ -174,3 +174,13 @@ void UpdateVibration(void) {
            vibrationCounterMax);
     vibrationBuf[latestControllerSlotPolled][1] = res;
 }
+
+void ResetVibration(void) {
+    int i, j;
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            vibrationBuf[i][j] = 0;
+        }
+    }
+    vibrationMode = -1;
+}
