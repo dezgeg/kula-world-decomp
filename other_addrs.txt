@@ -46,4 +46,4 @@ isDemoMode = 0x000a566c;
 VIBRATION_SEQS = 0x00073b48;
 playingBonusMusic = 0x000a3638;
 musicVolume = 0x000a599c;
-spuCommonAttr = 0x000a4cf0;
+spuCommonAttr = 0x000a4cf0; // size:40
