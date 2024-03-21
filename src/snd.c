@@ -16,6 +16,20 @@ int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
 
+void SndMuteAllTaggedVoices(void) {
+    char keyStatus[24];
+    int i;
+
+    SpuGetAllKeysStatus(&keyStatus[0]);
+    for (i = 0; i < 24; i++) {
+        if (keyStatus[i] && spuVoiceState[i].tag) {
+            spuVoiceState[i].sfxIndex = -1;
+            spuVoiceState[i].tag = 0;
+            SpuSetKey(0, 1 << i);
+        }
+    }
+}
+
 void SndMuteAllVoices(void) {
     char keyStatus[24];
     int i;
