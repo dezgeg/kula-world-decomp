@@ -2,12 +2,6 @@
 
 #include <libetc.h>
 
-void* kulaZAllocatorPointer;
-long kulaZAllocatorHeapUsage = 0;
-
-extern char S_Alloc_error[];
-extern char S_error_in_alloc_SIZE_ALLOC_too_small[];
-
 extern int whichDrawDispEnv;
 extern char kulaZAllocatorHeap[];
 
@@ -18,7 +12,7 @@ void z_error(const char* msg) {
   DrawSync(0);
   whichDrawDispEnv = 0;
   PutDrawAndDispEnvs();
-  FntPrint(S_Alloc_error);
+  FntPrint("Alloc error:\n\n");
   FntPrint(msg);
   FntFlush(-1);
   whichDrawDispEnv = 1;
@@ -26,6 +20,9 @@ void z_error(const char* msg) {
   while (1)
       ;
 }
+
+void* kulaZAllocatorPointer;
+long kulaZAllocatorHeapUsage = 0;
 
 void zcallocInit(void) {
     __asm__(
@@ -53,8 +50,8 @@ void* zcallocUnused(unsigned num, int size) {
     DrawSync(0);
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
-    FntPrint(S_Alloc_error);
-    FntPrint(S_error_in_alloc_SIZE_ALLOC_too_small);
+    FntPrint("Alloc error:\n\n");
+    FntPrint("error in alloc, SIZE_ALLOC too small!\n");
     FntFlush(-1);
     whichDrawDispEnv = 1;
     PutDrawAndDispEnvs();
@@ -81,8 +78,8 @@ void* zcalloc(void* opaque, unsigned num, int size) {
     DrawSync(0);
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
-    FntPrint(S_Alloc_error);
-    FntPrint(S_error_in_alloc_SIZE_ALLOC_too_small);
+    FntPrint("Alloc error:\n\n");
+    FntPrint("error in alloc, SIZE_ALLOC too small!\n");
     FntFlush(-1);
     whichDrawDispEnv = 1;
     PutDrawAndDispEnvs();
