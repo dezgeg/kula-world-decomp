@@ -304,5 +304,8 @@ segments:
       - [0x62088, c, libcard/patch]
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
-      - [0x622d8, data, main]
+      - [0x622d8, data, main1]
+      - [0x92f04, .data, pad] # How to make this .sdata?
+      - [0x92f0c, .sdata, pad]
+      - [0x92f10, data, main2]
   - [0x93800]

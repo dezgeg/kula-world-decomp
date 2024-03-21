@@ -2,9 +2,11 @@
 
 #include <LIBPAD.H>
 
+u_char VIBRATION_ACT_ALIGN[] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0xff, };
+int vibrationEnabled = 1;
+
 extern int isDemoMode;
 
-extern int vibrationEnabled;
 extern int vibrationMode;
 extern int vibrationSinPhase;
 extern int vibrationCounter;
@@ -21,7 +23,6 @@ extern u_char padData[2][34];
 
 extern void ResetVibration();
 
-extern u_char VIBRATION_ACT_ALIGN[];
 extern char* VIBRATION_SEQS[];
 
 int GetControllerButtons(int slot) {
