@@ -6,9 +6,7 @@
 #include "zutil.h"
 #include "inftrees.h"
 
-#ifdef DATA_IN_C
 char inflate_copyright[] = " inflate 1.0.4 Copyright 1995-1996 Mark Adler ";
-#endif
 /*
   If you use the zlib library in a product, an acknowledgment is welcome
   in the documentation of your product. If for some reason you cannot
@@ -40,7 +38,6 @@ local voidpf falloc OF((
     uInt));             /* size of item */
 
 /* Tables for deflate from PKZIP's appnote.txt. */
-#ifdef DATA_IN_C
 local uInt cplens[31] = { /* Copy lengths for literal codes 257..285 */
         3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
         35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
@@ -56,12 +53,6 @@ local uInt cpdext[30] = { /* Extra bits for distance codes */
         0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,
         7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
         12, 12, 13, 13};
-#else
-extern uInt cplens[31];
-extern uInt cplext[31];
-extern uInt cpdist[30];
-extern uInt cpdext[30];
-#endif
 
 /*
    Huffman code decoding is performed using a multi-level table lookup.
@@ -314,26 +305,14 @@ inflate_huft * FAR *tb; /* bits tree result */
 z_streamp z;            /* for zfree function */
 {
   int r;
-#ifndef RODATA_IN_C
-  extern char S_oversubscribed_dynamic_bit_lengths_tree[];
-  extern char S_incomplete_dynamic_bit_lengths_tree[];
-#endif
 
   r = huft_build(c, 19, 19, (uIntf*)Z_NULL, (uIntf*)Z_NULL, tb, bb, z);
   if (r == Z_DATA_ERROR)
-#ifdef RODATA_IN_C
     z->msg = (char*)"oversubscribed dynamic bit lengths tree";
-#else
-    z->msg = (char*)S_oversubscribed_dynamic_bit_lengths_tree;
-#endif
   else if (r == Z_BUF_ERROR)
   {
     inflate_trees_free(*tb, z);
-#ifdef RODATA_IN_C
     z->msg = (char*)"incomplete dynamic bit lengths tree";
-#else
-    z->msg = (char*)S_incomplete_dynamic_bit_lengths_tree;
-#endif
     r = Z_DATA_ERROR;
   }
   return r;
@@ -351,28 +330,16 @@ inflate_huft * FAR *td; /* distance tree result */
 z_streamp z;            /* for zfree function */
 {
   int r;
-#ifndef RODATA_IN_C
-  extern char S_oversubscribed_literal_length_tree[];
-  extern char S_incomplete_literal_length_tree[];
-#endif
 
   /* build literal/length tree */
   if ((r = huft_build(c, nl, 257, cplens, cplext, tl, bl, z)) != Z_OK)
   {
     if (r == Z_DATA_ERROR)
-#ifdef RODATA_IN_C
       z->msg = (char*)"oversubscribed literal/length tree";
-#else
-      z->msg = (char*)S_oversubscribed_literal_length_tree;
-#endif
     else if (r == Z_BUF_ERROR)
     {
       inflate_trees_free(*tl, z);
-#ifdef RODATA_IN_C
       z->msg = (char*)"incomplete literal/length tree";
-#else
-      z->msg = (char*)S_incomplete_literal_length_tree;
-#endif
       r = Z_DATA_ERROR;
     }
     return r;
@@ -382,22 +349,14 @@ z_streamp z;            /* for zfree function */
   if ((r = huft_build(c + nl, nd, 0, cpdist, cpdext, td, bd, z)) != Z_OK)
   {
     if (r == Z_DATA_ERROR)
-#ifdef RODATA_IN_C
       z->msg = (char*)"oversubscribed literal/length tree";
-#else
-      z->msg = (char*)S_oversubscribed_literal_length_tree;
-#endif
     else if (r == Z_BUF_ERROR) {
 #ifdef PKZIP_BUG_WORKAROUND
       r = Z_OK;
     }
 #else
       inflate_trees_free(*td, z);
-#ifdef RODATA_IN_C
       z->msg = (char*)"incomplete literal/length tree";
-#else
-      z->msg = (char*)S_incomplete_literal_length_tree;
-#endif
       r = Z_DATA_ERROR;
     }
     inflate_trees_free(*tl, z);
@@ -411,19 +370,102 @@ z_streamp z;            /* for zfree function */
 
 
 /* build fixed tables only once--keep them here */
-#define FIXEDH 530      /* number of hufts used by fixed tables */
-#ifdef DATA_IN_C
 local int fixed_built = 0;
+#define FIXEDH 530      /* number of hufts used by fixed tables */
 local inflate_huft fixed_mem[FIXEDH];
 local uInt fixed_bl;
 local uInt fixed_bd;
 local inflate_huft *fixed_tl;
 local inflate_huft *fixed_td;
-#else
-extern int fixed_built;
-extern inflate_huft fixed_mem[FIXEDH];
-extern uInt fixed_bl;
-extern uInt fixed_bd;
-extern inflate_huft *fixed_tl;
-extern inflate_huft *fixed_td;
-#endif
+
+
+int inflate_trees_fixed(bl, bd, tl, td)
+uIntf *bl;               /* literal desired/actual bit depth */
+uIntf *bd;               /* distance desired/actual bit depth */
+inflate_huft * FAR *tl;  /* literal/length tree result */
+inflate_huft * FAR *td;  /* distance tree result */
+{
+  /* build fixed tables if not already (multiple overlapped executions ok) */
+  if (!fixed_built)
+  {
+    int k;              /* temporary variable */
+    unsigned c[288];    /* length list for huft_build */
+    z_stream z;         /* for falloc function */
+    int f = FIXEDH;     /* number of hufts left in fixed_mem */
+
+    /* set up fake z_stream for memory routines */
+    z.zalloc = falloc;
+    z.zfree = Z_NULL;
+    z.opaque = (voidpf)&f;
+
+    /* literal table */
+    for (k = 0; k < 144; k++)
+      c[k] = 8;
+    for (; k < 256; k++)
+      c[k] = 9;
+    for (; k < 280; k++)
+      c[k] = 7;
+    for (; k < 288; k++)
+      c[k] = 8;
+    fixed_bl = 7;
+    huft_build(c, 288, 257, cplens, cplext, &fixed_tl, &fixed_bl, &z);
+
+    /* distance table */
+    for (k = 0; k < 30; k++)
+      c[k] = 5;
+    fixed_bd = 5;
+    huft_build(c, 30, 0, cpdist, cpdext, &fixed_td, &fixed_bd, &z);
+
+    /* done */
+    Assert(f == 0, "invalid build of fixed tables");
+    fixed_built = 1;
+  }
+  *bl = fixed_bl;
+  *bd = fixed_bd;
+  *tl = fixed_tl;
+  *td = fixed_td;
+  return Z_OK;
+}
+
+
+int inflate_trees_free(t, z)
+inflate_huft *t;        /* table to free */
+z_streamp z;            /* for zfree function */
+/* Free the malloc'ed tables built by huft_build(), which makes a linked
+   list of the tables it made, with the links in a dummy first entry of
+   each table. */
+{
+  register inflate_huft *p, *q, *r;
+
+  /* Reverse linked list */
+  p = Z_NULL;
+  q = t;
+  while (q != Z_NULL)
+  {
+    r = (q - 1)->next;
+    (q - 1)->next = p;
+    p = q;
+    q = r;
+  }
+  /* Go through linked list, freeing from the malloced (t[-1]) address. */
+  while (p != Z_NULL)
+  {
+    q = (--p)->next;
+    ZFREE(z,p);
+    p = q;
+  } 
+  return Z_OK;
+}
+
+
+/* For some reason this function has moved... */
+local voidpf falloc(q, n, s)
+voidpf q;       /* opaque pointer */
+uInt n;         /* number of items */
+uInt s;         /* size of item */
+{
+  Assert(s == sizeof(inflate_huft) && n <= *(intf *)q,
+         "inflate_trees falloc overflow");
+  *(intf *)q -= n+s-s; /* s-s to avoid warning */
+  return (voidpf)(fixed_mem + *(intf *)q);
+}
