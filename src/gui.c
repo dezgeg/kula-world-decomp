@@ -1,6 +1,8 @@
 #include "common.h"
 
-extern unsigned firstGuiTexture;
+unsigned firstGuiTexture;
+int DAT_000a4f50;
+
 extern Texture textures[];
 
 extern TSprite titleSprite[2];
@@ -55,7 +57,6 @@ extern TSprite timerPausedSprite[2];
 extern TSprite timerPausedSprite_[2];  // hack to make gcc not create induction variable of sprt
 __asm__(".set timerPausedSprite_, timerPausedSprite");
 
-extern int DAT_000a4f50;
 void InitTimerPausedSprite(void) {
     int i;
     SPRT* sprt;

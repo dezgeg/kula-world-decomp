@@ -2,16 +2,16 @@
 
 #include <libetc.h>
 
+void* kulaZAllocatorPointer;
+long kulaZAllocatorHeapUsage = 0;
+
 extern char S_Alloc_error[];
 extern char S_error_in_alloc_SIZE_ALLOC_too_small[];
 
 extern int whichDrawDispEnv;
-extern void* kulaZAllocatorPointer;
-extern long kulaZAllocatorHeapUsage;
 extern char kulaZAllocatorHeap[];
 
 void z_error(const char* msg) {
-  __asm__(".extern whichDrawDispEnv,999"); // hack
   VSyncCallback(NULL);
   SetupDisplay(1,128,0,0,0,0);
   FntFlush(-1);
@@ -29,8 +29,6 @@ void z_error(const char* msg) {
 
 void zcallocInit(void) {
     __asm__(
-        "\t.extern kulaZAllocatorHeapUsage, 4\n"
-        "\t.extern kulaZAllocatorPointer, 4\n"
         "\tlui        $a0,0xffe0\n"
         "\tori        $a0,$a0,0xe000\n"
         "\tlui        $v1,0x1f\n"

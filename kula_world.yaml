@@ -308,4 +308,6 @@ segments:
       - [0x92f04, .data, pad] # How to make this .sdata?
       - [0x92f0c, .sdata, pad]
       - [0x92f10, data, main2]
+      - [0x93484, .sdata, zlib_calloc]
+      - [0x93488, data, main3]
   - [0x93800]

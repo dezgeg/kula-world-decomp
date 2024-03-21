@@ -7,18 +7,19 @@ int vibrationEnabled = 1;
 
 extern int isDemoMode;
 
-extern int vibrationMode;
-extern int vibrationSinPhase;
-extern int vibrationCounter;
-extern int vibrationSinConst;
-extern int vibrationSinMagnitude;
-extern int vibrationAngleIncrement;
-extern int vibrationCounterMax;
-extern char* vibrationSeqPtr;
+int vibrationMode;
+int vibrationSinPhase;
+int vibrationCounter;
+int vibrationSinConst;
+int vibrationSinMagnitude;
+int vibrationAngleIncrement;
+int vibrationCounterMax;
+int latestControllerSlotPolled;
+char* vibrationSeqPtr;
+
 extern u_char padVibrationModeEntered[];
 extern u_char vibrationBuf[][2];
 
-extern int latestControllerSlotPolled;
 extern u_char padData[2][34];
 
 extern void ResetVibration();
@@ -99,9 +100,6 @@ void Vibrate99(int magnitude1, int magnitude2, int count) {
         vibrationBuf[latestControllerSlotPolled][0] = magnitude1;
         vibrationBuf[latestControllerSlotPolled][1] = magnitude2;
     }
-    // HACK: don't use GP-relative for these variables
-    // This is put into another function or it affects codegen in UpdateVibration
-    __asm__(".extern isDemoMode,999");
 }
 
 void Vibrate98(int seq) {
