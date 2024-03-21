@@ -59,7 +59,7 @@ segments:
     bss_size: 0xa3cb0
     subsegments:
       - [0x800, rodata, main]
-      - [0xb90, rodata, zlib_infblock]
+      - [0xb90, .rodata, zlib_infblock]
       - [0xbb8, rodata, zlib_inflate]
       - [0xbf0, rodata, zlib_infcodes]
       - [0xc18, rodata, libpress/libpress]
@@ -100,8 +100,6 @@ segments:
       - [0x3f968, c, part6]
       - [0x47034, c, zlib_adler32]
       - [0x47218, c, zlib_infblock]
-      - [0x47468, c, part7]
-      - [0x480c0, c, zlib_infblock2]
       - [0x48220, c, zlib_inflate]
       - [0x485a8, c, part8]
       - [0x48b3c, c, zlib_inflate2]
@@ -307,11 +305,15 @@ segments:
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
       - [0x622d8, data, main1]
+      - [0x8979c, .data, zlib_infblock]
+      - [0x897e8, data, main2]
       - [0x92e38, .sdata, snd]
-      - [0x92e3c, data, main2]
+      - [0x92e3c, data, main3]
       - [0x92f04, .data, pad] # How to make this .sdata?
       - [0x92f0c, .sdata, pad]
-      - [0x92f10, data, main3]
+      - [0x92f10, data, main4]
+      - [0x92f84, .sdata, zlib_infblock]
+      - [0x92ff8, data, main5]
       - [0x93484, .sdata, zlib_calloc]
-      - [0x93488, data, main4]
+      - [0x93488, data, main6]
   - [0x93800]
