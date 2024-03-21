@@ -94,7 +94,7 @@ segments:
       - [0x14b0c, c, part3]
       - [0x1541c, c, prim]
       - [0x154a8, c, part4]
-      - [0x3ee38, c, snd]
+      - [0x3ed98, c, snd]
       - [0x3eef8, c, part5]
       - [0x3f47c, c, pad]
       - [0x3f968, c, part6]

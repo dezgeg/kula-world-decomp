@@ -2,11 +2,33 @@
 
 #include <LIBSPU.H>
 
+typedef struct SpuVoiceState {
+    int tag;
+    int volume;
+    int sfxIndex;
+} SpuVoiceState;
+
 short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
 
 SpuCommonAttr spuCommonAttr;
 int musicVolume;
+
+extern SpuVoiceState spuVoiceState[];
+
+void SndMuteAllVoices(void) {
+    char keyStatus[24];
+    int i;
+
+    SpuGetAllKeysStatus(&keyStatus[0]);
+    for (i = 0; i < 24; i++) {
+        if (keyStatus[i]) {
+            spuVoiceState[i].sfxIndex = -1;
+            spuVoiceState[i].tag = 0;
+            SpuSetKey(0, 1 << i);
+        }
+    }
+}
 
 void SndSetMusicVolume(void) {
     int vol;
