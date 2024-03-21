@@ -2,9 +2,6 @@
 
 #include <LIBPAD.H>
 
-u_char VIBRATION_ACT_ALIGN[] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0xff, };
-int vibrationEnabled = 1;
-
 extern int isDemoMode;
 
 int vibrationMode;
@@ -40,7 +37,7 @@ int GetControllerButtons(int slot) {
         }
         if (!padVibrationModeEntered[slot]) {
             PadSetAct(slot << 4, &vibrationBuf[slot][0], 2);
-            if (status == 2 || (status == 6 && PadSetActAlign(slot << 4, VIBRATION_ACT_ALIGN))) {
+            if (status == 2 || (status == 6 && PadSetActAlign(slot << 4, "\x00\x01\xff\xff\xff\xff"))) {
                 padVibrationModeEntered[slot] = 1;
                 ResetVibration();
             }
@@ -51,6 +48,8 @@ int GetControllerButtons(int slot) {
     }
     return 0;
 }
+
+int vibrationEnabled = 1;
 
 int GetControllerStatus(int slot) {
     unsigned typeMsb;
