@@ -16,7 +16,6 @@ struct internal_state      {int dummy;}; /* for buggy compilers */
 extern void exit OF((int));
 #endif
 
-#ifdef DATA_IN_C
 const char *z_errmsg[10] = {
 "need dictionary",     /* Z_NEED_DICT       2  */
 "stream end",          /* Z_STREAM_END      1  */
@@ -28,17 +27,11 @@ const char *z_errmsg[10] = {
 "buffer error",        /* Z_BUF_ERROR     (-5) */
 "incompatible version",/* Z_VERSION_ERROR (-6) */
 ""};
-#endif
 
 
 const char *zlibVersion()
 {
-#ifdef RODATA_IN_C
     return ZLIB_VERSION;
-#else
-    extern const char S_1_0_4_4[];
-    return S_1_0_4_4;
-#endif
 }
 
 #ifdef DEBUG
@@ -86,7 +79,6 @@ void zmemzero(dest, len)
     } while (--len != 0);
 }
 #endif
-
 
 #ifdef __TURBOC__
 #if (defined( __BORLANDC__) || !defined(SMALL_MEDIUM)) && !defined(__32BIT__)
@@ -142,31 +134,6 @@ voidpf zcalloc (voidpf opaque, unsigned items, unsigned size)
     table[next_ptr++].new_ptr = buf;
     return buf;
 }
-#ifndef MY_ZCALLOC /* Any system without a special alloc function */
-
-#ifndef STDC
-extern voidp  calloc OF((uInt items, uInt size));
-extern void   free   OF((voidpf ptr));
-#endif
-
-voidpf zcalloc (opaque, items, size)
-    voidpf opaque;
-    unsigned items;
-    unsigned size;
-{
-    if (opaque) items += size - size; /* make compiler happy */
-    return (voidpf)calloc(items, size);
-}
-
-void  zcfree (opaque, ptr)
-    voidpf opaque;
-    voidpf ptr;
-{
-    free(ptr);
-    if (opaque) return; /* make compiler happy */
-}
-
-#endif /* MY_ZCALLOC */
 
 void  zcfree (voidpf opaque, voidpf ptr)
 {
