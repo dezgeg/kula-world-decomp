@@ -17,6 +17,25 @@ int musicVolume;
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
 
+void SndUpdateVoiceNote(int tag, int note) {
+    int i;
+    int sfxIndex;
+    short volumeL, volumeR;
+
+    for (i = 0; i < 24; i++) {
+        int lsb = tag & 0xf;
+        int res = (tag & 0x7f00) + note;
+        if ((spuVoiceState[i].tag & 0xf) == lsb) {
+            sfxIndex = spuVoiceState[i].sfxIndex;
+            if (sfxIndex > 24) {
+                perSfxVoiceAttrs[sfxIndex].mask = SPU_VOICE_NOTE;
+                perSfxVoiceAttrs[sfxIndex].note = res;
+                SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+            }
+        }
+    }
+}
+
 void SndFadeVoiceVolume(int tag) {
     int i;
     int sfxIndex;

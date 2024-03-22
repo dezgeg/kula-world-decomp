@@ -95,7 +95,7 @@ segments:
       - [0x14b0c, c, nonmatched/text3]
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/text4]
-      - [0x3eb10, c, snd]
+      - [0x3ea50, c, snd]
       - [0x3eef8, c, nonmatched/text5]
       - [0x3f47c, c, pad]
       - [0x3f968, c, nonmatched/text6]
