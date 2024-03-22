@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include <LIBGTE.H>
 #include <LIBSPU.H>
 
 typedef struct SpuVoiceState {
@@ -16,6 +17,51 @@ int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
+
+void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan) {
+    int i;
+    int sfxIndex;
+    int curVolume;
+    int newVolume;
+    int delta;
+
+    VECTOR panVec;
+    VECTOR panSqrVec;
+    /* XXX: Did they really declare these pointless pointers? */
+    long* panVecPtr = &panVec.vx;
+    long* panSqrVecPtr = &panSqrVec.vx;
+
+    for (i = 0; i < 24; i++) {
+        if (spuVoiceState[i].tag == tag) {
+            break;
+        }
+    }
+
+    /* Bug: this will read past the buffer if not found */
+    if (spuVoiceState[i].tag == tag) {
+        curVolume = spuVoiceState[i].volume;
+        sfxIndex = spuVoiceState[i].sfxIndex;
+        panVec.vx = pan->vx;
+        panVec.vy = pan->vy;
+        panVec.vz = pan->vz;
+        Square0(panVecPtr, panSqrVecPtr);
+        newVolume = SquareRoot0(panSqrVecPtr[0] + panSqrVecPtr[1] + panSqrVecPtr[2]) * 3;
+        if (newVolume > curVolume) {
+            newVolume = curVolume;
+        }
+        if (newVolume == 0) {
+            perSfxVoiceAttrs[sfxIndex].volume.right = curVolume >> 1;
+            perSfxVoiceAttrs[sfxIndex].volume.left = curVolume >> 1;
+        } else {
+            delta = curVolume - newVolume;
+            perSfxVoiceAttrs[sfxIndex].volume.right = delta + (*panVecPtr * delta) / newVolume >> 1;
+            perSfxVoiceAttrs[sfxIndex].volume.left = delta - (*panVecPtr * delta) / newVolume >> 1;
+        }
+        perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
+        perSfxVoiceAttrs[sfxIndex].mask = 3;
+        SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+    }
+}
 
 void SndUpdateVoiceNote(int tag, int note) {
     int i;
