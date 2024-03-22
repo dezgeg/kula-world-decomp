@@ -15,6 +15,41 @@ SpuCommonAttr spuCommonAttr;
 int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
+extern SpuVoiceAttr perSfxVoiceAttrs[];
+
+void SndFadeVoiceVolume(int tag) {
+    int i;
+    int sfxIndex;
+    short volumeL, volumeR;
+
+    for (i = 0; i < 24; i++) {
+        if (spuVoiceState[i].tag == tag) {
+            break;
+        }
+    }
+
+    /* Bug: this will read past the buffer if not found */
+    if (spuVoiceState[i].tag == tag) {
+        SpuGetVoiceVolume(i, &volumeL, &volumeR);
+
+        volumeL -= 200;
+        if (volumeL < 0) {
+            volumeL = 0;
+        }
+        volumeR -= 200;
+        if (volumeR < 0) {
+            volumeR = 0;
+        }
+
+        sfxIndex = spuVoiceState[i].sfxIndex;
+        perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
+        /* Bug: Yes, they really swapped left and right here! */
+        perSfxVoiceAttrs[sfxIndex].volume.right = volumeL;
+        perSfxVoiceAttrs[sfxIndex].volume.left = volumeR;
+        perSfxVoiceAttrs[sfxIndex].mask = 3;
+        SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+    }
+}
 
 void SndMuteVoiceByTag(int tag) {
     int i;

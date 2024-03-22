@@ -48,3 +48,4 @@ playingBonusMusic = 0x000a3638;
 musicVolume = 0x000a599c;
 spuCommonAttr = 0x000a4cf0; // size:40
 spuVoiceState = 0x000cb468;
+perSfxVoiceAttrs = 0x000e2cb8;
