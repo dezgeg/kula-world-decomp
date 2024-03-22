@@ -16,6 +16,23 @@ int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
 
+void SndMuteVoiceByTag(int tag) {
+    int i;
+
+    for (i = 0; i < 24; i++) {
+        if (spuVoiceState[i].tag == tag) {
+            break;
+        }
+    }
+
+    /* Bug: this will read past the buffer if not found */
+    if (spuVoiceState[i].tag == tag) {
+        spuVoiceState[i].sfxIndex = -1;
+        spuVoiceState[i].tag = 0;
+        SpuSetKey(0, 1 << i);
+    }
+}
+
 void SndMuteAllTaggedVoices(void) {
     char keyStatus[24];
     int i;
