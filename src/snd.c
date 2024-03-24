@@ -3,6 +3,7 @@
 #include <LIBGTE.H>
 #include <LIBSPU.H>
 
+__asm__(".set keyStatus_, keyStatus");
 typedef struct SpuVoiceState {
     int tag;
     int volume;
@@ -17,6 +18,36 @@ int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
+extern char keyStatus[]; /* pointless global */
+
+extern char keyStatus_[]; // hack to make gcc not create induction variable of sprt
+
+void SndProcessSpuVoices(void) {
+    int i;
+    int sfxIndex;
+    SpuGetAllKeysStatus(keyStatus_);
+
+    for (i = 0; i < 24; i++) {
+        if (keyStatus[i] == SPU_OFF) {
+            spuVoiceState[i].sfxIndex = -1;
+            spuVoiceState[i].tag = 0;
+        }
+        if (keyStatus[i] == SPU_ON_ENV_OFF) {
+            SpuSetKey(0, 1 << i);
+        }
+        if (keyStatus[i] == SPU_OFF_ENV_ON) {
+            spuVoiceState[i].sfxIndex = -1;
+            spuVoiceState[i].tag = 0;
+            /* ?!? This will underflow the array every time... */
+            sfxIndex = spuVoiceState[i].sfxIndex;
+            perSfxVoiceAttrs[sfxIndex].volume.right = 0;
+            perSfxVoiceAttrs[sfxIndex].volume.left = 0;
+            perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
+            perSfxVoiceAttrs[sfxIndex].mask = 3;
+            SpuSetVoiceAttr(perSfxVoiceAttrs + sfxIndex);
+        }
+    }
+}
 
 void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan) {
     int i;
