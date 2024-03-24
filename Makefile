@@ -18,4 +18,4 @@ build/%.o: %.s
 
 build/%.o: %.c
 	@mkdir -p $$(dirname $@)
-	~/wibo/build/wibo ~/PSYQ40/GNU/CPPPSX.EXE -I include/ -isystem ~/psyq42/INCLUDE/ $< | TMPDIR=/tmp ~/wibo/build/wibo ~/PSYQ40/GNU/CC1PSX.EXE -G999 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G999 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
+	 ~/buildpsyq/output/40/cpppsx -I include/ -isystem ~/psyq42/INCLUDE/ $< | ~/buildpsyq/output/40/cc1psx -G999 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G999 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
