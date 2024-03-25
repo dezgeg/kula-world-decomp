@@ -19,6 +19,7 @@ options:
   include_macro_inc: False
   migrate_rodata_to_functions: False
   auto_decompile_empty_functions: False
+  ld_generate_symbol_per_data_segment: False
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
@@ -100,7 +101,7 @@ segments:
       - [0x36b60, c, nonmatched/devkit]
       - [0x3714c, c, nonmatched/replay]
       - [0x37268, c, nonmatched/text_37268]
-      - [0x37378, c, nonmatched/rand]
+      - [0x37378, c, rand]
       - [0x373b4, c, nonmatched/cheats]
       - [0x377a0, c, nonmatched/text_377a0]
       - [0x3cc60, c, nonmatched/loading]
@@ -318,13 +319,15 @@ segments:
       - [0x62088, c, libcard/patch]
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
-      - [0x622d8, data, nonmatched/data1]
+      - [0x622d8, data, nonmatched/data_622d8]
       - [0x8979c, .data, zlib_infblock]
-      - [0x897e8, data, nonmatched/data2]
+      - [0x897e8, data, nonmatched/data_897e8]
+      - [0x92b2c, .sdata, rand]
+      - [0x92b30, sdata, nonmatched/sdata_92b30]
       - [0x92e38, .sdata, snd]
-      - [0x92e3c, sdata, nonmatched/data3]
+      - [0x92e3c, sdata, nonmatched/sdata_92e3c]
       - [0x92f04, .sdata, pad]
-      - [0x92f10, sdata, nonmatched/data4]
+      - [0x92f10, sdata, nonmatched/sdata_92f10]
       - [0x92f84, .sdata, zlib_infblock]
       - [0x92ff8, .sdata, zlib_inflate]
       - [0x93068, .sdata, zlib_inftrees]
@@ -333,5 +336,5 @@ segments:
       - [0x9338c, .sdata, zlib_inffast]
       - [0x933c0, .sdata, zlib_zutil]
       - [0x93474, .sdata, zlib_calloc]
-      - [0x934b0, sdata, nonmatched/data5]
+      - [0x934b0, sdata, nonmatched/sdata_934b0]
   - [0x93800]
