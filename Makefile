@@ -16,6 +16,12 @@ build/%.o: %.s
 	@mkdir -p $$(dirname $@)
 	python3 ~/maspsx/maspsx.py $< | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ - -o $@
 
-build/%.o: %.c
+build/%.o: %.c psyq
 	@mkdir -p $$(dirname $@)
-	 ~/buildpsyq/output/40/cpppsx -I include/ -isystem ~/psyq42/INCLUDE/ $< | ~/buildpsyq/output/40/cc1psx -G999 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G999 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
+	 psyq/cpppsx -I include/ -isystem psyq/INCLUDE/ $< | psyq/cc1psx -G999 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G999 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
+
+psyq:
+	mkdir -p psyq
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz
+	rm -rf psyq/INCLUDE psyq/LIB
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz
