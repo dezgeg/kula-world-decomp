@@ -32,6 +32,7 @@ options:
   symbol_addrs_path:
     - function_addrs.txt
     - string_addrs.txt
+    - variable_addrs.txt
     - other_addrs.txt
   reloc_addrs_path:
     - reloc_addrs.txt

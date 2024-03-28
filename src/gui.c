@@ -1,7 +1,7 @@
 #include "common.h"
 
 unsigned firstGuiTexture;
-int DAT_000a4f50;
+int drawTimerPausedWidget;
 
 extern Texture textures[];
 
@@ -61,7 +61,7 @@ void InitTimerPausedSprite(void) {
     int i;
     SPRT* sprt;
 
-    DAT_000a4f50 = 0;
+    drawTimerPausedWidget = 0;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&timerPausedSprite[i], 0, 0, textures[firstGuiTexture + 19].tpage);
         sprt = &timerPausedSprite_[i].sprt;
