@@ -10,6 +10,14 @@ O_FILES := $(patsubst %.c,build/%.o,$(C_FILES)) $(patsubst %.s,build/%.o,$(S_FIL
 check: build/SCES_010.00
 	sha256sum --check - <<<"28c8f46d28f971038ccd68135de4d5dfc0f7a1c00285748aea98276a5d37bf75  build/SCES_010.00"
 
+# This rule causes the $(wildcard) for C_FILES etc. to be re-evaluated if splat split needs re-running
+Makefile: build/kula_world.ld
+	touch Makefile
+
+build/kula_world.ld: kula_world.yaml $(wildcard *_addrs.txt)
+	rm -rf src/nonmatched asm/ build/
+	splat split kula_world.yaml
+
 build/SCES_010.00: build/main.elf
 	mipsel-linux-gnu-objcopy -O binary $< $@
 
