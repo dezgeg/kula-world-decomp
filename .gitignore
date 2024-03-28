@@ -1,0 +1,17 @@
+src/libapi/
+src/libc2/
+src/libcard/
+src/libcd/
+src/libds/
+src/libetc/
+src/libgpu/
+src/libgte/
+src/libmath/
+src/libmcrd/
+src/libpad/
+src/libpress/
+src/libsio/
+src/libsn/
+src/libsnd/
+src/libspu/
+src/nonmatched/
