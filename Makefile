@@ -6,6 +6,10 @@ C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)
 S_FILES := $(wildcard asm/*.s) $(wildcard asm/*/*.s) $(wildcard asm/data/*/*.s)
 O_FILES := $(patsubst %.c,build/%.o,$(C_FILES)) $(patsubst %.s,build/%.o,$(S_FILES))
 
+.PHONY: check
+check: build/SCES_010.00
+	sha256sum --check - <<<"28c8f46d28f971038ccd68135de4d5dfc0f7a1c00285748aea98276a5d37bf75  build/SCES_010.00"
+
 build/SCES_010.00: build/main.elf
 	mipsel-linux-gnu-objcopy -O binary $< $@
 

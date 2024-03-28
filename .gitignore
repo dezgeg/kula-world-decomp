@@ -1,3 +1,7 @@
+__pycache__/
+asm/
+build/
+psyq/
 src/libapi/
 src/libc2/
 src/libcard/
