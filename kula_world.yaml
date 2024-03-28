@@ -2,18 +2,18 @@ name: Kula World (EU)
 sha1: 1f3aebfc8f5f6da368915eaa02f1b3ff1249d299
 options:
   basename: kula_world
-  target_path: SCES_010.00
-  base_path: .
   platform: psx
   compiler: GCC
 
-  # create_asm_dependencies: True
+  base_path: .
+  target_path: SCES_010.00
+  ld_script_path: build/kula_world.ld
+  undefined_syms_auto_path: build/undefined_syms_auto.txt
 
-  ld_script_path: kula_world.ld
-
-  find_file_boundaries: True
   gp_value: 0x000A29E0
 
+  create_undefined_funcs_auto: False
+  find_file_boundaries: True
   o_as_suffix: True
   use_legacy_include_asm: False
   include_macro_inc: False
@@ -36,9 +36,6 @@ options:
     - other_addrs.txt
   reloc_addrs_path:
     - reloc_addrs.txt
-
-  # undefined_funcs_auto_path: undefined_funcs_auto.txt
-  # undefined_syms_auto_path: undefined_syms_auto.txt
 
   extensions_path: tools/splat_ext
 

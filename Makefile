@@ -10,7 +10,7 @@ build/SCES_010.00: build/main.elf
 	mipsel-linux-gnu-objcopy -O binary $< $@
 
 build/main.elf: $(O_FILES)
-	mipsel-linux-gnu-ld -nostdlib --no-check-sections -o $@ -T kula_world.ld -T undefined_syms_auto.txt -Map build/symbols.map
+	mipsel-linux-gnu-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -Map build/symbols.map
 
 build/%.o: %.s
 	@mkdir -p $$(dirname $@)
