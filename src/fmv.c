@@ -30,6 +30,7 @@ typedef struct {
 } DECENV;
 
 #define MOVIE_WAIT 2000
+#define RING_SIZE 32
 #define bound(val, n) ((((val) - 1) / (n) + 1) * (n))
 #define bound16(val) bound((val), 16)
 #define VRAMPIX(pixels, is24bit)  ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
@@ -44,8 +45,17 @@ int fmvEnded;
 int strWidth /* = 0 */;
 int strHeight /* = 0 */;
 int isFirstSlice;
+void* fmvRing /* = ... */;
 
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
+
+void StrInit(CdlLOC* loc, void (*callback)(), MovieInfo* movie) {
+    DecDCTReset(0);
+    DecDCToutCallback(callback);
+    StSetRing(fmvRing, RING_SIZE);
+    StSetStream(movie->is24bit, movie->startFrame, 0xffffffff, 0, 0);
+    StrKickCd(loc);
+}
 
 void StrCallback() {
     int mod;

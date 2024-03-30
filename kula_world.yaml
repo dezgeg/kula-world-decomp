@@ -114,7 +114,7 @@ segments:
       - [0x42330, c, nonmatched/gte]
       - [0x424f4, c, nonmatched/hacks2]
       - [0x42550, c, nonmatched/fmv]
-      - [0x42d40, c, fmv]
+      - [0x42cc8, c, fmv]
       - [0x43264, c, nonmatched/render]
       - [0x47034, c, zlib_adler32]
       - [0x47218, c, zlib_infblock]
