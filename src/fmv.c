@@ -30,17 +30,58 @@ typedef struct {
 } DECENV;
 
 #define MOVIE_WAIT 2000
+#define bound(val, n) ((((val) - 1) / (n) + 1) * (n))
+#define bound16(val) bound((val), 16)
 #define VRAMPIX(pixels, is24bit)  ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
 // weird variant? maybe the original doesn't work for PAL?
 #define VRAMPIX2(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
 
+extern int stCdIntrFlag;
 extern DECDCTTAB vlc_table;
+static DECENV dec;
 
 int fmvEnded;
 int strWidth /* = 0 */;
 int strHeight /* = 0 */;
+int isFirstSlice;
 
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
+
+void StrCallback() {
+    int mod;
+    int id;
+    RECT snap_rect;
+
+    if (dec.is24bit) {
+        if (stCdIntrFlag) {
+            StCdInterrupt();
+            stCdIntrFlag = 0;
+        }
+    }
+    id = dec.imgid;
+    snap_rect = dec.slice;
+
+    dec.imgid = dec.imgid ? 0 : 1;
+
+    if (isFirstSlice && (mod = dec.rect[dec.rectid].w % dec.slice.w)) {
+        dec.slice.x += mod;
+        isFirstSlice = 0;
+    } else {
+        dec.slice.x += dec.slice.w;
+    }
+
+    if (dec.slice.x < dec.rect[dec.rectid].x + dec.rect[dec.rectid].w) {
+        DecDCTout((u_long*)dec.imgbuf[dec.imgid], dec.slice.w * bound16(dec.slice.h) / 2);
+    } else {
+        dec.isdone = 1;
+        isFirstSlice = 1;
+
+        dec.rectid = dec.rectid ? 0 : 1;
+        dec.slice.x = dec.rect[dec.rectid].x;
+        dec.slice.y = dec.rect[dec.rectid].y;
+    }
+    LoadImage(&snap_rect, (u_long*)dec.imgbuf[id]);
+}
 
 int StrNextVlc(DECENV* dec, MovieInfo* movie) {
     int cnt;
