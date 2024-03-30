@@ -5,6 +5,11 @@
 #include <libgte.h>
 #include <libgpu.h>
 
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
 typedef struct TSprite {
     DR_TPAGE tpage;
     SPRT sprt;
