@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include <libcd.h>
+#include <libgpu.h>
+#include <libpress.h>
 
 // Based on: PSX/SAMPLE/CD/MOVIE/TUTO1.C
 
@@ -32,9 +34,29 @@ typedef struct {
 // weird variant? maybe the original doesn't work for PAL?
 #define VRAMPIX2(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
 
+extern DECDCTTAB vlc_table;
+
 int fmvEnded;
-int strWidth /* = 0*/;
-int strHeight /* = 0*/;
+int strWidth /* = 0 */;
+int strHeight /* = 0 */;
+
+u_long* StrNext(DECENV* dec, MovieInfo* movie);
+
+int StrNextVlc(DECENV* dec, MovieInfo* movie) {
+    int cnt;
+    u_long* next;
+
+    for (cnt = 2000; cnt != 0; cnt--) {
+        next = StrNext(dec, movie);
+        if (next) {
+            dec->vlcid = dec->vlcid ? 0 : 1;
+            DecDCTvlc2(next, dec->vlcbuf[dec->vlcid], vlc_table);
+            StFreeRing(next);
+            return 0;
+        }
+    }
+    return -1;
+}
 
 u_long* StrNext(DECENV* dec, MovieInfo* movie) {
     u_long* addr;
@@ -42,7 +64,9 @@ u_long* StrNext(DECENV* dec, MovieInfo* movie) {
     int cnt = MOVIE_WAIT;
 
     while (StGetNext((u_long**)&addr, (u_long**)&sector)) {
-        if (--cnt == 0) return (0);
+        if (--cnt == 0) {
+            return (0);
+        }
     }
 
     if ((int)sector->frameCount >= movie->endFrame) {
