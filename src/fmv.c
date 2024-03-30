@@ -45,9 +45,45 @@ int fmvEnded;
 int strWidth /* = 0 */;
 int strHeight /* = 0 */;
 int isFirstSlice;
+int isFirstTimeDecEnvInit /* = 1*/;
 void* fmvRing /* = ... */;
 
+void* pVlcbuf0 /* = ...*/;
+void* pVlcbuf1 /* = ...*/;
+void* pImgbuf0 /* = ...*/;
+void* pImgbuf1 /* = ...*/;
+
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
+
+void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie) {
+    if (isFirstTimeDecEnvInit == 1) {
+        dec->vlcbuf[0] = pVlcbuf0;
+        dec->vlcbuf[1] = pVlcbuf1;
+        dec->vlcid = 0;
+
+        dec->imgbuf[0] = pImgbuf0;
+        dec->imgbuf[1] = pImgbuf1;
+        dec->imgid = 0;
+        dec->rectid = 0;
+        dec->isdone = 0;
+        isFirstTimeDecEnvInit = 0;
+    }
+
+    dec->rect[0].x = x0;
+    dec->rect[0].y = y0;
+    dec->rect[1].x = x1;
+    dec->rect[1].y = y1;
+    dec->slice.w = VRAMPIX(16, movie->is24bit);
+    dec->is24bit = movie->is24bit;
+
+    if (dec->rectid == 0) {
+        dec->slice.x = x0;
+        dec->slice.y = y0;
+    } else {
+        dec->slice.x = x1;
+        dec->slice.y = y1;
+    }
+}
 
 void StrInit(CdlLOC* loc, void (*callback)(), MovieInfo* movie) {
     DecDCTReset(0);
