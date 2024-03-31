@@ -41,6 +41,8 @@ extern uint prevControllerButtons;
 extern ushort dispenvScreenX;
 extern int dispenvScreenY;
 
+extern int musicVolume;
+
 #define MOVIE_WAIT 2000
 #define RING_SIZE 32
 #define bound(val, n) ((((val) - 1) / (n) + 1) * (n))
@@ -84,6 +86,60 @@ static inline int GetButtonsFromAnyController() {
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
+}
+
+void ShowEndingFmv(int movieI) {
+    uint r;
+    uint g;
+    uint b;
+    RECT rect;
+    RECT rect2;
+    int oldMusicVolume;
+    MovieInfo* movie = &movieInfos[movieI];
+
+    MusicPause();
+    oldMusicVolume = musicVolume;
+    musicVolume = 0xc;
+    SndSetMusicVolume();
+
+    DrawSync(0);
+    VSync(0);
+    rect.w = 320;
+    rect.h = 256;
+    rect.x = 640;
+    rect.y = 0;
+    StoreImage(&rect, 0x1b6000); // FIXME symbol for this
+    DrawSync(0);
+
+    FmvMainLoop(movieI);
+    DrawSync(0);
+
+    rect2.x = 0;
+    rect2.y = 0;
+    rect2.w = VRAMPIX_BOTH(movie->scrWidth, movie->is24bit);
+    rect2.h = movie->scrHeight;
+    if (movie->is24bit) {
+        ClearImage(&rect2, 0, 0, 0);
+    } else {
+        ClearImage(&rect2, 64, 64, 64);
+    }
+    DrawSync(0);
+
+    SetupDisplay(0, 0, 0, 0, 0, 0);
+    PutDrawAndDispEnvs();
+    VSync(0);
+
+    rect.w = 320;
+    rect.h = 256;
+    rect.x = 640;
+    rect.y = 0;
+    LoadImage(&rect, 0x1b6000); // FIXME symbol for this
+    DrawSync(0);
+    VSync(0);
+
+    musicVolume = oldMusicVolume;
+    SndSetMusicVolume();
+    SwitchFromBonusToNormalMusic();
 }
 
 int FmvMainLoop(int movieI) {
