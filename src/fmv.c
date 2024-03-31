@@ -29,17 +29,30 @@ typedef struct {
     int is24bit;
 } DECENV;
 
+extern uint GetControllerButtons(int slot);
+extern int GetControllerStatus(int slot);
+
+extern uint controllerButtons;
+extern int curController;
+extern uint prevControllerButtons;
+
+// wtf are these types?
+extern ushort dispenvScreenX;
+extern int dispenvScreenY;
+
 #define MOVIE_WAIT 2000
 #define RING_SIZE 32
 #define bound(val, n) ((((val) - 1) / (n) + 1) * (n))
 #define bound16(val) bound((val), 16)
-#define VRAMPIX(pixels, is24bit)  ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
+#define DCT_MODE(is24bit) ((is24bit) ? 3 : 2)
+#define VRAMPIX(pixels, is24bit) ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
 // weird variant? maybe the original doesn't work for PAL?
 #define VRAMPIX2(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
 
 extern int stCdIntrFlag;
 extern DECDCTTAB vlc_table;
 static DECENV dec;
+extern MovieInfo movieInfos[];
 
 int fmvEnded;
 int strWidth /* = 0 */;
@@ -53,7 +66,116 @@ void* pVlcbuf1 /* = ...*/;
 void* pImgbuf0 /* = ...*/;
 void* pImgbuf1 /* = ...*/;
 
+void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie);
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
+void StrInit(CdlLOC* loc, void (*callback)(), MovieInfo* movie);
+void StrCallback();
+void StrKickCd(CdlLOC* loc);
+
+static inline int GetButtonsFromAnyController() {
+    if (GetControllerStatus(curController) != 0) {
+            controllerButtons = GetControllerButtons(curController);
+            return controllerButtons;
+    } else {
+       controllerButtons = GetControllerButtons((curController + 1) % 2);
+       return controllerButtons;
+    }
+}
+
+static inline int TestButton(int button) {
+    int prev = ~prevControllerButtons;
+    return (controllerButtons & (button & prev));
+}
+
+int FmvMainLoop(int movieI) {
+    MovieInfo* movie = &movieInfos[movieI];
+    extern char S_file_not_found[];
+    extern char S_time_out_in_strNext_FMTd[];
+    DISPENV disp;
+    DRAWENV draw;
+    int id;
+    CdlFILE file;
+    RECT clearRect;
+    CdlLOC save_loc;
+    int frame_no;
+    int controller;
+    isFirstSlice = 1;
+
+    if (CdSearchFile(&file, movie->fileName) == 0) {
+        printf(S_file_not_found);
+        ResetGraph(3);
+        StopCallback();
+        return 0;
+    }
+
+    StrSetDefDecEnv(&dec, VRAMPIX(movie->posX, movie->is24bit), movie->posY,
+                    VRAMPIX(movie->posX + movie->scrWidth, movie->is24bit), movie->posY, movie);
+    StrInit(&file.pos, StrCallback, movie);
+    DecDCTvlcBuild(vlc_table);
+    while (StrNextVlc(&dec, movie) == -1) {
+        save_loc = file.pos;
+        StrKickCd(&save_loc);
+    }
+    fmvEnded = 0;
+
+    SetDispMask(0);
+    setRECT(&clearRect, 0, 0, VRAMPIX2(movie->scrWidth, movie->is24bit), movie->scrHeight);
+    if (movie->is24bit) {
+        ClearImage(&clearRect, 0, 0, 0);
+    } else {
+        ClearImage(&clearRect, 64, 64, 64);
+    }
+
+    while (1) {
+        DecDCTin(dec.vlcbuf[dec.vlcid], DCT_MODE(movie->is24bit));
+        DecDCTout((u_long*)dec.imgbuf[dec.imgid], dec.slice.w * bound16(dec.slice.h) / 2);
+
+        while (StrNextVlc(&dec, movie) == -1) {
+            frame_no = StGetBackloc(&save_loc);
+            printf(S_time_out_in_strNext_FMTd, frame_no);
+            if (frame_no > movie->endFrame || frame_no <= 0)
+                save_loc = file.pos;
+            StrKickCd(&save_loc);
+        }
+
+        StrSync(&dec, 0);
+
+        VSync(0);
+
+        id = dec.rectid ? 0 : 1;
+        SetDefDispEnv(&disp, dec.rect[id].x - VRAMPIX(movie->posX, movie->is24bit),
+                      dec.rect[id].y - movie->posY, VRAMPIX(movie->scrWidth, movie->is24bit),
+                      movie->scrHeight);
+        disp.screen.x = dispenvScreenX;
+        disp.screen.y = dispenvScreenY + 8;
+
+        if (movie->is24bit) {
+            disp.isrgb24 = movie->is24bit;
+            disp.disp.w = disp.disp.w * 2 / 3;
+        }
+        PutDispEnv(&disp);
+        SetDispMask(1);
+
+        prevControllerButtons = controllerButtons;
+        GetButtonsFromAnyController();
+        if (TestButton(PAD_START) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
+          fmvEnded = 1;
+        }
+
+        if (fmvEnded == 1) break;
+    }
+
+    DecDCToutCallback(0);
+    StUnSetRing();
+    CdControlB(CdlPause, 0, 0);
+    if (fmvEnded == 0) {
+        ResetGraph(3);
+        StopCallback();
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie) {
     if (isFirstTimeDecEnvInit == 1) {
