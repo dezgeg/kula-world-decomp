@@ -1,3 +1,5 @@
+SJIS_RANGES = 0x000a31fc; // size:12
+SJIS_SPECIAL_CHARS = 0x00073234; // size:68
 VIBRATION_ACT_ALIGN = 0x000a3704; // size:6
 VIBRATION_SEQS = 0x00073b48; // size:8
 border = 0x00099f9c; // size:76
