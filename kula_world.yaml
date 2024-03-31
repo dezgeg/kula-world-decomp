@@ -110,7 +110,7 @@ segments:
       - [0x3f07c, c, nonmatched/disp]
       - [0x3f47c, c, pad]
       - [0x3f968, c, nonmatched/text_3f968]
-      - [0x422dc, c, nonmatched/hacks1]
+      - [0x422dc, c, nonmatched/hacks1] # probably hand asm (for no good reason)
       - [0x42330, c, nonmatched/gte]
       - [0x424f4, c, nonmatched/hacks2]
       - [0x42550, c, fmv]

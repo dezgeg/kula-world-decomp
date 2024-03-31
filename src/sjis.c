@@ -76,7 +76,8 @@ int Sjis2Ascii(unsigned short sjis_code) {
         ascii_code = 48 + (sjis_code - 0x824F);
     } else {
         for (i = 0; i < 33; i++) {
-            if (SJIS_SPECIAL_CHARS[i] == sjis_code) ascii_code = S_SPECIAL_CHARS[i];
+            if (SJIS_SPECIAL_CHARS[i] == sjis_code)
+                ascii_code = S_SPECIAL_CHARS[i];
         }
     }
 
