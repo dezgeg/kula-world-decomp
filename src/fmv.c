@@ -4,7 +4,8 @@
 #include <libgpu.h>
 #include <libpress.h>
 
-// Based on: PSX/SAMPLE/CD/MOVIE/TUTO1.C
+// Based on: PSX/SAMPLE/CD/MOVIE/TUTO1.C, but seems to have been patched
+// for a different VRAM layout (framebuffers are side-by-side).
 
 typedef struct {
     char* fileName;
@@ -46,8 +47,8 @@ extern int dispenvScreenY;
 #define bound16(val) bound((val), 16)
 #define DCT_MODE(is24bit) ((is24bit) ? 3 : 2)
 #define VRAMPIX(pixels, is24bit) ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
-// weird variant? maybe the original doesn't work for PAL?
-#define VRAMPIX2(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
+// Both the even-and-odd frame buffers
+#define VRAMPIX_BOTH(pixels, is24bit) ((is24bit) ? (pixels)*3 : (pixels) << 1)
 
 extern int stCdIntrFlag;
 extern DECDCTTAB vlc_table;
@@ -117,7 +118,7 @@ int FmvMainLoop(int movieI) {
     fmvEnded = 0;
 
     SetDispMask(0);
-    setRECT(&clearRect, 0, 0, VRAMPIX2(movie->scrWidth, movie->is24bit), movie->scrHeight);
+    setRECT(&clearRect, 0, 0, VRAMPIX_BOTH(movie->scrWidth, movie->is24bit), movie->scrHeight);
     if (movie->is24bit) {
         ClearImage(&clearRect, 0, 0, 0);
     } else {
@@ -282,7 +283,7 @@ u_long* StrNext(DECENV* dec, MovieInfo* movie) {
 
     if (strWidth != sector->width || strHeight != sector->height) {
         RECT rect;
-        setRECT(&rect, 0, 0, VRAMPIX2(movie->scrWidth, movie->is24bit), movie->scrHeight);
+        setRECT(&rect, 0, 0, VRAMPIX_BOTH(movie->scrWidth, movie->is24bit), movie->scrHeight);
         if (movie->is24bit) {
             ClearImage(&rect, 0, 0, 0);
         } else {
