@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include <ctype.h>
+
 // Based on AS2CSJIS.C and SJIS2ASC.C in PSX/SAMPLE/SCEE/ETC/CARDCONF/
 
 extern ushort SJIS_RANGES[3][2];
@@ -74,10 +76,32 @@ int Sjis2Ascii(unsigned short sjis_code) {
         ascii_code = 48 + (sjis_code - 0x824F);
     } else {
         for (i = 0; i < 33; i++) {
-            if (SJIS_SPECIAL_CHARS[i] == sjis_code)
-                ascii_code = S_SPECIAL_CHARS[i];
+            if (SJIS_SPECIAL_CHARS[i] == sjis_code) ascii_code = S_SPECIAL_CHARS[i];
         }
     }
 
     return ascii_code;
+}
+
+int LooksLikeAscii(char *str) {
+    char* p;
+    int ret = 1;
+    int asciiScore = 0;
+    int length = strlen(str);
+    if (length > 64) {
+        length = 64;
+    }
+
+    for (p = str; p < str + length; p++) {
+        if (!isprint(*p)) {
+            return 0;
+        }
+        if ((*p >= 'A' && *p <= 'Z') || (*p >= 'a' && *p <= 'z') || (*p >= '0' && *p <= '9')) {
+            asciiScore++;
+        }
+        if (*p == 0x82 || *p == 0x60) {
+            asciiScore--;
+        }
+    }
+    return asciiScore >= 4;
 }

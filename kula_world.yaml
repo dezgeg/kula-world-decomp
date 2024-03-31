@@ -96,7 +96,6 @@ segments:
       - [0x154a8, c, nonmatched/text_154a8]
       - [0x32aa4, c, nonmatched/memcard]
       - [0x3687c, c, sjis]
-      - [0x36a74, c, nonmatched/sjis]
       - [0x36b60, c, nonmatched/devkit]
       - [0x3714c, c, nonmatched/replay]
       - [0x37268, c, nonmatched/text_37268]
