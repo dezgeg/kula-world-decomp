@@ -74,12 +74,11 @@ void StrKickCd(CdlLOC* loc);
 
 static inline int GetButtonsFromAnyController() {
     if (GetControllerStatus(curController) != 0) {
-            controllerButtons = GetControllerButtons(curController);
-            return controllerButtons;
+        controllerButtons = GetControllerButtons(curController);
     } else {
-       controllerButtons = GetControllerButtons((curController + 1) % 2);
-       return controllerButtons;
+        controllerButtons = GetControllerButtons((curController + 1) % 2);
     }
+    return controllerButtons;
 }
 
 static inline int TestButton(int button) {
@@ -158,7 +157,7 @@ int FmvMainLoop(int movieI) {
         prevControllerButtons = controllerButtons;
         GetButtonsFromAnyController();
         if (TestButton(PAD_START) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
-          fmvEnded = 1;
+            fmvEnded = 1;
         }
 
         if (fmvEnded == 1) break;
