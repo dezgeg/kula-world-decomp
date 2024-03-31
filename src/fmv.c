@@ -83,8 +83,7 @@ static inline int GetButtonsFromAnyController() {
 }
 
 static inline int TestButton(int button) {
-    int prev = ~prevControllerButtons;
-    return (controllerButtons & (button & prev));
+    return controllerButtons & (button & ~prevControllerButtons);
 }
 
 int FmvMainLoop(int movieI) {
