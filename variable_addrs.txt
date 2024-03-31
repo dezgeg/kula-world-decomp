@@ -2,6 +2,7 @@ SJIS_RANGES = 0x000a31fc; // size:12
 SJIS_SPECIAL_CHARS = 0x00073234; // size:68
 VIBRATION_ACT_ALIGN = 0x000a3704; // size:6
 VIBRATION_SEQS = 0x00073b48; // size:8
+_ctype_ = 0x000a2874; // size:129
 border = 0x00099f9c; // size:76
 controllerButtons = 0x000a5530; // type:u32
 copyrightSprite = 0x000a3fd8; // size:56
