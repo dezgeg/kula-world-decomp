@@ -32,14 +32,13 @@ int savedMusicXaChan;
 short bonusMusicIndex;
 short playingBonusMusic;
 
-extern Music BONUS_MUSICS[3];
-extern Music MUSICS[11];
-
-extern CdlFILE cdlfile1;  // TODO: rename
+extern CdlFILE musicCdlfile;
 extern CdlLOC musicBonusLoc;
 extern CdlLOC musicCdlLoc;
 extern CdlLOC musicCurLoc;
 extern CdlLOC savedMusicCdlLoc;
+extern Music BONUS_MUSICS[3];
+extern Music MUSICS[11];
 extern int musicCdMode;
 
 extern int whichDrawDispEnv;
@@ -55,7 +54,7 @@ void PlayMusic(int world) {
     SndSetMusicVolume();
     musicCounter = 50;
     musicSearchAttempt = 0;
-    while (CdSearchFile(&cdlfile1, MUSICS[world].file) == NULL) {
+    while (CdSearchFile(&musicCdlfile, MUSICS[world].file) == NULL) {
         if (musicSearchAttempt >= 10) break;
         CdInit();
         musicSearchAttempt++;
@@ -77,7 +76,7 @@ void PlayMusic(int world) {
         do {
         } while (1);
     }
-    musicStartSector = CdPosToInt(&cdlfile1.pos);
+    musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + MUSICS[world].sectors * 4;
     CdReadSync(0, 0);
     while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
@@ -133,7 +132,7 @@ void PlayBonusMusic(void) {
         savedMusicXaChan = musicCdlFilter.chan;
     }
     bonusMusicSearchAttempt = 0;
-    while (CdSearchFile(&cdlfile1, BONUS_MUSICS[bonusMusicIndex].file) == NULL) {
+    while (CdSearchFile(&musicCdlfile, BONUS_MUSICS[bonusMusicIndex].file) == NULL) {
         if (bonusMusicSearchAttempt >= 10) {
             break;
         }
@@ -159,7 +158,7 @@ void PlayBonusMusic(void) {
         } while (1);
     }
 
-    musicStartSector = CdPosToInt(&cdlfile1.pos);
+    musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + BONUS_MUSICS[bonusMusicIndex].sectors * 4;
     CdReadSync(0, 0);
     while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
