@@ -4,7 +4,7 @@
 #include <libgpu.h>
 
 typedef struct Music {
-    char *file;
+    char* file;
     ushort chan;
     short sectors;
 } Music;
@@ -49,7 +49,7 @@ void PlayMusic(int world) {
     extern char S_could_not_find_music[];
     extern char S_could_not_start_playing[];
     char dummy[8];
-    char *filename;
+    char* filename;
 
     Noop2();
     SndSetMusicVolume();
@@ -117,7 +117,7 @@ void PlayBonusMusic(void) {
     extern char S_could_not_start_playing[];
     extern char S_bonus_song[];
     char dummy[8];
-    char *file;
+    char* file;
 
     Noop2();
     SndSetMusicVolume();
@@ -220,7 +220,7 @@ void SwitchFromBonusToNormalMusic(void) {
     SndSetMusicVolume();
     musicCdlLoc = savedMusicCdlLoc;
     // XXX: Why?
-    *(volatile int *)&musicCurSector = savedMusicCurSector;
+    *(volatile int*)&musicCurSector = savedMusicCurSector;
     musicCounter = 50;
     musicStartSector = savedMusicStartSector;
     musicEndSector = savedMusicEndSector;
