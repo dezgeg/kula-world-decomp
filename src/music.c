@@ -4,7 +4,7 @@
 #include <libgpu.h>
 
 typedef struct Music {
-    char* file;
+    char* filename;
     ushort chan;
     short sectors;
 } Music;
@@ -45,8 +45,6 @@ extern int whichDrawDispEnv;
 
 void PlayMusic(int world) {
     extern char S_File_error[];
-    extern char S_could_not_find_music[];
-    extern char S_could_not_start_playing[];
     char dummy[8];
     char* filename;
 
@@ -54,13 +52,13 @@ void PlayMusic(int world) {
     SndSetMusicVolume();
     musicCounter = 50;
     musicSearchAttempt = 0;
-    while (CdSearchFile(&musicCdlfile, MUSICS[world].file) == NULL) {
+    while (CdSearchFile(&musicCdlfile, MUSICS[world].filename) == NULL) {
         if (musicSearchAttempt >= 10) break;
         CdInit();
         musicSearchAttempt++;
     }
     if (musicSearchAttempt >= 10) {
-        filename = MUSICS[world].file;
+        filename = MUSICS[world].filename;
         VSyncCallback(NULL);
         SetupDisplay(1, 0x80, 0, 0, 0, 0);
         FntFlush(-1);
@@ -68,7 +66,7 @@ void PlayMusic(int world) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_find_music);
+        FntPrint("could not find music \n");
         FntPrint(filename);
         FntFlush(-1);
         whichDrawDispEnv = 1;
@@ -89,7 +87,7 @@ void PlayMusic(int world) {
     while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
         ;
     if (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
-        filename = MUSICS[world].file;
+        filename = MUSICS[world].filename;
         VSyncCallback(NULL);
         SetupDisplay(1, 0x80, 0, 0, 0, 0);
         FntFlush(-1);
@@ -97,7 +95,7 @@ void PlayMusic(int world) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_start_playing);
+        FntPrint("could not start playing \n");
         FntPrint(filename);
         FntFlush(-1);
         whichDrawDispEnv = 1;
@@ -112,11 +110,8 @@ void PlayMusic(int world) {
 
 void PlayBonusMusic(void) {
     extern char S_File_error[];
-    extern char S_could_not_find_music[];
-    extern char S_could_not_start_playing[];
-    extern char S_bonus_song[];
     char dummy[8];
-    char* file;
+    char* filename;
 
     Noop2();
     SndSetMusicVolume();
@@ -132,7 +127,7 @@ void PlayBonusMusic(void) {
         savedMusicXaChan = musicCdlFilter.chan;
     }
     bonusMusicSearchAttempt = 0;
-    while (CdSearchFile(&musicCdlfile, BONUS_MUSICS[bonusMusicIndex].file) == NULL) {
+    while (CdSearchFile(&musicCdlfile, BONUS_MUSICS[bonusMusicIndex].filename) == NULL) {
         if (bonusMusicSearchAttempt >= 10) {
             break;
         }
@@ -141,7 +136,7 @@ void PlayBonusMusic(void) {
     }
 
     if (bonusMusicSearchAttempt >= 10) {
-        file = BONUS_MUSICS[bonusMusicIndex].file;
+        filename = BONUS_MUSICS[bonusMusicIndex].filename;
         VSyncCallback(NULL);
         SetupDisplay(1, 0x80, 0, 0, 0, 0);
         FntFlush(-1);
@@ -149,8 +144,8 @@ void PlayBonusMusic(void) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_find_music);
-        FntPrint(file);
+        FntPrint("could not find music \n");
+        FntPrint(filename);
         FntFlush(-1);
         whichDrawDispEnv = 1;
         PutDrawAndDispEnvs();
@@ -178,8 +173,8 @@ void PlayBonusMusic(void) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_start_playing);
-        FntPrint(S_bonus_song);
+        FntPrint("could not start playing \n");
+        FntPrint("bonus song");
         FntFlush(-1);
         whichDrawDispEnv = 1;
         PutDrawAndDispEnvs();
@@ -211,8 +206,6 @@ void MusicPause(void) {
 
 void SwitchFromBonusToNormalMusic(void) {
     extern char S_File_error[];
-    extern char S_could_not_start_playing[];
-    extern char S_resumed_song_after_bonus[];
     char dummy[8];
 
     Noop2();
@@ -239,8 +232,8 @@ void SwitchFromBonusToNormalMusic(void) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_start_playing);
-        FntPrint(S_resumed_song_after_bonus);
+        FntPrint("could not start playing \n");
+        FntPrint("resumed song after bonus");
         FntFlush(-1);
         whichDrawDispEnv = 1;
         PutDrawAndDispEnvs();
@@ -254,12 +247,10 @@ void SwitchFromBonusToNormalMusic(void) {
 }
 
 void UnusedDebugPrintMusicVariables(void) {
-    extern char S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd[];
-    extern char S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd[];
-    FntPrint(S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd, musicStartSector, musicEndSector,
-             musicCurSector);
-    FntPrint(S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd, savedMusicStartSector,
-             savedMusicEndSector, savedMusicCurSector);
+    FntPrint("CD INFO\nSTARTPOS %d\nENDPOS %d\nCURPOS %d\n",
+            musicStartSector, musicEndSector, musicCurSector);
+    FntPrint("\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n",
+            savedMusicStartSector, savedMusicEndSector, savedMusicCurSector);
 }
 
 void MusicCheckForLoop(void) {
