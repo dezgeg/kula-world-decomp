@@ -4,7 +4,7 @@
 #include <libgpu.h>
 
 typedef struct Music {
-    char* file;
+    char *file;
     ushort chan;
     short sectors;
 } Music;
@@ -16,10 +16,12 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
                          u_char use24Bit);
 extern void SndSetMusicVolume(void);
 
+CdlFILTER musicCdlFilter;
 int bonusMusicSearchAttempt;
 int musicCounter;
 int musicCurSector;
 int musicEndSector;
+int musicSearchAttempt;
 int musicStartSector;
 int musicUnkAlwaysZero1;
 int musicUnkAlwaysZero2;
@@ -30,10 +32,10 @@ int savedMusicXaChan;
 short bonusMusicIndex;
 short playingBonusMusic;
 
-CdlFILTER musicCdlFilter;
-
 extern Music BONUS_MUSICS[3];
-extern CdlFILE cdlfile1; // TODO: rename
+extern Music MUSICS[11];
+
+extern CdlFILE cdlfile1;  // TODO: rename
 extern CdlLOC musicBonusLoc;
 extern CdlLOC musicCdlLoc;
 extern CdlLOC musicCurLoc;
@@ -42,13 +44,80 @@ extern int musicCdMode;
 
 extern int whichDrawDispEnv;
 
+void PlayMusic(int world) {
+    extern char S_File_error[];
+    extern char S_could_not_find_music[];
+    extern char S_could_not_start_playing[];
+    char dummy[8];
+    char *filename;
+
+    Noop2();
+    SndSetMusicVolume();
+    musicCounter = 50;
+    musicSearchAttempt = 0;
+    while (CdSearchFile(&cdlfile1, MUSICS[world].file) == NULL) {
+        if (musicSearchAttempt >= 10) break;
+        CdInit();
+        musicSearchAttempt++;
+    }
+    if (musicSearchAttempt >= 10) {
+        filename = MUSICS[world].file;
+        VSyncCallback(NULL);
+        SetupDisplay(1, 0x80, 0, 0, 0, 0);
+        FntFlush(-1);
+        DrawSync(0);
+        whichDrawDispEnv = 0;
+        PutDrawAndDispEnvs();
+        FntPrint(S_File_error);
+        FntPrint(S_could_not_find_music);
+        FntPrint(filename);
+        FntFlush(-1);
+        whichDrawDispEnv = 1;
+        PutDrawAndDispEnvs();
+        do {
+        } while (1);
+    }
+    musicStartSector = CdPosToInt(&cdlfile1.pos);
+    musicEndSector = musicStartSector + MUSICS[world].sectors * 4;
+    CdReadSync(0, 0);
+    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
+        ;
+    CdReadSync(0, 0);
+    CdIntToPos(musicStartSector, &musicCdlLoc);
+    CdReadSync(0, 0);
+    musicCdlFilter.file = 1;
+    musicCdlFilter.chan = MUSICS[world].chan;
+    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
+        ;
+    if (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
+        filename = MUSICS[world].file;
+        VSyncCallback(NULL);
+        SetupDisplay(1, 0x80, 0, 0, 0, 0);
+        FntFlush(-1);
+        DrawSync(0);
+        whichDrawDispEnv = 0;
+        PutDrawAndDispEnvs();
+        FntPrint(S_File_error);
+        FntPrint(S_could_not_start_playing);
+        FntPrint(filename);
+        FntFlush(-1);
+        whichDrawDispEnv = 1;
+        PutDrawAndDispEnvs();
+        do {
+        } while (1);
+    }
+    Noop();
+    SpuSetReverb(1);
+    playingBonusMusic = 0;
+}
+
 void PlayBonusMusic(void) {
     extern char S_File_error[];
     extern char S_could_not_find_music[];
     extern char S_could_not_start_playing[];
     extern char S_bonus_song[];
     char dummy[8];
-    char* file;
+    char *file;
 
     Noop2();
     SndSetMusicVolume();
@@ -65,7 +134,7 @@ void PlayBonusMusic(void) {
     }
     bonusMusicSearchAttempt = 0;
     while (CdSearchFile(&cdlfile1, BONUS_MUSICS[bonusMusicIndex].file) == NULL) {
-        if (bonusMusicSearchAttempt > 9) {
+        if (bonusMusicSearchAttempt >= 10) {
             break;
         }
         CdInit();
@@ -156,7 +225,7 @@ void SwitchFromBonusToNormalMusic(void) {
     musicStartSector = savedMusicStartSector;
     musicEndSector = savedMusicEndSector;
     CdIntToPos(musicCurSector, &musicBonusLoc);
-    musicCdlFilter.chan = (u_char)savedMusicXaChan;
+    musicCdlFilter.chan = savedMusicXaChan;
     CdReadSync(0, 0);
     while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
         ;
