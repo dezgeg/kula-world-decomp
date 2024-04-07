@@ -1,9 +1,13 @@
+BONUS_MUSICS = 0x000733fc; // size:24
 SJIS_RANGES = 0x000a31fc; // size:12
 SJIS_SPECIAL_CHARS = 0x00073234; // size:68
 VIBRATION_ACT_ALIGN = 0x000a3704; // size:6
 VIBRATION_SEQS = 0x00073b48; // size:8
 _ctype_ = 0x000a2874; // size:129
+bonusMusicIndex = 0x000a363a; // type:s16
+bonusMusicSearchAttempt = 0x000a4b4c; // type:s32
 border = 0x00099f9c; // size:76
+cdlfile1 = 0x000a4c08; // size:24
 controllerButtons = 0x000a5530; // type:u32
 copyrightSprite = 0x000a3fd8; // size:56
 cpdext = 0x000a3a08; // size:120
