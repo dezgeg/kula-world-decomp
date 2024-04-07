@@ -6,7 +6,8 @@
 extern void Noop(void);
 extern void Noop2(void);
 extern void PutDrawAndDispEnvs(void);
-extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
+extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering,
+                         u_char use24Bit);
 extern void SndSetMusicVolume(void);
 
 int musicCounter;
@@ -29,6 +30,23 @@ extern CdlLOC savedMusicCdlLoc;
 extern int musicCdMode;
 
 extern int whichDrawDispEnv;
+
+void MusicPause(void) {
+    char dummy[8];
+
+    Noop2();
+    savedMusicCdlLoc = musicCdlLoc;
+    musicCounter = 50;
+    savedMusicStartSector = musicStartSector;
+    savedMusicEndSector = musicEndSector;
+    savedMusicCurSector = musicCurSector;
+    savedMusicXaChan = musicCdlFilter.chan;
+    while (CdControlB(CdlPause, 0, dummy) == 0)
+        ;
+    CdReadSync(0, 0);
+    Noop();
+    SpuSetReverb(1);
+}
 
 void SwitchFromBonusToNormalMusic(void) {
     extern char S_File_error[];
