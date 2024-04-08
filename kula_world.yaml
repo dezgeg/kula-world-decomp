@@ -96,6 +96,8 @@ segments:
       - [0x5cdc, c, nonmatched/text_5cdc]
       - [0x102c8, c, lethargy]
       - [0x10330, c, nonmatched/text_10330]
+      - [0x128b8, c, screenshake]
+      - [0x128e4, c, nonmatched/text_128e4]
       - [0x14610, c, gui]
       - [0x14b0c, c, nonmatched/text_14b0c]
       - [0x1541c, c, prim]
