@@ -50,6 +50,11 @@ typedef struct Texture {
     u_short h;
 } Texture;
 
+typedef struct DrawDisp {
+    DRAWENV draw;
+    DISPENV disp;
+} DrawDisp;
+
 #define INCLUDE_ASM(FOLDER, NAME) \
 __asm__( \
     ".text\n" \

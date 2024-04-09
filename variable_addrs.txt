@@ -21,6 +21,7 @@ dispenvScreenY = 0x000a5a04; // type:s32
 displayHeight = 0x000a2e74; // type:s32
 displayWidth = 0x000a2e6c; // type:s32
 drawTimerPausedWidget = 0x000a4f50; // type:s32
+drawdisp = 0x000d2280; // size:224
 firstGuiTexture = 0x000a52c4; // type:u32
 fixed_bd = 0x000a4cd8; // type:u32
 fixed_bl = 0x000a4cd4; // type:u32
