@@ -28,18 +28,15 @@ void EnableScreenShake(int param_1, int param_2, int param_3) {
 void ProcessScreenShake(void) {
     int rng;
     int v;
-    ushort x,y; // XXX: Any way to force load size without temp variable?
 
     if (screenShakeEnabled == 1) {
         screenShakeTimer--;
         if (screenShakeTimer < 0) {
             screenShakeEnabled = 0;
-            x = dispenvScreenX;
-            y = dispenvScreenY;
-            drawdisp[1].disp.screen.x = x;
-            drawdisp[0].disp.screen.x = x;
-            drawdisp[1].disp.screen.y = y;
-            drawdisp[0].disp.screen.y = y;
+            drawdisp[1].disp.screen.x = *(ushort*)&dispenvScreenX;
+            drawdisp[0].disp.screen.x = *(ushort*)&dispenvScreenX;
+            drawdisp[1].disp.screen.y = *(ushort*)&dispenvScreenY;
+            drawdisp[0].disp.screen.y = *(ushort*)&dispenvScreenY;
         } else {
             if ((screenShakeDirectionMask & 1) != 0) {
                 rng = Rand(screenShakeMagnitude << 1);
