@@ -37,8 +37,7 @@ extern uint controllerButtons;
 extern int curController;
 extern uint prevControllerButtons;
 
-// wtf are these types?
-extern ushort dispenvScreenX;
+extern int dispenvScreenX;
 extern int dispenvScreenY;
 
 extern int musicVolume;
@@ -201,7 +200,7 @@ int FmvMainLoop(int movieI) {
         SetDefDispEnv(&disp, dec.rect[id].x - VRAMPIX(movie->posX, movie->is24bit),
                       dec.rect[id].y - movie->posY, VRAMPIX(movie->scrWidth, movie->is24bit),
                       movie->scrHeight);
-        disp.screen.x = dispenvScreenX;
+        disp.screen.x = *(ushort*)&dispenvScreenX;
         disp.screen.y = dispenvScreenY + 8;
 
         if (movie->is24bit) {
