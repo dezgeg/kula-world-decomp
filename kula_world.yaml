@@ -122,7 +122,8 @@ segments:
       - [0x3e014, c, nonmatched/snd]
       - [0x3e73c, c, snd]
       - [0x3eef8, c, init]
-      - [0x3f07c, c, nonmatched/disp]
+      - [0x3f07c, c, disp]
+      - [0x3f0e0, c, nonmatched/disp]
       - [0x3f47c, c, pad]
       - [0x3f968, c, nonmatched/text_3f968]
       - [0x422dc, c, nonmatched/hacks1] # probably hand asm (for no good reason)
