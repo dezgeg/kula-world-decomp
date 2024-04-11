@@ -95,7 +95,7 @@ segments:
       - [0x4cf0, c, nonmatched/lensflare]
       - [0x5cdc, c, nonmatched/text_5cdc]
       - [0xc2c0, c, nonmatched/background_cubes]
-      - [0xd1b4, c, nonmatched/text_d1b4]
+      - [0xcf7c, c, nonmatched/text_cf7c]
       - [0x102c8, c, lethargy]
       - [0x10330, c, nonmatched/text_10330]
       - [0x128b8, c, screenshake]
