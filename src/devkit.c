@@ -33,8 +33,8 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     screenshotRect.w = displayWidth;
     screenshotRect.h = displayHeight;
     screenshotNumBytes = displayWidth * displayHeight * 2;
-    screenshotTimHeader[2] = screenshotNumBytes + 0xc;
-    screenshotTimHeader[4] = displayHeight << 0x10 | displayWidth;
+    screenshotTimHeader[2] = screenshotNumBytes + 12;
+    screenshotTimHeader[4] = displayHeight << 16 | displayWidth;
 
     if (whichDrawDispEnv == 0) {
         screenshotRect.x = screenshotRect.w;
@@ -62,7 +62,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         SetDebugScreenshotFilename(num);
     }
     DrawSync(0);
-    StoreImage(&screenshotRect, 0x600000);
+    StoreImage(&screenshotRect, 0x600000); // TODO: use symbol for this
     DrawSync(0);
     Noop2();
 
@@ -72,7 +72,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         FntPrint(S_can_not_create_file_FMTs, file);
     } else {
         PCwrite(fd, screenshotTimHeader, 20);
-        PCwrite(fd, 0x600000, screenshotNumBytes);
+        PCwrite(fd, 0x600000, screenshotNumBytes); // TODO: use symbol for this
         if (PCclose(fd) < 0) {
             FntPrint(S_error_closing_file_FMTs, file);
         }
