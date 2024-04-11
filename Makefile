@@ -30,7 +30,7 @@ build/%.o: %.s
 
 build/%.o: %.c psyq
 	@mkdir -p $$(dirname $@)
-	 psyq/cpppsx -I include/ -isystem psyq/INCLUDE/ $< | psyq/cc1psx -G200 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G200 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
+	 psyq/cpppsx -I include/ -isystem psyq/INCLUDE/ $< | psyq/cc1psx -G128 -w -O3 -fpeephole -ffunction-cse -fpcc-struct-return -fcommon -fgnu-linker -funsigned-char -fverbose-asm -mgas -msoft-float -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G128 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
 
 psyq:
 	mkdir -p psyq
