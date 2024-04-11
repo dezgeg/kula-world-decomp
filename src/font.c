@@ -5,7 +5,8 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern TSprite fontSprites[96];
 extern Texture textures[150];
 
-void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y, int texIndex) {
+void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y,
+                  int texIndex) {
     SPRT* sprt;
     uchar idx = c - 0x20;
     if (idx < 0x60) {
