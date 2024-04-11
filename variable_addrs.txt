@@ -34,6 +34,7 @@ fixed_td = 0x000a4ce0; // type:u32
 fixed_tl = 0x000a4cdc; // type:u32
 fmvEnded = 0x000a4cd0; // type:s32
 fmvRing = 0x000a3720; // size:4
+fontSprites = 0x000aa47c; // size:2688
 gteXScale = 0x000a2e70; // type:s32
 gteYScale = 0x000a2e78; // type:s32
 inflate_mask = 0x000a3b48; // size:68
