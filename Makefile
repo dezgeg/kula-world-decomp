@@ -40,4 +40,4 @@ psyq:
 
 venv:
 	virtualenv venv
-	source venv/bin/activate && pip3 install -U splat64[mips]
+	source venv/bin/activate && pip3 install -U splat64[mips] pycparser pynacl toml Levenshtein
