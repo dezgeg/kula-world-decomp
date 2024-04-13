@@ -14,7 +14,7 @@ check: build/SCES_010.00
 Makefile: build/kula_world.ld
 	touch Makefile
 
-build/kula_world.ld: kula_world.yaml $(wildcard *_addrs.txt)
+build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
 	source venv/bin/activate && splat split kula_world.yaml
 
@@ -37,3 +37,7 @@ psyq:
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz
 	rm -rf psyq/INCLUDE psyq/LIB
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz
+
+venv:
+	virtualenv venv
+	source venv/bin/activate && pip3 install -U splat64[mips]

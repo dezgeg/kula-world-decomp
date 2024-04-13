@@ -26,7 +26,7 @@ options:
   asm_data_macro: dlabel
 
   section_order: [".rodata", ".text", ".data", ".sdata", ".bss"]
-  ld_section_labels: [".rodata", ".text", ".data", ".sdata", ".bss"]
+  # ld_section_labels: [".rodata", ".text", ".data", ".sdata", ".bss"]
   # auto_all_sections: [".data", ".rodata", ".bss"]
 
   symbol_addrs_path:
