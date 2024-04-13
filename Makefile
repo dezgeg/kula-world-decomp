@@ -34,11 +34,11 @@ build/%.s: build/%.i psyq build/subdirs
 	psyq/cc1psx -G128 -w -O3 -quiet $< -o $@
 
 build/%.o: build/%.s build/subdirs
-	 python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G128 --run-assembler -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ -o $@ < $<
+	 python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G128 --run-assembler -no-pad-sections -Iinclude/ -o $@ < $<
 
 # TODO: figure out how to avoid this duplicate rule
 build/%.o: %.s build/subdirs
-	 python3 ~/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ -o $@ < $<
+	 python3 ~/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler -no-pad-sections -Iinclude/ -o $@ < $<
 
 psyq:
 	mkdir -p psyq
