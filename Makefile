@@ -1,6 +1,6 @@
-# No built-in rules
-.SUFFIXES:
-SHELL = bash -e -o pipefail
+.SUFFIXES: # No built-in rules
+.SECONDARY: # Don't delete intermediates
+SHELL := bash -e -o pipefail
 
 C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)
 S_FILES := $(wildcard asm/*.s) $(wildcard asm/*/*.s) $(wildcard asm/data/*/*.s)
@@ -14,6 +14,9 @@ check: build/SCES_010.00
 Makefile: build/kula_world.ld
 	touch Makefile
 
+build/subdirs:
+	mkdir -p $(sort $(dir $(O_FILES))) build/subdirs
+
 build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
 	source venv/bin/activate && splat split kula_world.yaml
@@ -24,13 +27,18 @@ build/SCES_010.00: build/main.elf
 build/main.elf: $(O_FILES)
 	mipsel-linux-gnu-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -Map build/symbols.map
 
-build/%.o: %.s
-	@mkdir -p $$(dirname $@)
-	python3 ~/maspsx/maspsx.py $< | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ - -o $@
+build/%.i: %.c psyq build/subdirs
+	psyq/cpppsx -isystem psyq/INCLUDE/ -I include/ -undef -D__GNUC__=2 -D__OPTIMIZE__ -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C $< -o $@
 
-build/%.o: %.c psyq
-	@mkdir -p $$(dirname $@)
-	 psyq/cpppsx -I include/ -isystem psyq/INCLUDE/ $< | psyq/cc1psx -G128 -w -O3 -quiet | python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G128 | mipsel-linux-gnu-as -EL -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -G0 -Iinclude/ - -o $@
+build/%.s: build/%.i psyq build/subdirs
+	psyq/cc1psx -G128 -w -O3 -quiet $< -o $@
+
+build/%.o: build/%.s build/subdirs
+	 python3 ~/maspsx/maspsx.py --macro-inc --aspsx-version=2.56 -G128 --run-assembler -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ -o $@ < $<
+
+# TODO: figure out how to avoid this duplicate rule
+build/%.o: %.s build/subdirs
+	 python3 ~/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler -32 -march=r3000 -mtune=r3000 -msoft-float -no-pad-sections -Iinclude/ -o $@ < $<
 
 psyq:
 	mkdir -p psyq
