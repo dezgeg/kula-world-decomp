@@ -16,7 +16,7 @@ Makefile: build/kula_world.ld
 
 build/kula_world.ld: kula_world.yaml $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
-	splat split kula_world.yaml
+	source venv/bin/activate && splat split kula_world.yaml
 
 build/SCES_010.00: build/main.elf
 	mipsel-linux-gnu-objcopy -O binary $< $@
