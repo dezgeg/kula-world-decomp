@@ -16,6 +16,9 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
                          u_char use24Bit);
 extern void SndSetMusicVolume(void);
 
+short bonusMusicIndex = 0;
+short playingBonusMusic = 0;
+
 CdlFILTER musicCdlFilter;
 int bonusMusicSearchAttempt;
 int musicCounter;
@@ -29,8 +32,6 @@ int savedMusicCurSector;
 int savedMusicEndSector;
 int savedMusicStartSector;
 int savedMusicXaChan;
-short bonusMusicIndex;
-short playingBonusMusic;
 
 extern CdlFILE musicCdlfile;
 extern CdlLOC musicBonusLoc;

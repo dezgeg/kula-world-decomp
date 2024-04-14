@@ -10,17 +10,98 @@ typedef struct SpuVoiceState {
     int sfxIndex;
 } SpuVoiceState;
 
-short playingBonusMusic = 0;
-short bonusMusicIndex = 0;
+short playingBonusMusic;
+short bonusMusicIndex;
 
 SpuCommonAttr spuCommonAttr;
+int sfxVolume;
 int musicVolume;
 
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
 extern char keyStatus[]; /* pointless global */
 
-extern char keyStatus_[]; // hack to make gcc not create induction variable of sprt
+extern char keyStatus_[];  // hack to make gcc not create induction variable of sprt
+
+extern short SFX_REMAP_TABLE[];
+int sndSwapPanDir;
+int sfxPanning;
+
+extern int lethargyMode;
+
+static int curPlayingSfx;
+static VECTOR panFactor;
+static VECTOR panVectorSq;
+
+static VECTOR* panFactorPtr = &panFactor;
+static VECTOR* panVectorSqPtr = &panVectorSq;
+
+int voiceIter;
+
+void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
+    int pan;
+    curPlayingSfx = sfx;
+
+    do { } while (0);
+
+    if (curPlayingSfx < 120) {
+        curPlayingSfx = SFX_REMAP_TABLE[sfx];
+    }
+    if (curPlayingSfx >= 0) {
+        for (voiceIter = 0; voiceIter < 23; voiceIter++) {
+            if (spuVoiceState[voiceIter].sfxIndex == -1) {
+                break;
+            }
+        }
+
+        if (spuVoiceState[voiceIter].sfxIndex == -1) {
+            panFactor.vx = dir->vx;
+            panFactor.vy = dir->vy;
+            panFactor.vz = dir->vz;
+            Square0(panFactorPtr, panVectorSqPtr);
+            volume = (volume * sfxVolume) / 0xc;
+            sfxPanning = 3 * SquareRoot0(panVectorSqPtr->vx + panVectorSqPtr->vy + panVectorSqPtr->vz);
+
+            if (sfxPanning > volume) {
+                sfxPanning = volume;
+            }
+            if (sfxPanning == 0) {
+                perSfxVoiceAttrs[curPlayingSfx].volume.right = volume;
+                perSfxVoiceAttrs[curPlayingSfx].volume.left = volume;
+            } else {
+                if (sndSwapPanDir) {
+                    perSfxVoiceAttrs[curPlayingSfx].volume.left =
+                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                    perSfxVoiceAttrs[curPlayingSfx].volume.right =
+                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                } else {
+                    perSfxVoiceAttrs[curPlayingSfx].volume.right =
+                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                    perSfxVoiceAttrs[curPlayingSfx].volume.left =
+                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                }
+            }
+            perSfxVoiceAttrs[curPlayingSfx].mask = 0;
+            perSfxVoiceAttrs[curPlayingSfx].voice = 1 << voiceIter;
+            if (tag > 0x8000) {
+                perSfxVoiceAttrs[curPlayingSfx].note -= 0x100;
+            }
+            SpuSetVoiceAttr(&perSfxVoiceAttrs[curPlayingSfx]);
+            if (tag > 0x8000) {
+                perSfxVoiceAttrs[curPlayingSfx].note += 0x100;
+            }
+            SpuSetKey(1, 1 << voiceIter);
+            if (!lethargyMode) {
+                SpuSetReverbVoice(0, 1 << voiceIter);
+            } else {
+                SpuSetReverbVoice(1, 1 << voiceIter);
+            }
+            spuVoiceState[voiceIter].tag = tag;
+            spuVoiceState[voiceIter].volume = volume;
+            spuVoiceState[voiceIter].sfxIndex = curPlayingSfx;
+        }
+    }
+}
 
 void SndProcessSpuVoices(void) {
     int i;
