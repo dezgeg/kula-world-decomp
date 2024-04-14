@@ -2,7 +2,7 @@
 
 extern void Noop(void);
 extern void Noop2(void);
-extern void SetDebugScreenshotFilename(int param_1);
+extern void SetDebugScreenshotFilenameSuffix(int param_1);
 
 int screenshotIndex[13];
 int screenshotNumBytes;
@@ -44,7 +44,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         sprintf(debugFilenameBuf, S_FMTs_2, prefix);
         num = screenshotIndex[0];
         screenshotIndex[0]++;
-        SetDebugScreenshotFilename(num);
+        SetDebugScreenshotFilenameSuffix(num);
     } else {
         worldNum = 10;
         if (curWorld < 10) {
@@ -59,7 +59,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         sprintf(debugFilenameBuf, S_FMTsFMTs, prefix, DEBUG_SCREENSHOT_WORLD_NAMES[worldNum]);
         num = screenshotIndex[worldNum];
         screenshotIndex[worldNum]++;
-        SetDebugScreenshotFilename(num);
+        SetDebugScreenshotFilenameSuffix(num);
     }
     DrawSync(0);
     StoreImage(&screenshotRect, 0x600000); // TODO: use symbol for this
