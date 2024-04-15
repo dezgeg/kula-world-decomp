@@ -7,11 +7,11 @@ extern void SetDebugScreenshotFilenameSuffix(int param_1);
 int screenshotIndex[13];
 int screenshotNumBytes;
 static RECT screenshotRect;
-static uint screenshotTimHeader[5]; // TODO add initializer
+static uint screenshotTimHeader[5];  // TODO add initializer
 
 extern char* DEBUG_SCREENSHOT_WORLD_NAMES[13];
 extern int curWorld;
-extern char debugFilenameBuf[16];
+extern char debugFilenameBuf[];
 extern int displayHeight;
 extern int displayWidth;
 extern int specialLevelType;
@@ -62,7 +62,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         SetDebugScreenshotFilenameSuffix(num);
     }
     DrawSync(0);
-    StoreImage(&screenshotRect, 0x600000); // TODO: use symbol for this
+    StoreImage(&screenshotRect, 0x600000);  // TODO: use symbol for this
     DrawSync(0);
     Noop2();
 
@@ -72,10 +72,29 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         FntPrint(S_can_not_create_file_FMTs, file);
     } else {
         PCwrite(fd, screenshotTimHeader, 20);
-        PCwrite(fd, 0x600000, screenshotNumBytes); // TODO: use symbol for this
+        PCwrite(fd, 0x600000, screenshotNumBytes);  // TODO: use symbol for this
         if (PCclose(fd) < 0) {
             FntPrint(S_error_closing_file_FMTs, file);
         }
     }
     Noop();
+}
+
+void SetDebugScreenshotFilenameSuffix(int num) {
+    char* p = debugFilenameBuf;
+    int y = num; // XXX: permuter mess
+    while (*p) {
+        p++;
+    }
+
+    *(p++) = '0' + y / 1000;
+    num = y = y % 1000;
+    *(p++) = ((num / 100) + '0');
+    *(p++) = ((num %= 100) / 10) + '0';
+    *(p++) = '0' + (y = num % 10);
+    *(p++) = '.';
+    *(p++) = 't';
+    *(p++) = 'i';
+    *(p++) = 'm';
+    *(p++) = '\0';
 }
