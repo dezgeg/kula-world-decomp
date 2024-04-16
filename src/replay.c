@@ -1,13 +1,13 @@
 #include "common.h"
 
 int replayEnded;
-ushort replayPlaybackCurrentButtons;
+short replayPlaybackCurrentButtons;
 char* replayPlaybackPtr;
 char replayPlaybackRleCounter;
 char replayRawButtons;
 
 int InitReplayPlayback(char* param_1) {
-    uint rawBtns;
+    uchar rawBtns;
 
     replayEnded = 0;
     replayPlaybackPtr = param_1 + 21;
@@ -18,4 +18,26 @@ int InitReplayPlayback(char* param_1) {
     replayPlaybackCurrentButtons = ((rawBtns << 4) & 0xf0) | ((rawBtns << 5) & 0x200) |
                                    ((rawBtns << 6) & 0x800) | ((rawBtns << 8) & 0x4000);
     return *(int*)(param_1 + 16);
+}
+
+int GetButtonsFromReplay(void) {
+    uchar rawBtns;
+
+    if (!replayEnded) {
+        if (replayPlaybackRleCounter != 0) {
+            replayPlaybackRleCounter--;
+        } else {
+            replayPlaybackRleCounter = *replayPlaybackPtr++ - 1;
+            rawBtns = *replayPlaybackPtr++;
+            replayRawButtons = rawBtns;
+            if (rawBtns == 0xff) {
+                replayEnded = 1;
+                return 0;
+            }
+            replayPlaybackCurrentButtons = ((rawBtns << 4) & 0xf0) | ((rawBtns << 5) & 0x200) |
+                                           ((rawBtns << 6) & 0x800) | ((rawBtns << 8) & 0x4000);
+        }
+        return replayPlaybackCurrentButtons;
+    }
+    return 0;
 }

@@ -114,7 +114,6 @@ segments:
       - [0x36b60, c, devkit]
       - [0x36e74, c, nonmatched/devkit]
       - [0x3714c, c, replay]
-      - [0x371b4, c, nonmatched/replay]
       - [0x37268, c, nonmatched/text_37268]
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
