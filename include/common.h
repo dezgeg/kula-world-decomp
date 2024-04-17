@@ -10,6 +10,16 @@ typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
+typedef signed char s8;
+typedef signed short s16;
+typedef signed int s32;
+
+typedef unsigned char byte;
+typedef signed char sbyte;
+
 enum PadButton {
     PAD_SELECT = 0x0001,
     PAD_L3 = 0x0002,
@@ -54,6 +64,54 @@ typedef struct DrawDisp {
     DRAWENV draw;
     DISPENV disp;
 } DrawDisp;
+
+typedef struct Highscore {
+    int score;
+    short level;
+    short fruits;
+    int time;
+    char name[8];
+} Highscore;
+
+typedef struct PsxSaveHeader {
+    char magic[2]; /* SC */
+    byte iconFlags;
+    byte blockNumber;
+    ushort title[32]; /* SJIS */
+    byte unused[28];
+    byte iconClut[32];
+    byte iconBitmap[128];
+} PsxSaveHeader;
+
+typedef struct SaveSlot {
+    int levelScores[150];
+    int score;
+    int playtime;
+    short fruits;
+    short curLevel;
+    short curWorld;
+    short fruitBitmask;
+    short valid;
+    short gameMode;
+    short timeTrialDifficulty;
+    short isFinal;
+} SaveSlot;
+
+typedef struct MemcardData {
+    PsxSaveHeader header;
+    short arcadeModeDone;
+    short highestLevelReached;
+    short musicVolume;
+    short sfxVolume;
+    short screenX;
+    short screenY;
+    Highscore highscore0;
+    int highscore0LevelScores[150];
+    SaveSlot saveslots[4];
+    int turnDelayEnabled;
+    int vibrationEnabled;
+    byte pad[4804];
+} MemcardData;
 
 #define INCLUDE_ASM(FOLDER, NAME) \
 __asm__( \

@@ -54,6 +54,7 @@ kulaZAllocatorPointer = 0x000a4ce4; // size:4
 latestControllerSlotPolled = 0x000a4c20; // type:s32
 lethargyMode = 0x000a52b8; // type:u32
 loadingIsComplete = 0x000a5750; // type:s32
+memCardData = 0x000db25c; // size:8196
 movieInfos = 0x00099e0c; // size:32
 musicBonusLoc = 0x000a4f80; // size:4
 musicCdMode = 0x000a35b4; // type:s32

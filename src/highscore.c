@@ -2,14 +2,6 @@
 
 #include <string.h>
 
-typedef struct Highscore {
-    int score;
-    short level;
-    short fruits;
-    int time;
-    char name[8];
-} Highscore;
-
 extern uint Rand(int param_1);
 
 Highscore highscores[6];
