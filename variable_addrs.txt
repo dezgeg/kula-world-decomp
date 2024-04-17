@@ -24,6 +24,7 @@ curPlayingSfx = 0x000a4b5c; // type:s32
 curWorld = 0x000a2ea4; // type:s32
 debugFilenameBuf = 0x000bb510; // size:16
 dec = 0x000a4c90; // size:60
+devkitFileNumber = 0x00131000; // type:s32
 dispenvScreenX = 0x000a5a00; // type:s32
 dispenvScreenY = 0x000a5a04; // type:s32
 displayHeight = 0x000a2e74; // type:s32

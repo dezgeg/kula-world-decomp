@@ -16,6 +16,7 @@ extern int displayHeight;
 extern int displayWidth;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
+extern int devkitFileNumber;
 
 extern char S_FMTs_2[];
 extern char S_FMTsFMTs[];
@@ -82,7 +83,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
 
 void SetDebugScreenshotFilenameSuffix(int num) {
     char* p = debugFilenameBuf;
-    int y = num; // XXX: permuter mess
+    int y = num;  // XXX: permuter mess
     while (*p) {
         p++;
     }
@@ -97,4 +98,8 @@ void SetDebugScreenshotFilenameSuffix(int num) {
     *(p++) = 'i';
     *(p++) = 'm';
     *(p++) = '\0';
+}
+
+void ResetDevkitFileNumber(void) {
+    devkitFileNumber = 0;
 }
