@@ -1,8 +1,16 @@
 #include "common.h"
 
-extern int highscoreLevelScores[6][150];
+#include <libmcrd.h>
+
+extern void ShowMemCardFullScreenText(char* str);
+
+long mcResult;
+long tempMcResult;
+
 extern Highscore highscores[6];
 extern MemcardData memCardData;
+extern int highscoreLevelScores[6][150];
+extern long mcCmd;
 
 void LoadHighscoresFromMemcardData(void) {
     int i;
@@ -66,4 +74,15 @@ void LoadHighscoresFromMemcardData(void) {
             }
         }
     }
+}
+
+void FormatMemcard(void) {
+    extern char S_FORMATTING_MEMORY_CARD_PLEASE_WAIT[];
+    MemCardAccept(0);
+    MemCardSync(0, &mcCmd, &tempMcResult);
+    if (tempMcResult == McErrNotFormat) {
+        ShowMemCardFullScreenText(S_FORMATTING_MEMORY_CARD_PLEASE_WAIT);
+        tempMcResult = MemCardFormat(0);
+    }
+    mcResult = tempMcResult;
 }
