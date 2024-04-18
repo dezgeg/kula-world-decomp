@@ -87,7 +87,7 @@ segments:
       - [0x1958, rodata, libsio/sio]
       - [0x1978, rodata, libmcrd/libmcrd]
       - [0x1af0, rodata, libmcrd/userfunc]
-      - [0x1b0c, c, nonmatched/text_1b0c]
+      - [0x1b0c, c, various_init]
       - [0x1b4c, c, nonmatched/particles]
       - [0x31c8, c, nonmatched/copycat_ui]
       - [0x355c, c, font]
