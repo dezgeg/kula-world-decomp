@@ -126,7 +126,6 @@ segments:
       - [0x37268, c, unused]
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
-      - [0x37418, c, nonmatched/cheats]
       - [0x377a0, c, nonmatched/text_377a0]
       - [0x3b6c0, c, highscore]
       - [0x3b89c, c, nonmatched/highscore]
