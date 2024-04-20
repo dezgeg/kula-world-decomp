@@ -5,8 +5,11 @@
 extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering,
                          u_char use24Bit);
+extern void Noop(void);
+extern void Noop2(void);
 
 int sizeOfSfxFile;
+int unusedReadErrorCode;
 
 extern char filenameBuf[24];
 extern int gameMode;
@@ -109,5 +112,24 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     if (filetype == 1) {
         sizeOfSfxFile = cdlfile.size;
     }
+    return cdlfile.size;
+}
+
+uint UnusedReadKulaPicPak(void* unknown, char* buf) {
+    extern char S_KULA_KULA_PIC_PAK_1[];
+    CdlFILE cdlfile;
+
+    Noop2();
+    if (CdSearchFile(&cdlfile, S_KULA_KULA_PIC_PAK_1) == 0) {
+        unusedReadErrorCode = 2;
+    }
+    while (CdControl(CdlSeekL, &cdlfile, 0) == 0) {
+        unusedReadErrorCode = 3;
+    }
+    while (CdRead((cdlfile.size >> 11) + 1, buf, 0x80) == 0) {
+        unusedReadErrorCode = 4;
+    }
+    CdReadSync(0, 0);
+    Noop();
     return cdlfile.size;
 }
