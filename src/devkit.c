@@ -9,14 +9,21 @@ int screenshotNumBytes;
 static RECT screenshotRect;
 static uint screenshotTimHeader[5];  // TODO add initializer
 
+extern byte saveReplayBuf[4076];
+extern byte saveReplayCurrentButtonsShuffled;
+extern byte saveReplayRleButtonCount;
+extern char debugFilenameBuf[];
 extern char* DEBUG_SCREENSHOT_WORLD_NAMES[13];
 extern int curWorld;
-extern char debugFilenameBuf[];
+extern int devkitFileNumber;
 extern int displayHeight;
 extern int displayWidth;
+extern int saveReplayIsFirstSequence;
+extern int saveReplayLength;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
-extern int devkitFileNumber;
+extern short saveReplayCurrentButtons;
+extern byte* saveReplayWritePtr;
 
 extern char S_FMTs_2[];
 extern char S_FMTsFMTs[];
@@ -102,4 +109,13 @@ void SetDebugScreenshotFilenameSuffix(int num) {
 
 void ResetDevkitFileNumber(void) {
     devkitFileNumber = 0;
+}
+
+void InitReplaySaving(void) {
+    saveReplayWritePtr = (byte*)0x131014; // saveReplayBuf
+    saveReplayRleButtonCount = 0;
+    saveReplayCurrentButtonsShuffled = 0;
+    saveReplayCurrentButtons = 0;
+    saveReplayLength = 0;
+    saveReplayIsFirstSequence = 1;
 }
