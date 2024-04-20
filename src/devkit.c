@@ -10,8 +10,6 @@ static RECT screenshotRect;
 static uint screenshotTimHeader[5];  // TODO add initializer
 
 extern byte saveReplayBuf[4076];
-extern byte saveReplayCurrentButtonsShuffled;
-extern byte saveReplayRleButtonCount;
 extern char debugFilenameBuf[];
 extern char* DEBUG_SCREENSHOT_WORLD_NAMES[13];
 extern int curWorld;
@@ -19,11 +17,14 @@ extern int devkitFileNumber;
 extern int displayHeight;
 extern int displayWidth;
 extern int saveReplayIsFirstSequence;
-extern int saveReplayLength;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
-extern short saveReplayCurrentButtons;
 extern byte* saveReplayWritePtr;
+
+extern volatile short saveReplayCurrentButtons;
+extern volatile byte saveReplayCurrentButtonsShuffled;
+extern volatile int saveReplayLength;
+extern volatile byte saveReplayRleButtonCount;
 
 extern char S_FMTs_2[];
 extern char S_FMTsFMTs[];
@@ -112,10 +113,50 @@ void ResetDevkitFileNumber(void) {
 }
 
 void InitReplaySaving(void) {
-    saveReplayWritePtr = (byte*)0x131014; // saveReplayBuf
+    saveReplayWritePtr = (byte*)0x131014;  // saveReplayBuf
     saveReplayRleButtonCount = 0;
     saveReplayCurrentButtonsShuffled = 0;
     saveReplayCurrentButtons = 0;
     saveReplayLength = 0;
     saveReplayIsFirstSequence = 1;
+}
+
+// XXX: this is a mess
+void RecordButtonsToDevkit(s32 arg0) {
+    s32 origArg0;
+    s16 currentButtons;
+    u8 currentButtonsShuffled;
+    u8 newCount;
+    u8* writePtr;
+    u8 buttonCount;
+
+    writePtr = saveReplayWritePtr;
+    buttonCount = saveReplayRleButtonCount;
+    currentButtonsShuffled = saveReplayCurrentButtonsShuffled;
+    currentButtons = saveReplayCurrentButtons;
+
+    *(s32*)0x131010 += 1;  // saveReplayLength++
+    origArg0 = arg0;
+    arg0 <<= 16;
+    if (arg0 >> 16 == currentButtons) {
+        newCount = buttonCount + 1;
+    } else {
+        if (*(s32*)0x131004 == 1) {  // saveReplayIsFirstSequence == 1
+            *(s32*)0x131004 = 0;     // saveReplayIsFirstSequence = 0
+        } else {
+            *writePtr++ = buttonCount;
+            *writePtr++ = currentButtonsShuffled;
+        }
+        newCount = 1;
+        currentButtons = origArg0;
+        currentButtonsShuffled = ((arg0 >> 20) & 0xF) | ((arg0 >> 21) & 0x10) |
+                                 ((arg0 >> 22) & 0x20) | ((arg0 >> 24) & 0x40);
+    }
+    if ((u32)writePtr > 0x131FFFU) {
+        writePtr = (u8*)0x131FFE;
+    }
+    saveReplayWritePtr = writePtr;
+    saveReplayRleButtonCount = newCount;
+    saveReplayCurrentButtonsShuffled = currentButtonsShuffled;
+    saveReplayCurrentButtons = currentButtons;
 }
