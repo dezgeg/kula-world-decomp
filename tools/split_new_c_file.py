@@ -12,5 +12,5 @@ for line in open('function_addrs.txt').readlines():
         func_addr = int(m[2], 16)
         end = True
 
-print(hex(func_addr - 0x11000 + 0x800))
-print(hex(next_func_addr - 0x11000 + 0x800))
+print("0x%05x" % (func_addr - 0x11000 + 0x800))
+print("0x%05x" % (next_func_addr - 0x11000 + 0x800))
