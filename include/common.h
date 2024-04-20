@@ -39,6 +39,13 @@ enum PadButton {
     PAD_SQUARE = 0x8000,
 };
 
+typedef struct PrimList {
+    void* main;
+    void* gui1;
+    void* gui2;
+    void* gui3;
+} PrimList;
+
 typedef struct TSprite {
     DR_TPAGE tpage;
     SPRT sprt;
