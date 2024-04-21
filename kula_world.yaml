@@ -99,6 +99,7 @@ segments:
       - [0x04cf0, c, nonmatched/lensflare]
       - [0x05cdc, c, nonmatched/code_05cdc]
       - [0x0c2c0, c, nonmatched/background_cubes]
+      - [0x0cba0, c, background_cubes2]
       - [0x0cf7c, c, nonmatched/psx_button_background]
       - [0x0d4dc, c, nonmatched/spinning_selection]
       - [0x0dcd4, c, nonmatched/code_0dcd4]
