@@ -106,7 +106,6 @@ segments:
       - [0x102c8, c, lethargy]
       - [0x10330, c, nonmatched/code_10330]
       - [0x10838, c, screen_fade]
-      - [0x1088c, c, nonmatched/screen_fade]
       - [0x10a2c, c, title_screen]
       - [0x10b78, c, nonmatched/score_graph]
       - [0x1250c, c, nonmatched/code_1250c]
