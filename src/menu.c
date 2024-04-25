@@ -96,7 +96,7 @@ void PauseOrMainMenu(void) {
             break;
     }
 
-    if (((controllerButtons & PAD_START & ~prevControllerButtons) && wasPausedPreviousFrame == 1) || !isPaused) {
+    if ((controllerButtons & PAD_START & ~prevControllerButtons && wasPausedPreviousFrame == 1) || !isPaused) {
         repeatRateTimer = 0;
         curMenu = 0;
         cursorPosInMenu[0] = 0;
@@ -109,7 +109,7 @@ void PauseOrMainMenu(void) {
 }
 
 void PauseMenu(void) {
-    if ((controllerButtons & PAD_U & ~prevControllerButtons) != 0) {
+    if (controllerButtons & PAD_U & ~prevControllerButtons) {
         if (cursorPosInMenu[curMenu] <= 0) {
             cursorPosInMenu[curMenu] = 3;
         } else {
@@ -117,14 +117,14 @@ void PauseMenu(void) {
         }
         SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    if ((controllerButtons & PAD_D & ~prevControllerButtons) != 0) {
+    if (controllerButtons & PAD_D & ~prevControllerButtons) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
         SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
     DrawWidgets(1, cursorPosInMenu[curMenu]);
 
-    if ((controllerButtons & PAD_CROSS & ~prevControllerButtons) != 0) {
+    if (controllerButtons & PAD_CROSS & ~prevControllerButtons) {
         switch (cursorPosInMenu[curMenu]) {
             case 1:
                 levelEndReason = -10;
