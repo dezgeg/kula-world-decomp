@@ -1,16 +1,23 @@
 import re
 import sys
 
-func = sys.argv[1]
-end = False
+def addr2off(addr):
+    return addr - 0x11000 + 0x800
+
+func_or_addr = sys.argv[1]
+found = False
 for line in open('function_addrs.txt').readlines():
     m = re.match('^(.*) = (.*);.*', line)
-    if end:
+    if found:
         next_func_addr = int(m[2], 16)
+        next_func = m[1]
         break
-    if m[1] == func:
+    if m[1] == func_or_addr:
         func_addr = int(m[2], 16)
-        end = True
+        found = True
 
-print("0x%05x" % (func_addr - 0x11000 + 0x800))
-print("0x%05x" % (next_func_addr - 0x11000 + 0x800))
+if found:
+    print("%s: 0x%05x" % (func_or_addr, addr2off(func_addr)))
+    print("%s: 0x%05x" % (next_func, addr2off(next_func_addr)))
+else:
+    print("0x%05x" % (addr2off(int(func_or_addr, 16))))

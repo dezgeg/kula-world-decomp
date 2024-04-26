@@ -358,8 +358,12 @@ segments:
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
       - [0x622d8, data, nonmatched/data_622d8]
+      - [0x62a34, .data, sjis]
+      - [0x62a9c, data, nonmatched/data_62a9c]
       - [0x8979c, .data, zlib_infblock]
       - [0x897e8, data, nonmatched/data_897e8]
+      - [0x929fc, .sdata, sjis]
+      - [0x92a08, sdata, nonmatched/sdata_92a08]
       - [0x92b2c, .sdata, rand]
       - [0x92b30, sdata, nonmatched/sdata_92b30]
       - [0x92e38, .sdata, music]
