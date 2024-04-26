@@ -10,6 +10,41 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void UnusedLoadFullScreenPicture(void* param_1);
 
+// .sdata
+// "\\HIRO\\COPYCAT"
+// "\\HELL\\HELL"
+// "\\MARS\\MARS"
+// "\\HAZE\\HAZE"
+// "\\ATLANT\\ATLANT"
+// "\\FIELD\\FIELD"
+// "\\COWBOY\\COWBOY"
+// "\\ARCTIC\\ARCTIC"
+// "\\INCA\\INCA"
+// "\\HILLS\\HILLS"
+// "\\HIRO\\HIRO"
+// "FI.PAK;1"
+// ".GGI;1"
+// ".PAK;1"
+// ".SFX;1"
+// ".TGI;1"
+// "\\KULA\\KULA_PIC.PAK;1"
+// short skipFirstLoadingScreen = 1;
+// "\\XA\\MUSIC_0.XA;1"
+// "\\XA\\MUSIC_2.XA;1"
+// "\\XA\\MUSIC_1.XA;1"
+// musicUnkAlwaysZero1
+// musicUnkAlwaysZero2
+// musicCdMode
+// "\\SAMPLE.XA;1"
+// "\\XA\\MUSIC_3.XA;1"
+// "File error:\n\n"
+// "could not find "
+// "seek error "
+// "read error "
+// "1.0.4"
+// RECT WARNING_TIM_LOAD_RECT = { 0, 0, 640, 256 };
+// "\\HIRO\\WARNING.TIM;1"
+
 int sizeOfSfxFile;
 int unusedReadErrorCode;
 
