@@ -56,10 +56,9 @@ void HandleCheats(void) {
     int j;
     int k;
 
-    i = controllerButtons & ~prevControllerButtons; // XXX: permuter mess
+    i = controllerButtons & ~prevControllerButtons;  // XXX: permuter mess
     buts = i;
     if (buts != 0) {
-
         *buttonsPtr = buts;
         buttonsPtr++;
         if (buttonsPtr >= buttonBuf + 8) {
@@ -112,10 +111,10 @@ void HandleCheats(void) {
     if (cheatState[2].activated == 1) {
         cheatState[2].activated = 0;
         if (cheatState[2].toggled == 1) {
-                EnableLethargy(1);
-            } else {
-                EnableLethargy(0);
-            }
+            EnableLethargy(1);
+        } else {
+            EnableLethargy(0);
+        }
     }
     if (cheatState[3].activated == 1) {
         cheatState[3].activated = 0;
@@ -150,9 +149,9 @@ void HandleCheats(void) {
             levelPlayTime[0] = levelPlayTime[0] + -1500;
         }
     }
-            if (cheatState[8].activated == 1) {
-            cheatState[8].activated = 0;
-            cheated = 1;
-            SetInvulnerable();
-        }
+    if (cheatState[8].activated == 1) {
+        cheatState[8].activated = 0;
+        cheated = 1;
+        SetInvulnerable();
+    }
 }
