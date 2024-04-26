@@ -120,6 +120,12 @@ typedef struct MemcardData {
     byte pad[4804];
 } MemcardData;
 
+typedef struct Music {
+    char* filename;
+    ushort chan;
+    short sectors;
+} Music;
+
 #define INCLUDE_ASM(FOLDER, NAME) \
 __asm__( \
     ".text\n" \

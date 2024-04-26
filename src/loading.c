@@ -10,40 +10,56 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void UnusedLoadFullScreenPicture(void* param_1);
 
-// .sdata
-// "\\HIRO\\COPYCAT"
-// "\\HELL\\HELL"
-// "\\MARS\\MARS"
-// "\\HAZE\\HAZE"
-// "\\ATLANT\\ATLANT"
-// "\\FIELD\\FIELD"
-// "\\COWBOY\\COWBOY"
-// "\\ARCTIC\\ARCTIC"
-// "\\INCA\\INCA"
-// "\\HILLS\\HILLS"
-// "\\HIRO\\HIRO"
-// "FI.PAK;1"
-// ".GGI;1"
-// ".PAK;1"
-// ".SFX;1"
-// ".TGI;1"
-// "\\KULA\\KULA_PIC.PAK;1"
-// short skipFirstLoadingScreen = 1;
-// "\\XA\\MUSIC_0.XA;1"
-// "\\XA\\MUSIC_2.XA;1"
-// "\\XA\\MUSIC_1.XA;1"
-// musicUnkAlwaysZero1
-// musicUnkAlwaysZero2
-// musicCdMode
-// "\\SAMPLE.XA;1"
-// "\\XA\\MUSIC_3.XA;1"
-// "File error:\n\n"
-// "could not find "
-// "seek error "
-// "read error "
-// "1.0.4"
-// RECT WARNING_TIM_LOAD_RECT = { 0, 0, 640, 256 };
-// "\\HIRO\\WARNING.TIM;1"
+char* LEVEL_DIRS[] = {
+    "\\HIRO\\HIRO",
+    "\\HILLS\\HILLS",
+    "\\INCA\\INCA",
+    "\\ARCTIC\\ARCTIC",
+    "\\COWBOY\\COWBOY",
+    "\\FIELD\\FIELD",
+    "\\ATLANT\\ATLANT",
+    "\\HAZE\\HAZE",
+    "\\MARS\\MARS",
+    "\\HELL\\HELL",
+    "\\HIRO\\COPYCAT",
+};
+
+char* EXTENSIONS[] = {
+    ".TGI;1",
+    ".SFX;1",
+    ".PAK;1",
+    ".GGI;1",
+    "FI.PAK;1",
+};
+
+char S_KULA_KULA_PIC_PAK_1[] = "\\KULA\\KULA_PIC.PAK;1";
+int skipFirstLoadingScreen = 1; // XXX: declared short in other file?
+
+Music BONUS_MUSICS[] = {
+    { "\\XA\\MUSIC_1.XA;1", 0, 3335 },
+    { "\\XA\\MUSIC_2.XA;1", 1, 5474 },
+    { "\\XA\\MUSIC_0.XA;1", 0, 3279 },
+};
+
+int musicUnkAlwaysZero1 = 0;
+int musicUnkAlwaysZero2 = 0;
+int musicCdMode = 0x78;
+
+Music MUSICS[] = {
+    { "\\XA\\MUSIC_1.XA;1", 1, 4533 },
+    { "\\XA\\MUSIC_3.XA;1", 2, 6844 },
+    { "\\XA\\MUSIC_2.XA;1", 2, 5646 },
+    { "\\XA\\MUSIC_2.XA;1", 3, 5786 },
+    { "\\XA\\MUSIC_3.XA;1", 3, 7151 },
+    { "\\XA\\MUSIC_2.XA;1", 0, 5178 },
+    { "\\XA\\MUSIC_3.XA;1", 1, 5979 },
+    { "\\XA\\MUSIC_3.XA;1", 0, 5897 },
+    { "\\XA\\MUSIC_1.XA;1", 2, 4705 },
+    { "\\XA\\MUSIC_1.XA;1", 3, 4776 },
+    { "\\SAMPLE.XA;1", 0, 0 },
+};
+
+char S_File_error[] = "File error:\n\n";
 
 int sizeOfSfxFile;
 int unusedReadErrorCode;
@@ -52,14 +68,11 @@ extern char filenameBuf[24];
 extern int gameMode;
 extern int isFinal;
 extern int whichDrawDispEnv;
-extern char* EXTENSIONS[5];
-extern char* LEVEL_DIRS[11];
 
 static z_stream zlibStream_a4b80;
 extern char fileBuf[];
 
 void UnusedFileError(char* str1, char* str2) {
-    extern char S_File_error[];
     VSyncCallback(NULL);
     SetupDisplay(1, 0x80, 0, 0, 0, 0);
     FntFlush(-1);
@@ -77,10 +90,6 @@ void UnusedFileError(char* str1, char* str2) {
 }
 
 uint ReadDataFile(int world, int filetype, void* buf) {
-    extern char S_File_error[];
-    extern char S_could_not_find[];
-    extern char S_seek_error[];
-    extern char S_read_error[];
     int i;
     int j;
     CdlFILE cdlfile;
@@ -108,7 +117,7 @@ uint ReadDataFile(int world, int filetype, void* buf) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_could_not_find);
+        FntPrint("could not find ");
         FntPrint(filenameBuf);
         FntFlush(-1);
         whichDrawDispEnv = 1;
@@ -124,7 +133,7 @@ uint ReadDataFile(int world, int filetype, void* buf) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_seek_error);
+        FntPrint("seek error ");
         FntPrint(filenameBuf);
         FntFlush(-1);
         whichDrawDispEnv = 1;
@@ -140,7 +149,7 @@ uint ReadDataFile(int world, int filetype, void* buf) {
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
         FntPrint(S_File_error);
-        FntPrint(S_read_error);
+        FntPrint("read error ");
         FntPrint(filenameBuf);
         FntFlush(-1);
         whichDrawDispEnv = 1;
@@ -156,7 +165,6 @@ uint ReadDataFile(int world, int filetype, void* buf) {
 }
 
 uint UnusedReadKulaPicPak(void* unknown, char* buf) {
-    extern char S_KULA_KULA_PIC_PAK_1[];
     CdlFILE cdlfile;
 
     Noop2();
@@ -175,15 +183,16 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
 }
 
 void UnusedInflateSomething(int idx, int* data) {
-    extern char S_1_0_4_3[];
-
     zlibStream_a4b80.avail_in = data[2 + 2 * idx];
     zlibStream_a4b80.next_in = (char*)data + data[1 + 2 * idx];
     zlibStream_a4b80.avail_out = 0x60000;
     zlibStream_a4b80.next_out = 0xfd000;
-    inflateInit_(&zlibStream_a4b80, S_1_0_4_3, 0x38);
+    inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
     VSync(0);
     UnusedLoadFullScreenPicture(0xfd000);
 }
+
+RECT WARNING_TIM_LOAD_RECT = { 0, 0, 640, 256 };
+char S_HIRO_WARNING_TIM_1[] = "\\HIRO\\WARNING.TIM;1";

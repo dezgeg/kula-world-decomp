@@ -3,12 +3,6 @@
 #include <libcd.h>
 #include <libgpu.h>
 
-typedef struct Music {
-    char* filename;
-    ushort chan;
-    short sectors;
-} Music;
-
 extern void Noop(void);
 extern void Noop2(void);
 extern void PutDrawAndDispEnvs(void);
