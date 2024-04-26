@@ -60,22 +60,14 @@ static int fmvEnded;
 extern DECDCTTAB vlc_table;
 extern int stCdIntrFlag;
 
-// .sdata
-// "\\XA\\FINAL.STR;1"
-void* fmvRing /* = ... */;
-void* pVlcbuf0 /* = ...*/;
-void* pVlcbuf1 /* = ...*/;
-void* pImgbuf0 /* = ...*/;
-void* pImgbuf1 /* = ...*/;
-// "file not found\n"
-// "time out in strNext() %d\n"
-int isFirstTimeDecEnvInit /* = 1*/;
-int strWidth /* = 0 */;
-int strHeight /* = 0 */;
-// "time out in decoding !\n"
-
-// .data
-extern MovieInfo movieInfos[];
+static MovieInfo movieInfos[] = {
+    { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
+};
+static void* fmvRing  = 0x140000;
+static void* pVlcbuf0 = 0x150000;
+static void* pVlcbuf1 = 0x1f0000;
+static void* pImgbuf0 = 0x1a0000;
+static void* pImgbuf1 = 0x1a6000;
 
 void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie);
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
@@ -152,8 +144,6 @@ void ShowEndingFmv(int movieI) {
 
 int FmvMainLoop(int movieI) {
     MovieInfo* movie = &movieInfos[movieI];
-    extern char S_file_not_found[];
-    extern char S_time_out_in_strNext_FMTd[];
     DISPENV disp;
     DRAWENV draw;
     int id;
@@ -165,7 +155,7 @@ int FmvMainLoop(int movieI) {
     isFirstSlice = 1;
 
     if (CdSearchFile(&file, movie->fileName) == 0) {
-        printf(S_file_not_found);
+        printf("file not found\n");
         ResetGraph(3);
         StopCallback();
         return 0;
@@ -195,7 +185,7 @@ int FmvMainLoop(int movieI) {
 
         while (StrNextVlc(&dec, movie) == -1) {
             frame_no = StGetBackloc(&save_loc);
-            printf(S_time_out_in_strNext_FMTd, frame_no);
+            printf("time out in strNext() %d\n", frame_no);
             if (frame_no > movie->endFrame || frame_no <= 0)
                 save_loc = file.pos;
             StrKickCd(&save_loc);
@@ -239,6 +229,10 @@ int FmvMainLoop(int movieI) {
         return 1;
     }
 }
+
+static int isFirstTimeDecEnvInit = 1;
+static int strWidth = 0;
+static int strHeight = 0;
 
 void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie) {
     if (isFirstTimeDecEnvInit == 1) {
@@ -365,12 +359,11 @@ u_long* StrNext(DECENV* dec, MovieInfo* movie) {
 }
 
 void StrSync(DECENV* dec, int mode) {
-    extern char S_time_out_in_decoding[];
     volatile u_long cnt = WAIT_TIME;
 
     while (dec->isdone == 0) {
         if (--cnt == 0) {
-            printf(S_time_out_in_decoding);
+            printf("time out in decoding !\n");
             dec->isdone = 1;
             dec->rectid = dec->rectid ? 0 : 1;
             dec->slice.x = dec->rect[dec->rectid].x;
