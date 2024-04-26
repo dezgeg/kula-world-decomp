@@ -36,7 +36,6 @@ int savedMusicXaChan;
 extern CdlFILE musicCdlfile;
 extern CdlLOC musicBonusLoc;
 extern CdlLOC musicCdlLoc;
-extern CdlLOC musicCurLoc;
 extern CdlLOC savedMusicCdlLoc;
 extern Music BONUS_MUSICS[3];
 extern Music MUSICS[11];
@@ -253,6 +252,9 @@ void UnusedDebugPrintMusicVariables(void) {
     FntPrint("\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n",
             savedMusicStartSector, savedMusicEndSector, savedMusicCurSector);
 }
+
+static CdlLOC musicCurLoc = { 0, 0, 0, 0 };
+static char PAD[8] = { 0 }; // hack
 
 void MusicCheckForLoop(void) {
     musicCounter--;

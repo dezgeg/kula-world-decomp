@@ -371,7 +371,6 @@ segments:
       - [0x92b2c, .sdata, rand]
       - [0x92b30, sdata, nonmatched/sdata_92b30]
       - [0x92e38, .sdata, music]
-      - [0x92ef0, sdata, nonmatched/sdata_92ef0]
       - [0x92efc, .sdata, snd]
       - [0x92f04, .sdata, pad]
       - [0x92f10, .sdata, fmv]
