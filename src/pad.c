@@ -4,6 +4,9 @@
 
 extern int isDemoMode;
 
+static unsigned char VIBRATION_ACT_ALIGN[6] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0xff };
+int vibrationEnabled = 1;
+
 int vibrationMode;
 int vibrationSinPhase;
 int vibrationCounter;
@@ -37,7 +40,7 @@ int GetControllerButtons(int slot) {
         }
         if (!padVibrationModeEntered[slot]) {
             PadSetAct(slot << 4, &vibrationBuf[slot][0], 2);
-            if (status == 2 || (status == 6 && PadSetActAlign(slot << 4, "\x00\x01\xff\xff\xff\xff"))) {
+            if (status == 2 || (status == 6 && PadSetActAlign(slot << 4, VIBRATION_ACT_ALIGN))) {
                 padVibrationModeEntered[slot] = 1;
                 ResetVibration();
             }
@@ -48,8 +51,6 @@ int GetControllerButtons(int slot) {
     }
     return 0;
 }
-
-int vibrationEnabled = 1;
 
 int GetControllerStatus(int slot) {
     unsigned typeMsb;
