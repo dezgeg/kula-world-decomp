@@ -51,22 +51,31 @@ extern int musicVolume;
 // Both the even-and-odd frame buffers
 #define VRAMPIX_BOTH(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
 
-extern int stCdIntrFlag;
-extern DECDCTTAB vlc_table;
+// .sbss
 static DECENV dec;
-extern MovieInfo movieInfos[];
+static int isFirstSlice;
+static int fmvEnded;
 
-int fmvEnded;
-int strWidth /* = 0 */;
-int strHeight /* = 0 */;
-int isFirstSlice;
-int isFirstTimeDecEnvInit /* = 1*/;
+// .bss
+extern DECDCTTAB vlc_table;
+extern int stCdIntrFlag;
+
+// .sdata
+// "\\XA\\FINAL.STR;1"
 void* fmvRing /* = ... */;
-
 void* pVlcbuf0 /* = ...*/;
 void* pVlcbuf1 /* = ...*/;
 void* pImgbuf0 /* = ...*/;
 void* pImgbuf1 /* = ...*/;
+// "file not found\n"
+// "time out in strNext() %d\n"
+int isFirstTimeDecEnvInit /* = 1*/;
+int strWidth /* = 0 */;
+int strHeight /* = 0 */;
+// "time out in decoding !\n"
+
+// .data
+extern MovieInfo movieInfos[];
 
 void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie);
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
