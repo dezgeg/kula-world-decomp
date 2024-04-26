@@ -14,8 +14,17 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TweakSkyboxColors(uint param_1);
 
-// .data
-extern uint CHEAT_BUTTONS[9][8];
+static uint CHEAT_BUTTONS[][8] = {
+    { PAD_L1, PAD_CIRCLE, PAD_L, PAD_R, PAD_L2, PAD_L, PAD_R2, PAD_R2, },
+    { PAD_R, PAD_CIRCLE, PAD_SQUARE, PAD_L1, PAD_SQUARE, PAD_CIRCLE, PAD_CIRCLE, PAD_SQUARE, },
+    { PAD_R, PAD_CIRCLE, PAD_L2, PAD_CIRCLE, PAD_R1, PAD_CIRCLE, PAD_SQUARE, PAD_CIRCLE, },
+    { PAD_L, PAD_U, PAD_R, PAD_D, PAD_SQUARE, PAD_TRIANGLE, PAD_CIRCLE, PAD_CROSS, },
+    { PAD_TRIANGLE, PAD_U, PAD_TRIANGLE, PAD_L2, PAD_L1, PAD_L2, PAD_SQUARE, PAD_CROSS, },
+    { PAD_SQUARE, PAD_U, PAD_D, PAD_L2, PAD_R1, PAD_TRIANGLE, PAD_CROSS, PAD_TRIANGLE, },
+    { PAD_CIRCLE, PAD_R2, PAD_CIRCLE, PAD_L1, PAD_U, PAD_L1, PAD_D, PAD_CROSS, },
+    { PAD_CIRCLE, PAD_L1, PAD_TRIANGLE, PAD_TRIANGLE, PAD_CIRCLE, PAD_CROSS, PAD_TRIANGLE, PAD_D, },
+    { PAD_R, PAD_D, PAD_L1, PAD_R2, PAD_R1, PAD_CIRCLE, PAD_TRIANGLE, PAD_SQUARE, },
+};
 
 // .sbss
 uint buttonBuf[8];
