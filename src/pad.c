@@ -7,20 +7,18 @@ extern int isDemoMode;
 static unsigned char VIBRATION_ACT_ALIGN[6] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0xff };
 int vibrationEnabled = 1;
 
+int latestControllerSlotPolled;
+extern u_char padData[2][34];
+extern u_char vibrationBuf[][2];
+extern u_char padVibrationModeEntered[];
 int vibrationMode;
-int vibrationSinPhase;
-int vibrationCounter;
 int vibrationSinConst;
 int vibrationSinMagnitude;
+int vibrationSinPhase;
 int vibrationAngleIncrement;
 int vibrationCounterMax;
-int latestControllerSlotPolled;
+int vibrationCounter;
 char* vibrationSeqPtr;
-
-extern u_char padVibrationModeEntered[];
-extern u_char vibrationBuf[][2];
-
-extern u_char padData[2][34];
 
 extern void ResetVibration();
 
