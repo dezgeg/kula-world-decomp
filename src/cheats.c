@@ -14,13 +14,18 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TweakSkyboxColors(uint param_1);
 
+// .data
+extern uint CHEAT_BUTTONS[9][8];
+
+// .sbss
 uint buttonBuf[8];
 uint* buttonsPtr;
+
+// .comm
 int cheated;
 int sioCheatActivated;
 
 extern CheatState cheatState[9];
-extern uint CHEAT_BUTTONS[9][8];
 extern uint controllerButtons;
 extern SVECTOR SVECTOR_000a3334;
 extern int finalUnlocked;
