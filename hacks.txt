@@ -1,0 +1,2 @@
+panVectorSq = 0x000a4b70;
+playingBonusMusic = 0x000a3638;
