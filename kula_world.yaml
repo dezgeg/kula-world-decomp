@@ -90,7 +90,6 @@ segments:
       - [0x01b0c, c, various_init]
       - [0x01b4c, c, nonmatched/particles]
       - [0x031c8, c, copycat_ui]
-      - [0x033e0, c, nonmatched/copycat_ui]
       - [0x0355c, c, font]
       - [0x036c8, c, font2]
       - [0x04400, c, text1]
