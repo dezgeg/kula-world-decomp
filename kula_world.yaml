@@ -123,7 +123,6 @@ segments:
       - [0x1e420, c, nonmatched/light_effect]
       - [0x1f330, c, nonmatched/code_1f330]
       - [0x2fee8, c, stack_hacks]
-      - [0x2ff68, c, nonmatched/stack_hacks]
       - [0x2ffdc, c, nonmatched/code_2ffdc]
       - [0x329a4, c, disp_mode]
       - [0x32aa4, c, memcard1]
