@@ -226,6 +226,7 @@ strWidth = 0x000a3764; // type:s32
 sunIntensityOnScreen = 0x000a50b8; // type:s32
 tempMcResult = 0x000a59fc; // type:s32
 textAlignMode = 0x000a3cc0; // type:s32
+textCharIdx = 0x000a3cbc; // type:s32
 textColorB = 0x000a3ccd; // type:u8
 textColorG = 0x000a3cce; // type:u8
 textColorR = 0x000a3ccc; // type:u8
