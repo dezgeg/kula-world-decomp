@@ -217,6 +217,7 @@ sizeOfSfxFile = 0x000a528c; // type:s32
 skipFirstLoadingScreen = 0x000a356c; // type:s16
 sndSwapPanDir = 0x000a5a18; // type:s32
 specialLevelType = 0x000a4f60; // type:s32
+spinningSelectionPhase = 0x000a2bd8; // type:s32
 spinningSelectionSprite1 = 0x000a54bc; // size:56
 spinningSelectionSprite2 = 0x000a54f8; // size:56
 spuCommonAttr = 0x000a4cf0; // size:40
