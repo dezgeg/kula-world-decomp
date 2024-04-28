@@ -63,8 +63,8 @@ typedef struct Texture {
     short tpage;
     u_char u;
     u_char v;
-    u_short w;
-    u_short h;
+    short w;
+    short h;
 } Texture;
 
 typedef struct DrawDisp {
