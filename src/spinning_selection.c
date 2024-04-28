@@ -44,3 +44,19 @@ void UpdateMemcardMenuSaveSelectionSprites(int slot) {
         64 + (rcos(spinningSelectionPhase + 0x800 & 0xfff) * 10 >> 12) - textures[firstGuiTexture + 13].w / 2;
     addPrim(&primLists[whichDrawDispEnv].main, &spinningSelectionSprite2[whichDrawDispEnv]);
 }
+
+void Update2PlayerLevelSelectionSprites(int x, int y) {
+    spinningSelectionPhase = spinningSelectionPhase + 60 & 0xfff;
+    spinningSelectionSprite1[whichDrawDispEnv].sprt.x0 =
+        x + ((rsin(spinningSelectionPhase) * 7) >> 12) - textures[firstGuiTexture + 13].w / 2;
+    spinningSelectionPhase = spinningSelectionPhase + 60 & 0xfff;
+    spinningSelectionSprite1[whichDrawDispEnv].sprt.y0 =
+        y + (rcos(spinningSelectionPhase) * 7 >> 12) - textures[firstGuiTexture + 13].w / 2;
+    addPrim(&primLists[whichDrawDispEnv].main, &spinningSelectionSprite1[whichDrawDispEnv]);
+
+    spinningSelectionSprite2[whichDrawDispEnv].sprt.x0 =
+        x + (rsin(spinningSelectionPhase + 0x800 & 0xfff) * 7 >> 12) - textures[firstGuiTexture + 13].w / 2;
+    spinningSelectionSprite2[whichDrawDispEnv].sprt.y0 =
+        y + (rcos(spinningSelectionPhase + 0x800 & 0xfff) * 7 >> 12) - textures[firstGuiTexture + 13].w / 2;
+    addPrim(&primLists[whichDrawDispEnv].main, &spinningSelectionSprite2[whichDrawDispEnv]);
+}
