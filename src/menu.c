@@ -25,10 +25,20 @@ extern int gameMode;
 extern int gameState;
 extern int isFinal;
 extern int levelEndReason;
+extern int musicVolume;
 extern int numTimeTrialPlayers;
+extern int sfxVolume;
 extern int specialLevelType;
-extern u32 controllerButtons;
+extern int vibrationEnabled;
+extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
+extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
+extern short turnDelayEnabled;
+extern uint controllerButtons;
 extern uint prevControllerButtons;
+
+static inline int TestButton(int button) {
+    return (controllerButtons & (~prevControllerButtons & button)) != 0;
+}
 
 void PauseOrMainMenu(void) {
     extern char S_FMTd_3[];
@@ -96,7 +106,7 @@ void PauseOrMainMenu(void) {
             break;
     }
 
-    if ((controllerButtons & PAD_START & ~prevControllerButtons && wasPausedPreviousFrame == 1) || !isPaused) {
+    if ((TestButton(PAD_START) && wasPausedPreviousFrame == 1) || !isPaused) {
         repeatRateTimer = 0;
         curMenu = 0;
         cursorPosInMenu[0] = 0;
@@ -109,7 +119,7 @@ void PauseOrMainMenu(void) {
 }
 
 void PauseMenu(void) {
-    if (controllerButtons & PAD_U & ~prevControllerButtons) {
+    if (TestButton(PAD_U)) {
         if (cursorPosInMenu[curMenu] <= 0) {
             cursorPosInMenu[curMenu] = 3;
         } else {
@@ -117,14 +127,14 @@ void PauseMenu(void) {
         }
         SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    if (controllerButtons & PAD_D & ~prevControllerButtons) {
+    if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
         SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
     DrawWidgets(1, cursorPosInMenu[curMenu]);
 
-    if (controllerButtons & PAD_CROSS & ~prevControllerButtons) {
+    if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
             case 1:
                 levelEndReason = -10;
@@ -141,5 +151,127 @@ void PauseMenu(void) {
                 curMenu = 3;
                 return;
         }
+    }
+}
+
+void OptionsMenu(void) {
+    int x;
+    int y;
+    int onOffSprite;
+
+    int decrement;
+    int increment;
+    int cross;
+
+    if (TestButton(PAD_U)) {
+        if (cursorPosInMenu[curMenu] < 1) {
+            cursorPosInMenu[curMenu] = 5;
+        } else {
+            cursorPosInMenu[curMenu]--;
+        }
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_D)) {
+        cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 6;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    DrawWidgets(2, cursorPosInMenu[curMenu]);
+    SetBigGuiSpriteVisible();
+    if (gameState == 0) {
+        y = MENU_CURSOR_START_Y_MAIN_MENU[2];
+    } else {
+        y = MENU_CURSOR_START_Y_PAUSE_MENU[2];
+    }
+    onOffSprite = 18;
+    if (turnDelayEnabled == 1) {
+        onOffSprite = 17;
+        x = 192;
+    } else {
+        x = 189;
+    }
+
+    DrawStaticUiSprite(onOffSprite, x, y + 59, 0);
+    onOffSprite = 18;
+    if (vibrationEnabled == 1) {
+        onOffSprite = 17;
+        x = 187;
+    } else {
+        x = 184;
+    }
+    DrawStaticUiSprite(onOffSprite, x, y + 79, 0);
+
+    cross = TestButton(PAD_CROSS);
+    decrement = TestButton(PAD_L);
+    increment = TestButton(PAD_R);
+
+    if (TestButton(PAD_TRIANGLE)) {
+        curMenu--;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    switch (cursorPosInMenu[curMenu]) {
+        case 0:
+            if (decrement && sfxVolume > 0) {
+                sfxVolume--;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (increment && sfxVolume < 12) {
+                sfxVolume++;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            break;
+        case 1:
+            if (decrement && musicVolume > 0) {
+                musicVolume--;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (increment && musicVolume < 12) {
+                musicVolume++;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            SndSetMusicVolume();
+            break;
+        case 2:
+            if (cross) {
+                /* adjust screen */
+                curMenu = 2;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+
+            break;
+        case 3:
+            if (increment && turnDelayEnabled == 0) {
+                turnDelayEnabled = 1;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (decrement && turnDelayEnabled == 1) {
+                turnDelayEnabled = 0;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (cross) {
+                turnDelayEnabled = turnDelayEnabled ^ 1;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            break;
+        case 4:
+            if (increment && vibrationEnabled == 0) {
+                vibrationEnabled = 1;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (decrement && vibrationEnabled == 1) {
+                vibrationEnabled = 0;
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            if (cross) {
+                vibrationEnabled = vibrationEnabled ^ 1;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+            break;
+        case 5:
+            if (cross) {
+                curMenu--;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            }
+
+            break;
     }
 }
