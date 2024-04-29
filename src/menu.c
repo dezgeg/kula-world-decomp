@@ -4,17 +4,23 @@ extern void DrawStaticUiSprite(short id, short x, short y, short count);
 extern void DrawTextFancyFont(char* str, int x, int y);
 extern void DrawTitleAndCopyrightSprites(void);
 extern void HandleMenus0To6(void);
+extern void MainMenu(void);
 extern void OptionsMenu(void);
 extern void PauseMenu(void);
 extern void QuitAreYouSureMenu(void);
 extern void ScreenAdjustMenu(void);
 extern void SetBigGuiSpriteVisible(void);
+extern void SinglePlayerMenu(void);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void TimeTrialDifficultySelectionMenu(void);
+extern void TwoPlayerLevelSelectMenu(void);
+extern void TwoPlayerMenu(void);
 
 int copycatModeStartingPlayer;
 int curMenu;
 int cursorPosInMenu[8];
 int isPaused;
+int menuUnkAlwaysZero;
 int repeatRateTimer;
 int timeTrialAtEndOfWorld;
 int wasPausedPreviousFrame;
@@ -334,10 +340,16 @@ void ScreenAdjustMenu(void) {
     SetLineF3(&screenAdjustLine2[whichDrawDispEnv]);
 
     setRGB0(&screenAdjustLine1[whichDrawDispEnv], 255, 0, 0);
-    setXY3(&screenAdjustLine1[whichDrawDispEnv], 0, 0, displayWidth - 1, 0, displayWidth - 1, displayHeight - 1);
+    setXY3(&screenAdjustLine1[whichDrawDispEnv],
+            0, 0,
+            displayWidth - 1, 0,
+            displayWidth - 1, displayHeight - 1);
 
     setRGB0(&screenAdjustLine2[whichDrawDispEnv], 255, 0, 0);
-    setXY3(&screenAdjustLine2[whichDrawDispEnv], displayWidth - 1, displayHeight - 1, 0, displayHeight - 1, 0, 0);
+    setXY3(&screenAdjustLine2[whichDrawDispEnv],
+            displayWidth - 1, displayHeight - 1,
+            0, displayHeight - 1,
+            0, 0);
 
     addPrim(&primLists[whichDrawDispEnv].main, &screenAdjustLine1[whichDrawDispEnv]);
     addPrim(&primLists[whichDrawDispEnv].main, &screenAdjustLine2[whichDrawDispEnv]);
@@ -369,5 +381,45 @@ void ScreenAdjustMenu(void) {
     if (TestButton(PAD_CROSS)) {
         curMenu--;
         SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+}
+
+void HandleMenus0To6(void) {
+    if (isPaused == -1) {
+        repeatRateTimer = 0;
+        menuUnkAlwaysZero = 0;
+    }
+    if (controllerButtons == prevControllerButtons) {
+        repeatRateTimer++;
+    } else {
+        repeatRateTimer = 0;
+    }
+
+    if (repeatRateTimer > 20) {
+        repeatRateTimer -= 5;
+        prevControllerButtons = 0;
+    }
+    switch (curMenu) {
+        case 0:
+            MainMenu();
+            break;
+        case 1:
+            OptionsMenu();
+            break;
+        case 2:
+            ScreenAdjustMenu();
+            break;
+        case 3:
+            SinglePlayerMenu();
+            break;
+        case 4:
+            TwoPlayerMenu();
+            break;
+        case 5:
+            TimeTrialDifficultySelectionMenu();
+            break;
+        case 6:
+            TwoPlayerLevelSelectMenu();
+            break;
     }
 }
