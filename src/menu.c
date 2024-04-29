@@ -26,6 +26,10 @@ extern int curWorld;
 extern int curWorld2;
 extern int debugBonusLevels;
 extern int debugDisableTimer;
+extern int dispenvScreenX;
+extern int dispenvScreenY;
+extern int displayHeight;
+extern int displayWidth;
 extern int gameMode;
 extern int gameState;
 extern int gotSioData;
@@ -40,12 +44,17 @@ extern int specialLevelType;
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern int vibrationEnabled;
+extern int whichDrawDispEnv;
 extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
 extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
 extern short turnDelayEnabled;
 extern uint curController;
 extern uint controllerButtons;
 extern uint prevControllerButtons;
+extern LINE_F3 screenAdjustLine1[2];
+extern LINE_F3 screenAdjustLine2[2];
+extern DrawDisp drawdisp[2];
+extern PrimList primLists[2];
 
 static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
@@ -315,5 +324,50 @@ void QuitToMainMenu(void) {
     gotSioData = 0;
     if (gameMode == 1 || isFinal == 1) {
         loadNewWorld = 1;
+    }
+}
+
+void ScreenAdjustMenu(void) {
+    DrawWidgets(10, 0);
+
+    SetLineF3(&screenAdjustLine1[whichDrawDispEnv]);
+    SetLineF3(&screenAdjustLine2[whichDrawDispEnv]);
+
+    setRGB0(&screenAdjustLine1[whichDrawDispEnv], 255, 0, 0);
+    setXY3(&screenAdjustLine1[whichDrawDispEnv], 0, 0, displayWidth - 1, 0, displayWidth - 1, displayHeight - 1);
+
+    setRGB0(&screenAdjustLine2[whichDrawDispEnv], 255, 0, 0);
+    setXY3(&screenAdjustLine2[whichDrawDispEnv], displayWidth - 1, displayHeight - 1, 0, displayHeight - 1, 0, 0);
+
+    addPrim(&primLists[whichDrawDispEnv].main, &screenAdjustLine1[whichDrawDispEnv]);
+    addPrim(&primLists[whichDrawDispEnv].main, &screenAdjustLine2[whichDrawDispEnv]);
+
+    if (controllerButtons & PAD_U && dispenvScreenY > 0) {
+        dispenvScreenY--;
+    }
+    if (controllerButtons & PAD_D && dispenvScreenY < 60) {
+        dispenvScreenY++;
+    }
+    if (controllerButtons & PAD_L && dispenvScreenX > 0) {
+        dispenvScreenX--;
+    }
+    if (controllerButtons & PAD_R && dispenvScreenX < 60) {
+        dispenvScreenX++;
+    }
+
+    if (TestButton(PAD_TRIANGLE)) {
+        dispenvScreenX = 0;
+        dispenvScreenY = 18;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+
+    drawdisp[1].disp.screen.x = *(ushort*)&dispenvScreenX;
+    drawdisp[0].disp.screen.x = *(ushort*)&dispenvScreenX;
+    drawdisp[1].disp.screen.y = *(ushort*)&dispenvScreenY;
+    drawdisp[0].disp.screen.y = *(ushort*)&dispenvScreenY;
+
+    if (TestButton(PAD_CROSS)) {
+        curMenu--;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 }
