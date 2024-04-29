@@ -16,23 +16,34 @@ int curMenu;
 int cursorPosInMenu[8];
 int isPaused;
 int repeatRateTimer;
+int timeTrialAtEndOfWorld;
 int wasPausedPreviousFrame;
 
 extern SVECTOR ZERO_SVECTOR_a3340;
+extern int byteCountToReceiveFromSio;
 extern int curLevel;
+extern int curWorld;
 extern int curWorld2;
+extern int debugBonusLevels;
+extern int debugDisableTimer;
 extern int gameMode;
 extern int gameState;
+extern int gotSioData;
 extern int isFinal;
 extern int levelEndReason;
+extern int levelScore;
+extern int loadNewWorld;
 extern int musicVolume;
 extern int numTimeTrialPlayers;
 extern int sfxVolume;
 extern int specialLevelType;
+extern int totalScore;
+extern int twoPlayerWhichPlayer;
 extern int vibrationEnabled;
 extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
 extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
 extern short turnDelayEnabled;
+extern uint curController;
 extern uint controllerButtons;
 extern uint prevControllerButtons;
 
@@ -283,5 +294,26 @@ void QuitAreYouSureMenu(void) {
     }
     if (TestButton(PAD_CIRCLE)) {
         QuitToMainMenu();
+    }
+}
+
+void QuitToMainMenu(void) {
+    gameState = 4;
+    curMenu = 0;
+    cursorPosInMenu[0] = 0;
+    isPaused = 1;
+    debugDisableTimer = 0;
+    debugBonusLevels = 0;
+    totalScore = -1;
+    levelScore = 0;
+    wasPausedPreviousFrame = 0;
+    curController = 0;
+    twoPlayerWhichPlayer = 0;
+    curWorld = 0;
+    timeTrialAtEndOfWorld = 0;
+    byteCountToReceiveFromSio = 0;
+    gotSioData = 0;
+    if (gameMode == 1 || isFinal == 1) {
+        loadNewWorld = 1;
     }
 }
