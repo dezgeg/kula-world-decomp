@@ -275,3 +275,13 @@ void OptionsMenu(void) {
             break;
     }
 }
+
+void QuitAreYouSureMenu(void) {
+    DrawWidgets(18, 0);
+    if (TestButton(PAD_TRIANGLE)) {
+        curMenu = 0;
+    }
+    if (TestButton(PAD_CIRCLE)) {
+        QuitToMainMenu();
+    }
+}
