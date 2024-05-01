@@ -92,3 +92,10 @@ void DrawPsxButtonBackground(void) {
         guiBackgroundFadeIn = 0x80;
     }
 }
+
+void FadePsxButtonBackground(void) {
+    guiBackgroundFadeIn -= 20;
+    if (guiBackgroundFadeIn < 0) {
+        guiBackgroundFadeIn = 0;
+    }
+}

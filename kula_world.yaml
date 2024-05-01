@@ -104,7 +104,6 @@ segments:
       - [0x0c2c0, c, nonmatched/background_cubes]
       - [0x0cba0, c, background_cubes2]
       - [0x0cf7c, c, psx_button_background]
-      - [0x0d4b8, c, nonmatched/psx_button_background]
       - [0x0d4dc, c, spinning_selection]
       - [0x0dcd4, c, nonmatched/hud]
       - [0x102c8, c, lethargy]
