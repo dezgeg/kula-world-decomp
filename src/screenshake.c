@@ -13,6 +13,11 @@ int screenShakeEnabled;
 int screenShakeMagnitude;
 int screenShakeTimer;
 
+static inline void SetDispScreen(ushort x, ushort y) {
+    drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
+    drawdisp[0].disp.screen.y = drawdisp[1].disp.screen.y = y;
+}
+
 void DisableScreenShake(void) {
     screenShakeEnabled = 0;
 }
@@ -33,10 +38,7 @@ void ProcessScreenShake(void) {
         screenShakeTimer--;
         if (screenShakeTimer < 0) {
             screenShakeEnabled = 0;
-            drawdisp[1].disp.screen.x = *(ushort*)&dispenvScreenX;
-            drawdisp[0].disp.screen.x = *(ushort*)&dispenvScreenX;
-            drawdisp[1].disp.screen.y = *(ushort*)&dispenvScreenY;
-            drawdisp[0].disp.screen.y = *(ushort*)&dispenvScreenY;
+            SetDispScreen(dispenvScreenX, dispenvScreenY);
         } else {
             if ((screenShakeDirectionMask & 1) != 0) {
                 rng = Rand(screenShakeMagnitude << 1);

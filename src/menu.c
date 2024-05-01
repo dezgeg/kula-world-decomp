@@ -66,6 +66,11 @@ static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
 }
 
+static inline void SetDispScreen(ushort x, ushort y) {
+    drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
+    drawdisp[0].disp.screen.y = drawdisp[1].disp.screen.y = y;
+}
+
 void PauseOrMainMenu(void) {
     extern char S_FMTd_3[];
     char buf[64];
@@ -373,10 +378,7 @@ void ScreenAdjustMenu(void) {
         SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
-    drawdisp[1].disp.screen.x = *(ushort*)&dispenvScreenX;
-    drawdisp[0].disp.screen.x = *(ushort*)&dispenvScreenX;
-    drawdisp[1].disp.screen.y = *(ushort*)&dispenvScreenY;
-    drawdisp[0].disp.screen.y = *(ushort*)&dispenvScreenY;
+    SetDispScreen(dispenvScreenX, dispenvScreenY);
 
     if (TestButton(PAD_CROSS)) {
         curMenu--;
