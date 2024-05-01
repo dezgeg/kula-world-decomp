@@ -9,11 +9,16 @@ extern uint Rand(int param_1);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 int enableGuiBackgroundScroll;
+int guiBackgroundAnimCounter;
 int guiBackgroundFadeIn;
 PsxButtonBackground* psxButtonBackgroundPtr;
 
+extern int displayHeight;
+extern int displayWidth;
 extern int firstLensFlareOrPsxButtonTexture;
+extern void* otag[2][1][1026];
 extern Texture textures[150];
+extern int whichDrawDispEnv;
 
 void InitPsxButtonBackgroundSprites(int param_1) {
     uint rng;
@@ -53,5 +58,37 @@ void InitPsxButtonBackgroundSprites(int param_1) {
         case 1:
             enableGuiBackgroundScroll = 1;
             break;
+    }
+}
+
+void DrawPsxButtonBackground(void) {
+    int y;
+    int x;
+    int i;
+    uint* ot;
+    int b;
+
+    for (i = 0; i < 200; i++) {
+        x = (i % 20) * 48 + (rsin(guiBackgroundAnimCounter) * (480 - displayWidth / 2) >> 12) -
+            480 + displayWidth / 2;
+        y = (i / 20) * 48 + (rcos(guiBackgroundAnimCounter) * (240 - displayHeight / 2) >> 12) -
+            240 + displayHeight / 2;
+        setXY0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, x, y);
+
+        setRGB0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, guiBackgroundFadeIn,
+                guiBackgroundFadeIn, guiBackgroundFadeIn);
+
+        if (x > -48 && x < displayWidth + 48 && y > -48 && y < displayHeight + 48) {
+            addPrim(&otag[whichDrawDispEnv][0][1024] - (psxButtonBackgroundPtr->buttons[i] + 1),
+                    &psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i]);
+        }
+    }
+
+    if (enableGuiBackgroundScroll == 1) {
+        guiBackgroundAnimCounter += 9;
+    }
+    guiBackgroundFadeIn += 6;
+    if (guiBackgroundFadeIn > 0x80) {
+        guiBackgroundFadeIn = 0x80;
     }
 }
