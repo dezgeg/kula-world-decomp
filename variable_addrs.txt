@@ -92,6 +92,7 @@ gameState = 0x000a2ec0; // type:s32
 gotSioData = 0x000a2e8c; // type:s32
 gteXScale = 0x000a2e70; // type:s32
 gteYScale = 0x000a2e78; // type:s32
+guiBackgroundAnimCounter = 0x000a2bd4; // type:s32
 guiBackgroundFadeIn = 0x000a2bd0; // type:s32
 halfFps = 0x000a5444; // type:s32
 highScoreCubesMatrix = 0x000a4e90; // size:32
