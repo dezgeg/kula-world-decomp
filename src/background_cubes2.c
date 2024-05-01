@@ -50,7 +50,7 @@ extern int displayHeight;
 extern int displayWidth;
 extern MATRIX highScoreCubesMatrix;
 extern int whichDrawDispEnv;
-extern void* otag[2][1026];
+extern void* otag[2][1][1026];
 
 void DrawHighScoreCubes(void) {
     int sinVal2ndX;
@@ -96,7 +96,7 @@ void DrawHighScoreCubes(void) {
 
         SetRotMatrix(&highScoreCubesMatrix);
         SetTransMatrix(&highScoreCubesMatrix);
-        RotSMD_FT4((long*)&pmdCubesPtr[i], &otag[whichDrawDispEnv][0], 1024, whichDrawDispEnv, 1,
+        RotSMD_FT4((long*)&pmdCubesPtr[i], &otag[whichDrawDispEnv][0][0], 1024, whichDrawDispEnv, 1,
                    displayWidth, displayHeight, 1);
     }
 }
