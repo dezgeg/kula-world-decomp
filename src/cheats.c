@@ -32,11 +32,12 @@ uint* buttonsPtr;
 
 // .comm
 int cheated;
-int sioCheatActivated;
+
+int sioCheatActivated = 0; // .sdata
+SVECTOR SVECTOR_000a3334 = { 0, 0, 0, 0}; // .sdata
 
 extern CheatState cheatState[9];
 extern uint controllerButtons;
-extern SVECTOR SVECTOR_000a3334;
 extern int finalUnlocked;
 extern int gameState;
 extern int isPaused;
