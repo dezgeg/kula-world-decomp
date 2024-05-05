@@ -25,15 +25,9 @@ void* kulaZAllocatorPointer;
 long kulaZAllocatorHeapUsage = 0;
 
 void zcallocInit(void) {
-    __asm__(
-        "\tlui        $a0,0xffe0\n"
-        "\tori        $a0,$a0,0xe000\n"
-        "\tlui        $v1,0x1f\n"
-        "\tlw         $v0,kulaZAllocatorPointer\n"
-        "\tori        $v1,$v1,0x2000\n"
-        "\tsw         $v1,kulaZAllocatorPointer\n"
-        "\taddu       $v0,$v0,$a0\n"
-        "\tsw         $v0,kulaZAllocatorHeapUsage\n");
+    char* old = kulaZAllocatorPointer;
+    kulaZAllocatorHeapUsage = (unsigned)old - 0x1F2000;
+    kulaZAllocatorPointer = 0x1F2000;
 }
 
 void* zcallocUnused(unsigned num, int size) {
