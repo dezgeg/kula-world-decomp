@@ -12,6 +12,7 @@ static uint screenshotTimHeader[5];  // TODO add initializer
 extern byte saveReplayBuf[4076];
 extern char debugFilenameBuf[];
 extern char* DEBUG_SCREENSHOT_WORLD_NAMES[13];
+extern int buttonSaveReplayMode;
 extern int curWorld;
 extern int devkitFileNumber;
 extern int displayHeight;
@@ -30,6 +31,8 @@ extern char S_FMTs_2[];
 extern char S_FMTsFMTs[];
 extern char S_can_not_create_file_FMTs[];
 extern char S_error_closing_file_FMTs[];
+extern char S_psx_cube_pad_FMTd_pad[];
+extern char S_psx_cube_pad_rescue_pad[];
 
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     int num;
@@ -159,4 +162,53 @@ void RecordButtonsToDevkit(s32 arg0) {
     saveReplayRleButtonCount = newCount;
     saveReplayCurrentButtonsShuffled = currentButtonsShuffled;
     saveReplayCurrentButtons = currentButtons;
+}
+
+void WriteToDevkit(int param_1) {
+    int fd;
+    int len;
+    byte* nextP;
+    byte* p;
+    int buts;
+    int count;
+
+    if (param_1 == 0) {
+        sprintf(debugFilenameBuf, S_psx_cube_pad_FMTd_pad, devkitFileNumber);
+    } else {
+        sprintf(debugFilenameBuf, S_psx_cube_pad_rescue_pad);
+    }
+
+    *(int*)0x131000 += 1; // devkitFileNumber++;
+    p = saveReplayWritePtr;
+    count = saveReplayRleButtonCount;
+    buts = saveReplayCurrentButtonsShuffled;
+    *p++ = count;
+    *p++ = buts;
+    *p++ = 0;
+    *p++ = 0xff;
+    if (((uint)p & 3) != 0) {
+        p = (byte*)(((uint)p + 4) & 0xfffffffc);
+    }
+    Noop2();
+
+    fd = PCcreat(debugFilenameBuf, 0);
+    if (fd == -1) {
+        FntPrint(S_can_not_create_file_FMTs, debugFilenameBuf);
+    } else {
+        len = (int)p - 0x131000;
+        if (len < 0) {
+            len = 0x4000;
+        }
+        if (len > 0x6cf000) {
+            len = 0x6cf000;
+        }
+        PCwrite(fd, 0x131000, len);
+        if (PCclose(fd) < 0) {
+            FntPrint(S_error_closing_file_FMTs, debugFilenameBuf);
+        }
+    }
+
+    Noop();
+    saveReplayWritePtr = p;
+    buttonSaveReplayMode = 0;
 }
