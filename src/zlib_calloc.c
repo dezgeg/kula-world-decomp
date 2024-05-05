@@ -3,7 +3,6 @@
 #include <libetc.h>
 
 extern int whichDrawDispEnv;
-extern char kulaZAllocatorHeap[];
 
 void z_error(const char* msg) {
     VSyncCallback(NULL);
@@ -52,7 +51,9 @@ void* zcallocUnused(unsigned num, int size) {
             ;
     }
 
-    for (i = 0; i < (int)num * size; i++) ret[i] = 0;
+    for (i = 0; i < (int)num * size; i++) {
+        ret[i] = 0;
+    }
 
     return ret;
 }
@@ -79,9 +80,12 @@ void* zcalloc(void* opaque, unsigned num, int size) {
             ;
     }
 
-    for (i = 0; i < (int)num * size; i++) ret[i] = 0;
+    for (i = 0; i < (int)num * size; i++) {
+        ret[i] = 0;
+    }
 
     return ret;
 }
 
-void zcfree(void* ptr) {}
+void zcfree(void* ptr) {
+}
