@@ -428,10 +428,6 @@ void HandleMenus0To6(void) {
 }
 
 void MainMenu(void) {
-    int menuIndex;
-    int menuIndex_;
-    int iVar1;
-
     if (TestButton(PAD_U)) {
         if (cursorPosInMenu[curMenu] <= 0) {
             cursorPosInMenu[curMenu] = 3;
@@ -446,7 +442,6 @@ void MainMenu(void) {
     }
     DrawWidgets(0, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_CROSS)) {
-        menuIndex_ = cursorPosInMenu[curMenu];
         drawCopyright = 0;
         switch (cursorPosInMenu[curMenu]) {
             case 0:
