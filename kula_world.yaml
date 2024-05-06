@@ -141,7 +141,7 @@ segments:
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
       - [0x377a0, c, menu]
-      - [0x38788, c, nonmatched/menu]
+      - [0x389a8, c, nonmatched/menu]
       - [0x3a484, c, nonmatched/code_3a484]
       - [0x3b6c0, c, highscore]
       - [0x3b89c, c, nonmatched/highscore]

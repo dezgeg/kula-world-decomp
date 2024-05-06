@@ -36,6 +36,7 @@ extern int dispenvScreenX;
 extern int dispenvScreenY;
 extern int displayHeight;
 extern int displayWidth;
+extern int drawCopyright;
 extern int gameMode;
 extern int gameState;
 extern int gotSioData;
@@ -423,5 +424,49 @@ void HandleMenus0To6(void) {
         case 6:
             TwoPlayerLevelSelectMenu();
             break;
+    }
+}
+
+void MainMenu(void) {
+    int menuIndex;
+    int menuIndex_;
+    int iVar1;
+
+    if (TestButton(PAD_U)) {
+        if (cursorPosInMenu[curMenu] <= 0) {
+            cursorPosInMenu[curMenu] = 3;
+        } else {
+            cursorPosInMenu[curMenu]--;
+        }
+        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_D)) {
+        cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
+        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    DrawWidgets(0, cursorPosInMenu[curMenu]);
+    if (TestButton(PAD_CROSS)) {
+        menuIndex_ = cursorPosInMenu[curMenu];
+        drawCopyright = 0;
+        switch (cursorPosInMenu[curMenu]) {
+            case 0:
+                curMenu = 3;
+                cursorPosInMenu[3] = 0;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                break;
+            case 1:
+                curMenu = 4;
+                cursorPosInMenu[4] = 0;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                break;
+            case 2:
+                HighScoreUi(0);
+                break;
+            case 3:
+                curMenu = 1;
+                cursorPosInMenu[1] = 0;
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                break;
+        }
     }
 }
