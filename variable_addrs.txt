@@ -212,6 +212,7 @@ panFactorPtr = 0x000a36fc; // size:4
 panVectorSq = 0x000a4b70; // size:16
 panVectorSqPtr = 0x000a3700; // size:4
 particlePolyTemplates = 0x000aaefc; // size:280
+particles = 0x000ab014; // size:5888
 perSfxVoiceAttrs = 0x000e2cb8; // size:2112
 playingBonusMusic = 0x000a3638; // type:s16
 pmdCubes = 0x001fb8f0; // size:6760
