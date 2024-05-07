@@ -1,13 +1,46 @@
 #include "common.h"
 
-unsigned firstGuiTexture;
+uint firstGuiTexture;
 int drawTimerPausedWidget;
+int halfFps;
+int screenFadeColor;
+int screenFadeEnabled;
+int screenFadeSpeed;
 
-extern Texture textures[];
+extern int screenOffsetX;
+extern int screenOffsetY;
+extern int specialLevelType;
 
+extern Texture textures[150];
+extern TPolyF4 screenFadePolys[2][1];
 extern TSprite titleSprite[2];
 extern TSprite copyrightSprite[2];
 extern TSprite timerPausedSprite[2];
+
+void InitScreenFadePolys(void) {
+    int i;
+    int j;
+
+    screenFadeEnabled = 0;
+    halfFps = 0;
+    if (specialLevelType == 1) {
+        screenFadeEnabled = 1;
+        halfFps = 0;
+        screenFadeSpeed = 2;
+        screenFadeColor = 0x100;
+    }
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 1; j++) {
+            TPolyF4Prim(&screenFadePolys[i][j], 0, 0, GetTPage(0, 1, 0, 0));
+            setXY4(&screenFadePolys[i][j].poly,
+                    0, 0,
+                    screenOffsetX + 1, 0,
+                    0, screenOffsetY + 1,
+                    screenOffsetX + 1, screenOffsetY + 1);
+            SetSemiTrans(&screenFadePolys[i][j].poly, 1);
+        }
+    }
+}
 
 void InitTitleSprite(void) {
     int i;

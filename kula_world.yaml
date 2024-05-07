@@ -118,7 +118,7 @@ segments:
       - [0x12eb0, c, nonmatched/ggi]
       - [0x1343c, c, sprite_init]
       - [0x134a4, c, nonmatched/sprite_init]
-      - [0x14610, c, gui]
+      - [0x144dc, c, gui]
       - [0x14b0c, c, nonmatched/sprite_init3]
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/code_154a8]
