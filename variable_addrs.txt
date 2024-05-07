@@ -189,6 +189,7 @@ loadingIsComplete = 0x000a5750; // type:s32
 mcCmd = 0x000a506c; // type:s32
 mcResult = 0x000a5668; // type:s32
 memCardData = 0x000db25c; // size:8196
+memCardDataValid = 0x000a2fa8; // type:s32
 menuCursorSprite = 0x000a3d48; // size:56
 menuUnkAlwaysZero = 0x000a5434; // type:s32
 movieInfos = 0x00099e0c; // size:32
