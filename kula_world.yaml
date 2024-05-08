@@ -132,7 +132,7 @@ segments:
       - [0x32aa4, c, memcard1]
       - [0x32b48, c, nonmatched/memcard_ui]
       - [0x35b70, c, memcard2]
-      - [0x35ee8, c, nonmatched/memcard2]
+      - [0x36258, c, nonmatched/memcard3]
       - [0x366c0, c, memcard3]
       - [0x3687c, c, sjis]
       - [0x36b60, c, devkit]

@@ -4,13 +4,41 @@
 
 extern void ShowMemCardFullScreenText(char* str);
 
+int memCardDataValid;
 long mcResult;
 long tempMcResult;
 
 extern Highscore highscores[6];
 extern MemcardData memCardData;
+extern int curLevel;
+extern int curWorld;
+extern int dispenvScreenX;
+extern int dispenvScreenY;
+extern int finalUnlocked;
+extern int gameMode;
+extern int highestLevelReached;
 extern int highscoreLevelScores[6][150];
+extern int isFinal;
+extern int levelScores[150];
+extern int musicVolume;
+extern int sfxVolume;
+extern int timeTrialDifficulty;
+extern int totalPlayTime[2];
+extern int totalScore;
+extern int vibrationEnabled;
 extern long mcCmd;
+extern short numFruits;
+extern short turnDelayEnabled;
+extern uint fruitsCollectedBitmask;
+extern uint savedFruitsCollectedBitmask;
+
+static inline void ClearMemCardData() {
+    uint i;
+    char* p = &memCardData;
+    for (i = 0; i < 8196; i++) {
+            (*p++) = 0;
+    }
+}
 
 void LoadHighscoresFromMemcardData(void) {
     int i;
@@ -85,4 +113,68 @@ void FormatMemcard(void) {
         tempMcResult = MemCardFormat(0);
     }
     mcResult = tempMcResult;
+}
+
+int LoadSaveSlot(uint slot) {
+    extern char S_BESCES_01000KULA[];
+    int i;
+
+    MemCardAccept(0);
+    MemCardSync(0, &mcCmd, &tempMcResult);
+
+    if (tempMcResult == McErrNewCard || (tempMcResult == 0 && memCardDataValid == 0)) {
+        ClearMemCardData();
+        if (MemCardReadFile(0, S_BESCES_01000KULA, &memCardData, 0, 0x1000) == McErrCardNotExist) {
+            MemCardSync(0, &mcCmd, &tempMcResult);
+            if (tempMcResult == 0) {
+                memCardDataValid = 1;
+            } else {
+                memCardDataValid = 0;
+                ClearMemCardData();
+            }
+            mcResult = tempMcResult;
+        }
+    } else if (tempMcResult != 0) {
+        ClearMemCardData();
+        memCardDataValid = 0;
+        mcResult = tempMcResult;
+    }
+
+    if (memCardDataValid == 0) {
+        return 0;
+    }
+
+    LoadHighscoresFromMemcardData();
+    if (memCardData.arcadeModeDone == 1) {
+        finalUnlocked = memCardData.arcadeModeDone;
+    }
+    if (memCardData.highestLevelReached > highestLevelReached) {
+        highestLevelReached = memCardData.highestLevelReached;
+    }
+    if (slot < 4) {
+        musicVolume = memCardData.musicVolume;
+        sfxVolume = memCardData.sfxVolume;
+        dispenvScreenX = memCardData.screenX;
+        dispenvScreenY = memCardData.screenY;
+        turnDelayEnabled = memCardData.turnDelayEnabled;
+        vibrationEnabled = memCardData.vibrationEnabled;
+        for (i = 0; i < 150; i++) {
+            levelScores[i] = memCardData.saveslots[slot].levelScores[i];
+        }
+        gameMode = memCardData.saveslots[slot].gameMode;
+        if (gameMode == 0) {
+            totalScore = memCardData.saveslots[slot].score;
+            totalPlayTime[0] = memCardData.saveslots[slot].playtime;
+        } else {
+            totalPlayTime[0] = memCardData.saveslots[slot].score;
+        }
+        curLevel = memCardData.saveslots[slot].curLevel;
+        timeTrialDifficulty = memCardData.saveslots[slot].timeTrialDifficulty;
+        curWorld = memCardData.saveslots[slot].curWorld;
+        savedFruitsCollectedBitmask = memCardData.saveslots[slot].fruitBitmask;
+        numFruits = memCardData.saveslots[slot].fruits;
+        isFinal = memCardData.saveslots[slot].isFinal;
+        fruitsCollectedBitmask = savedFruitsCollectedBitmask;
+    }
+    return 1;
 }
