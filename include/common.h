@@ -59,7 +59,7 @@ typedef struct TPolyF4 {
 typedef struct Texture {
     u_char bitsPerPixel;
     u_char semitrans;
-    u_short clut;
+    short clut;
     short tpage;
     u_char u;
     u_char v;
