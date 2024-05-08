@@ -109,6 +109,7 @@ fontSprites = 0x000aa47c; // size:2688
 fruitsCollectedBitmask = 0x000a51f0; // type:u32
 gameMode = 0x000a2e48; // type:s32
 gameState = 0x000a2ec0; // type:s32
+ggiPart1HourglassAnim = 0x000a3df4; // size:4
 gotSioData = 0x000a2e8c; // type:s32
 gteXScale = 0x000a2e70; // type:s32
 gteYScale = 0x000a2e78; // type:s32
