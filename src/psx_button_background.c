@@ -9,8 +9,6 @@ extern uint Rand(int param_1);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 int enableGuiBackgroundScroll;
-int guiBackgroundAnimCounter;
-int guiBackgroundFadeIn;
 PsxButtonBackground* psxButtonBackgroundPtr;
 
 extern int displayHeight;
@@ -19,6 +17,9 @@ extern int firstLensFlareOrPsxButtonTexture;
 extern void* otag[2][1][1026];
 extern Texture textures[150];
 extern int whichDrawDispEnv;
+
+static int guiBackgroundFadeIn = 0; // .sdata
+static int guiBackgroundAnimCounter = 0; // .sdata
 
 void InitPsxButtonBackgroundSprites(int param_1) {
     uint rng;

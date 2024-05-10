@@ -4,14 +4,11 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void SetDebugScreenshotFilenameSuffix(int param_1);
 
-int screenshotIndex[13];
 int screenshotNumBytes;
 static RECT screenshotRect;
-static uint screenshotTimHeader[5];  // TODO add initializer
 
 extern byte saveReplayBuf[4076];
 extern char debugFilenameBuf[];
-extern char* DEBUG_SCREENSHOT_WORLD_NAMES[13];
 extern int buttonSaveReplayMode;
 extern int curWorld;
 extern int devkitFileNumber;
@@ -27,12 +24,28 @@ extern volatile byte saveReplayCurrentButtonsShuffled;
 extern volatile int saveReplayLength;
 extern volatile byte saveReplayRleButtonCount;
 
-extern char S_FMTs_2[];
-extern char S_FMTsFMTs[];
-extern char S_can_not_create_file_FMTs[];
-extern char S_error_closing_file_FMTs[];
-extern char S_psx_cube_pad_FMTd_pad[];
-extern char S_psx_cube_pad_rescue_pad[];
+
+static char* DEBUG_SCREENSHOT_WORLD_NAMES[13] = {
+    "hir",
+    "hil",
+    "inc",
+    "arc",
+    "cow",
+    "fie",
+    "atl",
+    "haz",
+    "mar",
+    "hel",
+    "xxx",
+    "bon",
+    "hid",
+};
+static int screenshotIndex[13] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+static uint screenshotTimHeader[5] = {
+    0x10, 0x2, 0x0, 0x0, 0x0
+};
 
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     int num;
@@ -53,7 +66,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     }
 
     if (useWorldPrefix == 0) {
-        sprintf(debugFilenameBuf, S_FMTs_2, prefix);
+        sprintf(debugFilenameBuf, "%s", prefix);
         num = screenshotIndex[0];
         screenshotIndex[0]++;
         SetDebugScreenshotFilenameSuffix(num);
@@ -68,7 +81,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         if (specialLevelType == 2) {
             worldNum = 12;
         }
-        sprintf(debugFilenameBuf, S_FMTsFMTs, prefix, DEBUG_SCREENSHOT_WORLD_NAMES[worldNum]);
+        sprintf(debugFilenameBuf, "%s%s", prefix, DEBUG_SCREENSHOT_WORLD_NAMES[worldNum]);
         num = screenshotIndex[worldNum];
         screenshotIndex[worldNum]++;
         SetDebugScreenshotFilenameSuffix(num);
@@ -81,12 +94,12 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     file = debugFilenameBuf;
     fd = PCcreat(file, 0);
     if (fd == -1) {
-        FntPrint(S_can_not_create_file_FMTs, file);
+        FntPrint( "can not create file:\n%s\n", file);
     } else {
         PCwrite(fd, screenshotTimHeader, 20);
         PCwrite(fd, 0x600000, screenshotNumBytes);  // TODO: use symbol for this
         if (PCclose(fd) < 0) {
-            FntPrint(S_error_closing_file_FMTs, file);
+            FntPrint("error closing file:\n%s\n", file);
         }
     }
     Noop();
@@ -173,9 +186,9 @@ void WriteToDevkit(int param_1) {
     int count;
 
     if (param_1 == 0) {
-        sprintf(debugFilenameBuf, S_psx_cube_pad_FMTd_pad, devkitFileNumber);
+        sprintf(debugFilenameBuf,  "\\psx\\cube\\pad\\%d.pad", devkitFileNumber);
     } else {
-        sprintf(debugFilenameBuf, S_psx_cube_pad_rescue_pad);
+        sprintf(debugFilenameBuf,  "\\psx\\cube\\pad\\rescue.pad");
     }
 
     *(int*)0x131000 += 1; // devkitFileNumber++;
@@ -193,7 +206,7 @@ void WriteToDevkit(int param_1) {
 
     fd = PCcreat(debugFilenameBuf, 0);
     if (fd == -1) {
-        FntPrint(S_can_not_create_file_FMTs, debugFilenameBuf);
+        FntPrint("can not create file:\n%s\n", debugFilenameBuf);
     } else {
         len = (int)p - 0x131000;
         if (len < 0) {
@@ -204,7 +217,7 @@ void WriteToDevkit(int param_1) {
         }
         PCwrite(fd, 0x131000, len);
         if (PCclose(fd) < 0) {
-            FntPrint(S_error_closing_file_FMTs, debugFilenameBuf);
+            FntPrint("error closing file:\n%s\n", debugFilenameBuf);
         }
     }
 

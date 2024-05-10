@@ -9,7 +9,7 @@ extern TSprite spinningSelectionSprite2[2];
 extern Texture textures[150];
 extern int whichDrawDispEnv;
 
-int spinningSelectionPhase;
+static int spinningSelectionPhase = 0; // .sdata
 
 void InitSpinningSelectionSprites(void) {
     TSpritePrim(&spinningSelectionSprite1[0], 0, 0, textures[firstGuiTexture + 13].tpage);

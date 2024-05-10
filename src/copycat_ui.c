@@ -1,11 +1,19 @@
 #include "common.h"
 
+short COPYCAT_SPRITE_POSITIONS[] = {
+    98, 20,
+    98, 20,
+    28, 200,
+    246, 200,
+    40, 200,
+    246, 200
+};
+
 extern PrimList primLists[2];
 extern TSprite copycatUiSprites[2][4];
 extern Texture textures[150];
 extern int gameMode;
 extern int whichDrawDispEnv;
-extern short COPYCAT_SPRITE_POSITIONS[];
 extern uint firstGuiTextTexture;
 
 void InitCopycatUiTextures(void) {
@@ -38,7 +46,6 @@ void InitCopycatUiTextures(void) {
 
 void RenderPlayerOrCopycatLabels(int sprite, u_char color) {
     if (sprite > 1) {
-        // XXX: not too sure about this... maybe the symbol does start earlier
         setXY0(&copycatUiSprites[whichDrawDispEnv][sprite].sprt,
                COPYCAT_SPRITE_POSITIONS[sprite * 2 + gameMode * 4 - 4],
                COPYCAT_SPRITE_POSITIONS[sprite * 2 + gameMode * 4 + 1 - 4]);
