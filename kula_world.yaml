@@ -122,6 +122,7 @@ segments:
       - [0x13c8c, c, nonmatched/sprite_init2]
       - [0x144dc, c, gui]
       - [0x14b0c, c, nonmatched/sprite_init3]
+      - [0x1511c, c, nonmatched/sprite_init4]
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/code_154a8]
       - [0x1dbac, c, nonmatched/visited_cubes]
