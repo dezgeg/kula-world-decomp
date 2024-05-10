@@ -18,6 +18,7 @@ extern void InitTitleSprite(void);
 
 extern POLY_FT4 hourglassSprites[2][3];
 extern DigitSprites levelTimeLeftDigitSprites;
+extern TSprite keySprites[2][8];
 extern Texture textures[150];
 
 uint firstGuiTexture;
@@ -100,5 +101,26 @@ void InitDigitSprites(DigitSprites* ds, int font,int x,int y,int r,int g,int b) 
                 textures[firstGuiTexture + textureIdx].w / 13,
                 textures[firstGuiTexture + textureIdx].h);
         ds->sprites[1][i] = ds->sprites[0][i];
+    }
+}
+
+void InitKeySprites(void) {
+    int i;
+    int textureIdx;
+
+    for (i = 0; i < 8; i++) {
+        textureIdx = i % 2 + 7;
+        TSpritePrim(&keySprites[0][i], 0, 0, textures[firstGuiTexture + textureIdx].tpage);
+        setRGB0(&keySprites[0][i].sprt, 0x80, 0x80, 0x80);
+        SetSemiTrans(&keySprites[0][i].sprt, textures[firstGuiTexture + textureIdx].semitrans);
+        SetShadeTex(&keySprites[0][i].sprt, 0);
+        keySprites[0][i].sprt.clut = textures[firstGuiTexture + textureIdx].clut;
+        keySprites[0][i].sprt.w =textures[firstGuiTexture + textureIdx].w;
+        keySprites[0][i].sprt.h =textures[firstGuiTexture + textureIdx].h;
+        setUV0(&keySprites[0][i].sprt,
+                textures[firstGuiTexture + textureIdx].u,
+                textures[firstGuiTexture + textureIdx].v);
+
+        keySprites[1][i] = keySprites[0][i];
     }
 }

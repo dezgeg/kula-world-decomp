@@ -167,6 +167,7 @@ isFinal = 0x000a2edc; // type:s32
 isFirstSlice = 0x000a4ccc; // type:s32
 isFirstTimeDecEnvInit = 0x000a3760; // type:s32
 isPaused = 0x000a334c; // type:s32
+keySprites = 0x000adbb4; // size:448
 keyStatus = 0x000a4b80; // size:24
 kulaZAllocatorHeapUsage = 0x000a3c84; // type:s32
 kulaZAllocatorPointer = 0x000a4ce4; // size:4
