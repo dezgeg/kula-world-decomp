@@ -119,7 +119,7 @@ segments:
       - [0x12a64, c, nonmatched/bios_font]
       - [0x12eb0, c, nonmatched/ggi]
       - [0x1343c, c, sprite_init]
-      - [0x13884, c, nonmatched/sprite_init2]
+      - [0x13a9c, c, nonmatched/sprite_init2]
       - [0x144dc, c, gui]
       - [0x14b0c, c, nonmatched/sprite_init3]
       - [0x1541c, c, prim]
