@@ -273,7 +273,7 @@ segments:
       - [0x598e0, c, libapi/c57]
       - [0x598f0, c, libsn/write]
       - [0x599b0, c, libsn/snwrite]
-      - [0x599c8, c, libsnd/ut_roff]
+      - [0x599c8, c, libspu/s_i]
       - [0x599e8, c, libspu/s_ini]
       - [0x59b48, c, libapi/a08]
       - [0x59b58, c, libapi/a12]
