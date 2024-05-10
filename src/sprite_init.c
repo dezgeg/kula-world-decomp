@@ -76,7 +76,7 @@ void InitHourglassSprites(void) {
     InitDigitSprites(&levelTimeLeftDigitSprites, 0, 152, 50, 0x80, 0x80, 0x80);
 }
 
-void InitDigitSprites(DigitSprites* ds, int font,int x,int y,int r,int g,int b) {
+void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b) {
     int textureIdx;
     int tmp;
     int w;
@@ -91,7 +91,7 @@ void InitDigitSprites(DigitSprites* ds, int font,int x,int y,int r,int g,int b) 
 
     for (i = 0; i < 10; i++) {
         textureIdx = font + 3;
-        TSpritePrim(&ds->sprites[0][i],0,0,textures[firstGuiTexture + textureIdx].tpage);
+        TSpritePrim(&ds->sprites[0][i], 0, 0, textures[firstGuiTexture + textureIdx].tpage);
         setRGB0(&ds->sprites[0][i].sprt, r, g, b);
         setXY0(&ds->sprites[0][i].sprt, x + i * w, y);
         SetSemiTrans(&ds->sprites[0][i].sprt, textures[firstGuiTexture + textureIdx].semitrans);
