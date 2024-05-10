@@ -56,10 +56,10 @@ void InitHourglassSprites(void) {
                 textures[firstGuiTexture + i].u, textures[firstGuiTexture + i].v + h,
                 textures[firstGuiTexture + i].u + w, textures[firstGuiTexture + i].v + h);
         setXY4(&hourglassSprites[0][i],
-                ggiPart1HourglassAnim[320*i + 0] + 160, ggiPart1HourglassAnim[320 * i + 1] + 26,
-                ggiPart1HourglassAnim[320*i + 2] + 160, ggiPart1HourglassAnim[320 * i + 3] + 26,
-                ggiPart1HourglassAnim[320*i + 4] + 160, ggiPart1HourglassAnim[320 * i + 5] + 26,
-                ggiPart1HourglassAnim[320*i + 6] + 160, ggiPart1HourglassAnim[320 * i + 7] + 26);
+                ggiPart1HourglassAnim[320 * i + 0] + 160, ggiPart1HourglassAnim[320 * i + 1] + 26,
+                ggiPart1HourglassAnim[320 * i + 2] + 160, ggiPart1HourglassAnim[320 * i + 3] + 26,
+                ggiPart1HourglassAnim[320 * i + 4] + 160, ggiPart1HourglassAnim[320 * i + 5] + 26,
+                ggiPart1HourglassAnim[320 * i + 6] + 160, ggiPart1HourglassAnim[320 * i + 7] + 26);
         setRGB0(&hourglassSprites[0][i], 0x80, 0x80, 0x80);
         SetSemiTrans(&hourglassSprites[0][i], textures[firstGuiTexture + i].semitrans);
         SetShadeTex(&hourglassSprites[0][i], 0);
@@ -115,8 +115,8 @@ void InitKeySprites(void) {
         SetSemiTrans(&keySprites[0][i].sprt, textures[firstGuiTexture + textureIdx].semitrans);
         SetShadeTex(&keySprites[0][i].sprt, 0);
         keySprites[0][i].sprt.clut = textures[firstGuiTexture + textureIdx].clut;
-        keySprites[0][i].sprt.w =textures[firstGuiTexture + textureIdx].w;
-        keySprites[0][i].sprt.h =textures[firstGuiTexture + textureIdx].h;
+        keySprites[0][i].sprt.w = textures[firstGuiTexture + textureIdx].w;
+        keySprites[0][i].sprt.h = textures[firstGuiTexture + textureIdx].h;
         setUV0(&keySprites[0][i].sprt,
                 textures[firstGuiTexture + textureIdx].u,
                 textures[firstGuiTexture + textureIdx].v);
