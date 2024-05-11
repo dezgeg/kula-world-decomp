@@ -123,7 +123,6 @@ void InitLensFlareSprites(void) {
 void DrawLensFlares(void) {
     MATRIX matrix;
     short screenCoords[10];
-    long dummy;
     long sz;
     int i;
     int j;
