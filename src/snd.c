@@ -82,7 +82,7 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     spuReverbAttr.mask = 0;
     spuReverbAttr.feedback = 0x2fff;
 
-    SsUtReverbOff();
+    SpuInit();
     SpuSetTransferStartAddr(0x1010);
 
     addr = (int)sfxFile + sfxFile->entries[0].offset;
