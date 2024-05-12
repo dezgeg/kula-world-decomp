@@ -23,12 +23,14 @@ int isPaused;
 int menuUnkAlwaysZero;
 int repeatRateTimer;
 int timeTrialAtEndOfWorld;
+int twoPlayerLevelSelectionCursorPos;
 int wasPausedPreviousFrame;
 
 extern SVECTOR ZERO_SVECTOR_a3340;
 extern int TIME_TRIAL_PAR_TIMES[150];
 extern int byteCountToReceiveFromSio;
 extern int cheated;
+extern int copycatPlayerScores[2];
 extern int curLevel;
 extern int curWorld2;
 extern int curWorld;
@@ -695,6 +697,59 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
                 break;
             case 4:
                 cursorPosInMenu[curMenu] = 0;
+                curMenu = 0;
+                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                break;
+        }
+    }
+}
+
+void TwoPlayerMenu(void) {
+    int i;
+
+    if (TestButton(PAD_U)) {
+        if (cursorPosInMenu[curMenu] <= 0) {
+            cursorPosInMenu[curMenu] = 2;
+        } else {
+            cursorPosInMenu[curMenu]--;
+        }
+        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    if (TestButton(PAD_D)) {
+        cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 3;
+        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    DrawWidgets(5,cursorPosInMenu[curMenu]);
+    if (TestButton(PAD_TRIANGLE)) {
+        cursorPosInMenu[curMenu] = 0;
+        curMenu = 0;
+        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    if (TestButton(PAD_CROSS)) {
+        switch (cursorPosInMenu[curMenu]) {
+            case 0:
+                for (i = 0; i < 2; i++) {
+                    copycatPlayerScores[i] = 0;
+                }
+                wasPausedPreviousFrame = 0;
+                gameMode = 1;
+                screenOffsetY = displayHeight;
+                numCameras = 1;
+                copycatModeStartingPlayer = 1;
+                isPaused = 0;
+                gameState++;
+                cursorPosInMenu[curMenu] = 0;
+                cursorPosInMenu[0] = 0;
+                curMenu = 0;
+                InitAllDigitSprites();
+                loadNewWorld = 1;
+                break;
+            case 1:
+                twoPlayerLevelSelectionCursorPos = 0;
+                curMenu = 6;
+                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                break;
+            case 2:
                 curMenu = 0;
                 SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
                 break;
