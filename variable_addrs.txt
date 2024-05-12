@@ -338,6 +338,7 @@ totalPlayTime = 0x000a4eb4; // size:8
 totalScore = 0x000a59a0; // type:s32
 totalScoreSprite = 0x000aca34; // size:560
 turnDelayEnabled = 0x000a2e4c; // type:s16
+twoPlayerLevelSelectionCursorPos = 0x000a56d8; // type:s32
 twoPlayerWhichPlayer = 0x000a51ac; // type:s32
 unusedInitStackParamEnd = 0x000bb504; // type:u32
 unusedInitStackParamStart = 0x000bb508; // type:u32
