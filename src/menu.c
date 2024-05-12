@@ -26,10 +26,12 @@ int timeTrialAtEndOfWorld;
 int wasPausedPreviousFrame;
 
 extern SVECTOR ZERO_SVECTOR_a3340;
+extern int TIME_TRIAL_PAR_TIMES[150];
 extern int byteCountToReceiveFromSio;
+extern int cheated;
 extern int curLevel;
-extern int curWorld;
 extern int curWorld2;
+extern int curWorld;
 extern int debugBonusLevels;
 extern int debugDisableTimer;
 extern int dispenvScreenX;
@@ -37,23 +39,35 @@ extern int dispenvScreenY;
 extern int displayHeight;
 extern int displayWidth;
 extern int drawCopyright;
+extern int drawCopyright;
+extern int finalUnlocked;
 extern int gameMode;
 extern int gameState;
 extern int gotSioData;
 extern int isFinal;
 extern int levelEndReason;
+extern int levelHasBeenCompletedByPlayer[2];
+extern int levelPlayTime[2];
+extern int levelPlaytimesInThisWorld[15];
 extern int levelScore;
 extern int loadNewWorld;
 extern int musicVolume;
+extern int numCameras;
 extern int numTimeTrialPlayers;
+extern int screenOffsetY;
 extern int sfxVolume;
+extern int skipNextLoad;
 extern int specialLevelType;
+extern int startingPlayerForThisLevel;
+extern int timeTrialDifficulty;
+extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern int vibrationEnabled;
 extern int whichDrawDispEnv;
 extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
 extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
+extern short numFruits;
 extern short turnDelayEnabled;
 extern uint curController;
 extern uint controllerButtons;
@@ -462,6 +476,112 @@ void MainMenu(void) {
                 cursorPosInMenu[1] = 0;
                 SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
+        }
+    }
+}
+
+
+void SinglePlayerMenu(void) {
+    int fullLevel;
+    int i;
+
+    if (finalUnlocked == 1) {
+        SinglePlayerMenuWhenFinalUnlocked();
+    } else {
+        if (TestButton(PAD_U)) {
+            if (cursorPosInMenu[curMenu] <= 0) {
+                cursorPosInMenu[curMenu] = 3;
+            } else {
+                cursorPosInMenu[curMenu]--;
+            }
+            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        }
+        if (TestButton(PAD_D)) {
+            cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
+            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        }
+        DrawWidgets(4,cursorPosInMenu[curMenu]);
+        if (TestButton(PAD_TRIANGLE)) {
+            cursorPosInMenu[curMenu] = 0;
+            curMenu = 0;
+            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        }
+        if (TestButton(PAD_CROSS)) {
+            switch (cursorPosInMenu[curMenu]) {
+                case 0:
+                    numFruits = 0;
+                    wasPausedPreviousFrame = 0;
+                    gameMode = 0;
+                    totalPlayTime[0] = 0;
+                    numCameras = 1;
+                    isPaused = 0;
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    cheated = 0;
+                    screenOffsetY = displayHeight;
+                    gameState++;
+                    InitAllDigitSprites();
+                    SndPlaySfx(30,0,&ZERO_SVECTOR_a3340,7000);
+                    break;
+                case 1:
+                    curMenu = 5;
+                    SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+                    break;
+                case 2:
+                    drawCopyright = 0;
+                    if (LoadSaveMenu() != 1) {
+                        return;
+                    }
+                    if (gameMode == 0) {
+                        wasPausedPreviousFrame = 0;
+                        gameMode = 0;
+                        screenOffsetY = displayHeight;
+                        numCameras = 1;
+                        isPaused = 0;
+                        cursorPosInMenu[curMenu] = 0;
+                        curMenu = 0;
+                        cheated = 0;
+                        gameState++;
+                        InitAllDigitSprites();
+                        loadNewWorld = 1;
+                        if (curWorld == curWorld2) {
+                            skipNextLoad = 1;
+                        }
+                        return;
+                    }
+
+                    numTimeTrialPlayers = 1;
+                    twoPlayerWhichPlayer = 0;
+                    for (i = 0; i < 15; i++) {
+                        levelPlaytimesInThisWorld[i] = 0;
+                    }
+
+                    for (i = 0; i < numTimeTrialPlayers; i++) {
+                        levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
+                        levelHasBeenCompletedByPlayer[i] = 0;
+                    }
+                    gameMode = 2;
+                    screenOffsetY = displayHeight;
+                    wasPausedPreviousFrame = 0;
+                    numCameras = 1;
+                    isPaused = 0;
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    cheated = 0;
+                    startingPlayerForThisLevel = 0;
+                    gameState++;
+                    InitAllDigitSprites();
+                    loadNewWorld = 1;
+                    if (curWorld == 0 && !isFinal) {
+                        skipNextLoad = 1;
+                    }
+                    break;
+                case 3:
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                    break;
+            }
         }
     }
 }
