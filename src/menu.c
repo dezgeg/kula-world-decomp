@@ -585,3 +585,119 @@ void SinglePlayerMenu(void) {
         }
     }
 }
+
+void SinglePlayerMenuWhenFinalUnlocked(void) {
+    int fullLevel;
+    int i;
+
+    if (TestButton(PAD_U)) {
+        if (cursorPosInMenu[curMenu] <= 0) {
+            cursorPosInMenu[curMenu] = 4;
+        } else {
+            cursorPosInMenu[curMenu]--;
+        }
+        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    if (TestButton(PAD_D)) {
+        cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 5;
+        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    DrawWidgets(6,cursorPosInMenu[curMenu]);
+    if (TestButton(PAD_TRIANGLE)) {
+        cursorPosInMenu[curMenu] = 0;
+        curMenu = 0;
+        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+    }
+    if (TestButton(PAD_CROSS)) {
+        switch (cursorPosInMenu[curMenu]) {
+            case 0:
+                isFinal = 1;
+                    numFruits = 0;
+                    wasPausedPreviousFrame = 0;
+                    gameMode = 0;
+                    totalPlayTime[0] = 0;
+                    screenOffsetY = displayHeight;
+                    numCameras = 1;
+                    isPaused = 0;
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    cheated = 0;
+                    gameState++;
+                InitAllDigitSprites();
+                loadNewWorld = 1;
+                break;
+            case 1:
+                    numFruits = 0;
+                    wasPausedPreviousFrame = 0;
+                    gameMode = 0;
+                    totalPlayTime[0] = 0;
+                    screenOffsetY = displayHeight;
+                    numCameras = 1;
+                    isPaused = 0;
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    cheated = 0;
+                    gameState++;
+                InitAllDigitSprites();
+                SndPlaySfx(30,0,&ZERO_SVECTOR_a3340,7000);
+                break;
+            case 2:
+                curMenu = 5;
+                SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+                break;
+            case 3:
+                if (LoadSaveMenu() != 1) {
+                    return;
+                }
+                if (gameMode == 0) {
+                    wasPausedPreviousFrame = 0;
+                    gameMode = 0;
+                    screenOffsetY = displayHeight;
+                    numCameras = 1;
+                    isPaused = 0;
+                    cursorPosInMenu[curMenu] = 0;
+                    curMenu = 0;
+                    cheated = 0;
+                    gameState++;
+                    InitAllDigitSprites();
+                    loadNewWorld = 1;
+                    if (curWorld == curWorld2) {
+                        skipNextLoad = 1;
+                    }
+                    return;
+                }
+
+                numTimeTrialPlayers = 1;
+                twoPlayerWhichPlayer = 0;
+                for (i = 0; i < 15; i++) {
+                    levelPlaytimesInThisWorld[i] = 0;
+                }
+
+                for (i = 0; i < numTimeTrialPlayers; i++) {
+                    levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
+                    levelHasBeenCompletedByPlayer[i] = 0;
+                }
+                gameMode = 2;
+                screenOffsetY = displayHeight;
+                wasPausedPreviousFrame = 0;
+                numCameras = 1;
+                isPaused = 0;
+                cursorPosInMenu[curMenu] = 0;
+                curMenu = 0;
+                cheated = 0;
+                startingPlayerForThisLevel = 0;
+                gameState++;
+                InitAllDigitSprites();
+                loadNewWorld = 1;
+                if (curWorld == 0 && !isFinal) {
+                    skipNextLoad = 1;
+                }
+                break;
+            case 4:
+                cursorPosInMenu[curMenu] = 0;
+                curMenu = 0;
+                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                break;
+        }
+    }
+}

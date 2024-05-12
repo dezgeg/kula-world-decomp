@@ -60,7 +60,6 @@ segments:
     subsegments:
       - [0x00800, rodata, rodata_00800]
       - [0x00b44, .rodata, menu]
-      - [0x00b78, rodata, rodata_00b78]
       - [0x00b90, .rodata, zlib_infblock]
       - [0x00bb8, .rodata, zlib_inflate]
       - [0x00bf0, .rodata, zlib_infcodes]
@@ -144,7 +143,7 @@ segments:
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
       - [0x377a0, c, menu]
-      - [0x38eac, c, nonmatched/menu]
+      - [0x39424, c, nonmatched/menu]
       - [0x3a484, c, nonmatched/code_3a484]
       - [0x3b6c0, c, highscore]
       - [0x3b89c, c, nonmatched/highscore]
