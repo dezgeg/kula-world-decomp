@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
-extern void DrawTextFancyFont(char* str, int x, int y);
+extern void DrawTextFancyFont(char* str, short x, short y);
 extern void DrawTitleAndCopyrightSprites(void);
 extern void HandleMenus0To6(void);
 extern void MainMenu(void);
@@ -22,11 +22,13 @@ int cursorPosInMenu[8];
 int isPaused;
 int menuUnkAlwaysZero;
 int repeatRateTimer;
+int savePointMenuConfirmed;
 int timeTrialAtEndOfWorld;
 int twoPlayerLevelSelectionCursorPos;
 int wasPausedPreviousFrame;
 
 extern SVECTOR ZERO_SVECTOR_a3340;
+extern char scoreText[128];
 extern int TIME_TRIAL_PAR_TIMES[150];
 extern int byteCountToReceiveFromSio;
 extern int cheated;
@@ -46,6 +48,7 @@ extern int finalUnlocked;
 extern int gameMode;
 extern int gameState;
 extern int gotSioData;
+extern int highestLevelReached;
 extern int isFinal;
 extern int levelEndReason;
 extern int levelHasBeenCompletedByPlayer[2];
@@ -56,6 +59,7 @@ extern int loadNewWorld;
 extern int musicVolume;
 extern int numCameras;
 extern int numTimeTrialPlayers;
+extern int screenOffsetY;
 extern int screenOffsetY;
 extern int sfxVolume;
 extern int skipNextLoad;
@@ -482,7 +486,6 @@ void MainMenu(void) {
     }
 }
 
-
 void SinglePlayerMenu(void) {
     int fullLevel;
     int i;
@@ -496,17 +499,17 @@ void SinglePlayerMenu(void) {
             } else {
                 cursorPosInMenu[curMenu]--;
             }
-            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_D)) {
             cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
-            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
         }
-        DrawWidgets(4,cursorPosInMenu[curMenu]);
+        DrawWidgets(4, cursorPosInMenu[curMenu]);
         if (TestButton(PAD_TRIANGLE)) {
             cursorPosInMenu[curMenu] = 0;
             curMenu = 0;
-            SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_CROSS)) {
             switch (cursorPosInMenu[curMenu]) {
@@ -523,11 +526,11 @@ void SinglePlayerMenu(void) {
                     screenOffsetY = displayHeight;
                     gameState++;
                     InitAllDigitSprites();
-                    SndPlaySfx(30,0,&ZERO_SVECTOR_a3340,7000);
+                    SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
                     break;
                 case 1:
                     curMenu = 5;
-                    SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+                    SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
                     break;
                 case 2:
                     drawCopyright = 0;
@@ -581,7 +584,7 @@ void SinglePlayerMenu(void) {
                 case 3:
                     cursorPosInMenu[curMenu] = 0;
                     curMenu = 0;
-                    SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                    SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
                     break;
             }
         }
@@ -598,54 +601,54 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 5;
-        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(6,cursorPosInMenu[curMenu]);
+    DrawWidgets(6, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
-        SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
             case 0:
                 isFinal = 1;
-                    numFruits = 0;
-                    wasPausedPreviousFrame = 0;
-                    gameMode = 0;
-                    totalPlayTime[0] = 0;
-                    screenOffsetY = displayHeight;
-                    numCameras = 1;
-                    isPaused = 0;
-                    cursorPosInMenu[curMenu] = 0;
-                    curMenu = 0;
-                    cheated = 0;
-                    gameState++;
+                numFruits = 0;
+                wasPausedPreviousFrame = 0;
+                gameMode = 0;
+                totalPlayTime[0] = 0;
+                screenOffsetY = displayHeight;
+                numCameras = 1;
+                isPaused = 0;
+                cursorPosInMenu[curMenu] = 0;
+                curMenu = 0;
+                cheated = 0;
+                gameState++;
                 InitAllDigitSprites();
                 loadNewWorld = 1;
                 break;
             case 1:
-                    numFruits = 0;
-                    wasPausedPreviousFrame = 0;
-                    gameMode = 0;
-                    totalPlayTime[0] = 0;
-                    screenOffsetY = displayHeight;
-                    numCameras = 1;
-                    isPaused = 0;
-                    cursorPosInMenu[curMenu] = 0;
-                    curMenu = 0;
-                    cheated = 0;
-                    gameState++;
+                numFruits = 0;
+                wasPausedPreviousFrame = 0;
+                gameMode = 0;
+                totalPlayTime[0] = 0;
+                screenOffsetY = displayHeight;
+                numCameras = 1;
+                isPaused = 0;
+                cursorPosInMenu[curMenu] = 0;
+                curMenu = 0;
+                cheated = 0;
+                gameState++;
                 InitAllDigitSprites();
-                SndPlaySfx(30,0,&ZERO_SVECTOR_a3340,7000);
+                SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
                 break;
             case 2:
                 curMenu = 5;
-                SndPlaySfx(0x6d,0,&ZERO_SVECTOR_a3340,8000);
+                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 3:
                 if (LoadSaveMenu() != 1) {
@@ -698,7 +701,7 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
             case 4:
                 cursorPosInMenu[curMenu] = 0;
                 curMenu = 0;
-                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
         }
     }
@@ -713,17 +716,17 @@ void TwoPlayerMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 3;
-        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(5,cursorPosInMenu[curMenu]);
+    DrawWidgets(5, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
-        SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
@@ -747,12 +750,155 @@ void TwoPlayerMenu(void) {
             case 1:
                 twoPlayerLevelSelectionCursorPos = 0;
                 curMenu = 6;
-                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 2:
                 curMenu = 0;
-                SndPlaySfx(109,0,&ZERO_SVECTOR_a3340,8000);
+                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
         }
     }
+}
+
+void TimeTrialDifficultySelectionMenu(void) {
+    int i;
+    if (TestButton(PAD_U)) {
+        if (cursorPosInMenu[curMenu] <= 0) {
+            cursorPosInMenu[curMenu] = 3;
+        } else {
+            cursorPosInMenu[curMenu]--;
+        }
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_D)) {
+        cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    DrawWidgets(7, cursorPosInMenu[curMenu]);
+    if (TestButton(PAD_TRIANGLE)) {
+        cursorPosInMenu[curMenu] = 0;
+        curMenu = 3;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_CROSS)) {
+        if (cursorPosInMenu[curMenu] < 3) {
+            timeTrialDifficulty = 20 - 10 * cursorPosInMenu[curMenu];
+            numTimeTrialPlayers = 1;
+            twoPlayerWhichPlayer = 0;
+            for (i = 0; i < numTimeTrialPlayers; i++) {
+                levelPlayTime[i] = (- TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] -timeTrialDifficulty ) * 50;
+                totalPlayTime[i] = 0;
+                levelHasBeenCompletedByPlayer[i] = 0;
+            }
+            screenOffsetY = displayHeight;
+            gameMode = 2;
+            numCameras = 1;
+            numFruits = 0;
+            wasPausedPreviousFrame = 0;
+            isPaused = 0;
+            cursorPosInMenu[curMenu] = 0;
+            curMenu = 0;
+            cheated = 0;
+            startingPlayerForThisLevel = 0;
+            gameState++;
+            for (i = 0; i < 15; i++) {
+                levelPlaytimesInThisWorld[i] = 0;
+            }
+            InitAllDigitSprites();
+            SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+        } else {
+            cursorPosInMenu[curMenu] = 0;
+            curMenu = 3;
+            SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        }
+    }
+}
+
+extern char S_FMTd_4[];
+void TwoPlayerLevelSelectMenu(void) {
+    int i;
+
+    SetBigGuiSpriteVisible();
+    if (TestButton(PAD_L)) {
+        if (twoPlayerLevelSelectionCursorPos > 0) {
+            twoPlayerLevelSelectionCursorPos--;
+        } else {
+            twoPlayerLevelSelectionCursorPos = highestLevelReached / 15;
+        }
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_R)) {
+        twoPlayerLevelSelectionCursorPos = (twoPlayerLevelSelectionCursorPos + 1) % (highestLevelReached / 15 + 1);
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    DrawWidgets(8, cursorPosInMenu[curMenu]);
+    sprintf(scoreText, S_FMTd_4, twoPlayerLevelSelectionCursorPos * 15 + 1);
+    Update2PlayerLevelSelectionSprites(49 + (twoPlayerLevelSelectionCursorPos + 1) * 20 + (twoPlayerLevelSelectionCursorPos / 9) * 8, 187);
+    for (i = 1; i < 11; i++) {
+        if (highestLevelReached / 15 + 1 < i) {
+            SetFancyTextColor(0, 0x80, 0x80);
+        }
+        sprintf(scoreText, S_FMTd_4, i);
+        DrawTextFancyFont(scoreText, 54 + i * 20 + (i / 10) * 12, 178);
+    }
+
+    if (TestButton(PAD_TRIANGLE)) {
+        cursorPosInMenu[curMenu] = 0;
+        curMenu = 4;
+        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+    }
+    if (TestButton(PAD_CROSS)) {
+        numTimeTrialPlayers = 2;
+        twoPlayerWhichPlayer = 0;
+        for (i = 0; i < numTimeTrialPlayers; i++) {
+            totalPlayTime[i] = 0;
+            levelPlayTime[i] = 0;
+            levelHasBeenCompletedByPlayer[i] = 0;
+        }
+        gameMode = 2;
+        wasPausedPreviousFrame = 0;
+        numCameras = 1;
+        isPaused = 0;
+        screenOffsetY = displayHeight;
+        cursorPosInMenu[curMenu] = 0;
+        cursorPosInMenu[0] = 0;
+        curMenu = 0;
+        gameState++;
+        startingPlayerForThisLevel = 0;
+        InitAllDigitSprites();
+        curWorld = twoPlayerLevelSelectionCursorPos;
+        levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[twoPlayerLevelSelectionCursorPos * 15 + curLevel] * 50;
+        if (twoPlayerLevelSelectionCursorPos != curWorld2) {
+            loadNewWorld = 1;
+        } else {
+            SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+        }
+    }
+}
+
+void SavePointMenu(void) {
+    DrawWidgets(9, cursorPosInMenu[curMenu]);
+    if (TestButton(PAD_CROSS) && MemCardUi() > 0) {
+        savePointMenuConfirmed = 1;
+        prevControllerButtons = 0;
+        controllerButtons = controllerButtons | PAD_CROSS;
+    } else {
+        if (TestButton(PAD_TRIANGLE)) {
+            SndPlaySfx(109, 37000, &ZERO_SVECTOR_a3340, 8000);
+            savePointMenuConfirmed = 1;
+        }
+    }
+}
+
+int GetReadyScreen(void) {
+    SetBigGuiSpriteVisible();
+    DrawStaticUiSprite(7, 90, 150, 0);
+    DrawStaticUiSprite(twoPlayerWhichPlayer + 8, 144, 151, 0);
+    DrawStaticUiSprite(6, 162, 150, 0);
+    DrawWidgets(19, 0);
+    if (TestButton(PAD_CROSS)) {
+        SndPlaySfx(0x1e, 0, &ZERO_SVECTOR_a3340, 7000);
+        return 0;
+    }
+    return 1;
 }
