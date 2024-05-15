@@ -16,6 +16,8 @@ extern void TimeTrialDifficultySelectionMenu(void);
 extern void TwoPlayerLevelSelectMenu(void);
 extern void TwoPlayerMenu(void);
 
+short qualifyScreenCursorX;
+short qualifyScreenCursorY;
 int copycatModeStartingPlayer;
 int curMenu;
 int cursorPosInMenu[8];
@@ -901,4 +903,10 @@ int GetReadyScreen(void) {
         return 0;
     }
     return 1;
+}
+
+void UnusedInitFailedToQualifyScreen(void) {
+    qualifyScreenCursorX = 0;
+    qualifyScreenCursorY = 0;
+    timeTrialAtEndOfWorld = 1;
 }
