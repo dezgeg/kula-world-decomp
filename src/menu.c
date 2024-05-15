@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
-extern void DrawTextFancyFont(char* str, short x, short y);
+extern void DrawTextFancyFont(char* str, int x, int y);
 extern void DrawTitleAndCopyrightSprites(void);
 extern void HandleMenus0To6(void);
 extern void MainMenu(void);
