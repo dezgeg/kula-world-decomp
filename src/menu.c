@@ -22,6 +22,7 @@ int copycatModeStartingPlayer;
 int curMenu;
 int cursorPosInMenu[8];
 int isPaused;
+int levelScoreSummaryConfirmed;
 int menuUnkAlwaysZero;
 int repeatRateTimer;
 int savePointMenuConfirmed;
