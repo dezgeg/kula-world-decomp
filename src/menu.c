@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
-extern void DrawTextFancyFont(char* str, int x, int y);
+extern void DrawTextFancyFont(char* str, short x, short y);
 extern void DrawTitleAndCopyrightSprites(void);
 extern void HandleMenus0To6(void);
 extern void MainMenu(void);
@@ -910,4 +910,85 @@ void UnusedInitFailedToQualifyScreen(void) {
     qualifyScreenCursorX = 0;
     qualifyScreenCursorY = 0;
     timeTrialAtEndOfWorld = 1;
+}
+
+extern char S_FMTd_5[];
+void TimeTrialFailedToQualifyScreen(void) {
+    int i;
+    int j;
+    char buf[16];
+    int time;
+    int k;
+
+    curLevel = 0;
+    time = 0;
+    for (k = 0; k < 15; k++) {
+        time += levelPlaytimesInThisWorld[k];
+    }
+    totalPlayTime[0] = time;
+
+    if (totalPlayTime[0] < 1) {
+        if (TestButton(PAD_CROSS)) {
+            totalPlayTime[0] = 0;
+            time = 0;
+            for (k = 0; k < 15; k++) {
+                levelPlaytimesInThisWorld[k] = 0;
+            }
+            loadNewWorld = 1;
+            timeTrialAtEndOfWorld = 0;
+            levelScoreSummaryConfirmed = 1;
+        }
+    } else {
+        if (TestButton(PAD_U)) {
+            if (qualifyScreenCursorY >= 1) {
+                qualifyScreenCursorY = qualifyScreenCursorY - 1;
+            } else {
+                if (qualifyScreenCursorX == 0) {
+                    qualifyScreenCursorY = 7;
+                } else {
+                    qualifyScreenCursorY = 6;
+                }
+            }
+            SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        }
+        if (TestButton(PAD_D)) {
+            qualifyScreenCursorY = (qualifyScreenCursorY + 1) % 8;
+            if (qualifyScreenCursorX == 1 && qualifyScreenCursorY == 7) {
+                qualifyScreenCursorY = 0;
+            }
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        }
+        if (TestButton(PAD_L) && qualifyScreenCursorY != 7) {
+            qualifyScreenCursorX = qualifyScreenCursorX ^ 1;
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        }
+        if ((TestButton(PAD_R) != 0) && (qualifyScreenCursorY != 7)) {
+            qualifyScreenCursorX = qualifyScreenCursorX ^ 1;
+            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        }
+        if (TestButton(PAD_CROSS)) {
+            levelScoreSummaryConfirmed = 1;
+            loadNewWorld = 0;
+            curLevel = qualifyScreenCursorX * 8 + qualifyScreenCursorY;
+        }
+        DrawMenuCursorSprite(116 + qualifyScreenCursorX * 150, 85 + qualifyScreenCursorY * 18);
+    }
+
+    i = 0;
+
+    for (; i < 2; i++) {
+        DrawStaticUiSprite(3, 25 + 150 * i, 67, 0);
+        DrawStaticUiSprite(1, 92 + 150 * i, 67, 0);
+        for (j = 0; j < 8 && i * j < 7; j++) {
+            sprintf(buf, S_FMTd_5, j + i * 8 + curWorld2 * 15 + 1);
+            DrawTextFancyFont(buf, 57 + 150 * i, 85 + 18 * j);
+            FormatTime(levelPlaytimesInThisWorld[i * 8 + j], buf, 1);
+            DrawTextFancyFont(buf, 140 + 150 * i, 85 + 18 * j);
+        }
+    }
+
+    FormatTime(time, buf, 1);
+    DrawStaticUiSprite(0, 170, 210, 7);
+    DrawStaticUiSprite(16, 175, 220, 0);
+    DrawTextFancyFont(buf, 290, 220);
 }
