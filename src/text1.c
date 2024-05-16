@@ -5,7 +5,7 @@ int textAlignMode;
 byte textColorB;
 byte textColorG;
 byte textColorR;
-int textPosX;
+int textPosXStart;
 int textPosYEnd;
 int textPosYStart;
 
@@ -18,7 +18,7 @@ void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int co
         textAlignMode = align;
     }
     if (posX != -1) {
-        textPosX = posX;
+        textPosXStart = posX;
     }
     if (posY != -1) {
         textPosYStart = posY;
