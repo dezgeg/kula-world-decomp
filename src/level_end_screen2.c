@@ -8,3 +8,7 @@ void FadeOutBigGuiSprite(void) {
         bigGuiSpriteFade = 0;
     }
 }
+
+void SetBigGuiSpriteVisible(void) {
+    bigGuiSpriteFade = 0x100;
+}
