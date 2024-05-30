@@ -2,6 +2,7 @@
 
 extern void LoadMenuGfx(int menuId);
 
+int bigGuiSpriteFade;
 int menuCursorSinPhase;
 int whichLevelEndSpriteLoaded;
 
@@ -70,4 +71,22 @@ void DrawWidgets(int menuId, int cursorPos) {
             addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite2[whichDrawDispEnv]);
         }
     }
+}
+
+void DrawMenuCursorSprite(int x, int y) {
+    int color;
+    int m = 20;
+
+    menuCursorSinPhase = (menuCursorSinPhase + 80) & 0xfff;
+    menuCursorSprite[whichDrawDispEnv].sprt.x0 = x + (m * rsin(menuCursorSinPhase) >> 12) - textures[firstGuiTexture + 13].w / 2;
+    menuCursorSprite[whichDrawDispEnv].sprt.y0 = y;
+    color = bigGuiSpriteFade - y / 2;
+    if (color < 0) {
+        color = 0;
+    }
+    if (color > 0x80 ) {
+        color = 0x80;
+    }
+    setRGB0(&menuCursorSprite[whichDrawDispEnv].sprt, color, color, color);
+    addPrim(&primLists[whichDrawDispEnv].main, &menuCursorSprite[whichDrawDispEnv]);
 }
