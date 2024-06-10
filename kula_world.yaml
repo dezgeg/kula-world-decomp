@@ -104,6 +104,8 @@ segments:
       - [0x06ad8, c, nonmatched/level_end_screen2]
       - [0x072e8, c, menu_widgets]
       - [0x07a34, c, nonmatched/menu_widgets]
+      - [0x08c08, c, memcard_ui2]
+      - [0x09710, c, nonmatched/menu_widgets2]
       - [0x09e14, c, fancy_text]
       - [0x09e40, c, nonmatched/fancy_text]
       - [0x0c2c0, c, nonmatched/background_cubes]
