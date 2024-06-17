@@ -7,7 +7,7 @@ typedef struct DigitSprites {
 extern void DrawBonusWidget(void);
 extern void DrawFruitWidgets(void);
 extern void DrawHourglassAndTimer(void);
-extern void DrawInt(DigitSprites* sprites, int style, int digits, int max, int value);
+extern void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value);
 extern void DrawKeyWidgets(void);
 extern void DrawLethargyEffects(void);
 extern void DrawScore(void);
@@ -245,4 +245,46 @@ void DrawHourglassAndTimer(void) {
     addPrim(&primLists[whichDrawDispEnv].gui1, &hourglassSprites[whichDrawDispEnv][2]);
     addPrim(&primLists[whichDrawDispEnv].gui1, &hourglassSprites[whichDrawDispEnv][1]);
     addPrim(&primLists[whichDrawDispEnv].gui1, &hourglassSprites[whichDrawDispEnv][0]);
+}
+
+void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
+    int i;
+    int smallestDrawnDigitIndex;
+    int digit;
+    int digitWidth;
+    int pow10;
+    int shouldDraw;
+    int tex;
+
+    if (value > max - 1) {
+        value = max - 1;
+    }
+    pow10 = max / 10;
+    tex = style + 3;
+    digitWidth = textures[firstGuiTexture + tex].w / 13;
+    shouldDraw = 0;
+    smallestDrawnDigitIndex = numDigits;
+    for (i = 0; i < numDigits; i++) {
+        if (i == numDigits - 1) {
+            shouldDraw = 1;
+        }
+        // XXX permuter ugliness
+        digit = value;
+        digit /= pow10;
+        if (digit != 0 || shouldDraw == 1) {
+            if (i < smallestDrawnDigitIndex) {
+                smallestDrawnDigitIndex = i;
+            }
+            shouldDraw = 1;
+            setUV0(&ds->sprites[whichDrawDispEnv][i].sprt,
+                textures[firstGuiTexture + tex].u + digit * digitWidth,
+                textures[firstGuiTexture + tex].v);
+            value -= digit * pow10;
+        }
+        pow10 = pow10 / 10;
+    }
+
+    for (i = numDigits - 1; i >= smallestDrawnDigitIndex; i--) {
+        addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][i]);
+    }
 }
