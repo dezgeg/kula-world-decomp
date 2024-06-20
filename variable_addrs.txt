@@ -246,6 +246,7 @@ musicVolumeWidgetSprite = 0x000a3cd8; // size:56
 numCameras = 0x000a2e64; // type:s32
 numFruits = 0x000a5454; // type:s16
 numKeysInLevel = 0x000a5a14; // type:s32
+numKeysRemaining = 0x000a2e94; // size:4
 numLensFlareSprites = 0x000a3cb8; // type:s32
 numParticleTextures = 0x000a55c8; // type:s32
 numParticles = 0x000a3db0; // size:8
