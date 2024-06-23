@@ -113,6 +113,8 @@ segments:
       - [0x0d4dc, c, spinning_selection]
       - [0x0dcd4, c, hud]
       - [0x0f128, c, nonmatched/hud2]
+      - [0x0fae8, c, hud2]
+      - [0x0fbcc, c, nonmatched/hud3]
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]
       - [0x10a2c, c, title_screen]
