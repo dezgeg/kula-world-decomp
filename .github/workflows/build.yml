@@ -11,5 +11,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   submodules: true
+                  lfs: true
             - run: pip install virtualenv
+            - run: openssl aes-256-cbc -pbkdf2 -d -k ${{ secrets.EXE_DECRYPTION_KEY }} < SCES_010.00.enc > SCES_010.00
             - run: make
