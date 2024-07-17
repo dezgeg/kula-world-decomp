@@ -3,8 +3,8 @@ InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 InitHighscoreCubes: https://decomp.me/scratch/PicTE
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
-GetFaceTypeAtRelativeToDir: https://decomp.me/scratch/fe0Zm
 
 Needs to be integrated:
 GetCubeIndexRelativeToDir: https://decomp.me/scratch/9iO1S
 GetFaceTypeOfBlockType: https://decomp.me/scratch/0xB4L
+GetFaceTypeAtRelativeToDir: https://decomp.me/scratch/fe0Zm
