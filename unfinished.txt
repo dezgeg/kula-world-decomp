@@ -3,6 +3,7 @@ InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 InitHighscoreCubes: https://decomp.me/scratch/PicTE
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
+main: https://decomp.me/scratch/LaYxz
 
 Needs to be integrated:
 GetCubeIndexRelativeToDir: https://decomp.me/scratch/9iO1S
@@ -11,3 +12,5 @@ GetFaceTypeAtRelativeToDir: https://decomp.me/scratch/fe0Zm
 FormatTime: https://decomp.me/scratch/zX6ul
 LoadingScreen: https://decomp.me/scratch/fyPXV
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
+ShowMemCardFullScreenText: https://decomp.me/scratch/TyhdD
+AskSaveOverwrite: https://decomp.me/scratch/cnilU
