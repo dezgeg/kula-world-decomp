@@ -4,6 +4,7 @@ InitHighscoreCubes: https://decomp.me/scratch/PicTE
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 main: https://decomp.me/scratch/LaYxz
+LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 Needs to be integrated:
 GetCubeIndexRelativeToDir: https://decomp.me/scratch/9iO1S
@@ -14,3 +15,9 @@ LoadingScreen: https://decomp.me/scratch/fyPXV
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 ShowMemCardFullScreenText: https://decomp.me/scratch/TyhdD
 AskSaveOverwrite: https://decomp.me/scratch/cnilU
+DecideNextLevel: https://decomp.me/scratch/pRqVh
+
+InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
+DrawPlayerShadowSprites: https://decomp.me/scratch/0HMKx
+InitPlayerSpecularSprite: https://decomp.me/scratch/VCaQJ
+DrawPlayerSpecularSprites: https://decomp.me/scratch/Ye0Ls
