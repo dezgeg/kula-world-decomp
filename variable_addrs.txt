@@ -371,6 +371,7 @@ textPosYCur = 0x000a3cb4; // type:s32
 textPosYEnd = 0x000a3cd4; // type:s32
 textPosYStart = 0x000a3cc8; // type:s32
 textures = 0x000f9d18; // size:1800
+tgi = 0x000a52f0; // size:4
 timeAttackPlayer1CurLevelTimeDigitSprites = 0x000ad524; // size:560
 timeAttackPlayer1TotalPlaytimeDigitSprites = 0x000ad2f4; // size:560
 timeAttackPlayer2CurLevelTimeDigitSprites = 0x000ad984; // size:560

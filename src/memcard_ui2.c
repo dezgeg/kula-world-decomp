@@ -1,76 +1,117 @@
 #include "common.h"
 
-extern TSprite loadGameSprite1[2];
-extern TSprite loadGameSprite2[2];
-extern MemcardData memCardData;
+// Prototypes
+extern void DrawPsxButtonBackground(void);
+extern void DrawTextCrappyFont(char * str);
+extern int GetControllerButtons(int slot);
+extern int GetControllerStatus(int slot);
+extern void MusicCheckForLoop(void);
+extern void PutDrawAndDispEnvs(void);
+extern void ResetTextRenderState(void);
+extern void ResetTextVars(void);
+extern void SetBigGuiSpriteVisible(void);
+extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndProcessSpuVoices(void);
+
+// non-gprel-used variables (extern)
+extern SVECTOR SVECTOR_000a2fac;
+extern int controllerButtons;
+extern int curController;
+extern int displayHeight;
+extern int displayWidth;
+extern int musicShouldLoop;
+extern int numCameras;
+extern uint prevControllerButtons;
 extern PrimList primLists[2];
-extern TSprite saveBackButtonSprite1[2];
-extern TSprite saveBackButtonSprite2[2];
-extern TSprite saveGameSprite1[2];
-extern TSprite saveGameSprite2[2];
-extern TSprite saveSelectButtonSprite1[2];
-extern TSprite saveSelectButtonSprite2[2];
-extern TSprite saveSlot0Sprite1[2];
-extern TSprite saveSlot0Sprite2[2];
-extern TSprite saveSlot1Sprite1[2];
-extern TSprite saveSlot1Sprite2[2];
-extern TSprite saveSlot2Sprite1[2];
-extern TSprite saveSlot2Sprite2[2];
-extern TSprite saveSlot3Sprite1[2];
-extern TSprite saveSlot3Sprite2[2];
 extern int whichDrawDispEnv;
+extern void* otag[2][1][1026];
 
-void DrawSaveSlotSprites(int isSave) {
-    if (isSave == 0) {
-        addPrim(&primLists[whichDrawDispEnv].main, &loadGameSprite1[whichDrawDispEnv]);
-        addPrim(&primLists[whichDrawDispEnv].main, &loadGameSprite2[whichDrawDispEnv]);
+typedef struct TgiBuf {
+    char pad[0x10c];
+    int otagLen;
+} TgiBuf;
+extern TgiBuf* tgi;
+
+static inline int GetButtonsFromAnyController() {
+    if (GetControllerStatus(curController) != 0) {
+        controllerButtons = GetControllerButtons(curController);
     } else {
-        addPrim(&primLists[whichDrawDispEnv].main, &saveGameSprite1[whichDrawDispEnv]);
-        addPrim(&primLists[whichDrawDispEnv].main, &saveGameSprite2[whichDrawDispEnv]);
+        controllerButtons = GetControllerButtons((curController + 1) % 2);
     }
-    if (!isSave && !memCardData.saveslots[0].valid) {
-        setRGB0(&saveSlot0Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot0Sprite1[whichDrawDispEnv].sprt, 0x80, 0, 0);
-    } else {
-        setRGB0(&saveSlot0Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot0Sprite1[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
+    return controllerButtons;
+}
+
+static inline int TestButton(int button) {
+    return controllerButtons & (button & ~prevControllerButtons);
+}
+
+extern char S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO[];
+int AskSaveOverwrite(void) {
+    int i;
+
+    while (1) {
+        DrawSync(0);
+        VSync(0);
+        whichDrawDispEnv = whichDrawDispEnv == 0;
+        PutDrawAndDispEnvs();
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
+        }
+        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        ResetTextRenderState();
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->otagLen]);
+        }
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+        SndProcessSpuVoices();
+        prevControllerButtons = controllerButtons;
+        GetButtonsFromAnyController();
+        if (musicShouldLoop == 1) {
+            MusicCheckForLoop();
+        }
+        SetBigGuiSpriteVisible();
+        ResetTextVars();
+        DrawPsxButtonBackground();
+        SetTextParams(displayWidth / 2,displayHeight / 2 - 50,1,0x80,0x80,0x80);
+        DrawTextCrappyFont(S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO);
+        if (TestButton(PAD_CROSS)) {
+            SndPlaySfx(109,0,&SVECTOR_000a2fac,8000);
+            prevControllerButtons = 0xffffffff;
+            return 1;
+        }
+        if (TestButton(PAD_TRIANGLE)) {
+            SndPlaySfx(109,0,&SVECTOR_000a2fac,8000);
+            prevControllerButtons = 0xffffffff;
+            return 0;
+        }
     }
 
-    if (!isSave && !memCardData.saveslots[1].valid) {
-        setRGB0(&saveSlot1Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot1Sprite1[whichDrawDispEnv].sprt, 0x80, 0, 0);
-    } else {
-        setRGB0(&saveSlot1Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot1Sprite1[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
+}
+
+void ShowMemCardFullScreenText(char *str) {
+    int i;
+    int j;
+    int iter;
+    int l;
+
+    for (iter = 0; iter < 3; iter++) {
+        SetTextParams(displayWidth / 2,displayHeight / 2 - 25,1,0x80,0x80,0x80);
+        DrawTextCrappyFont(str);
+        DrawSync(0);
+        VSync(0);
+        whichDrawDispEnv = whichDrawDispEnv == 0;
+        PutDrawAndDispEnvs();
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
+        }
+        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        ResetTextRenderState();
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->otagLen]);
+        }
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+        SndProcessSpuVoices();
+        DrawPsxButtonBackground();
     }
-
-    if (!isSave && !memCardData.saveslots[2].valid) {
-        setRGB0(&saveSlot2Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot2Sprite1[whichDrawDispEnv].sprt, 0x80, 0, 0);
-    } else {
-        setRGB0(&saveSlot2Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot2Sprite1[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-    }
-
-    if (!isSave && !memCardData.saveslots[3].valid) {
-        setRGB0(&saveSlot3Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot3Sprite1[whichDrawDispEnv].sprt, 0x80, 0, 0);
-    } else {
-        setRGB0(&saveSlot3Sprite2[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-        setRGB0(&saveSlot3Sprite1[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
-    }
-
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot0Sprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot0Sprite2[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot1Sprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot1Sprite2[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot2Sprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot2Sprite2[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot3Sprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSlot3Sprite2[whichDrawDispEnv]);
-
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSelectButtonSprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveSelectButtonSprite2[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveBackButtonSprite1[whichDrawDispEnv]);
-    addPrim(&primLists[whichDrawDispEnv].main, &saveBackButtonSprite2[whichDrawDispEnv]);
 }

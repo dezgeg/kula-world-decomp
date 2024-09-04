@@ -13,8 +13,6 @@ GetFaceTypeAtRelativeToDir: https://decomp.me/scratch/fe0Zm
 FormatTime: https://decomp.me/scratch/zX6ul
 LoadingScreen: https://decomp.me/scratch/fyPXV
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
-ShowMemCardFullScreenText: https://decomp.me/scratch/TyhdD
-AskSaveOverwrite: https://decomp.me/scratch/cnilU
 DecideNextLevel: https://decomp.me/scratch/pRqVh
 
 InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
