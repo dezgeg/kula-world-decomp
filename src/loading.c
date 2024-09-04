@@ -9,6 +9,7 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void Noop(void);
 extern void Noop2(void);
 extern void UnusedLoadFullScreenPicture(void* param_1);
+extern void LoadingScreenVSyncCallback(void);
 
 char* LEVEL_DIRS[] = {
     "\\HIRO\\HIRO",
@@ -33,7 +34,9 @@ char* EXTENSIONS[] = {
 };
 
 char S_KULA_KULA_PIC_PAK_1[] = "\\KULA\\KULA_PIC.PAK;1";
-int skipFirstLoadingScreen = 1;  // XXX: declared short in other file?
+struct {
+    short hack;
+} skipFirstLoadingScreen = {1}; // XXX: padding somehow wrong
 
 Music BONUS_MUSICS[] = {
     {"\\XA\\MUSIC_1.XA;1", 0, 3335},
@@ -64,12 +67,14 @@ char S_File_error[] = "File error:\n\n";
 int sizeOfSfxFile;
 int unusedReadErrorCode;
 
+extern char filenameBuf[24];
 extern int displayHeight;
 extern int displayWidth;
-extern char filenameBuf[24];
 extern int gameMode;
 extern int isFinal;
+extern int levelEndReason;
 extern int whichDrawDispEnv;
+extern void* otag[2][1][1026];
 
 static z_stream zlibStream_a4b80;
 extern char fileBuf[];
@@ -264,4 +269,27 @@ void LoadWarningTim(void) {
     inflateEnd(&zlibStream_a4b80);
     LoadImage(&rect, 0x132014);
     DrawSync(0);
+}
+
+void LoadingScreen(void) {
+    int i;
+
+    if (!skipFirstLoadingScreen.hack) {
+        DrawSync(0);
+        DrawBigGuiSprite(2);
+        for (i = 0; i < 1; i++) {
+            ClearOTagR(&otag[0][i][0], 1026);
+            ClearOTagR(&otag[1][i][0], 1026);
+        }
+        DrawSync(0);
+        levelEndReason = 0;
+        SetupDisplay(0,0,0,0,0,0);
+        DrawBigGuiSprite(1);
+        InitPsxButtonBackgroundSprites(1);
+        DrawSync(0);
+        VSync(0);
+        VSyncCallback(LoadingScreenVSyncCallback);
+    } else {
+        skipFirstLoadingScreen.hack = 0;
+    }
 }

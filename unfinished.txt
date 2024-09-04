@@ -11,7 +11,6 @@ GetCubeIndexRelativeToDir: https://decomp.me/scratch/9iO1S
 GetFaceTypeOfBlockType: https://decomp.me/scratch/0xB4L
 GetFaceTypeAtRelativeToDir: https://decomp.me/scratch/fe0Zm
 FormatTime: https://decomp.me/scratch/zX6ul
-LoadingScreen: https://decomp.me/scratch/fyPXV
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 DecideNextLevel: https://decomp.me/scratch/pRqVh
 
