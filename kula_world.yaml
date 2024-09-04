@@ -58,6 +58,8 @@ segments:
     bss_size: 0xa3cb0
     subsegments:
       - [0x00800, rodata, rodata_00800]
+      - [0x008d4, .rodata, block_utils]
+      - [0x0091c, rodata, rodata_0091c]
       - [0x00b44, .rodata, menu]
       - [0x00b90, .rodata, zlib_infblock]
       - [0x00bb8, .rodata, zlib_inflate]
@@ -130,7 +132,7 @@ segments:
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/code_154a8]
       - [0x1dbac, c, nonmatched/visited_cubes]
-      - [0x1dfcc, c, nonmatched/block_utils]
+      - [0x1dfcc, c, block_utils]
       - [0x1e420, c, nonmatched/light_effect]
       - [0x1f330, c, nonmatched/code_1f330]
       - [0x2fee8, c, stack_hacks]
