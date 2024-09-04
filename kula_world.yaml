@@ -16,7 +16,6 @@ options:
   find_file_boundaries: True
   o_as_suffix: True
   use_legacy_include_asm: False
-  include_macro_inc: False
   migrate_rodata_to_functions: False
   auto_decompile_empty_functions: False
   ld_generate_symbol_per_data_segment: False
