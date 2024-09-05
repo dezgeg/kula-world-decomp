@@ -319,15 +319,17 @@ typedef struct Player {
 } Player;
 
 #define INCLUDE_ASM(FOLDER, NAME) \
-__asm__( \
-    ".text\n" \
-    "\t.align\t2\n" \
-    "\t.set noreorder\n" \
-    "\t.set noat\n" \
-    ".include \""FOLDER"/"#NAME".s\"\n" \
-    "\t.set reorder\n" \
-    "\t.set at\n" \
-)
+    void __maspsx_global_asm_hack_##NAME() { \
+        __asm__( \
+            ".text # maspsx-keep \n" \
+            "\t.align\t2 # maspsx-keep\n" \
+            "\t.set noreorder # maspsx-keep\n" \
+            "\t.set noat # maspsx-keep\n" \
+            ".include \""FOLDER"/"#NAME".s\" # maspsx-keep\n" \
+            "\t.set reorder # maspsx-keep\n" \
+            "\t.set at # maspsx-keep\n" \
+        ); \
+    }
 #define INCLUDE_RODATA(FOLDER, NAME) \
 __asm__( \
     ".section .rodata\n" \
