@@ -52,3 +52,5 @@ void InitHighscores(void) {
     sprintf(highscores[4].name, S_SAVE_4);
     sprintf(highscores[5].name, S_PLAYER);
 }
+
+INCLUDE_ASM("asm/nonmatchings/highscore", HighScoreUi);

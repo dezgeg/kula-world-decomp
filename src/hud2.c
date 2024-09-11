@@ -7,6 +7,10 @@ extern int whichDrawDispEnv;
 
 int numKeysInLevel;
 
+INCLUDE_ASM("asm/nonmatchings/hud2", DrawTimeAttackTimer);
+
+INCLUDE_ASM("asm/nonmatchings/hud2", UpdateStaticHourglassClut);
+
 void DrawKeyWidgets(void) {
     int i;
 

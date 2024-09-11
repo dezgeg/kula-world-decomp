@@ -124,3 +124,7 @@ void InitKeySprites(void) {
         keySprites[1][i] = keySprites[0][i];
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/sprite_init", InitFruitSprites);
+
+INCLUDE_ASM("asm/nonmatchings/sprite_init", InitLethargyEffectSprites);

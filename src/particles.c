@@ -102,3 +102,5 @@ void AddParticles(int type, SVECTOR* pos, int lightEffectId) {
         }
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/particles", ProcessAndRenderParticles);

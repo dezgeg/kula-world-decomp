@@ -20,6 +20,8 @@ extern TSprite saveSlot3Sprite1[2];
 extern TSprite saveSlot3Sprite2[2];
 extern int whichDrawDispEnv;
 
+INCLUDE_ASM("asm/nonmatchings/memcard_ui1", InitMemcardUi);
+
 void DrawSaveSlotSprites(int isSave) {
     if (isSave == 0) {
         addPrim(&primLists[whichDrawDispEnv].main, &loadGameSprite1[whichDrawDispEnv]);

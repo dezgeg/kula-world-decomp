@@ -25,6 +25,8 @@ static inline void SetDispScreen(ushort x, ushort y) {
     drawdisp[0].disp.screen.y = drawdisp[1].disp.screen.y = y;
 }
 
+INCLUDE_ASM("asm/nonmatchings/memcard3", SaveMemCard);
+
 void LoadSaveFromMemoryCard(void){
     extern char S_BESCES_01000KULA[];
     uint i;

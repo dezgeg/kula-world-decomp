@@ -9,3 +9,5 @@ void InitLevelEndScreen(void) {
     gameOverScreenState = 0;
     bigGuiSpriteFade = 0;
 }
+
+INCLUDE_ASM("asm/nonmatchings/level_end_screen", LoadLevelEndReasonGfx);

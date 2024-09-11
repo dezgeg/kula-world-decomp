@@ -319,7 +319,7 @@ typedef struct Player {
 } Player;
 
 #define INCLUDE_ASM(FOLDER, NAME) \
-    void __maspsx_global_asm_hack_##NAME() { \
+    void __maspsx_include_asm_hack_##NAME() { \
         __asm__( \
             ".text # maspsx-keep \n" \
             "\t.align\t2 # maspsx-keep\n" \

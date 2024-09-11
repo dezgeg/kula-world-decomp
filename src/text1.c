@@ -43,3 +43,5 @@ void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int co
         textColorB = (byte)colorB;
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/text1", DrawTextCrappyFont);
