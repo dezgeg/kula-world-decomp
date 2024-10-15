@@ -97,8 +97,7 @@ segments:
       - [0x04400, c, text1] # 1 nonmatching
       - [0x04990, c, widget_init]
       - [0x04cf0, c, lensflare]
-      - [0x05cdc, c, level_end_screen] # 1 nonmatching
-      - [0x0657c, c, level_end_screen2] # 1 nonmatching
+      - [0x05cdc, c, level_end_screen] # 2 nonmatching
       - [0x072e8, c, menu_widgets]
       - [0x07a34, c, memcard_ui1] # 1 nonmatching
       - [0x09710, c, menu_widgets2]
