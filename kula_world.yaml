@@ -138,7 +138,7 @@ segments:
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
       - [0x377a0, c, menu]
-      - [0x3a484, c, nonmatched/level_end]
+      - [0x3a484, c, level_end] # 2 nonmatching
       - [0x3b6c0, c, highscore] # 1 nonmatching
       - [0x3cc60, c, loading]
       - [0x3d664, c, music]
