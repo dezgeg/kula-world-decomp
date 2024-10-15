@@ -309,3 +309,5 @@ void DrawKeyWidgets(void) {
         }
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/hud", DrawFruitWidgets);

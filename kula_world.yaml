@@ -105,8 +105,7 @@ segments:
       - [0x0c2c0, c, background_cubes] # 1 nonmatching
       - [0x0cf7c, c, psx_button_background]
       - [0x0d4dc, c, spinning_selection]
-      - [0x0dcd4, c, hud] # 2 nonmatching
-      - [0x0fbcc, c, nonmatched/hud3]
+      - [0x0dcd4, c, hud] # 3 nonmatching
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]
       - [0x10a2c, c, title_screen]
@@ -125,7 +124,7 @@ segments:
       - [0x1e420, c, nonmatched/light_effect]
       - [0x1f330, c, nonmatched/code_1f330]
       - [0x2fee8, c, stack_hacks]
-      - [0x2ffdc, c, nonmatched/code_2ffdc]
+      - [0x2ffdc, c, nonmatched/main]
       - [0x329a4, c, disp_mode]
       - [0x32aa4, c, memcard1]
       - [0x32b48, c, nonmatched/memcard_ui]
@@ -139,7 +138,7 @@ segments:
       - [0x37378, c, rand]
       - [0x373b4, c, cheats]
       - [0x377a0, c, menu]
-      - [0x3a484, c, nonmatched/code_3a484]
+      - [0x3a484, c, nonmatched/level_end]
       - [0x3b6c0, c, highscore] # 1 nonmatching
       - [0x3cc60, c, loading]
       - [0x3d664, c, music]
