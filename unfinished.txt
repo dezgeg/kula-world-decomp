@@ -7,7 +7,6 @@ main: https://decomp.me/scratch/LaYxz
 LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 Needs to be integrated:
-FormatTime: https://decomp.me/scratch/zX6ul
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 DecideNextLevel: https://decomp.me/scratch/pRqVh
 
