@@ -105,8 +105,7 @@ segments:
       - [0x0c2c0, c, background_cubes] # 1 nonmatching
       - [0x0cf7c, c, psx_button_background]
       - [0x0d4dc, c, spinning_selection]
-      - [0x0dcd4, c, hud]
-      - [0x0f128, c, hud2] # 2 nonmatching
+      - [0x0dcd4, c, hud] # 2 nonmatching
       - [0x0fbcc, c, nonmatched/hud3]
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]

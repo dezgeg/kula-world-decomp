@@ -25,13 +25,11 @@ int drawTimerPausedWidget;
 int hourglassIsRotating;
 int hourglassRotationTimer;
 int levelTimeLeft;
+int numKeysInLevel;
 int smoothIncrementingScore;
 short* ggiPart1HourglassAnim;
 uint firstGuiTexture;
 
-extern DR_AREA hudDrawAreas[2];
-extern DR_OFFSET hudDrawOffsets[2];
-extern DR_TPAGE hudDrTpages[2];
 extern DigitSprites copycatPlayer1ScoreDigitSprites;
 extern DigitSprites copycatPlayer2ScoreDigitSprites;
 extern DigitSprites levelScoreSprite;
@@ -41,19 +39,24 @@ extern DigitSprites timeAttackPlayer1TotalPlaytimeDigitSprites;
 extern DigitSprites timeAttackPlayer2CurLevelTimeDigitSprites;
 extern DigitSprites timeAttackPlayer2TotalPlaytimeDigitSprites;
 extern DigitSprites totalScoreSprite;
-extern POLY_FT4 hourglassSprites[2][3];
-extern PrimList primLists[2];
-extern TSprite timerPausedSprite[2];
-extern Texture textures[150];
+extern DR_AREA hudDrawAreas[2];
+extern DR_OFFSET hudDrawOffsets[2];
+extern DR_TPAGE hudDrTpages[2];
 extern int copycatPlayerScores[2];
 extern int levelHasBeenCompletedByPlayer[2];
 extern int levelPlayTime[2];
 extern int levelScore;
+extern int numKeysRemaining;
 extern int numTimeTrialPlayers;
 extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern int whichDrawDispEnv;
+extern POLY_FT4 hourglassSprites[2][3];
+extern PrimList primLists[2];
+extern Texture textures[150];
+extern TSprite keySprites[2][4][2];
+extern TSprite timerPausedSprite[2];
 
 void DrawHud(void) {
     addPrim(&primLists[whichDrawDispEnv].gui3, &hudDrTpages[whichDrawDispEnv]);
@@ -286,5 +289,23 @@ void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
 
     for (i = numDigits - 1; i >= smallestDrawnDigitIndex; i--) {
         addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][i]);
+    }
+}
+
+INCLUDE_ASM("asm/nonmatchings/hud", DrawTimeAttackTimer);
+
+INCLUDE_ASM("asm/nonmatchings/hud", UpdateStaticHourglassClut);
+
+void DrawKeyWidgets(void) {
+    int i;
+
+    for (i = numKeysInLevel - 1; i >= 0; i--) {
+        if (i < numKeysInLevel - numKeysRemaining){
+            addPrim(&primLists[whichDrawDispEnv].gui1,
+                    &keySprites[whichDrawDispEnv][i][1]);
+        } else {
+            addPrim(&primLists[whichDrawDispEnv].gui1,
+                    &keySprites[whichDrawDispEnv][i][0]);
+        }
     }
 }
