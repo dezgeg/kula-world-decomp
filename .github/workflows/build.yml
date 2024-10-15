@@ -13,6 +13,6 @@ jobs:
                   submodules: true
                   lfs: true
             - run: sudo apt install -y binutils-mipsel-linux-gnu
-            - run: pip install virtualenv
+            - run: pipx install virtualenv
             - run: openssl aes-256-cbc -pbkdf2 -d -k ${{ secrets.EXE_DECRYPTION_KEY }} < SCES_010.00.enc > SCES_010.00
             - run: make
