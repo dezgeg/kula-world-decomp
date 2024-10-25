@@ -25,6 +25,7 @@ void InitLevelEndScreen(void) {
     bigGuiSpriteFade = 0;
 }
 
+// https://decomp.me/scratch/DYXGq
 INCLUDE_ASM("asm/nonmatchings/level_end_screen", LoadLevelEndReasonGfx);
 
 void FadeOutBigGuiSprite(void) {

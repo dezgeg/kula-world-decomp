@@ -100,4 +100,5 @@ void FormatTime(int time, char* s, int showPlus) {
     }
 }
 
+// https://decomp.me/scratch/jaKLN
 INCLUDE_ASM("asm/nonmatchings/level_end", DrawLevelScoreSummary);

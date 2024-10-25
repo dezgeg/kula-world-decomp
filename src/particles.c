@@ -103,4 +103,5 @@ void AddParticles(int type, SVECTOR* pos, int lightEffectId) {
     }
 }
 
+// https://decomp.me/scratch/PaoVU
 INCLUDE_ASM("asm/nonmatchings/particles", ProcessAndRenderParticles);

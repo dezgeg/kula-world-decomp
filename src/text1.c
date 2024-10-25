@@ -44,4 +44,5 @@ void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int co
     }
 }
 
+// https://decomp.me/scratch/VgNU6
 INCLUDE_ASM("asm/nonmatchings/text1", DrawTextCrappyFont);

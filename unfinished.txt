@@ -1,8 +1,8 @@
-DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
+particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
+text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
+level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
+background_cubes/InitHighscoreCubes: https://decomp.me/scratch/PicTE
 InitAllDigitSprites: https://decomp.me/scratch/2Cm13
-InitHighscoreCubes: https://decomp.me/scratch/PicTE
-LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
-ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 main: https://decomp.me/scratch/LaYxz
 LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 

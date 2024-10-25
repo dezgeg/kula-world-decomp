@@ -52,6 +52,7 @@ extern MATRIX highScoreCubesMatrix;
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 
+// https://decomp.me/scratch/PicTE
 INCLUDE_ASM("asm/nonmatchings/background_cubes", InitHighscoreCubes);
 
 void DrawHighScoreCubes(void) {
