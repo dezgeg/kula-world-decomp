@@ -184,6 +184,7 @@ hsCubeRotationVec = 0x000a55b4; // size:8
 hudDrTpages = 0x000a5038; // size:16
 hudDrawAreas = 0x000a569c; // size:24
 hudDrawOffsets = 0x000a56fc; // size:24
+idleTimer = 0x000a333c; // type:s32
 inflateRetCode = 0x000a5420; // type:s32
 inflate_mask = 0x000a3b48; // size:68
 isDemoMode = 0x000a566c; // type:s32
