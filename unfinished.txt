@@ -9,6 +9,8 @@ LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 Needs to be integrated:
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 DecideNextLevel: https://decomp.me/scratch/pRqVh
+GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
+DrawLevelScoreSummary: https://decomp.me/scratch/jaKLN
 
 InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
 DrawPlayerShadowSprites: https://decomp.me/scratch/0HMKx
