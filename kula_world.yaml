@@ -112,7 +112,7 @@ segments:
       - [0x10b78, c, nonmatched/score_graph]
       - [0x1250c, c, nonmatched/bonus_widget]
       - [0x128b8, c, screenshake]
-      - [0x12a64, c, nonmatched/bios_font]
+      - [0x12a64, c, bios_font] # 1 nonmatching
       - [0x12eb0, c, nonmatched/ggi]
       - [0x1343c, c, sprite_init] # 2 nonmatching
       - [0x14b0c, c, nonmatched/sprite_init3]
