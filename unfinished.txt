@@ -1,3 +1,4 @@
+bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
 level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq

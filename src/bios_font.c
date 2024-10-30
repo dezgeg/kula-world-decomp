@@ -8,6 +8,7 @@ extern int whichDrawDispEnv;
 // gprel-used variables (defined in this file)
 int biosStrLen;
 
+// https://decomp.me/scratch/B2Bmk
 INCLUDE_ASM("asm/nonmatchings/bios_font", SetupBiosFontStr);
 
 void DrawBiosFontString(void) {
