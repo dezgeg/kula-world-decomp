@@ -413,6 +413,7 @@ vibrationSinMagnitude = 0x000a4c78; // type:s32
 vibrationSinPhase = 0x000a4c7c; // type:s32
 vlc_table = 0x000e8d04; // size:69632
 voiceIter = 0x000a4b58; // type:u32
+vsyncCounter = 0x000a2f64; // type:s32
 wasPausedPreviousFrame = 0x000a3350; // type:s32
 whichDrawDispEnv = 0x000a52bc; // type:s32
 whichLevelEndSpriteLoaded = 0x000a2adc; // type:s32

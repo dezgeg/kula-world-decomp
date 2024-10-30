@@ -124,7 +124,7 @@ segments:
       - [0x1e420, c, nonmatched/light_effect]
       - [0x1f330, c, nonmatched/code_1f330]
       - [0x2fee8, c, stack_hacks]
-      - [0x2ffdc, c, nonmatched/main]
+      - [0x2ffdc, c, main]
       - [0x329a4, c, disp_mode]
       - [0x32aa4, c, memcard1]
       - [0x32b48, c, nonmatched/memcard_ui]
