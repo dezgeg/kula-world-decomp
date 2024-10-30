@@ -213,6 +213,7 @@ lethargyEffectSprite = 0x000a3ee4; // size:112
 lethargyMode = 0x000a52b8; // type:s32
 lethargySinMagnitude = 0x000a3dec; // type:s32
 lethargyUnusedCounter = 0x000a3de4; // type:s32
+levelAfterBonusLevel = 0x000a5430; // type:s32
 levelData = 0x000a5588; // size:4
 levelEndReason = 0x000a591c; // type:s32
 levelHasBeenCompletedByPlayer = 0x000a59a8; // size:8
