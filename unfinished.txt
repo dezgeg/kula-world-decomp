@@ -13,7 +13,7 @@ sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 memcard3/SaveMemCard: <none>
 highscore/HighScoreUi: <none>
 main/main: https://decomp.me/scratch/LaYxz
-main/MainGameLoop: https://decomp.me/scratch/HBwQp
+main/MainGameLoop: <none>
 main/LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 Needs to be integrated:

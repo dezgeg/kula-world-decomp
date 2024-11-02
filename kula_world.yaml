@@ -115,8 +115,7 @@ segments:
       - [0x12a64, c, bios_font] # 1 nonmatching
       - [0x12eb0, c, nonmatched/ggi]
       - [0x1343c, c, sprite_init] # 2 nonmatching
-      - [0x14b0c, c, nonmatched/sprite_init3]
-      - [0x1511c, c, nonmatched/sprite_init4]
+      - [0x14b0c, c, nonmatched/sprite_init2]
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/code_154a8]
       - [0x1dbac, c, nonmatched/visited_cubes]
@@ -130,7 +129,6 @@ segments:
       - [0x32b48, c, nonmatched/memcard_ui]
       - [0x35654, c, memcard_ui2]
       - [0x35b70, c, memcard2]
-      - [0x36258, c, memcard3] # 1 nonmatching
       - [0x3687c, c, sjis]
       - [0x36b60, c, devkit]
       - [0x3714c, c, replay]
