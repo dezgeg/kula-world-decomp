@@ -102,7 +102,7 @@ segments:
       - [0x07a34, c, memcard_ui1] # 1 nonmatching
       - [0x09710, c, menu_widgets2]
       - [0x09e14, c, fancy_text]
-      - [0x0c2c0, c, background_cubes] # 1 nonmatching
+      - [0x0c2c0, c, background_cubes]
       - [0x0cf7c, c, psx_button_background]
       - [0x0d4dc, c, spinning_selection]
       - [0x0dcd4, c, hud] # 3 nonmatching
@@ -370,6 +370,7 @@ segments:
       - [0x8962c, data, nonmatched/data_8962c]
       - [0x8979c, .data, zlib_infblock]
       - [0x897e8, data, nonmatched/data_897e8]
+      - [0x92388, .sdata, background_cubes]
       - [0x923d0, .sdata, psx_button_background]
       - [0x923d8, .sdata, spinning_selection]
       - [0x923dc, sdata, nonmatched/sdata_923dc]

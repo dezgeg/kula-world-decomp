@@ -2,7 +2,6 @@ bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
 level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
-background_cubes/InitHighscoreCubes: https://decomp.me/scratch/PicTE
 InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 main/main: https://decomp.me/scratch/LaYxz
 main/LevelCompletedOrDied: https://decomp.me/scratch/HBwQp

@@ -48,12 +48,116 @@ PmdCube* pmdCubesPtr;
 
 extern int displayHeight;
 extern int displayWidth;
-extern MATRIX highScoreCubesMatrix;
 extern int whichDrawDispEnv;
+extern MATRIX highScoreCubesMatrix;
+extern SVECTOR hsCubeUnusedVec;
 extern void* otag[2][1][1026];
 
-// https://decomp.me/scratch/PicTE
-INCLUDE_ASM("asm/nonmatchings/background_cubes", InitHighscoreCubes);
+void InitHighscoreCubes(void) {
+    u_char rgb;
+    int i;
+    int j;
+    ushort tpage;
+    ushort clut;
+    byte u0;
+    byte v0;
+    int semitrans;
+
+    SVECTOR zero = {};
+    SVECTOR v1 = { -100, -100, 100 };
+    SVECTOR v2 = { 100, -100, 100 };
+    SVECTOR v3 = { -100, -100, -100 };
+    SVECTOR v4 = { 100, -100, -100 };
+    SVECTOR v5 = { -100, 100, 100 };
+    SVECTOR v6 = { 100, 100, 100 };
+    SVECTOR v7 = { -100, 100, -100 };
+    SVECTOR v8 = { 100, 100, -100 };
+
+    hsCubeRotationVec = zero;
+    hsCubeUnusedVec = zero;
+    hsCubeUnusedVec.vz = 1000;
+
+    hsCube2ndSinValMulX = 900;
+    hsCube2ndSinPhaseX = 0;
+    hsCube2ndSinPhaseIncrementX = 30;
+    hsCube2ndSinOffsetX = 700;
+    hsCube3rdSinValMulX = 500;
+    hsCube3rdSinPhaseX = 0;
+    hsCube3rdSinPhaseIncrementX = 13;
+    hsCube3rdIndexMulX = 860;
+    hsCube2ndIndexMulX = 400;
+    hsCube1stSinPhaseX = 0;
+    hsCube1stSinPhaseIncrementX = 7;
+
+    hsCube2ndSinValMulY = 800;
+    hsCube2ndSinPhaseY = 0;
+    hsCube2ndSinPhaseIncrementY = 19;
+    hsCube2ndSinOffsetY = 600;
+    hsCube3rdSinValMulY = 400;
+    hsCube3rdSinPhaseY = 0;
+    hsCube3rdSinPhaseIncrementY = 20;
+    hsCube3rdIndexMulY = 730;
+    hsCube2ndIndexMulY = 150;
+    hsCube1stSinPhaseY = 0;
+    hsCube1stSinPhaseIncrementY = 19;
+
+    hsCube2ndSinValMulZ = 400;
+    hsCube2ndSinPhaseZ = 0;
+    hsCube2ndSinPhaseIncrementZ = 7;
+    hsCube2ndSinOffsetZ = 37;
+    hsCube3rdSinValMulZ = 200;
+    hsCube3rdSinPhaseZ = 0;
+    hsCube3rdSinPhaseIncrementZ = 20;
+    hsCube3rdIndexMulZ = 70;
+    hsCube2ndIndexMulZ = 0;
+    hsCube1stSinPhaseZ = 0;
+    hsCube1stSinPhaseIncrementZ = 0;
+
+    pmdCubesPtr = 0x1fb8f0;
+
+    for (i = 0; i < 10; i++) {
+        pmdCubesPtr[i].count = 6;
+        GetHighscoreCubeStyle(&tpage, &clut, &u0, &v0, &semitrans);
+        for (j = 0; j < 6; j++) {
+            SetPolyFT4(&pmdCubesPtr[i].faces[j].polys[0]);
+            rgb = j * 16 + ((i & 1) * 8 + 64);
+            setRGB0(&pmdCubesPtr[i].faces[j].polys[0], rgb, rgb, rgb);
+            SetSemiTrans(&pmdCubesPtr[i].faces[j].polys[0], semitrans);
+            setUV4(&pmdCubesPtr[i].faces[j].polys[0],
+                u0, v0,
+                u0 + 31, v0,
+                u0, v0 + 31,
+                u0 + 31, v0 + 31);
+            pmdCubesPtr[i].faces[j].polys[0].clut = clut;
+            pmdCubesPtr[i].faces[j].polys[0].tpage = tpage;
+            pmdCubesPtr[i].faces[j].polys[1] = pmdCubesPtr[i].faces[j].polys[0];
+        }
+        pmdCubesPtr[i].faces[0].vertexes[0] = v1;
+        pmdCubesPtr[i].faces[0].vertexes[1] = v2;
+        pmdCubesPtr[i].faces[0].vertexes[2] = v3;
+        pmdCubesPtr[i].faces[0].vertexes[3] = v4;
+        pmdCubesPtr[i].faces[1].vertexes[0] = v7;
+        pmdCubesPtr[i].faces[1].vertexes[1] = v8;
+        pmdCubesPtr[i].faces[1].vertexes[2] = v5;
+        pmdCubesPtr[i].faces[1].vertexes[3] = v6;
+        pmdCubesPtr[i].faces[2].vertexes[0] = v1;
+        pmdCubesPtr[i].faces[2].vertexes[1] = v3;
+        pmdCubesPtr[i].faces[2].vertexes[2] = v5;
+        pmdCubesPtr[i].faces[2].vertexes[3] = v7;
+        pmdCubesPtr[i].faces[3].vertexes[0] = v4;
+        pmdCubesPtr[i].faces[3].vertexes[1] = v2;
+        pmdCubesPtr[i].faces[3].vertexes[2] = v8;
+        pmdCubesPtr[i].faces[3].vertexes[3] = v6;
+        pmdCubesPtr[i].faces[4].vertexes[0] = v3;
+        pmdCubesPtr[i].faces[4].vertexes[1] = v4;
+        pmdCubesPtr[i].faces[4].vertexes[2] = v7;
+        pmdCubesPtr[i].faces[4].vertexes[3] = v8;
+        pmdCubesPtr[i].faces[5].vertexes[0] = v2;
+        pmdCubesPtr[i].faces[5].vertexes[1] = v1;
+        pmdCubesPtr[i].faces[5].vertexes[2] = v6;
+        pmdCubesPtr[i].faces[5].vertexes[3] = v5;
+    }
+}
 
 void DrawHighScoreCubes(void) {
     int sinVal2ndX;
