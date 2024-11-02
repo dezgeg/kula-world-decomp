@@ -20,6 +20,7 @@ extern TSprite saveSlot3Sprite1[2];
 extern TSprite saveSlot3Sprite2[2];
 extern int whichDrawDispEnv;
 
+// https://decomp.me/scratch/ehGLH
 INCLUDE_ASM("asm/nonmatchings/memcard_ui1", InitMemcardUi);
 
 void DrawSaveSlotSprites(int isSave) {

@@ -1,9 +1,19 @@
-bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
 level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
-InitAllDigitSprites: https://decomp.me/scratch/2Cm13
+level_end_screen/LoadMenuGfx: <none>
+memcard_ui1/InitMemcardUi: https://decomp.me/scratch/ehGLH
+hud/DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
+hud/UpdateStaticHourglassClut: <none>
+hud/DrawFruitWidgets: <none>
+bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
+sprite_init/InitFruitSprites: <none>
+sprite_init/InitLethargyEffectSprites: <none>
+sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
+memcard3/SaveMemCard: <none>
+highscore/HighScoreUi: <none>
 main/main: https://decomp.me/scratch/LaYxz
+main/MainGameLoop: https://decomp.me/scratch/HBwQp
 main/LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 Needs to be integrated:

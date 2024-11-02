@@ -292,6 +292,7 @@ void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
     }
 }
 
+// https://decomp.me/scratch/1yWKd
 INCLUDE_ASM("asm/nonmatchings/hud", DrawTimeAttackTimer);
 
 INCLUDE_ASM("asm/nonmatchings/hud", UpdateStaticHourglassClut);
