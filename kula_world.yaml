@@ -370,6 +370,7 @@ segments:
       - [0x8962c, data, nonmatched/data_8962c]
       - [0x8979c, .data, zlib_infblock]
       - [0x897e8, data, nonmatched/data_897e8]
+      - [0x921e0, sdata, nonmatched/sdata_921e0]
       - [0x92388, .sdata, background_cubes]
       - [0x923d0, .sdata, psx_button_background]
       - [0x923d8, .sdata, spinning_selection]
