@@ -350,6 +350,7 @@ sfxVolumeWidgetSprite = 0x000a3d10; // size:56
 sinCosArr23 = 0x000d216c; // size:128
 sinCosArr80 = 0x000d21ec; // size:128
 sioCheatActivated = 0x000a3330; // type:s32
+sioWritePtr = 0x000a4dcc; // size:4
 sizeOfSfxFile = 0x000a528c; // type:s32
 skipFirstLoadingScreen = 0x000a356c; // type:s16
 skipNextLoad = 0x000a2eb0; // type:s32

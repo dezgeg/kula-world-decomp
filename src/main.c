@@ -1,11 +1,19 @@
 #include "common.h"
 
+#include <LIBSIO.H>
+
+extern int GetControllerButtons(int slot);
+extern void PutDrawAndDispEnvs(void);
+extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
+
 extern int copycatModeStartingPlayer;
 extern int gameMode;
 extern int levelHasBeenCompletedByPlayer[2];
 extern int specialLevelType;
 extern int timeTrialAtEndOfWorld;
 
+char* sioWritePtr;
+int byteCountToReceiveFromSio;
 int curLevel;
 int curWorld;
 int debugBonusLevels;
@@ -18,9 +26,9 @@ int numTimeTrialPlayers;
 int startingPlayerForThisLevel;
 int twoPlayerWhichPlayer;
 int vsyncCounter;
+int whichDrawDispEnv;
 uint fruitsCollectedBitmask;
 uint savedFruitsCollectedBitmask;
-
 
 // https://decomp.me/scratch/LaYxz
 INCLUDE_ASM("asm/nonmatchings/main", main);
@@ -153,4 +161,41 @@ LAB_00042f60:
     loadNewWorld = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", ReceiveBufFromSio);
+void ReceiveBufFromSio(void) {
+    extern char S_recived_FMTd[];
+    extern char S_of_FMTd_bytes[];
+
+    int i;
+
+    SetupDisplay(1,128,0,0,0,0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    sioWritePtr = 0x0015d800;
+    for (i = 0; i < byteCountToReceiveFromSio; i++) {
+        vsyncCounter = 0;
+        while ((_sio_control(0,0,0) & 2) == 0) {
+            if (vsyncCounter > 50) {
+                gotSioData = 0;
+                SetupDisplay(0,0,0,0,0,0);
+                return;
+            }
+        }
+        *sioWritePtr++ = _sio_control(0,4,0);
+        if (((i & 0xff) == 0) || i == byteCountToReceiveFromSio - 1) {
+            FntPrint(S_recived_FMTd,i + 1);
+            FntPrint(S_of_FMTd_bytes,byteCountToReceiveFromSio);
+            FntFlush(-1);
+            whichDrawDispEnv = !whichDrawDispEnv;
+            PutDrawAndDispEnvs();
+            if (GetControllerButtons(0) & PAD_SELECT) {
+                gotSioData = 0;
+                SetupDisplay(0,0,0,0,0,0);
+                return;
+            }
+        }
+    }
+    gotSioData = 1;
+    SetupDisplay(0,0,0,0,0,0);
+}
