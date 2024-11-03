@@ -117,7 +117,12 @@ segments:
       - [0x1343c, c, sprite_init] # 2 nonmatching
       - [0x14b0c, c, nonmatched/sprite_init2]
       - [0x1541c, c, prim]
-      - [0x154a8, c, nonmatched/code_154a8]
+      - [0x154a8, c, nonmatched/tgi]
+      - [0x16094, c, nonmatched/skybox]
+      - [0x16ffc, c, nonmatched/level_init]
+      - [0x1a27c, c, nonmatched/render1]
+      - [0x1b334, c, nonmatched/update]
+      - [0x1c2ec, c, nonmatched/render2]
       - [0x1dbac, c, nonmatched/visited_cubes]
       - [0x1dfcc, c, block_utils]
       - [0x1e420, c, nonmatched/light_effect]
