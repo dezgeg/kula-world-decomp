@@ -10,7 +10,6 @@ bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 sprite_init/InitFruitSprites: <none>
 sprite_init/InitLethargyEffectSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
-memcard3/SaveMemCard: <none>
 highscore/HighScoreUi: <none>
 main/main: https://decomp.me/scratch/LaYxz
 main/MainGameLoop: <none>

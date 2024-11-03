@@ -4,17 +4,17 @@
 
 extern void ShowMemCardFullScreenText(char* str);
 
+int INT_000a5690;
 int memCardDataValid;
 long mcResult;
 long tempMcResult;
 
+extern char* SAVE_ICON_TIM_PTR;
 extern DrawDisp drawdisp[2];
 extern Highscore highscores[6];
 extern int curLevel;
 extern int curWorld;
 extern int dispenvScreenX;
-extern int dispenvScreenX;
-extern int dispenvScreenY;
 extern int dispenvScreenY;
 extern int finalUnlocked;
 extern int gameMode;
@@ -187,7 +187,91 @@ int LoadSaveSlot(uint slot) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/memcard2", SaveMemCard);
+extern char S_KULA_WORLD[];
+extern char S_BESCES_01000KULA[16];
+
+int SaveMemCard(uint slot) {
+    int ret;
+    int i;
+    char buf[32];
+
+    MemCardAccept(0);
+    MemCardSync(0,&mcCmd,&tempMcResult);
+    if (tempMcResult == 0) {
+        memCardData.header.magic[0] = 'S';
+        memCardData.header.magic[1] = 'C';
+        memCardData.header.iconFlags = 0x11;
+        memCardData.header.blockNumber = 1;
+        sprintf(buf,S_KULA_WORLD);
+        for (i = 0; i < 32; i++) {
+            memCardData.header.title[i] = Ascii2Sjis(buf[i]);
+        }
+        for (i = 0; i < 28; i++) {
+            memCardData.header.unused[i] = 0;
+        }
+        for (i = 0; i < 16; i++) {
+            memCardData.header.iconClut[i] = ((short*)(SAVE_ICON_TIM_PTR + 20))[i];
+        }
+        for (i = 0; i < 128; i++) {
+            memCardData.header.iconBitmap[i] = (SAVE_ICON_TIM_PTR + 64)[i];
+        }
+
+        if (finalUnlocked == 1 || (curWorld == 10 && curLevel == 0)) {
+            memCardData.arcadeModeDone = 1;
+        }
+        if (highestLevelReached > memCardData.highestLevelReached) {
+            memCardData.highestLevelReached = highestLevelReached;
+        }
+        memCardData.turnDelayEnabled = turnDelayEnabled;
+        memCardData.vibrationEnabled = vibrationEnabled;
+        memCardData.musicVolume = musicVolume;
+        memCardData.sfxVolume = sfxVolume;
+        if (slot < 4) {
+            memCardData.screenX = dispenvScreenX;
+            memCardData.screenY = dispenvScreenY;
+            for (i = 0; i < 150; i++) {
+                memCardData.saveslots[slot].levelScores[i] = levelScores[i];
+            }
+            if (gameMode == 0) {
+                memCardData.saveslots[slot].playtime = totalPlayTime[0];
+                memCardData.saveslots[slot].score = totalScore;
+            } else {
+                memCardData.saveslots[slot].playtime = totalPlayTime[0];
+                memCardData.saveslots[slot].score = totalPlayTime[0];
+            }
+            memCardData.saveslots[slot].valid = 1;
+            memCardData.saveslots[slot].timeTrialDifficulty = timeTrialDifficulty;
+            memCardData.saveslots[slot].curLevel = curLevel;
+            memCardData.saveslots[slot].curWorld = curWorld;
+            memCardData.saveslots[slot].fruitBitmask = savedFruitsCollectedBitmask;
+            memCardData.saveslots[slot].fruits = numFruits;
+            memCardData.saveslots[slot].isFinal = isFinal;
+            memCardData.saveslots[slot].gameMode = gameMode;
+        }
+        ret = MemCardCreateFile(0,S_BESCES_01000KULA,1);
+        if (ret == 0 || ret == McErrAlreadyExist) {
+            if (MemCardWriteFile(0,S_BESCES_01000KULA, (long*)&memCardData,0,0x1000) == McErrCardNotExist) {
+                MemCardSync(0,&mcCmd,&tempMcResult);
+                if (tempMcResult != 0) {
+                    INT_000a5690 = 1;
+                    mcResult = tempMcResult;
+                    return 0;
+                }
+            }
+        } else {
+            INT_000a5690 = 1;
+            mcResult = ret;
+            return 0;
+        }
+    }  else {
+            INT_000a5690 = 1;
+            mcResult = tempMcResult;
+            return 0;
+    }
+    LoadHighscoresFromMemcardData();
+
+    return 1;
+}
 
 void LoadSaveFromMemoryCard(void){
     extern char S_BESCES_01000KULA[];

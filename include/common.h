@@ -97,7 +97,7 @@ typedef struct PsxSaveHeader {
     byte blockNumber;
     ushort title[32]; /* SJIS */
     byte unused[28];
-    byte iconClut[32];
+    short iconClut[16];
     byte iconBitmap[128];
 } PsxSaveHeader;
 
