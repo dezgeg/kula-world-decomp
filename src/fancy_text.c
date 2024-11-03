@@ -155,7 +155,7 @@ void DrawTextFancyFont(char *str,short x,short y) {
         if (col > 0x80) {
             col = 0x80;
         }
-        
+
         while (startIdx < endIdx) {
             if (str[startIdx] - 0x30 < 10u) {
                 if (textCharIdx + 2 > 299) {

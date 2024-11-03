@@ -1,5 +1,4 @@
 particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
-text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
 level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 level_end_screen/LoadMenuGfx: <none>
 memcard_ui1/InitMemcardUi: https://decomp.me/scratch/ehGLH
@@ -11,13 +10,14 @@ sprite_init/InitFruitSprites: <none>
 sprite_init/InitLethargyEffectSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 highscore/HighScoreUi: <none>
-main/main: https://decomp.me/scratch/LaYxz
 main/MainGameLoop: <none>
 main/LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 Needs to be integrated:
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
+text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
+main/main: https://decomp.me/scratch/LaYxz
 
 InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
 DrawPlayerShadowSprites: https://decomp.me/scratch/0HMKx
