@@ -30,6 +30,8 @@ int smoothIncrementingScore;
 short* ggiPart1HourglassAnim;
 uint firstGuiTexture;
 
+static short HOURGLASS_ANIM_DATA[29][2];
+
 extern DigitSprites copycatPlayer1ScoreDigitSprites;
 extern DigitSprites copycatPlayer2ScoreDigitSprites;
 extern DigitSprites levelScoreSprite;
@@ -54,6 +56,8 @@ extern int twoPlayerWhichPlayer;
 extern int whichDrawDispEnv;
 extern POLY_FT4 hourglassSprites[2][3];
 extern PrimList primLists[2];
+extern RECT hourglassClutRect;
+extern short hourglassClut[60];
 extern Texture textures[150];
 extern TSprite keySprites[2][4][2];
 extern TSprite timerPausedSprite[2];
@@ -295,7 +299,35 @@ void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
 // https://decomp.me/scratch/1yWKd
 INCLUDE_ASM("asm/nonmatchings/hud", DrawTimeAttackTimer);
 
-INCLUDE_ASM("asm/nonmatchings/hud", UpdateStaticHourglassClut);
+void UpdateStaticHourglassClut(void) {
+    int i;
+    int amount;
+    int div28;
+    int mod28;
+    int dummy[4];
+
+    amount = (levelTimeLeft * 420) / 5000;
+    div28 = amount / 28;
+    mod28 = amount % 28;
+    for (i = 0; i < div28; i++) {
+        hourglassClut[i*2] = HOURGLASS_ANIM_DATA[28][0];
+        hourglassClut[i*2 + 1] = HOURGLASS_ANIM_DATA[28][1];
+        hourglassClut[i*2 + 30] = HOURGLASS_ANIM_DATA[0][0];
+        hourglassClut[i*2 + 31] = HOURGLASS_ANIM_DATA[0][1];
+    }
+    i += 1;
+    hourglassClut[div28 * 2] = HOURGLASS_ANIM_DATA[mod28][0];
+    hourglassClut[div28 * 2 + 1] = HOURGLASS_ANIM_DATA[mod28][1];
+    hourglassClut[div28 * 2 + 30] = HOURGLASS_ANIM_DATA[27 - mod28][0];
+    hourglassClut[div28 * 2 + 31] = HOURGLASS_ANIM_DATA[27 - mod28][1];
+    for (; i < 15; i++) {
+        hourglassClut[i*2] = HOURGLASS_ANIM_DATA[0][0];
+        hourglassClut[i*2 + 1] = HOURGLASS_ANIM_DATA[0][1];
+        hourglassClut[i*2 + 30] = HOURGLASS_ANIM_DATA[28][0];
+        hourglassClut[i*2 + 31] = HOURGLASS_ANIM_DATA[28][1];
+    }
+    LoadImage(&hourglassClutRect,hourglassClut);
+}
 
 void DrawKeyWidgets(void) {
     int i;

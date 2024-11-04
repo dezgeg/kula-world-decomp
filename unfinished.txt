@@ -13,8 +13,6 @@ main/MainGameLoop: <none>
 highscore/HighScoreUi: <none>
 
 Needs to be integrated:
-hud/UpdateStaticHourglassClut: https://decomp.me/scratch/UHGrq
 GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
-
 InitShadowSprites: https://decomp.me/scratch/XsZoX
 InitPlayerSpecularSprite: https://decomp.me/scratch/VCaQJ
