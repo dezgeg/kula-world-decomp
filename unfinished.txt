@@ -16,8 +16,6 @@ Needs to be integrated:
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
 text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
-main/main: https://decomp.me/scratch/LaYxz
-main/LevelCompletedOrDied: https://decomp.me/scratch/HBwQp
 
 InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
 DrawPlayerShadowSprites: https://decomp.me/scratch/0HMKx
