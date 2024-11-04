@@ -9,13 +9,12 @@ bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 sprite_init/InitFruitSprites: <none>
 sprite_init/InitLethargyEffectSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
-highscore/HighScoreUi: <none>
 main/MainGameLoop: <none>
+highscore/HighScoreUi: <none>
 
 Needs to be integrated:
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
-text1/DrawTextCrappyFont: https://decomp.me/scratch/VgNU6
 
 InitPlayerShadowSprites: https://decomp.me/scratch/XsZoX
 DrawPlayerShadowSprites: https://decomp.me/scratch/0HMKx

@@ -94,7 +94,7 @@ segments:
       - [0x031c8, c, copycat_ui]
       - [0x0355c, c, font]
       - [0x036c8, c, font2]
-      - [0x04400, c, text1] # 1 nonmatching
+      - [0x04400, c, text1]
       - [0x04990, c, widget_init]
       - [0x04cf0, c, lensflare]
       - [0x05cdc, c, level_end_screen] # 2 nonmatching
@@ -128,7 +128,7 @@ segments:
       - [0x1e420, c, nonmatched/light_effect]
       - [0x1f330, c, nonmatched/code_1f330]
       - [0x2fee8, c, stack_hacks]
-      - [0x2ffdc, c, main] # 3 nonmatching
+      - [0x2ffdc, c, main] # 1 nonmatching
       - [0x329a4, c, disp_mode]
       - [0x32aa4, c, memcard1]
       - [0x32b48, c, nonmatched/memcard_ui]
