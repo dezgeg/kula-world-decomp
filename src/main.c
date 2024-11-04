@@ -9,6 +9,8 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern int copycatModeStartingPlayer;
 extern int gameMode;
 extern int levelHasBeenCompletedByPlayer[2];
+extern int levelPlaytimesInThisWorld[15];
+extern int levelScores[150];
 extern int specialLevelType;
 extern int timeTrialAtEndOfWorld;
 
@@ -16,17 +18,28 @@ char* sioWritePtr;
 int byteCountToReceiveFromSio;
 int curLevel;
 int curWorld;
+int curWorld2;
 int debugBonusLevels;
+int gameState;
 int gotSioData;
 int highestLevelReached;
+int isDemoMode;
+int isFinal;
+int latestPlayerToFinish;
 int levelAfterBonusLevel;
 int levelEndReason;
+int levelHasBeenCompletedByPlayer[2];
+int levelPlayTime[2];
+int levelScore;
 int loadNewWorld;
 int numTimeTrialPlayers;
 int startingPlayerForThisLevel;
+int totalPlayTime[2];
+int totalScore;
 int twoPlayerWhichPlayer;
 int vsyncCounter;
 int whichDrawDispEnv;
+short numFruits;
 uint fruitsCollectedBitmask;
 uint savedFruitsCollectedBitmask;
 
@@ -39,8 +52,105 @@ void SioRecvVsyncCallback(void) {
 
 INCLUDE_ASM("asm/nonmatchings/main", MainGameLoop);
 
-// https://decomp.me/scratch/HBwQp
-INCLUDE_ASM("asm/nonmatchings/main", LevelCompletedOrDied);
+void LevelCompletedOrDied(void) {
+    int i;
+    int j;
+    int penalty;
+    int t;
+
+    if (gameMode == 0 && gotSioData == 0) {
+        if (loadNewWorld == 0) {
+            if (levelEndReason < 0 && specialLevelType == 0) {
+                penalty = ((isFinal == 0 ? curWorld2 * 15 : curWorld2 * 2) + curLevel + 1) * 50;
+                if (penalty > 5000) {
+                    penalty = 5000;
+                }
+                totalScore -= levelScore + penalty;
+                fruitsCollectedBitmask = savedFruitsCollectedBitmask;
+            } else {
+                if (savedFruitsCollectedBitmask != fruitsCollectedBitmask) {
+                    numFruits++;
+                }
+                totalScore += levelScore;
+                savedFruitsCollectedBitmask = fruitsCollectedBitmask;
+            }
+            if (specialLevelType == 0) {
+                levelScores[curWorld2 * 15 + curLevel] = totalScore;
+            } else {
+                t = levelAfterBonusLevel;
+                if (t >= 15) {
+                    t = 15;
+                }
+                if (t < 0) {
+                    t = 0;
+                }
+                levelScores[curWorld2 * 15 + t - 1] = totalScore;
+            }
+        }
+        totalPlayTime[0] += levelPlayTime[0] / 50;
+    }
+    if (gameMode != 2 || gotSioData != 0 || gameState == 4) {
+        return;
+    }
+    latestPlayerToFinish = twoPlayerWhichPlayer;
+    if (loadNewWorld) {
+        return;
+    }
+    if (levelEndReason < 0 && specialLevelType == 0) {
+        fruitsCollectedBitmask = savedFruitsCollectedBitmask;
+        if (numTimeTrialPlayers == 2) {
+            totalPlayTime[twoPlayerWhichPlayer] += 4;
+            if (levelHasBeenCompletedByPlayer[0] == 0 && levelHasBeenCompletedByPlayer[1] == 0)
+                twoPlayerWhichPlayer = (twoPlayerWhichPlayer + 1) % 2;
+            }
+    } else {
+        if (savedFruitsCollectedBitmask != fruitsCollectedBitmask) {
+            numFruits++;
+        }
+        savedFruitsCollectedBitmask = fruitsCollectedBitmask;
+        levelHasBeenCompletedByPlayer[twoPlayerWhichPlayer] = 1;
+        if (numTimeTrialPlayers == 1) {
+            j = levelPlayTime[0] / 50;
+            if (levelPlayTime[0] < 0) {
+                j--;
+            }
+            if (timeTrialAtEndOfWorld == 0 || j < levelPlaytimesInThisWorld[curLevel]) {
+                levelPlaytimesInThisWorld[curLevel % 15] = j;
+            }
+            totalPlayTime[twoPlayerWhichPlayer] = 0;
+            for (i = 0; i < 15; i++) {
+                totalPlayTime[twoPlayerWhichPlayer] += levelPlaytimesInThisWorld[i];
+            }
+        } else {
+            totalPlayTime[twoPlayerWhichPlayer] += levelPlayTime[twoPlayerWhichPlayer] / 50;
+            if (levelPlayTime[twoPlayerWhichPlayer] < 0) {
+                totalPlayTime[twoPlayerWhichPlayer] -= 1;
+            }
+
+            if (levelHasBeenCompletedByPlayer[0] == 1) {
+                if (levelHasBeenCompletedByPlayer[1] != 1) {
+                    twoPlayerWhichPlayer = (twoPlayerWhichPlayer + 1) % 2;
+                }
+            } else if (levelHasBeenCompletedByPlayer[1] == 1) {
+                twoPlayerWhichPlayer = (twoPlayerWhichPlayer + 1) % 2;
+            }
+        }
+    }
+    if (totalScore >= 0) {
+        return;
+    }
+    gameMode = 0;
+    numTimeTrialPlayers = 0;
+    if (isDemoMode == 1) {
+        return;
+    }
+
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 15; j++) {
+            levelScores[i*15+j] = -1;
+        }
+    }
+}
 
 void DecideNextLevel(void) {
     int bVar1;
@@ -183,7 +293,7 @@ void ReceiveBufFromSio(void) {
             }
         }
         *sioWritePtr++ = _sio_control(0,4,0);
-        if (((i & 0xff) == 0) || i == byteCountToReceiveFromSio - 1) {
+        if ((i & 0xff) == 0 || i == byteCountToReceiveFromSio - 1) {
             FntPrint(S_recived_FMTd,i + 1);
             FntPrint(S_of_FMTd_bytes,byteCountToReceiveFromSio);
             FntFlush(-1);
