@@ -216,3 +216,7 @@ void InitTimerPausedSprite(void) {
         timerPausedSprite[i].sprt.h = textures[firstGuiTexture + 19].h;
     }
 }
+
+INCLUDE_ASM("asm/nonmatchings/sprite_init", InitBonusWidgetSprites);
+
+INCLUDE_ASM("asm/nonmatchings/sprite_init", InitAllDigitSprites);

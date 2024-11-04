@@ -114,8 +114,7 @@ segments:
       - [0x128b8, c, screenshake]
       - [0x12a64, c, bios_font] # 1 nonmatching
       - [0x12eb0, c, nonmatched/ggi]
-      - [0x1343c, c, sprite_init] # 2 nonmatching
-      - [0x14b0c, c, nonmatched/sprite_init2]
+      - [0x1343c, c, sprite_init] # 4 nonmatching
       - [0x1541c, c, prim]
       - [0x154a8, c, nonmatched/tgi]
       - [0x16094, c, nonmatched/skybox]

@@ -3,16 +3,17 @@ level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 level_end_screen/LoadMenuGfx: <none>
 memcard_ui1/InitMemcardUi: https://decomp.me/scratch/ehGLH
 hud/DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
-hud/UpdateStaticHourglassClut: <none>
 hud/DrawFruitWidgets: <none>
 bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 sprite_init/InitFruitSprites: <none>
 sprite_init/InitLethargyEffectSprites: <none>
+sprite_init/InitBonusWidgetSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 main/MainGameLoop: <none>
 highscore/HighScoreUi: <none>
 
 Needs to be integrated:
+hud/UpdateStaticHourglassClut: https://decomp.me/scratch/UHGrq
 SetLightEffectToBeDisabled: https://decomp.me/scratch/r0K84
 GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
 
