@@ -9,7 +9,7 @@ sprite_init/InitFruitSprites: <none>
 sprite_init/InitLethargyEffectSprites: <none>
 sprite_init/InitBonusWidgetSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
-main/MainGameLoop: <none>
+main/MainGameLoop: https://decomp.me/scratch/A0Tmn
 highscore/HighScoreUi: <none>
 
 Needs to be integrated:
