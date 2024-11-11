@@ -436,6 +436,7 @@ unkUnused = 0x000d5aa4; // type:s32
 unusedFrameCounter = 0x000a2ebc; // type:s32
 unusedInitStackParamEnd = 0x000bb504; // type:u32
 unusedInitStackParamStart = 0x000bb508; // type:u32
+unusedNumHblanks = 0x000de7c4; // type:s32
 unusedReadErrorCode = 0x000a59b0; // type:s32
 unusedRenderPhase = 0x000a2f68; // type:s32
 vibrationAngleIncrement = 0x000a4c80; // type:s32
