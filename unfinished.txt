@@ -1,7 +1,6 @@
 particles/ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 level_end_screen/LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 level_end_screen/LoadMenuGfx: https://decomp.me/scratch/LHZmY
-memcard_ui1/InitMemcardUi: https://decomp.me/scratch/ehGLH
 hud/DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 hud/DrawFruitWidgets: <none>
 bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
