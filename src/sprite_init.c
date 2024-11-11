@@ -4,6 +4,11 @@ typedef struct DigitSprites {
     TSprite sprites[2][10];
 } DigitSprites;
 
+typedef struct FakeTgiFile {
+    char pad[4];
+    int levelBgG;
+} FakeTgiFile;
+
 extern void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b);
 extern void InitAllDigitSprites(void);
 extern void InitBonusWidgetSprites(void);
@@ -17,15 +22,19 @@ extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
 
 extern DigitSprites levelTimeLeftDigitSprites;
+extern int displayHeight;
+extern int displayWidth;
 extern int screenOffsetX;
 extern int screenOffsetY;
 extern int specialLevelType;
 extern POLY_FT4 hourglassSprites[2][3];
+extern POLY_FT4 lethargyEffectPoly[2];
 extern Texture textures[150];
-extern Texture textures[150];
+extern FakeTgiFile* tgi;
 extern TPolyF4 screenFadePolys[2][1];
 extern TSprite copyrightSprite[2];
 extern TSprite keySprites[2][8];
+extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
 
@@ -33,6 +42,7 @@ int drawTimerPausedWidget;
 int halfFps;
 int hourglassIsRotating;
 int hourglassRotationTimer;
+int lethargyMode;
 int levelTimeLeft;
 int screenFadeColor;
 int screenFadeEnabled;
@@ -140,7 +150,40 @@ void InitKeySprites(void) {
 
 INCLUDE_ASM("asm/nonmatchings/sprite_init", InitFruitSprites);
 
-INCLUDE_ASM("asm/nonmatchings/sprite_init", InitLethargyEffectSprites);
+void InitLethargyEffectSprites(void) {
+    int i;
+
+    lethargyMode = 0;
+    for (i = 0; i < 2; i++) {
+        setPolyFT4(&lethargyEffectPoly[i]);
+        setUV4(&lethargyEffectPoly[i],
+            textures[firstGuiTexture + 6].u, textures[firstGuiTexture + 6].v,
+            textures[firstGuiTexture + 6].u + textures[firstGuiTexture + 6].w - 1, textures[firstGuiTexture + 6].v,
+            textures[firstGuiTexture + 6].u, textures[firstGuiTexture + 6].v + textures[firstGuiTexture + 6].h - 1,
+            textures[firstGuiTexture + 6].u + textures[firstGuiTexture + 6].w - 1, textures[firstGuiTexture + 6].v + textures[firstGuiTexture + 6].h - 1);
+
+        setRGB0(&lethargyEffectPoly[i], 0x80, 0x80, 0x80);
+        SetSemiTrans(&lethargyEffectPoly[i], textures[firstGuiTexture + 6].semitrans);
+        SetShadeTex(&lethargyEffectPoly[i], 0);
+        lethargyEffectPoly[i].tpage = textures[firstGuiTexture + 6].tpage;
+        lethargyEffectPoly[i].clut = textures[firstGuiTexture + 6].clut;
+
+        TSpritePrim(&lethargyEffectSprite[i][0], 0, tgi->levelBgG, GetTPage(2,0,i == 1 ? 0 : displayWidth,0));
+        setXY0(&lethargyEffectSprite[i][0].sprt, 0, 0);
+        setWH(&lethargyEffectSprite[i][0].sprt, 256, displayHeight);
+        setUV0(&lethargyEffectSprite[i][0].sprt, 0, 0);
+        SetSemiTrans(&lethargyEffectSprite[i][0].sprt,1);
+        SetShadeTex(&lethargyEffectSprite[i][0].sprt,0);
+        if (displayWidth > 256) {
+            TSpritePrim(&lethargyEffectSprite[i][1], 0,tgi->levelBgG, GetTPage(2,0,i == 1 ? 256 : 256 + displayWidth,0));
+            setXY0(&lethargyEffectSprite[i][1].sprt, 256, 0);
+            setWH(&lethargyEffectSprite[i][1].sprt, displayWidth - 256, displayHeight);
+            setUV0(&lethargyEffectSprite[i][1].sprt, 0, 0);
+            SetSemiTrans(&lethargyEffectSprite[i][1].sprt,1);
+            SetShadeTex(&lethargyEffectSprite[i][1].sprt,0);
+        }
+    }
+}
 
 void InitScreenFadePolys(void) {
     int i;

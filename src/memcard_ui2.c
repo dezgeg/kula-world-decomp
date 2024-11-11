@@ -27,11 +27,11 @@ extern PrimList primLists[2];
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 
-typedef struct TgiBuf {
+typedef struct FakeTgiFile {
     char pad[0x10c];
     int otagLen;
-} TgiBuf;
-extern TgiBuf* tgi;
+} FakeTgiFile;
+extern FakeTgiFile* tgi;
 
 static inline int GetButtonsFromAnyController() {
     if (GetControllerStatus(curController) != 0) {
