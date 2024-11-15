@@ -4,7 +4,6 @@ level_end_screen/LoadMenuGfx: https://decomp.me/scratch/LHZmY
 hud/DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 hud/DrawFruitWidgets: <none>
 bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
-sprite_init/InitFruitSprites: <none>
 sprite_init/InitBonusWidgetSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 main/MainGameLoop: https://decomp.me/scratch/A0Tmn

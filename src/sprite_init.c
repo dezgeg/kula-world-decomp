@@ -9,6 +9,10 @@ typedef struct FakeTgiFile {
     int levelBgG;
 } FakeTgiFile;
 
+typedef struct FakeGgiFile {
+    int numFruitTextures;
+} FakeGgiFile;
+
 extern void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b);
 extern void InitAllDigitSprites(void);
 extern void InitBonusWidgetSprites(void);
@@ -22,23 +26,33 @@ extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
 
 extern DigitSprites levelTimeLeftDigitSprites;
+extern FakeTgiFile* tgi;
 extern int displayHeight;
 extern int displayWidth;
+extern int FRUIT_BONUS_TEXT_POSITIONS1[];
+extern int FRUIT_BONUS_TEXT_POSITIONS2[];
+extern int FRUIT_WIDGET_POSITIONS[];
 extern int screenOffsetX;
 extern int screenOffsetY;
 extern int specialLevelType;
 extern POLY_FT4 hourglassSprites[2][3];
 extern POLY_FT4 lethargyEffectPoly[2];
 extern Texture textures[150];
-extern FakeTgiFile* tgi;
 extern TPolyF4 screenFadePolys[2][1];
 extern TSprite copyrightSprite[2];
+extern TSprite fruitBonusTextSprites[2][10];
+extern TSprite fruitSprites[2][10];
 extern TSprite keySprites[2][8];
 extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
 
+FakeGgiFile* ggi;
 int drawTimerPausedWidget;
+int firstFruitTexture;
+int fruitBonusTextIndex;
+int fruitBonusTextTimer;
+int fruitWidgetDisplayMode;
 int halfFps;
 int hourglassIsRotating;
 int hourglassRotationTimer;
@@ -148,7 +162,53 @@ void InitKeySprites(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/sprite_init", InitFruitSprites);
+void InitFruitSprites(void) {
+    int i;
+    int x;
+    int y;
+    int tex;
+
+    for (i = 0; i < ggi->numFruitTextures; i++) {
+        TSpritePrim(&fruitSprites[0][i],0,0,textures[firstFruitTexture + i].tpage);
+        setXY0(&fruitSprites[0][i].sprt, FRUIT_WIDGET_POSITIONS[(i / 2) * 2], FRUIT_WIDGET_POSITIONS[(i / 2) * 2 + 1]);
+        setRGB0(&fruitSprites[0][i].sprt, 0x80, 0x80, 0x80);
+        SetSemiTrans(&fruitSprites[0][i].sprt,textures[firstFruitTexture + i].semitrans);
+        SetShadeTex(&fruitSprites[0][i].sprt,0);
+        fruitSprites[0][i].sprt.clut = textures[firstFruitTexture + i].clut;
+        fruitSprites[0][i].sprt.w = textures[firstFruitTexture + i].w;
+        fruitSprites[0][i].sprt.h = textures[firstFruitTexture + i].h;
+        setUV0(&fruitSprites[0][i].sprt, textures[firstFruitTexture + i].u, textures[firstFruitTexture + i].v);
+        fruitSprites[1][i] = fruitSprites[0][i];
+    }
+
+    if (specialLevelType == 0) {
+        fruitWidgetDisplayMode = 0;
+    } else {
+        fruitWidgetDisplayMode = 1;
+        fruitBonusTextIndex = 0;
+        fruitBonusTextTimer = 7;
+    }
+
+    for (i = 0; i < 10; i++) {
+        tex = i + 22;
+        TSpritePrim(&fruitBonusTextSprites[0][i],0,0,textures[firstGuiTexture + tex].tpage);
+        x = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2];
+        y = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2 + 1];
+        if ((i / 2) * 2 == i - 1) {
+            x += FRUIT_BONUS_TEXT_POSITIONS2[(i / 2) * 2];
+            y += FRUIT_BONUS_TEXT_POSITIONS2[(i / 2) * 2 + 1];
+        }
+        setXY0(&fruitBonusTextSprites[0][i].sprt, x, y);
+        setRGB0(&fruitBonusTextSprites[0][i].sprt, 0x80, 0x80, 0x80);
+        SetSemiTrans(&fruitBonusTextSprites[0][i].sprt,textures[firstGuiTexture + tex].semitrans);
+        SetShadeTex(&fruitBonusTextSprites[0][i].sprt,0);
+        fruitBonusTextSprites[0][i].sprt.clut = textures[firstGuiTexture + tex].clut;
+        fruitBonusTextSprites[0][i].sprt.w = textures[firstGuiTexture + tex].w;
+        fruitBonusTextSprites[0][i].sprt.h = textures[firstGuiTexture + tex].h;
+        setUV0(&fruitBonusTextSprites[0][i].sprt, textures[firstGuiTexture + tex].u, textures[firstGuiTexture + tex].v);
+        fruitBonusTextSprites[1][i] = fruitBonusTextSprites[0][i];
+    }
+}
 
 void InitLethargyEffectSprites(void) {
     int i;
