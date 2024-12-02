@@ -124,7 +124,7 @@ segments:
       - [0x1b334, c, nonmatched/update]
       - [0x1c2ec, c, nonmatched/render2]
       - [0x1d9ec, c, render3]
-      - [0x1dbac, c, visited_cubes]
+      - [0x1dbac, c, visited_cubes] # 2 nonmatching
       - [0x1dfcc, c, block_utils]
       - [0x1e420, c, light_effect]
       - [0x1f330, c, nonmatched/code_1f330]

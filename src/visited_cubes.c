@@ -85,6 +85,8 @@ void SetCubeVisited(int x,int y,int z,int visitType) {
     }
 }
 
+// https://decomp.me/scratch/FLqog
 INCLUDE_ASM("asm/nonmatchings/visited_cubes", SetCubeFaceVisited);
 
+// https://decomp.me/scratch/X4b4u
 INCLUDE_ASM("asm/nonmatchings/visited_cubes", ProcessRecentlyVisitedCubes);
