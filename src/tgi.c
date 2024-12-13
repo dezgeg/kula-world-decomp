@@ -179,7 +179,30 @@ void GetHighscoreCubeStyle(ushort *pTpage,ushort *pClut,byte *pU,byte *pV,int *p
     *pV = md->entries[0].uv.u8.v;
 }
 
-INCLUDE_ASM("asm/nonmatchings/tgi", LoadImagesFromTgiPart9);
+void LoadImagesFromTgiPart9(short *p) {
+    int i;
+    int w;
+    int h;
+    RECT rect;
+
+    for (i = 0; i < 24; i++) {
+        rect.x = *p++;
+        rect.y = *p++;
+        w = *p++;
+        rect.w = w;
+        h = *p++;
+        rect.h = h;
+        LoadImage(&rect,p);
+        DrawSync(0);
+        p += w * h;
+    }
+    rect.x = *p++;
+    rect.y = *p++;
+    rect.w = *p++;
+    rect.h = *p++;
+    LoadImage(&rect,p);
+    DrawSync(0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/tgi", InitTurningMotionBlur);
 
