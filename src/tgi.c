@@ -1,5 +1,21 @@
 #include "common.h"
 
+typedef struct Entry {
+    short* clut;
+    // byte u;
+    // byte v;
+    short uv;
+    short tpage;
+} Entry;
+
+typedef struct CubeTextureMetadata {
+    short unk0;
+    short unk2;
+    short unk4;
+    short unk6;
+    Entry entries[3];
+} CubeTextureMetadata;
+
 extern void InitCubeTextureMetadata(void);
 extern void InitTurningMotionBlur(void);
 extern void LoadImagesFromTgiPart9(short* p);
@@ -20,6 +36,7 @@ short* tgiPart8;
 short* tgiPart9;
 short* tgiPart10;
 
+extern CubeTextureMetadata cubeTextureMetadata[1300];
 extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
@@ -72,7 +89,60 @@ void* ParseTGI(TgiFile *tgiBuf) {
     return tgiPart9 + 0x3f00 / 2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/tgi", InitCubeTextureMetadata);
+void InitCubeTextureMetadata(void) {
+    short *pPart6;
+    int i;
+    int j;
+    int k;
+    short *p;
+    int p0;
+    short* de;
+
+    int tx;
+    int ty;
+    int mx;
+    int my;
+
+    for (p = tgiPart5; p < tgiPart6; p += 2) {
+        p0 = p[0];
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < p[1]; j++) {
+                pPart6 = &tgiPart6[20 * (p0 + j)];
+                de = &cubeTextureMetadata[p0 * 3 + i * p[1] + j];
+                *de++ = pPart6[i];
+                tx = pPart6[3];
+                ty = pPart6[4];
+                mx = (tx % 64) * 2;
+                my = ty % 256;
+                *de++ = my << 8 | mx;
+                *de++ = GetTPage(1, 0, tx, ty);
+                *de++ = 0;
+                pPart6 += 5;
+                for (k = 0; k < 3; pPart6 += 5,k++) {
+                    *(int*)de = &tgiPart0[pPart6[i] * tgi->unk108];
+                    de += 2;
+                    tx = pPart6[3];
+                    ty = pPart6[4];
+                    mx = (tx % 64) * 4;
+                    my = ty % 256;
+                    switch (k) {
+                        case 0:
+                            mx += 0x1f;
+                            break;
+                        case 1:
+                            mx += 0xf;
+                            break;
+                        case 2:
+                            mx += 0x7;
+                            break;
+                    }
+                    *de++ = my << 8 | mx;
+                    *de++ = GetTPage(0, 0, tx, ty);
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/tgi", GetHighscoreCubeStyle);
 
