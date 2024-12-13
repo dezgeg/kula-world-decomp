@@ -4,11 +4,6 @@ typedef struct DigitSprites {
     TSprite sprites[2][10];
 } DigitSprites;
 
-typedef struct FakeTgiFile {
-    char pad[4];
-    int levelBgG;
-} FakeTgiFile;
-
 typedef struct FakeGgiFile {
     int numFruitTextures;
 } FakeGgiFile;
@@ -26,7 +21,7 @@ extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
 
 extern DigitSprites levelTimeLeftDigitSprites;
-extern FakeTgiFile* tgi;
+extern TgiFile* tgi;
 extern int displayHeight;
 extern int displayWidth;
 extern int FRUIT_BONUS_TEXT_POSITIONS1[];
@@ -228,14 +223,14 @@ void InitLethargyEffectSprites(void) {
         lethargyEffectPoly[i].tpage = textures[firstGuiTexture + 6].tpage;
         lethargyEffectPoly[i].clut = textures[firstGuiTexture + 6].clut;
 
-        TSpritePrim(&lethargyEffectSprite[i][0], 0, tgi->levelBgG, GetTPage(2,0,i == 1 ? 0 : displayWidth,0));
+        TSpritePrim(&lethargyEffectSprite[i][0], 0, tgi->normalLevelBgColor[1], GetTPage(2,0,i == 1 ? 0 : displayWidth,0));
         setXY0(&lethargyEffectSprite[i][0].sprt, 0, 0);
         setWH(&lethargyEffectSprite[i][0].sprt, 256, displayHeight);
         setUV0(&lethargyEffectSprite[i][0].sprt, 0, 0);
         SetSemiTrans(&lethargyEffectSprite[i][0].sprt,1);
         SetShadeTex(&lethargyEffectSprite[i][0].sprt,0);
         if (displayWidth > 256) {
-            TSpritePrim(&lethargyEffectSprite[i][1], 0,tgi->levelBgG, GetTPage(2,0,i == 1 ? 256 : 256 + displayWidth,0));
+            TSpritePrim(&lethargyEffectSprite[i][1], 0,tgi->normalLevelBgColor[1], GetTPage(2,0,i == 1 ? 256 : 256 + displayWidth,0));
             setXY0(&lethargyEffectSprite[i][1].sprt, 256, 0);
             setWH(&lethargyEffectSprite[i][1].sprt, displayWidth - 256, displayHeight);
             setUV0(&lethargyEffectSprite[i][1].sprt, 0, 0);

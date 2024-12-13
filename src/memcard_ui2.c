@@ -26,12 +26,7 @@ extern uint prevControllerButtons;
 extern PrimList primLists[2];
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
-
-typedef struct FakeTgiFile {
-    char pad[0x10c];
-    int otagLen;
-} FakeTgiFile;
-extern FakeTgiFile* tgi;
+extern TgiFile* tgi;
 
 static inline int GetButtonsFromAnyController() {
     if (GetControllerStatus(curController) != 0) {
@@ -61,7 +56,7 @@ int AskSaveOverwrite(void) {
         ClearOTagR(&primLists[whichDrawDispEnv].main,4);
         ResetTextRenderState();
         for (i = 0; i < numCameras; i++) {
-            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->otagLen]);
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
         }
         DrawOTag(&primLists[!whichDrawDispEnv].gui3);
         SndProcessSpuVoices();
@@ -108,7 +103,7 @@ void ShowMemCardFullScreenText(char *str) {
         ClearOTagR(&primLists[whichDrawDispEnv].main,4);
         ResetTextRenderState();
         for (i = 0; i < numCameras; i++) {
-            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->otagLen]);
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
         }
         DrawOTag(&primLists[!whichDrawDispEnv].gui3);
         SndProcessSpuVoices();
