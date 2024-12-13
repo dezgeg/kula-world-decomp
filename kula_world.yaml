@@ -120,6 +120,8 @@ segments:
       - [0x154a8, c, tgi] # 1 nonmatching
       - [0x16094, c, nonmatched/skybox]
       - [0x16ffc, c, nonmatched/level_init]
+      - [0x198c4, c, dirfuncs]
+      - [0x1a140, c, nonmatched/level_init2]
       - [0x1a27c, c, nonmatched/render1]
       - [0x1b334, c, nonmatched/update]
       - [0x1c2ec, c, nonmatched/render2]
