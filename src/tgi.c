@@ -45,6 +45,9 @@ extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
 extern int HIGHSCORE_CUBE_RANDOM_TEXTURES[16];
+extern int INT_ARRAY_000a2cd8[7];
+extern int LOD_THRESHOLDS[9];
+extern int turningMotionBlurTable[9 * 7];
 
 void* ParseTGI(TgiFile *tgiBuf) {
     int i;
@@ -204,6 +207,24 @@ void LoadImagesFromTgiPart9(short *p) {
     DrawSync(0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/tgi", InitTurningMotionBlur);
+void InitTurningMotionBlur(void) {
+    int i;
+    int j;
+    int fromTgi;
+    int fromConst;
+    int* tgip;
+    int* constp;
+
+    constp = &INT_ARRAY_000a2cd8[0];
+    tgip = &tgi->lodDistance[0];
+
+    for (i = 0; i < 7; i++) {
+        fromTgi = *tgip++;
+        fromConst = *constp++;
+        for (j = 0; j < 9; j++) {
+            turningMotionBlurTable[j * 7 + i] = fromTgi + ((fromConst - fromTgi) * LOD_THRESHOLDS[j]) / 100;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/tgi", ParseLevelDataFromTgi);
