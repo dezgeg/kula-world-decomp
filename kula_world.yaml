@@ -117,7 +117,7 @@ segments:
       - [0x12eb0, c, nonmatched/ggi]
       - [0x1343c, c, sprite_init] # 4 nonmatching
       - [0x1541c, c, prim]
-      - [0x154a8, c, tgi]
+      - [0x154a8, c, tgi] # 1 nonmatching
       - [0x16094, c, nonmatched/skybox]
       - [0x16ffc, c, nonmatched/level_init]
       - [0x1a27c, c, nonmatched/render1]
