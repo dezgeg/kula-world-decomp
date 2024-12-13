@@ -6,6 +6,11 @@ hud/DrawFruitWidgets: <none>
 bios_font/SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 sprite_init/InitBonusWidgetSprites: <none>
 sprite_init/InitAllDigitSprites: https://decomp.me/scratch/2Cm13
+tgi/ParseTGI: https://decomp.me/scratch/3zyzz
+tgi/InitCubeTextureMetadata: https://decomp.me/scratch/F2oOW
+tgi/GetHighscoreCubeStyle: https://decomp.me/scratch/IjPRe
+tgi/LoadImagesFromTgiPart9: https://decomp.me/scratch/o0CGS
+tgi/InitTurningMotionBlur: https://decomp.me/scratch/Lr2Xy
 visited_cubes/SetCubeFaceVisited: https://decomp.me/scratch/FLqog
 visited_cubes/ProcessRecentlyVisitedCubes: https://decomp.me/scratch/X4b4u
 main/MainGameLoop: https://decomp.me/scratch/A0Tmn
