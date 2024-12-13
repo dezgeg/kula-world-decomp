@@ -2,9 +2,13 @@
 
 typedef struct Entry {
     short* clut;
-    // byte u;
-    // byte v;
-    short uv;
+    union {
+        short u16;
+        struct {
+            byte u;
+            byte v;
+        } u8;
+    } uv;
     short tpage;
 } Entry;
 
@@ -40,6 +44,7 @@ extern CubeTextureMetadata cubeTextureMetadata[1300];
 extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
+extern int HIGHSCORE_CUBE_RANDOM_TEXTURES[16];
 
 void* ParseTGI(TgiFile *tgiBuf) {
     int i;
@@ -144,7 +149,35 @@ void InitCubeTextureMetadata(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/tgi", GetHighscoreCubeStyle);
+void GetHighscoreCubeStyle(ushort *pTpage,ushort *pClut,byte *pU,byte *pV,int *pSemitrans) {
+    int variation;
+    int texture;
+    CubeTextureMetadata* md;
+
+    variation = HIGHSCORE_CUBE_RANDOM_TEXTURES[Rand(16)];
+    // texture = variation;
+    *pSemitrans = 0;
+    switch (variation) {
+        default:
+            texture = variation;
+            break;
+        case 6:
+            texture = 6;
+            *pSemitrans = 1;
+            break;
+        case 666:
+            texture = tgi->unk150 + Rand(tgi->numPlainTileTextureVariationsNormalLevel);
+            break;
+        case 668:
+            texture = tgi->unk150 + tgi->numPlainTileTextureVariationsNormalLevel + 2;
+            break;
+    }
+    md = &cubeTextureMetadata[tgiPart5[texture * 2] * 3 + tgiPart5[texture * 2 + 1]];
+    *pTpage = md->entries[0].tpage | 0x20;
+    *pClut = *md->entries[0].clut;
+    *pU = md->entries[0].uv.u8.u - 0x1f;
+    *pV = md->entries[0].uv.u8.v;
+}
 
 INCLUDE_ASM("asm/nonmatchings/tgi", LoadImagesFromTgiPart9);
 
