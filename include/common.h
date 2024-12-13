@@ -318,6 +318,57 @@ typedef struct Player {
     short pad_2c6;
 } Player;
 
+typedef int RGB[3];
+typedef union BlockColors {
+    struct {
+        RGB left;
+        RGB right;
+        RGB forward;
+        RGB backward;
+        RGB up;
+        RGB down;
+    } colors;
+    int arr[3 * 6];
+} BlockColors;
+
+typedef struct TgiFile {
+    RGB normalLevelBgColor;
+    RGB normalLevelFarColor2Mul;
+    RGB normalLevelModelDarkColor;
+    RGB normalLevelModelMediumColor;
+    RGB normalLevelModelLightColor;
+    BlockColors normalBlockColors;
+    RGB specialLevelBgColor;
+    RGB specialLevelFarColor2Mul;
+    RGB specialLevelModelDarkColor;
+    RGB specialLevelModelMediumColor;
+    RGB specialLevelModelLightColor;
+    BlockColors specialBlockColors;
+    int unk108;
+    int skyboxFlag;
+    int lodDistance[7];
+    int unk12c[6];
+    int randomTileRotation;
+    int unk148;
+    int unk14c;
+    int unk150;
+    int numPlainTileTextureVariationsNormalLevel;
+    int unk158;
+    int numPlainTileTextureVariationsSpecialLevel;
+    int unk160;
+    int part0Words;
+    int part1Words;
+    int part2Words;
+    int part3Words;
+    int part4Words;
+    int part5Words;
+    int part6Words;
+    int part7Words;
+    int part8Words;
+    int part9Words;
+    int part10Words;
+} TgiFile;
+
 #define INCLUDE_ASM(FOLDER, NAME) \
     void __maspsx_include_asm_hack_##NAME() { \
         __asm__( \
