@@ -1,4 +1,5 @@
 BONUS_MUSICS = 0x000733fc; // size:24
+BONUS_WIDGET_COLOR_DATA_LEN = 0x00073c00; // type:s32
 CHEAT_BUTTONS = 0x0007329c; // size:288
 COPYCAT_SPRITE_POSITIONS = 0x00072ad8; // size:16
 DAT_000a3374 = 0x000a3374; // type:s32
@@ -69,6 +70,8 @@ biosStrLen = 0x000a4100; // type:s32
 biosStrSprites = 0x000af23c; // size:1792
 bonusMusicIndex = 0x000a363a; // type:s16
 bonusMusicSearchAttempt = 0x000a4b4c; // type:s32
+bonusWidgetDataEnd = 0x000a4058; // size:4
+bonusWidgetDataPtr3 = 0x000a4054; // size:4
 border = 0x00099f9c; // size:76
 buttonBuf = 0x000a4a20; // size:32
 buttonHelpSprite1 = 0x000a511c; // size:56
