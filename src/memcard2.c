@@ -9,31 +9,31 @@ int memCardDataValid;
 long mcResult;
 long tempMcResult;
 
-extern char* SAVE_ICON_TIM_PTR;
 extern DrawDisp drawdisp[2];
 extern Highscore highscores[6];
+extern MemcardData memCardData;
+extern char* SAVE_ICON_TIM_PTR;
 extern int curLevel;
 extern int curWorld;
 extern int dispenvScreenX;
 extern int dispenvScreenY;
 extern int finalUnlocked;
+extern int fruitsCollectedBitmask;
 extern int gameMode;
 extern int highestLevelReached;
 extern int highscoreLevelScores[6][150];
 extern int isFinal;
 extern int levelScores[150];
 extern int musicVolume;
+extern int savedFruitsCollectedBitmask;
 extern int sfxVolume;
 extern int timeTrialDifficulty;
 extern int totalPlayTime[2];
 extern int totalScore;
 extern int vibrationEnabled;
 extern long mcCmd;
-extern MemcardData memCardData;
 extern short numFruits;
 extern short turnDelayEnabled;
-extern uint fruitsCollectedBitmask;
-extern uint savedFruitsCollectedBitmask;
 
 static inline void SetDispScreen(ushort x, ushort y) {
     drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
