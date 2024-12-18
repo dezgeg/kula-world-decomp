@@ -8,5 +8,5 @@ void Srand(int seed) {
 
 int Rand(unsigned v) {
     randomSeed = randomSeed * 0x41c64e6d + 12345;
-    return v * ((u_short)randomSeed) >> 0x10;
+    return (v * (ushort)randomSeed) >> 16;
 }
