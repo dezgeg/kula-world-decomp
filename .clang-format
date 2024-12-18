@@ -4,3 +4,4 @@ ColumnLimit: 100
 IncludeBlocks: Preserve
 DerivePointerAlignment: false
 AllowShortFunctionsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
