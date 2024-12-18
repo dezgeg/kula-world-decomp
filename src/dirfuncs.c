@@ -19,7 +19,7 @@ typedef struct Quad {
     int z23;
 } Quad;
 
-void DirFunc0(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc0(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
@@ -66,7 +66,7 @@ void DirFunc0(Quad *quad,int width,int x,int y,int z,int textureRotation) {
     }
 }
 
-void DirFunc1(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc1(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
@@ -111,7 +111,7 @@ void DirFunc1(Quad *quad,int width,int x,int y,int z,int textureRotation) {
     }
 }
 
-void DirFunc2(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc2(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
@@ -158,7 +158,7 @@ void DirFunc2(Quad *quad,int width,int x,int y,int z,int textureRotation) {
     }
 }
 
-void DirFunc3(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc3(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
@@ -202,10 +202,10 @@ void DirFunc3(Quad *quad,int width,int x,int y,int z,int textureRotation) {
             quad->z01 = (z + width) << 16 | z;
             quad->z23 = (z + width) << 16 | z;
             break;
-        }
+    }
 }
 
-void DirFunc4(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc4(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
@@ -252,7 +252,7 @@ void DirFunc4(Quad *quad,int width,int x,int y,int z,int textureRotation) {
     }
 }
 
-void DirFunc5(Quad *quad,int width,int x,int y,int z,int textureRotation) {
+void DirFunc5(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
     z -= width / 2;
