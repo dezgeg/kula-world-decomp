@@ -3,8 +3,8 @@
 #include <string.h>
 
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
-extern void DrawTextFancyFont(char * str, short x, short y);
-extern void FormatTime(int time, char * s, int showPlus);
+extern void DrawTextFancyFont(char* str, short x, short y);
+extern void FormatTime(int time, char* s, int showPlus);
 extern void FullyFinishLevelEndScreenFades(void);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
@@ -105,7 +105,7 @@ void UpdateScoreAtEndOfLevel(void) {
             levelScoreSummaryScoreTicker = 4;
         }
         newScore = totalPlayTime[latestPlayerToFinish] - levelScoreSummaryScoreTicker;
-                oldScore = newScore;
+        oldScore = newScore;
 
         menuUnkUnused = 0;
         if (levelEndReason == -10 && numTimeTrialPlayers == 1) {
@@ -159,37 +159,37 @@ void DrawLevelScoreSummary(void) {
         } else {
             levelScoreSummaryScoreTicker = 0;
             newScore = totalScore;
-            DrawStaticUiSprite(6,124,225,0);
+            DrawStaticUiSprite(6, 124, 225, 0);
         }
         if (levelEndReason > 0 || specialLevelType == 1) {
             y2off = 18;
-            sprintf(scoreText, S_FMTd_FMTd,oldScore,levelScore - levelScoreSummaryScoreTicker);
+            sprintf(scoreText, S_FMTd_FMTd, oldScore, levelScore - levelScoreSummaryScoreTicker);
         } else {
             y2off = 0;
             if (isFinal == 0) {
-                penalty = (curWorld2 * 15 + curLevel + 1) * 50;;
+                penalty = (curWorld2 * 15 + curLevel + 1) * 50;
             } else {
-                penalty = (curWorld2 * 2 + curLevel + 1) * 50;;
+                penalty = (curWorld2 * 2 + curLevel + 1) * 50;
             }
             if (penalty > 5000) {
                 penalty = 5000;
             }
-            sprintf(scoreText,S_FMTd_6,penalty);
-            DrawStaticUiSprite(13,64,176,0);
-            DrawTextFancyFont(scoreText,266,176);
-            sprintf(scoreText, S_FMTd_FMTd,oldScore,levelScoreSummaryScoreTicker - levelScore);
+            sprintf(scoreText, S_FMTd_6, penalty);
+            DrawStaticUiSprite(13, 64, 176, 0);
+            DrawTextFancyFont(scoreText, 266, 176);
+            sprintf(scoreText, S_FMTd_FMTd, oldScore, levelScoreSummaryScoreTicker - levelScore);
         }
         y1 = y2off | 0x8c;
-        DrawTextFancyFont(scoreText,266,y1);
-        DrawStaticUiSprite(4,64,y1,0);
-        DrawStaticUiSprite(5,96,y1,0);
-        DrawStaticUiSprite(3,64,y2off + 158,0);
-        DrawStaticUiSprite(5,107,y2off + 158,0);
-        sprintf(scoreText, S_FMTd_3,newScore);
-        DrawStaticUiSprite(0,54,193,12);
-        DrawTextFancyFont(scoreText,266,203);
-        DrawStaticUiSprite(2,64,203,0);
-        DrawStaticUiSprite(5,102,203,0);
+        DrawTextFancyFont(scoreText, 266, y1);
+        DrawStaticUiSprite(4, 64, y1, 0);
+        DrawStaticUiSprite(5, 96, y1, 0);
+        DrawStaticUiSprite(3, 64, y2off + 158, 0);
+        DrawStaticUiSprite(5, 107, y2off + 158, 0);
+        sprintf(scoreText, S_FMTd_3, newScore);
+        DrawStaticUiSprite(0, 54, 193, 12);
+        DrawTextFancyFont(scoreText, 266, 203);
+        DrawStaticUiSprite(2, 64, 203, 0);
+        DrawStaticUiSprite(5, 102, 203, 0);
         if (controllerButtons & PAD_CROSS) {
             FullyFinishLevelEndScreenFades();
             if (levelScoreSummaryScoreTicker > 0) {
@@ -213,9 +213,9 @@ void DrawLevelScoreSummary(void) {
                 controllerButtons = GetControllerButtons((copycatModeStartingPlayer + 1) % 2);
             }
         }
-        DrawStaticUiSprite(7,90,176,0);
-        DrawStaticUiSprite(i + 8,144,177,0);
-        DrawStaticUiSprite(6,162,176,0);
+        DrawStaticUiSprite(7, 90, 176, 0);
+        DrawStaticUiSprite(i + 8, 144, 177, 0);
+        DrawStaticUiSprite(6, 162, 176, 0);
         if (TestButton(PAD_CROSS)) {
             levelScoreSummaryConfirmed = 1;
             if (curLevel == 0 && (copycatPlayerScores[0] > 5 || copycatPlayerScores[1] > 5)) {
@@ -274,10 +274,10 @@ void DrawLevelScoreSummary(void) {
             DrawStaticUiSprite(1,96,158,0);
             DrawTextFancyFont(buf,254,176);
             if (levelEndReason > 0) {
-                DrawStaticUiSprite(3,64,176,0);
-                DrawStaticUiSprite(1,107,176,0);
+                DrawStaticUiSprite(3, 64, 176, 0);
+                DrawStaticUiSprite(1, 107, 176, 0);
             } else {
-                DrawStaticUiSprite(13,64,176,0);
+                DrawStaticUiSprite(13, 64, 176, 0);
             }
             DrawStaticUiSprite(0,54,193,12);
             DrawStaticUiSprite(2,64,203,0);
@@ -290,53 +290,53 @@ void DrawLevelScoreSummary(void) {
                     for (i = 0; i < 2; i++) {
                         if (latestPlayerToFinish == i || levelHasBeenCompletedByPlayer[i] == 1) {
                             if (i == latestPlayerToFinish) {
-                                FormatTime(newScore - timeSecs,buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,158);
-                                FormatTime(timeSecs,buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,176);
-                                FormatTime(newScore,buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,0xcb);
+                                FormatTime(newScore - timeSecs, buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 158);
+                                FormatTime(timeSecs, buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 176);
+                                FormatTime(newScore, buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0xcb);
                             } else {
                                 iVar2 = levelPlayTime[i] / 50;
                                 if (levelPlayTime[i] < 0) {
                                     iVar2 = iVar2 + -1;
                                 }
-                                FormatTime(totalPlayTime[i] - iVar2,buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,0x9e);
-                                FormatTime(iVar2,buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,0xb0);
-                                FormatTime(totalPlayTime[i],buf,1);
-                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i,0xcb);
+                                FormatTime(totalPlayTime[i] - iVar2, buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0x9e);
+                                FormatTime(iVar2, buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0xb0);
+                                FormatTime(totalPlayTime[i], buf, 1);
+                                DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0xcb);
                             }
                         } else {
-                            FormatTime(totalPlayTime[i],buf,1);
-                            DrawTextFancyFont(buf, 0xc1 + 0x53 * i,158);
-                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i,176);
-                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i,0xcb);
+                            FormatTime(totalPlayTime[i], buf, 1);
+                            DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 158);
+                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i, 176);
+                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i, 0xcb);
                         }
                     }
-                    DrawStaticUiSprite(14,134,140,0);
-                    DrawTextFancyFont(S_1,201,140);
-                    DrawStaticUiSprite(14,217,140,0);
-                    DrawTextFancyFont(S_2,284,140);
-                    DrawStaticUiSprite(4,42,158,0);
-                    DrawStaticUiSprite(1,72,158,0);
-                    DrawStaticUiSprite(3,42,176,0);
-                    DrawStaticUiSprite(1,85,176,0);
-                    DrawStaticUiSprite(0,30,193,15);
-                    DrawStaticUiSprite(2,42,203,0);
-                    DrawStaticUiSprite(1,80,203,0);
+                    DrawStaticUiSprite(14, 134, 140, 0);
+                    DrawTextFancyFont(S_1, 201, 140);
+                    DrawStaticUiSprite(14, 217, 140, 0);
+                    DrawTextFancyFont(S_2, 284, 140);
+                    DrawStaticUiSprite(4, 42, 158, 0);
+                    DrawStaticUiSprite(1, 72, 158, 0);
+                    DrawStaticUiSprite(3, 42, 176, 0);
+                    DrawStaticUiSprite(1, 85, 176, 0);
+                    DrawStaticUiSprite(0, 30, 193, 15);
+                    DrawStaticUiSprite(2, 42, 203, 0);
+                    DrawStaticUiSprite(1, 80, 203, 0);
                 } else {
                     for (i = 0; i < 2; i++) {
-                        DrawStaticUiSprite(0xe, 0x49 + i * 0x67,0xa0,0);
-                        sprintf(scoreText,S_FMTd_4,i);
+                        DrawStaticUiSprite(0xe, 0x49 + i * 0x67, 0xa0, 0);
+                        sprintf(scoreText, S_FMTd_4, i);
                         if (i == 0) {
-                            DrawTextFancyFont(S_1,0x8c,0xa0);
+                            DrawTextFancyFont(S_1, 0x8c, 0xa0);
                         } else {
-                            DrawTextFancyFont(S_2,0x8c + i * 0x67,0xa0);
+                            DrawTextFancyFont(S_2, 0x8c + i * 0x67, 0xa0);
                         }
-                        FormatTime(totalPlayTime[i],buf,1);
-                        DrawTextFancyFont(buf,0x84 + 0x67 * i,0xba);
+                        FormatTime(totalPlayTime[i], buf, 1);
+                        DrawTextFancyFont(buf, 0x84 + 0x67 * i, 0xba);
                     }
                 }
             }
@@ -344,15 +344,15 @@ void DrawLevelScoreSummary(void) {
         if (levelScoreSummaryScoreTicker == 0) {
             if (numTimeTrialPlayers == 1 || (numTimeTrialPlayers == 2 && curLevel == 14 && (levelHasBeenCompletedByPlayer[0] == 1 || levelHasBeenCompletedByPlayer[1] == 1))) {
                 if (levelEndReason > 0) {
-                    DrawStaticUiSprite(6,124,225,0);
+                    DrawStaticUiSprite(6, 124, 225, 0);
                 } else {
-                    DrawStaticUiSprite(6,124,176,0);
+                    DrawStaticUiSprite(6, 124, 176, 0);
                 }
             } else {
                 if (GetControllerStatus(latestPlayerToFinish) != 0) {
                     controllerButtons = GetControllerButtons(latestPlayerToFinish);
                 }
-                DrawStaticUiSprite(6,124,225,0);
+                DrawStaticUiSprite(6, 124, 225, 0);
             }
         }
         if ((controllerButtons & PAD_CROSS) != 0) {
