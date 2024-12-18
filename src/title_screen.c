@@ -1,12 +1,12 @@
 #include "common.h"
 
-int drawCopyright;
-
 extern TSprite copyrightSprite[2];
 extern PrimList primLists[2];
 extern int sunIntensityOnScreen;
 extern TSprite titleSprite[2];
 extern int whichDrawDispEnv;
+
+int drawCopyright;
 
 void DrawTitleAndCopyrightSprites(void) {
     int color;
