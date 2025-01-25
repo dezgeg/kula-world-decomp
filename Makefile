@@ -2,6 +2,12 @@
 .SECONDARY: # Don't delete intermediates
 SHELL := bash -e -o pipefail
 
+ifeq (, $(shell which mipsel-linux-as 2>/dev/null))
+CROSS := mipsel-linux-gnu
+else
+CROSS := mipsel-linux
+endif
+
 C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)
 S_FILES := $(wildcard asm/*.s) $(wildcard asm/*/*.s) $(wildcard asm/data/*/*.s)
 O_FILES := $(patsubst %.c,build/%.o,$(C_FILES)) $(patsubst %.s,build/%.o,$(S_FILES))
@@ -22,10 +28,10 @@ build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
 	source venv/bin/activate && splat split kula_world.yaml
 
 build/SCES_010.00: build/main.elf
-	mipsel-linux-gnu-objcopy -O binary $< $@
+	$(CROSS)-objcopy -O binary $< $@
 
 build/main.elf: $(O_FILES)
-	mipsel-linux-gnu-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -T hacks.txt -Map build/symbols.map
+	$(CROSS)-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -T hacks.txt -Map build/symbols.map
 
 build/%.i: %.c psyq build/subdirs
 	psyq/cpppsx -isystem psyq/INCLUDE/ -I include/ -undef -D__GNUC__=2 -D__OPTIMIZE__ -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C $< -o $@
@@ -34,11 +40,11 @@ build/%.s: build/%.i psyq build/subdirs
 	psyq/cc1psx -G128 -w -O3 -quiet $< -o $@
 
 build/%.o: build/%.s build/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=mipsel-linux-gnu-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iinclude/ -o $@ < $<
+	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iinclude/ -o $@ < $<
 
 # TODO: figure out how to avoid this duplicate rule
 build/%.o: %.s build/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=mipsel-linux-gnu-as --no-pad-sections --use-comm-section --use-comm-for-lcomm -Iinclude/ -o $@ < $<
+	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm -Iinclude/ -o $@ < $<
 
 psyq:
 	mkdir -p psyq
