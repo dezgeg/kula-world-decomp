@@ -37,7 +37,7 @@ build/%.i: %.c psyq build/subdirs
 	psyq/cpppsx -isystem psyq/INCLUDE/ -I include/ -undef -D__GNUC__=2 -D__OPTIMIZE__ -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C $< -o $@
 
 build/%.s: build/%.i psyq build/subdirs
-	psyq/cc1psx -G128 -w -O3 -quiet $< -o $@
+	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $< -o $@
 
 build/%.o: build/%.s build/subdirs
 	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iinclude/ -o $@ < $<
