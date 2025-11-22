@@ -1,7 +1,8 @@
-__pycache__/
 asm/
 build/
 psyq/
+__pycache__/
+SCES_010.00
 src/libapi/
 src/libc2/
 src/libcard/
