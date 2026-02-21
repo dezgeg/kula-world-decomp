@@ -1,24 +1,5 @@
 #include "common.h"
 
-typedef struct Quad {
-    uint flags;
-    short otagIndex;
-    byte textureRotation;
-    byte pad;
-    void* metadata;
-    uint color;
-    int unk;
-    int rgb0;
-    int rgb1;
-    int rgb2;
-    int xy0;
-    int xy1;
-    int xy2;
-    int xy3;
-    int z01;
-    int z23;
-} Quad;
-
 void DirFunc0(Quad* quad, int width, int x, int y, int z, int textureRotation) {
     x -= width / 2;
     y -= width / 2;
