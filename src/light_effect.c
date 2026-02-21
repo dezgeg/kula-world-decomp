@@ -1,24 +1,5 @@
 #include "common.h"
 
-typedef struct Quad {
-    uint flags;
-    short otagIndex;
-    byte textureRotation;
-    byte pad;
-    void* metadata;
-    uint color;
-    int unk;
-    int rgb0;
-    int rgb1;
-    int rgb2;
-    int xy0;
-    int xy1;
-    int xy2;
-    int xy3;
-    int z01;
-    int z23;
-} Quad;
-
 int AddLightEffectToCube(int x, int y, int z, int param_4, int param_5, int param_6, int param_7, int param_8);
 
 typedef struct LightEffect {

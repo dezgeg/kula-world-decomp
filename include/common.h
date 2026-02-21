@@ -137,6 +137,81 @@ typedef struct Music {
     short sectors;
 } Music;
 
+typedef struct Quad {
+    uint flags;
+    short otagIndex;
+    byte textureRotation;
+    byte pad;
+    void* metadata;
+    uint color;
+    int unk;
+    int rgb0;
+    int rgb1;
+    int rgb2;
+    int xy0;
+    int xy1;
+    int xy2;
+    int xy3;
+    int z01;
+    int z23;
+    byte reserved[104];
+} Quad;
+
+typedef struct TextureChainEntry {
+    Quad** quadPtr;
+    void* anim;
+} TextureChainEntry;
+
+typedef struct AnimatedTextureChain {
+    void* endPtr;
+    TextureChainEntry* entries;
+    int numFrames1;
+    int numFrames2;
+    void* ptr1;
+    void* ptr2;
+    void* ptr3;
+    void* ptr4;
+    int initToAlwaysZero9;
+    int initToAlwaysZero10;
+} AnimatedTextureChain;
+
+typedef struct Enemy {
+    SVECTOR dir;
+    SVECTOR field1_0x8;
+    SVECTOR normalVec;
+    SVECTOR pos;
+    SVECTOR initPos;
+    int enemyType;
+    byte pad_2c[12];
+    SVECTOR rotationVec;
+    byte pad_40[44];
+    MATRIX matrix;
+    MATRIX matrix2;
+    short state;
+    short timer;
+    short field_b0;
+    byte pad_b2[2];
+} Enemy;
+
+typedef struct MovingPlatformEntity {
+    short tag;
+    short movementDirection;
+    short dir;
+    short unk6;
+    short startX, startY, startZ;
+    short endX, endY, endZ;
+    byte pad_14[12];
+    ushort flags;
+    short length;
+    short velocity;
+    short counter;
+    short cubeStyle;
+    short velX, velY, velZ;
+    byte pad_30[190];
+    short posX, posY, posZ;
+    byte pad_f4[12];
+} MovingPlatformEntity;
+
 typedef struct Player {
     int howMoving0;
     SVECTOR facingDirBeforeStartingTurning;
