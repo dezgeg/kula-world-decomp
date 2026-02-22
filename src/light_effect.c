@@ -14,7 +14,7 @@ extern int cubeStates[16 * 256];
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
-int AddLightEffect(int x,int y,int z,int whichSide) {
+int AddLightEffect(int x, int y, int z, int whichSide) {
     int i;
 
     for (i = 0; i < 32; i++) {

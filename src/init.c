@@ -50,6 +50,6 @@ void InitStuff(void)
     SetupDisplay(0, 0, 0, 0, 0, 0);
     FntLoad(576, 256);
     SetDumpFnt(FntOpen(16, 8, displayWidth + -0x10, displayHeight + -8, 0,
-                        (displayWidth / 8 - 2) * (displayHeight / 8 - 1)));
+                       (displayWidth / 8 - 2) * (displayHeight / 8 - 1)));
     return;
 }

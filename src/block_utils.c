@@ -4,7 +4,7 @@ extern short* entityData;
 extern short* levelData;
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
-#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34  + (y) * 34  + (z)]
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34 + (y) * 34 + (z)]
 
 int GetFaceTypeOfBlockType(int blockType) {
     if (blockType >= 5) {
@@ -13,7 +13,7 @@ int GetFaceTypeOfBlockType(int blockType) {
     return blockType;
 }
 
-int GetFaceTypeAtRelativeToDir(int x,int y,int z,int dir) {
+int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dir) {
     int type;
     switch(dir) {
     case 0:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x,     y, z - 1     )); // Z-

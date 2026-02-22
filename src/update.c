@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern TgiFile * tgi;
+extern TgiFile* tgi;
 extern int turningMotionBlurEnabled;
 extern int turningMotionBlurPhase;
 extern int turningMotionBlurTable[70];
@@ -28,7 +28,7 @@ void EnableTurningMotionBlur(void) {
 
 void ProcessTurningMotionBlur(void) {
     int i;
-    
+
     if (turningMotionBlurEnabled != 0) {
         if (turningMotionBlurEnabled == 1) {
             turningMotionBlurPhase++;
@@ -42,7 +42,7 @@ void ProcessTurningMotionBlur(void) {
                 turningMotionBlurEnabled = 0;
             }
         }
-        
+
         for (i = 0; i < 7; i++) {
             tgi->lodDistance[i] = turningMotionBlurTable[turningMotionBlurPhase * 7 + i];
         }

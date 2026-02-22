@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern short *ggiPart2DepthCueingLookup;
+extern short* ggiPart2DepthCueingLookup;
 
 INCLUDE_ASM("asm/nonmatchings/render1", RenderBackground);
 
@@ -23,7 +23,7 @@ extern int cameraIndex;
 extern DR_AREA drawAreas[2][1];
 extern DR_OFFSET drawOffsets[2][1];
 extern void* otag[2][1][1026];
-extern TgiFile * tgi;
+extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 
 void AddDrChangePrims(void) {

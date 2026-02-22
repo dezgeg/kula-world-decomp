@@ -10,7 +10,6 @@ INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", CoordHash);
 
-
 int GetRandomTextureRotation(void) {
     int ret;
 

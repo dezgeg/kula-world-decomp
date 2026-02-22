@@ -52,7 +52,7 @@ void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int co
     }
 }
 
-void DrawTextCrappyFont(char *str) {
+void DrawTextCrappyFont(char* str) {
     int i;
     int j;
     int width;
@@ -80,7 +80,7 @@ void DrawTextCrappyFont(char *str) {
                 textPosXEnd = textPosXStart - width;
             }
 
-            for (j = lineStartIndex; str[j] != '\n' && str[j] ;j++) {
+            for (j = lineStartIndex; str[j] != '\n' && str[j]; j++) {
                 if (fontSprites[str[j] - 0x20].sprt.h != 0 && str[j] - 0x20 >= 0) {
                     if (textCharIdx + 1 >= 400) {
                         return;

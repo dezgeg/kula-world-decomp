@@ -49,7 +49,7 @@ extern int INT_ARRAY_000a2cd8[7];
 extern int LOD_THRESHOLDS[9];
 extern int turningMotionBlurTable[9 * 7];
 
-void* ParseTGI(TgiFile *tgiBuf) {
+void* ParseTGI(TgiFile* tgiBuf) {
     int i;
     int j;
     short* p;
@@ -89,20 +89,20 @@ void* ParseTGI(TgiFile *tgiBuf) {
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 1; j++) {
-            SetDrawTPage(&drTpages1[i][j],0,1,GetTPage(0,0,0,0));
-            SetDrawTPage(&drTpages2[i][j],0,1,GetTPage(0,0,0,0));
+            SetDrawTPage(&drTpages1[i][j], 0, 1, GetTPage(0, 0, 0, 0));
+            SetDrawTPage(&drTpages2[i][j], 0, 1, GetTPage(0, 0, 0, 0));
         }
-        SetDrawTPage(&hudDrTpages[i],0,0,GetTPage(0,0,0,0));
+        SetDrawTPage(&hudDrTpages[i], 0, 0, GetTPage(0, 0, 0, 0));
     }
     return tgiPart9 + 0x3f00 / 2;
 }
 
 void InitCubeTextureMetadata(void) {
-    short *pPart6;
+    short* pPart6;
     int i;
     int j;
     int k;
-    short *p;
+    short* p;
     int p0;
     short* de;
 
@@ -126,7 +126,7 @@ void InitCubeTextureMetadata(void) {
                 *de++ = GetTPage(1, 0, tx, ty);
                 *de++ = 0;
                 pPart6 += 5;
-                for (k = 0; k < 3; pPart6 += 5,k++) {
+                for (k = 0; k < 3; pPart6 += 5, k++) {
                     *(int*)de = &tgiPart0[pPart6[i] * tgi->unk108];
                     de += 2;
                     tx = pPart6[3];
@@ -152,7 +152,7 @@ void InitCubeTextureMetadata(void) {
     }
 }
 
-void GetHighscoreCubeStyle(ushort *pTpage,ushort *pClut,byte *pU,byte *pV,int *pSemitrans) {
+void GetHighscoreCubeStyle(ushort* pTpage, ushort* pClut, byte* pU, byte* pV, int* pSemitrans) {
     int variation;
     int texture;
     CubeTextureMetadata* md;
@@ -182,7 +182,7 @@ void GetHighscoreCubeStyle(ushort *pTpage,ushort *pClut,byte *pU,byte *pV,int *p
     *pV = md->entries[0].uv.u8.v;
 }
 
-void LoadImagesFromTgiPart9(short *p) {
+void LoadImagesFromTgiPart9(short* p) {
     int i;
     int w;
     int h;
@@ -195,7 +195,7 @@ void LoadImagesFromTgiPart9(short *p) {
         rect.w = w;
         h = *p++;
         rect.h = h;
-        LoadImage(&rect,p);
+        LoadImage(&rect, p);
         DrawSync(0);
         p += w * h;
     }
@@ -203,7 +203,7 @@ void LoadImagesFromTgiPart9(short *p) {
     rect.y = *p++;
     rect.w = *p++;
     rect.h = *p++;
-    LoadImage(&rect,p);
+    LoadImage(&rect, p);
     DrawSync(0);
 }
 

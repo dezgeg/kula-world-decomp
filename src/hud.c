@@ -113,35 +113,35 @@ void DrawTimeAttackWidgets(void) {
     if (levelPlayTime[twoPlayerWhichPlayer] < 0) {
         curPlayerTimer--;
     }
-    DrawTimeAttackTimer(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,totalPlayTime[0],0);
+    DrawTimeAttackTimer(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, totalPlayTime[0], 0);
     if (numTimeTrialPlayers == 2) {
-        DrawTimeAttackTimer(&timeAttackPlayer2TotalPlaytimeDigitSprites,2,totalPlayTime[1],0);
+        DrawTimeAttackTimer(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, totalPlayTime[1], 0);
         if (twoPlayerWhichPlayer == 0) {
-            DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites,1,curPlayerTimer,0);
+            DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
             curPlayerTimer = levelPlayTime[1] / 50;
             if (levelPlayTime[1] < 0) {
                 curPlayerTimer--;
             }
             if (levelHasBeenCompletedByPlayer[1] == 1) {
-                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites,1,curPlayerTimer,0);
+                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, curPlayerTimer,
+                                    0);
             } else {
-                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites,1,0,1);
+                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0, 1);
             }
         } else {
-            DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites,1,curPlayerTimer,0);
+            DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
             curPlayerTimer = levelPlayTime[0] / 50;
             if (levelPlayTime[0] < 0) {
                 curPlayerTimer--;
             }
             if (levelHasBeenCompletedByPlayer[0] != 1) {
-                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0,1);
+                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0, 1);
             } else {
                 DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites,1,curPlayerTimer,0);
             }
         }
-    }
-    else {
-        DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites,1,curPlayerTimer,0);
+    } else {
+        DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
     }
 }
 
@@ -254,7 +254,7 @@ void DrawHourglassAndTimer(void) {
     addPrim(&primLists[whichDrawDispEnv].gui1, &hourglassSprites[whichDrawDispEnv][0]);
 }
 
-void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
+void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value) {
     int i;
     int smallestDrawnDigitIndex;
     int digit;
@@ -284,8 +284,8 @@ void DrawInt(DigitSprites *ds,int style,int numDigits,int max,int value) {
             }
             shouldDraw = 1;
             setUV0(&ds->sprites[whichDrawDispEnv][i].sprt,
-                textures[firstGuiTexture + tex].u + digit * digitWidth,
-                textures[firstGuiTexture + tex].v);
+                   textures[firstGuiTexture + tex].u + digit * digitWidth,
+                   textures[firstGuiTexture + tex].v);
             value -= digit * pow10;
         }
         pow10 = pow10 / 10;
@@ -310,10 +310,10 @@ void UpdateStaticHourglassClut(void) {
     div28 = amount / 28;
     mod28 = amount % 28;
     for (i = 0; i < div28; i++) {
-        hourglassClut[i*2] = HOURGLASS_ANIM_DATA[28][0];
-        hourglassClut[i*2 + 1] = HOURGLASS_ANIM_DATA[28][1];
-        hourglassClut[i*2 + 30] = HOURGLASS_ANIM_DATA[0][0];
-        hourglassClut[i*2 + 31] = HOURGLASS_ANIM_DATA[0][1];
+        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[28][0];
+        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[28][1];
+        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[0][0];
+        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[0][1];
     }
     i += 1;
     hourglassClut[div28 * 2] = HOURGLASS_ANIM_DATA[mod28][0];

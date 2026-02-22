@@ -18,10 +18,10 @@ extern short* levelData;
 extern short copycatMoves[1024];
 extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
-extern void *entityData;
+extern void* entityData;
 
-void HandlePauseModeRotationEffect(Player *player);
-int FUN_00033720(SVECTOR *vec, int itemdataOff, int param_3);
+void HandlePauseModeRotationEffect(Player* player);
+int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
 
 extern int inGetReadyScreen;
 extern int isPaused;
@@ -31,7 +31,7 @@ static SVECTOR SVECTOR_000a45d8;
 short pauseForStartPress;
 
 extern void ProcessEnemies(void);
-extern void CalcPlayerMatrixesAndDrawPlayer(Player * player);
+extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
 extern void CreateAllItemDispLists(void);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
@@ -40,18 +40,18 @@ INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
 
-int FUN_0003382c(Player *player) {
+int FUN_0003382c(Player* player) {
     int blockIndex;
     int scaledIndex;
 
     blockIndex = player->surroundingBlocks[1][1][1];
     scaledIndex = blockIndex - 5;
     DAT_000a43c4 = scaledIndex * 128;
-    if (DAT_000a43c4 < 0 || *(short *)(scaledIndex * 256 + (int)entityData) != 5) {
+    if (DAT_000a43c4 < 0 || *(short*)(scaledIndex * 256 + (int)entityData) != 5) {
         blockIndex = player->surroundingBlocks[2][1][1];
         scaledIndex = blockIndex - 5;
         DAT_000a43c4 = scaledIndex * 128;
-        if (DAT_000a43c4 < 0 || *(short *)(scaledIndex * 256 + (int)entityData) != 5) {
+        if (DAT_000a43c4 < 0 || *(short*)(scaledIndex * 256 + (int)entityData) != 5) {
             return 0;
         }
     }
@@ -147,7 +147,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", CalcWhatPlayerIsStandingOn);
 
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
-int GetBlockAt(SVECTOR *coord) {
+int GetBlockAt(SVECTOR* coord) {
     getBlockX = (coord->vx + 0x100) >> 9;
     getBlockY = (coord->vy + 0x100) >> 9;
     getBlockZ = (coord->vz + 0x100) >> 9;
@@ -198,7 +198,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleSpecialCubeTypes);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", SubtractLevelTimer);
 
-int IsPlayerInAir(Player *player) {
+int IsPlayerInAir(Player* player) {
     if (player->howMoving198 == FALLING ||
         ((uint)player->howMoving198 < ROLLING && player->jumpingOrViewportRotationTimer > 1)) {
         return 1;
@@ -206,7 +206,7 @@ int IsPlayerInAir(Player *player) {
     return 0;
 }
 
-int IsFallingOrJumping(Player *player) {
+int IsFallingOrJumping(Player* player) {
     if (player->howMoving198 == FALLING || (uint)player->howMoving198 < ROLLING) {
         return 1;
     }

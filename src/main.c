@@ -6,7 +6,7 @@
 extern int GetControllerButtons(int slot);
 extern int MainGameLoop(void);
 extern int ParseGGI(void* ggi); // hack
-extern uint ReadDataFile(int world, int filetype, void * buf);
+extern uint ReadDataFile(int world, int filetype, void* buf);
 extern void InitCopycatUiTextures(void);
 extern void InitFont(void);
 extern void InitHighscores(void);
@@ -28,7 +28,7 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void SndInitFromSfxFile(void * file, int length); // hack
 extern void SndMuteAllVoices(void);
 extern void SndMuteVoiceByTag(int tag);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SwitchFromBonusToNormalMusic(void);
 extern void VariousInit(void);
 extern void WriteToDevkit(int param_1);
@@ -306,7 +306,7 @@ void LevelCompletedOrDied(void) {
             totalPlayTime[twoPlayerWhichPlayer] += 4;
             if (levelHasBeenCompletedByPlayer[0] == 0 && levelHasBeenCompletedByPlayer[1] == 0)
                 twoPlayerWhichPlayer = (twoPlayerWhichPlayer + 1) % 2;
-            }
+        }
     } else {
         if (savedFruitsCollectedBitmask != fruitsCollectedBitmask) {
             numFruits++;
@@ -351,7 +351,7 @@ void LevelCompletedOrDied(void) {
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 15; j++) {
-            levelScores[i*15+j] = -1;
+            levelScores[i * 15 + j] = -1;
         }
     }
 }
@@ -371,8 +371,7 @@ void DecideNextLevel(void) {
             }
             levelAfterBonusLevel = curLevel;
             curLevel = 18;
-        }
-        else {
+        } else {
             curLevel++;
             if ((savedFruitsCollectedBitmask & 0x1f) == 0x1f) {
                 fruitsCollectedBitmask = 0;
@@ -481,7 +480,7 @@ void ReceiveBufFromSio(void) {
 
     int i;
 
-    SetupDisplay(1,128,0,0,0,0);
+    SetupDisplay(1, 128, 0, 0, 0, 0);
     FntFlush(-1);
     DrawSync(0);
     whichDrawDispEnv = 0;

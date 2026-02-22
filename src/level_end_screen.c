@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void LoadLevelEndReasonGfx(int unused);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern PrimList primLists[2];
 extern SVECTOR SVECTOR_000a2ab4;
@@ -48,9 +48,9 @@ void FullyFinishLevelEndScreenFades(void) {
 }
 
 void DrawBigGuiSprite(int param_1) {
-    TSprite *pTVar1;
-    TSprite *pTVar2;
-    PrimList *pPVar3;
+    TSprite* pTVar1;
+    TSprite* pTVar2;
+    PrimList* pPVar3;
 
     LoadLevelEndReasonGfx(0);
     if (param_1 == 2) {
@@ -82,7 +82,7 @@ void DrawBigGuiSprite(int param_1) {
         gameOverScreenFade = 0;
         if (gameOverScreenState == 2) {
             gameOverScreenState = 3;
-            SndPlaySfx(110,0,&SVECTOR_000a2ab4,8000);
+            SndPlaySfx(110, 0, &SVECTOR_000a2ab4, 8000);
         }
     }
     if (gameOverScreenFade > 0x80) {

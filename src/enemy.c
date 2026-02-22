@@ -11,7 +11,7 @@ SVECTOR SVECTOR_000a4838 = {0};
 
 static SVECTOR SVECTOR_000a48fc;
 
-extern int GetBlockAt(SVECTOR *coord);
+extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
 int FUN_000403ec(int blockType, int rotationIndex);
 
@@ -23,7 +23,7 @@ INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003d758);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003d8b8);
 
-void FUN_0003da18(Enemy *enemy) {
+void FUN_0003da18(Enemy* enemy) {
     enemy->dir.vx = -enemy->dir.vx;
     enemy->dir.vy = -enemy->dir.vy;
     enemy->dir.vz = -enemy->dir.vz;
@@ -32,7 +32,7 @@ void FUN_0003da18(Enemy *enemy) {
     enemy->field1_0x8.vz = -enemy->field1_0x8.vz;
 }
 
-int FUN_0003da64(Enemy *enemy) {
+int FUN_0003da64(Enemy* enemy) {
     int blockType;
     int rotationIndex;
     int res;
@@ -50,7 +50,7 @@ int FUN_0003da64(Enemy *enemy) {
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003db64);
 
-int FUN_0003dbe0(Enemy *e) {
+int FUN_0003dbe0(Enemy* e) {
     int blockType;
     int rotationIndex;
     int res;
@@ -66,7 +66,7 @@ int FUN_0003dbe0(Enemy *e) {
     return res == 1;
 }
 
-void FUN_0003dce0(Enemy *enemy) {
+void FUN_0003dce0(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
     enemy->dir.vx = -enemy->field1_0x8.vx;
     enemy->dir.vy = -enemy->field1_0x8.vy;
@@ -104,7 +104,7 @@ INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemy);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_000403ec);
 
-int FUN_00040490(SVECTOR *enemyPos, Enemy *enemy) {
+int FUN_00040490(SVECTOR* enemyPos, Enemy* enemy) {
     SVECTOR_000a48fc.vx = (enemyPos->vx + 0x100) & 0x1ff;
     SVECTOR_000a48fc.vy = (enemyPos->vy + 0x100) & 0x1ff;
     SVECTOR_000a48fc.vz = (enemyPos->vz + 0x100) & 0x1ff;

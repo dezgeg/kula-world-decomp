@@ -283,7 +283,7 @@ void LoadingScreen(void) {
         }
         DrawSync(0);
         levelEndReason = 0;
-        SetupDisplay(0,0,0,0,0,0);
+        SetupDisplay(0, 0, 0, 0, 0, 0);
         DrawBigGuiSprite(1);
         InitPsxButtonBackgroundSprites(1);
         DrawSync(0);

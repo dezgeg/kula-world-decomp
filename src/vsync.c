@@ -35,7 +35,7 @@ void LoadingScreenVSyncCallback(void) {
         ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
     }
     for (i = 0; i < numCameras; i++) {
-        DrawOTag(&otag[!whichDrawDispEnv][i][1024]-1);
+        DrawOTag(&otag[!whichDrawDispEnv][i][1024] - 1);
     }
 
     DrawBigGuiSprite(1);

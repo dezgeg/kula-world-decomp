@@ -87,17 +87,17 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
         SetDebugScreenshotFilenameSuffix(num);
     }
     DrawSync(0);
-    StoreImage(&screenshotRect, 0x600000);  // TODO: use symbol for this
+    StoreImage(&screenshotRect, 0x600000); // TODO: use symbol for this
     DrawSync(0);
     Noop2();
 
     file = debugFilenameBuf;
     fd = PCcreat(file, 0);
     if (fd == -1) {
-        FntPrint( "can not create file:\n%s\n", file);
+        FntPrint("can not create file:\n%s\n", file);
     } else {
         PCwrite(fd, screenshotTimHeader, 20);
-        PCwrite(fd, 0x600000, screenshotNumBytes);  // TODO: use symbol for this
+        PCwrite(fd, 0x600000, screenshotNumBytes); // TODO: use symbol for this
         if (PCclose(fd) < 0) {
             FntPrint("error closing file:\n%s\n", file);
         }
@@ -107,7 +107,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
 
 void SetDebugScreenshotFilenameSuffix(int num) {
     char* p = debugFilenameBuf;
-    int y = num;  // XXX: permuter mess
+    int y = num; // XXX: permuter mess
     while (*p) {
         p++;
     }
@@ -129,7 +129,7 @@ void ResetDevkitFileNumber(void) {
 }
 
 void InitReplaySaving(void) {
-    saveReplayWritePtr = (byte*)0x131014;  // saveReplayBuf
+    saveReplayWritePtr = (byte*)0x131014; // saveReplayBuf
     saveReplayRleButtonCount = 0;
     saveReplayCurrentButtonsShuffled = 0;
     saveReplayCurrentButtons = 0;
@@ -151,14 +151,14 @@ void RecordButtonsToDevkit(s32 arg0) {
     currentButtonsShuffled = saveReplayCurrentButtonsShuffled;
     currentButtons = saveReplayCurrentButtons;
 
-    *(s32*)0x131010 += 1;  // saveReplayLength++
+    *(s32*)0x131010 += 1; // saveReplayLength++
     origArg0 = arg0;
     arg0 <<= 16;
     if (arg0 >> 16 == currentButtons) {
         newCount = buttonCount + 1;
     } else {
-        if (*(s32*)0x131004 == 1) {  // saveReplayIsFirstSequence == 1
-            *(s32*)0x131004 = 0;     // saveReplayIsFirstSequence = 0
+        if (*(s32*)0x131004 == 1) { // saveReplayIsFirstSequence == 1
+            *(s32*)0x131004 = 0;    // saveReplayIsFirstSequence = 0
         } else {
             *writePtr++ = buttonCount;
             *writePtr++ = currentButtonsShuffled;
@@ -186,9 +186,9 @@ void WriteToDevkit(int param_1) {
     int count;
 
     if (param_1 == 0) {
-        sprintf(debugFilenameBuf,  "\\psx\\cube\\pad\\%d.pad", devkitFileNumber);
+        sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\%d.pad", devkitFileNumber);
     } else {
-        sprintf(debugFilenameBuf,  "\\psx\\cube\\pad\\rescue.pad");
+        sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\rescue.pad");
     }
 
     *(int*)0x131000 += 1; // devkitFileNumber++;

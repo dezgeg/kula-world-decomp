@@ -104,7 +104,7 @@ void DrawStaticUiSprite(short id, short x, short y, short count) {
     }
 }
 
-void DrawTextFancyFont(char *str,short x,short y) {
+void DrawTextFancyFont(char* str, short x, short y) {
     int startIdx;
     int endIdx;
     int finalX;

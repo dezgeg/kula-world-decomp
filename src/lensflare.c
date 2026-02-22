@@ -159,7 +159,6 @@ void DrawLensFlares(void) {
                 framebufferFetches[i].y = sinCosArr23[i].cos + lensFlareScreenY;
                 if ((sx + sinCosArr80[i].sin & 0x7fff) < screenOffsetX &&
                     (sy + sinCosArr80[i].cos & 0x7fff) < screenOffsetY) {
-
                     texel = framebufferFetches[i].texel;
                     if ((texel & 0x7c00) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][0] &&
                         (texel & 0x3e0) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][1] &&

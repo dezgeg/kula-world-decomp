@@ -25,7 +25,7 @@ extern int numCubesRemainingInLevel[5];
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
-int IsCubeVisited(int x,int y,int z) {
+int IsCubeVisited(int x, int y, int z) {
     if (CUBE_INDEX_AT(x, y, z) == -1) {
         return -1;
     }
@@ -41,7 +41,7 @@ int IsCubeSideVisited(int x, int y, int z, int dir) {
     return ((char*)&cubeStates[CUBE_INDEX_AT(x, y, z) * CS_SIZE + CS_SIDES_VISITED])[dir];
 }
 
-void SetCubeVisited(int x,int y,int z,int visitType) {
+void SetCubeVisited(int x, int y, int z, int visitType) {
     int cubeIndex;
     int prevVisitType;
     int i;
@@ -57,10 +57,10 @@ void SetCubeVisited(int x,int y,int z,int visitType) {
             numCubesRemainingInLevel[visitType]++;
             if (visitType != 0) {
                 levelScore += 50;
-                SndPlaySfx(116,0,&sndPos,5000);
+                SndPlaySfx(116, 0, &sndPos, 5000);
             }
             for (i = 0; i < 6; i++) {
-                SetCubeFaceVisited(x,y,z,i,visitType);
+                SetCubeFaceVisited(x, y, z, i, visitType);
             }
         }
     }

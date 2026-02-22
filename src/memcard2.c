@@ -44,7 +44,7 @@ static inline void ClearMemCardData() {
     uint i;
     char* p = &memCardData;
     for (i = 0; i < 8196; i++) {
-            (*p++) = 0;
+        (*p++) = 0;
     }
 }
 
@@ -196,13 +196,13 @@ int SaveMemCard(uint slot) {
     char buf[32];
 
     MemCardAccept(0);
-    MemCardSync(0,&mcCmd,&tempMcResult);
+    MemCardSync(0, &mcCmd, &tempMcResult);
     if (tempMcResult == 0) {
         memCardData.header.magic[0] = 'S';
         memCardData.header.magic[1] = 'C';
         memCardData.header.iconFlags = 0x11;
         memCardData.header.blockNumber = 1;
-        sprintf(buf,S_KULA_WORLD);
+        sprintf(buf, S_KULA_WORLD);
         for (i = 0; i < 32; i++) {
             memCardData.header.title[i] = Ascii2Sjis(buf[i]);
         }

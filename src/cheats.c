@@ -71,7 +71,7 @@ void HandleCheats(void) {
     int j;
     int k;
 
-    i = controllerButtons & ~prevControllerButtons;  // XXX: permuter mess
+    i = controllerButtons & ~prevControllerButtons; // XXX: permuter mess
     buts = i;
     if (buts != 0) {
         *buttonsPtr = buts;
