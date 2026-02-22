@@ -8,6 +8,8 @@ short landingSquishMagnitudeIncrement;
 short *initJumpTimerPtr;
 extern short *ggiPart5JumpAnimData;
 
+extern void JumpingOnMovingPlatform(Player *player);
+
 void ResetPlayerVars(Player *player) {
     short* anim = ggiPart5JumpAnimData;
     short vx = player->finePos.vx;
@@ -65,15 +67,39 @@ void ResetPlayerVars(Player *player) {
     player->matrix_274.m[0][1] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", SetVec184ToVec54);
+void SetVec184ToVec54(Player *player) {
+    player->svec_184.vx = player->finePos.vx + player->svec54.vx;
+    player->svec_184.vy = player->finePos.vy + player->svec54.vy;
+    player->svec_184.vz = player->finePos.vz + player->svec54.vz;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", StartMovementIfNeeded);
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", StartJumpingForward);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", StartRollingForward);
+void StartRollingForward(Player *player) {
+    if (player->surroundingBlocks[0][1][1] >= 0) {
+        if (IsRollingForwardBlocked(player) != 0 || player->subpixelPositionOnCube.vz < 256) {
+            player->howMoving0 = 2;
+            player->howMoving198 = ROLLING;
+            player->onGround = 0;
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", StartJumpingInplace);
+void StartJumpingInplace(Player *player) {
+    player->howMoving198 = JUMPING_INPLACE;
+    if (player->onMovingPlatform != 0) {
+        JumpingOnMovingPlatform(player);
+        player->jumpingInplaceOnTopOfMovingPlatform = 1;
+    }
+    player->jumpStartPos = player->finePos;
+    player->jumpdataPtr = initJumpTimerPtr;
+    player->jumpingOrViewportRotationTimer = *player->jumpdataPtr;
+    player->howMoving0 = 1;
+    player->onGround = 0;
+    player->jumpdataPtr += 4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", TurnRight);
 
