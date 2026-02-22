@@ -13,6 +13,7 @@ int getBlockResult;
 extern short* levelData;
 extern short copycatMoves[1024];
 extern short copycatNewOrCopyMoves;
+extern Player thePlayer;
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
@@ -46,7 +47,9 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandlePauseModeRotationEffect);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandlePlayerMovementStuff);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SetInvulnerable);
+void SetInvulnerable(void) {
+    thePlayer.invulnerabilityTimer = 3000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CreateItemsFromLevelData);
 

@@ -496,6 +496,7 @@ tgiPart6 = 0x000a4114; // size:4
 tgiPart7 = 0x000a4e48; // size:4
 tgiPart8 = 0x000a4f1c; // size:4
 tgiPart9 = 0x000a4118; // size:4
+thePlayer = 0x000b9bbc; // size:712
 timeAttackPlayer1CurLevelTimeDigitSprites = 0x000ad524; // size:560
 timeAttackPlayer1TotalPlaytimeDigitSprites = 0x000ad2f4; // size:560
 timeAttackPlayer2CurLevelTimeDigitSprites = 0x000ad984; // size:560
