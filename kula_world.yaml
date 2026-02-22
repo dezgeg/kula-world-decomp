@@ -118,18 +118,20 @@ segments:
       - [0x1343c, c, sprite_init] # 4 nonmatching
       - [0x1541c, c, prim]
       - [0x154a8, c, tgi] # 1 nonmatching
-      - [0x16094, c, nonmatched/skybox]
-      - [0x16ffc, c, nonmatched/level_init]
+      - [0x16094, c, skybox]
+      - [0x16ffc, c, level_init]
       - [0x198c4, c, dirfuncs]
       - [0x1a140, c, nonmatched/level_init2]
-      - [0x1a27c, c, nonmatched/render1]
-      - [0x1b334, c, nonmatched/update]
+      - [0x1a27c, c, render1]
+      - [0x1b334, c, update]
       - [0x1c2ec, c, nonmatched/render2]
       - [0x1d9ec, c, render3]
       - [0x1dbac, c, visited_cubes] # 2 nonmatching
       - [0x1dfcc, c, block_utils]
       - [0x1e420, c, light_effect]
-      - [0x1f330, c, nonmatched/code_1f330]
+      - [0x1f330, c, player_movement]
+      - [0x22818, c, level_update]
+      - [0x2b638, c, enemy]
       - [0x2fd44, c, vsync]
       - [0x2fee8, c, stack_hacks]
       - [0x2ffdc, c, main] # 1 nonmatching
