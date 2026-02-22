@@ -10,8 +10,3 @@ visited_cubes/SetCubeFaceVisited: https://decomp.me/scratch/FLqog
 visited_cubes/ProcessRecentlyVisitedCubes: https://decomp.me/scratch/X4b4u
 main/MainGameLoop: https://decomp.me/scratch/A0Tmn
 highscore/HighScoreUi: <none>
-
-Needs to be integrated:
-GetRotationIndexFromVector: https://decomp.me/scratch/rDkk6
-InitShadowSprites: https://decomp.me/scratch/XsZoX
-InitPlayerSpecularSprite: https://decomp.me/scratch/VCaQJ
