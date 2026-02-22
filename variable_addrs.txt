@@ -360,6 +360,7 @@ particlePolyTemplates = 0x000aaefc; // size:280
 particles = 0x000ab014; // size:5888
 perSfxVoiceAttrs = 0x000e2cb8; // size:2112
 perspMatrixes = 0x000a547c; // size:32
+playerFinePosMod512 = 0x000a4630; // size:8
 playingBonusMusic = 0x000a3638; // type:s16
 pmdCubes = 0x001fb8f0; // size:6760
 pmdCubesPtr = 0x000a5180; // size:4
