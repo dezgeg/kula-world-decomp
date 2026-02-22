@@ -1,5 +1,13 @@
 #include "common.h"
 
+int ballTextureIndex;
+int curController;
+short numCopycatMoves;
+short unusedNumCopycatRounds;
+
+extern short copycatMoves[1024];
+extern short copycatNewOrCopyMoves;
+
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
@@ -38,7 +46,19 @@ INCLUDE_ASM("asm/nonmatchings/level_update", CreateItemsFromLevelData);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", InitLasers);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", ResetCopycatMode);
+void ResetCopycatMode(int param_1) {
+    int i;
+
+    for (i = 0; i < 1024; i++) {
+        copycatMoves[i] = -1;
+    }
+
+    numCopycatMoves = 1;
+    curController = param_1;
+    ballTextureIndex = param_1;
+    unusedNumCopycatRounds = 0;
+    copycatNewOrCopyMoves = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", LevelInit);
 
