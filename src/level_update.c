@@ -133,8 +133,19 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleSpecialCubeTypes);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", SubtractLevelTimer);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", IsPlayerInAir);
+int IsPlayerInAir(Player *player) {
+    if (player->howMoving198 == FALLING ||
+        ((uint)player->howMoving198 < ROLLING && player->jumpingOrViewportRotationTimer > 1)) {
+        return 1;
+    }
+    return 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level_update", IsFallingOrJumping);
+int IsFallingOrJumping(Player *player) {
+    if (player->howMoving198 == FALLING || (uint)player->howMoving198 < ROLLING) {
+        return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", Unused_FUN_0003bdec);
