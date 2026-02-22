@@ -10,10 +10,14 @@ int getBlockY;
 int getBlockZ;
 int getBlockResult;
 
+short isPausedOrWaitingForRestart;
+
 extern short* levelData;
 extern short copycatMoves[1024];
 extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
+
+void HandlePauseModeRotationEffect(Player *player);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
@@ -75,7 +79,10 @@ INCLUDE_ASM("asm/nonmatchings/level_update", ProcessPlayer);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ProcessEnemiesRenderItemsAndCheckFellOff);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SetPausedOrWaitingForRestart);
+void SetPausedOrWaitingForRestart(void) {
+    isPausedOrWaitingForRestart = 1;
+    HandlePauseModeRotationEffect(&thePlayer);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 
