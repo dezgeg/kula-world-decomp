@@ -12,12 +12,16 @@ int getBlockResult;
 
 short isPausedOrWaitingForRestart;
 
+int DAT_000a43c4 = 0;
+
 extern short* levelData;
 extern short copycatMoves[1024];
 extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
+extern void *entityData;
 
 void HandlePauseModeRotationEffect(Player *player);
+int FUN_00033720(SVECTOR *vec, int itemdataOff, int param_3);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
@@ -25,7 +29,23 @@ INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", FUN_0003382c);
+int FUN_0003382c(Player *player) {
+    int blockIndex;
+    int scaledIndex;
+    
+    blockIndex = player->surroundingBlocks[1][1][1];
+    scaledIndex = blockIndex - 5;
+    DAT_000a43c4 = scaledIndex * 128;
+    if (DAT_000a43c4 < 0 || *(short *)(scaledIndex * 256 + (int)entityData) != 5) {
+        blockIndex = player->surroundingBlocks[2][1][1];
+        scaledIndex = blockIndex - 5;
+        DAT_000a43c4 = scaledIndex * 128;
+        if (DAT_000a43c4 < 0 || *(short *)(scaledIndex * 256 + (int)entityData) != 5) {
+            return 0;
+        }
+    }
+    return FUN_00033720(&player->finePos, DAT_000a43c4, 100);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
 
