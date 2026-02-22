@@ -57,7 +57,10 @@ segments:
     subalign: 4
     bss_size: 0xa3cb0
     subsegments:
-      - [0x00800, rodata, rodata_00800]
+      - [0x00800, rodata, hud]
+      - [0x00814, .rodata, level_init]
+      - [0x0082c, rodata, level_init_2]
+      - [0x00838, rodata, rodata_00838]
       - [0x008d4, .rodata, block_utils]
       - [0x0091c, .rodata, light_effect]
       - [0x00934, rodata, rodata_00934]
