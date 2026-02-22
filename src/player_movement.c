@@ -36,7 +36,17 @@ INCLUDE_ASM("asm/nonmatchings/player_movement", IsSubpixelZBelow257);
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", AutoCenterSubpixelPosition);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", AutoAlignJumpStartPos);
+void AutoAlignJumpStartPos(Player *player, int amount) {
+    if (player->subpixelPositionOnCube.vx < 0x100 - amount) {
+        player->jumpStartPos.vx += amount * player->rightVec.vx;
+        player->jumpStartPos.vy += amount * player->rightVec.vy;
+        player->jumpStartPos.vz += amount * player->rightVec.vz;
+    } else if (player->subpixelPositionOnCube.vx > 0x100 + amount) {
+        player->jumpStartPos.vx -= amount * player->rightVec.vx;
+        player->jumpStartPos.vy -= amount * player->rightVec.vy;
+        player->jumpStartPos.vz -= amount * player->rightVec.vz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", CalcPlayerMatrixesAndDrawPlayer);
 
