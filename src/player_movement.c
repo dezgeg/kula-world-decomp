@@ -1,6 +1,6 @@
 #include "common.h"
 
-short DAT_000a4374 = 0;
+short DAT_000a4374;
 short landingSquishDamping;
 short landingSquishFrameCounter;
 short landingSquishMagnitude;
@@ -8,8 +8,14 @@ short landingSquishMagnitudeIncrement;
 short *initJumpTimerPtr;
 extern short *ggiPart5JumpAnimData;
 
-extern void JumpingOnMovingPlatform(Player *player);
+extern int CheckForPlayerWallHit(Player * player);
+extern int CheckIfPlayerLanded(Player * player);
+extern int HandleMovingPlatforms(Player * player);
+extern void ClearA4374(Player *player);
 extern void EnableTurningMotionBlur(void);
+extern void FUN_00031288(Player * player);
+extern void JumpingOnMovingPlatform(Player *player);
+extern void MovePlayerForward(Player * player, int delta);
 
 void ResetPlayerVars(Player *player) {
     short* anim = ggiPart5JumpAnimData;
@@ -76,7 +82,25 @@ void SetVec184ToVec54(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", StartMovementIfNeeded);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", StartJumpingForward);
+void StartJumpingForward(Player *player) {
+    if (player->surroundingBlocks[0][1][1] >= 0) {
+        player->onGround = 0;
+        player->howMoving198 = JUMPING_FORWARD;
+        if (player->onMovingPlatform != 0) {
+            JumpingOnMovingPlatform(player);
+        }
+        player->jumpingInplaceOnTopOfMovingPlatform = 0;
+        player->jumpStartPos = player->finePos;
+
+        player->jumpdataPtr = initJumpTimerPtr;
+        player->jumpingOrViewportRotationTimer = initJumpTimerPtr[0];
+        player->howMoving0 = 3;
+        player->movementVelocity = 40;
+        player->rotX = 40;
+        player->jumpdataPtr += 4;
+        ClearA4374(player);
+    }
+}
 
 void StartRollingForward(Player *player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
@@ -140,7 +164,70 @@ INCLUDE_ASM("asm/nonmatchings/player_movement", ProcessMovement);
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", HandleViewportRotationStart);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", CheckPlayerJumpingStuff);
+void CheckPlayerJumpingStuff(Player *player) {
+    if (player->dying) {
+        return;
+    }
+    switch (player->howMoving198) {
+        case JUMPING_FORWARD:
+            if (player->jumpingOrViewportRotationTimer < 12) {
+                if (HandleMovingPlatforms(player)) {
+                    return;
+                }
+                if (CheckIfPlayerLanded(player)) {
+                    return;
+                }
+            }
+            if (player->jumpingOrViewportRotationTimer < 1) {
+                return;
+            }
+            if (CheckForPlayerWallHit(player)) {
+                if (player->jumpingOnMovingPlatform == 0) {
+                    return;
+                }
+                if (player->jumpingOrViewportRotationTimer < 12) {
+                    return;
+                }
+            }
+            if (player->jumpingOnMovingPlatform) {
+                return;
+            }
+            break;
+
+        case FALLING:
+            if (HandleMovingPlatforms(player)) {
+                return;
+            }
+            if (CheckIfPlayerLanded(player)) {
+                return;
+            }
+            if (player->subpixelPositionOnCube.vz > 410 && player->surroundingBlocks[1][2][1] > -1)
+            {
+                MovePlayerForward(player, 409);
+            }
+            if (player->subpixelPositionOnCube.vz > 101) {
+                return;
+            }
+            if (player->surroundingBlocks[1][0][1] < 0) {
+                return;
+            }
+            MovePlayerForward(player, 103);
+            return;
+
+        case JUMPING_INPLACE:
+            if (player->jumpingOrViewportRotationTimer < 12 && HandleMovingPlatforms(player) != 0) {
+                return;
+            }
+            if (player->jumpingOrViewportRotationTimer < 1) {
+                return;
+            }
+            break;
+
+        default:
+            return;
+    }
+    FUN_00031288(player);
+}
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", CheckForPlayerWallHit);
 
@@ -158,9 +245,12 @@ void SetLandingSquishVars(void) {
 }
 
 int IsRollingForwardBlocked(Player *player) {
-    if (player->surroundingBlocks[0][2][1] >= 0) return 1;
-    if (player->surroundingBlocks[0][1][0] >= 0) return player->faceTypePlayerStandingOn == 2;
-    if (player->surroundingBlocks[0][1][2] >= 0) return player->faceTypePlayerStandingOn == 2;
+    if (player->surroundingBlocks[0][2][1] >= 0)
+        return 1;
+    if (player->surroundingBlocks[0][1][0] >= 0)
+        return player->faceTypePlayerStandingOn == 2;
+    if (player->surroundingBlocks[0][1][2] >= 0)
+        return player->faceTypePlayerStandingOn == 2;
     return 1;
 }
 
@@ -192,15 +282,12 @@ void AutoAlignJumpStartPos(Player *player, int amount) {
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", CalcPlayerMatrixesAndDrawPlayer);
 
-void ClearA4374(void) {
+void ClearA4374(Player *player) {
     DAT_000a4374 = 0;
 }
 
 void SetBallShapeAndRotationWhenJumping(Player *player) {
-    int rot;
-
-    rot = player->rotX * -6;
-    RotMatrixX(rot, &player->matrix_254);
+    RotMatrixX(player->rotX * -6, &player->matrix_254);
 
     if (player->field_2bc > -750 && player->jumpingOrViewportRotationTimer > 12) {
         player->field_2bc += DAT_000a4374;

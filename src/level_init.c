@@ -1,12 +1,32 @@
 #include "common.h"
 
+extern uint Rand(int param_1);
+
+TgiFile* tgi;
+
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", CoordHash);
 
-INCLUDE_ASM("asm/nonmatchings/level_init", GetRandomTextureRotation);
+
+int GetRandomTextureRotation(void) {
+    int ret;
+
+    switch (tgi->randomTileRotation) {
+        case 0:
+            return 0;
+        case 1:
+            ret = Rand(2);
+            if (ret == 1) {
+                ret = 2;
+            }
+            return ret;
+        default:
+            return Rand(4);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ParseKeysAndSpecialLevelFromItemData);
 

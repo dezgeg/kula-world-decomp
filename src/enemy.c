@@ -9,6 +9,8 @@ SVECTOR tmpEnemyPos;
 SVECTOR SVECTOR_000a4830 = {0};
 SVECTOR SVECTOR_000a4838 = {0};
 
+static SVECTOR SVECTOR_000a48fc;
+
 extern int GetBlockAt(SVECTOR *coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
 int FUN_000403ec(int blockType, int rotationIndex);
@@ -102,4 +104,29 @@ INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemy);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_000403ec);
 
-INCLUDE_ASM("asm/nonmatchings/enemy", FUN_00040490);
+int FUN_00040490(SVECTOR *enemyPos, Enemy *enemy) {
+    SVECTOR_000a48fc.vx = (enemyPos->vx + 0x100) & 0x1ff;
+    SVECTOR_000a48fc.vy = (enemyPos->vy + 0x100) & 0x1ff;
+    SVECTOR_000a48fc.vz = (enemyPos->vz + 0x100) & 0x1ff;
+
+    if (enemy->dir.vx == 1) {
+        return SVECTOR_000a48fc.vx;
+    }
+    if (enemy->dir.vx == -1) {
+        return 0x200 - SVECTOR_000a48fc.vx;
+    }
+    if (enemy->dir.vy == 1) {
+        return SVECTOR_000a48fc.vy;
+    }
+    if (enemy->dir.vy == -1) {
+        return 0x200 - SVECTOR_000a48fc.vy;
+    }
+    if (enemy->dir.vz == 1) {
+        return SVECTOR_000a48fc.vz;
+    }
+    if (enemy->dir.vz == -1) {
+        return 0x200 - SVECTOR_000a48fc.vz;
+    }
+
+    return -10000;
+}

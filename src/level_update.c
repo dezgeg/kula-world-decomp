@@ -23,6 +23,17 @@ extern void *entityData;
 void HandlePauseModeRotationEffect(Player *player);
 int FUN_00033720(SVECTOR *vec, int itemdataOff, int param_3);
 
+extern int inGetReadyScreen;
+extern int isPaused;
+extern int levelEndReason;
+
+static SVECTOR SVECTOR_000a45d8;
+short pauseForStartPress;
+
+extern void ProcessEnemies(void);
+extern void CalcPlayerMatrixesAndDrawPlayer(Player * player);
+extern void CreateAllItemDispLists(void);
+
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
@@ -32,7 +43,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
 int FUN_0003382c(Player *player) {
     int blockIndex;
     int scaledIndex;
-    
+
     blockIndex = player->surroundingBlocks[1][1][1];
     scaledIndex = blockIndex - 5;
     DAT_000a43c4 = scaledIndex * 128;
@@ -102,7 +113,26 @@ INCLUDE_ASM("asm/nonmatchings/level_update", LevelInit);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ProcessPlayer);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", ProcessEnemiesRenderItemsAndCheckFellOff);
+void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
+    ProcessEnemies();
+    if (!isPaused && levelEndReason == 0 && !inGetReadyScreen) {
+        CalcPlayerMatrixesAndDrawPlayer(&thePlayer);
+    }
+    CreateAllItemDispLists();
+
+    SVECTOR_000a45d8.vx = (thePlayer.finePos.vx + (thePlayer.gravityDir.vx << 8) + 0x100) >> 9;
+    SVECTOR_000a45d8.vy = (thePlayer.finePos.vy + (thePlayer.gravityDir.vy << 8) + 0x100) >> 9;
+    SVECTOR_000a45d8.vz = (thePlayer.finePos.vz + (thePlayer.gravityDir.vz << 8) + 0x100) >> 9;
+
+    if (SVECTOR_000a45d8.vx < -1 || SVECTOR_000a45d8.vx > 35 || SVECTOR_000a45d8.vy < -1 || SVECTOR_000a45d8.vy > 35 || SVECTOR_000a45d8.vz < -1 || SVECTOR_000a45d8.vz > 35) {
+        levelEndReason = -3;
+    }
+
+    if (pauseForStartPress == 1 && levelEndReason == 0) {
+        pauseForStartPress = 0;
+        isPaused = 1;
+    }
+}
 
 void SetPausedOrWaitingForRestart(void) {
     isPausedOrWaitingForRestart = 1;
@@ -118,23 +148,15 @@ INCLUDE_ASM("asm/nonmatchings/level_update", CalcWhatPlayerIsStandingOn);
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
 int GetBlockAt(SVECTOR *coord) {
-    int x, y, z;
-    int res;
-    
-    x = (coord->vx + 0x100) >> 9;
-    y = (coord->vy + 0x100) >> 9;
-    z = (coord->vz + 0x100) >> 9;
-    
-    getBlockX = x;
-    getBlockY = y;
-    getBlockZ = z;
-    
-    if (x < 1 || y < 1 || z < 1 || x > 32 || y > 32 || z > 32) {
+    getBlockX = (coord->vx + 0x100) >> 9;
+    getBlockY = (coord->vy + 0x100) >> 9;
+    getBlockZ = (coord->vz + 0x100) >> 9;
+
+    if (getBlockX < 1 || getBlockY < 1 || getBlockZ < 1 || getBlockX > 32 || getBlockY > 32 || getBlockZ > 32) {
         return -1;
     } else {
-        res = CUBE_TYPE_AT(x, y, z);
-        getBlockResult = res;
-        return res;
+        getBlockResult = CUBE_TYPE_AT(getBlockX, getBlockY, getBlockZ);
+        return getBlockResult;
     }
 }
 
@@ -150,7 +172,8 @@ int GetRotationIndexFromVector(SVECTOR v) {
     if (v.vy == 1) return 2;
     if (v.vy == -1) return 3;
     if (v.vz == 1) return 5;
-    return -(v.vz != -1);
+    if (v.vz == -1) return 0;
+    return -1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level_update", GetVectorBasedOnTwoDirs);
