@@ -18,11 +18,6 @@ extern void JumpingOnMovingPlatform(Player *player);
 extern void MovePlayerForward(Player * player, int delta);
 
 void ResetPlayerVars(Player *player) {
-    short* anim = ggiPart5JumpAnimData;
-    short vx = player->finePos.vx;
-    short vy = player->finePos.vy;
-    short vz = player->finePos.vz;
-
     player->howMoving198 = NOT_MOVING;
     player->field119_0x1c8 = 0;
     player->viewpointRotationTimer = 0;
@@ -50,10 +45,10 @@ void ResetPlayerVars(Player *player) {
     player->matrix_274.m[0][0] = 0x1000;
 
     player->matrix_234.m[2][1] = 0;
-    initJumpTimerPtr = anim;
-    player->svec_184.vx = vx;
-    player->svec_184.vy = vy;
-    player->svec_184.vz = vz;
+    initJumpTimerPtr = ggiPart5JumpAnimData;
+    player->svec_184.vx = player->finePos.vx;
+    player->svec_184.vy = player->finePos.vy;
+    player->svec_184.vz = player->finePos.vz;
 
     player->matrix_254.m[2][1] = 0;
     player->matrix_274.m[2][1] = 0;
