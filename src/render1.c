@@ -1,12 +1,19 @@
 #include "common.h"
 
+extern short *ggiPart2DepthCueingLookup;
+
 INCLUDE_ASM("asm/nonmatchings/render1", RenderBackground);
 
 INCLUDE_ASM("asm/nonmatchings/render1", RenderEverythingElseAndProcessSomeStuff);
 
 INCLUDE_ASM("asm/nonmatchings/render1", CalculateBlockLighting);
 
-INCLUDE_ASM("asm/nonmatchings/render1", GetShortFromGgiPart2);
+int GetShortFromGgiPart2(int param_1) {
+    if (param_1 >= 4096) {
+        return 4096;
+    }
+    return ggiPart2DepthCueingLookup[param_1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/render1", RenderPlayerAndItems);
 

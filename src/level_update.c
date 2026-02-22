@@ -119,7 +119,14 @@ INCLUDE_ASM("asm/nonmatchings/level_update", MovePlayerForward);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", MovePlayerDownwards);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", GetRotationIndexFromVector);
+int GetRotationIndexFromVector(SVECTOR v) {
+    if (v.vx == 1) return 1;
+    if (v.vx == -1) return 4;
+    if (v.vy == 1) return 2;
+    if (v.vy == -1) return 3;
+    if (v.vz == 1) return 5;
+    return -(v.vz != -1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", GetVectorBasedOnTwoDirs);
 

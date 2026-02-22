@@ -1,5 +1,10 @@
 #include "common.h"
 
+int collI;
+int enemyPlayerDistSq;
+int numEnemies;
+extern Enemy enemies[];
+
 INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemies);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", UpdateEnemies);
@@ -18,7 +23,31 @@ INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003dbe0);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003dce0);
 
-INCLUDE_ASM("asm/nonmatchings/enemy", IsCollidingWithEnemy);
+int IsCollidingWithEnemy(SVECTOR pos) {
+    int dx, dy, dz;
+
+    collI = 0;
+    if (numEnemies > 0) {
+        do {
+            dx = (int)pos.vx - (int)enemies[collI].pos.vx;
+            dy = (int)pos.vy - (int)enemies[collI].pos.vy;
+            dz = (int)pos.vz - (int)enemies[collI].pos.vz;
+
+            enemyPlayerDistSq = dx * dx + dy * dy + dz * dz;
+
+            if (enemies[collI].enemyType == 53) {
+                if (enemyPlayerDistSq < 16200) {
+                    return 1;
+                }
+            } else if (enemyPlayerDistSq < 45000) {
+                return 1;
+            }
+            collI++;
+        } while (collI < numEnemies);
+    }
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/enemy", Noop4);
 
