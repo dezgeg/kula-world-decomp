@@ -1,3 +1,10 @@
+#!/usr/bin/env -S uv run
+# /// script
+# dependencies = [
+#   "pyyaml",
+# ]
+# ///
+
 import re
 import sys
 import yaml
