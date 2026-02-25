@@ -211,7 +211,7 @@ segments:
       - [0x506c0, c, libgte/msc02]
       - [0x50970, c, libgte/mtx_000]
       - [0x50a80, c, libgte/mtx_004]
-      - [0x50be0, c, libgte/mtx_005]
+      - [0x50be0, c, libgte/mtx_05]
       - [0x50c30, c, libgte/mtx_06]
       - [0x50c90, c, libgte/mtx_09]
       - [0x50cc0, c, libgte/mtx_12]
