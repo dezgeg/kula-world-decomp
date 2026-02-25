@@ -212,7 +212,7 @@ segments:
       - [0x50970, c, libgte/mtx_000]
       - [0x50a80, c, libgte/mtx_004]
       - [0x50be0, c, libgte/mtx_005]
-      - [0x50c30, c, libgte/mtx_006]
+      - [0x50c30, c, libgte/mtx_06]
       - [0x50c90, c, libgte/mtx_09]
       - [0x50cc0, c, libgte/mtx_12]
       - [0x50ce0, c, libgte/reg11]
@@ -381,7 +381,57 @@ segments:
       - [0x8960c, .data, fmv]
       - [0x8962c, data, nonmatched/data_8962c]
       - [0x8979c, .data, zlib_infblock]
-      - [0x897e8, data, nonmatched/data_897e8]
+      - [0x897e8, data, libpress/libpress]
+      - [0x89938, data, libpress/vlc_c]
+      - [0x89968, data, libpress/build]
+      - [0x8a778, data, libgpu/font]
+      - [0x8b308, data, libgpu/sys]
+      - [0x8b4a8, data, libgpu/ktrans]
+      - [0x8b618, data, libgte/sincos]
+      - [0x8be28, data, libgte/msc00]
+      - [0x8be38, data, libgte/sqrtbl]
+      - [0x8bfb8, data, libgte/msc02]
+      - [0x8c158, data, libgte/cstbl]
+      - [0x90158, data, libcd/cdrom]
+      - [0x90168, data, libcd/sys]
+      - [0x901e8, data, libcd/bios]
+      - [0x90508, data, libcd/iso9660]
+      - [0x90518, data, libcd/cdread]
+      - [0x90558, data, libcd/c_002]
+      - [0x90568, data, libcd/c_003]
+      - [0x90578, data, libcd/c_004]
+      - [0x90588, data, libcd/c_005]
+      - [0x90598, data, libcd/c_007]
+      - [0x905a8, data, libcd/c_008]
+      - [0x905b8, data, libcd/c_009]
+      - [0x905c8, data, libcd/c_010]
+      - [0x905d8, data, libcd/c_011]
+      - [0x90628, data, libetc/vsync]
+      - [0x90648, data, libetc/intr]
+      - [0x91748, data, libetc/intr_vb]
+      - [0x91778, data, libetc/intr_dma]
+      - [0x917a8, data, libetc/vmode]
+      - [0x917b8, data, libpad/padmain]
+      - [0x91838, data, libpad/padif]
+      - [0x91858, data, libpad/padportd]
+      - [0x91868, data, libsn/snmain]
+      - [0x91894, data, libspu/s_ini]
+      - [0x91914, data, libspu/spu]
+      - [0x91974, data, libspu/s_m]
+      - [0x91984, data, libspu/zerobuf]
+      - [0x91d84, data, libspu/s_rmp0]
+      - [0x91db4, data, libspu/s_rmp2]
+      - [0x92064, data, libmath/ferr]
+      - [0x92074, data, libc2/ctype]
+      - [0x92104, data, libc2/putchar]
+      - [0x92114, data, libc2/sprintf]
+      - [0x92124, data, libc2/puts]
+      - [0x92134, data, libsio/siohandl]
+      - [0x92194, data, libsio/sio]
+      - [0x921a4, data, libmcrd/libmcrd]
+      - [0x921bc, data, libmcrd/userfunc]
+      - [0x921c0, data, libcard/init]
+      - [0x921d0, data, libapi/pad]
       - [0x921e0, sdata, nonmatched/sdata_921e0]
       - [0x92388, .sdata, background_cubes]
       - [0x923d0, .sdata, psx_button_background]
@@ -406,4 +456,34 @@ segments:
       - [0x933c0, .sdata, zlib_zutil]
       - [0x93474, .sdata, zlib_calloc]
       - [0x934b0, sdata, nonmatched/sdata_934b0]
+      - { type: bss, vram: 0xa5a1c, name: nonmatched/bss_a5a1c }
+      - { type: bss, vram: 0xbd628, name: libgpu/font }
+      - { type: bss, vram: 0xc1a38, name: libgpu/sys }
+      - { type: bss, vram: 0xc3388, name: libgte/patchgte }
+      - { type: bss, vram: 0xc3398, name: libcd/cdrom }
+      - { type: bss, vram: 0xc33e0, name: libcd/bios }
+      - { type: bss, vram: 0xc3414, name: libcd/iso9660 }
+      - { type: bss, vram: 0xc5814, name: libds/dscb }
+      - { type: bss, vram: 0xc5820, name: libcd/c_004 }
+      - { type: bss, vram: 0xc5830, name: libcd/c_005 }
+      - { type: bss, vram: 0xc5838, name: libcd/c_011 }
+      - { type: bss, vram: 0xc5848, name: libpad/padmain }
+      - { type: bss, vram: 0xc5868, name: libpad/padcmd }
+      - { type: bss, vram: 0xc5878, name: libpad/padportd }
+      - { type: bss, vram: 0xc5ae8, name: libpad/waitrc2 }
+      - { type: bss, vram: 0xc5af0, name: libspu/spu }
+      - { type: bss, vram: 0xc5b04, name: libspu/s_sca }
+      - { type: bss, vram: 0xc5b08, name: libc2/rand }
+      - { type: bss, vram: 0xc5b18, name: libc2/putchar }
+      - { type: bss, vram: 0xc5b38, name: libsio/siohandl }
+      - { type: bss, vram: 0xc5c54, name: libsio/sio }
+      - { type: bss, vram: 0xc5c60, name: libmcrd/libmcrd }
+      - { type: bss, vram: 0xc5ce0, name: libapi/first }
+      - { type: bss, vram: 0xc5d10, name: libmcrd/userfunc }
+      - { type: bss, vram: 0xc5d60, name: libmcrd/bios }
+      - { type: bss, vram: 0xc5da0, name: libapi/pad }
+      - { type: bss, vram: 0xc5db0, name: libapi/patch }
+      - { type: bss, vram: 0xc5dc0, name: libapi/chclrpad }
+      - { type: bss, vram: 0xc5dd0, name: libcard/patch }
+      - { type: bss, vram: 0xc5de0, name: libcard/end }
   - [0x93800]
