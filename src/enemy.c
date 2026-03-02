@@ -10,6 +10,9 @@ SVECTOR SVECTOR_000a4830 = {0};
 SVECTOR SVECTOR_000a4838 = {0};
 
 static SVECTOR SVECTOR_000a48fc;
+static SVECTOR SVECTOR_000a48e4;
+static SVECTOR SVECTOR_000a48ec;
+static SVECTOR SVECTOR_000a48f4;
 
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
@@ -100,7 +103,73 @@ INCLUDE_ASM("asm/nonmatchings/enemy", Noop4);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", ProcessEnemies);
 
-INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemy);
+void InitEnemy(int side, int rotation, Enemy *enemy) {
+    SVECTOR_000a48f4.vz = 0;
+    SVECTOR_000a48f4.vy = 0;
+    SVECTOR_000a48f4.vx = 0;
+    SVECTOR_000a48ec.vz = 0;
+    SVECTOR_000a48ec.vy = 0;
+    SVECTOR_000a48ec.vx = 0;
+    SVECTOR_000a48e4.vz = 0;
+    SVECTOR_000a48e4.vy = 0;
+    SVECTOR_000a48e4.vx = 0;
+
+    if (side == 5) {
+        SVECTOR_000a48f4.vz = 1;
+        SVECTOR_000a48ec.vy = 1;
+        SVECTOR_000a48e4.vx = 1;
+    }
+    if (side == 0) {
+        SVECTOR_000a48e4.vx = -1;
+        SVECTOR_000a48ec.vy = 1;
+        SVECTOR_000a48f4.vz = -1;
+    }
+    if (side == 4) {
+        SVECTOR_000a48ec.vy = 1;
+        SVECTOR_000a48e4.vz = 1;
+        SVECTOR_000a48f4.vx = -1;
+    }
+    if (side == 1) {
+        SVECTOR_000a48e4.vz = -1;
+        SVECTOR_000a48f4.vx = 1;
+        SVECTOR_000a48ec.vy = 1;
+    }
+    if (side == 2) {
+        SVECTOR_000a48e4.vx = 1;
+        SVECTOR_000a48ec.vz = -1;
+        SVECTOR_000a48f4.vy = 1;
+    }
+    if (side == 3) {
+        SVECTOR_000a48ec.vz = 1;
+        SVECTOR_000a48e4.vx = 1;
+        SVECTOR_000a48f4.vy = -1;
+    }
+
+    enemy->field1_0x8 = SVECTOR_000a48e4;
+    enemy->dir = SVECTOR_000a48ec;
+    enemy->normalVec = SVECTOR_000a48f4;
+
+    if (rotation == 2) {
+        enemy->field1_0x8.vx = -SVECTOR_000a48ec.vx;
+        enemy->field1_0x8.vy = -SVECTOR_000a48ec.vy;
+        enemy->field1_0x8.vz = -SVECTOR_000a48ec.vz;
+        enemy->dir = SVECTOR_000a48e4;
+    }
+    if (rotation == 3) {
+        enemy->field1_0x8.vx = -SVECTOR_000a48e4.vx;
+        enemy->field1_0x8.vy = -SVECTOR_000a48e4.vy;
+        enemy->field1_0x8.vz = -SVECTOR_000a48e4.vz;
+        enemy->dir.vx = -SVECTOR_000a48ec.vx;
+        enemy->dir.vy = -SVECTOR_000a48ec.vy;
+        enemy->dir.vz = -SVECTOR_000a48ec.vz;
+    }
+    if (rotation == 4) {
+        enemy->field1_0x8 = SVECTOR_000a48ec;
+        enemy->dir.vx = -SVECTOR_000a48e4.vx;
+        enemy->dir.vy = -SVECTOR_000a48e4.vy;
+        enemy->dir.vz = -SVECTOR_000a48e4.vz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/enemy", FUN_000403ec);
 
