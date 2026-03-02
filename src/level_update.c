@@ -26,6 +26,10 @@ int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
 extern int inGetReadyScreen;
 extern int isPaused;
 extern int levelEndReason;
+extern int debugDisableTimer;
+extern int drawTimerPausedWidget;
+extern int levelTimeLeft;
+int gameMode;
 
 static SVECTOR SVECTOR_000a45d8;
 short pauseForStartPress;
@@ -196,7 +200,24 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleTransporter);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleSpecialCubeTypes);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SubtractLevelTimer);
+void SubtractLevelTimer(int param_1) {
+    if (thePlayer.faceTypePlayerStandingOn != 8) {
+        if (debugDisableTimer == 0) {
+            if (gameMode != 1) {
+                levelTimeLeft -= param_1;
+                if (levelTimeLeft < 1) {
+                    levelEndReason = -2;
+                }
+            }
+        }
+    }
+
+    if (thePlayer.faceTypePlayerStandingOn == 8 || debugDisableTimer == 1) {
+        drawTimerPausedWidget = 1;
+    } else {
+        drawTimerPausedWidget = 0;
+    }
+}
 
 int IsPlayerInAir(Player* player) {
     if (player->howMoving198 == FALLING ||
