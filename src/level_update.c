@@ -285,16 +285,13 @@ void SetEntityRotation(EntityPos *pos, int param_2, int param_3, int param_4) {
     }
 
     if (param_2 == 2) {
-        unsigned short s1, s2;
         SVECTOR_000a4738.vx = pos->matrix.m[0][0];
         SVECTOR_000a4738.vy = pos->matrix.m[1][0];
         SVECTOR_000a4738.vz = pos->matrix.m[2][0];
 
-        s1 = pos->matrix.m[1][1];
         pos->matrix.m[0][0] = -pos->matrix.m[0][1];
-        s2 = pos->matrix.m[2][1];
-        pos->matrix.m[1][0] = -s1;
-        pos->matrix.m[2][0] = -s2;
+        pos->matrix.m[1][0] = -pos->matrix.m[1][1];
+        pos->matrix.m[2][0] = -pos->matrix.m[2][1];
 
         pos->matrix.m[0][1] = SVECTOR_000a4738.vx;
         pos->matrix.m[1][1] = SVECTOR_000a4738.vy;
@@ -309,17 +306,13 @@ void SetEntityRotation(EntityPos *pos, int param_2, int param_3, int param_4) {
         pos->matrix.m[2][1] = -pos->matrix.m[2][1];
     }
     if (param_2 == 4) {
-        unsigned short s01, s11, s21;
         SVECTOR_000a4738.vx = pos->matrix.m[0][0];
         SVECTOR_000a4738.vy = pos->matrix.m[1][0];
         SVECTOR_000a4738.vz = pos->matrix.m[2][0];
 
-        s01 = pos->matrix.m[0][1];
-        s11 = pos->matrix.m[1][1];
-        s21 = pos->matrix.m[2][1];
-        pos->matrix.m[0][0] = s01;
-        pos->matrix.m[1][0] = s11;
-        pos->matrix.m[2][0] = s21;
+        pos->matrix.m[0][0] = pos->matrix.m[0][1];
+        pos->matrix.m[1][0] = pos->matrix.m[1][1];
+        pos->matrix.m[2][0] = pos->matrix.m[2][1];
 
         pos->matrix.m[0][1] = -SVECTOR_000a4738.vx;
         pos->matrix.m[1][1] = -SVECTOR_000a4738.vy;
@@ -376,16 +369,13 @@ void MatrixFromDirectionIndex(MATRIX *m, int param_2, int param_3, short delta, 
     }
 
     if (param_2 == 2) {
-        unsigned short s1, s2;
         SVECTOR_000a4740.vx = m->m[0][0];
         SVECTOR_000a4740.vy = m->m[1][0];
         SVECTOR_000a4740.vz = m->m[2][0];
 
-        s1 = m->m[1][1];
         m->m[0][0] = -m->m[0][1];
-        s2 = m->m[2][1];
-        m->m[1][0] = -s1;
-        m->m[2][0] = -s2;
+        m->m[1][0] = -m->m[1][1];
+        m->m[2][0] = -m->m[2][1];
 
         m->m[0][1] = SVECTOR_000a4740.vx;
         m->m[1][1] = SVECTOR_000a4740.vy;
@@ -400,17 +390,13 @@ void MatrixFromDirectionIndex(MATRIX *m, int param_2, int param_3, short delta, 
         m->m[2][1] = -m->m[2][1];
     }
     if (param_2 == 4) {
-        unsigned short s01, s11, s21;
         SVECTOR_000a4740.vx = m->m[0][0];
         SVECTOR_000a4740.vy = m->m[1][0];
         SVECTOR_000a4740.vz = m->m[2][0];
 
-        s01 = m->m[0][1];
-        s11 = m->m[1][1];
-        s21 = m->m[2][1];
-        m->m[0][0] = s01;
-        m->m[1][0] = s11;
-        m->m[2][0] = s21;
+        m->m[0][0] = m->m[0][1];
+        m->m[1][0] = m->m[1][1];
+        m->m[2][0] = m->m[2][1];
 
         m->m[0][1] = -SVECTOR_000a4740.vx;
         m->m[1][1] = -SVECTOR_000a4740.vy;
