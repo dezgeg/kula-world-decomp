@@ -30,6 +30,7 @@ extern int debugDisableTimer;
 extern int drawTimerPausedWidget;
 extern int levelTimeLeft;
 int gameMode;
+int D_000A4430;
 
 static SVECTOR SVECTOR_000a45d8;
 short pauseForStartPress;
@@ -79,7 +80,40 @@ int FUN_000344b0(int a0, int a1) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00034518);
+void FUN_00034518(VECTOR *v1, VECTOR *v2, VECTOR *v3, VECTOR *v4, VECTOR *v5, short timer, short param_7) {
+    int t = timer;
+    int shift = param_7;
+    int inv_t = (1 << (shift * 2 / 3)) - t;
+    
+    int inv_t2 = inv_t * inv_t;
+    int inv_t3 = inv_t2 * inv_t;
+    int t2 = t * t;
+    int t3 = t2 * t;
+    
+    int inv_t_3 = inv_t * 3;
+    int t_3 = t * 3;
+    
+    v5->vx = (inv_t3 >> shift) * v1->vx;
+    v5->vx += ((t * inv_t_3 * inv_t) >> shift) * v2->vx;
+    v5->vx += ((t * t_3 * inv_t) >> shift) * v3->vx;
+    v5->vx += (t3 >> shift) * v4->vx;
+    v5->vx >>= shift;
+    
+    v5->vy = (inv_t3 >> shift) * v1->vy;
+    v5->vy += ((t * inv_t_3 * inv_t) >> shift) * v2->vy;
+    v5->vy += ((t * t_3 * inv_t) >> shift) * v3->vy;
+    v5->vy += (t3 >> shift) * v4->vy;
+    v5->vy >>= shift;
+    
+    v5->vz = (inv_t3 >> shift) * v1->vz;
+    v5->vz += ((t * inv_t_3 * inv_t) >> shift) * v2->vz;
+    v5->vz += ((t * t_3 * inv_t) >> shift) * v3->vz;
+    v5->vz += (t3 >> shift) * v4->vz;
+    v5->vz >>= shift;
+    
+    D_000A4430 = inv_t;
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
 
