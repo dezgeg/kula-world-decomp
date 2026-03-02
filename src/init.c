@@ -14,9 +14,7 @@ extern char padData[2][34];
 extern u_char padVibrationModeEntered[2];
 extern long projectionDistance;
 
-void InitStuff(void)
-
-{
+void InitStuff(void) {
     int j;
     int i;
     RECT rect;
@@ -51,5 +49,4 @@ void InitStuff(void)
     FntLoad(576, 256);
     SetDumpFnt(FntOpen(16, 8, displayWidth + -0x10, displayHeight + -8, 0,
                        (displayWidth / 8 - 2) * (displayHeight / 8 - 1)));
-    return;
 }
