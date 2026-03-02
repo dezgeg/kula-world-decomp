@@ -201,14 +201,10 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleTransporter);
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleSpecialCubeTypes);
 
 void SubtractLevelTimer(int param_1) {
-    if (thePlayer.faceTypePlayerStandingOn != 8) {
-        if (debugDisableTimer == 0) {
-            if (gameMode != 1) {
-                levelTimeLeft -= param_1;
-                if (levelTimeLeft < 1) {
-                    levelEndReason = -2;
-                }
-            }
+    if (thePlayer.faceTypePlayerStandingOn != 8 && debugDisableTimer == 0 && gameMode != 1) {
+        levelTimeLeft -= param_1;
+        if (levelTimeLeft < 1) {
+            levelEndReason = -2;
         }
     }
 
