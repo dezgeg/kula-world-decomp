@@ -16,6 +16,14 @@ extern void EnableTurningMotionBlur(void);
 extern void FUN_00031288(Player * player);
 extern void JumpingOnMovingPlatform(Player *player);
 extern void MovePlayerForward(Player * player, int delta);
+extern int gameMode;
+
+void StartJumpingForward(Player *player);
+void StartJumpingInplace(Player *player);
+void StartRollingForward(Player *player);
+void TurnLeft(Player *player);
+void TurnRight(Player *player);
+
 
 void ResetPlayerVars(Player *player) {
     player->howMoving198 = NOT_MOVING;
@@ -75,7 +83,70 @@ void SetVec184ToVec54(Player *player) {
     player->svec_184.vz = player->finePos.vz + player->svec54.vz;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", StartMovementIfNeeded);
+void StartMovementIfNeeded(Player *player) {
+    if (gameMode != 1) {
+        if (gameMode < 2) {
+            if (gameMode != 0) return;
+        } else if (gameMode != 2) {
+            return;
+        }
+
+        if (player->howMoving198 == JUMPING_FORWARD) return;
+        if (player->howMoving198 == JUMPING_INPLACE) {
+            if (player->turnDirection == 1) TurnLeft(player);
+            if (player->turnDirection == -1) TurnRight(player);
+            return;
+        }
+        if (player->howMoving198 == ROLLING && player->jumping == 1) {
+            StartJumpingForward(player);
+        }
+        if (player->howMoving198 == NOT_MOVING) {
+            if (player->jumping == 1) {
+                if (player->rollingForward == 1) {
+                    StartJumpingForward(player);
+                } else {
+                    StartJumpingInplace(player);
+                }
+            } else {
+                if (player->rollingForward == 1) {
+                    StartRollingForward(player);
+                } else {
+                    if (player->turnDirection == 1) {
+                        TurnLeft(player);
+                    }
+                    if (player->turnDirection == -1) {
+                        TurnRight(player);
+                    }
+                }
+            }
+        }
+    } else {
+        if (player->howMoving198 == NOT_MOVING) {
+            if (player->jumping == 1) {
+                if (player->rollingForward == 1) {
+                    StartJumpingForward(player);
+                } else {
+                    StartJumpingInplace(player);
+                }
+                return;
+            }
+            if (player->rollingForward == 1) {
+                StartRollingForward(player);
+                return;
+            }
+            if (player->turnDirection == 1) {
+                TurnLeft(player);
+            }
+            if (player->turnDirection == -1) {
+                TurnRight(player);
+            }
+        }
+        if (player->howMoving198 == ROLLING && player->jumping == 1) {
+            StartJumpingForward(player);
+        }
+    }
+}
+
 
 void StartJumpingForward(Player *player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
