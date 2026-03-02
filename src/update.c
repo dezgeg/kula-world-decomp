@@ -6,6 +6,11 @@ extern int turningMotionBlurPhase;
 extern int turningMotionBlurTable[70];
 extern int numKeysRemaining;
 extern Quad** levelExitQuadPPtr;
+extern int cameraIndex;
+extern int sunglassCounter1[];
+extern int sunglassCounter2[];
+extern int sunglassDisablingState[];
+extern int sunglassSeeEverything[];
 
 INCLUDE_ASM("asm/nonmatchings/update", ProcessMovingPlatforms2);
 
@@ -15,7 +20,18 @@ INCLUDE_ASM("asm/nonmatchings/update", ProcessFlashingBlocks);
 
 INCLUDE_ASM("asm/nonmatchings/update", ProcessRetractableSpikes);
 
-INCLUDE_ASM("asm/nonmatchings/update", SetSunglassMode);
+void SetSunglassMode(int on) {
+    if (!on) {
+        sunglassDisablingState[cameraIndex] = 1;
+        sunglassCounter2[cameraIndex] = 0x15;
+        sunglassCounter1[cameraIndex] = 8;
+        sunglassSeeEverything[cameraIndex] = 0;
+    } else {
+        sunglassDisablingState[cameraIndex] = 0;
+        sunglassSeeEverything[cameraIndex] = 1;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/update", UpdateSunglassModeDisabling);
 
