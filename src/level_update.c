@@ -33,6 +33,18 @@ int gameMode;
 int D_000A4430;
 
 static SVECTOR SVECTOR_000a45d8;
+static SVECTOR SVECTOR_000a4738;
+static SVECTOR SVECTOR_000a4740;
+
+typedef struct EntityPos {
+    MATRIX matrix;
+    short posX;
+    short posY;
+    short posZ;
+    short pad;
+    byte reserved[8];
+} EntityPos;
+
 short pauseForStartPress;
 
 extern void ProcessEnemies(void);
@@ -224,9 +236,187 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleItemTouching);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CreateAllItemDispLists);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SetEntityRotation);
+void SetEntityRotation(EntityPos *pos, int param_2, int param_3, int param_4) {
+    pos->matrix.m[2][2] = 0;
+    pos->matrix.m[2][1] = 0;
+    pos->matrix.m[2][0] = 0;
+    pos->matrix.m[1][2] = 0;
+    pos->matrix.m[1][1] = 0;
+    pos->matrix.m[1][0] = 0;
+    pos->matrix.m[0][2] = 0;
+    pos->matrix.m[0][1] = 0;
+    pos->matrix.m[0][0] = 0;
 
-INCLUDE_ASM("asm/nonmatchings/level_update", MatrixFromDirectionIndex);
+    if (param_3 == 4) {
+        pos->matrix.m[2][0] = 0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[0][2] = -0x1000;
+        pos->matrix.t[0] -= param_4;
+    }
+    if (param_3 == 1) {
+        pos->matrix.m[2][0] = -0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[0][2] = 0x1000;
+        pos->matrix.t[0] += param_4;
+    }
+    if (param_3 == 3) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[2][1] = 0x1000;
+        pos->matrix.m[1][2] = -0x1000;
+        pos->matrix.t[1] -= param_4;
+    }
+    if (param_3 == 2) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[2][1] = -0x1000;
+        pos->matrix.m[1][2] = 0x1000;
+        pos->matrix.t[1] += param_4;
+    }
+    if (param_3 == 0) {
+        pos->matrix.m[0][0] = -0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[2][2] = -0x1000;
+        pos->matrix.t[2] -= param_4;
+    }
+    if (param_3 == 5) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[2][2] = 0x1000;
+        pos->matrix.t[2] += param_4;
+    }
+
+    if (param_2 == 2) {
+        unsigned short s1, s2;
+        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
+        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
+        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+
+        s1 = pos->matrix.m[1][1];
+        pos->matrix.m[0][0] = -pos->matrix.m[0][1];
+        s2 = pos->matrix.m[2][1];
+        pos->matrix.m[1][0] = -s1;
+        pos->matrix.m[2][0] = -s2;
+
+        pos->matrix.m[0][1] = SVECTOR_000a4738.vx;
+        pos->matrix.m[1][1] = SVECTOR_000a4738.vy;
+        pos->matrix.m[2][1] = SVECTOR_000a4738.vz;
+    }
+    if (param_2 == 3) {
+        pos->matrix.m[0][0] = -pos->matrix.m[0][0];
+        pos->matrix.m[1][0] = -pos->matrix.m[1][0];
+        pos->matrix.m[2][0] = -pos->matrix.m[2][0];
+        pos->matrix.m[0][1] = -pos->matrix.m[0][1];
+        pos->matrix.m[1][1] = -pos->matrix.m[1][1];
+        pos->matrix.m[2][1] = -pos->matrix.m[2][1];
+    }
+    if (param_2 == 4) {
+        unsigned short s01, s11, s21;
+        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
+        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
+        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+
+        s01 = pos->matrix.m[0][1];
+        s11 = pos->matrix.m[1][1];
+        s21 = pos->matrix.m[2][1];
+        pos->matrix.m[0][0] = s01;
+        pos->matrix.m[1][0] = s11;
+        pos->matrix.m[2][0] = s21;
+
+        pos->matrix.m[0][1] = -SVECTOR_000a4738.vx;
+        pos->matrix.m[1][1] = -SVECTOR_000a4738.vy;
+        pos->matrix.m[2][1] = -SVECTOR_000a4738.vz;
+    }
+}
+
+void MatrixFromDirectionIndex(MATRIX *m, int param_2, int param_3, short delta, SVECTOR *param_5) {
+    m->m[0][2] = 0;
+    m->m[0][1] = 0;
+    m->m[0][0] = 0;
+    m->m[1][2] = 0;
+    m->m[1][1] = 0;
+    m->m[1][0] = 0;
+    m->m[2][2] = 0;
+    m->m[2][1] = 0;
+    m->m[2][0] = 0;
+
+    if (param_3 == 4) {
+        param_5->vx = param_5->vx - delta;
+        m->m[2][0] = 0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[0][2] = -0x1000;
+    }
+    if (param_3 == 1) {
+        param_5->vx = param_5->vx + delta;
+        m->m[2][0] = -0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[0][2] = 0x1000;
+    }
+    if (param_3 == 3) {
+        param_5->vy = param_5->vy - delta;
+        m->m[0][0] = 0x1000;
+        m->m[2][1] = 0x1000;
+        m->m[1][2] = -0x1000;
+    }
+    if (param_3 == 2) {
+        param_5->vy = param_5->vy + delta;
+        m->m[0][0] = 0x1000;
+        m->m[2][1] = -0x1000;
+        m->m[1][2] = 0x1000;
+    }
+    if (param_3 == 0) {
+        param_5->vz = param_5->vz - delta;
+        m->m[0][0] = -0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[2][2] = -0x1000;
+    }
+    if (param_3 == 5) {
+        param_5->vz = param_5->vz + delta;
+        m->m[0][0] = 0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[2][2] = 0x1000;
+    }
+
+    if (param_2 == 2) {
+        unsigned short s1, s2;
+        SVECTOR_000a4740.vx = m->m[0][0];
+        SVECTOR_000a4740.vy = m->m[1][0];
+        SVECTOR_000a4740.vz = m->m[2][0];
+
+        s1 = m->m[1][1];
+        m->m[0][0] = -m->m[0][1];
+        s2 = m->m[2][1];
+        m->m[1][0] = -s1;
+        m->m[2][0] = -s2;
+
+        m->m[0][1] = SVECTOR_000a4740.vx;
+        m->m[1][1] = SVECTOR_000a4740.vy;
+        m->m[2][1] = SVECTOR_000a4740.vz;
+    }
+    if (param_2 == 3) {
+        m->m[0][0] = -m->m[0][0];
+        m->m[1][0] = -m->m[1][0];
+        m->m[2][0] = -m->m[2][0];
+        m->m[0][1] = -m->m[0][1];
+        m->m[1][1] = -m->m[1][1];
+        m->m[2][1] = -m->m[2][1];
+    }
+    if (param_2 == 4) {
+        unsigned short s01, s11, s21;
+        SVECTOR_000a4740.vx = m->m[0][0];
+        SVECTOR_000a4740.vy = m->m[1][0];
+        SVECTOR_000a4740.vz = m->m[2][0];
+
+        s01 = m->m[0][1];
+        s11 = m->m[1][1];
+        s21 = m->m[2][1];
+        m->m[0][0] = s01;
+        m->m[1][0] = s11;
+        m->m[2][0] = s21;
+
+        m->m[0][1] = -SVECTOR_000a4740.vx;
+        m->m[1][1] = -SVECTOR_000a4740.vy;
+        m->m[2][1] = -SVECTOR_000a4740.vz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CheckForButtonEntity);
 
