@@ -1,11 +1,21 @@
 #include "common.h"
 
-extern uint Rand(int param_1);
-
 typedef struct P {
     ulong* p0;
     ulong* p1;
 } P;
+
+typedef struct FaceData {
+    void **pointerInsideCubeState;
+    short texIdx;
+    short dir;
+    short x, y, z;
+    short textureRotation;
+    int flags;
+    int color;
+} FaceData;
+
+extern uint Rand(int param_1);
 
 extern POLY_FT4 shadowPrims[2][1][2][16];
 extern POLY_FT4 specularPrims[2][1][16];
@@ -17,6 +27,7 @@ extern uint firstGuiTexture;
 extern uint firstGuiTexture;
 
 TgiFile* tgi;
+FaceData *faceDataPtr;
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
@@ -72,7 +83,32 @@ INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForCrumblingBlocks);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForFlashingBlocks);
 
-INCLUDE_ASM("asm/nonmatchings/level_init", SetFaceData);
+void SetFaceData(int index, void **pointerInsideCubeState, int texIdx, int flags, int dir,
+                 int xFine, int yFine, int zFine, int textureRotation, int color) {
+    FaceData *fd = &faceDataPtr[index];
+    unsigned char *ptr;
+
+    if (pointerInsideCubeState != (void **)0xffffffff) {
+        fd->pointerInsideCubeState = pointerInsideCubeState;
+        *pointerInsideCubeState = (void *)index;
+    }
+
+    fd = (FaceData *)((char *)fd + 4);
+    *(short *)fd = texIdx;
+    fd = (FaceData *)((char *)fd + 2);
+    *(short *)fd = dir;
+    fd = (FaceData *)((char *)fd + 2);
+    *(short *)fd = xFine;
+    fd = (FaceData *)((char *)fd + 2);
+    *(short *)fd = yFine;
+    fd = (FaceData *)((char *)fd + 2);
+    *(short *)fd = zFine;
+    fd = (FaceData *)((char *)fd + 2);
+    *(short *)fd = textureRotation;
+    fd = (FaceData *)((char *)fd + 2);
+    *(int *)fd = flags;
+    ((int *)fd)[1] = color;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", CopyQuadData);
 
