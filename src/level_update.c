@@ -35,6 +35,9 @@ int D_000A43E8;
 int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
 static SVECTOR SVECTOR_000a43e0;
+static SVECTOR initPlayerFacingVec;
+static SVECTOR initPlayerGravityVec;
+static SVECTOR initPlayerRightVec;
 
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
@@ -408,7 +411,74 @@ void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SetPlayerRotation);
+void SetPlayerRotation(int cubeSide, int rotation, Player *player) {
+    initPlayerRightVec.vz = 0;
+    initPlayerRightVec.vy = 0;
+    initPlayerRightVec.vx = 0;
+    initPlayerFacingVec.vz = 0;
+    initPlayerFacingVec.vy = 0;
+    initPlayerFacingVec.vx = 0;
+    initPlayerGravityVec.vz = 0;
+    initPlayerGravityVec.vy = 0;
+    initPlayerGravityVec.vx = 0;
+
+    if (cubeSide == 5) {
+        initPlayerRightVec.vx = 1;
+        initPlayerFacingVec.vy = 1;
+        initPlayerGravityVec.vz = 1;
+    }
+    if (cubeSide == 0) {
+        initPlayerRightVec.vx = -1;
+        initPlayerFacingVec.vy = 1;
+        initPlayerGravityVec.vz = -1;
+    }
+    if (cubeSide == 4) {
+        initPlayerRightVec.vz = 1;
+        initPlayerFacingVec.vy = 1;
+        initPlayerGravityVec.vx = -1;
+    }
+    if (cubeSide == 1) {
+        initPlayerRightVec.vz = -1;
+        initPlayerFacingVec.vy = 1;
+        initPlayerGravityVec.vx = 1;
+    }
+    if (cubeSide == 2) {
+        initPlayerRightVec.vx = 1;
+        initPlayerFacingVec.vz = -1;
+        initPlayerGravityVec.vy = 1;
+    }
+    if (cubeSide == 3) {
+        initPlayerRightVec.vx = 1;
+        initPlayerFacingVec.vz = 1;
+        initPlayerGravityVec.vy = -1;
+    }
+
+    player->rightVec = initPlayerRightVec;
+    player->facingDir = initPlayerFacingVec;
+    player->gravityDir = initPlayerGravityVec;
+
+    if (rotation == 2) {
+        player->rightVec.vx = -initPlayerFacingVec.vx;
+        player->rightVec.vy = -initPlayerFacingVec.vy;
+        player->rightVec.vz = -initPlayerFacingVec.vz;
+        player->facingDir = initPlayerRightVec;
+    }
+    if (rotation == 3) {
+        player->rightVec.vx = -initPlayerRightVec.vx;
+        player->rightVec.vy = -initPlayerRightVec.vy;
+        player->rightVec.vz = -initPlayerRightVec.vz;
+        player->facingDir.vx = -initPlayerFacingVec.vx;
+        player->facingDir.vy = -initPlayerFacingVec.vy;
+        player->facingDir.vz = -initPlayerFacingVec.vz;
+    }
+    if (rotation == 4) {
+        player->rightVec = initPlayerFacingVec;
+        player->facingDir.vx = -initPlayerRightVec.vx;
+        player->facingDir.vy = -initPlayerRightVec.vy;
+        player->facingDir.vz = -initPlayerRightVec.vz;
+    }
+}
+
 
 void SetPlayerMatrix6(Player *player) {
     player->matrix_d4.m[0][0] = player->rightVec.vx << 12;
