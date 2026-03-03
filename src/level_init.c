@@ -76,7 +76,20 @@ INCLUDE_ASM("asm/nonmatchings/level_init", SetFaceData);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", CopyQuadData);
 
-INCLUDE_ASM("asm/nonmatchings/level_init", InitAnimatedTextureChain);
+void InitAnimatedTextureChain(AnimatedTextureChain *dst, int numEntries, int numFrames1, int numFrames2, void *ptr1,
+                             void *ptr2, void *ptr3, void *ptr4, int zero9, int zero10) {
+    int *d = (int *)dst;
+    d[0] = (int)((u8*)dst + 40 + numEntries * 8);
+    d[1] = (int)(dst + 1);
+    d[2] = numFrames1;
+    d[3] = numFrames2;
+    d[4] = (int)ptr1;
+    d[5] = (int)ptr2;
+    d[6] = (int)ptr3;
+    d[7] = (int)ptr4;
+    d[8] = zero9;
+    d[9] = zero10;
+}
 
 void AddQuadToAnimatedTextureChain(AnimatedTextureChain *chain, Quad **quadPtr, int initAnimFrame1, int initAnimFrame2) {
     void **tce = (void **)chain->entries;
