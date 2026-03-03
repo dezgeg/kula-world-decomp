@@ -32,6 +32,18 @@ extern int levelTimeLeft;
 int gameMode;
 int D_000A4430;
 
+extern int cameraIndex;
+extern MATRIX perspMatrixes[];
+extern int specialLevelType;
+
+static SVECTOR SVECTOR_000a449c;
+static VECTOR VECTOR_000a44a8;
+int maxDistSquared;
+int xMinPlusMax;
+int yMinPlusMax;
+int zMinPlusMax;
+int zoomInAndOutPhase;
+
 static SVECTOR SVECTOR_000a45d8;
 static SVECTOR SVECTOR_000a4638;
 static SVECTOR SVECTOR_000a4640;
@@ -135,7 +147,41 @@ INCLUDE_ASM("asm/nonmatchings/level_update", ProcessCameraAndMovement);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleDebugCamera);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", HandlePauseModeRotationEffect);
+void HandlePauseModeRotationEffect(Player *player) {
+    int iVar2;
+    
+    player->playerHasControl = 0;
+    
+    SVECTOR_000a449c.vx = (SVECTOR_000a449c.vx - 10) % 4096;
+    SVECTOR_000a449c.vy = (SVECTOR_000a449c.vy + 4) % 4096;
+    SVECTOR_000a449c.vz = (SVECTOR_000a449c.vz + 13) % 4096;
+    
+    if (specialLevelType == 0) {
+        zoomInAndOutPhase = (zoomInAndOutPhase + 15) % 4096;
+    }
+    if (specialLevelType == 1) {
+        zoomInAndOutPhase = (zoomInAndOutPhase + 70) % 4096;
+    }
+    
+    RotMatrix(&SVECTOR_000a449c, &perspMatrixes[cameraIndex]);
+    
+    VECTOR_000a44a8.vx = -xMinPlusMax;
+    VECTOR_000a44a8.vy = -yMinPlusMax;
+    VECTOR_000a44a8.vz = -zMinPlusMax;
+    
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44a8, &VECTOR_000a44a8);
+    
+    perspMatrixes[cameraIndex].t[0] = VECTOR_000a44a8.vx;
+    perspMatrixes[cameraIndex].t[1] = VECTOR_000a44a8.vy;
+    perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 400;
+    
+    if (specialLevelType == 0) {
+        perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 1400 + ((rsin(zoomInAndOutPhase) * 1000) / 4096);
+    }
+    if (specialLevelType == 1) {
+        perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 3400 + ((rsin(zoomInAndOutPhase) * 3000) / 4096);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandlePlayerMovementStuff);
 
