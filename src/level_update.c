@@ -33,6 +33,8 @@ int gameMode;
 int D_000A4430;
 
 static SVECTOR SVECTOR_000a45d8;
+static SVECTOR SVECTOR_000a4638;
+static SVECTOR SVECTOR_000a4640;
 static SVECTOR SVECTOR_000a4738;
 static SVECTOR SVECTOR_000a4740;
 
@@ -226,7 +228,54 @@ int GetRotationIndexFromVector(SVECTOR v) {
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", GetVectorBasedOnTwoDirs);
+void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
+    SVECTOR_000a4638.vz = 0;
+    SVECTOR_000a4638.vy = 0;
+    SVECTOR_000a4638.vx = 0;
+    SVECTOR_000a4640.vz = 0;
+    SVECTOR_000a4640.vy = 0;
+    SVECTOR_000a4640.vx = 0;
+    
+    if (dir1 == 5) {
+        SVECTOR_000a4638.vx = 1;
+        SVECTOR_000a4640.vy = 1;
+    }
+    if (dir1 == 0) {
+        SVECTOR_000a4638.vx = -1;
+        SVECTOR_000a4640.vy = 1;
+    }
+    if (dir1 == 4) {
+        SVECTOR_000a4638.vz = 1;
+        SVECTOR_000a4640.vy = 1;
+    }
+    if (dir1 == 1) {
+        SVECTOR_000a4638.vz = -1;
+        SVECTOR_000a4640.vy = 1;
+    }
+    if (dir1 == 2) {
+        SVECTOR_000a4638.vx = 1;
+        SVECTOR_000a4640.vz = -1;
+    }
+    if (dir1 == 3) {
+        SVECTOR_000a4638.vx = 1;
+        SVECTOR_000a4640.vz = 1;
+    }
+    
+    *res = SVECTOR_000a4640;
+    if (dir2 == 2) {
+        *res = SVECTOR_000a4638;
+    }
+    if (dir2 == 3) {
+        res->vx = -SVECTOR_000a4640.vx;
+        res->vy = -SVECTOR_000a4640.vy;
+        res->vz = -SVECTOR_000a4640.vz;
+    }
+    if (dir2 == 4) {
+        res->vx = -SVECTOR_000a4638.vx;
+        res->vy = -SVECTOR_000a4638.vy;
+        res->vz = -SVECTOR_000a4638.vz;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", SetPlayerRotation);
 
