@@ -325,7 +325,17 @@ void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", SetPlayerRotation);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", SetPlayerMatrix6);
+void SetPlayerMatrix6(Player *player) {
+    player->matrix_d4.m[0][0] = player->rightVec.vx << 12;
+    player->matrix_d4.m[1][0] = player->rightVec.vy << 12;
+    player->matrix_d4.m[2][0] = player->rightVec.vz << 12;
+    player->matrix_d4.m[0][2] = player->gravityDir.vx << 12;
+    player->matrix_d4.m[1][2] = player->gravityDir.vy << 12;
+    player->matrix_d4.m[2][2] = player->gravityDir.vz << 12;
+    player->matrix_d4.m[0][1] = -player->facingDir.vx << 12;
+    player->matrix_d4.m[1][1] = -player->facingDir.vy << 12;
+    player->matrix_d4.m[2][1] = -player->facingDir.vz << 12;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleItemTouching);
 
