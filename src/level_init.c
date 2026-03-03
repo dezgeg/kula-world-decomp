@@ -15,6 +15,13 @@ typedef struct FaceData {
     int color;
 } FaceData;
 
+typedef struct {
+    short entityType;
+    short pad2;
+    short counter;
+    char pad[250];
+} CrumblingBlockEntity;
+
 extern uint Rand(int param_1);
 
 extern POLY_FT4 shadowPrims[2][1][2][16];
@@ -28,6 +35,10 @@ extern uint firstGuiTexture;
 
 TgiFile* tgi;
 FaceData *faceDataPtr;
+CrumblingBlockEntity *entityData; // XXX: Fix type
+int numCrumblingBlocks;
+short numEntities;
+short crumblingBlockEntityIndexes[64];
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
@@ -79,7 +90,17 @@ INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForMovingBlocks1);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", InitLasers2);
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForCrumblingBlocks);
+void ScanLevelDataForCrumblingBlocks(void) {
+    int i;
+
+    numCrumblingBlocks = 0;
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i].entityType == 6) {
+            crumblingBlockEntityIndexes[numCrumblingBlocks++] = i;
+            entityData[i].counter = 0x200;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForFlashingBlocks);
 
