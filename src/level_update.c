@@ -31,6 +31,8 @@ extern int drawTimerPausedWidget;
 extern int levelTimeLeft;
 int gameMode;
 int D_000A4430;
+int D_000A43E8;
+static SVECTOR SVECTOR_000a43ec;
 
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
@@ -93,7 +95,50 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", GetMovingPlatformAt);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033eb0);
+int FUN_00033eb0(Player *player, SVECTOR *param_2) {
+    int type;
+    int index;
+    int rotation;
+    
+    if (param_2->vx == -1) {
+        SVECTOR_000a43ec = player->finePos;
+    } else {
+        SVECTOR_000a43ec = *param_2;
+    }
+
+    type = GetBlockAt(&SVECTOR_000a43ec);
+    index = type - 5;
+    D_000A43E8 = index * 128;
+
+    if (D_000A43E8 < 0 || *(short *)((index * 256) + (int)entityData) != 5) {
+        SVECTOR_000a43ec.vx -= player->gravityDir.vx * 512;
+        SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
+        SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
+
+        type = GetBlockAt(&SVECTOR_000a43ec);
+        index = type - 5;
+        D_000A43E8 = index * 128;
+
+        if (D_000A43E8 < 0) {
+            return -1;
+        }
+        if (*(short *)((index * 256) + (int)entityData) != 5) {
+            return -1;
+        }
+    }
+
+    rotation = GetRotationIndexFromVector(player->gravityDir);
+    type = FUN_000344b0((int)*(short *)(D_000A43E8 * 2 + (int)entityData + 4), rotation);
+    
+    if (type == 0) {
+        return -1;
+    }
+    if (FUN_00033720(&player->finePos, D_000A43E8, 100) != 0) {
+        return D_000A43E8;
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", JumpingOnMovingPlatform);
 
