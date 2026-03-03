@@ -57,7 +57,35 @@ int FUN_0003d758(Enemy *e) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003d8b8);
+int FUN_0003d8b8(Enemy *e) {
+    int blockType;
+    int rotationIndex;
+    int res;
+
+    SVECTOR_000a4820.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
+    SVECTOR_000a4820.vy = e->pos.vy - e->normalVec.vy * 400 - e->dir.vy * 0x200;
+    SVECTOR_000a4820.vz = e->pos.vz - e->normalVec.vz * 400 - e->dir.vz * 0x200;
+
+    SVECTOR_000a4828.vx = e->pos.vx - e->dir.vx * 0x200;
+    SVECTOR_000a4828.vy = e->pos.vy - e->dir.vy * 0x200;
+    SVECTOR_000a4828.vz = e->pos.vz - e->dir.vz * 0x200;
+
+    blockType = GetBlockAt(&SVECTOR_000a4820);
+    rotationIndex = GetRotationIndexFromVector(e->normalVec);
+
+    if (FUN_000403ec(blockType, rotationIndex) != 1) {
+        return 0;
+    }
+
+    res = GetBlockAt(&SVECTOR_000a4828);
+    if (res == -1) {
+        res = 1;
+    } else {
+        res = 0;
+    }
+    return res;
+}
+
 
 void FUN_0003da18(Enemy* enemy) {
     enemy->dir.vx = -enemy->dir.vx;
