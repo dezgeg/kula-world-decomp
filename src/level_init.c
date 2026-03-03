@@ -78,7 +78,18 @@ INCLUDE_ASM("asm/nonmatchings/level_init", CopyQuadData);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", InitAnimatedTextureChain);
 
-INCLUDE_ASM("asm/nonmatchings/level_init", AddQuadToAnimatedTextureChain);
+void AddQuadToAnimatedTextureChain(AnimatedTextureChain *chain, Quad **quadPtr, int initAnimFrame1, int initAnimFrame2) {
+    void **tce = (void **)chain->entries;
+    *tce++ = (void *)quadPtr;
+    if (initAnimFrame1 == -1) {
+        initAnimFrame1 = Rand(chain->numFrames1);
+    }
+    if (initAnimFrame2 == -1) {
+        initAnimFrame2 = Rand(chain->numFrames2);
+    }
+    *tce++ = (void *)(initAnimFrame2 << 16 | initAnimFrame1);
+    chain->entries = (TextureChainEntry *)tce;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", FUN_000298e0);
 
