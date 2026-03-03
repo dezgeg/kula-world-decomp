@@ -7,16 +7,29 @@ short landingSquishMagnitude;
 short landingSquishMagnitudeIncrement;
 short *initJumpTimerPtr;
 extern short *ggiPart5JumpAnimData;
+extern int gameMode;
+
+extern void EnableScreenShake(int param_1, int param_2, int param_3);
+extern int GetBlockAt(SVECTOR * coord);
+extern void MovePlayerDownwards(Player * player, int param_2);
+extern void ResetPlayerMatrix274(Player * player);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void UpdateSubpixelPositions(Player * player);
+extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
+extern SVECTOR SVECTOR_000a2dd8;
+extern u8 * entityData;
+extern short isPausedOrWaitingForRestart;
+
+int tempNewBlock;
+static SVECTOR tempNewPlayerPos;
 
 extern int CheckForPlayerWallHit(Player * player);
-extern int CheckIfPlayerLanded(Player * player);
 extern int HandleMovingPlatforms(Player * player);
 extern void ClearA4374(Player *player);
 extern void EnableTurningMotionBlur(void);
 extern void FUN_00031288(Player * player);
 extern void JumpingOnMovingPlatform(Player *player);
 extern void MovePlayerForward(Player * player, int delta);
-extern int gameMode;
 
 void StartJumpingForward(Player *player);
 void StartJumpingInplace(Player *player);
@@ -299,7 +312,55 @@ INCLUDE_ASM("asm/nonmatchings/player_movement", CheckForPlayerWallHit);
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", FUN_00031288);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", CheckIfPlayerLanded);
+int CheckIfPlayerLanded(Player *player) {
+    int dummy[2];
+    tempNewPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
+    tempNewPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
+    tempNewPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * 100);
+    
+    tempNewBlock = GetBlockAt(&tempNewPlayerPos);
+    
+    if ((tempNewBlock >= 5 && *(short *)(entityData + tempNewBlock * 256 - 0x500) == 5) || tempNewBlock < 0) {
+        return 0;
+    }
+    
+    if (player->howMoving198 == 1) {
+        ResetPlayerMatrix274(player);
+    }
+    if (player->alreadyProcessedEntityAction != 5 && player->playerHasControl == 1 && isPausedOrWaitingForRestart == 0) {
+        SndPlaySfx(0x66, 0, &SVECTOR_000a2dd8, 7000);
+    }
+    if (player->gravityVelocity == -80) {
+        Vibrate99(0, 200, 3);
+        EnableScreenShake(3, 20, 2);
+    }
+    
+    player->finePos.vx += player->gravityDir.vx * 100;
+    player->finePos.vy += player->gravityDir.vy * 100;
+    player->finePos.vz += player->gravityDir.vz * 100;
+    
+    MovePlayerDownwards(player, 100);
+    player->howMoving198 = -1;
+    player->onGround = 1;
+    player->howMoving0 = 0;
+    if (player->rollingForward != 0) {
+        player->movementVelocity = 0x28;
+    }
+    landingSquishFrameCounter = 4;
+    landingSquishMagnitudeIncrement = 0xbb;
+    player->gravityVelocity = 0;
+    player->longJump = 0;
+    landingSquishMagnitude = 0;
+    landingSquishDamping = 100;
+    UpdateSubpixelPositions(player);
+    if (player->subpixelPositionOnCube.vz < 0xb4 && player->jumping == 0) {
+        player->rollingForward = 1;
+        player->forcedRollForwardTimer = 1;
+        player->turnDirection = 0;
+        player->movementVelocity = 0x28;
+    }
+    return 1;
+}
 
 void SetLandingSquishVars(void) {
     int pad[2];
