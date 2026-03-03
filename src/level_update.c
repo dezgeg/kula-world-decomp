@@ -32,7 +32,9 @@ extern int levelTimeLeft;
 int gameMode;
 int D_000A4430;
 int D_000A43E8;
+int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
+static SVECTOR SVECTOR_000a43e0;
 
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
@@ -93,7 +95,45 @@ int FUN_0003382c(Player* player) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", GetMovingPlatformAt);
+int GetMovingPlatformAt(Player *player, SVECTOR *param_2) {
+    int blockType;
+    int ri;
+    
+    if (param_2->vx == -1) {
+        SVECTOR_000a43e0.vx = player->finePos.vx - player->gravityDir.vx * 512;
+        SVECTOR_000a43e0.vy = player->finePos.vy - player->gravityDir.vy * 512;
+        SVECTOR_000a43e0.vz = player->finePos.vz - player->gravityDir.vz * 512;
+    } else {
+        SVECTOR_000a43e0 = *param_2;
+    }
+    
+    blockType = GetBlockAt(&SVECTOR_000a43e0);
+    D_000A43DC = (blockType - 5) * 128;
+    
+    if (D_000A43DC >= 0) {
+        if (*(short *)(entityData + D_000A43DC * 2) != 5) {
+            goto ret_minus1;
+        }
+        
+        ri = GetRotationIndexFromVector(player->gravityDir);
+        
+        if (FUN_000344b0(*(short *)(entityData + D_000A43DC * 2 + 4), ri) != 0) {
+            goto ret_minus1;
+        }
+        
+        if (player->subpixelPositionOnCube.vy < 101) {
+            if (FUN_00033720(&player->finePos, D_000A43DC, 0) != 0) {
+                goto ret_D;
+            }
+            goto ret_minus1;
+        }
+    }
+
+ret_minus1:
+    return -1;
+ret_D:
+    return D_000A43DC;
+}
 
 int FUN_00033eb0(Player *player, SVECTOR *param_2) {
     int type;
