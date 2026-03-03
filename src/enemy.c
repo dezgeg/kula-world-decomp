@@ -5,7 +5,7 @@ int enemyPlayerDistSq;
 int numEnemies;
 extern Enemy enemies[];
 
-SVECTOR tmpEnemyPos;
+static SVECTOR tmpEnemyPos;
 SVECTOR SVECTOR_000a4830 = {0};
 SVECTOR SVECTOR_000a4838 = {0};
 
@@ -51,7 +51,13 @@ int FUN_0003da64(Enemy* enemy) {
     return res == 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/enemy", FUN_0003db64);
+void FUN_0003db64(Enemy *enemy) {
+    tmpEnemyPos = enemy->dir;
+    enemy->dir = enemy->field1_0x8;
+    enemy->field1_0x8.vx = -tmpEnemyPos.vx;
+    enemy->field1_0x8.vy = -tmpEnemyPos.vy;
+    enemy->field1_0x8.vz = -tmpEnemyPos.vz;
+}
 
 int FUN_0003dbe0(Enemy* e) {
     int blockType;
