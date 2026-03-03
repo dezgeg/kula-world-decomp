@@ -33,7 +33,36 @@ void SetSunglassMode(int on) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/update", UpdateSunglassModeDisabling);
+void UpdateSunglassModeDisabling(void) {
+    int idx = cameraIndex;
+    
+    switch (sunglassDisablingState[idx]) {
+    case 1:
+        if (--sunglassCounter1[idx] > 0) {
+            return;
+        }
+        if (--sunglassCounter2[idx] <= 0) {
+            sunglassDisablingState[idx] = 0;
+            return;
+        }
+        sunglassCounter1[idx] = 8;
+        sunglassDisablingState[idx] = 2;
+        sunglassSeeEverything[idx] = 1;
+        break;
+    case 2:
+        if (--sunglassCounter1[idx] > 0) {
+            return;
+        }
+        if (--sunglassCounter2[idx] <= 0) {
+            sunglassDisablingState[idx] = 0;
+            return;
+        }
+        sunglassCounter1[idx] = 8;
+        sunglassDisablingState[idx] = 1;
+        sunglassSeeEverything[idx] = 0;
+        break;
+    }
+}
 
 void EnableTurningMotionBlur(void) {
     if (turningMotionBlurEnabled == 0) {
