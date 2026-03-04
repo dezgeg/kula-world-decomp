@@ -22,6 +22,28 @@ typedef struct {
     char pad[250];
 } CrumblingBlockEntity;
 
+typedef struct CubeState {
+    Quad* quadPtrs[6];
+    int field1_0x18[6];
+    char sideVisited[6];
+    char field3_0x36;
+    char field4_0x37;
+    int visited;
+    int field6_0x3c;
+} CubeState;
+
+typedef struct FlashingEntity {
+    short entityType;
+    short cubeType;
+    short initState;
+    short state;
+    short counter;
+    short pad[120];
+    short x;
+    short y;
+    short z;
+} FlashingEntity;
+
 extern uint Rand(int param_1);
 
 extern POLY_FT4 shadowPrims[2][1][2][16];
@@ -32,6 +54,9 @@ extern Texture textures[150];
 extern Texture textures[150];
 extern uint firstGuiTexture;
 extern uint firstGuiTexture;
+#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
+extern CubeState cubeStates[256];
+extern short flashingBlockEntityIndexes[64];
 
 TgiFile* tgi;
 FaceData *faceDataPtr;
@@ -41,10 +66,12 @@ short numEntities;
 short crumblingBlockEntityIndexes[64];
 int specialLevelType;
 int wasSpecialLevel;
+int numFlashingBlocks;
 
 extern int invisBlockVisibility[6];
 extern int gameMode;
 extern int numKeysInLevel;
+short* levelData;
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
@@ -149,7 +176,47 @@ void ScanLevelDataForCrumblingBlocks(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForFlashingBlocks);
+void ScanLevelDataForFlashingBlocks(void) {
+    Quad *quad;
+    int j;
+    FlashingEntity *eb;
+    int x;
+    int y;
+    int z;
+    int i;
+    int ci;
+    int initState;
+    
+    numFlashingBlocks = 0;
+    for (i = 0; i < numEntities; i++) {
+        eb = (FlashingEntity *)(entityData + i * 128);
+        if (eb->entityType == 7) {
+            flashingBlockEntityIndexes[numFlashingBlocks++] = i;
+            x = eb->x;
+            y = eb->y;
+            z = eb->z;
+            eb->cubeType = levelData[x * 1156 + y * 34 + z];
+            ci = CUBE_INDEX_AT(x, y, z);
+            initState = eb->initState;
+            if (initState < 2) {
+                for (j = 0; j < 6; j++) {
+                    *(u16*)&cubeStates[0].quadPtrs[16 * ci + j]->flags = 0x10e;
+                }
+                eb->counter = 76 - initState * 47;
+                eb->state = 0;
+                levelData[x * 1156 + y * 34 + z] = -1;
+            } else {
+                for (j = 0; j < 6; j++) {
+                    quad = cubeStates[0].quadPtrs[16 * ci + j];
+                    *(u8*)&quad->flags = 0xf;
+                    quad->color = 0x808080;
+                }
+                eb->state = 3;
+                eb->counter = 164 - initState * 47;
+            }
+        }
+    }
+}
 
 void SetFaceData(int index, void **pointerInsideCubeState, int texIdx, int flags, int dir,
                  int xFine, int yFine, int zFine, int textureRotation, int color) {
