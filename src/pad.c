@@ -83,7 +83,9 @@ int GetControllerStatus(int slot) {
 }
 
 // unused
-int Return1(void) { return 1; }
+int Return1(void) {
+    return 1;
+}
 
 // unused
 void VibrateDirectlyToBuf(char value) {

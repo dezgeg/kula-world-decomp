@@ -84,7 +84,7 @@ void DrawMenuCursorSprite(int x, int y) {
     if (color < 0) {
         color = 0;
     }
-    if (color > 0x80 ) {
+    if (color > 0x80) {
         color = 0x80;
     }
     setRGB0(&menuCursorSprite[whichDrawDispEnv].sprt, color, color, color);

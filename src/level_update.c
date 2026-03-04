@@ -99,10 +99,10 @@ int FUN_0003382c(Player* player) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
 
-int GetMovingPlatformAt(Player *player, SVECTOR *param_2) {
+int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
     int blockType;
     int ri;
-    
+
     if (param_2->vx == -1) {
         SVECTOR_000a43e0.vx = player->finePos.vx - player->gravityDir.vx * 512;
         SVECTOR_000a43e0.vy = player->finePos.vy - player->gravityDir.vy * 512;
@@ -110,21 +110,21 @@ int GetMovingPlatformAt(Player *player, SVECTOR *param_2) {
     } else {
         SVECTOR_000a43e0 = *param_2;
     }
-    
+
     blockType = GetBlockAt(&SVECTOR_000a43e0);
     D_000A43DC = (blockType - 5) * 128;
-    
+
     if (D_000A43DC >= 0) {
-        if (*(short *)(entityData + D_000A43DC * 2) != 5) {
+        if (*(short*)(entityData + D_000A43DC * 2) != 5) {
             goto ret_minus1;
         }
-        
+
         ri = GetRotationIndexFromVector(player->gravityDir);
-        
-        if (FUN_000344b0(*(short *)(entityData + D_000A43DC * 2 + 4), ri) != 0) {
+
+        if (FUN_000344b0(*(short*)(entityData + D_000A43DC * 2 + 4), ri) != 0) {
             goto ret_minus1;
         }
-        
+
         if (player->subpixelPositionOnCube.vy < 101) {
             if (FUN_00033720(&player->finePos, D_000A43DC, 0) != 0) {
                 goto ret_D;
@@ -139,11 +139,11 @@ ret_D:
     return D_000A43DC;
 }
 
-int FUN_00033eb0(Player *player, SVECTOR *param_2) {
+int FUN_00033eb0(Player* player, SVECTOR* param_2) {
     int type;
     int index;
     int rotation;
-    
+
     if (param_2->vx == -1) {
         SVECTOR_000a43ec = player->finePos;
     } else {
@@ -154,7 +154,7 @@ int FUN_00033eb0(Player *player, SVECTOR *param_2) {
     index = type - 5;
     D_000A43E8 = index * 128;
 
-    if (D_000A43E8 < 0 || *(short *)((index * 256) + (int)entityData) != 5) {
+    if (D_000A43E8 < 0 || *(short*)((index * 256) + (int)entityData) != 5) {
         SVECTOR_000a43ec.vx -= player->gravityDir.vx * 512;
         SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
         SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
@@ -166,14 +166,14 @@ int FUN_00033eb0(Player *player, SVECTOR *param_2) {
         if (D_000A43E8 < 0) {
             return -1;
         }
-        if (*(short *)((index * 256) + (int)entityData) != 5) {
+        if (*(short*)((index * 256) + (int)entityData) != 5) {
             return -1;
         }
     }
 
     rotation = GetRotationIndexFromVector(player->gravityDir);
-    type = FUN_000344b0((int)*(short *)(D_000A43E8 * 2 + (int)entityData + 4), rotation);
-    
+    type = FUN_000344b0((int)*(short*)(D_000A43E8 * 2 + (int)entityData + 4), rotation);
+
     if (type == 0) {
         return -1;
     }
@@ -195,40 +195,40 @@ int FUN_000344b0(int a0, int a1) {
     return 0;
 }
 
-void FUN_00034518(VECTOR *v1, VECTOR *v2, VECTOR *v3, VECTOR *v4, VECTOR *v5, short timer, short param_7) {
+void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, short timer,
+                  short param_7) {
     int t = timer;
     int shift = param_7;
     int inv_t = (1 << (shift * 2 / 3)) - t;
-    
+
     int inv_t2 = inv_t * inv_t;
     int inv_t3 = inv_t2 * inv_t;
     int t2 = t * t;
     int t3 = t2 * t;
-    
+
     int inv_t_3 = inv_t * 3;
     int t_3 = t * 3;
-    
+
     v5->vx = (inv_t3 >> shift) * v1->vx;
     v5->vx += ((t * inv_t_3 * inv_t) >> shift) * v2->vx;
     v5->vx += ((t * t_3 * inv_t) >> shift) * v3->vx;
     v5->vx += (t3 >> shift) * v4->vx;
     v5->vx >>= shift;
-    
+
     v5->vy = (inv_t3 >> shift) * v1->vy;
     v5->vy += ((t * inv_t_3 * inv_t) >> shift) * v2->vy;
     v5->vy += ((t * t_3 * inv_t) >> shift) * v3->vy;
     v5->vy += (t3 >> shift) * v4->vy;
     v5->vy >>= shift;
-    
+
     v5->vz = (inv_t3 >> shift) * v1->vz;
     v5->vz += ((t * inv_t_3 * inv_t) >> shift) * v2->vz;
     v5->vz += ((t * t_3 * inv_t) >> shift) * v3->vz;
     v5->vz += (t3 >> shift) * v4->vz;
     v5->vz >>= shift;
-    
+
     D_000A4430 = inv_t;
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
 
@@ -236,34 +236,34 @@ INCLUDE_ASM("asm/nonmatchings/level_update", ProcessCameraAndMovement);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleDebugCamera);
 
-void HandlePauseModeRotationEffect(Player *player) {
+void HandlePauseModeRotationEffect(Player* player) {
     int iVar2;
-    
+
     player->playerHasControl = 0;
-    
+
     SVECTOR_000a449c.vx = (SVECTOR_000a449c.vx - 10) % 4096;
     SVECTOR_000a449c.vy = (SVECTOR_000a449c.vy + 4) % 4096;
     SVECTOR_000a449c.vz = (SVECTOR_000a449c.vz + 13) % 4096;
-    
+
     if (specialLevelType == 0) {
         zoomInAndOutPhase = (zoomInAndOutPhase + 15) % 4096;
     }
     if (specialLevelType == 1) {
         zoomInAndOutPhase = (zoomInAndOutPhase + 70) % 4096;
     }
-    
+
     RotMatrix(&SVECTOR_000a449c, &perspMatrixes[cameraIndex]);
-    
+
     VECTOR_000a44a8.vx = -xMinPlusMax;
     VECTOR_000a44a8.vy = -yMinPlusMax;
     VECTOR_000a44a8.vz = -zMinPlusMax;
-    
+
     ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44a8, &VECTOR_000a44a8);
-    
+
     perspMatrixes[cameraIndex].t[0] = VECTOR_000a44a8.vx;
     perspMatrixes[cameraIndex].t[1] = VECTOR_000a44a8.vy;
     perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 400;
-    
+
     if (specialLevelType == 0) {
         perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 1400 + ((rsin(zoomInAndOutPhase) * 1000) / 4096);
     }
@@ -399,14 +399,14 @@ int GetRotationIndexFromVector(SVECTOR v) {
     return -1;
 }
 
-void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
+void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR* res) {
     SVECTOR_000a4638.vz = 0;
     SVECTOR_000a4638.vy = 0;
     SVECTOR_000a4638.vx = 0;
     SVECTOR_000a4640.vz = 0;
     SVECTOR_000a4640.vy = 0;
     SVECTOR_000a4640.vx = 0;
-    
+
     if (dir1 == 5) {
         SVECTOR_000a4638.vx = 1;
         SVECTOR_000a4640.vy = 1;
@@ -431,7 +431,7 @@ void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
         SVECTOR_000a4638.vx = 1;
         SVECTOR_000a4640.vz = 1;
     }
-    
+
     *res = SVECTOR_000a4640;
     if (dir2 == 2) {
         *res = SVECTOR_000a4638;
@@ -448,7 +448,7 @@ void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR *res) {
     }
 }
 
-void SetPlayerRotation(int cubeSide, int rotation, Player *player) {
+void SetPlayerRotation(int cubeSide, int rotation, Player* player) {
     initPlayerRightVec.vz = 0;
     initPlayerRightVec.vy = 0;
     initPlayerRightVec.vx = 0;
@@ -516,8 +516,7 @@ void SetPlayerRotation(int cubeSide, int rotation, Player *player) {
     }
 }
 
-
-void SetPlayerMatrix6(Player *player) {
+void SetPlayerMatrix6(Player* player) {
     player->matrix_d4.m[0][0] = player->rightVec.vx << 12;
     player->matrix_d4.m[1][0] = player->rightVec.vy << 12;
     player->matrix_d4.m[2][0] = player->rightVec.vz << 12;
@@ -533,7 +532,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", HandleItemTouching);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CreateAllItemDispLists);
 
-void SetEntityRotation(EntityPos *pos, int param_2, int param_3, int param_4) {
+void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
     pos->matrix.m[2][2] = 0;
     pos->matrix.m[2][1] = 0;
     pos->matrix.m[2][0] = 0;
@@ -617,7 +616,7 @@ void SetEntityRotation(EntityPos *pos, int param_2, int param_3, int param_4) {
     }
 }
 
-void MatrixFromDirectionIndex(MATRIX *m, int param_2, int param_3, short delta, SVECTOR *param_5) {
+void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, SVECTOR* param_5) {
     m->m[0][2] = 0;
     m->m[0][1] = 0;
     m->m[0][0] = 0;

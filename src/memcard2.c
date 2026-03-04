@@ -263,17 +263,17 @@ int SaveMemCard(uint slot) {
             mcResult = ret;
             return 0;
         }
-    }  else {
-            INT_000a5690 = 1;
-            mcResult = tempMcResult;
-            return 0;
+    } else {
+        INT_000a5690 = 1;
+        mcResult = tempMcResult;
+        return 0;
     }
     LoadHighscoresFromMemcardData();
 
     return 1;
 }
 
-void LoadSaveFromMemoryCard(void){
+void LoadSaveFromMemoryCard(void) {
     extern char S_BESCES_01000KULA[];
     uint i;
     char* p = &memCardData;

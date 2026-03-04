@@ -55,7 +55,7 @@ void InitMemcardUi(void) {
     if (whichLevelEndSpriteLoaded != 200) {
         len = MENU_DEFLATED_SPRITES_PTR2[2 + tex * 2];
         offset = MENU_DEFLATED_SPRITES_PTR2[1 + tex * 2];
-        buf = (char *) MENU_DEFLATED_SPRITES_PTR2 + offset;
+        buf = (char*)MENU_DEFLATED_SPRITES_PTR2 + offset;
         zlibStream_a4dd4.avail_in = len;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
@@ -84,13 +84,13 @@ void InitMemcardUi(void) {
         rect.h = 1;
         rect.w = 16;
         DrawSync(0);
-        LoadImage(&rect,0x1EA014);
+        LoadImage(&rect, 0x1EA014);
         DrawSync(0);
         rect.x = 704;
         rect.y = 0x5f;
         rect.w = w;
         rect.h = h;
-        LoadImage(&rect,0x1EA040);
+        LoadImage(&rect, 0x1EA040);
         DrawSync(0);
         tex++;
         if (MENU_DEFLATED_SPRITES_PTR2[0] < tex) {
@@ -123,13 +123,13 @@ void InitMemcardUi(void) {
         rect.y = 175;
         rect.w = 16;
         rect.h = 1;
-        LoadImage(&rect,0x1EA014);
+        LoadImage(&rect, 0x1EA014);
         DrawSync(0);
         rect.x = 704;
         rect.y = 176;
         rect.w = w;
         rect.h = h;
-        LoadImage(&rect,0x1EA040);
+        LoadImage(&rect, 0x1EA040);
         DrawSync(0);
 
         TSpritePrim(loadGameSprite2, 0, 0, GetTPage(0, 2, 0x2C0, 0x5E));

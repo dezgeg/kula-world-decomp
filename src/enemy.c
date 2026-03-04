@@ -26,7 +26,7 @@ INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemies);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", UpdateEnemies);
 
-int FUN_0003d758(Enemy *e) {
+int FUN_0003d758(Enemy* e) {
     int blockType;
     int rotationIndex;
     int res;
@@ -56,8 +56,7 @@ int FUN_0003d758(Enemy *e) {
     return res;
 }
 
-
-int FUN_0003d8b8(Enemy *e) {
+int FUN_0003d8b8(Enemy* e) {
     int blockType;
     int rotationIndex;
     int res;
@@ -86,7 +85,6 @@ int FUN_0003d8b8(Enemy *e) {
     return res;
 }
 
-
 void FUN_0003da18(Enemy* enemy) {
     enemy->dir.vx = -enemy->dir.vx;
     enemy->dir.vy = -enemy->dir.vy;
@@ -112,7 +110,7 @@ int FUN_0003da64(Enemy* enemy) {
     return res == 1;
 }
 
-void FUN_0003db64(Enemy *enemy) {
+void FUN_0003db64(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
     enemy->dir = enemy->field1_0x8;
     enemy->field1_0x8.vx = -tmpEnemyPos.vx;
@@ -170,7 +168,7 @@ INCLUDE_ASM("asm/nonmatchings/enemy", Noop4);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", ProcessEnemies);
 
-void InitEnemy(int side, int rotation, Enemy *enemy) {
+void InitEnemy(int side, int rotation, Enemy* enemy) {
     SVECTOR_000a48f4.vz = 0;
     SVECTOR_000a48f4.vy = 0;
     SVECTOR_000a48f4.vx = 0;

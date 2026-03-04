@@ -126,14 +126,14 @@ void main(void) {
     isPaused = 1;
     loadNewWorld = 1;
     CdInit();
-                                        /* sfx */
-    curFileLength = ReadDataFile(curWorld,1,0xFD000);
-    SndInitFromSfxFile(0xFD000,curFileLength);
+    /* sfx */
+    curFileLength = ReadDataFile(curWorld, 1, 0xFD000);
+    SndInitFromSfxFile(0xFD000, curFileLength);
     LoadWarningTim();
-                                        /* piracy screen music */
-    SndPlaySfx(0x6f,0x378,&ZERO_SVECTOR_a2f04,8000);
-                                        /* ggi */
-    curFileLength = ReadDataFile(curWorld,3,0xFD000);
+    /* piracy screen music */
+    SndPlaySfx(0x6f, 0x378, &ZERO_SVECTOR_a2f04, 8000);
+    /* ggi */
+    curFileLength = ReadDataFile(curWorld, 3, 0xFD000);
     i = ParseGGI(0xFD000);
     printf(S_FMTx, i);
     InitFont();
@@ -155,10 +155,10 @@ void main(void) {
     do {
         if (isDemoMode == 1) {
             curLevel = DEMO_LEVELS[demoIndex] % 15;
-            if (curWorld !=  DEMO_LEVELS[demoIndex] / 15) {
+            if (curWorld != DEMO_LEVELS[demoIndex] / 15) {
                 loadNewWorld = 1;
             }
-            curWorld =  DEMO_LEVELS[demoIndex] / 15;
+            curWorld = DEMO_LEVELS[demoIndex] / 15;
             demoIndex = (demoIndex + 1) % 3;
         }
         if (loadNewWorld && !skipNextLoad) {
@@ -168,10 +168,10 @@ void main(void) {
                 loadedInitialSave = 1;
             } else {
                 /* Loading screen music */
-                SndPlaySfx(111,888,&ZERO_SVECTOR_a2f04,8000);
+                SndPlaySfx(111, 888, &ZERO_SVECTOR_a2f04, 8000);
             }
             /* .tgi */
-            curFileLength = ReadDataFile(curWorld,0,0x132000);
+            curFileLength = ReadDataFile(curWorld, 0, 0x132000);
             if (displayModeHasBeenSet == 0) {
                 displayWidth = 320;
                 displayHeight = 256;
@@ -184,7 +184,7 @@ void main(void) {
             loadingIsComplete = 888;
             curWorld2 = curWorld;
             /* .pak */
-            curFileLength = ReadDataFile(curWorld,2,0x156000);
+            curFileLength = ReadDataFile(curWorld, 2, 0x156000);
             PlayMusic(curWorld);
             loadNewWorld = 0;
             VSyncCallback(NULL);
@@ -192,8 +192,8 @@ void main(void) {
             loadingIsComplete = -1;
         }
         skipNextLoad = 0;
-        if (curLevel >= *(int* )0x156000) {
-            curLevel = *(int* )0x156000 - 1;
+        if (curLevel >= *(int*)0x156000) {
+            curLevel = *(int*)0x156000 - 1;
         }
         if (curLevel < 0) {
             curLevel = 0;
@@ -204,8 +204,8 @@ void main(void) {
                 levelLoadZlibStream.next_in = 0x15D800;
                 levelLoadZlibStream.avail_out = 0x60000;
                 levelLoadZlibStream.next_out = 0x15E000;
-                inflateRetCode1 = inflateInit_(&levelLoadZlibStream,S_1_0_4_2,0x38);
-                inflateRetCode2 = inflate(&levelLoadZlibStream,4);
+                inflateRetCode1 = inflateInit_(&levelLoadZlibStream, S_1_0_4_2, 0x38);
+                inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
                 inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
                 if (inflateRetCode1 < 0 || inflateRetCode2 < 0 || inflateRetCode3 < 0) {
                     gotSioData = 0;
@@ -215,13 +215,13 @@ void main(void) {
             }
             if (gotSioData == 0) goto loadFromPak;
         } else {
-loadFromPak:
-            levelLoadZlibStream.avail_in = *(uint *)(0x156008 + curLevel * 8);
-            levelLoadZlibStream.next_in = 0x156000 + *(int *)(0x156004 + curLevel * 8);
+        loadFromPak:
+            levelLoadZlibStream.avail_in = *(uint*)(0x156008 + curLevel * 8);
+            levelLoadZlibStream.next_in = 0x156000 + *(int*)(0x156004 + curLevel * 8);
             levelLoadZlibStream.avail_out = 0x60000;
             levelLoadZlibStream.next_out = 0x15E000;
-            inflateRetCode1 = inflateInit_(&levelLoadZlibStream,S_1_0_4_2,0x38);
-            inflateRetCode2 = inflate(&levelLoadZlibStream,4);
+            inflateRetCode1 = inflateInit_(&levelLoadZlibStream, S_1_0_4_2, 0x38);
+            inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
             inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
         }
         if (specialLevelType != 0) {
@@ -235,9 +235,9 @@ loadFromPak:
         }
         VariousInit();
         if (gameState != 0 && gameState != 4 &&
-             (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1))) {
-                                        /* level begin sfx (but also done in other places?) */
-            SndPlaySfx(30,0,&ZERO_SVECTOR_a2f04,7000);
+            (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1))) {
+            /* level begin sfx (but also done in other places?) */
+            SndPlaySfx(30, 0, &ZERO_SVECTOR_a2f04, 7000);
         }
         if (specialLevelType != 0) {
             PlayBonusMusic();
@@ -247,7 +247,7 @@ loadFromPak:
         drawCopyright = 0;
         DrawSync(0);
         VSync(0);
-    } while(1);
+    } while (1);
 }
 
 void SioRecvVsyncCallback(void) {
@@ -488,27 +488,27 @@ void ReceiveBufFromSio(void) {
     sioWritePtr = 0x0015d800;
     for (i = 0; i < byteCountToReceiveFromSio; i++) {
         vsyncCounter = 0;
-        while ((_sio_control(0,0,0) & 2) == 0) {
+        while ((_sio_control(0, 0, 0) & 2) == 0) {
             if (vsyncCounter > 50) {
                 gotSioData = 0;
-                SetupDisplay(0,0,0,0,0,0);
+                SetupDisplay(0, 0, 0, 0, 0, 0);
                 return;
             }
         }
-        *sioWritePtr++ = _sio_control(0,4,0);
+        *sioWritePtr++ = _sio_control(0, 4, 0);
         if ((i & 0xff) == 0 || i == byteCountToReceiveFromSio - 1) {
-            FntPrint(S_recived_FMTd,i + 1);
-            FntPrint(S_of_FMTd_bytes,byteCountToReceiveFromSio);
+            FntPrint(S_recived_FMTd, i + 1);
+            FntPrint(S_of_FMTd_bytes, byteCountToReceiveFromSio);
             FntFlush(-1);
             whichDrawDispEnv = !whichDrawDispEnv;
             PutDrawAndDispEnvs();
             if (GetControllerButtons(0) & PAD_SELECT) {
                 gotSioData = 0;
-                SetupDisplay(0,0,0,0,0,0);
+                SetupDisplay(0, 0, 0, 0, 0, 0);
                 return;
             }
         }
     }
     gotSioData = 1;
-    SetupDisplay(0,0,0,0,0,0);
+    SetupDisplay(0, 0, 0, 0, 0, 0);
 }

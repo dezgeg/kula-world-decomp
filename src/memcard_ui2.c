@@ -2,7 +2,7 @@
 
 // Prototypes
 extern void DrawPsxButtonBackground(void);
-extern void DrawTextCrappyFont(char * str);
+extern void DrawTextCrappyFont(char* str);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
 extern void MusicCheckForLoop(void);
@@ -11,7 +11,7 @@ extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
 extern void SetBigGuiSpriteVisible(void);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 
 // non-gprel-used variables (extern)
@@ -53,7 +53,7 @@ int AskSaveOverwrite(void) {
         for (i = 0; i < numCameras; i++) {
             ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
         }
-        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
         ResetTextRenderState();
         for (i = 0; i < numCameras; i++) {
             DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
@@ -68,30 +68,29 @@ int AskSaveOverwrite(void) {
         SetBigGuiSpriteVisible();
         ResetTextVars();
         DrawPsxButtonBackground();
-        SetTextParams(displayWidth / 2,displayHeight / 2 - 50,1,0x80,0x80,0x80);
+        SetTextParams(displayWidth / 2, displayHeight / 2 - 50, 1, 0x80, 0x80, 0x80);
         DrawTextCrappyFont(S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO);
         if (TestButton(PAD_CROSS)) {
-            SndPlaySfx(109,0,&SVECTOR_000a2fac,8000);
+            SndPlaySfx(109, 0, &SVECTOR_000a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 1;
         }
         if (TestButton(PAD_TRIANGLE)) {
-            SndPlaySfx(109,0,&SVECTOR_000a2fac,8000);
+            SndPlaySfx(109, 0, &SVECTOR_000a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 0;
         }
     }
-
 }
 
-void ShowMemCardFullScreenText(char *str) {
+void ShowMemCardFullScreenText(char* str) {
     int i;
     int j;
     int iter;
     int l;
 
     for (iter = 0; iter < 3; iter++) {
-        SetTextParams(displayWidth / 2,displayHeight / 2 - 25,1,0x80,0x80,0x80);
+        SetTextParams(displayWidth / 2, displayHeight / 2 - 25, 1, 0x80, 0x80, 0x80);
         DrawTextCrappyFont(str);
         DrawSync(0);
         VSync(0);
@@ -100,7 +99,7 @@ void ShowMemCardFullScreenText(char *str) {
         for (i = 0; i < numCameras; i++) {
             ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
         }
-        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
         ResetTextRenderState();
         for (i = 0; i < numCameras; i++) {
             DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);

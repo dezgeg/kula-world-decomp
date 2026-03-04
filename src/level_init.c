@@ -6,7 +6,7 @@ typedef struct P {
 } P;
 
 typedef struct FaceData {
-    void **pointerInsideCubeState;
+    void** pointerInsideCubeState;
     short texIdx;
     short dir;
     short x, y, z;
@@ -59,8 +59,8 @@ extern CubeState cubeStates[256];
 extern short flashingBlockEntityIndexes[64];
 
 TgiFile* tgi;
-FaceData *faceDataPtr;
-short *entityData;
+FaceData* faceDataPtr;
+short* entityData;
 int numCrumblingBlocks;
 short numEntities;
 short crumblingBlockEntityIndexes[64];
@@ -77,25 +77,25 @@ INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 
-int CoordHash(int x,int y,int z,int dir,int div,int mod) {
-    switch(dir) {
-    case 0:
-        z = z + -0x100;
-        break;
-    case 1:
-        x = x + 0x100;
-        break;
-    case 2:
-        y = y + 0x100;
-        break;
-    case 3:
-        y = y + -0x100;
-        break;
-    case 4:
-        x = x + -0x100;
-        break;
-    case 5:
-        z = z + 0x100;
+int CoordHash(int x, int y, int z, int dir, int div, int mod) {
+    switch (dir) {
+        case 0:
+            z = z + -0x100;
+            break;
+        case 1:
+            x = x + 0x100;
+            break;
+        case 2:
+            y = y + 0x100;
+            break;
+        case 3:
+            y = y + -0x100;
+            break;
+        case 4:
+            x = x + -0x100;
+            break;
+        case 5:
+            z = z + 0x100;
     }
     return ((x + y + z) / (div * 3)) % mod;
 }
@@ -177,19 +177,19 @@ void ScanLevelDataForCrumblingBlocks(void) {
 }
 
 void ScanLevelDataForFlashingBlocks(void) {
-    Quad *quad;
+    Quad* quad;
     int j;
-    FlashingEntity *eb;
+    FlashingEntity* eb;
     int x;
     int y;
     int z;
     int i;
     int ci;
     int initState;
-    
+
     numFlashingBlocks = 0;
     for (i = 0; i < numEntities; i++) {
-        eb = (FlashingEntity *)(entityData + i * 128);
+        eb = (FlashingEntity*)(entityData + i * 128);
         if (eb->entityType == 7) {
             flashingBlockEntityIndexes[numFlashingBlocks++] = i;
             x = eb->x;
@@ -218,38 +218,39 @@ void ScanLevelDataForFlashingBlocks(void) {
     }
 }
 
-void SetFaceData(int index, void **pointerInsideCubeState, int texIdx, int flags, int dir,
+void SetFaceData(int index, void** pointerInsideCubeState, int texIdx, int flags, int dir,
                  int xFine, int yFine, int zFine, int textureRotation, int color) {
-    FaceData *fd = &faceDataPtr[index];
-    unsigned char *ptr;
+    FaceData* fd = &faceDataPtr[index];
+    unsigned char* ptr;
 
-    if (pointerInsideCubeState != (void **)0xffffffff) {
+    if (pointerInsideCubeState != (void**)0xffffffff) {
         fd->pointerInsideCubeState = pointerInsideCubeState;
-        *pointerInsideCubeState = (void *)index;
+        *pointerInsideCubeState = (void*)index;
     }
 
-    fd = (FaceData *)((char *)fd + 4);
-    *(short *)fd = texIdx;
-    fd = (FaceData *)((char *)fd + 2);
-    *(short *)fd = dir;
-    fd = (FaceData *)((char *)fd + 2);
-    *(short *)fd = xFine;
-    fd = (FaceData *)((char *)fd + 2);
-    *(short *)fd = yFine;
-    fd = (FaceData *)((char *)fd + 2);
-    *(short *)fd = zFine;
-    fd = (FaceData *)((char *)fd + 2);
-    *(short *)fd = textureRotation;
-    fd = (FaceData *)((char *)fd + 2);
-    *(int *)fd = flags;
-    ((int *)fd)[1] = color;
+    fd = (FaceData*)((char*)fd + 4);
+    *(short*)fd = texIdx;
+    fd = (FaceData*)((char*)fd + 2);
+    *(short*)fd = dir;
+    fd = (FaceData*)((char*)fd + 2);
+    *(short*)fd = xFine;
+    fd = (FaceData*)((char*)fd + 2);
+    *(short*)fd = yFine;
+    fd = (FaceData*)((char*)fd + 2);
+    *(short*)fd = zFine;
+    fd = (FaceData*)((char*)fd + 2);
+    *(short*)fd = textureRotation;
+    fd = (FaceData*)((char*)fd + 2);
+    *(int*)fd = flags;
+    ((int*)fd)[1] = color;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level_init", CopyQuadData);
 
-void InitAnimatedTextureChain(AnimatedTextureChain *dst, int numEntries, int numFrames1, int numFrames2, void *ptr1,
-                             void *ptr2, void *ptr3, void *ptr4, int zero9, int zero10) {
-    int *d = (int *)dst;
+void InitAnimatedTextureChain(AnimatedTextureChain* dst, int numEntries, int numFrames1,
+                              int numFrames2, void* ptr1, void* ptr2, void* ptr3, void* ptr4,
+                              int zero9, int zero10) {
+    int* d = (int*)dst;
     d[0] = (int)((u8*)dst + 40 + numEntries * 8);
     d[1] = (int)(dst + 1);
     d[2] = numFrames1;
@@ -262,17 +263,18 @@ void InitAnimatedTextureChain(AnimatedTextureChain *dst, int numEntries, int num
     d[9] = zero10;
 }
 
-void AddQuadToAnimatedTextureChain(AnimatedTextureChain *chain, Quad **quadPtr, int initAnimFrame1, int initAnimFrame2) {
-    void **tce = (void **)chain->entries;
-    *tce++ = (void *)quadPtr;
+void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, int initAnimFrame1,
+                                   int initAnimFrame2) {
+    void** tce = (void**)chain->entries;
+    *tce++ = (void*)quadPtr;
     if (initAnimFrame1 == -1) {
         initAnimFrame1 = Rand(chain->numFrames1);
     }
     if (initAnimFrame2 == -1) {
         initAnimFrame2 = Rand(chain->numFrames2);
     }
-    *tce++ = (void *)(initAnimFrame2 << 16 | initAnimFrame1);
-    chain->entries = (TextureChainEntry *)tce;
+    *tce++ = (void*)(initAnimFrame2 << 16 | initAnimFrame1);
+    chain->entries = (TextureChainEntry*)tce;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level_init", FUN_000298e0);
@@ -304,8 +306,6 @@ void InitShadowSprites(void) {
             }
         }
     }
-
-
 }
 
 void InitPlayerSpecularSprite(void) {
