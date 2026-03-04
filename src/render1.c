@@ -12,6 +12,24 @@ extern int specialLevelType;
 extern RGB farColor;
 extern RGB farColor2;
 
+typedef struct {
+    char data[0x15c];
+} GemRandomSparkleEffect;
+
+extern GemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
+extern int itemsDispList[10];
+extern int itemsDispListIdx;
+extern int maxPrimBufUsage;
+extern void* playerEnemyDispList[4];
+extern int playerEnemyDispListIdx;
+extern int primBufUsage;
+extern void* renderedPrimsBuf;
+
+extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect * eff);
+extern void RenderDispList(void* p);
+extern void DrawPlayerSpecularSprites(void);
+extern void DrawShadowSprites(void);
+
 extern void RenderBonusBackground(void * ot);
 extern void RenderNonSpecialBackground(void * ot);
 extern void RenderStarfield(void * ot);
@@ -114,7 +132,39 @@ int GetShortFromGgiPart2(int param_1) {
     return ggiPart2DepthCueingLookup[param_1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/render1", RenderPlayerAndItems);
+void RenderPlayerAndItems(void) {
+    int i, j;
+    int iDl = itemsDispListIdx;
+    int pDl = playerEnemyDispListIdx;
+    int temp;
+    
+    itemsDispList[iDl] = 0;
+    playerEnemyDispList[pDl] = NULL;
+    itemsDispListIdx = iDl + 1;
+    playerEnemyDispListIdx = pDl + 1;
+    
+    SetFarColor(farColor2[0], farColor2[1], farColor2[2]);
+    
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            UpdateGemRandomSparkleEffect(&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j]);
+        }
+    }
+    
+    RenderDispList(itemsDispList);
+    DrawPlayerSpecularSprites();
+    RenderDispList(playerEnemyDispList);
+    DrawShadowSprites();
+    
+    temp = (int)renderedPrimsBuf + 0xffe87000;
+    primBufUsage = temp - (whichDrawDispEnv * 0xc000);
+    if (primBufUsage > maxPrimBufUsage) {
+        maxPrimBufUsage = primBufUsage;
+    }
+    
+    itemsDispListIdx = 0;
+    playerEnemyDispListIdx = 0;
+}
 
 extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
