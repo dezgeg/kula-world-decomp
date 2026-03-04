@@ -32,7 +32,23 @@ extern int screenOffsetY;
 extern int specialLevelType;
 extern POLY_FT4 hourglassSprites[2][3];
 extern POLY_FT4 lethargyEffectPoly[2];
+extern int BONUS_WIDGET_COLOR_DATA_LEN;
+extern int BONUS_WIDGET_POSITIONS[];
+extern TSprite bonusWidgetSpritesMsbBackground[2][34];
+extern TSprite bonusWidgetSpritesMsbForeground[2][32];
+extern TSprite bonusWidgetSpritesPiechart[2][9];
+extern int numCubesRemainingInLevel[5];
 extern Texture textures[150];
+
+uint BONUS_WIDGET_COLOR_DATA[96];
+uint SIZE_OF_UNK_ENTRY;
+int* bonusWidgetDataEnd;
+int* bonusWidgetDataPtr;
+int* bonusWidgetDataPtr2;
+int* bonusWidgetDataPtr3;
+int drawBonusWidget;
+int firstBonusWidgetTexture;
+int numBonusWidgetMsbs;
 extern TPolyF4 screenFadePolys[2][1];
 extern TSprite copyrightSprite[2];
 extern TSprite fruitBonusTextSprites[2][10];
@@ -315,6 +331,84 @@ void InitTimerPausedSprite(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/sprite_init", InitBonusWidgetSprites);
+extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+
+void InitBonusWidgetSprites(void) {
+    int dx;
+    int dy;
+    int i;
+    int j;
+    int texIdx;
+
+    drawBonusWidget = 0;
+    bonusWidgetDataPtr = BONUS_WIDGET_COLOR_DATA;
+    bonusWidgetDataPtr2 = BONUS_WIDGET_COLOR_DATA;
+    bonusWidgetDataPtr3 = BONUS_WIDGET_COLOR_DATA;
+    bonusWidgetDataEnd = &BONUS_WIDGET_COLOR_DATA[BONUS_WIDGET_COLOR_DATA_LEN];
+    numBonusWidgetMsbs = numCubesRemainingInLevel[0] / 8;
+
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 9; j++) {
+            TSpritePrim(&bonusWidgetSpritesPiechart[i][j],0,0,textures[firstBonusWidgetTexture + j].tpage);
+            SetSemiTrans(&bonusWidgetSpritesPiechart[i][j].sprt, textures[firstBonusWidgetTexture + j].semitrans);
+            SetShadeTex(&bonusWidgetSpritesPiechart[i][j].sprt,0);
+            setRGB0(&bonusWidgetSpritesPiechart[i][j].sprt, 0x80, 0x80, 0x80);
+            bonusWidgetSpritesPiechart[i][j].sprt.clut = textures[firstBonusWidgetTexture + j].clut;
+            bonusWidgetSpritesPiechart[i][j].sprt.u0 = textures[firstBonusWidgetTexture + j].u;
+            bonusWidgetSpritesPiechart[i][j].sprt.v0 = textures[firstBonusWidgetTexture + j].v;
+            bonusWidgetSpritesPiechart[i][j].sprt.w = textures[firstBonusWidgetTexture + j].w;
+            bonusWidgetSpritesPiechart[i][j].sprt.h = textures[firstBonusWidgetTexture + j].h;
+        }
+
+        for (j = 0; j < 8; j++) {
+            int *arr1 = &BONUS_WIDGET_POSITIONS[0];
+            int *arr2 = &BONUS_WIDGET_POSITIONS[0] + 1;
+            setXY0(&bonusWidgetSpritesPiechart[i][j].sprt,
+                arr1[j*2] + 268,
+                arr2[j*2] + 7);
+        }
+        setXY0(&bonusWidgetSpritesPiechart[i][8].sprt, 268, 7);
+
+        for (j = 0; j < numBonusWidgetMsbs; j++) {
+            TSpritePrim(&bonusWidgetSpritesMsbForeground[i][j],0,0,textures[firstBonusWidgetTexture + 9].tpage);
+            setXY0(&bonusWidgetSpritesMsbForeground[i][j].sprt, 268 + -6 * j, 25);
+            SetSemiTrans(&bonusWidgetSpritesMsbForeground[i][j].sprt,  textures[firstBonusWidgetTexture + 9].semitrans);
+            SetShadeTex(&bonusWidgetSpritesMsbForeground[i][j].sprt,0);
+            setRGB0(&bonusWidgetSpritesMsbForeground[i][j].sprt, 0x80, 0x80, 0x80);
+            bonusWidgetSpritesMsbForeground[i][j].sprt.clut = textures[firstBonusWidgetTexture + 9].clut;
+            bonusWidgetSpritesMsbForeground[i][j].sprt.u0 = textures[firstBonusWidgetTexture + 9].u;
+            bonusWidgetSpritesMsbForeground[i][j].sprt.v0 = textures[firstBonusWidgetTexture + 9].v;
+            bonusWidgetSpritesMsbForeground[i][j].sprt.w = textures[firstBonusWidgetTexture + 9].w;
+            bonusWidgetSpritesMsbForeground[i][j].sprt.h = textures[firstBonusWidgetTexture + 9].h;
+        }
+
+        for (j = 0; j < numBonusWidgetMsbs + 2; j++) {
+            if (j == 0) {
+                texIdx = firstBonusWidgetTexture + 12;
+                dx = 0;
+                dy = 0;
+            } else if (j == numBonusWidgetMsbs + 1) {
+                texIdx = firstBonusWidgetTexture + 11;
+                dx = 2;
+                dy = 0;
+            } else {
+                texIdx = firstBonusWidgetTexture + 10;
+                dx = 0;
+                dy = 0;
+            }
+
+            TSpritePrim(&bonusWidgetSpritesMsbBackground[i][j],0,0,textures[texIdx].tpage);
+            setXY0(&bonusWidgetSpritesMsbBackground[i][j].sprt, -6 * (j-1) + 267 + dx , 20 + dy);
+            SetSemiTrans(&bonusWidgetSpritesMsbBackground[i][j].sprt,  textures[texIdx].semitrans);
+            SetShadeTex(&bonusWidgetSpritesMsbBackground[i][j].sprt,0);
+            setRGB0(&bonusWidgetSpritesMsbBackground[i][j].sprt, 0x80, 0x80, 0x80);
+            bonusWidgetSpritesMsbBackground[i][j].sprt.clut = textures[texIdx].clut;
+            bonusWidgetSpritesMsbBackground[i][j].sprt.u0 = textures[texIdx].u;
+            bonusWidgetSpritesMsbBackground[i][j].sprt.v0 = textures[texIdx].v;
+            bonusWidgetSpritesMsbBackground[i][j].sprt.w = textures[texIdx].w;
+            bonusWidgetSpritesMsbBackground[i][j].sprt.h = textures[texIdx].h;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/sprite_init", InitAllDigitSprites);
