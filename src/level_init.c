@@ -35,7 +35,7 @@ extern uint firstGuiTexture;
 
 TgiFile* tgi;
 FaceData *faceDataPtr;
-CrumblingBlockEntity *entityData; // XXX: Fix type
+short *entityData;
 int numCrumblingBlocks;
 short numEntities;
 short crumblingBlockEntityIndexes[64];
@@ -95,9 +95,9 @@ void ScanLevelDataForCrumblingBlocks(void) {
 
     numCrumblingBlocks = 0;
     for (i = 0; i < numEntities; i++) {
-        if (entityData[i].entityType == 6) {
+        if (((CrumblingBlockEntity*)entityData)[i].entityType == 6) {
             crumblingBlockEntityIndexes[numCrumblingBlocks++] = i;
-            entityData[i].counter = 0x200;
+            ((CrumblingBlockEntity*)entityData)[i].counter = 0x200;
         }
     }
 }
