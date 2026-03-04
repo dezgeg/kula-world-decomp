@@ -14,6 +14,7 @@ short isPausedOrWaitingForRestart;
 
 int DAT_000a43c4 = 0;
 
+extern short numEntities;
 extern short* levelData;
 extern short copycatMoves[1024];
 extern short copycatNewOrCopyMoves;
@@ -279,7 +280,43 @@ void SetInvulnerable(void) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CreateItemsFromLevelData);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", InitLasers);
+void InitLasers(void) {
+    int i;
+    int x;
+    int y;
+    int z;
+
+    for (i = 0; i < numEntities * 128; i += 128) {
+        if (((short*)entityData)[i + 0] != 8)
+            continue;
+        x = ((short*)entityData)[i + 4];
+        y = ((short*)entityData)[i + 5];
+        z = ((short*)entityData)[i + 6];
+        switch (((short*)entityData)[i + 2]) {
+            case 1:
+                levelData[x * 1156 + y * 34 + z] = 0;
+                for (x = ((short*)entityData)[i + 4] + 1; x < ((short*)entityData)[i + 7]; x++) {
+                    levelData[x * 1156 + y * 34 + z] = -2;
+                }
+                levelData[x * 1156 + y * 34 + z] = 0;
+                break;
+            case 2:
+                levelData[x * 1156 + y * 34 + z] = 0;
+                for (y = ((short*)entityData)[i + 5] + 1; y < ((short*)entityData)[i + 8]; y++) {
+                    levelData[x * 1156 + y * 34 + z] = -2;
+                }
+                levelData[x * 1156 + y * 34 + z] = 0;
+                break;
+            case 5:
+                levelData[x * 1156 + y * 34 + z] = 0;
+                for (z = ((short*)entityData)[i + 6] + 1; z < ((short*)entityData)[i + 9]; z++) {
+                    levelData[x * 1156 + y * 34 + z] = -2;
+                }
+                levelData[x * 1156 + y * 34 + z] = 0;
+                break;
+        }
+    }
+}
 
 void ResetCopycatMode(int param_1) {
     int i;
