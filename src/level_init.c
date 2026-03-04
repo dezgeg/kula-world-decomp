@@ -39,6 +39,12 @@ short *entityData;
 int numCrumblingBlocks;
 short numEntities;
 short crumblingBlockEntityIndexes[64];
+int specialLevelType;
+int wasSpecialLevel;
+
+extern int invisBlockVisibility[6];
+extern int gameMode;
+extern int numKeysInLevel;
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
 
@@ -84,7 +90,48 @@ int GetRandomTextureRotation(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ParseKeysAndSpecialLevelFromItemData);
+void ParseKeysAndSpecialLevelFromItemData(void) {
+    int i;
+    int j;
+
+    numKeysInLevel = 0;
+    wasSpecialLevel = specialLevelType;
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i * 128] >= 0 && entityData[i * 128] < 5) {
+            for (j = 0; j < 6; j++) {
+                if (entityData[128 * i + 1 + 16 * j] == 31) {
+                    numKeysInLevel++;
+                }
+            }
+        }
+    }
+    if (numKeysInLevel == 0) {
+        specialLevelType = 1;
+    } else {
+        specialLevelType = 0;
+    }
+    invisBlockVisibility[0] = 0x2000;
+    invisBlockVisibility[1] = 0x2000;
+    invisBlockVisibility[2] = 0x2000;
+    invisBlockVisibility[3] = 0x15e;
+    invisBlockVisibility[4] = 0x200;
+    invisBlockVisibility[5] = 0;
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[128 * i] == 9) {
+            if (entityData[128 * i + 1] == 1) {
+                specialLevelType = 2;
+            }
+            if (entityData[128 * i + 2] == 1) {
+                invisBlockVisibility[3] = 0x500;
+                invisBlockVisibility[4] = 0x700;
+                invisBlockVisibility[5] = 1;
+            }
+        }
+    }
+    if (gameMode == 1) {
+        specialLevelType = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForMovingBlocks1);
 
