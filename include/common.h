@@ -138,7 +138,12 @@ typedef struct Music {
 } Music;
 
 typedef struct Quad {
-    uint flags;
+    union {
+        uint i32;
+        ushort u16;
+        byte u8;
+        byte b[4];
+    } flags;
     short otagIndex;
     byte textureRotation;
     byte pad;
