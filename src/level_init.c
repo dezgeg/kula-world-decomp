@@ -68,13 +68,88 @@ short crumblingBlockEntityIndexes[64];
 int specialLevelType;
 int wasSpecialLevel;
 int numFlashingBlocks;
+int cubeCounter;
+int numCubesInLevelTmp;
+int numCubesRemainingInLevel[5];
+int numberOfCubeFaces;
+
+extern byte D_000735B5[];
+extern byte D_00073634[];
+extern uint D_00073798[];
+extern byte D_000737D4[];
+
+extern byte BYTE_ARRAY_00073588[52];
+extern byte BYTE_ARRAY_000735bc[124];
+extern byte BYTE_ARRAY_0007379c[60];
+extern uint SIZE_OF_UNK_ENTRY;
+extern uint UINT_ARRAY_00073638[89];
+extern uint UINT_ARRAY_000737d8[16];
+extern AnimatedTextureChain bonusBlockTextureChain;
+extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
+extern int curWorld;
+extern AnimatedTextureChain fireBlockTextureChain;
+extern AnimatedTextureChain invisibleBlockTextureChain;
+extern uint UNK_ENTRIES[];
+
+extern void ProcessCubesIntoFaces(void);
+extern void ScanLevelDataForMovingBlocks1(void);
+extern void InitLasers2(void);
+extern void ProcessMovingPlatforms2(void);
+extern void FUN_000298e0(AnimatedTextureChain * textureChain);
+extern void ScanLevelDataForRetractableSpikes(void);
 
 extern int invisBlockVisibility[6];
 extern int gameMode;
 extern int numKeysInLevel;
 short* levelData;
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ProcessLevelData);
+void ProcessLevelData(void) {
+    int i;
+    int one = 1;
+    AnimatedTextureChain* fbtc = &fireBlockTextureChain;
+    AnimatedTextureChain* ibtc = &invisibleBlockTextureChain;
+
+    numberOfCubeFaces = 0;
+    numCubesInLevelTmp = 0;
+    cubeCounter = 0;
+
+    InitAnimatedTextureChain(fbtc, 0x80, D_000735B5 - BYTE_ARRAY_00073588, 0, BYTE_ARRAY_00073588, NULL, NULL, NULL, 0, 0);
+    InitAnimatedTextureChain(ibtc, 0x200, D_00073634 - BYTE_ARRAY_000735bc, D_00073798 - UINT_ARRAY_00073638, BYTE_ARRAY_000735bc, NULL, UINT_ARRAY_00073638, NULL, 0, 0);
+
+    if (specialLevelType == one) {
+        uint* unkEntries = UNK_ENTRIES;
+        InitAnimatedTextureChain(&crumblingSpecialBlockTextureChain, 0x300, 0, SIZE_OF_UNK_ENTRY, NULL, NULL,
+                                 unkEntries + (curWorld % 2) * (SIZE_OF_UNK_ENTRY << 1),
+                                 unkEntries + ((curWorld % 2) * 2 + 1) * SIZE_OF_UNK_ENTRY, 0, 0);
+        InitAnimatedTextureChain(&bonusBlockTextureChain, 0x300, D_000737D4 - BYTE_ARRAY_0007379c, SIZE_OF_UNK_ENTRY, BYTE_ARRAY_0007379c,
+                                 UINT_ARRAY_000737d8,
+                                 unkEntries + (curWorld % 2) * (SIZE_OF_UNK_ENTRY << 1),
+                                 unkEntries + ((curWorld % 2) * 2 + 1) * SIZE_OF_UNK_ENTRY, 0, 0);
+    }
+
+    ProcessCubesIntoFaces();
+    ScanLevelDataForMovingBlocks1();
+    InitLasers2();
+    CopyQuadData();
+    ScanLevelDataForCrumblingBlocks();
+    ScanLevelDataForFlashingBlocks();
+    ProcessMovingPlatforms2();
+
+    FUN_000298e0(fbtc);
+    FUN_000298e0(ibtc);
+    if (specialLevelType == one) {
+        FUN_000298e0(&crumblingSpecialBlockTextureChain);
+        FUN_000298e0(&bonusBlockTextureChain);
+    }
+
+    ScanLevelDataForRetractableSpikes();
+
+    numCubesRemainingInLevel[0] = numCubesInLevelTmp;
+    for (i = 1; i < 4; i++) {
+        numCubesRemainingInLevel[i] = 0;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 
