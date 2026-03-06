@@ -383,7 +383,83 @@ int GetBlockAt(SVECTOR* coord) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", UpdateSubpixelPositions);
+static short playerFinePosMod512[4];
+
+void UpdateSubpixelPositions(Player* player) {
+    playerFinePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
+    playerFinePosMod512[1] = (player->finePos.vy + 0x100) & 0x1FF;
+    playerFinePosMod512[2] = (player->finePos.vz + 0x100) & 0x1FF;
+
+    player->svec_154 = player->subpixelPositionOnCube;
+
+    if (player->facingDir.vx == 1) {
+        player->subpixelPositionOnCube.vz = playerFinePosMod512[0];
+    }
+    if (player->facingDir.vx == -1) {
+        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[0];
+    }
+
+    if (player->facingDir.vy == 1) {
+        player->subpixelPositionOnCube.vz = playerFinePosMod512[1];
+    }
+    if (player->facingDir.vy == -1) {
+        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[1];
+    }
+
+    if (player->facingDir.vz == 1) {
+        player->subpixelPositionOnCube.vz = playerFinePosMod512[2];
+    }
+    if (player->facingDir.vz == -1) {
+        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[2];
+    }
+
+    if (player->gravityDir.vx == 1) {
+        player->subpixelPositionOnCube.vy = playerFinePosMod512[0];
+    }
+    if (player->gravityDir.vx == -1) {
+        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[0];
+    }
+
+    if (player->gravityDir.vy == 1) {
+        player->subpixelPositionOnCube.vy = playerFinePosMod512[1];
+    }
+    if (player->gravityDir.vy == -1) {
+        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[1];
+    }
+
+    if (player->gravityDir.vz == 1) {
+        player->subpixelPositionOnCube.vy = playerFinePosMod512[2];
+    }
+    if (player->gravityDir.vz == -1) {
+        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[2];
+    }
+
+    if (player->rightVec.vx == 1) {
+        player->subpixelPositionOnCube.vx = playerFinePosMod512[0];
+    }
+    if (player->rightVec.vx == -1) {
+        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[0];
+    }
+
+    if (player->rightVec.vy == 1) {
+        player->subpixelPositionOnCube.vx = playerFinePosMod512[1];
+    }
+    if (player->rightVec.vy == -1) {
+        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[1];
+    }
+
+    if (player->rightVec.vz == 1) {
+        player->subpixelPositionOnCube.vx = playerFinePosMod512[2];
+    }
+    if (player->rightVec.vz == -1) {
+        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[2];
+    }
+
+    player->svec_144.vx = player->subpixelPositionOnCube.vx - player->svec_154.vx;
+    player->svec_144.vy = player->subpixelPositionOnCube.vy - player->svec_154.vy;
+    player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level_update", MovePlayerForward);
 
