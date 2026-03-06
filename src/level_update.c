@@ -100,9 +100,6 @@ int FUN_0003382c(Player* player) {
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
 
 int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
-    int blockType;
-    int ri;
-
     if (param_2->vx == -1) {
         SVECTOR_000a43e0.vx = player->finePos.vx - player->gravityDir.vx * 512;
         SVECTOR_000a43e0.vy = player->finePos.vy - player->gravityDir.vy * 512;
@@ -111,17 +108,14 @@ int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
         SVECTOR_000a43e0 = *param_2;
     }
 
-    blockType = GetBlockAt(&SVECTOR_000a43e0);
-    D_000A43DC = (blockType - 5) * 128;
+    D_000A43DC = (GetBlockAt(&SVECTOR_000a43e0) - 5) * 128;
 
     if (D_000A43DC >= 0) {
         if (*(short*)(entityData + D_000A43DC * 2) != 5) {
             goto ret_minus1;
         }
 
-        ri = GetRotationIndexFromVector(player->gravityDir);
-
-        if (FUN_000344b0(*(short*)(entityData + D_000A43DC * 2 + 4), ri) != 0) {
+        if (FUN_000344b0(*(short*)(entityData + D_000A43DC * 2 + 4), GetRotationIndexFromVector(player->gravityDir)) != 0) {
             goto ret_minus1;
         }
 
