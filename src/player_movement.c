@@ -1,13 +1,25 @@
 #include "common.h"
 
-short DAT_000a4374;
-short landingSquishDamping;
-short landingSquishFrameCounter;
-short landingSquishMagnitude;
-short landingSquishMagnitudeIncrement;
+short idleSquishSinPhase;
+short pad_000a4352;
+short idleSquishMagnitude;
+short pad_000a4356;
+static SVECTOR SVECTOR_000a4358;
+static SVECTOR SVECTOR_000a4360;
+static SVECTOR SVECTOR_000a4368;
 short *initJumpTimerPtr;
+short DAT_000a4374;
+short pad_000a4376;
+short landingSquishMagnitudeIncrement;
+short pad_000a437a;
+short landingSquishMagnitude;
+short pad_000a437e;
+short landingSquishFrameCounter;
+short pad_000a4382;
+unsigned short landingSquishDamping;
 extern short *ggiPart5JumpAnimData;
 extern int gameMode;
+extern int levelTimeLeft;
 
 extern void EnableScreenShake(int param_1, int param_2, int param_3);
 extern int GetBlockAt(SVECTOR * coord);
@@ -431,7 +443,29 @@ void SetBallShapeAndRotationWhenJumping(Player *player) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", SetBallShapeAndRotationWhenRollingOrIdle);
+void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
+    RotMatrixX(-(player->rotX * 6), &player->matrix_254);
+    if (landingSquishFrameCounter > 0) {
+        landingSquishFrameCounter--;
+        landingSquishDamping = 100;
+        landingSquishMagnitude += landingSquishMagnitudeIncrement;
+    } else if (landingSquishMagnitude > 0) {
+        landingSquishDamping -= 10;
+        if ((short)landingSquishDamping < 20) {
+            landingSquishDamping = 20;
+        }
+        landingSquishMagnitude -= landingSquishDamping;
+        if (landingSquishMagnitude < 0) {
+            landingSquishMagnitude = 0;
+        }
+    } else {
+        int temp = (5000 - levelTimeLeft) / 40;
+        idleSquishSinPhase = (idleSquishSinPhase + temp + 40) % 4096;
+        idleSquishMagnitude = (rsin(idleSquishSinPhase) * 200) / 4096;
+    }
+    player->ballMorphShape = (ushort)idleSquishMagnitude + (ushort)landingSquishMagnitude;
+}
+
 
 void ResetPlayerMatrix274(Player *player) {
     MulMatrix0(&player->matrix_274, &player->matrix_254, &player->matrix_254);
