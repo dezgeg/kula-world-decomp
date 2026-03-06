@@ -57,8 +57,6 @@ int FUN_0003d758(Enemy* e) {
 }
 
 int FUN_0003d8b8(Enemy* e) {
-    int blockType;
-    int rotationIndex;
     int res;
 
     SVECTOR_000a4820.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
@@ -69,10 +67,7 @@ int FUN_0003d8b8(Enemy* e) {
     SVECTOR_000a4828.vy = e->pos.vy - e->dir.vy * 0x200;
     SVECTOR_000a4828.vz = e->pos.vz - e->dir.vz * 0x200;
 
-    blockType = GetBlockAt(&SVECTOR_000a4820);
-    rotationIndex = GetRotationIndexFromVector(e->normalVec);
-
-    if (FUN_000403ec(blockType, rotationIndex) != 1) {
+    if (FUN_000403ec(GetBlockAt(&SVECTOR_000a4820), GetRotationIndexFromVector(e->normalVec)) != 1) {
         return 0;
     }
 
@@ -95,19 +90,11 @@ void FUN_0003da18(Enemy* enemy) {
 }
 
 int FUN_0003da64(Enemy* enemy) {
-    int blockType;
-    int rotationIndex;
-    int res;
-
     SVECTOR_000a4830.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) + (enemy->field1_0x8.vx * 0x200);
     SVECTOR_000a4830.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) + (enemy->field1_0x8.vy * 0x200);
     SVECTOR_000a4830.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) + (enemy->field1_0x8.vz * 0x200);
 
-    blockType = GetBlockAt(&SVECTOR_000a4830);
-    rotationIndex = GetRotationIndexFromVector(enemy->normalVec);
-    res = FUN_000403ec(blockType, rotationIndex);
-
-    return res == 1;
+    return FUN_000403ec(GetBlockAt(&SVECTOR_000a4830), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
 
 void FUN_0003db64(Enemy* enemy) {
@@ -118,20 +105,12 @@ void FUN_0003db64(Enemy* enemy) {
     enemy->field1_0x8.vz = -tmpEnemyPos.vz;
 }
 
-int FUN_0003dbe0(Enemy* e) {
-    int blockType;
-    int rotationIndex;
-    int res;
+int FUN_0003dbe0(Enemy* enemy) {
+    SVECTOR_000a4838.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) - (enemy->field1_0x8.vx * 0x200);
+    SVECTOR_000a4838.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) - (enemy->field1_0x8.vy * 0x200);
+    SVECTOR_000a4838.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) - (enemy->field1_0x8.vz * 0x200);
 
-    SVECTOR_000a4838.vx = e->pos.vx + (e->normalVec.vx * -400) - (e->field1_0x8.vx * 0x200);
-    SVECTOR_000a4838.vy = e->pos.vy + (e->normalVec.vy * -400) - (e->field1_0x8.vy * 0x200);
-    SVECTOR_000a4838.vz = e->pos.vz + (e->normalVec.vz * -400) - (e->field1_0x8.vz * 0x200);
-
-    blockType = GetBlockAt(&SVECTOR_000a4838);
-    rotationIndex = GetRotationIndexFromVector(e->normalVec);
-    res = FUN_000403ec(blockType, rotationIndex);
-
-    return res == 1;
+    return FUN_000403ec(GetBlockAt(&SVECTOR_000a4838), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
 
 void FUN_0003dce0(Enemy* enemy) {
