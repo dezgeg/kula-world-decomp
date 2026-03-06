@@ -6,11 +6,53 @@ extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 
+typedef struct InvisBlockVisibility {
+    int pos[3];
+    int transparencyFactor;
+    int distanceFactor;
+    int flip;
+} InvisBlockVisibility;
+
+extern void ASM_FUN_00050310(void* otag);
+extern void ASM_FUN_00052504(void* otag);
+extern void CubeTextureStuff(AnimatedTextureChain* param_1);
+extern void DisableLightEffect(int param_1);
+extern void DrawScreenFade(void);
+extern void ProcessCrumblingBlocks(void);
+extern void ProcessDisabledLightEffects(void);
+extern void ProcessEnabledLightEffects(void);
+extern void ProcessEnemiesRenderItemsAndCheckFellOff(void);
+extern void ProcessFlashingBlocks(void);
+extern void ProcessInvisibleBlockVisibility(InvisBlockVisibility* param_1);
+extern void ProcessLightEffects(void);
+extern void ProcessMovingPlatforms2(void);
+extern void ProcessRecentlyVisitedCubes(void);
+extern void ProcessRetractableSpikes(void);
+extern void ProcessTurningMotionBlur(void);
+extern void RenderItems_(void);
+extern void RenderLevelGeometryQuads(void* otag);
+extern void RenderPlayerAndItems(void);
+extern void SubdivideLevelGeometryPolys(void);
+extern void TurnLevelExitQuadIntoGreen(void);
+extern void UnusedAsmNoop(void);
+extern void UpdateSunglassModeDisabling(void);
+
+int drawGeometryAndObjects;
+MATRIX levelGeometryRenderingMatrix;
+
 MATRIX MATRIX_000a5184;
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
 extern RGB farColor;
 extern RGB farColor2;
+
+extern AnimatedTextureChain bonusBlockTextureChain;
+extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
+extern AnimatedTextureChain fireBlockTextureChain;
+extern InvisBlockVisibility invisBlockVisibility;
+extern AnimatedTextureChain invisibleBlockTextureChain;
+extern int isPaused;
+extern int toBeDisabledLightEffects[64];
 
 typedef struct {
     char data[0x15c];
@@ -59,7 +101,72 @@ void RenderBackground(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/render1", RenderEverythingElseAndProcessSomeStuff);
+void RenderEverythingElseAndProcessSomeStuff(void) {
+    int i;
+    int* p;
+
+    if (drawGeometryAndObjects == 1) {
+        TurnLevelExitQuadIntoGreen();
+        UpdateSunglassModeDisabling();
+
+        if (cameraIndex == 0) {
+            ProcessMovingPlatforms2();
+            ProcessCrumblingBlocks();
+            CubeTextureStuff(&fireBlockTextureChain);
+            CubeTextureStuff(&invisibleBlockTextureChain);
+
+            if (specialLevelType == 1) {
+                CubeTextureStuff(&crumblingSpecialBlockTextureChain);
+                CubeTextureStuff(&bonusBlockTextureChain);
+                ProcessRecentlyVisitedCubes();
+            }
+
+            if (isPaused == 0) {
+                ProcessFlashingBlocks();
+                ProcessRetractableSpikes();
+            }
+        }
+
+        ProcessEnabledLightEffects();
+        ProcessInvisibleBlockVisibility(&invisBlockVisibility);
+        ProcessLightEffects();
+
+        levelGeometryRenderingMatrix = perspMatrixes[cameraIndex];
+
+        CalculateBlockLighting();
+        SetFarColor(farColor[0] + 4, farColor[1] + 4, farColor[2] + 4);
+
+        RenderLevelGeometryQuads(otag[whichDrawDispEnv][cameraIndex]);
+        ProcessTurningMotionBlur();
+        ASM_FUN_00050310(otag[whichDrawDispEnv][cameraIndex]);
+        UnusedAsmNoop();
+
+        if (isPaused == 0) {
+            ProcessEnemiesRenderItemsAndCheckFellOff();
+        } else {
+            RenderItems_();
+        }
+
+        SubdivideLevelGeometryPolys();
+        ProcessDisabledLightEffects();
+
+        p = toBeDisabledLightEffects;
+        for (i = 0; i < 64; i++, p++) {
+            if (*p != -1) {
+                DisableLightEffect(*p);
+                *p = -1;
+            }
+        }
+
+        ASM_FUN_00052504(otag[whichDrawDispEnv][cameraIndex]);
+        DrawScreenFade();
+        RenderPlayerAndItems();
+    } else {
+        itemsDispListIdx = 0;
+        playerEnemyDispListIdx = 0;
+    }
+}
+
 
 void CalculateBlockLighting(void) {
     int i;
