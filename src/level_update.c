@@ -16,6 +16,24 @@ short isPausedOrWaitingForRestart;
 
 int DAT_000a43c4;
 
+int hpbPrevControllerButtons;
+short copycatIdleTimer;
+short copycatStateVar;
+short curCopycatMove;
+short padCross;
+short padUp;
+short timerBeforeJumpOrRoll;
+short turnDelayEnabled;
+short turnDelayFrames;
+uint prevControllerButtons;
+uint controllerButtons;
+
+extern int GetButtonsFromReplay(void);
+extern void RecordButtonsToDevkit(int buttons);
+extern void SndMuteAllTaggedVoices(void);
+extern void WriteToDevkit(int param_1);
+extern int buttonSaveReplayMode;
+
 extern short numEntities;
 extern short* levelData;
 extern short copycatMoves[1024];
@@ -350,7 +368,257 @@ void SetPausedOrWaitingForRestart(void) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", HandlePlayerButtons);
+void HandlePlayerButtons(Player *player) {
+    short copycatMove;
+    
+    if (turnDelayEnabled != 0) {
+        turnDelayFrames = 6;
+    } else {
+        turnDelayFrames = 0;
+    }
+    
+    switch (buttonSaveReplayMode) {
+        case 1:
+            if (controllerButtons & PAD_CIRCLE) {
+                WriteToDevkit(0);
+            } else {
+                RecordButtonsToDevkit((short)controllerButtons);
+            }
+            break;
+        case 2:
+            controllerButtons |= GetButtonsFromReplay();
+            break;
+    }
+    player->jumping = 0;
+
+    
+    player->rollingForward = 0;
+    player->turnDirection = 0;
+    player->cameraR1R2TurnDirection.vy = 0;
+    player->cameraR1R2TurnDirection.vx = 0;
+    
+    if (thePlayer.bounceTimer >= 0) {
+        player->jumping = 1;
+    }
+
+    if ((controllerButtons & PAD_CROSS) != 0 && isPausedOrWaitingForRestart != 0) {
+        return;
+    }
+    
+    hpbPrevControllerButtons = prevControllerButtons;
+    isPausedOrWaitingForRestart = 0;
+    
+    switch (gameMode) {
+        case 0:
+        case 2:
+            if (player->playerHasControl) {
+                if (player->startTurningTo == 0) {
+                    if (++player->turnDelayTimer > turnDelayFrames) {
+                        hpbPrevControllerButtons = 0;
+                    }
+                    if (player->startTurningLeftNextFrame == 1) {
+                        player->startTurningLeftNextFrame = 0;
+                        player->turnDelayTimer = 0;
+                        player->turnDirection = 1;
+                    }
+                    if (player->startTurningRightNextFrame == 1) {
+                        player->startTurningRightNextFrame = 0;
+                        player->turnDelayTimer = 0;
+                        player->turnDirection = -1;
+                    }
+                    if ((controllerButtons & PAD_L) & ~hpbPrevControllerButtons) {
+                        player->startTurningLeftNextFrame = 0;
+                        player->turnDelayTimer = 0;
+                        player->turnDirection = 1;
+                    }
+                    if ((controllerButtons & PAD_R) & ~hpbPrevControllerButtons) {
+                        player->startTurningRightNextFrame = 0;
+                        player->turnDelayTimer = 0;
+                        player->turnDirection = -1;
+                    }
+                } else {
+                    player->turnDelayTimer = 0;
+                    if ((controllerButtons & PAD_L) & ~hpbPrevControllerButtons) {
+                        player->startTurningLeftNextFrame = 1;
+                    }
+                    if ((controllerButtons & PAD_R) & ~hpbPrevControllerButtons) {
+                        player->startTurningRightNextFrame = 1;
+                    }
+                }
+
+                if (thePlayer.bounceTimer >= 0) {
+                    if (controllerButtons & PAD_U) {
+                        padUp = 1;
+                    }
+                    if (controllerButtons & PAD_CROSS) {
+                        padCross = 1;
+                    }
+                    if (padUp == 1 || padCross == 1) {
+                        timerBeforeJumpOrRoll++;
+                    } else {
+                        timerBeforeJumpOrRoll = 0;
+                    }
+                    if (timerBeforeJumpOrRoll > 3) {
+                        player->rollingForward = padUp;
+                        if (padCross == 1 && padUp == 1 && player->longJump == 0 && player->howMoving198 != JUMPING_FORWARD) {
+                            player->longJump = 1;
+                        }
+                        padCross = 0;
+                        padUp = 0;
+                    }
+                } else {
+                    if (controllerButtons & PAD_U) {
+                        player->rollingForward = 1;
+                    }
+                    if (controllerButtons & PAD_CROSS) {
+                        player->jumping = 1;
+                    }
+                }
+            }
+            break;
+
+        case 1:
+            if (player->playerHasControl == 0) break;
+            if (copycatStateVar == 1) break;
+            if (copycatStateVar == 2) break;
+            {
+                if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
+                    copycatIdleTimer++;
+                } else {
+                    copycatIdleTimer = 0;
+                }
+
+                if (controllerButtons & PAD_U) {
+                    padUp = 1;
+                }
+                if (controllerButtons & PAD_CROSS) {
+                    padCross = 1;
+                }
+                if (padUp == 1 || padCross == 1) {
+                    timerBeforeJumpOrRoll++;
+                }
+
+                if (timerBeforeJumpOrRoll > 4) {
+                    player->jumping = padCross;
+                    player->rollingForward = padUp;
+                    timerBeforeJumpOrRoll = 0;
+                    padCross = 0;
+                    padUp = 0;
+                }
+
+                if (copycatIdleTimer < 3) {
+                    timerBeforeJumpOrRoll = 0;
+                    padCross = 0;
+                    padUp = 0;
+                    if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
+                        if (copycatMoves[player->copycatMoveIndex] == -1) {
+                            copycatNewOrCopyMoves = 1;
+                        } else {
+                            copycatNewOrCopyMoves = 0;
+                        }
+                    }
+                }
+
+                if (copycatIdleTimer < 6) {
+                    player->jumping = 0;
+                    player->turnDirection = 0;
+                    player->rollingForward = 0;
+                } else {
+                    if (controllerButtons & PAD_L) {
+                        player->turnDirection = 1;
+                        copycatIdleTimer = 0;
+                    }
+                    if (controllerButtons & PAD_R) {
+                        player->turnDirection = -1;
+                        copycatIdleTimer = 0;
+                    }
+                }
+
+                if (player->rollingForward == 1 && player->jumping == 0 && player->surroundingBlocks[0][2][1] < 0 &&
+                    (player->surroundingBlocks[0][1][0] > -1 || player->surroundingBlocks[0][1][2] > -1)) {
+                    player->rollingForward = 0;
+                }
+
+                if (player->turnDirection != 0 || player->rollingForward != 0 || player->jumping != 0) {
+                    curCopycatMove = 0;
+                    if (player->turnDirection == -1) curCopycatMove = 1;
+                    if (player->turnDirection == 1) curCopycatMove |= 2;
+                    if (player->rollingForward == 1) curCopycatMove |= 4;
+                    if (player->jumping == 1) curCopycatMove |= 8;
+
+                    copycatMove = copycatMoves[player->copycatMoveIndex];
+                    if (copycatMove == -1) {
+                        copycatMoves[player->copycatMoveIndex] = curCopycatMove;
+                        if (player->copycatMoveIndex == numCopycatMoves) {
+                            copycatStateVar = 1;
+                        }
+                    } else {
+                        if (copycatMove != curCopycatMove) {
+                            copycatStateVar = 2;
+                        }
+                    }
+                    player->copycatMoveIndex++;
+                }
+            }
+            break;
+    }
+
+
+    
+    if (controllerButtons & PAD_R1) {
+        player->cameraR1R2TurnDirection.vx = -1;
+    }
+    if (controllerButtons & PAD_R2) {
+        player->cameraR1R2TurnDirection.vx = 1;
+    }
+    if (player->rollingForward == 1) {
+        player->cameraR1R2TurnDirection.vy = 0;
+    }
+    
+    if ((controllerButtons & PAD_START) & ~prevControllerButtons) {
+        pauseForStartPress = 1;
+        SndMuteAllTaggedVoices();
+    }
+    
+    if (player->debugCameraMode) {
+        if ((controllerButtons & PAD_CIRCLE) & ~prevControllerButtons) {
+            player->debugCameraMode = (player->debugCameraMode + 1) % 2;
+        }
+        player->debugCamY = 0;
+        player->debugCamX = 0;
+        if (controllerButtons & PAD_D) player->debugCamY = -25;
+        if (controllerButtons & PAD_U) player->debugCamY = 25;
+        if (controllerButtons & PAD_L) player->debugCamX = 32;
+        if (controllerButtons & PAD_R) player->debugCamX = -32;
+        
+        if ((controllerButtons & PAD_L1) & ~prevControllerButtons) player->debugCameraParam -= 4;
+        if ((controllerButtons & PAD_L2) & ~prevControllerButtons) player->debugCameraParam += 4;
+        
+        if (player->debugCameraParam > 19) player->debugCameraParam = 20;
+        if (player->debugCameraParam < 5) player->debugCameraParam = 4;
+        
+        player->debugCamY %= 4096;
+        player->debugCamX %= 4096;
+        
+        player->jumping = 0;
+        player->rollingForward = 0;
+        player->turnDirection = 0;
+    }
+    
+    if (player->surroundingBlocks[0][2][1] < 0 && player->surroundingBlocks[0][1][0] < 0 && 
+        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == 96 && 
+        player->jumping == 0 && player->movementVelocity > 0 && player->subpixelPositionOnCube.vz > 300) {
+        
+        player->rollingForward = 0;
+        if (player->subpixelPositionOnCube.vz > 400) {
+            player->finePos.vx += player->facingDir.vx * -40;
+            player->finePos.vy += player->facingDir.vy * -40;
+            player->finePos.vz += player->facingDir.vz * -40;
+        }
+        player->movementVelocity = 0;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcWhatPlayerIsStandingOn);
 
