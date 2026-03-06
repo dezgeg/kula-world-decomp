@@ -12,7 +12,7 @@ int getBlockResult;
 
 short isPausedOrWaitingForRestart;
 
-int DAT_000a43c4 = 0;
+int DAT_000a43c4;
 
 extern short numEntities;
 extern short* levelData;
