@@ -105,7 +105,6 @@ short* levelData;
 
 void ProcessLevelData(void) {
     int i;
-    int one = 1;
     AnimatedTextureChain* fbtc = &fireBlockTextureChain;
     AnimatedTextureChain* ibtc = &invisibleBlockTextureChain;
 
@@ -116,7 +115,7 @@ void ProcessLevelData(void) {
     InitAnimatedTextureChain(fbtc, 0x80, D_000735B5 - BYTE_ARRAY_00073588, 0, BYTE_ARRAY_00073588, NULL, NULL, NULL, 0, 0);
     InitAnimatedTextureChain(ibtc, 0x200, D_00073634 - BYTE_ARRAY_000735bc, D_00073798 - UINT_ARRAY_00073638, BYTE_ARRAY_000735bc, NULL, UINT_ARRAY_00073638, NULL, 0, 0);
 
-    if (specialLevelType == one) {
+    if (specialLevelType == 1) {
         uint* unkEntries = UNK_ENTRIES;
         InitAnimatedTextureChain(&crumblingSpecialBlockTextureChain, 0x300, 0, SIZE_OF_UNK_ENTRY, NULL, NULL,
                                  unkEntries + (curWorld % 2) * (SIZE_OF_UNK_ENTRY << 1),
@@ -137,7 +136,7 @@ void ProcessLevelData(void) {
 
     FUN_000298e0(fbtc);
     FUN_000298e0(ibtc);
-    if (specialLevelType == one) {
+    if (specialLevelType == 1) {
         FUN_000298e0(&crumblingSpecialBlockTextureChain);
         FUN_000298e0(&bonusBlockTextureChain);
     }
@@ -149,7 +148,6 @@ void ProcessLevelData(void) {
         numCubesRemainingInLevel[i] = 0;
     }
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 
