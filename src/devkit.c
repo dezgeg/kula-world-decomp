@@ -24,7 +24,6 @@ extern volatile byte saveReplayCurrentButtonsShuffled;
 extern volatile int saveReplayLength;
 extern volatile byte saveReplayRleButtonCount;
 
-
 static char* DEBUG_SCREENSHOT_WORLD_NAMES[13] = {
     "hir",
     "hil",

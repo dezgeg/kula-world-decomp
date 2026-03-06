@@ -1,5 +1,7 @@
 #include "common.h"
 
+#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
+
 typedef struct P {
     ulong* p0;
     ulong* p1;
@@ -54,7 +56,6 @@ extern Texture textures[150];
 extern Texture textures[150];
 extern uint firstGuiTexture;
 extern uint firstGuiTexture;
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 extern CubeState cubeStates[256];
 extern short flashingBlockEntityIndexes[64];
 
@@ -80,22 +81,22 @@ INCLUDE_ASM("asm/nonmatchings/level_init", ProcessCubesIntoFaces);
 int CoordHash(int x, int y, int z, int dir, int div, int mod) {
     switch (dir) {
         case 0:
-            z = z + -0x100;
+            z -= 0x100;
             break;
         case 1:
-            x = x + 0x100;
+            x += 0x100;
             break;
         case 2:
-            y = y + 0x100;
+            y += 0x100;
             break;
         case 3:
-            y = y + -0x100;
+            y -= 0x100;
             break;
         case 4:
-            x = x + -0x100;
+            x -= 0x100;
             break;
         case 5:
-            z = z + 0x100;
+            z += 0x100;
     }
     return ((x + y + z) / (div * 3)) % mod;
 }
