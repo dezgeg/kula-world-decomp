@@ -700,7 +700,65 @@ void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, 
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", CheckForButtonEntity);
+extern SVECTOR SVECTOR_000a2df4;
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void Vibrate99(int magnitude1, int magnitude2, int count);
+int IsFallingOrJumping(Player* player);
+
+int DAT_000a4748;
+int DAT_000a474c;
+int DAT_000a4750;
+int DAT_000a4754;
+
+void CheckForButtonEntity(Player* player) {
+    int temp;
+    int temp_init;
+    short* ptr;
+    unsigned short* ptr0;
+    unsigned short* ptr2;
+    if (IsFallingOrJumping(player)) {
+        player->alreadyProcessedEntityAction = 0;
+    } else {
+        if (player->alreadyProcessedEntityAction != 9 && player->faceTypePlayerStandingOn == 9 &&
+            (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
+            (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
+
+            player->alreadyProcessedEntityAction = 9;
+            DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
+
+            if (((short*)(entityData + DAT_000a4748 * 2))[4] == 1) {
+                SndPlaySfx(9, 0, &SVECTOR_000a2df4, 7000);
+            } else {
+                SndPlaySfx(100, 0, &SVECTOR_000a2df4, 7000);
+            }
+            Vibrate99(1, 0xff, 1);
+
+            ptr0 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+            DAT_000a4754 = (short)ptr0[7];
+            DAT_000a474c = ((int)(ptr0[7] << 16)) >> 20;
+            DAT_000a4750 = ptr0[7] & 0xf;
+
+            while (DAT_000a4754 != -1) {
+                if (DAT_000a4750 == 6) {
+                    ptr = (short*)(DAT_000a474c * 256 + (int)entityData);
+                    ptr[3] = (ptr[3] + 1) % 2;
+                    DAT_000a4748 = DAT_000a474c << 7;
+                    DAT_000a4754 = ptr[23];
+                    DAT_000a474c = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
+                    DAT_000a4750 = ((unsigned short*)ptr)[23] & 0xf;
+                } else {
+                    DAT_000a4748 = DAT_000a474c * 128 + DAT_000a4750 * 16;
+                    ptr2 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+                    ptr2[4] = ((short)ptr2[4] % 2) + 1;
+                    DAT_000a4754 = (short)ptr2[6];
+                    DAT_000a474c = ((int)(ptr2[6] << 16)) >> 20;
+                    DAT_000a4750 = ptr2[6] & 0xf;
+                }
+            }
+        }
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleTransporter);
 
