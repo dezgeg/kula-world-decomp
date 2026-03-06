@@ -57,7 +57,7 @@ segments:
     subalign: 4
     bss_size: 0xa3cb0
     subsegments:
-      - [0x00800, rodata, hud]
+      - [0x00800, .rodata, hud]
       - [0x00814, .rodata, level_init]
       - [0x0082c, rodata, level_init_2]
       - [0x00838, rodata, rodata_00838]
