@@ -1,22 +1,16 @@
 #include "common.h"
 
 short idleSquishSinPhase;
-short pad_000a4352;
 short idleSquishMagnitude;
-short pad_000a4356;
 static SVECTOR SVECTOR_000a4358;
 static SVECTOR SVECTOR_000a4360;
 static SVECTOR SVECTOR_000a4368;
 short *initJumpTimerPtr;
 short DAT_000a4374;
-short pad_000a4376;
 short landingSquishMagnitudeIncrement;
-short pad_000a437a;
 short landingSquishMagnitude;
-short pad_000a437e;
 short landingSquishFrameCounter;
-short pad_000a4382;
-unsigned short landingSquishDamping;
+short landingSquishDamping;
 extern short *ggiPart5JumpAnimData;
 extern int gameMode;
 extern int levelTimeLeft;
@@ -171,7 +165,6 @@ void StartMovementIfNeeded(Player *player) {
         }
     }
 }
-
 
 void StartJumpingForward(Player *player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
@@ -329,33 +322,33 @@ int CheckIfPlayerLanded(Player *player) {
     tempNewPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
     tempNewPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
     tempNewPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * 100);
-    
+
     tempNewBlock = GetBlockAt(&tempNewPlayerPos);
-    
+
     if ((tempNewBlock >= 5 && *(short *)(entityData + tempNewBlock * 256 - 0x500) == 5) || tempNewBlock < 0) {
         return 0;
     }
-    
+
     if (player->howMoving198 == 1) {
         ResetPlayerMatrix274(player);
     }
-    if (player->alreadyProcessedEntityAction != 5 && player->playerHasControl == 1 && isPausedOrWaitingForRestart == 0) {
+    if (player->alreadyProcessedEntityAction != 5 && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
         SndPlaySfx(0x66, 0, &SVECTOR_000a2dd8, 7000);
     }
     if (player->gravityVelocity == -80) {
         Vibrate99(0, 200, 3);
         EnableScreenShake(3, 20, 2);
     }
-    
+
     player->finePos.vx += player->gravityDir.vx * 100;
     player->finePos.vy += player->gravityDir.vy * 100;
     player->finePos.vz += player->gravityDir.vz * 100;
-    
+
     MovePlayerDownwards(player, 100);
     player->howMoving198 = -1;
     player->onGround = 1;
     player->howMoving0 = 0;
-    if (player->rollingForward != 0) {
+    if (player->rollingForward) {
         player->movementVelocity = 0x28;
     }
     landingSquishFrameCounter = 4;
@@ -365,7 +358,7 @@ int CheckIfPlayerLanded(Player *player) {
     landingSquishMagnitude = 0;
     landingSquishDamping = 100;
     UpdateSubpixelPositions(player);
-    if (player->subpixelPositionOnCube.vz < 0xb4 && player->jumping == 0) {
+    if (player->subpixelPositionOnCube.vz < 0xb4 && !player->jumping) {
         player->rollingForward = 1;
         player->forcedRollForwardTimer = 1;
         player->turnDirection = 0;
@@ -444,14 +437,14 @@ void SetBallShapeAndRotationWhenJumping(Player *player) {
 }
 
 void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
-    RotMatrixX(-(player->rotX * 6), &player->matrix_254);
+    RotMatrixX(player->rotX * -6, &player->matrix_254);
     if (landingSquishFrameCounter > 0) {
         landingSquishFrameCounter--;
         landingSquishDamping = 100;
         landingSquishMagnitude += landingSquishMagnitudeIncrement;
     } else if (landingSquishMagnitude > 0) {
         landingSquishDamping -= 10;
-        if ((short)landingSquishDamping < 20) {
+        if (landingSquishDamping < 20) {
             landingSquishDamping = 20;
         }
         landingSquishMagnitude -= landingSquishDamping;
@@ -459,11 +452,10 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
             landingSquishMagnitude = 0;
         }
     } else {
-        int temp = (5000 - levelTimeLeft) / 40;
-        idleSquishSinPhase = (idleSquishSinPhase + temp + 40) % 4096;
+        idleSquishSinPhase = (idleSquishSinPhase + (5000 - levelTimeLeft) / 40 + 40) % 4096;
         idleSquishMagnitude = (rsin(idleSquishSinPhase) * 200) / 4096;
     }
-    player->ballMorphShape = (ushort)idleSquishMagnitude + (ushort)landingSquishMagnitude;
+    player->ballMorphShape = idleSquishMagnitude + landingSquishMagnitude;
 }
 
 
