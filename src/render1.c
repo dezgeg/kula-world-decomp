@@ -103,7 +103,6 @@ void RenderBackground(void) {
 
 void RenderEverythingElseAndProcessSomeStuff(void) {
     int i;
-    int* p;
 
     if (drawGeometryAndObjects == 1) {
         TurnLevelExitQuadIntoGreen();
@@ -150,11 +149,10 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
         SubdivideLevelGeometryPolys();
         ProcessDisabledLightEffects();
 
-        p = toBeDisabledLightEffects;
-        for (i = 0; i < 64; i++, p++) {
-            if (*p != -1) {
-                DisableLightEffect(*p);
-                *p = -1;
+        for (i = 0; i < 64; i++) {
+            if (toBeDisabledLightEffects[i] != -1) {
+                DisableLightEffect(toBeDisabledLightEffects[i]);
+                toBeDisabledLightEffects[i] = -1;
             }
         }
 
