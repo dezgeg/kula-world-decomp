@@ -1,5 +1,7 @@
 #include "common.h"
 
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
+
 int ballTextureIndex;
 int curController;
 short numCopycatMoves;
@@ -144,8 +146,7 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
         SVECTOR_000a43ec = *param_2;
     }
 
-    type = GetBlockAt(&SVECTOR_000a43ec);
-    index = type - 5;
+    index = GetBlockAt(&SVECTOR_000a43ec) - 5;
     D_000A43E8 = index * 128;
 
     if (D_000A43E8 < 0 || *(short*)((index * 256) + (int)entityData) != 5) {
@@ -153,8 +154,7 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
         SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
         SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
 
-        type = GetBlockAt(&SVECTOR_000a43ec);
-        index = type - 5;
+        index = GetBlockAt(&SVECTOR_000a43ec) - 5;
         D_000A43E8 = index * 128;
 
         if (D_000A43E8 < 0) {
@@ -165,10 +165,7 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
         }
     }
 
-    rotation = GetRotationIndexFromVector(player->gravityDir);
-    type = FUN_000344b0((int)*(short*)(D_000A43E8 * 2 + (int)entityData + 4), rotation);
-
-    if (type == 0) {
+    if (FUN_000344b0((int)*(short*)(D_000A43E8 * 2 + (int)entityData + 4), GetRotationIndexFromVector(player->gravityDir)) == 0) {
         return -1;
     }
     if (FUN_00033720(&player->finePos, D_000A43E8, 100) != 0) {
@@ -189,10 +186,7 @@ int FUN_000344b0(int a0, int a1) {
     return 0;
 }
 
-void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, short timer,
-                  short param_7) {
-    int t = timer;
-    int shift = param_7;
+void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, short t, short shift) {
     int inv_t = (1 << (shift * 2 / 3)) - t;
 
     int inv_t2 = inv_t * inv_t;
@@ -231,8 +225,6 @@ INCLUDE_ASM("asm/nonmatchings/level_update", ProcessCameraAndMovement);
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleDebugCamera);
 
 void HandlePauseModeRotationEffect(Player* player) {
-    int iVar2;
-
     player->playerHasControl = 0;
 
     SVECTOR_000a449c.vx = (SVECTOR_000a449c.vx - 10) % 4096;
@@ -361,8 +353,6 @@ INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 INCLUDE_ASM("asm/nonmatchings/level_update", HandlePlayerButtons);
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcWhatPlayerIsStandingOn);
-
-#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
 int GetBlockAt(SVECTOR* coord) {
     getBlockX = (coord->vx + 0x100) >> 9;
