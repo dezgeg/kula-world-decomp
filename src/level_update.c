@@ -431,7 +431,6 @@ INCLUDE_ASM("asm/nonmatchings/level_update", LevelInit);
 
 void ProcessPlayer(void) {
     int fireVibration;
-    int reason;
     
     SubtractLevelTimer(1);
     if (isPausedOrWaitingForRestart != 0) {
@@ -498,13 +497,12 @@ void ProcessPlayer(void) {
         thePlayer.bounceTimer++;
     }
     
-    reason = levelWon[cameraIndex];
-    if (reason == 1) {
+    if (levelWon[cameraIndex] == 1) {
         if (numCameras == 1 || (levelWon[0] == 1 && levelWon[1] == 1)) {
-            levelEndReason = reason;
+            levelEndReason = levelWon[cameraIndex];
         }
-    } else if (reason != 0) {
-        levelEndReason = reason;
+    } else if (levelWon[cameraIndex] != 0) {
+        levelEndReason = levelWon[cameraIndex];
     }
     
     if (thePlayer.movementInhibitTimer < 1000) {
