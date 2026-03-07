@@ -596,7 +596,7 @@ void SetPausedOrWaitingForRestart(void) {
 INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 
 void HandlePlayerButtons(Player *player) {
-    if (turnDelayEnabled != 0) {
+    if (turnDelayEnabled) {
         turnDelayFrames = 6;
     } else {
         turnDelayFrames = 0;
@@ -626,7 +626,7 @@ void HandlePlayerButtons(Player *player) {
         player->jumping = 1;
     }
 
-    if ((controllerButtons & PAD_CROSS) != 0 && isPausedOrWaitingForRestart != 0) {
+    if ((controllerButtons & PAD_CROSS) && isPausedOrWaitingForRestart) {
         return;
     }
 
