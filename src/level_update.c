@@ -238,19 +238,19 @@ void FUN_0003418c(Player *player) {
     SVECTOR_000a4428.vy = vy;
     vz = (player->finePos.vz + 256) >> 9;
     SVECTOR_000a4428.vz = vz;
-    
+
     gx = player->gravityDir.vx;
     rx = player->rightVec.vx;
     gx--;
     vx -= gx;
     DAT_000a43fc = (rx + vx) - player->facingDir.vx;
-    
+
     gy = player->gravityDir.vy;
     ry = player->rightVec.vy;
     gy--;
     vy -= gy;
     DAT_000a4400 = (ry + vy) - player->facingDir.vy;
-    
+
     gz = player->gravityDir.vz;
     rz = player->rightVec.vz;
     gz--;
@@ -268,21 +268,21 @@ void FUN_0003418c(Player *player) {
             }
         }
     }
-    
+
     SVECTOR_000a4428.vx = player->finePos.vx + player->svec54.vx;
     SVECTOR_000a4428.vy = player->finePos.vy + player->svec54.vy;
     SVECTOR_000a4428.vz = player->finePos.vz + player->svec54.vz;
-    
+
     mpVelSum = GetBlockAt(&SVECTOR_000a4428);
     if (mpVelSum == -2) {
         player->surroundingBlocks[1][1][1] = -2;
     }
-    
+
     {
         MovingPlatformEntity *mpe = (MovingPlatformEntity *)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
         mpVelSum = (ushort)mpe->velZ + ((ushort)mpe->velX + (ushort)mpe->velY);
     }
-    
+
     if (mpVelSum != 0) {
         Vibrate99(0, 70, 2);
     }
