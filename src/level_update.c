@@ -597,13 +597,13 @@ INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 
 void HandlePlayerButtons(Player *player) {
     short copycatMove;
-    
+
     if (turnDelayEnabled != 0) {
         turnDelayFrames = 6;
     } else {
         turnDelayFrames = 0;
     }
-    
+
     switch (buttonSaveReplayMode) {
         case 1:
             if (controllerButtons & PAD_CIRCLE) {
@@ -618,12 +618,12 @@ void HandlePlayerButtons(Player *player) {
     }
     player->jumping = 0;
 
-    
+
     player->rollingForward = 0;
     player->turnDirection = 0;
     player->cameraR1R2TurnDirection.vy = 0;
     player->cameraR1R2TurnDirection.vx = 0;
-    
+
     if (thePlayer.bounceTimer >= 0) {
         player->jumping = 1;
     }
@@ -631,10 +631,10 @@ void HandlePlayerButtons(Player *player) {
     if ((controllerButtons & PAD_CROSS) != 0 && isPausedOrWaitingForRestart != 0) {
         return;
     }
-    
+
     hpbPrevControllerButtons = prevControllerButtons;
     isPausedOrWaitingForRestart = 0;
-    
+
     switch (gameMode) {
         case 0:
         case 2:
@@ -790,8 +790,6 @@ void HandlePlayerButtons(Player *player) {
             break;
     }
 
-
-    
     if (controllerButtons & PAD_R1) {
         player->cameraR1R2TurnDirection.vx = -1;
     }
@@ -801,12 +799,12 @@ void HandlePlayerButtons(Player *player) {
     if (player->rollingForward == 1) {
         player->cameraR1R2TurnDirection.vy = 0;
     }
-    
+
     if ((controllerButtons & PAD_START) & ~prevControllerButtons) {
         pauseForStartPress = 1;
         SndMuteAllTaggedVoices();
     }
-    
+
     if (player->debugCameraMode) {
         if ((controllerButtons & PAD_CIRCLE) & ~prevControllerButtons) {
             player->debugCameraMode = (player->debugCameraMode + 1) % 2;
@@ -817,25 +815,25 @@ void HandlePlayerButtons(Player *player) {
         if (controllerButtons & PAD_U) player->debugCamY = 25;
         if (controllerButtons & PAD_L) player->debugCamX = 32;
         if (controllerButtons & PAD_R) player->debugCamX = -32;
-        
+
         if ((controllerButtons & PAD_L1) & ~prevControllerButtons) player->debugCameraParam -= 4;
         if ((controllerButtons & PAD_L2) & ~prevControllerButtons) player->debugCameraParam += 4;
-        
+
         if (player->debugCameraParam > 19) player->debugCameraParam = 20;
         if (player->debugCameraParam < 5) player->debugCameraParam = 4;
-        
+
         player->debugCamY %= 4096;
         player->debugCamX %= 4096;
-        
+
         player->jumping = 0;
         player->rollingForward = 0;
         player->turnDirection = 0;
     }
-    
-    if (player->surroundingBlocks[0][2][1] < 0 && player->surroundingBlocks[0][1][0] < 0 && 
-        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == 96 && 
+
+    if (player->surroundingBlocks[0][2][1] < 0 && player->surroundingBlocks[0][1][0] < 0 &&
+        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == 96 &&
         player->jumping == 0 && player->movementVelocity > 0 && player->subpixelPositionOnCube.vz > 300) {
-        
+
         player->rollingForward = 0;
         if (player->subpixelPositionOnCube.vz > 400) {
             player->finePos.vx += player->facingDir.vx * -40;
