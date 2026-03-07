@@ -596,8 +596,6 @@ void SetPausedOrWaitingForRestart(void) {
 INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
 
 void HandlePlayerButtons(Player *player) {
-    short copycatMove;
-
     if (turnDelayEnabled != 0) {
         turnDelayFrames = 6;
     } else {
@@ -773,14 +771,13 @@ void HandlePlayerButtons(Player *player) {
                     if (player->rollingForward == 1) curCopycatMove |= 4;
                     if (player->jumping == 1) curCopycatMove |= 8;
 
-                    copycatMove = copycatMoves[player->copycatMoveIndex];
-                    if (copycatMove == -1) {
+                    if (copycatMoves[player->copycatMoveIndex] == -1) {
                         copycatMoves[player->copycatMoveIndex] = curCopycatMove;
                         if (player->copycatMoveIndex == numCopycatMoves) {
                             copycatStateVar = 1;
                         }
                     } else {
-                        if (copycatMove != curCopycatMove) {
+                        if (copycatMoves[player->copycatMoveIndex] != curCopycatMove) {
                             copycatStateVar = 2;
                         }
                     }
