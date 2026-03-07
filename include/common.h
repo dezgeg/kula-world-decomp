@@ -198,6 +198,13 @@ typedef struct Enemy {
     byte pad_b2[2];
 } Enemy;
 
+typedef struct InvisBlockVisibility {
+    int pos[3];
+    int transparencyFactor;
+    int distanceFactor;
+    int flip;
+} InvisBlockVisibility;
+
 typedef struct MovingPlatformEntity {
     short tag;
     short movementDirection;

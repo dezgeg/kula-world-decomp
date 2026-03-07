@@ -6,13 +6,6 @@ extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 
-typedef struct InvisBlockVisibility {
-    int pos[3];
-    int transparencyFactor;
-    int distanceFactor;
-    int flip;
-} InvisBlockVisibility;
-
 extern void ASM_FUN_00050310(void* otag);
 extern void ASM_FUN_00052504(void* otag);
 extern void CubeTextureStuff(AnimatedTextureChain* param_1);
