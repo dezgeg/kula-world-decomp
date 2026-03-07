@@ -8,7 +8,7 @@ extern short* levelData;
 
 int GetFaceTypeOfBlockType(int blockType) {
     if (blockType >= 5) {
-        return entityData[(blockType - 5) * 0x80];
+        return entityData[(blockType - 5) * 128];
     }
     return blockType;
 }

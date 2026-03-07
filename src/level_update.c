@@ -51,7 +51,7 @@ extern short copycatMoves[1024];
 extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
 extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
-extern void* entityData;
+extern short* entityData;
 
 void HandlePauseModeRotationEffect(Player* player);
 int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
@@ -131,17 +131,10 @@ INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
 INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
 
 int FUN_0003382c(Player* player) {
-    int blockIndex;
-    int scaledIndex;
-
-    blockIndex = player->surroundingBlocks[1][1][1];
-    scaledIndex = blockIndex - 5;
-    DAT_000a43c4 = scaledIndex * 128;
-    if (DAT_000a43c4 < 0 || *(short*)(scaledIndex * 256 + (int)entityData) != 5) {
-        blockIndex = player->surroundingBlocks[2][1][1];
-        scaledIndex = blockIndex - 5;
-        DAT_000a43c4 = scaledIndex * 128;
-        if (DAT_000a43c4 < 0 || *(short*)(scaledIndex * 256 + (int)entityData) != 5) {
+    DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
+    if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != 5) {
+        DAT_000a43c4 = (player->surroundingBlocks[2][1][1] - 5) * 128;
+        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4 ] != 5) {
             return 0;
         }
     }
@@ -162,59 +155,51 @@ int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
     D_000A43DC = (GetBlockAt(&SVECTOR_000a43e0) - 5) * 128;
 
     if (D_000A43DC >= 0) {
-        if (*(short*)(entityData + D_000A43DC * 2) != 5) {
-            goto ret_minus1;
+        if (entityData[D_000A43DC] != 5) {
+            return -1;
         }
 
-        if (FUN_000344b0(*(short*)(entityData + D_000A43DC * 2 + 4), GetRotationIndexFromVector(player->gravityDir)) != 0) {
-            goto ret_minus1;
+        if (FUN_000344b0(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir)) != 0) {
+            return -1;
         }
 
         if (player->subpixelPositionOnCube.vy < 101) {
             if (FUN_00033720(&player->finePos, D_000A43DC, 0) != 0) {
                 goto ret_D;
             }
-            goto ret_minus1;
+            return -1;
         }
     }
 
-ret_minus1:
     return -1;
 ret_D:
     return D_000A43DC;
 }
 
 int FUN_00033eb0(Player* player, SVECTOR* param_2) {
-    int type;
-    int index;
-    int rotation;
-
     if (param_2->vx == -1) {
         SVECTOR_000a43ec = player->finePos;
     } else {
         SVECTOR_000a43ec = *param_2;
     }
 
-    index = GetBlockAt(&SVECTOR_000a43ec) - 5;
-    D_000A43E8 = index * 128;
+    D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
 
-    if (D_000A43E8 < 0 || *(short*)((index * 256) + (int)entityData) != 5) {
+    if (D_000A43E8 < 0 || entityData[D_000A43E8] != 5) {
         SVECTOR_000a43ec.vx -= player->gravityDir.vx * 512;
         SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
         SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
 
-        index = GetBlockAt(&SVECTOR_000a43ec) - 5;
-        D_000A43E8 = index * 128;
-
+        D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
         if (D_000A43E8 < 0) {
             return -1;
         }
-        if (*(short*)((index * 256) + (int)entityData) != 5) {
+        if (entityData[D_000A43E8] != 5) {
             return -1;
         }
     }
 
-    if (FUN_000344b0((int)*(short*)(D_000A43E8 * 2 + (int)entityData + 4), GetRotationIndexFromVector(player->gravityDir)) == 0) {
+    if (FUN_000344b0(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir)) == 0) {
         return -1;
     }
     if (FUN_00033720(&player->finePos, D_000A43E8, 100) != 0) {
@@ -280,7 +265,7 @@ void FUN_0003418c(Player *player) {
 
     {
         MovingPlatformEntity *mpe = (MovingPlatformEntity *)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
-        mpVelSum = (ushort)mpe->velZ + ((ushort)mpe->velX + (ushort)mpe->velY);
+        mpVelSum = mpe->velX + mpe->velY + mpe->velZ;
     }
 
     if (mpVelSum != 0) {
@@ -382,29 +367,29 @@ void InitLasers(void) {
     int z;
 
     for (i = 0; i < numEntities * 128; i += 128) {
-        if (((short*)entityData)[i + 0] != 8)
+        if (entityData[i + 0] != 8)
             continue;
-        x = ((short*)entityData)[i + 4];
-        y = ((short*)entityData)[i + 5];
-        z = ((short*)entityData)[i + 6];
-        switch (((short*)entityData)[i + 2]) {
+        x = entityData[i + 4];
+        y = entityData[i + 5];
+        z = entityData[i + 6];
+        switch (entityData[i + 2]) {
             case 1:
                 levelData[x * 1156 + y * 34 + z] = 0;
-                for (x = ((short*)entityData)[i + 4] + 1; x < ((short*)entityData)[i + 7]; x++) {
+                for (x = entityData[i + 4] + 1; x < entityData[i + 7]; x++) {
                     levelData[x * 1156 + y * 34 + z] = -2;
                 }
                 levelData[x * 1156 + y * 34 + z] = 0;
                 break;
             case 2:
                 levelData[x * 1156 + y * 34 + z] = 0;
-                for (y = ((short*)entityData)[i + 5] + 1; y < ((short*)entityData)[i + 8]; y++) {
+                for (y = entityData[i + 5] + 1; y < entityData[i + 8]; y++) {
                     levelData[x * 1156 + y * 34 + z] = -2;
                 }
                 levelData[x * 1156 + y * 34 + z] = 0;
                 break;
             case 5:
                 levelData[x * 1156 + y * 34 + z] = 0;
-                for (z = ((short*)entityData)[i + 6] + 1; z < ((short*)entityData)[i + 9]; z++) {
+                for (z = entityData[i + 6] + 1; z < entityData[i + 9]; z++) {
                     levelData[x * 1156 + y * 34 + z] = -2;
                 }
                 levelData[x * 1156 + y * 34 + z] = 0;
@@ -1260,8 +1245,6 @@ int DAT_000a4750;
 int DAT_000a4754;
 
 void CheckForButtonEntity(Player* player) {
-    int temp;
-    int temp_init;
     short* ptr;
     unsigned short* ptr0;
     unsigned short* ptr2;
@@ -1275,7 +1258,7 @@ void CheckForButtonEntity(Player* player) {
             player->alreadyProcessedEntityAction = 9;
             DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
 
-            if (((short*)(entityData + DAT_000a4748 * 2))[4] == 1) {
+            if (entityData[DAT_000a4748 + 4] == 1) {
                 SndPlaySfx(9, 0, &SVECTOR_000a2df4, 7000);
             } else {
                 SndPlaySfx(100, 0, &SVECTOR_000a2df4, 7000);

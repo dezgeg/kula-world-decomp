@@ -200,7 +200,7 @@ void ParseKeysAndSpecialLevelFromItemData(void) {
     for (i = 0; i < numEntities; i++) {
         if (entityData[i * 128] >= 0 && entityData[i * 128] < 5) {
             for (j = 0; j < 6; j++) {
-                if (entityData[128 * i + 1 + 16 * j] == 31) {
+                if (entityData[128 * i + 16 * j + 1] == 31) {
                     numKeysInLevel++;
                 }
             }

@@ -23,7 +23,7 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
 extern void UpdateSubpixelPositions(Player * player);
 extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
 extern SVECTOR SVECTOR_000a2dd8;
-extern u8 * entityData;
+extern short* entityData;
 extern short isPausedOrWaitingForRestart;
 
 int tempNewBlock;
@@ -325,7 +325,7 @@ int CheckIfPlayerLanded(Player *player) {
 
     tempNewBlock = GetBlockAt(&tempNewPlayerPos);
 
-    if ((tempNewBlock >= 5 && *(short *)(entityData + tempNewBlock * 256 - 0x500) == 5) || tempNewBlock < 0) {
+    if ((tempNewBlock >= 5 && entityData[(tempNewBlock - 5) * 128] == 5) || tempNewBlock < 0) {
         return 0;
     }
 
