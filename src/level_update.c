@@ -15,6 +15,17 @@ int getBlockResult;
 short isPausedOrWaitingForRestart;
 
 int DAT_000a43c4;
+short DAT_000a43fc;
+short DAT_000a4400;
+short DAT_000a4404;
+short DAT_000a4408;
+short DAT_000a440c;
+short DAT_000a4410;
+static SVECTOR SVECTOR_000a4428;
+short mpVelSum;
+short tempI;
+short tempJ;
+short tempK;
 
 int hpbPrevControllerButtons;
 short copycatIdleTimer;
@@ -37,6 +48,7 @@ extern int buttonSaveReplayMode;
 extern short numEntities;
 extern short* levelData;
 extern short copycatMoves[1024];
+extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
 extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
 extern void* entityData;
@@ -214,7 +226,67 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
 
 INCLUDE_ASM("asm/nonmatchings/level_update", JumpingOnMovingPlatform);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", FUN_0003418c);
+void FUN_0003418c(Player *player) {
+    short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
+    short gx, gy, gz;
+    short rx, ry, rz;
+    short vx, vy, vz;
+
+    vx = (player->finePos.vx + 256) >> 9;
+    SVECTOR_000a4428.vx = vx;
+    vy = (player->finePos.vy + 256) >> 9;
+    SVECTOR_000a4428.vy = vy;
+    vz = (player->finePos.vz + 256) >> 9;
+    SVECTOR_000a4428.vz = vz;
+    
+    gx = player->gravityDir.vx;
+    rx = player->rightVec.vx;
+    gx--;
+    vx -= gx;
+    DAT_000a43fc = (rx + vx) - player->facingDir.vx;
+    
+    gy = player->gravityDir.vy;
+    ry = player->rightVec.vy;
+    gy--;
+    vy -= gy;
+    DAT_000a4400 = (ry + vy) - player->facingDir.vy;
+    
+    gz = player->gravityDir.vz;
+    rz = player->rightVec.vz;
+    gz--;
+    vz -= gz;
+    DAT_000a4404 = (rz + vz) - player->facingDir.vz;
+
+    for (tempI = 0; tempI < 3; tempI++) {
+        for (tempJ = 0; tempJ < 3; tempJ++) {
+            for (tempK = 0; tempK < 3; tempK++) {
+                DAT_000a4408 = (DAT_000a43fc + tempI * player->gravityDir.vx + tempJ * player->facingDir.vx) - tempK * player->rightVec.vx;
+                DAT_000a440c = (DAT_000a4400 + tempI * player->gravityDir.vy + tempJ * player->facingDir.vy) - tempK * player->rightVec.vy;
+                DAT_000a4410 = (DAT_000a4404 + tempI * player->gravityDir.vz + tempJ * player->facingDir.vz) - tempK * player->rightVec.vz;
+                player->surroundingBlocks[tempI][tempJ][tempK] = grid[DAT_000a4408][DAT_000a440c][DAT_000a4410];
+                mpVelSum = (short)player->surroundingBlocks[tempI][tempJ][tempK];
+            }
+        }
+    }
+    
+    SVECTOR_000a4428.vx = player->finePos.vx + player->svec54.vx;
+    SVECTOR_000a4428.vy = player->finePos.vy + player->svec54.vy;
+    SVECTOR_000a4428.vz = player->finePos.vz + player->svec54.vz;
+    
+    mpVelSum = GetBlockAt(&SVECTOR_000a4428);
+    if (mpVelSum == -2) {
+        player->surroundingBlocks[1][1][1] = -2;
+    }
+    
+    {
+        MovingPlatformEntity *mpe = (MovingPlatformEntity *)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
+        mpVelSum = (ushort)mpe->velZ + ((ushort)mpe->velX + (ushort)mpe->velY);
+    }
+    
+    if (mpVelSum != 0) {
+        Vibrate99(0, 70, 2);
+    }
+}
 
 int FUN_000344b0(int a0, int a1) {
     if ((a0 == 1 || a0 == 4) && (a1 == 1 || a1 == 4)) return 1;
