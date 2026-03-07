@@ -431,7 +431,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", LevelInit);
 
 void ProcessPlayer(void) {
     int fireVibration;
-    
+
     SubtractLevelTimer(1);
     if (isPausedOrWaitingForRestart != 0) {
         isPausedOrWaitingForRestart++;
@@ -439,27 +439,27 @@ void ProcessPlayer(void) {
     if (isPausedOrWaitingForRestart == 20) {
         isPausedOrWaitingForRestart = 0;
     }
-    
+
     if (copycatStateVar == 1 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
         thePlayer.delayedLevelEndReason = 1;
         thePlayer.movementInhibitTimer = 25;
         copycatStateVar = 0;
         curController = (curController + 1) % 2;
     }
-    
+
     if (copycatStateVar == 2 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
         thePlayer.delayedLevelEndReason = -8;
         thePlayer.movementInhibitTimer = 25;
         copycatStateVar = 0;
     }
-    
+
     if (thePlayer.movementInhibitTimer != 0) {
         short timer = thePlayer.movementInhibitTimer - 1;
         thePlayer.movementInhibitTimer = timer;
         thePlayer.rollingForward = 0;
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
-        
+
         if (thePlayer.delayedLevelEndReason == -4) {
             thePlayer.flatteningTimer += 210;
         }
@@ -473,30 +473,30 @@ void ProcessPlayer(void) {
             levelWon[cameraIndex] = thePlayer.delayedLevelEndReason;
         }
     }
-    
+
     if (thePlayer.forcedRollForwardTimer != 0) {
         thePlayer.forcedRollForwardTimer--;
         thePlayer.rollingForward = 1;
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
     }
-    
+
     if (thePlayer.movementInhibitTimer < 1 && thePlayer.forcedRollForwardTimer < 1 && thePlayer.faceTypePlayerStandingOn != 10) {
         HandlePlayerButtons(&thePlayer);
     }
-    
+
     if (levelWon[cameraIndex] == 1) {
         thePlayer.rollingForward = 0;
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
     }
-    
+
     if (thePlayer.bounceTimer > 698 && thePlayer.howMoving198 == ROLLING) {
         thePlayer.jumping = 0;
         thePlayer.rollingForward = 0;
         thePlayer.bounceTimer++;
     }
-    
+
     if (levelWon[cameraIndex] == 1) {
         if (numCameras == 1 || (levelWon[0] == 1 && levelWon[1] == 1)) {
             levelEndReason = levelWon[cameraIndex];
@@ -504,12 +504,12 @@ void ProcessPlayer(void) {
     } else if (levelWon[cameraIndex] != 0) {
         levelEndReason = levelWon[cameraIndex];
     }
-    
+
     if (thePlayer.movementInhibitTimer < 1000) {
         playerCombinedPos.vx = thePlayer.finePos.vx + thePlayer.svec54.vx;
         playerCombinedPos.vy = thePlayer.finePos.vy + thePlayer.svec54.vy;
         playerCombinedPos.vz = thePlayer.finePos.vz + thePlayer.svec54.vz;
-        
+
         MoveMovingPlatforms(playerCombinedPos);
         if (thePlayer.delayedLevelEndReason != -5) {
             UpdateEnemies(playerCombinedPos);
@@ -518,7 +518,7 @@ void ProcessPlayer(void) {
             HandleSpecialCubeTypes(&thePlayer);
         }
     }
-    
+
     if (thePlayer.fireTimer > 0) {
         fireVibration = thePlayer.fireTimer / 25 + 40;
         if (fireVibration > 125) {
@@ -527,7 +527,7 @@ void ProcessPlayer(void) {
             Vibrate99(0, fireVibration, 1);
         }
     }
-    
+
     if (thePlayer.invulnerabilityTimer == -1) {
         if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != -5) {
             SndPlaySfx(0x71, 0, &SVECTOR_000a2df4, 7000);
@@ -540,28 +540,28 @@ void ProcessPlayer(void) {
             thePlayer.ballBlinking = 1;
         }
     }
-    
+
     thePlayer.onGround = 0;
     StartMovementIfNeeded(&thePlayer);
     ProcessMovement(&thePlayer);
     CalcWhatPlayerIsStandingOn(&thePlayer);
     UpdateSubpixelPositions(&thePlayer);
-    
+
     if ((uint)((ushort)thePlayer.subpixelPositionOnCube.vz - 156) > 200 || (uint)((ushort)thePlayer.subpixelPositionOnCube.vx - 156) > 200) {
         thePlayer.alreadyProcessedEntityAction = 0;
     }
-    
+
     HandleViewportRotationStart(&thePlayer);
     CheckPlayerJumpingStuff(&thePlayer);
     SetVec184ToVec54(&thePlayer);
-    
+
     if (thePlayer.playerHasControl == 1 && isPausedOrWaitingForRestart == 0) {
         HandleItemTouching(&thePlayer);
     }
-    
+
     ProcessCameraAndMovement(&thePlayer);
     SetPlayerMatrix6(&thePlayer);
-    
+
     invisBlockVisibility.pos[0] = (int)thePlayer.finePos.vx + (int)thePlayer.svec54.vx;
     invisBlockVisibility.pos[1] = (int)thePlayer.finePos.vy + (int)thePlayer.svec54.vy;
     invisBlockVisibility.pos[2] = (int)thePlayer.finePos.vz + (int)thePlayer.svec54.vz;
