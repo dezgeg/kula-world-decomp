@@ -1,5 +1,36 @@
 #include "common.h"
 
+typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
+
+typedef struct MovingPlatformEntity2 {
+    short tag;
+    short movementDirection;
+    short dir;
+    short unk6;
+    short startX;
+    short startY;
+    short startZ;
+    short endX;
+    short endY;
+    short endZ;
+    char pad1[12];
+    short flags;
+    short length;
+    short velocity;
+    short counter;
+    short cubeStyle;
+    short velX;
+    short velY;
+    short velZ;
+    char pad2[92];
+    Quad* quads[4][6];
+    char pad3[2];
+    short posX;
+    short posY;
+    short posZ;
+    char pad4[12];
+} MovingPlatformEntity2;
+
 extern TgiFile* tgi;
 extern int turningMotionBlurEnabled;
 extern int turningMotionBlurPhase;
@@ -12,7 +43,47 @@ extern int sunglassCounter2[];
 extern int sunglassDisablingState[];
 extern int sunglassSeeEverything[];
 
-INCLUDE_ASM("asm/nonmatchings/update", ProcessMovingPlatforms2);
+extern QuadFunc QUAD_FUNC_PTRS[6];
+extern short movingBlockEntityIndexes[16];
+extern short* entityData;
+extern int numMovingPlatforms;
+
+void ProcessMovingPlatforms2(void) {
+    MovingPlatformEntity2 *mpe;
+    Quad* quad;
+    int i;
+    int j;
+    int dir;
+    int x;
+    int y;
+    int z;
+
+    for (i = 0; i < numMovingPlatforms; i++) {
+        mpe = (MovingPlatformEntity2 *) &entityData[movingBlockEntityIndexes[i] * 128];
+        x = mpe->posX;
+        y = mpe->posY;
+        z = mpe->posZ;
+        for (j = 0; j < mpe->length; j++) {
+            for (dir = 0; dir < 6; dir++) {
+                quad = *(Quad **)((char *)mpe + j * 24 + dir * 4 + 142);
+                if (quad != (Quad*)-1) {
+                    QUAD_FUNC_PTRS[dir](quad, 512, x, y, z, -1);
+                }
+            }
+            switch (mpe->dir) {
+                case 1:
+                    x += 512;
+                    break;
+                case 2:
+                    y += 512;
+                    break;
+                case 5:
+                    z += 512;
+                    break;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/update", ProcessCrumblingBlocks);
 
