@@ -20,6 +20,7 @@ static SVECTOR SVECTOR_000a48f4;
 
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
+extern short* entityData;
 int FUN_000403ec(int blockType, int rotationIndex);
 
 INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemies);
@@ -215,7 +216,30 @@ void InitEnemy(int side, int rotation, Enemy* enemy) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/enemy", FUN_000403ec);
+int FUN_000403ec(int blockType, int rotationIndex) {
+    short type;
+    int index;
+
+    if (blockType == -1) return 0;
+    if (blockType == -2) return 0;
+
+    if (blockType < 5) return 1;
+
+    type = entityData[(blockType - 5) * 128];
+
+    if (type == 5) return 0;
+    if (type == 6) return 1;
+
+    type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];
+    if (type == 0) return 1;
+    if (type >= 50) return 1; // enemy
+    if (type == 30) return 1; // spawn
+
+    if (type == 2) return 1;
+    if (type == 1) return 1;
+    if (type == 4) return 1;
+    return 0;
+}
 
 int FUN_00040490(SVECTOR* enemyPos, Enemy* enemy) {
     SVECTOR_000a48fc.vx = (enemyPos->vx + 0x100) & 0x1ff;
