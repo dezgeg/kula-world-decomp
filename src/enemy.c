@@ -144,7 +144,8 @@ int IsCollidingWithEnemy(SVECTOR pos) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/enemy", Noop4);
+void Noop4() {
+}
 
 INCLUDE_ASM("asm/nonmatchings/enemy", ProcessEnemies);
 
