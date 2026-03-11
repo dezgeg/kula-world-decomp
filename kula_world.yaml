@@ -9,6 +9,7 @@ options:
   target_path: SCES_010.00
   ld_script_path: build/kula_world.ld
   undefined_syms_auto_path: build/undefined_syms_auto.txt
+  generated_asm_macros_directory: asm/
 
   gp_value: 0x000A29E0
 

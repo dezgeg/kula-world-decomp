@@ -40,11 +40,11 @@ build/%.s: build/%.i psyq build/subdirs
 	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $< -o $@
 
 build/%.o: build/%.s build/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iinclude/ -o $@ < $<
+	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/ -o $@ < $<
 
 # TODO: figure out how to avoid this duplicate rule
 build/%.o: %.s build/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm -Iinclude/ -o $@ < $<
+	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm -Iasm/ -o $@ < $<
 
 psyq:
 	mkdir -p psyq
