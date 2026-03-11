@@ -33,7 +33,7 @@ extern int CheckForPlayerWallHit(Player * player);
 extern int HandleMovingPlatforms(Player * player);
 extern void ClearA4374(Player *player);
 extern void EnableTurningMotionBlur(void);
-extern void FUN_00031288(Player * player);
+extern int FUN_0003382c(); // XXX: this should take Player* player
 extern void JumpingOnMovingPlatform(Player *player);
 extern void MovePlayerForward(Player * player, int delta);
 
@@ -315,7 +315,36 @@ void CheckPlayerJumpingStuff(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", CheckForPlayerWallHit);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", FUN_00031288);
+int FUN_00031288(Player *player) {
+    if (player->subpixelPositionOnCube.vy < 412) return 0;
+    if (player->svec_144.vy < 0) return 0;
+
+    if (FUN_0003382c() ||
+        player->surroundingBlocks[2][1][1] >= 0 ||
+        (player->subpixelPositionOnCube.vz >= 412 && player->surroundingBlocks[2][2][1] >= 0) ||
+        (player->subpixelPositionOnCube.vz < 101 && player->surroundingBlocks[2][0][1] >= 0))
+    {
+        SndPlaySfx(102, 0, &SVECTOR_000a2dd8, 7000);
+        Vibrate99(0, 200, 3);
+
+        player->finePos.vx -= player->svec_144.vy * (player->gravityDir.vx + player->gravityDir.vx);
+        player->finePos.vy -= player->svec_144.vy * (player->gravityDir.vy + player->gravityDir.vy);
+
+        player->movementVelocity = 0;
+        player->rotX = 0;
+        player->jumpingInplaceOnTopOfMovingPlatform = 0;
+        player->howMoving198 = FALLING;
+        player->howMoving0 = 3;
+        player->longJump = 0;
+
+        player->finePos.vz -= player->svec_144.vy * (player->gravityDir.vz + player->gravityDir.vz);
+        player->gravityVelocity = -player->svec_144.vy;
+
+        return 1;
+    }
+
+    return 0;
+}
 
 int CheckIfPlayerLanded(Player *player) {
     int dummy[2];
