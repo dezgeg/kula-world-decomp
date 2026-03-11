@@ -615,4 +615,281 @@ int MemCardUi(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/memcard_ui", MemCardUiPart);
+int MemCardUiPart(void) {
+    short filecount;
+    int cursorX;
+    int cursorY;
+    int keyRepeatTimer;
+    RECT rect;
+    unsigned int i;
+    int idx;
+    int k;
+    TSprite fileSprites[16][2];
+    char rawName[15][24];
+    char fileNames[15][36];
+    char fileSizes[16];
+    int files;
+    char* ptr;
+
+    keyRepeatTimer = 0;
+    cursorX = 0;
+    cursorY = 0;
+    files = 1;
+    filecount = 0;
+
+    ptr = &memCardData;
+    for (i = 0; i < 0x2004; i++) {
+        *ptr++ = 0;
+    }
+
+    MemCardAccept(0);
+    MemCardSync(0, &mcCmd, &tempMcResult);
+    if (tempMcResult != 0) {
+        return 0;
+    }
+
+    for (idx = 0; idx < 15; idx++) {
+        if (files < 1) break;
+        MemCardGetDirentry(0, S_XYZ, &direntry, &files, idx, 1);
+
+        if (MemCardReadFile(0, direntry.name, (u_long*)&memcardBuf, 0, 256) == 1 && files > 0) {
+            MemCardSync(0, &mcCmd, &tempMcResult);
+            fileSizes[filecount] = memcardBuf.blockNumber;
+
+            if (fileSizes[filecount] == 0)
+                continue;
+            for (k = 0; k < 22; k++) {
+                rawName[filecount][k] = ((char*)&direntry)[k];
+                if (rawName[filecount][k] == 0) break;
+            }
+
+            DrawSync(0);
+            rect.x = 704;
+            rect.y = filecount + 150;
+            rect.w = 16;
+            rect.h = 1;
+            LoadImage(&rect, memcardBuf.clut);
+
+            rect.x = filecount * 4 + 704;
+            rect.y = 118;
+            rect.w = 4;
+            rect.h = 16;
+            LoadImage(&rect, memcardBuf.bitmap);
+            DrawSync(0);
+
+            TSpritePrim(&fileSprites[filecount][0], 0, 0, GetTPage(0, 1, 704, 118));
+
+            setRGB0(&fileSprites[filecount][0].sprt, 0x60, 0x60, 0x60);
+            setXY0(&fileSprites[filecount][0].sprt, (filecount % 3) * 24 + 124, (filecount / 3) * 24 + 50);
+
+            SetSemiTrans(&fileSprites[filecount][0].sprt, 0);
+            SetShadeTex(&fileSprites[filecount][0].sprt, 0);
+
+            fileSprites[filecount][0].sprt.clut = GetClut(704, filecount + 150);
+            fileSprites[filecount][0].sprt.w = 16;
+            fileSprites[filecount][0].sprt.h = 16;
+
+            setUV0(&fileSprites[filecount][0].sprt, ((filecount * 4 + 704) % 64) * 4, 118);
+
+            fileSprites[filecount][1] = fileSprites[filecount][0];
+
+            if (LooksLikeAscii(memcardBuf.title)) {
+                for (k = 0; k < 32; k++) {
+                    char bVar1 = ((char*)&memcardBuf)[4 + k];
+                    fileNames[filecount][k] = bVar1;
+                    if (bVar1 == 0) break;
+                    if (bVar1 >= 'a' && bVar1 <= 'z') {
+                        fileNames[filecount][k] = bVar1 + 0xe0;
+                    }
+                }
+            } else {
+                for (k = 0; k < 32; k++) {
+                    char cVar2 = Sjis2Ascii(((unsigned short*)&memcardBuf)[2 + k]);
+                    fileNames[filecount][k] = cVar2;
+                    if (cVar2 == 0) break;
+                    if (cVar2 >= 'a' && cVar2 <= 'z') {
+                        fileNames[filecount][k] = cVar2 + 0xe0;
+                    }
+                }
+            }
+
+            fileNames[filecount][k] = '\n';
+            fileNames[filecount][k + 1] = 0;
+            filecount++;
+        }
+    }
+    prevControllerButtons = controllerButtons;
+
+    for (idx = 0; idx < 1; idx++) {
+        ClearOTagR(&otag[0][idx][0], 1026);
+        ClearOTagR(&otag[1][idx][0], 1026);
+    }
+
+    ClearOTagR(&primLists[0].main, 4);
+    ClearOTagR(&primLists[1].main, 4);
+    DrawSync(0);
+    VSync(0);
+
+    if (!TestButton(PAD_TRIANGLE)) {
+        do {
+            DrawSync(0);
+            VSync(0);
+            whichDrawDispEnv = !whichDrawDispEnv;
+
+            PutDrawAndDispEnvs();
+
+            for (idx = 0; idx < numCameras; idx++) {
+                ClearOTagR(&otag[whichDrawDispEnv][idx][0], 1026);
+            }
+            ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
+            ResetTextRenderState();
+
+            for (idx = 0; idx < numCameras; idx++) {
+                DrawOTag(&otag[!whichDrawDispEnv][idx][tgi->skyboxFlag]);
+            }
+            DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+            SndProcessSpuVoices();
+
+            prevControllerButtons = controllerButtons;
+            if (GetControllerStatus(curController)) {
+                controllerButtons = GetControllerButtons(curController);
+            } else {
+                controllerButtons = GetControllerButtons((curController + 1) % 2);
+            }
+
+            if (musicShouldLoop == 1) MusicCheckForLoop();
+
+            if (controllerButtons == prevControllerButtons)
+                keyRepeatTimer++;
+            else
+                keyRepeatTimer = 0;
+
+            if (keyRepeatTimer > 20) {
+                keyRepeatTimer -= 5;
+                prevControllerButtons = 0;
+            }
+
+            SetBigGuiSpriteVisible();
+            ResetTextVars();
+            DrawPsxButtonBackground();
+
+            if (TestButton(PAD_CROSS)) {
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                if (AskSaveOverwrite()) {
+                    idx = MemCardDeleteFile(0, rawName[cursorY * 3 + cursorX]);
+                    if (idx == 0) {
+                        memCardDataValid = 0;
+                        return 1;
+                    }
+                    mcResult = idx;
+                    return 0;
+                }
+                DrawSync(0);
+                VSync(0);
+            }
+
+            if (TestButton(PAD_U)) {
+                setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
+                setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                cursorY--;
+                if (cursorY < 0) {
+                    cursorY = 4;
+                }
+                while (cursorY * 3 + cursorX >= filecount) {
+                    cursorY--;
+                }
+            }
+
+            if (TestButton(PAD_D)) {
+                setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
+                setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                cursorY = (cursorY + 1) % 5;
+                if (cursorY * 3 + cursorX >= filecount) {
+                    cursorY = 0;
+                }
+            }
+
+            if (TestButton(PAD_L)) {
+                setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
+                setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                cursorX--;
+                if (cursorX < 0) {
+                    cursorX = 2;
+                    while (cursorY * 3 + cursorX >= filecount) {
+                        cursorX--;
+                    }
+                }
+            }
+
+            if (TestButton(PAD_R)) {
+                setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
+                setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                cursorX = (cursorX + 1) % 3;
+                if (cursorY * 3 + cursorX >= filecount) {
+                    cursorX = 0;
+                }
+            }
+
+            if (TestButton(PAD_TRIANGLE)) {
+                DrawSync(0);
+                VSync(0);
+                prevControllerButtons = -1;
+                return -1;
+            }
+
+            if (TestButton(PAD_CIRCLE)) break;
+
+            SetTextParams(displayWidth / 2, displayHeight / 2 - 105, 1, 128, 128, 128);
+            DrawTextCrappyFont(S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE);
+
+            SetTextParams(20, displayHeight / 2 + 40, 0, 128, 128, 128);
+            DrawTextCrappyFont(S_NAME);
+            SetTextParams(60, displayHeight / 2 + 40, 0, 128, 128, 128);
+            DrawTextCrappyFont(fileNames[cursorY * 3 + cursorX]);
+
+            SetTextParams(20, displayHeight / 2 + 52, 0, 128, 128, 128);
+            if (fileSizes[cursorY * 3 + cursorX] == 1) {
+                sprintf(stringbuf, S_SIZE_FMTd_BLOCK, fileSizes[cursorY * 3 + cursorX]);
+            } else {
+                sprintf(stringbuf, S_SIZE_FMTd_BLOCKS, fileSizes[cursorY * 3 + cursorX]);
+            }
+            DrawTextCrappyFont(stringbuf);
+
+            SetTextParams(displayWidth / 2, displayHeight / 2 + 70, 1, 128, 128, 128);
+            DrawTextCrappyFont(S_PLEASE_SELECT_FILE_TO_REPLACE);
+            DrawTextCrappyFont(S_PRESS_g_TO_CONTINUE_e_TO_CANCEL);
+            DrawTextCrappyFont(S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD);
+
+            setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0xc0, 0xc0, 0xc0);
+            setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0xc0, 0xc0, 0xc0);
+
+            for (idx = 0; idx < filecount; idx++) {
+                addPrim(&primLists[whichDrawDispEnv].main, &fileSprites[idx][whichDrawDispEnv]);
+            }
+
+            SetLineF3(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv]);
+            SetLineF3(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv]);
+            setRGB0(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv], 255, 0, 0);
+            setXY3(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv], cursorX * 24 + 123, cursorY * 24 + 49,
+                          cursorX * 24 + 140, cursorY * 24 + 49,
+                          cursorX * 24 + 140, cursorY * 24 + 66);
+
+            setRGB0(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv], 255, 0, 0);
+            setXY3(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv], cursorX * 24 + 140, cursorY * 24 + 66,
+                          cursorX * 24 + 123, cursorY * 24 + 66,
+                          cursorX * 24 + 123, cursorY * 24 + 49);
+
+            addPrim(&primLists[whichDrawDispEnv].main, &LINE_F3_ARRAY_000a49a0[whichDrawDispEnv]);
+            addPrim(&primLists[whichDrawDispEnv].main, &LINE_F3_ARRAY_000a49d0[whichDrawDispEnv]);
+        } while (!TestButton(PAD_TRIANGLE));
+    }
+
+    DrawSync(0);
+    VSync(0);
+    prevControllerButtons = -1;
+    return 0;
+}
