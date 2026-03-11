@@ -1,13 +1,27 @@
 #include "common.h"
 #include <libmcrd.h>
 
+struct MemcardHdr {
+    char magic1;
+    char magic2;
+    byte iconFlags;
+    byte blockNumber;
+    ushort title[32];
+    byte unused[28];
+    byte clut[32];
+    byte bitmap[128];
+};
+
 // Prototypes
+extern int AskSaveOverwrite(void);
 extern void DrawPsxButtonBackground(void);
 extern void DrawSaveSlotSprites(int isSave);
 extern void DrawScoreGraph(void);
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
+extern void DrawTextCrappyFont(char * str);
 extern void DrawTextFancyFont(char * str, short x, short y);
 extern void DrawWidgets(int menuId, int cursorPos);
+extern void FormatMemcard(void);
 extern void FormatTime(int time, char * s, int showPlus);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
@@ -16,32 +30,43 @@ extern void InitPsxButtonBackgroundSprites(int);
 extern void InitScoreGraph(void * pBuf, int * levelScores, int * unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
 extern void InitSpinningSelectionSprites(void);
 extern int LoadSaveSlot(int slot);
+extern int LooksLikeAscii(char * param_1);
+extern int MemCardUiPart(void);
 extern void MusicCheckForLoop(void);
 extern void PutDrawAndDispEnvs(void);
 extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
+extern int SaveMemCard(int slot);
 extern void SetBigGuiSpriteVisible(void);
+extern void SetSemiTrans(void * p, int enable);
+extern void SetShadeTex(void * p, int disable);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
 extern void ShowMemCardFullScreenText(char * str);
+extern char Sjis2Ascii(int sjis);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
 extern void SndProcessSpuVoices(void);
+extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
 extern int sprintf(char * s, const char * format, ...);
 
 // Variables
+int INT_000a5690;
 uint mcResult;
 int memCardDataValid;
 int saveSlot;
+long tempMcResult;
 
-extern char S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_FMTd_2[]; // "%d \n"
-
+extern LINE_F3 LINE_F3_ARRAY_000a49a0[2];
+extern LINE_F3 LINE_F3_ARRAY_000a49d0[2];
 extern SVECTOR SVECTOR_000a2fac;
 extern uint controllerButtons;
 extern int curController;
+extern struct DIRENTRY direntry;
+extern int displayHeight;
 extern int displayWidth;
+extern long mcCmd;
 extern MemcardData memCardData;
+extern struct MemcardHdr memcardBuf;
 extern int musicShouldLoop;
 extern int numCameras;
 extern void* otag[2][1][1026];
@@ -51,10 +76,24 @@ extern char stringbuf[64];
 extern TgiFile * tgi;
 extern int whichDrawDispEnv;
 
+extern char S_CHECKING_MEMORY_CARD_PLEASE_WAIT[];
+extern char S_FMTd_2[];
+extern char S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD[];
+extern char S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE[];
+extern char S_NAME[];
+extern char S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD[];
+extern char S_PLEASE_SELECT_FILE_TO_REPLACE[];
+extern char S_PRESS_g_TO_CONTINUE_e_TO_CANCEL[];
+extern char S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD[];
+extern char S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD[];
+extern char S_SAVING_DO_NOT_REMOVE_MEMORY_CARD[];
+extern char S_SIZE_FMTd_BLOCK[];
+extern char S_SIZE_FMTd_BLOCKS[];
+extern char S_XYZ[];
+
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
-
 
 int LoadSaveMenu(void) {
     int i, j, k;
@@ -271,7 +310,309 @@ int LoadSaveMenu(void) {
     return 0;
 }
 
+int MemCardUi(void) {
+    int i, j, k;
+    int k2, j2;
+    int k3, j3;
+    int maxScore, maxScore2, maxScore3;
+    int cursorPos;
+    int idleTimer;
+    int res;
+    int status;
 
-INCLUDE_ASM("asm/nonmatchings/memcard_ui", MemCardUi);
+    idleTimer = 0;
+    INT_000a5690 = 0;
+    cursorPos = 1;
+    LoadSaveSlot(-1);
+    if (memCardDataValid == 0 && mcResult != McErrFileNotExist) {
+        INT_000a5690 = 1;
+    } else {
+        INT_000a5690 = 0;
+    }
+
+    prevControllerButtons = controllerButtons;
+
+    for (i = 0; i < 1; i++) {
+        ClearOTagR(&otag[0][i][0], 1026);
+        ClearOTagR(&otag[1][i][0], 1026);
+    }
+
+    ClearOTagR(&primLists[0].main, 4);
+    ClearOTagR(&primLists[1].main, 4);
+    DrawSync(0);
+    VSync(0);
+
+    InitMemcardUi();
+    InitPsxButtonBackgroundSprites(0);
+    InitSpinningSelectionSprites();
+
+    maxScore = 0;
+    for (k = 0; k < 4; k++) {
+        if (memCardData.saveslots[k].valid == 1) {
+            for (j = 0; j < 150; j++) {
+                if (maxScore < memCardData.saveslots[k].levelScores[j]) {
+                    maxScore = memCardData.saveslots[k].levelScores[j];
+                }
+            }
+        }
+    }
+
+    InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore, 16, 135, 280, 90, 0);
+    if (TestButton(PAD_TRIANGLE)) {
+        prevControllerButtons = -1;
+        return 0;
+    }
+    do {
+        DrawSync(0);
+        VSync(0);
+        whichDrawDispEnv = !whichDrawDispEnv;
+
+        PutDrawAndDispEnvs();
+
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
+        }
+
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
+        ResetTextRenderState();
+
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
+        }
+
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+        SndProcessSpuVoices();
+
+        prevControllerButtons = controllerButtons;
+        status = GetControllerStatus(curController);
+        if (status) {
+            controllerButtons = GetControllerButtons(curController);
+        } else {
+            controllerButtons = GetControllerButtons((curController + 1) % 2);
+        }
+
+        if (musicShouldLoop == 1)
+            MusicCheckForLoop();
+
+        if (controllerButtons == prevControllerButtons) {
+            idleTimer++;
+        } else {
+            idleTimer = 0;
+        }
+
+        if (idleTimer > 20) {
+            idleTimer -= 5;
+            prevControllerButtons = 0;
+        }
+
+        SetBigGuiSpriteVisible();
+        ResetTextVars();
+        DrawPsxButtonBackground();
+
+        if (INT_000a5690 == 0) {
+            if (TestButton(PAD_R)) {
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                saveSlot = (saveSlot + 1) % 4;
+
+                DrawSync(0);
+                maxScore3 = 0;
+                for (j3 = 0; j3 < 4; j3++) {
+                    if (memCardData.saveslots[j3].valid == 1) {
+                        for (k3 = 0; k3 < 150; k3++) {
+                            if (maxScore3 < memCardData.saveslots[j3].levelScores[k3]) {
+                                maxScore3 = memCardData.saveslots[j3].levelScores[k3];
+                            }
+                        }
+                    }
+                }
+                InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore3, 16, 135, 280, 90, 0);
+            }
+
+            if (TestButton(PAD_L)) {
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                saveSlot--;
+                if (saveSlot < 0)
+                    saveSlot = 3;
+
+                DrawSync(0);
+                maxScore2 = 0;
+                for (k2 = 0; k2 < 4; k2++) {
+                    if (memCardData.saveslots[k2].valid == 1) {
+                        for (j2 = 0; j2 < 150; j2++) {
+                            if (maxScore2 < memCardData.saveslots[k2].levelScores[j2]) {
+                                maxScore2 = memCardData.saveslots[k2].levelScores[j2];
+                            }
+                        }
+                    }
+                }
+                InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore2, 16, 135, 280, 90, 0);
+            }
+
+            UpdateMemcardMenuSaveSelectionSprites(saveSlot);
+
+            if (memCardData.saveslots[saveSlot].valid == 1 && memCardData.saveslots[saveSlot].isFinal == 0 && memCardData.saveslots[saveSlot].gameMode == 0) {
+                DrawScoreGraph();
+            }
+
+            InitMemcardUi();
+            DrawSaveSlotSprites(1);
+
+            if (memCardData.saveslots[saveSlot].valid == 1) {
+                if (memCardData.saveslots[saveSlot].isFinal == 0) {
+                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 15 + memCardData.saveslots[saveSlot].curLevel + 1);
+                } else {
+                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 2 + memCardData.saveslots[saveSlot].curLevel + 151);
+                }
+                DrawTextFancyFont(stringbuf, 110, 89);
+                DrawStaticUiSprite(3, 20, 89, 0);
+                DrawStaticUiSprite(11, 20, 108, 0);
+
+                if (memCardData.saveslots[saveSlot].gameMode == 0) {
+                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].score);
+                    DrawTextFancyFont(stringbuf, 280, 89);
+                    DrawStaticUiSprite(5, 130, 89, 0);
+                    DrawStaticUiSprite(12, 100, 108, 0);
+                } else {
+                    FormatTime(memCardData.saveslots[saveSlot].score, stringbuf, 1);
+                    DrawTextFancyFont(stringbuf, 280, 89);
+                    DrawStaticUiSprite(1, 130, 89, 0);
+                    DrawStaticUiSprite(10, 100, 108, 0);
+                }
+            }
+
+            if (TestButton(PAD_CROSS)) {
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                if (memCardData.saveslots[saveSlot].valid == 0) {
+                    ShowMemCardFullScreenText(S_SAVING_DO_NOT_REMOVE_MEMORY_CARD);
+                    if (SaveMemCard(saveSlot) == 1) {
+                        return 1;
+                    }
+                } else {
+                    INT_000a5690 = 1;
+                    mcResult = 666;
+                }
+            }
+        } else {
+            ResetTextRenderState();
+            SetTextParams(displayWidth / 2, 100, 1, 128, 128, 128);
+
+            switch (mcResult) {
+            case McErrCardNotExist:
+                DrawWidgets(12, 0);
+                break;
+            case McErrCardInvalid:
+                DrawWidgets(13, 0);
+                break;
+            case McErrNewCard:
+                INT_000a5690 = 0;
+                ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                LoadSaveSlot(-1);
+                if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                    INT_000a5690 = 1;
+                else
+                    INT_000a5690 = 0;
+                break;
+            case McErrNotFormat:
+                DrawWidgets(14, cursorPos);
+                if (TestButton(PAD_U) && cursorPos == 1) {
+                    SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                    cursorPos = 0;
+                }
+                if (TestButton(PAD_D) && cursorPos == 0) {
+                    SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                    cursorPos = 1;
+                }
+                if (TestButton(PAD_CROSS)) {
+                    if (cursorPos == 0) {
+                        ShowMemCardFullScreenText(S_CHECKING_MEMORY_CARD_PLEASE_WAIT);
+                        FormatMemcard();
+                        LoadSaveSlot(-1);
+                        if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                            INT_000a5690 = 1;
+                        else
+                            INT_000a5690 = 0;
+                        cursorPos = 1;
+                        prevControllerButtons = -1;
+                    } else if (cursorPos == 1) {
+                        prevControllerButtons = -1;
+                        return 0;
+                    }
+                }
+                break;
+            case McErrBlockFull:
+                DrawWidgets(16, 0);
+                if (TestButton(PAD_CROSS)) {
+                    SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                    switch (MemCardUiPart()) {
+                        case 1:
+                            ShowMemCardFullScreenText(S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD);
+                            if (SaveMemCard(saveSlot) == 1) {
+                                return 1;
+                            }
+                            INT_000a5690 = 0;
+                            ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                            LoadSaveSlot(-1);
+                            if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                                INT_000a5690 = 1;
+                            else
+                                INT_000a5690 = 0;
+                            break;
+                        case 0:
+                            INT_000a5690 = 0;
+                            ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                            LoadSaveSlot(-1);
+                            if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                                INT_000a5690 = 1;
+                            else
+                                INT_000a5690 = 0;
+                            break;
+                        case -1:
+                            prevControllerButtons = -1;
+                            return 0;
+                    }
+                }
+                if (TestButton(PAD_CIRCLE)) {
+                    INT_000a5690 = 0;
+                    ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                    LoadSaveSlot(-1);
+                    if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                        INT_000a5690 = 1;
+                    else
+                        INT_000a5690 = 0;
+                }
+                break;
+            case 666:
+                DrawWidgets(17, 0);
+                if (TestButton(PAD_CROSS)) {
+                    SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                    ShowMemCardFullScreenText(S_SAVING_DO_NOT_REMOVE_MEMORY_CARD);
+                    if (SaveMemCard(saveSlot) == 1) {
+                        return 1;
+                    }
+                }
+                if (TestButton(PAD_TRIANGLE)) {
+                    mcResult = 0;
+                    INT_000a5690 = 0;
+                    prevControllerButtons = -1;
+                }
+                break;
+            }
+
+            if (TestButton(PAD_CROSS) && mcResult) {
+                SndPlaySfx(0x6d, 0, &SVECTOR_000a2fac, 8000);
+                INT_000a5690 = 0;
+                ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                LoadSaveSlot(-1);
+                if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                    INT_000a5690 = 1;
+                else
+                    INT_000a5690 = 0;
+            }
+        }
+    } while (!TestButton(PAD_TRIANGLE));
+
+    prevControllerButtons = -1;
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/memcard_ui", MemCardUiPart);
