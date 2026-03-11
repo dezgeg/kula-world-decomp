@@ -81,6 +81,15 @@ static SVECTOR initPlayerRightVec;
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
+extern int curWorld;
+extern int numKeysRemaining;
+extern int twoPlayerWhichPlayer;
+
+extern void CalcLevelBounds(Player* player);
+extern void CreateItemsFromLevelData(void);
+extern void HandlePlayerMovementStuff(Player* player);
+extern void InitEnemies(void);
+extern void ResetPlayerVars(Player* player);
 
 static SVECTOR SVECTOR_000a449c;
 static VECTOR VECTOR_000a44a8;
@@ -106,6 +115,9 @@ typedef struct EntityPos {
 } EntityPos;
 
 short pauseForStartPress;
+short fireSoundTimer;
+int shouldMarkCubesVisited;
+short D_000A45CC;
 
 extern void ProcessEnemies(void);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
@@ -412,7 +424,129 @@ void ResetCopycatMode(int param_1) {
     copycatNewOrCopyMoves = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", LevelInit);
+void LevelInit(void) {
+    int i, j;
+
+    if (gameMode == 1) {
+        thePlayer.movementInhibitTimer = 10;
+        copycatNewOrCopyMoves = 0;
+        copycatStateVar = 0;
+        timerBeforeJumpOrRoll = 0;
+        copycatIdleTimer = 0;
+        thePlayer.copycatMoveIndex = 0;
+        numCopycatMoves += 2;
+        unusedNumCopycatRounds++;
+    }
+
+    fireSoundTimer = 0;
+    numKeysRemaining = 0;
+    levelEndReason = 0;
+    levelWon[0] = 0;
+    levelWon[1] = 0;
+
+    ScanLevelDataForMovingBlocks2();
+    MoveMovingPlatforms(thePlayer.finePos);
+    InitEnemies();
+
+    thePlayer.sunglassTimer = -1;
+    thePlayer.lethargyTimer = -1;
+    thePlayer.invulnerabilityTimer = -1;
+    thePlayer.bounceTimer = -1;
+
+    thePlayer.debugCameraMode = 0;
+    thePlayer.turnDelayTimer = 0;
+    thePlayer.ballBlinking = 0;
+    thePlayer.isRotatingViewport = 0;
+    thePlayer.dying = 0;
+    thePlayer.field_2bc = 0;
+    thePlayer.ballMorphShape = 0;
+    thePlayer.flatteningTimer = 0;
+    thePlayer.startedIceSfx = 0;
+    thePlayer.delayedLevelEndReason = 0;
+    thePlayer.jumpingOnMovingPlatform = 0;
+    thePlayer.onMovingPlatform = 0;
+    thePlayer.alreadyProcessedEntityAction = 0;
+    thePlayer.movementInhibitTimer = 20;
+    thePlayer.forcedRollForwardTimer = 0;
+    thePlayer.turnDirection = 0;
+    thePlayer.rollingForward = 0;
+    thePlayer.jumpingInplaceOnTopOfMovingPlatform = 0;
+    thePlayer.jumping = 0;
+    thePlayer.longJump = 0;
+    thePlayer.onGround = 0;
+    thePlayer.fireTimer = 0;
+    thePlayer.acidTimer = 0;
+    thePlayer.iceColorChangeTimer = 0;
+
+    thePlayer.cameraR1R2TurnDirection = SVECTOR_000a2df4;
+    thePlayer.cameraR1TurnAmount = SVECTOR_000a2df4;
+    thePlayer.svec54 = SVECTOR_000a2df4;
+
+    pauseForStartPress = 0;
+    if (entityData[numEntities * 128] == 666) {
+        levelTimeLeft = entityData[numEntities * 128 + 6] * 50;
+    } else {
+        levelTimeLeft = 4950;
+    }
+
+    CreateItemsFromLevelData();
+
+    if (numKeysRemaining == 0 && gameMode != 1) {
+        shouldMarkCubesVisited = 1;
+    } else {
+        shouldMarkCubesVisited = 0;
+    }
+
+    ballTextureIndex = curWorld;
+    if (shouldMarkCubesVisited != 0) {
+        ballTextureIndex = D_000A45CC + 10;
+    }
+
+    D_000A45CC = (D_000A45CC + 1) % 3;
+
+    if (specialLevelType == 2) {
+        ballTextureIndex = 13;
+    }
+
+    if (gameMode == 1) {
+        ballTextureIndex = curController;
+    }
+
+    if (gameMode == 2) {
+        ballTextureIndex = twoPlayerWhichPlayer;
+    }
+
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i * 128] < 5) {
+            for (j = 0; j < 6; j++) {
+                if ((ushort)(entityData[i * 128 + j * 16 + 1] - 29) < 2) {
+                    SetPlayerRotation(j, entityData[i * 128 + j * 16 + 2], &thePlayer);
+
+                    thePlayer.perspVec1 = thePlayer.rightVec;
+                    thePlayer.perspVec3 = thePlayer.facingDir;
+                    thePlayer.perspVec2 = thePlayer.gravityDir;
+
+                    SetPlayerMatrix6(&thePlayer);
+
+                    thePlayer.jumpStartPos.vx = entityData[i * 128 + 125] * 512 + thePlayer.gravityDir.vx * 256;
+                    thePlayer.jumpStartPos.vy = entityData[i * 128 + 126] * 512 + thePlayer.gravityDir.vy * 256;
+                    thePlayer.jumpStartPos.vz = entityData[i * 128 + 127] * 512 + thePlayer.gravityDir.vz * 256;
+
+                    thePlayer.finePos = thePlayer.jumpStartPos;
+
+                    CalcWhatPlayerIsStandingOn(&thePlayer);
+                    ResetPlayerVars(&thePlayer);
+                    HandlePlayerMovementStuff(&thePlayer);
+
+                    if (entityData[i * 128 + j * 16 + 1] == 29) {
+                        entityData[i * 128 + j * 16 + 1] = 8;
+                    }
+                }
+            }
+        }
+    }
+    CalcLevelBounds(&thePlayer);
+}
 
 void ProcessPlayer(void) {
     int fireVibration;
