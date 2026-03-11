@@ -578,7 +578,9 @@ void SetPausedOrWaitingForRestart(void) {
     HandlePauseModeRotationEffect(&thePlayer);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", RenderItems_);
+void RenderItems_() {
+    CreateAllItemDispLists();
+}
 
 void HandlePlayerButtons(Player *player) {
     if (turnDelayEnabled) {
