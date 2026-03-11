@@ -1,11 +1,18 @@
 #include "common.h"
+#include <libgte.h>
 
 int collI;
 int enemyPlayerDistSq;
 int numEnemies;
+int enemyI;
+int DAT_000a4850;
 extern Enemy enemies[];
 
 static SVECTOR tmpEnemyPos;
+static SVECTOR tmpEnemyScreenPos;
+static SVECTOR tmpEnemyPixelPos;
+static SVECTOR tmpEnemyPixelPos2;
+static SVECTOR SVECTOR_000a4874;
 static SVECTOR SVECTOR_000a4810;
 static SVECTOR SVECTOR_000a4818;
 static SVECTOR SVECTOR_000a4820;
@@ -18,8 +25,18 @@ static SVECTOR SVECTOR_000a48e4;
 static SVECTOR SVECTOR_000a48ec;
 static SVECTOR SVECTOR_000a48f4;
 
+static MATRIX rotationMatrix;
+MATRIX MATRIX_000a48a4;
+static MATRIX MATRIX_000a48c4;
+
+extern int cameraIndex;
+extern Enemy enemies[];
+extern MATRIX perspMatrixes[];
+
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
+extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7, int p8, int blockX, int blockY, int blockZ, int dirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int p16, MATRIX* gteMatrix, int shadowColor, int p19);
+extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
 extern short* entityData;
 int FUN_000403ec(int blockType, int rotationIndex);
 
@@ -147,7 +164,244 @@ int IsCollidingWithEnemy(SVECTOR pos) {
 void Noop4() {
 }
 
-INCLUDE_ASM("asm/nonmatchings/enemy", ProcessEnemies);
+void ProcessEnemies(void) {
+    for (enemyI = 0; enemyI < numEnemies; enemyI++) {
+        if (enemies[enemyI].enemyType == 50) {
+            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
+            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
+            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
+
+            RotMatrix(&enemies[enemyI].rotationVec, &rotationMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+
+            tmpEnemyPos = enemies[enemyI].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+
+            SVECTOR_000a4874.vx = 1024;
+            SVECTOR_000a4874.vz = 0;
+            SVECTOR_000a4874.vy = 0;
+            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
+            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 20, 0, 4096, 4096, 4096, 0,
+                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+        }
+
+        if (enemies[enemyI].enemyType == 53) {
+            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
+            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
+            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
+
+            RotMatrix(&enemies[enemyI].rotationVec, &rotationMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+
+            tmpEnemyPos = enemies[enemyI].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+
+            SVECTOR_000a4874.vx = 1024;
+            SVECTOR_000a4874.vz = 0;
+            SVECTOR_000a4874.vy = 0;
+            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
+            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 23, 0, 4096, 4096, 4096, 0,
+                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+        }
+
+        if (enemies[enemyI].enemyType == 56) {
+            enemies[enemyI].rotationVec.vx = 0;
+            enemies[enemyI].rotationVec.vy = 0;
+            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz - (rcos(enemies[enemyI].timer % 2048) * 400) / 4096) & 0xfff;
+
+            RotMatrixZYX(&enemies[enemyI].rotationVec, &rotationMatrix);
+            MulMatrix0(&rotationMatrix, &enemies[enemyI].matrix, &rotationMatrix);
+            MulMatrix0(&enemies[enemyI].matrix2, &rotationMatrix, &rotationMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+
+            tmpEnemyPos = enemies[enemyI].pos;
+            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[enemyI].normalVec.vx * 150);
+            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[enemyI].normalVec.vy * 150);
+            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[enemyI].normalVec.vz * 150);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            tmpEnemyPixelPos.vx = tmpEnemyPixelPos2.vx = (enemies[enemyI].initPos.vx + 256 - (enemies[enemyI].normalVec.vx * 300)) >> 9;
+            tmpEnemyPixelPos.vy = tmpEnemyPixelPos2.vy = (enemies[enemyI].initPos.vy + 256 - (enemies[enemyI].normalVec.vy * 300)) >> 9;
+            tmpEnemyPixelPos.vz = tmpEnemyPixelPos2.vz = (enemies[enemyI].initPos.vz + 256 - (enemies[enemyI].normalVec.vz * 300)) >> 9;
+
+            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), 0, &tmpEnemyPos);
+
+            SVECTOR_000a4874.vx = 1024;
+            SVECTOR_000a4874.vz = 0;
+            SVECTOR_000a4874.vy = 0;
+            RotMatrixZYX(&SVECTOR_000a4874, &MATRIX_000a48a4);
+            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+
+            tmpEnemyPos = enemies[enemyI].initPos;
+            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[enemyI].normalVec.vx * 170);
+            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[enemyI].normalVec.vy * 170);
+            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[enemyI].normalVec.vz * 170);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            DAT_000a4850 = 128 - (rsin(enemies[enemyI].timer % 2048) * 48) / 4096;
+            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 24, 0, 4096, 4096, 4096, 0,
+                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, DAT_000a4850, 0);
+        }
+
+        if (enemies[enemyI].enemyType == 51) {
+            if (enemies[enemyI].state == 0) {
+                enemies[enemyI].rotationVec.vx -= 64;
+            }
+            enemies[enemyI].rotationVec.vx %= 4096;
+            enemies[enemyI].rotationVec.vy %= 4096;
+            enemies[enemyI].rotationVec.vz %= 4096;
+
+            RotMatrixZYX(&enemies[enemyI].rotationVec, &rotationMatrix);
+            MulMatrix0(&rotationMatrix, &enemies[enemyI].matrix, &rotationMatrix);
+            MulMatrix0(&enemies[enemyI].matrix2, &rotationMatrix, &rotationMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+
+            tmpEnemyPos = enemies[enemyI].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+
+            SVECTOR_000a4874.vx = 1024;
+            SVECTOR_000a4874.vy = 0;
+            SVECTOR_000a4874.vz = enemies[enemyI].rotationVec.vz;
+            RotMatrixZYX(&SVECTOR_000a4874, &MATRIX_000a48a4);
+            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 21, 0, 4096, 4096, 4096, 0,
+                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 1);
+        }
+
+        if (enemies[enemyI].enemyType == 52) {
+            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 64) % 4096;
+            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy + 32) % 4096;
+            enemies[enemyI].rotationVec.vz %= 4096;
+
+            RotMatrix(&enemies[enemyI].rotationVec, &MATRIX_000a48a4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48a4, &rotationMatrix);
+
+            tmpEnemyPos = enemies[enemyI].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+
+            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
+            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
+            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+
+            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+
+            SVECTOR_000a4874.vx = 1024;
+            SVECTOR_000a4874.vz = 0;
+            SVECTOR_000a4874.vy = 0;
+            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
+            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+
+            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 22, 0, 4096, 4096, 4096, 0,
+                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+        }
+    }
+}
 
 void InitEnemy(int side, int rotation, Enemy* enemy) {
     SVECTOR_000a48f4.vz = 0;
