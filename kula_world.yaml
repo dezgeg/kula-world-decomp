@@ -139,6 +139,7 @@ segments:
       - [0x1e420, c, light_effect]
       - [0x1f330, c, player_movement]
       - [0x22818, c, level_update]
+      - [0x255dc, c, level_update2]
       - [0x2b638, c, enemy]
       - [0x2fd44, c, vsync]
       - [0x2fee8, c, stack_hacks]
