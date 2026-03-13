@@ -28,6 +28,8 @@ extern short isPausedOrWaitingForRestart;
 
 int tempNewBlock;
 static SVECTOR tempNewPlayerPos;
+static int D_000A41B0;
+static SVECTOR cubePlayerIsOn;
 
 extern int CheckForPlayerWallHit(Player * player);
 extern int HandleMovingPlatforms(Player * player);
@@ -36,6 +38,9 @@ extern void EnableTurningMotionBlur(void);
 extern int FUN_0003382c(); // XXX: this should take Player* player
 extern void JumpingOnMovingPlatform(Player *player);
 extern void MovePlayerForward(Player * player, int delta);
+extern void SetCubeVisited(int x, int y, int z, int visitType);
+extern int shouldMarkCubesVisited;
+extern int IsSubpixelZBelow257(Player * player);
 
 void StartJumpingForward(Player *player);
 void StartJumpingInplace(Player *player);
@@ -246,7 +251,83 @@ void TurnLeft(Player *player) {
 
 INCLUDE_ASM("asm/nonmatchings/player_movement", ProcessMovement);
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", HandleViewportRotationStart);
+void HandleViewportRotationStart(Player *player) {
+    int pad[3];
+    if (player->dying != 0) return;
+    if (player->howMoving198 != ROLLING) return;
+
+    if (IsSubpixelZBelow257(player)) {
+        if (player->rollingForward == 0 || player->turnDirection != 0) {
+            player->howMoving0 = 0;
+            player->movementVelocity = 0;
+            player->howMoving198 = -1;
+            MovePlayerForward(player, 256);
+            return;
+        }
+    }
+
+    if (!IsRollingForwardBlocked(player) && player->subpixelPositionOnCube.vz > 255) {
+        if (player->faceTypePlayerStandingOn == 2) return;
+
+        if (IsSubpixelZBelow257(player)) {
+            MovePlayerForward(player, 256);
+        } else {
+            player->finePos.vx -= player->movementVelocity * player->facingDir.vx;
+            player->finePos.vy -= player->movementVelocity * player->facingDir.vy;
+            player->finePos.vz -= player->movementVelocity * player->facingDir.vz;
+        }
+        player->howMoving0 = 0;
+        player->movementVelocity = 0;
+        player->howMoving198 = NOT_MOVING;
+        return;
+    }
+
+    if (player->surroundingBlocks[1][2][1] > -1 && player->subpixelPositionOnCube.vz > 412) {
+        cubePlayerIsOn.vx = (player->finePos.vx - player->gravityDir.vx * 356 + (player->facingDir.vx << 9) + 256) >> 9;
+        cubePlayerIsOn.vy = (player->finePos.vy - player->gravityDir.vy * 356 + (player->facingDir.vy << 9) + 256) >> 9;
+        cubePlayerIsOn.vz = (player->finePos.vz - player->gravityDir.vz * 356 + (player->facingDir.vz << 9) + 256) >> 9;
+
+        if (shouldMarkCubesVisited) {
+            SetCubeVisited(cubePlayerIsOn.vx, cubePlayerIsOn.vy, cubePlayerIsOn.vz, 1);
+        }
+
+        player->field100_0x1ac = -1;
+        player->viewpointRotationTimer = 14;
+        player->viewpointRotationAngleIncrement = -73;
+        MovePlayerForward(player, 412);
+        player->turningWhereNextFrame = 2;
+    }
+
+    D_000A41B0 = player->surroundingBlocks[0][0][1];
+    if (D_000A41B0 != 0) {
+        D_000A41B0 = entityData[(D_000A41B0 - 5) * 128];
+    } else {
+        D_000A41B0 = 0;
+    }
+
+    if (player->surroundingBlocks[0][1][1] < 0 && player->surroundingBlocks[0][0][0] < 0 &&
+        player->surroundingBlocks[0][0][2] < 0 &&
+        (player->svec_154.vz + player->movementVelocity > 511) &&
+        player->isRotatingViewport == 0) {
+
+        player->howMoving198 = ROTATING;
+        player->howMoving0 = 3;
+        player->field100_0x1ac = 1;
+        player->viewpointRotationTimer = 11;
+        player->gravityVelocity = 0;
+        player->jumpingOrViewportRotationTimer = 0;
+        player->viewpointRotationAngleIncrement = 93;
+        MovePlayerForward(player, 0);
+
+        SVECTOR_000a4358.vx = -player->gravityDir.vx;
+        SVECTOR_000a4358.vy = -player->gravityDir.vy;
+        SVECTOR_000a4358.vz = -player->gravityDir.vz;
+
+        player->gravityDir = player->facingDir;
+        player->facingDir = SVECTOR_000a4358;
+    }
+}
+
 
 void CheckPlayerJumpingStuff(Player *player) {
     if (player->dying) {
