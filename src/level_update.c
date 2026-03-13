@@ -19,18 +19,31 @@ extern short* entityData;
 
 int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
 
+extern int cameraIndex;
+extern MATRIX perspMatrixes[];
+extern int specialLevelType;
+extern int gameMode;
+
 int D_000A4430;
+static VECTOR VECTOR_000a4434;
 int D_000A43E8;
 int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
 static SVECTOR SVECTOR_000a43e0;
 
-extern int cameraIndex;
-extern MATRIX perspMatrixes[];
-extern int specialLevelType;
-
 static SVECTOR SVECTOR_000a449c;
 static VECTOR VECTOR_000a44a8;
+static VECTOR VECTOR_000a451c;
+static VECTOR VECTOR_000a452c;
+static VECTOR VECTOR_000a453c;
+static VECTOR VECTOR_000a454c;
+static VECTOR initPlayerFacingDir;
+static VECTOR initPlayerFacingDirCoarse;
+static VECTOR initPlayerGravityDir;
+static VECTOR facingGravityProd;
+static int levelEntryAnimTimer;
+static int levelEntryAnimTimerIncrement;
+
 int maxDistSquared;
 int xMinPlusMax;
 int yMinPlusMax;
@@ -227,7 +240,67 @@ void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, sh
 
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", ProcessCameraAndMovement);
+void ProcessCameraAndMovement(Player *player) {
+    player->playerHasControl = 0;
+    if (levelEntryAnimTimer >= 1025 || gameMode == 1) {
+        if (player->debugCameraMode != 0) {
+            HandleDebugCamera(player);
+        } else {
+            HandlePlayerMovementStuff(player);
+        }
+        return;
+    }
+
+    player->copycatMoveIndex = 0;
+    FUN_00034518(&VECTOR_000a451c, &VECTOR_000a452c, &VECTOR_000a453c, &VECTOR_000a454c, &VECTOR_000a4434, (short)levelEntryAnimTimer, 15);
+
+    initPlayerFacingDirCoarse.vx = initPlayerFacingDir.vx / 1024;
+    initPlayerFacingDirCoarse.vy = initPlayerFacingDir.vy / 1024;
+    initPlayerFacingDirCoarse.vz = initPlayerFacingDir.vz / 1024;
+
+    VectorNormal(&initPlayerFacingDirCoarse, &initPlayerFacingDirCoarse);
+    OuterProduct12(&initPlayerFacingDirCoarse, &initPlayerGravityDir, &facingGravityProd);
+    VectorNormal(&facingGravityProd, &facingGravityProd);
+
+    perspMatrixes[cameraIndex].m[0][0] = (short)facingGravityProd.vx;
+    perspMatrixes[cameraIndex].m[0][1] = (short)facingGravityProd.vy;
+    perspMatrixes[cameraIndex].m[0][2] = (short)facingGravityProd.vz;
+    perspMatrixes[cameraIndex].m[1][0] = -(short)initPlayerGravityDir.vx;
+    perspMatrixes[cameraIndex].m[1][1] = -(short)initPlayerGravityDir.vy;
+    perspMatrixes[cameraIndex].m[1][2] = -(short)initPlayerGravityDir.vz;
+    perspMatrixes[cameraIndex].m[2][0] = (short)initPlayerFacingDirCoarse.vx;
+    perspMatrixes[cameraIndex].m[2][1] = (short)initPlayerFacingDirCoarse.vy;
+    perspMatrixes[cameraIndex].m[2][2] = (short)initPlayerFacingDirCoarse.vz;
+
+    RotMatrixY(levelEntryAnimTimer - 1024, &perspMatrixes[cameraIndex]);
+    RotMatrixX(250, &perspMatrixes[cameraIndex]);
+    RotMatrixZ((1024 - levelEntryAnimTimer) * 2, &perspMatrixes[cameraIndex]);
+
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a4434, &VECTOR_000a4434);
+
+    perspMatrixes[cameraIndex].t[0] = -VECTOR_000a4434.vx;
+    perspMatrixes[cameraIndex].t[1] = -VECTOR_000a4434.vy + 250;
+    perspMatrixes[cameraIndex].t[2] = -VECTOR_000a4434.vz + 800 + (1024 - levelEntryAnimTimer) * 14000 / 1024;
+
+    player->movementInhibitTimer = 2000;
+
+    if (levelEntryAnimTimer > 880) {
+        levelEntryAnimTimer += levelEntryAnimTimerIncrement;
+        levelEntryAnimTimerIncrement--;
+        if (levelEntryAnimTimerIncrement < 1) {
+            levelEntryAnimTimerIncrement = 1;
+        }
+    } else {
+        levelEntryAnimTimer += 16;
+    }
+
+    if (levelEntryAnimTimer > 1024) {
+        player->movementInhibitTimer = 1;
+    }
+
+    player->debugCamY = 0;
+    player->debugCamX = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", HandleDebugCamera);
 
