@@ -6,7 +6,6 @@ CopyQuadData http://decomp.me/scratch/eBNRK
 CreateAllItemDispLists: https://decomp.scratch/r8cry
 CreateEnemyDispList: https://decomp.scratch/LpgS0
 CreateItemDispList http://decomp.me/scratch/ngbHC
-CreateItemsFromLevelData: https://decomp.scratch/LAm3z
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DisableItemShadow: https://decomp.scratch/apQkr
 DrawBonusWidget: https://decomp.scratch/zORj5

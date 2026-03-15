@@ -2,6 +2,70 @@
 
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
+typedef struct ItemState {
+    int collisionDistance;
+    int type;
+    MATRIX matrix;
+    SVECTOR pos;
+} ItemState;
+
+int ballTextureIndex;
+int curController;
+short numCopycatMoves;
+short unusedNumCopycatRounds;
+
+int levelExitEntityOffset;
+int levelHiddenExitEntityOffset;
+
+int getBlockX;
+int getBlockY;
+int getBlockZ;
+int getBlockResult;
+
+short isPausedOrWaitingForRestart;
+
+extern int inGetReadyScreen;
+extern int isPaused;
+extern int levelEndReason;
+extern int debugDisableTimer;
+extern int drawTimerPausedWidget;
+extern int levelTimeLeft;
+extern uint fruitsCollectedBitmask;
+extern SVECTOR SVECTOR_000a2df4;
+int gameMode;
+extern int numCameras;
+static int levelWon[2];
+static SVECTOR playerCombinedPos;
+extern InvisBlockVisibility invisBlockVisibility;
+extern ItemState itemState[256];
+
+int D_000A4430;
+int D_000A43E8;
+int D_000A43DC;
+static SVECTOR SVECTOR_000a43ec;
+static SVECTOR SVECTOR_000a43e0;
+static SVECTOR initPlayerFacingVec;
+static SVECTOR initPlayerGravityVec;
+static SVECTOR initPlayerRightVec;
+
+
+int DAT_000a43c4;
+short DAT_000a43fc;
+short DAT_000a4400;
+short DAT_000a4404;
+short DAT_000a4408;
+short DAT_000a440c;
+short DAT_000a4410;
+static SVECTOR SVECTOR_000a4428;
+short mpVelSum;
+short tempI;
+short tempJ;
+short tempK;
+
+extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
+extern Player thePlayer;
+extern short* entityData;
+
 int ballTextureIndex;
 int curController;
 short numCopycatMoves;
@@ -107,7 +171,124 @@ extern void SetVec184ToVec54(Player * player);
 extern void StartMovementIfNeeded(Player * player);
 extern void UpdateEnemies(SVECTOR pos);
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", CreateItemsFromLevelData);
+void CreateItemsFromLevelData(void) {
+    int i, j, k;
+    int eoff;
+
+    levelHiddenExitEntityOffset = -1;
+    k = 0;
+
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i * 128] < 5) {
+            for (j = 0; j < 6; j++) {
+                int shouldCreate = 1;
+                eoff = i * 128 + j * 16;
+
+                itemState[k].type = 0;
+
+                switch (entityData[eoff + 1]) {
+                case 43:
+                case 44:
+                case 45:
+                case 46:
+                case 47:
+                    itemState[k].collisionDistance = 32400;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 386;
+                    if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = 47;
+                    if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = 46;
+                    if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = 45;
+                    if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = 44;
+                    if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = 43;
+                    break;
+                case 32:
+                case 33:
+                case 34:
+                case 38:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 386;
+                    break;
+                case 37:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 406;
+                    break;
+                case 42:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 416;
+                    break;
+                case 35:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 436;
+                    break;
+                case 36:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    if (entityData[eoff + 3] == 0) {
+                        entityData[eoff + 9] = 386;
+                    } else {
+                        entityData[eoff + 9] = 436;
+                    }
+                    break;
+                case 7:
+                    levelExitEntityOffset = eoff;
+                    entityData[eoff + 3] = 1;
+                    entityData[eoff + 9] = 500;
+                    break;
+                case 26:
+                    levelHiddenExitEntityOffset = eoff;
+                    entityData[eoff + 4] = 0;
+                    entityData[eoff + 9] = 500;
+                    break;
+                case 31:
+                    itemState[k].collisionDistance = 22500;
+                    numKeysRemaining++;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 386;
+                    break;
+                case 10:
+                    entityData[eoff + 11] = 16;
+                    entityData[eoff + 9] = 256;
+                    break;
+                case 5:
+                case 9:
+                case 11:
+                case 12:
+                case 28:
+                    entityData[eoff + 9] = 256;
+                    break;
+                default:
+                    shouldCreate = 0;
+                    break;
+                }
+
+                if (shouldCreate) {
+                    entityData[eoff + 11] = rand(4095);
+                    if (entityData[eoff + 1] == 10) {
+                        entityData[eoff + 11] = 16;
+                    }
+                    entityData[eoff + 12] = rand(4095);
+                    entityData[eoff + 13] = rand(4095);
+                    entityData[eoff + 5] = k;
+
+                    itemState[k].matrix.t[0] = entityData[i * 128 + 125] << 9;
+                    itemState[k].matrix.t[1] = entityData[i * 128 + 126] << 9;
+                    itemState[k].matrix.t[2] = entityData[i * 128 + 127] << 9;
+
+                    SetEntityRotation(&itemState[k].matrix, entityData[eoff + 2], j, entityData[eoff + 9]);
+                    k++;
+                }
+            }
+        }
+    }
+
+    if (levelHiddenExitEntityOffset == -1) {
+        levelHiddenExitEntityOffset = levelExitEntityOffset;
+    }
+}
 
 void InitLasers(void) {
     int i;
