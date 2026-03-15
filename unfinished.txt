@@ -20,7 +20,6 @@ HandleMovingPlatforms: https://decomp.scratch/zRxhB
 HandlePlayerMovementStuff: https://decomp.scratch/k8yiT
 HandleSpecialCubeTypes: https://decomp.scratch/0RSJc
 HandleTransporter: https://decomp.scratch/plraT
-HighScoreUi: <none>
 InitAllDigitSprites: https://decomp.me/scratch/2Cm13
 InitEnemies: https://decomp.scratch/STipp
 InitLasers http://decomp.me/scratch/Rap4x
