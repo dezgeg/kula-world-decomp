@@ -30,7 +30,6 @@ JumpingOnMovingPlatform: https://decomp.scratch/o5ZGF
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn
-MoveMovingPlatforms: https://decomp.scratch/FpizM
 MovePlayerDownwards: https://decomp.me/scratch/ZTPlH
 MovePlayerForward: https://decomp.me/scratch/Xc2q5
 ParseGGI: https://decomp.scratch/fyTSX

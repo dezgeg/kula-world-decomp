@@ -1,5 +1,34 @@
 #include "common.h"
 
+typedef struct LocalMovingPlatformEntity {
+    short tag;                // 0x0
+    short movementDirection;  // 0x2
+    short pad_4[2];           // 0x4, 0x6
+    short startX, startY, startZ; // 0x8, 0xa, 0xc
+    short endX, endY, endZ;       // 0xe, 0x10, 0x12
+    short pad_14[6];              // 0x14 - 0x1f
+    ushort flags;                 // 0x20
+    short length;                 // 0x22
+    ushort velocity;              // 0x24
+    short counter;                // 0x26
+    short pad_28;                 // 0x28
+    short velX, velY, velZ;       // 0x2a, 0x2c, 0x2e
+    byte pad_30[190];             // 0x30
+    short posX, posY, posZ;       // 0xee, 0xf0, 0xf2
+} LocalMovingPlatformEntity;
+
+// gprel-used variables (defined in this file)
+int D_000A4398; // mpOff
+int D_000A439C; // swapMovingPlatformDir
+static short D_000A43A0;
+static short D_000A43A2;
+static short D_000A43A4;
+static short D_000A43A6;
+
+// non-gprel-used variables (extern)
+extern short* entityData;
+extern short numEntities;
+
 int DAT_000a43c4;
 short DAT_000a43fc;
 short DAT_000a4400;
@@ -52,7 +81,93 @@ int zoomInAndOutPhase;
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
-INCLUDE_ASM("asm/nonmatchings/level_update", MoveMovingPlatforms);
+void MoveMovingPlatforms(SVECTOR vec) {
+#define EB ((LocalMovingPlatformEntity *)&entityData[D_000A4398])
+    for (D_000A4398 = 0; D_000A4398 < (int)numEntities << 7; D_000A4398 += 128) {
+        if (EB->tag == 5) {
+            D_000A439C = 0;
+            EB->velX = 0;
+            EB->velY = 0;
+            EB->velZ = 0;
+
+            if (EB->counter != 0) {
+                EB->counter--;
+            }
+
+            if (EB->counter == 1) {
+                D_000A43A0 = EB->posX - vec.vx;
+                D_000A43A2 = EB->posY - vec.vy;
+                D_000A43A4 = EB->posZ - vec.vz;
+                SndPlaySfx(0x6b, D_000A4398 + 1, (SVECTOR *)&D_000A43A0, 8000);
+            }
+
+            if (EB->counter == 0) {
+                D_000A43A0 = EB->posX - vec.vx;
+                D_000A43A2 = EB->posY - vec.vy;
+                D_000A43A4 = EB->posZ - vec.vz;
+                SndUpdateVolumeBasedOnDirVec(D_000A4398 + 1, (SVECTOR *)&D_000A43A0);
+
+                switch (EB->movementDirection) {
+                case 4:
+                    EB->posX -= EB->velocity;
+                    EB->velX = -EB->velocity;
+                    if (EB->posX <= EB->startX << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 1;
+                    }
+                    break;
+                case 1:
+                    EB->posX += EB->velocity;
+                    EB->velX = EB->velocity;
+                    if (EB->posX >= EB->endX << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 4;
+                    }
+                    break;
+                case 3:
+                    EB->posY -= EB->velocity;
+                    EB->velY = -EB->velocity;
+                    if (EB->posY <= EB->startY << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 2;
+                    }
+                    break;
+                case 2:
+                    EB->posY += EB->velocity;
+                    EB->velY = EB->velocity;
+                    if (EB->posY >= EB->endY << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 3;
+                    }
+                    break;
+                case 0:
+                    EB->posZ -= EB->velocity;
+                    EB->velZ = -EB->velocity;
+                    if (EB->posZ <= EB->startZ << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 5;
+                    }
+                    break;
+                case 5:
+                    EB->posZ += EB->velocity;
+                    EB->velZ = EB->velocity;
+                    if (EB->posZ >= EB->endZ << 9) {
+                        D_000A439C = 1;
+                        EB->movementDirection = 0;
+                    }
+                    break;
+                }
+            }
+
+            if (D_000A439C != 0) {
+                SndMuteVoiceByTag(D_000A4398 + 1);
+                EB->counter = 40;
+                EB->flags ^= 1;
+            }
+        }
+    }
+#undef EB
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
 
