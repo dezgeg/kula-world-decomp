@@ -55,4 +55,3 @@ SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
 Unused_FUN_0002caec: <none>
 Unused_FUN_0003bdec: <none>
 UpdateEnemies: https://decomp.scratch/tFgOk
-UpdateStarfield: https://decomp.scratch/1ZcRc

@@ -47,6 +47,25 @@ extern AnimatedTextureChain invisibleBlockTextureChain;
 extern int isPaused;
 extern int toBeDisabledLightEffects[64];
 
+static int starfieldSinPhase1;
+static int starfieldSinPhase2;
+static int starfieldSinPhase3;
+
+static int D_000A501C;
+static int D_000A5024;
+static int D_000A5028;
+static int D_000A5030;
+static int D_000A5034;
+static int D_000A5050;
+
+SVECTOR starfieldSinVec;
+
+int D_000A51BC;
+extern int D_000A51C0;
+extern int D_000A51C4;
+
+extern MATRIX starfieldMatrix;
+
 typedef struct {
     char data[0x15c];
 } GemRandomSparkleEffect;
@@ -283,4 +302,57 @@ void AddDrChangePrims(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/render1", UpdateStarfield);
+void UpdateStarfield(void) {
+    SVECTOR svec;
+    VECTOR vec;
+    MATRIX rot;
+    int vx, vy, vz;
+
+    starfieldSinPhase1 = (starfieldSinPhase1 + 1) % 4096;
+    starfieldSinVec.vx = rsin(starfieldSinPhase1);
+
+    starfieldSinPhase2 = (starfieldSinPhase2 + 1) % 4096;
+    starfieldSinVec.vy = rsin(starfieldSinPhase2);
+
+    starfieldSinPhase3 = (starfieldSinPhase3 + 1) % 4096;
+    starfieldSinVec.vz = rsin(starfieldSinPhase3);
+
+    RotMatrix(&starfieldSinVec, &rot);
+    MulMatrix0(&levelGeometryRenderingMatrix, &rot, &starfieldMatrix);
+    starfieldMatrix.t[0] = 0;
+    starfieldMatrix.t[1] = 0;
+    starfieldMatrix.t[2] = 0;
+
+    D_000A501C = (D_000A501C + 2) % 4096;
+    D_000A5024 = (D_000A5024 + 7) % 4096;
+    D_000A51BC = (rsin(D_000A501C) * 50000 / 4096) + (rsin(D_000A5024) * 10000 / 4096);
+
+    D_000A5028 = (D_000A5028 + 3) % 4096;
+    D_000A5030 = (D_000A5030 + 8) % 4096;
+    D_000A51C0 = (rsin(D_000A5028) * 50000 / 4096) + (rsin(D_000A5030) * 10000 / 4096);
+
+    D_000A5034 = (D_000A5034 + 2) % 4096;
+    D_000A5050 = (D_000A5050 + 6) % 4096;
+    D_000A51C4 = (rsin(D_000A5034) * 60000 / 4096) + (rsin(D_000A5050) * 10000 / 4096);
+
+    vx = D_000A51BC;
+    vy = D_000A51C0;
+    vz = D_000A51C4;
+    while (vx > 6552) vx -= 13106;
+    while (vx < -6553) vx += 13106;
+
+    while (vy > 6552) vy -= 13106;
+    while (vy < -6553) vy += 13106;
+
+    while (vz > 6552) vz -= 13106;
+    while (vz < -6553) vz += 13106;
+
+    svec.vx = vx;
+    svec.vy = vy;
+    svec.vz = vz;
+
+    ApplyMatrix(&starfieldMatrix, &svec, &vec);
+    starfieldMatrix.t[0] = vec.vx;
+    starfieldMatrix.t[1] = vec.vy;
+    starfieldMatrix.t[2] = vec.vz;
+}
