@@ -49,7 +49,7 @@ extern Texture textures[150];
 
 // Prototypes
 void ParseTextures(void* headerPtr, Texture * out, int count);
-void ParseGgiInner(int *eff, int modelType, int const36, int i, int j, int const3, int addRgb, int maxRgb, int subRgb, int modelType6);
+void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int const3, int addRgb, int maxRgb, int subRgb, int const16);
 
 void* ParseGGI(GgiFile *ggi_ptr) {
     int i, j;
@@ -95,20 +95,15 @@ void* ParseGGI(GgiFile *ggi_ptr) {
 
 INCLUDE_ASM("asm/nonmatchings/ggi", ParseTextures);
 
-void ParseGgiInner(int *eff, int modelType, int const36, int i, int j, int const3,
-                   int addRgb, int maxRgb, int subRgb, int modelType6) {
+void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int const3,
+                   int addRgb, int maxRgb, int subRgb, int const16) {
     int* p;
-    int offset;
-    int fromModelDataOff0x14;
-    int unk;
     int k;
-    LocalSparkleEntry* s;
-    int* ptr;
 
     if (modelType == 0) {
-        p = (int*)((char*)ggiPart0A + (*(int*)((char*)ggiPart0A + const36 * 16 + i * 4) / 4) * 4);
+        p = (int*)((char*)ggiPart0A + (*(int*)((char*)ggiPart0A + modelIdx * 16 + i * 4) / 4) * 4);
     } else {
-        p = (int*)((char*)ggiPart0B + (*(int*)((char*)ggiPart0B + const36 * 64 + i * 16 + j * 4) / 4) * 4);
+        p = (int*)((char*)ggiPart0B + (*(int*)((char*)ggiPart0B + modelIdx * 64 + i * 16 + j * 4) / 4) * 4);
     }
 
     p = (int*)((char*)p + (p[5] / 4) * 4);
@@ -119,10 +114,10 @@ void ParseGgiInner(int *eff, int modelType, int const36, int i, int j, int const
     eff[3] = addRgb;
     eff[4] = maxRgb;
     eff[5] = subRgb;
-    eff[6] = modelType6;
+    eff[6] = const16;
     eff += 7;
 
-    for (k = 0; k < modelType6; k++,eff += 5) {
+    for (k = 0; k < const16; k++,eff += 5) {
         eff[0] = 0;
     }
 }
