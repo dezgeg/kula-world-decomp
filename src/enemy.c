@@ -4,6 +4,7 @@
 int collI;
 int enemyPlayerDistSq;
 int numEnemies;
+int enemiesProcessedOnce;
 int enemyI;
 int DAT_000a4850;
 extern Enemy enemies[];
@@ -38,9 +39,71 @@ extern int GetRotationIndexFromVector(SVECTOR v);
 extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7, int p8, int blockX, int blockY, int blockZ, int dirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int p16, MATRIX* gteMatrix, int shadowColor, int p19);
 extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
 extern short* entityData;
+extern short numEntities;
+extern void InitEnemy(int side, int rotation, Enemy* enemy);
 int FUN_000403ec(int blockType, int rotationIndex);
 
-INCLUDE_ASM("asm/nonmatchings/enemy", InitEnemies);
+void InitEnemies(void) {
+    int i, j;
+    int rotation;
+
+    numEnemies = 0;
+    enemiesProcessedOnce = 0;
+
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i * 128] >= 5) {
+            continue;
+        }
+        for (j = 0; j < 6; j++) {
+            if (entityData[i * 128 + j * 16 + 1] == 50 ||
+                    entityData[i * 128 + j * 16 + 1] == 51 ||
+                    entityData[i * 128 + j * 16 + 1] == 53 ||
+                    entityData[i * 128 + j * 16 + 1] == 56 ||
+                    entityData[i * 128 + j * 16 + 1] == 52) {
+                rotation = entityData[i * 128 + j * 16 + 2];
+                InitEnemy(j, rotation, &enemies[numEnemies]);
+
+                enemies[numEnemies].pos.vx = entityData[i * 128 + 125] * 512 + enemies[numEnemies].normalVec.vx * 456;
+                enemies[numEnemies].pos.vy = entityData[i * 128 + 126] * 512 + enemies[numEnemies].normalVec.vy * 456;
+                enemies[numEnemies].pos.vz = entityData[i * 128 + 127] * 512 + enemies[numEnemies].normalVec.vz * 456;
+
+                enemies[numEnemies].initPos = enemies[numEnemies].pos;
+
+                enemies[numEnemies].enemyType = entityData[i * 128 + j * 16 + 1];
+                enemies[numEnemies].rotationVec.vx = enemies[numEnemies].rotationVec.vy = enemies[numEnemies].rotationVec.vz = 0;
+                enemies[numEnemies].state = enemies[numEnemies].timer = 0;
+
+                if (enemies[numEnemies].enemyType == 56) {
+                    if (entityData[i * 128 + j * 16 + 3] == 2) {
+                        enemies[numEnemies].timer = 341;
+                    }
+                    if (entityData[i * 128 + j * 16 + 3] == 1) {
+                        enemies[numEnemies].timer = 682;
+                    }
+                    if (entityData[i * 128 + j * 16 + 3] == 0) {
+                        enemies[numEnemies].timer = 1024;
+                    }
+                }
+
+                enemies[numEnemies].field_b0 = -1;
+                enemies[numEnemies].matrix.m[0][0] = enemies[numEnemies].matrix.m[1][1] = enemies[numEnemies].matrix.m[2][2] = 4096;
+                enemies[numEnemies].matrix.m[1][0] =
+                enemies[numEnemies].matrix.m[2][0] =
+                enemies[numEnemies].matrix.m[0][1] =
+                enemies[numEnemies].matrix.m[2][1] =
+                enemies[numEnemies].matrix.m[0][2] =
+                enemies[numEnemies].matrix.m[1][2] = 0;
+
+                RotMatrixZ(1024, &enemies[numEnemies].matrix);
+
+                MatrixFromDirectionIndex(&enemies[numEnemies].matrix2, rotation, GetRotationIndexFromVector(enemies[numEnemies].normalVec), -200, &tmpEnemyPos);
+
+                numEnemies++;
+            }
+        }
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/enemy", UpdateEnemies);
 
