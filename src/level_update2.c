@@ -140,6 +140,22 @@ static SVECTOR SVECTOR_000a4640;
 static SVECTOR SVECTOR_000a4738;
 static SVECTOR SVECTOR_000a4740;
 
+extern int FUN_00033720(SVECTOR * vec, int itemdataOff, int param_3);
+extern void FUN_0003418c(Player * player);
+extern int GetRotationIndexFromVector(SVECTOR vec);
+
+short calcI;
+short calcX2;
+short calcY2;
+short calcZ2;
+short D_000A45F8;
+short D_000A45FC;
+short D_000A4600;
+short calcJ;
+short calcK;
+static SVECTOR SVECTOR_000a4618;
+static short calcBlockType;
+
 typedef struct EntityPos {
     MATRIX matrix;
     short posX;
@@ -158,7 +174,6 @@ extern void ProcessEnemies(void);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
 extern void CreateAllItemDispLists(void);
 
-extern void CalcWhatPlayerIsStandingOn(Player * player);
 extern void CheckPlayerJumpingStuff(Player * player);
 extern void HandleItemTouching(Player * player);
 extern void HandleSpecialCubeTypes(Player* player);
@@ -881,7 +896,77 @@ void HandlePlayerButtons(Player *player) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", CalcWhatPlayerIsStandingOn);
+void CalcWhatPlayerIsStandingOn(Player *player) {
+    if (player->onMovingPlatform != 0) {
+        FUN_0003418c(player);
+    } else {
+        SVECTOR_000a4618.vx = (player->finePos.vx + 256) >> 9;
+        SVECTOR_000a4618.vy = (player->finePos.vy + 256) >> 9;
+        SVECTOR_000a4618.vz = (player->finePos.vz + 256) >> 9;
+
+        calcX2 = player->rightVec.vx + (SVECTOR_000a4618.vx - player->gravityDir.vx) - player->facingDir.vx;
+        calcY2 = player->rightVec.vy + (SVECTOR_000a4618.vy - player->gravityDir.vy) - player->facingDir.vy;
+        calcZ2 = player->rightVec.vz + (SVECTOR_000a4618.vz - player->gravityDir.vz) - player->facingDir.vz;
+
+        for (calcI = 0; calcI < 3; calcI++) {
+            for (calcJ = 0; calcJ < 3; calcJ++) {
+                for (calcK = 0; calcK < 3; calcK++) {
+                    D_000A45F8 = calcX2 + calcI * player->gravityDir.vx + calcJ * player->facingDir.vx - calcK * player->rightVec.vx;
+                    D_000A45FC = calcY2 + calcI * player->gravityDir.vy + calcJ * player->facingDir.vy - calcK * player->rightVec.vy;
+                    D_000A4600 = calcZ2 + calcI * player->gravityDir.vz + calcJ * player->facingDir.vz - calcK * player->rightVec.vz;
+
+                    if (!(D_000A45F8 >= 1 && D_000A45FC >= 1 && D_000A4600 >= 1 && D_000A45F8 <= 32 && D_000A45FC <= 32 && D_000A4600 <= 32)) {
+                        player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                    } else {
+                        calcBlockType = player->surroundingBlocks[calcI][calcJ][calcK] = levelData[D_000A45F8 * 1156 + D_000A45FC * 34 + D_000A4600];
+
+                        if (calcBlockType >= 5 && entityData[(calcBlockType - 5) * 128] == 5) {
+                            if (calcI == 2 || calcJ == 2) {
+                                if (FUN_00033720(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
+                                    player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                                }
+                            } else {
+                                player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        player->specialBlockIndexPlayerIsStandingOn = player->surroundingBlocks[0][1][1];
+
+        if (player->specialBlockIndexPlayerIsStandingOn >= 5) {
+            player->specialBlockIndexPlayerIsStandingOn = (player->specialBlockIndexPlayerIsStandingOn - 5) * 128;
+            player->specialBlockSideOffsetPlayerIsStandingOn = player->specialBlockIndexPlayerIsStandingOn + GetRotationIndexFromVector(player->gravityDir) * 16;
+
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 5) player->faceTypePlayerStandingOn = 95;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 6) player->faceTypePlayerStandingOn = 96;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 7) player->faceTypePlayerStandingOn = 97;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 1) player->faceTypePlayerStandingOn = 1;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 2) player->faceTypePlayerStandingOn = 2;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 3) player->faceTypePlayerStandingOn = 93;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 4) player->faceTypePlayerStandingOn = 4;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
+                 player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
+            }
+        } else {
+            if (player->specialBlockIndexPlayerIsStandingOn == 1) player->faceTypePlayerStandingOn = 1;
+            if (player->specialBlockIndexPlayerIsStandingOn == 2) player->faceTypePlayerStandingOn = 2;
+            if (player->specialBlockIndexPlayerIsStandingOn == 3) player->faceTypePlayerStandingOn = 93;
+            if (player->specialBlockIndexPlayerIsStandingOn == 4) player->faceTypePlayerStandingOn = 4;
+            if (player->specialBlockIndexPlayerIsStandingOn == 0) {
+                player->faceTypePlayerStandingOn = -1;
+            }
+            if (player->specialBlockIndexPlayerIsStandingOn == -1) {
+                player->faceTypePlayerStandingOn = -1;
+            }
+            player->specialBlockIndexPlayerIsStandingOn = -1;
+            player->specialBlockSideOffsetPlayerIsStandingOn = -1;
+        }
+    }
+}
+
 
 int GetBlockAt(SVECTOR* coord) {
     getBlockX = (coord->vx + 0x100) >> 9;
