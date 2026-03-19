@@ -82,7 +82,7 @@ void DrawBigGuiSprite(int param_1) {
         gameOverScreenFade = 0;
         if (gameOverScreenState == 2) {
             gameOverScreenState = 3;
-            SndPlaySfx(110, 0, &SVECTOR_000a2ab4, 8000);
+            SndPlaySfx(SFX_GAME_OVER, 0, &SVECTOR_000a2ab4, 8000);
         }
     }
     if (gameOverScreenFade > 0x80) {

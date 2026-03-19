@@ -250,12 +250,12 @@ void HighScoreUi(int param_1) {
                 } else {
                     highscoreEntryCursorY = 2;
                 }
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             if (TestButton(PAD_D)) {
                 highscoreEntryCursorY = (highscoreEntryCursorY + 1) % 3;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             if (TestButton(PAD_L)) {
@@ -264,12 +264,12 @@ void HighScoreUi(int param_1) {
                 } else {
                     highscoreEntryCursorX = 9;
                 }
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             if (TestButton(PAD_R)) {
                 highscoreEntryCursorX = (highscoreEntryCursorX + 1) % 10;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE)) {
@@ -281,11 +281,11 @@ void HighScoreUi(int param_1) {
                         if (highscoreEntryCharIndex > 0) {
                             highscoreEntryCharIndex--;
                         }
-                        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                         goto LABEL_SKIP_ENTRY;
                     }
                 }
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 if (highscoreEntryCharIndex < 6) {
                     highscoreEntryCharIndex++;
                 } else {
@@ -312,7 +312,7 @@ LABEL_SKIP_ENTRY:
                 cursorIndex = (cursorIndex + 1) % 6;
                 DrawSync(0);
                 InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int *)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             if (TestButton(PAD_U)) {
@@ -322,7 +322,7 @@ LABEL_SKIP_ENTRY:
                 }
                 DrawSync(0);
                 InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int *)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             SetTextParams(26, 45, 0, -1, -1, -1);
@@ -336,7 +336,7 @@ LABEL_SKIP_ENTRY:
                 DrawTextCrappyFont(i == cursorIndex ? S__5 : S__4);
             }
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE) || TestButton(PAD_START)) {
-                SndPlaySfx(0x6d, 37000, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
                 DrawSync(0);
                 VSync(0);
                 return;

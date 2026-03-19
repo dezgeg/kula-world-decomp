@@ -582,7 +582,7 @@ void ProcessPlayer(void) {
 
     if (thePlayer.invulnerabilityTimer == -1) {
         if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != -5) {
-            SndPlaySfx(0x71, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(SFX_CAPTURED, 0, &SVECTOR_000a2df4, 7000);
             Vibrate99(1, 255, 10);
             thePlayer.dying = 1;
             thePlayer.movementInhibitTimer = 10;
@@ -1398,9 +1398,9 @@ void CheckForButtonEntity(Player* player) {
             DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
 
             if (entityData[DAT_000a4748 + 4] == 1) {
-                SndPlaySfx(9, 0, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
             } else {
-                SndPlaySfx(100, 0, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
             }
             Vibrate99(1, 0xff, 1);
 

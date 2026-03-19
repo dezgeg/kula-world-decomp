@@ -65,7 +65,7 @@ void SetCubeVisited(int x, int y, int z, int visitType) {
             numCubesRemainingInLevel[visitType]++;
             if (visitType != 0) {
                 levelScore += 50;
-                SndPlaySfx(116, 0, &sndPos, 5000);
+                SndPlaySfx(SFX_BONUS_TILE, 0, &sndPos, 5000);
             }
             for (i = 0; i < 6; i++) {
                 SetCubeFaceVisited(x, y, z, i, visitType);

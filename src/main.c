@@ -131,7 +131,7 @@ void main(void) {
     SndInitFromSfxFile(0xFD000, curFileLength);
     LoadWarningTim();
     /* piracy screen music */
-    SndPlaySfx(0x6f, 0x378, &ZERO_SVECTOR_a2f04, 8000);
+    SndPlaySfx(SFX_LOADING, 0x378, &ZERO_SVECTOR_a2f04, 8000);
     /* ggi */
     curFileLength = ReadDataFile(curWorld, 3, 0xFD000);
     i = ParseGGI(0xFD000);
@@ -168,7 +168,7 @@ void main(void) {
                 loadedInitialSave = 1;
             } else {
                 /* Loading screen music */
-                SndPlaySfx(111, 888, &ZERO_SVECTOR_a2f04, 8000);
+                SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
             }
             /* .tgi */
             curFileLength = ReadDataFile(curWorld, 0, 0x132000);
@@ -237,7 +237,7 @@ void main(void) {
         if (gameState != 0 && gameState != 4 &&
             (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1))) {
             /* level begin sfx (but also done in other places?) */
-            SndPlaySfx(30, 0, &ZERO_SVECTOR_a2f04, 7000);
+            SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a2f04, 7000);
         }
         if (specialLevelType != 0) {
             PlayBonusMusic();

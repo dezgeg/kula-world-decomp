@@ -167,7 +167,7 @@ void PauseOrMainMenu(void) {
         cursorPosInMenu[0] = 0;
         isPaused = 0;
         wasPausedPreviousFrame = 0;
-        SndPlaySfx(109, 37000, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
     } else {
         wasPausedPreviousFrame = isPaused;
     }
@@ -180,11 +180,11 @@ void PauseMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
     DrawWidgets(1, cursorPosInMenu[curMenu]);
@@ -200,7 +200,7 @@ void PauseMenu(void) {
             case 2:
                 curMenu = 1;
                 cursorPosInMenu[1] = 0;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 return;
             case 3:
                 curMenu = 3;
@@ -224,11 +224,11 @@ void OptionsMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 6;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(2, cursorPosInMenu[curMenu]);
     SetBigGuiSpriteVisible();
@@ -261,27 +261,27 @@ void OptionsMenu(void) {
 
     if (TestButton(PAD_TRIANGLE)) {
         curMenu--;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     switch (cursorPosInMenu[curMenu]) {
         case 0:
             if (decrement && sfxVolume > 0) {
                 sfxVolume--;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (increment && sfxVolume < 12) {
                 sfxVolume++;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             break;
         case 1:
             if (decrement && musicVolume > 0) {
                 musicVolume--;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (increment && musicVolume < 12) {
                 musicVolume++;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             SndSetMusicVolume();
             break;
@@ -289,42 +289,42 @@ void OptionsMenu(void) {
             if (cross) {
                 /* adjust screen */
                 curMenu = 2;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             break;
         case 3:
             if (increment && turnDelayEnabled == 0) {
                 turnDelayEnabled = 1;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (decrement && turnDelayEnabled == 1) {
                 turnDelayEnabled = 0;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (cross) {
                 turnDelayEnabled = turnDelayEnabled ^ 1;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             break;
         case 4:
             if (increment && vibrationEnabled == 0) {
                 vibrationEnabled = 1;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (decrement && vibrationEnabled == 1) {
                 vibrationEnabled = 0;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (cross) {
                 vibrationEnabled = vibrationEnabled ^ 1;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             break;
         case 5:
             if (cross) {
                 curMenu--;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
             break;
@@ -399,14 +399,14 @@ void ScreenAdjustMenu(void) {
     if (TestButton(PAD_TRIANGLE)) {
         dispenvScreenX = 0;
         dispenvScreenY = 18;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
     SetDispScreen(dispenvScreenX, dispenvScreenY);
 
     if (TestButton(PAD_CROSS)) {
         curMenu--;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 }
 
@@ -457,11 +457,11 @@ void MainMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(0, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_CROSS)) {
@@ -470,12 +470,12 @@ void MainMenu(void) {
             case 0:
                 curMenu = 3;
                 cursorPosInMenu[3] = 0;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 1:
                 curMenu = 4;
                 cursorPosInMenu[4] = 0;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 2:
                 HighScoreUi(0);
@@ -483,7 +483,7 @@ void MainMenu(void) {
             case 3:
                 curMenu = 1;
                 cursorPosInMenu[1] = 0;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
         }
     }
@@ -502,17 +502,17 @@ void SinglePlayerMenu(void) {
             } else {
                 cursorPosInMenu[curMenu]--;
             }
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_D)) {
             cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         DrawWidgets(4, cursorPosInMenu[curMenu]);
         if (TestButton(PAD_TRIANGLE)) {
             cursorPosInMenu[curMenu] = 0;
             curMenu = 0;
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_CROSS)) {
             switch (cursorPosInMenu[curMenu]) {
@@ -529,11 +529,11 @@ void SinglePlayerMenu(void) {
                     screenOffsetY = displayHeight;
                     gameState++;
                     InitAllDigitSprites();
-                    SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+                    SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
                     break;
                 case 1:
                     curMenu = 5;
-                    SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                     break;
                 case 2:
                     drawCopyright = 0;
@@ -587,7 +587,7 @@ void SinglePlayerMenu(void) {
                 case 3:
                     cursorPosInMenu[curMenu] = 0;
                     curMenu = 0;
-                    SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                     break;
             }
         }
@@ -604,17 +604,17 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 5;
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(6, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
-        SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
@@ -647,11 +647,11 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
                 cheated = 0;
                 gameState++;
                 InitAllDigitSprites();
-                SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+                SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
                 break;
             case 2:
                 curMenu = 5;
-                SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 3:
                 if (LoadSaveMenu() != 1) {
@@ -704,7 +704,7 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
             case 4:
                 cursorPosInMenu[curMenu] = 0;
                 curMenu = 0;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
         }
     }
@@ -719,17 +719,17 @@ void TwoPlayerMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 3;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(5, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
@@ -753,11 +753,11 @@ void TwoPlayerMenu(void) {
             case 1:
                 twoPlayerLevelSelectionCursorPos = 0;
                 curMenu = 6;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
             case 2:
                 curMenu = 0;
-                SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 break;
         }
     }
@@ -771,17 +771,17 @@ void TimeTrialDifficultySelectionMenu(void) {
         } else {
             cursorPosInMenu[curMenu]--;
         }
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_D)) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(7, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 3;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         if (cursorPosInMenu[curMenu] < 3) {
@@ -808,11 +808,11 @@ void TimeTrialDifficultySelectionMenu(void) {
                 levelPlaytimesInThisWorld[i] = 0;
             }
             InitAllDigitSprites();
-            SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+            SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
         } else {
             cursorPosInMenu[curMenu] = 0;
             curMenu = 3;
-            SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
     }
 }
@@ -828,11 +828,11 @@ void TwoPlayerLevelSelectMenu(void) {
         } else {
             twoPlayerLevelSelectionCursorPos = highestLevelReached / 15;
         }
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_R)) {
         twoPlayerLevelSelectionCursorPos = (twoPlayerLevelSelectionCursorPos + 1) % (highestLevelReached / 15 + 1);
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     DrawWidgets(8, cursorPosInMenu[curMenu]);
     sprintf(scoreText, S_FMTd_4, twoPlayerLevelSelectionCursorPos * 15 + 1);
@@ -848,7 +848,7 @@ void TwoPlayerLevelSelectMenu(void) {
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 4;
-        SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
     if (TestButton(PAD_CROSS)) {
         numTimeTrialPlayers = 2;
@@ -874,7 +874,7 @@ void TwoPlayerLevelSelectMenu(void) {
         if (twoPlayerLevelSelectionCursorPos != curWorld2) {
             loadNewWorld = 1;
         } else {
-            SndPlaySfx(30, 0, &ZERO_SVECTOR_a3340, 7000);
+            SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
         }
     }
 }
@@ -887,7 +887,7 @@ void SavePointMenu(void) {
         controllerButtons = controllerButtons | PAD_CROSS;
     } else {
         if (TestButton(PAD_TRIANGLE)) {
-            SndPlaySfx(109, 37000, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
             savePointMenuConfirmed = 1;
         }
     }
@@ -900,7 +900,7 @@ int GetReadyScreen(void) {
     DrawStaticUiSprite(6, 162, 150, 0);
     DrawWidgets(19, 0);
     if (TestButton(PAD_CROSS)) {
-        SndPlaySfx(0x1e, 0, &ZERO_SVECTOR_a3340, 7000);
+        SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
         return 0;
     }
     return 1;
@@ -949,22 +949,22 @@ void TimeTrialFailedToQualifyScreen(void) {
                     qualifyScreenCursorY = 6;
                 }
             }
-            SndPlaySfx(109, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_D)) {
             qualifyScreenCursorY = (qualifyScreenCursorY + 1) % 8;
             if (qualifyScreenCursorX == 1 && qualifyScreenCursorY == 7) {
                 qualifyScreenCursorY = 0;
             }
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_L) && qualifyScreenCursorY != 7) {
             qualifyScreenCursorX = qualifyScreenCursorX ^ 1;
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if ((TestButton(PAD_R) != 0) && (qualifyScreenCursorY != 7)) {
             qualifyScreenCursorX = qualifyScreenCursorX ^ 1;
-            SndPlaySfx(0x6d, 0, &ZERO_SVECTOR_a3340, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
         if (TestButton(PAD_CROSS)) {
             levelScoreSummaryConfirmed = 1;

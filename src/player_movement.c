@@ -405,7 +405,7 @@ int FUN_00031288(Player *player) {
         (player->subpixelPositionOnCube.vz >= 412 && player->surroundingBlocks[2][2][1] >= 0) ||
         (player->subpixelPositionOnCube.vz < 101 && player->surroundingBlocks[2][0][1] >= 0))
     {
-        SndPlaySfx(102, 0, &SVECTOR_000a2dd8, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2dd8, 7000);
         Vibrate99(0, 200, 3);
 
         player->finePos.vx -= player->svec_144.vy * (player->gravityDir.vx + player->gravityDir.vx);
@@ -443,7 +443,7 @@ int CheckIfPlayerLanded(Player *player) {
         ResetPlayerMatrix274(player);
     }
     if (player->alreadyProcessedEntityAction != 5 && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
-        SndPlaySfx(0x66, 0, &SVECTOR_000a2dd8, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2dd8, 7000);
     }
     if (player->gravityVelocity == -80) {
         Vibrate99(0, 200, 3);

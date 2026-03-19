@@ -98,7 +98,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                 D_000A43A0 = EB->posX - vec.vx;
                 D_000A43A2 = EB->posY - vec.vy;
                 D_000A43A4 = EB->posZ - vec.vz;
-                SndPlaySfx(0x6b, D_000A4398 + 1, (SVECTOR *)&D_000A43A0, 8000);
+                SndPlaySfx(SFX_MOVING_PLATFORM, D_000A4398 + 1, (SVECTOR *)&D_000A43A0, 8000);
             }
 
             if (EB->counter == 0) {

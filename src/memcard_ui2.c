@@ -71,12 +71,12 @@ int AskSaveOverwrite(void) {
         SetTextParams(displayWidth / 2, displayHeight / 2 - 50, 1, 0x80, 0x80, 0x80);
         DrawTextCrappyFont(S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO);
         if (TestButton(PAD_CROSS)) {
-            SndPlaySfx(109, 0, &SVECTOR_000a2fac, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 1;
         }
         if (TestButton(PAD_TRIANGLE)) {
-            SndPlaySfx(109, 0, &SVECTOR_000a2fac, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 0;
         }
