@@ -4,10 +4,6 @@ typedef struct DigitSprites {
     TSprite sprites[2][10];
 } DigitSprites;
 
-typedef struct GgiFile {
-    int numFruitTextures;
-} GgiFile;
-
 extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
 extern uint BONUS_WIDGET_COLOR_DATA[96];

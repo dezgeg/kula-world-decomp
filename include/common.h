@@ -456,6 +456,25 @@ typedef struct TgiFile {
     int part10Words;
 } TgiFile;
 
+typedef struct GgiFile {
+    int numFruitTextures;
+    int numParticleTextures;
+    int numUnk1Textures;
+    int numGuiTextTextures;
+    int numUnk2Textures;
+    int numBonusWidgetTextures;
+    int part0Len;
+    int part1Len;
+    int part2Len;
+    int part3Len;
+    int part4Len;
+    int part5Len;
+    int part6Len;
+    int part0Aoff;
+    int part0Boff;
+    int pad[5];
+} GgiFile;
+
 #define INCLUDE_ASM(FOLDER, NAME) \
     void __maspsx_include_asm_hack_##NAME() { \
         __asm__( \

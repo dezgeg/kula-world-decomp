@@ -4,10 +4,6 @@ typedef struct DigitSprites {
     TSprite sprites[2][10];
 } DigitSprites;
 
-typedef struct FakeGgiFile {
-    int numFruitTextures;
-} FakeGgiFile;
-
 extern void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b);
 extern void InitAllDigitSprites(void);
 extern void InitBonusWidgetSprites(void);
@@ -58,7 +54,7 @@ extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
 
-FakeGgiFile* ggi;
+GgiFile* ggi;
 int drawTimerPausedWidget;
 int firstFruitTexture;
 int fruitBonusTextIndex;
