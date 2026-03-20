@@ -202,44 +202,44 @@ void CreateItemsFromLevelData(void) {
                 itemState[k].type = 0;
 
                 switch (entityData[eoff + 1]) {
-                case 43:
-                case 44:
-                case 45:
-                case 46:
-                case 47:
+                case OBJ_APPLE:
+                case OBJ_WATERMELON:
+                case OBJ_PUMPKIN:
+                case OBJ_BANANA:
+                case OBJ_STRAWBERRY:
                     itemState[k].collisionDistance = 32400;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 386;
-                    if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = 47;
-                    if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = 46;
-                    if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = 45;
-                    if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = 44;
-                    if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = 43;
+                    if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = OBJ_STRAWBERRY;
+                    if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = OBJ_BANANA;
+                    if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = OBJ_PUMPKIN;
+                    if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = OBJ_WATERMELON;
+                    if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = OBJ_APPLE;
                     break;
-                case 32:
-                case 33:
-                case 34:
-                case 38:
+                case OBJ_LETHARGY_PILL:
+                case OBJ_BOUNCY_PILL:
+                case OBJ_INVINCIBILITY_PILL:
+                case OBJ_SUNGLASSES:
                     itemState[k].collisionDistance = 25600;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 386;
                     break;
-                case 37:
+                case OBJ_COIN:
                     itemState[k].collisionDistance = 25600;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 406;
                     break;
-                case 42:
+                case OBJ_SPIKE_TRAP:
                     itemState[k].collisionDistance = 25600;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 416;
                     break;
-                case 35:
+                case OBJ_HOURGLASS:
                     itemState[k].collisionDistance = 25600;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 436;
                     break;
-                case 36:
+                case OBJ_GEM:
                     itemState[k].collisionDistance = 25600;
                     itemState[k].type = 1;
                     if (entityData[eoff + 3] == 0) {
@@ -248,31 +248,31 @@ void CreateItemsFromLevelData(void) {
                         entityData[eoff + 9] = 436;
                     }
                     break;
-                case 7:
+                case OBJ_EXIT:
                     levelExitEntityOffset = eoff;
                     entityData[eoff + 3] = 1;
                     entityData[eoff + 9] = 500;
                     break;
-                case 26:
+                case OBJ_HIDDEN_EXIT:
                     levelHiddenExitEntityOffset = eoff;
                     entityData[eoff + 4] = 0;
                     entityData[eoff + 9] = 500;
                     break;
-                case 31:
+                case OBJ_KEY:
                     itemState[k].collisionDistance = 22500;
                     numKeysRemaining++;
                     itemState[k].type = 1;
                     entityData[eoff + 9] = 386;
                     break;
-                case 10:
+                case OBJ_BOUNCEPAD:
                     entityData[eoff + 11] = 16;
                     entityData[eoff + 9] = 256;
                     break;
-                case 5:
-                case 9:
-                case 11:
-                case 12:
-                case 28:
+                case OBJ_TRANSPORTER:
+                case OBJ_BUTTON:
+                case OBJ_MOVING_SPIKE:
+                case OBJ_SPIKE:
+                case OBJ_ARROW:
                     entityData[eoff + 9] = 256;
                     break;
                 default:
@@ -282,7 +282,7 @@ void CreateItemsFromLevelData(void) {
 
                 if (shouldCreate) {
                     entityData[eoff + 11] = rand(4095);
-                    if (entityData[eoff + 1] == 10) {
+                    if (entityData[eoff + 1] == OBJ_BOUNCEPAD) {
                         entityData[eoff + 11] = 16;
                     }
                     entityData[eoff + 12] = rand(4095);
@@ -452,7 +452,7 @@ void LevelInit(void) {
     for (i = 0; i < numEntities; i++) {
         if (entityData[i * 128] < 5) {
             for (j = 0; j < 6; j++) {
-                if ((ushort)(entityData[i * 128 + j * 16 + 1] - 29) < 2) {
+                if ((ushort)(entityData[i * 128 + j * 16 + 1] - OBJ_PLAYER_SPAWN_PAUSED) < 2) {
                     SetPlayerRotation(j, entityData[i * 128 + j * 16 + 2], &thePlayer);
 
                     thePlayer.perspVec1 = thePlayer.rightVec;
@@ -471,8 +471,8 @@ void LevelInit(void) {
                     ResetPlayerVars(&thePlayer);
                     HandlePlayerMovementStuff(&thePlayer);
 
-                    if (entityData[i * 128 + j * 16 + 1] == 29) {
-                        entityData[i * 128 + j * 16 + 1] = 8;
+                    if (entityData[i * 128 + j * 16 + 1] == OBJ_PLAYER_SPAWN_PAUSED) {
+                        entityData[i * 128 + j * 16 + 1] = OBJ_TIMER_PAUSE;
                     }
                 }
             }

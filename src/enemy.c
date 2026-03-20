@@ -55,11 +55,11 @@ void InitEnemies(void) {
             continue;
         }
         for (j = 0; j < 6; j++) {
-            if (entityData[i * 128 + j * 16 + 1] == 50 ||
-                    entityData[i * 128 + j * 16 + 1] == 51 ||
-                    entityData[i * 128 + j * 16 + 1] == 53 ||
-                    entityData[i * 128 + j * 16 + 1] == 56 ||
-                    entityData[i * 128 + j * 16 + 1] == 52) {
+            if (entityData[i * 128 + j * 16 + 1] == OBJ_SLOW_STAR ||
+                    entityData[i * 128 + j * 16 + 1] == OBJ_TIRE ||
+                    entityData[i * 128 + j * 16 + 1] == OBJ_CAPTURE_POD ||
+                    entityData[i * 128 + j * 16 + 1] == OBJ_CAPTIVATOR ||
+                    entityData[i * 128 + j * 16 + 1] == OBJ_FAST_STAR) {
                 rotation = entityData[i * 128 + j * 16 + 2];
                 InitEnemy(j, rotation, &enemies[numEnemies]);
 

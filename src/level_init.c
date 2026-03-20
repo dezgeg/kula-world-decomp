@@ -200,7 +200,7 @@ void ParseKeysAndSpecialLevelFromItemData(void) {
     for (i = 0; i < numEntities; i++) {
         if (entityData[i * 128] >= 0 && entityData[i * 128] < 5) {
             for (j = 0; j < 6; j++) {
-                if (entityData[128 * i + 16 * j + 1] == 31) {
+                if (entityData[128 * i + 16 * j + 1] == OBJ_KEY) {
                     numKeysInLevel++;
                 }
             }
@@ -219,7 +219,7 @@ void ParseKeysAndSpecialLevelFromItemData(void) {
     invisBlockVisibility[5] = 0;
     for (i = 0; i < numEntities; i++) {
         if (entityData[128 * i] == 9) {
-            if (entityData[128 * i + 1] == 1) {
+            if (entityData[128 * i + 1] == OBJ_FIRE_PATCH) {
                 specialLevelType = 2;
             }
             if (entityData[128 * i + 2] == 1) {
