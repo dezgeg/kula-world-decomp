@@ -20,10 +20,7 @@ typedef struct LocalMovingPlatformEntity {
 // gprel-used variables (defined in this file)
 int D_000A4398; // mpOff
 int D_000A439C; // swapMovingPlatformDir
-static short D_000A43A0;
-static short D_000A43A2;
-static short D_000A43A4;
-static short D_000A43A6;
+static SVECTOR SVECTOR_000a43a0;
 
 // non-gprel-used variables (extern)
 extern short* entityData;
@@ -95,17 +92,17 @@ void MoveMovingPlatforms(SVECTOR vec) {
             }
 
             if (EB->counter == 1) {
-                D_000A43A0 = EB->posX - vec.vx;
-                D_000A43A2 = EB->posY - vec.vy;
-                D_000A43A4 = EB->posZ - vec.vz;
-                SndPlaySfx(SFX_MOVING_PLATFORM, D_000A4398 + 1, (SVECTOR *)&D_000A43A0, 8000);
+                SVECTOR_000a43a0.vx = EB->posX - vec.vx;
+                SVECTOR_000a43a0.vy = EB->posY - vec.vy;
+                SVECTOR_000a43a0.vz = EB->posZ - vec.vz;
+                SndPlaySfx(SFX_MOVING_PLATFORM, D_000A4398 + 1, &SVECTOR_000a43a0, 8000);
             }
 
             if (EB->counter == 0) {
-                D_000A43A0 = EB->posX - vec.vx;
-                D_000A43A2 = EB->posY - vec.vy;
-                D_000A43A4 = EB->posZ - vec.vz;
-                SndUpdateVolumeBasedOnDirVec(D_000A4398 + 1, (SVECTOR *)&D_000A43A0);
+                SVECTOR_000a43a0.vx = EB->posX - vec.vx;
+                SVECTOR_000a43a0.vy = EB->posY - vec.vy;
+                SVECTOR_000a43a0.vz = EB->posZ - vec.vz;
+                SndUpdateVolumeBasedOnDirVec(D_000A4398 + 1, &SVECTOR_000a43a0);
 
                 switch (EB->movementDirection) {
                 case 4:
