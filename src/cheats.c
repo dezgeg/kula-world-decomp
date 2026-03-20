@@ -94,7 +94,7 @@ void HandleCheats(void) {
                 if (isPaused == 0 && gameState != 0) {
                     cheatState[i].activated = 1;
                     cheatState[i].toggled ^= 1;
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a3334, 0x1f40);
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a3334, 8000);
                 }
                 for (j = 0; j < 8; j++) {
                     buttonBuf[j] = 0;

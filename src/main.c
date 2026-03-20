@@ -131,7 +131,7 @@ void main(void) {
     SndInitFromSfxFile(0xFD000, curFileLength);
     LoadWarningTim();
     /* piracy screen music */
-    SndPlaySfx(SFX_LOADING, 0x378, &ZERO_SVECTOR_a2f04, 8000);
+    SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
     /* ggi */
     curFileLength = ReadDataFile(curWorld, 3, 0xFD000);
     i = ParseGGI(0xFD000);
