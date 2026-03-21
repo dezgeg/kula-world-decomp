@@ -18,7 +18,7 @@ void SkyboxSinCos(int angleval1, int angleval2, short *out1, short *out2, short 
     int sinParam1;
     int angleval2_;
     int out1_val;
-    
+
     if (angleval1 < 0) {
         angleval1 = angleval1 + skyboxMaxAngle1;
     }

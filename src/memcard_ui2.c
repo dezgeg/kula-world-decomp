@@ -28,6 +28,8 @@ extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 extern TgiFile* tgi;
 
+extern char S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO[];
+
 static inline int GetButtonsFromAnyController() {
     if (GetControllerStatus(curController) != 0) {
         controllerButtons = GetControllerButtons(curController);
@@ -41,7 +43,6 @@ static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
-extern char S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO[];
 int AskSaveOverwrite(void) {
     int i;
 

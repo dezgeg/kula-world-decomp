@@ -2,11 +2,76 @@
 
 #include <string.h>
 
+// Prototypes
+extern void DrawHighScoreCubes(void);
+extern void DrawPsxButtonBackground(void);
+extern void DrawScoreGraph(void);
+extern void DrawTextCrappyFont(char *str);
+extern void DrawWidgets(int menuId, int cursorPos);
+extern void FormatTime(int time, char *s, int showPlus);
+extern int GetControllerButtons(int slot);
+extern int GetControllerStatus(int slot);
+extern void InitHighscoreCubes(void);
+extern void InitPsxButtonBackgroundSprites(int);
+extern void InitScoreGraph(void *pBuf, int *levelScores, int *unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
+extern void MusicCheckForLoop(void);
+extern void PutDrawAndDispEnvs(void);
+extern void ResetTextRenderState(void);
+extern void ResetTextVars(void);
+extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
+extern void SndMuteAllVoices(void);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR *dir, int volume);
+extern void SndProcessSpuVoices(void);
 extern uint Rand(int param_1);
 
+// gprel-used variables (defined in this file)
+short highscoreEntryCursorX;
+short highscoreEntryCursorY;
+int idleTimer;
+unsigned char rainbowColorB;
+unsigned char rainbowColorDeltaB;
+unsigned char rainbowColorDeltaG;
+unsigned char rainbowColorDeltaR;
+unsigned char rainbowColorG;
+unsigned char rainbowColorR;
+int repeatRateTimer;
 Highscore highscores[6];
 
+// non-gprel-used variables (extern)
+extern SVECTOR ZERO_SVECTOR_a3340;
+extern int curController;
+extern int curLevel;
+extern int curWorld;
+extern int curWorld2;
+extern int displayWidth;
+extern int levelScores[150];
+extern int musicShouldLoop;
+extern int numCameras;
+extern short numFruits;
+extern uint controllerButtons;
+extern uint prevControllerButtons;
+extern PrimList primLists[2];
+extern int totalPlayTime[2];
+extern int whichDrawDispEnv;
+extern uint otag[2][1][1026];
 extern int highscoreLevelScores[6][150];
+
+extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
+extern char S__4[];
+extern char S__5[];
+extern char S_FMTs_3[];
+extern char S_SCORE[];
+extern char S_TIMETRIAL[];
+extern char S_FMTd_4[];
+extern char S_LEVEL[];
+extern char S_FRUITS[];
+extern char S_TIME[];
+extern char S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE[];
+extern char S_FMTc[];
+
+static inline int TestButton(int button) {
+    return controllerButtons & (button & ~prevControllerButtons);
+}
 
 void InitHighscores(void) {
     extern char S_LEIF[];
@@ -51,74 +116,6 @@ void InitHighscores(void) {
     sprintf(highscores[3].name, S_SAVE_3);
     sprintf(highscores[4].name, S_SAVE_4);
     sprintf(highscores[5].name, S_PLAYER);
-}
-
-// gprel-used variables (defined in this file)
-short highscoreEntryCursorX;
-short highscoreEntryCursorY;
-int idleTimer;
-unsigned char rainbowColorB;
-unsigned char rainbowColorDeltaB;
-unsigned char rainbowColorDeltaG;
-unsigned char rainbowColorDeltaR;
-unsigned char rainbowColorG;
-unsigned char rainbowColorR;
-int repeatRateTimer;
-
-// Prototypes
-extern void DrawHighScoreCubes(void);
-extern void DrawPsxButtonBackground(void);
-extern void DrawScoreGraph(void);
-extern void DrawTextCrappyFont(char *str);
-extern void DrawWidgets(int menuId, int cursorPos);
-extern void FormatTime(int time, char *s, int showPlus);
-extern int GetControllerButtons(int slot);
-extern int GetControllerStatus(int slot);
-extern void InitHighscoreCubes(void);
-extern void InitPsxButtonBackgroundSprites(int);
-extern void InitScoreGraph(void *pBuf, int *levelScores, int *unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
-extern void MusicCheckForLoop(void);
-extern void PutDrawAndDispEnvs(void);
-extern void ResetTextRenderState(void);
-extern void ResetTextVars(void);
-extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
-extern void SndMuteAllVoices(void);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR *dir, int volume);
-extern void SndProcessSpuVoices(void);
-
-// non-gprel-used variables (extern)
-extern SVECTOR ZERO_SVECTOR_a3340;
-extern int curController;
-extern int curLevel;
-extern int curWorld;
-extern int curWorld2;
-extern int displayWidth;
-extern int levelScores[150];
-extern int musicShouldLoop;
-extern int numCameras;
-extern short numFruits;
-extern uint controllerButtons;
-extern uint prevControllerButtons;
-extern PrimList primLists[2];
-extern int totalPlayTime[2];
-extern int whichDrawDispEnv;
-extern uint otag[2][1][1026];
-
-extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
-extern char S__4[];
-extern char S__5[];
-extern char S_FMTs_3[];
-extern char S_SCORE[];
-extern char S_TIMETRIAL[];
-extern char S_FMTd_4[];
-extern char S_LEVEL[];
-extern char S_FRUITS[];
-extern char S_TIME[];
-extern char S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE[];
-extern char S_FMTc[];
-
-static inline int TestButton(int button) {
-    return controllerButtons & (button & ~prevControllerButtons);
 }
 
 void HighScoreUi(int param_1) {
@@ -503,4 +500,3 @@ LABEL_SKIP_ENTRY:
     DrawSync(0);
     VSync(0);
 }
-

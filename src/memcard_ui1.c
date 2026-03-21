@@ -292,7 +292,7 @@ void InitMemcardUi(void) {
 }
 
 void DrawSaveSlotSprites(int isSave) {
-    if (isSave == 0) {
+    if (!isSave) {
         addPrim(&primLists[whichDrawDispEnv].main, &loadGameSprite1[whichDrawDispEnv]);
         addPrim(&primLists[whichDrawDispEnv].main, &loadGameSprite2[whichDrawDispEnv]);
     } else {

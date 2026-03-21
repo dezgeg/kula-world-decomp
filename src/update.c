@@ -106,7 +106,7 @@ void SetSunglassMode(int on) {
 
 void UpdateSunglassModeDisabling(void) {
     int idx = cameraIndex;
-    
+
     switch (sunglassDisablingState[idx]) {
     case 1:
         if (--sunglassCounter1[idx] > 0) {

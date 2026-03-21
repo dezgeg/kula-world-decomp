@@ -254,31 +254,31 @@ void RenderPlayerAndItems(void) {
     int iDl = itemsDispListIdx;
     int pDl = playerEnemyDispListIdx;
     int temp;
-    
+
     itemsDispList[iDl] = 0;
     playerEnemyDispList[pDl] = NULL;
     itemsDispListIdx = iDl + 1;
     playerEnemyDispListIdx = pDl + 1;
-    
+
     SetFarColor(farColor2[0], farColor2[1], farColor2[2]);
-    
+
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
             UpdateGemRandomSparkleEffect(&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j]);
         }
     }
-    
+
     RenderDispList(itemsDispList);
     DrawPlayerSpecularSprites();
     RenderDispList(playerEnemyDispList);
     DrawShadowSprites();
-    
+
     temp = (int)renderedPrimsBuf + 0xffe87000;
     primBufUsage = temp - (whichDrawDispEnv * 0xc000);
     if (primBufUsage > maxPrimBufUsage) {
         maxPrimBufUsage = primBufUsage;
     }
-    
+
     itemsDispListIdx = 0;
     playerEnemyDispListIdx = 0;
 }

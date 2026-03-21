@@ -32,22 +32,22 @@ void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int co
         textPosYStart = posY;
         textPosYEnd = posY;
     }
-    if (0x80 < colorR) {
+    if (colorR > 0x80) {
         colorR = 0x80;
     }
-    if (0x80 < colorG) {
+    if (colorG > 0x80) {
         colorG = 0x80;
     }
-    if (0x80 < colorB) {
+    if (colorB > 0x80) {
         colorB = 0x80;
     }
-    if (-1 < colorR) {
+    if (colorR >= 0) {
         textColorR = (byte)colorR;
     }
-    if (-1 < colorG) {
+    if (colorG >= 0) {
         textColorG = (byte)colorG;
     }
-    if (-1 < colorB) {
+    if (colorB >= 0) {
         textColorB = (byte)colorB;
     }
 }

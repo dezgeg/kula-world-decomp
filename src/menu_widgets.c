@@ -35,7 +35,7 @@ void DrawWidgets(int menuId, int cursorPos) {
             sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_MAIN_MENU[menuId];
         } else {
             musicVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 =  MENU_CURSOR_START_Y_PAUSE_MENU[menuId] + 20;
-            sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 =  MENU_CURSOR_START_Y_PAUSE_MENU[menuId]; 
+            sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 =  MENU_CURSOR_START_Y_PAUSE_MENU[menuId];
         }
         addPrim(&primLists[whichDrawDispEnv].main, &musicVolumeWidgetSprite[whichDrawDispEnv]);
         addPrim(&primLists[whichDrawDispEnv].main, &sfxVolumeWidgetSprite[whichDrawDispEnv]);

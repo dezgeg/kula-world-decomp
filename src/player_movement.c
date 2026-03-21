@@ -193,7 +193,7 @@ void StartJumpingForward(Player *player) {
 
 void StartRollingForward(Player *player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
-        if (IsRollingForwardBlocked(player) != 0 || player->subpixelPositionOnCube.vz < 256) {
+        if (IsRollingForwardBlocked(player) || player->subpixelPositionOnCube.vz < 256) {
             player->howMoving0 = 2;
             player->howMoving198 = ROLLING;
             player->onGround = 0;
@@ -203,7 +203,7 @@ void StartRollingForward(Player *player) {
 
 void StartJumpingInplace(Player *player) {
     player->howMoving198 = JUMPING_INPLACE;
-    if (player->onMovingPlatform != 0) {
+    if (player->onMovingPlatform) {
         JumpingOnMovingPlatform(player);
         player->jumpingInplaceOnTopOfMovingPlatform = 1;
     }
@@ -327,7 +327,6 @@ void HandleViewportRotationStart(Player *player) {
         player->facingDir = SVECTOR_000a4358;
     }
 }
-
 
 void CheckPlayerJumpingStuff(Player *player) {
     if (player->dying) {
@@ -567,7 +566,6 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
     }
     player->ballMorphShape = idleSquishMagnitude + landingSquishMagnitude;
 }
-
 
 void ResetPlayerMatrix274(Player *player) {
     MulMatrix0(&player->matrix_274, &player->matrix_254, &player->matrix_254);

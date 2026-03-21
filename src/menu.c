@@ -108,7 +108,6 @@ void PauseOrMainMenu(void) {
     SetBigGuiSpriteVisible();
     if (specialLevelType == 0) {
         short levelTextX = 112;
-        int dummy = 1;
         int fullLevel = 0;
         if (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1)) {
             DrawStaticUiSprite(3, 20, 20, 0);
