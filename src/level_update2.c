@@ -201,108 +201,109 @@ void CreateItemsFromLevelData(void) {
     k = 0;
 
     for (i = 0; i < numEntities; i++) {
-        if (entityData[i * 128] < 5) {
-            for (j = 0; j < 6; j++) {
-                int shouldCreate = 1;
-                eoff = i * 128 + j * 16;
+        if (entityData[i * 128] >= 5) {
+            continue;
+        }
+        for (j = 0; j < 6; j++) {
+            int shouldCreate = 1;
+            eoff = i * 128 + j * 16;
 
-                itemState[k].type = 0;
+            itemState[k].type = 0;
 
-                switch (entityData[eoff + 1]) {
-                case OBJ_APPLE:
-                case OBJ_WATERMELON:
-                case OBJ_PUMPKIN:
-                case OBJ_BANANA:
-                case OBJ_STRAWBERRY:
-                    itemState[k].collisionDistance = 32400;
-                    itemState[k].type = 1;
+            switch (entityData[eoff + 1]) {
+            case OBJ_APPLE:
+            case OBJ_WATERMELON:
+            case OBJ_PUMPKIN:
+            case OBJ_BANANA:
+            case OBJ_STRAWBERRY:
+                itemState[k].collisionDistance = 32400;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 386;
+                if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = OBJ_STRAWBERRY;
+                if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = OBJ_BANANA;
+                if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = OBJ_PUMPKIN;
+                if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = OBJ_WATERMELON;
+                if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = OBJ_APPLE;
+                break;
+            case OBJ_LETHARGY_PILL:
+            case OBJ_BOUNCY_PILL:
+            case OBJ_INVINCIBILITY_PILL:
+            case OBJ_SUNGLASSES:
+                itemState[k].collisionDistance = 25600;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 386;
+                break;
+            case OBJ_COIN:
+                itemState[k].collisionDistance = 25600;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 406;
+                break;
+            case OBJ_SPIKE_TRAP:
+                itemState[k].collisionDistance = 25600;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 416;
+                break;
+            case OBJ_HOURGLASS:
+                itemState[k].collisionDistance = 25600;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 436;
+                break;
+            case OBJ_GEM:
+                itemState[k].collisionDistance = 25600;
+                itemState[k].type = 1;
+                if (entityData[eoff + 3] == 0) {
                     entityData[eoff + 9] = 386;
-                    if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = OBJ_STRAWBERRY;
-                    if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = OBJ_BANANA;
-                    if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = OBJ_PUMPKIN;
-                    if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = OBJ_WATERMELON;
-                    if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = OBJ_APPLE;
-                    break;
-                case OBJ_LETHARGY_PILL:
-                case OBJ_BOUNCY_PILL:
-                case OBJ_INVINCIBILITY_PILL:
-                case OBJ_SUNGLASSES:
-                    itemState[k].collisionDistance = 25600;
-                    itemState[k].type = 1;
-                    entityData[eoff + 9] = 386;
-                    break;
-                case OBJ_COIN:
-                    itemState[k].collisionDistance = 25600;
-                    itemState[k].type = 1;
-                    entityData[eoff + 9] = 406;
-                    break;
-                case OBJ_SPIKE_TRAP:
-                    itemState[k].collisionDistance = 25600;
-                    itemState[k].type = 1;
-                    entityData[eoff + 9] = 416;
-                    break;
-                case OBJ_HOURGLASS:
-                    itemState[k].collisionDistance = 25600;
-                    itemState[k].type = 1;
+                } else {
                     entityData[eoff + 9] = 436;
-                    break;
-                case OBJ_GEM:
-                    itemState[k].collisionDistance = 25600;
-                    itemState[k].type = 1;
-                    if (entityData[eoff + 3] == 0) {
-                        entityData[eoff + 9] = 386;
-                    } else {
-                        entityData[eoff + 9] = 436;
-                    }
-                    break;
-                case OBJ_EXIT:
-                    levelExitEntityOffset = eoff;
-                    entityData[eoff + 3] = 1;
-                    entityData[eoff + 9] = 500;
-                    break;
-                case OBJ_HIDDEN_EXIT:
-                    levelHiddenExitEntityOffset = eoff;
-                    entityData[eoff + 4] = 0;
-                    entityData[eoff + 9] = 500;
-                    break;
-                case OBJ_KEY:
-                    itemState[k].collisionDistance = 22500;
-                    numKeysRemaining++;
-                    itemState[k].type = 1;
-                    entityData[eoff + 9] = 386;
-                    break;
-                case OBJ_BOUNCEPAD:
+                }
+                break;
+            case OBJ_EXIT:
+                levelExitEntityOffset = eoff;
+                entityData[eoff + 3] = 1;
+                entityData[eoff + 9] = 500;
+                break;
+            case OBJ_HIDDEN_EXIT:
+                levelHiddenExitEntityOffset = eoff;
+                entityData[eoff + 4] = 0;
+                entityData[eoff + 9] = 500;
+                break;
+            case OBJ_KEY:
+                itemState[k].collisionDistance = 22500;
+                numKeysRemaining++;
+                itemState[k].type = 1;
+                entityData[eoff + 9] = 386;
+                break;
+            case OBJ_BOUNCEPAD:
+                entityData[eoff + 11] = 16;
+                entityData[eoff + 9] = 256;
+                break;
+            case OBJ_TRANSPORTER:
+            case OBJ_BUTTON:
+            case OBJ_MOVING_SPIKE:
+            case OBJ_SPIKE:
+            case OBJ_ARROW:
+                entityData[eoff + 9] = 256;
+                break;
+            default:
+                shouldCreate = 0;
+                break;
+            }
+
+            if (shouldCreate) {
+                entityData[eoff + 11] = rand(4095);
+                if (entityData[eoff + 1] == OBJ_BOUNCEPAD) {
                     entityData[eoff + 11] = 16;
-                    entityData[eoff + 9] = 256;
-                    break;
-                case OBJ_TRANSPORTER:
-                case OBJ_BUTTON:
-                case OBJ_MOVING_SPIKE:
-                case OBJ_SPIKE:
-                case OBJ_ARROW:
-                    entityData[eoff + 9] = 256;
-                    break;
-                default:
-                    shouldCreate = 0;
-                    break;
                 }
+                entityData[eoff + 12] = rand(4095);
+                entityData[eoff + 13] = rand(4095);
+                entityData[eoff + 5] = k;
 
-                if (shouldCreate) {
-                    entityData[eoff + 11] = rand(4095);
-                    if (entityData[eoff + 1] == OBJ_BOUNCEPAD) {
-                        entityData[eoff + 11] = 16;
-                    }
-                    entityData[eoff + 12] = rand(4095);
-                    entityData[eoff + 13] = rand(4095);
-                    entityData[eoff + 5] = k;
+                itemState[k].matrix.t[0] = entityData[i * 128 + 125] << 9;
+                itemState[k].matrix.t[1] = entityData[i * 128 + 126] << 9;
+                itemState[k].matrix.t[2] = entityData[i * 128 + 127] << 9;
 
-                    itemState[k].matrix.t[0] = entityData[i * 128 + 125] << 9;
-                    itemState[k].matrix.t[1] = entityData[i * 128 + 126] << 9;
-                    itemState[k].matrix.t[2] = entityData[i * 128 + 127] << 9;
-
-                    SetEntityRotation(&itemState[k].matrix, entityData[eoff + 2], j, entityData[eoff + 9]);
-                    k++;
-                }
+                SetEntityRotation(&itemState[k].matrix, entityData[eoff + 2], j, entityData[eoff + 9]);
+                k++;
             }
         }
     }
