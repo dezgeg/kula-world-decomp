@@ -1460,4 +1460,9 @@ int IsFallingOrJumping(Player* player) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", Unused_FUN_0003bdec);
+void Unused_FUN_0003bdec(s16 *a0) {
+    SVECTOR v;
+    v.vx = a0[30] + (a0[6] * 1024);
+    v.vy = a0[31] + (a0[7] * 1024);
+    v.vz = a0[32] + (a0[8] * 1024);
+}

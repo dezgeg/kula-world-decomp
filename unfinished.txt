@@ -44,5 +44,4 @@ ScanLevelDataForMovingBlocks1: https://decomp.scratch/qU5tz
 ScanLevelDataForMovingBlocks2: https://decomp.scratch/U1VPt
 ScanLevelDataForRetractableSpikes: <none>
 SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
-Unused_FUN_0003bdec: <none>
 UpdateEnemies: https://decomp.scratch/tFgOk
