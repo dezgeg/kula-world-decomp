@@ -206,9 +206,9 @@ int IsCollidingWithEnemy(SVECTOR pos) {
     int dx, dy, dz;
 
     for (collI = 0; collI < numEnemies; collI++) {
-        dx = (int)pos.vx - (int)enemies[collI].pos.vx;
-        dy = (int)pos.vy - (int)enemies[collI].pos.vy;
-        dz = (int)pos.vz - (int)enemies[collI].pos.vz;
+        dx = pos.vx - enemies[collI].pos.vx;
+        dy = pos.vy - enemies[collI].pos.vy;
+        dz = pos.vz - enemies[collI].pos.vz;
 
         enemyPlayerDistSq = dx * dx + dy * dy + dz * dz;
 
