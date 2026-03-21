@@ -457,30 +457,31 @@ void LevelInit(void) {
     }
 
     for (i = 0; i < numEntities; i++) {
-        if (entityData[i * 128] < 5) {
-            for (j = 0; j < 6; j++) {
-                if ((ushort)(entityData[i * 128 + j * 16 + 1] - OBJ_PLAYER_SPAWN_PAUSED) < 2) {
-                    SetPlayerRotation(j, entityData[i * 128 + j * 16 + 2], &thePlayer);
+        if (entityData[i * 128] >= 5) {
+            continue;
+        }
+        for (j = 0; j < 6; j++) {
+            if (entityData[i * 128 + j * 16 + 1] == OBJ_PLAYER_SPAWN_PAUSED || entityData[i * 128 + j * 16 + 1] == OBJ_PLAYER_SPAWN) {
+                SetPlayerRotation(j, entityData[i * 128 + j * 16 + 2], &thePlayer);
 
-                    thePlayer.perspVec1 = thePlayer.rightVec;
-                    thePlayer.perspVec3 = thePlayer.facingDir;
-                    thePlayer.perspVec2 = thePlayer.gravityDir;
+                thePlayer.perspVec1 = thePlayer.rightVec;
+                thePlayer.perspVec3 = thePlayer.facingDir;
+                thePlayer.perspVec2 = thePlayer.gravityDir;
 
-                    SetPlayerMatrix6(&thePlayer);
+                SetPlayerMatrix6(&thePlayer);
 
-                    thePlayer.jumpStartPos.vx = entityData[i * 128 + 125] * 512 + thePlayer.gravityDir.vx * 256;
-                    thePlayer.jumpStartPos.vy = entityData[i * 128 + 126] * 512 + thePlayer.gravityDir.vy * 256;
-                    thePlayer.jumpStartPos.vz = entityData[i * 128 + 127] * 512 + thePlayer.gravityDir.vz * 256;
+                thePlayer.jumpStartPos.vx = entityData[i * 128 + 125] * 512 + thePlayer.gravityDir.vx * 256;
+                thePlayer.jumpStartPos.vy = entityData[i * 128 + 126] * 512 + thePlayer.gravityDir.vy * 256;
+                thePlayer.jumpStartPos.vz = entityData[i * 128 + 127] * 512 + thePlayer.gravityDir.vz * 256;
 
-                    thePlayer.finePos = thePlayer.jumpStartPos;
+                thePlayer.finePos = thePlayer.jumpStartPos;
 
-                    CalcWhatPlayerIsStandingOn(&thePlayer);
-                    ResetPlayerVars(&thePlayer);
-                    HandlePlayerMovementStuff(&thePlayer);
+                CalcWhatPlayerIsStandingOn(&thePlayer);
+                ResetPlayerVars(&thePlayer);
+                HandlePlayerMovementStuff(&thePlayer);
 
-                    if (entityData[i * 128 + j * 16 + 1] == OBJ_PLAYER_SPAWN_PAUSED) {
-                        entityData[i * 128 + j * 16 + 1] = OBJ_TIMER_PAUSE;
-                    }
+                if (entityData[i * 128 + j * 16 + 1] == OBJ_PLAYER_SPAWN_PAUSED) {
+                    entityData[i * 128 + j * 16 + 1] = OBJ_TIMER_PAUSE;
                 }
             }
         }
@@ -1445,15 +1446,14 @@ void SubtractLevelTimer(int param_1) {
 }
 
 int IsPlayerInAir(Player* player) {
-    if (player->howMoving198 == FALLING ||
-        ((uint)player->howMoving198 < ROLLING && player->jumpingOrViewportRotationTimer > 1)) {
+    if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_INPLACE || player->howMoving198 == JUMPING_FORWARD) && player->jumpingOrViewportRotationTimer > 1) {
         return 1;
     }
     return 0;
 }
 
 int IsFallingOrJumping(Player* player) {
-    if (player->howMoving198 == FALLING || (uint)player->howMoving198 < ROLLING) {
+    if (player->howMoving198 == FALLING || player->howMoving198 == JUMPING_INPLACE || player->howMoving198 == JUMPING_FORWARD) {
         return 1;
     }
     return 0;
