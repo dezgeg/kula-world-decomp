@@ -21,6 +21,10 @@ typedef struct LocalMovingPlatformEntity {
 int D_000A4398; // mpOff
 int D_000A439C; // swapMovingPlatformDir
 static SVECTOR SVECTOR_000a43a0;
+int DAT_000a43a8;
+int DAT_000a43ac;
+int D_000A43B0;
+int mpLengthScaled;
 
 // non-gprel-used variables (extern)
 extern short* entityData;
@@ -166,7 +170,29 @@ void MoveMovingPlatforms(SVECTOR vec) {
 #undef EB
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", FUN_00033720);
+int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3) {
+    mpLengthScaled = (entityData[itemdataOff + 17] - 1) << 9;
+
+    switch (entityData[itemdataOff + 2]) {
+    case 1:
+        DAT_000a43a8 = vec->vx + param_3 - (entityData[itemdataOff + 119] - 256);
+        DAT_000a43ac = entityData[itemdataOff + 119] + mpLengthScaled + 256 - (vec->vx - param_3);
+        break;
+    case 2:
+        DAT_000a43a8 = vec->vy + param_3 - (entityData[itemdataOff + 120] - 256);
+        DAT_000a43ac = entityData[itemdataOff + 120] + mpLengthScaled + 256 - (vec->vy - param_3);
+        break;
+    case 5:
+        DAT_000a43a8 = vec->vz + param_3 - (entityData[itemdataOff + 121] - 256);
+        DAT_000a43ac = entityData[itemdataOff + 121] + mpLengthScaled + 256 - (vec->vz - param_3);
+        break;
+    }
+
+    if (DAT_000a43a8 >= 0 && DAT_000a43ac >= 0) {
+        return 1;
+    }
+    return 0;
+}
 
 int FUN_0003382c(Player* player) {
     DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
