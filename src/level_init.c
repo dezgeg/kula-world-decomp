@@ -56,7 +56,7 @@ extern Texture textures[150];
 extern Texture textures[150];
 extern uint firstGuiTexture;
 extern uint firstGuiTexture;
-extern CubeState cubeStates[256];
+extern int cubeStates[16 * 256];
 extern short flashingBlockEntityIndexes[64];
 
 TgiFile* tgi;
@@ -193,14 +193,14 @@ int GetRandomTextureRotation(void) {
 
 void ParseKeysAndSpecialLevelFromItemData(void) {
     int i;
-    int j;
+    int dir;
 
     numKeysInLevel = 0;
     wasSpecialLevel = specialLevelType;
     for (i = 0; i < numEntities; i++) {
         if (entityData[i * 128] >= 0 && entityData[i * 128] < 5) {
-            for (j = 0; j < 6; j++) {
-                if (entityData[128 * i + 16 * j + 1] == OBJ_KEY) {
+            for (dir = 0; dir < 6; dir++) {
+                if (entityData[128 * i + 16 * dir + 1] == OBJ_KEY) {
                     numKeysInLevel++;
                 }
             }
@@ -252,7 +252,7 @@ void ScanLevelDataForCrumblingBlocks(void) {
 
 void ScanLevelDataForFlashingBlocks(void) {
     Quad* quad;
-    int j;
+    int dir;
     FlashingEntity* eb;
     int x;
     int y;
@@ -273,15 +273,15 @@ void ScanLevelDataForFlashingBlocks(void) {
             ci = CUBE_INDEX_AT(x, y, z);
             initState = eb->initState;
             if (initState < 2) {
-                for (j = 0; j < 6; j++) {
-                    *(u16*)&cubeStates[0].quadPtrs[16 * ci + j]->flags = 0x10e;
+                for (dir = 0; dir < 6; dir++) {
+                    *(u16*)cubeStates[16 * ci + dir] = 0x10e;
                 }
                 eb->counter = 76 - initState * 47;
                 eb->state = 0;
                 levelData[x * 1156 + y * 34 + z] = -1;
             } else {
-                for (j = 0; j < 6; j++) {
-                    quad = cubeStates[0].quadPtrs[16 * ci + j];
+                for (dir = 0; dir < 6; dir++) {
+                    quad = cubeStates[16 * ci + dir];
                     *(u8*)&quad->flags = 0xf;
                     quad->color = 0x808080;
                 }
