@@ -1,10 +1,10 @@
 CalcLevelBounds: https://decomp.scratch/CTYFE
 CalcPlayerMatrixesAndDrawPlayer: https://decomp.scratch/5MgRF
 CheckForPlayerWallHit: https://decomp.scratch/POxOn
-CopyQuadData http://decomp.me/scratch/eBNRK
+CopyQuadData: https://decomp.me/scratch/kyhIu
 CreateAllItemDispLists: https://decomp.scratch/r8cry
 CreateEnemyDispList: https://decomp.scratch/LpgS0
-CreateItemDispList http://decomp.me/scratch/ngbHC
+CreateItemDispList: https://decomp.me/scratch/Q9HSg
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DisableItemShadow: https://decomp.scratch/apQkr
 DrawBonusWidget: https://decomp.scratch/zORj5
@@ -33,8 +33,8 @@ ParseLevelDataFromTgi: https://decomp.scratch/gMseL
 ParseTextures: https://decomp.scratch/pOWE8
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 ProcessCrumblingBlocks: https://decomp.scratch/2XWwj
-ProcessCubesIntoFaces http://decomp.me/scratch/QOV43
-ProcessFlashingBlocks http://decomp.me/scratch/5T9GV
+ProcessCubesIntoFaces: https://decomp.me/scratch/rjmZz
+ProcessFlashingBlocks: http://decomp.me/scratch/5T9GV
 ProcessMovement: https://decomp.scratch/iZVbL
 ProcessRecentlyVisitedCubes: https://decomp.me/scratch/X4b4u
 ProcessRetractableSpikes: https://decomp.scratch/Bsuue
@@ -45,6 +45,5 @@ ScanLevelDataForMovingBlocks1: https://decomp.scratch/qU5tz
 ScanLevelDataForMovingBlocks2: https://decomp.scratch/U1VPt
 ScanLevelDataForRetractableSpikes: <none>
 SetupBiosFontStr: https://decomp.me/scratch/B2Bmk
-Unused_FUN_0002caec: <none>
 Unused_FUN_0003bdec: <none>
 UpdateEnemies: https://decomp.scratch/tFgOk
