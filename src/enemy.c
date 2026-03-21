@@ -73,7 +73,7 @@ void InitEnemies(void) {
                 enemies[numEnemies].rotationVec.vx = enemies[numEnemies].rotationVec.vy = enemies[numEnemies].rotationVec.vz = 0;
                 enemies[numEnemies].state = enemies[numEnemies].timer = 0;
 
-                if (enemies[numEnemies].enemyType == 56) {
+                if (enemies[numEnemies].enemyType == OBJ_CAPTIVATOR) {
                     if (entityData[i * 128 + j * 16 + 3] == 2) {
                         enemies[numEnemies].timer = 341;
                     }
@@ -212,7 +212,7 @@ int IsCollidingWithEnemy(SVECTOR pos) {
 
         enemyPlayerDistSq = dx * dx + dy * dy + dz * dz;
 
-        if (enemies[collI].enemyType == 53) {
+        if (enemies[collI].enemyType == OBJ_CAPTURE_POD) {
             if (enemyPlayerDistSq < 16200) {
                 return 1;
             }
@@ -229,7 +229,7 @@ void Noop4() {
 
 void ProcessEnemies(void) {
     for (enemyI = 0; enemyI < numEnemies; enemyI++) {
-        if (enemies[enemyI].enemyType == 50) {
+        if (enemies[enemyI].enemyType == OBJ_SLOW_STAR) {
             enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
             enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
             enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
@@ -274,7 +274,7 @@ void ProcessEnemies(void) {
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
         }
 
-        if (enemies[enemyI].enemyType == 53) {
+        if (enemies[enemyI].enemyType == OBJ_CAPTURE_POD) {
             enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
             enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
             enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
@@ -319,7 +319,7 @@ void ProcessEnemies(void) {
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
         }
 
-        if (enemies[enemyI].enemyType == 56) {
+        if (enemies[enemyI].enemyType == OBJ_CAPTIVATOR) {
             enemies[enemyI].rotationVec.vx = 0;
             enemies[enemyI].rotationVec.vy = 0;
             enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz - (rcos(enemies[enemyI].timer % 2048) * 400) / 4096) & 0xfff;
@@ -371,7 +371,7 @@ void ProcessEnemies(void) {
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, DAT_000a4850, 0);
         }
 
-        if (enemies[enemyI].enemyType == 51) {
+        if (enemies[enemyI].enemyType == OBJ_TIRE) {
             if (enemies[enemyI].state == 0) {
                 enemies[enemyI].rotationVec.vx -= 64;
             }
@@ -420,7 +420,7 @@ void ProcessEnemies(void) {
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 1);
         }
 
-        if (enemies[enemyI].enemyType == 52) {
+        if (enemies[enemyI].enemyType == OBJ_FAST_STAR) {
             enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 64) % 4096;
             enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy + 32) % 4096;
             enemies[enemyI].rotationVec.vz %= 4096;
@@ -549,13 +549,13 @@ int FUN_000403ec(int blockType, int rotationIndex) {
     if (type == 6) return 1;
 
     type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];
-    if (type == 0) return 1;
-    if (type >= 50) return 1; // enemy
-    if (type == 30) return 1; // spawn
+    if (type == OBJ_NONE) return 1;
+    if (type >= OBJ_SLOW_STAR) return 1; // enemy
+    if (type == OBJ_PLAYER_SPAWN) return 1; // spawn
 
-    if (type == 2) return 1;
-    if (type == 1) return 1;
-    if (type == 4) return 1;
+    if (type == OBJ_ICE_PATCH) return 1;
+    if (type == OBJ_FIRE_PATCH) return 1;
+    if (type == OBJ_ACID_PATCH) return 1;
     return 0;
 }
 
