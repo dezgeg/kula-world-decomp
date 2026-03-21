@@ -549,7 +549,7 @@ int FUN_000403ec(int blockType, int rotationIndex) {
     if (type == 6) return 1;
 
     type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];
-    if (type == OBJ_NONE) return 1;
+    if (type == 0) return 1;
     if (type >= OBJ_SLOW_STAR) return 1; // enemy
     if (type == OBJ_PLAYER_SPAWN) return 1; // spawn
 

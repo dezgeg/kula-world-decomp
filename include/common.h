@@ -87,7 +87,6 @@ typedef enum SoundEffect {
 } SoundEffect;
 
 typedef enum ObjectType {
-    OBJ_NONE = 0x00,
     OBJ_FIRE_PATCH = 0x01,
     OBJ_ICE_PATCH = 0x02,
     OBJ_INVISIBLE_PATCH = 0x03,
