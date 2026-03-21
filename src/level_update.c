@@ -25,6 +25,7 @@ int DAT_000a43a8;
 int DAT_000a43ac;
 int D_000A43B0;
 int mpLengthScaled;
+int mI;
 
 // non-gprel-used variables (extern)
 extern short* entityData;
@@ -273,7 +274,22 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", JumpingOnMovingPlatform);
+void JumpingOnMovingPlatform(Player *player) {
+    player->jumpingOnMovingPlatform = 1;
+    player->onMovingPlatform = 0;
+
+    for (mI = 2; mI <= entityData[player->movingPlatformEntityIdStandingOn + 17] + 1; mI++) {
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[mI][2][2] =
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mI][2] =
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mI] = -1;
+    }
+
+    player->finePos.vx += entityData[player->movingPlatformEntityIdStandingOn + 119] - 512;
+    player->finePos.vy += entityData[player->movingPlatformEntityIdStandingOn + 120] - 512;
+    player->finePos.vz += entityData[player->movingPlatformEntityIdStandingOn + 121] - 512;
+
+    player->svec54.vx = player->svec54.vy = player->svec54.vz = 0;
+}
 
 void FUN_0003418c(Player *player) {
     short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
