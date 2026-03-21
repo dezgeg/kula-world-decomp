@@ -1,6 +1,5 @@
 CalcLevelBounds: https://decomp.scratch/CTYFE
 CalcPlayerMatrixesAndDrawPlayer: https://decomp.scratch/5MgRF
-CalcWhatPlayerIsStandingOn: https://decomp.me/scratch/5Tspv
 CheckForPlayerWallHit: https://decomp.scratch/POxOn
 CopyQuadData http://decomp.me/scratch/eBNRK
 CreateAllItemDispLists: https://decomp.scratch/r8cry
@@ -12,7 +11,6 @@ DrawBonusWidget: https://decomp.scratch/zORj5
 DrawScoreGraph: <none>
 DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 FUN_000298e0: https://decomp.scratch/WO6tU
-FUN_00033720: https://decomp.scratch/8qh1c
 HandleDebugCamera: https://decomp.me/scratch/P5as1
 HandleItemTouching: https://decomp.me/scratch/0GliO
 HandleMovingPlatforms: https://decomp.scratch/zRxhB
@@ -20,10 +18,9 @@ HandlePlayerMovementStuff: https://decomp.scratch/k8yiT
 HandleSpecialCubeTypes: https://decomp.scratch/0RSJc
 HandleTransporter: https://decomp.scratch/plraT
 InitAllDigitSprites: https://decomp.me/scratch/CmcRF
-InitEnemies: https://decomp.scratch/STipp
-InitLasers http://decomp.me/scratch/Rap4x
-InitLasers http://decomp.me/scratch/qhHUf
 InitLasers2: https://decomp.scratch/LWRua
+InitLasers: http://decomp.me/scratch/qhHUf
+InitLasers: http://decomp.me/scratch/Rap4x
 InitScoreGraph: <none>
 IsSubpixelZBelow257: https://decomp.scratch/VShme
 JumpingOnMovingPlatform: https://decomp.scratch/o5ZGF
@@ -32,8 +29,6 @@ LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn
 MovePlayerDownwards: https://decomp.me/scratch/ZTPlH
 MovePlayerForward: https://decomp.me/scratch/Xc2q5
-ParseGGI: https://decomp.scratch/fyTSX
-ParseGgiInner: https://decomp.scratch/EDUPE
 ParseLevelDataFromTgi: https://decomp.scratch/gMseL
 ParseTextures: https://decomp.scratch/pOWE8
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
