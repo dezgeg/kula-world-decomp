@@ -271,7 +271,8 @@ void ProcessEnemies(void) {
                                 tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec),
                                 tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                &MATRIX_000a48c4, 128, 0);
         }
 
         if (enemies[enemyI].enemyType == OBJ_CAPTURE_POD) {
@@ -316,7 +317,8 @@ void ProcessEnemies(void) {
                                 tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec),
                                 tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                &MATRIX_000a48c4, 128, 0);
         }
 
         if (enemies[enemyI].enemyType == OBJ_CAPTIVATOR) {
@@ -368,7 +370,8 @@ void ProcessEnemies(void) {
                                 tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec),
                                 tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, DAT_000a4850, 0);
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                &MATRIX_000a48c4, DAT_000a4850, 0);
         }
 
         if (enemies[enemyI].enemyType == OBJ_TIRE) {
@@ -417,7 +420,8 @@ void ProcessEnemies(void) {
                                 tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec),
                                 tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 1);
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                &MATRIX_000a48c4, 128, 1);
         }
 
         if (enemies[enemyI].enemyType == OBJ_FAST_STAR) {
@@ -461,7 +465,8 @@ void ProcessEnemies(void) {
                                 tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
                                 GetRotationIndexFromVector(enemies[enemyI].normalVec),
                                 tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec), &MATRIX_000a48c4, 128, 0);
+                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
+                                &MATRIX_000a48c4, 128, 0);
         }
     }
 }
