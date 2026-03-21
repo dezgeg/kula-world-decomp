@@ -3,7 +3,6 @@ CalcPlayerMatrixesAndDrawPlayer: https://decomp.scratch/5MgRF
 CheckForPlayerWallHit: https://decomp.scratch/POxOn
 CopyQuadData: https://decomp.me/scratch/kyhIu
 CreateAllItemDispLists: https://decomp.scratch/r8cry
-CreateEnemyDispList: https://decomp.scratch/LpgS0
 CreateItemDispList: https://decomp.me/scratch/Q9HSg
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DisableItemShadow: https://decomp.scratch/apQkr
