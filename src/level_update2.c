@@ -42,12 +42,16 @@ extern ItemState itemState[256];
 int D_000A4430;
 int D_000A43E8;
 int D_000A43DC;
+int DAT_000a4748;
+int DAT_000a474c;
+int DAT_000a4750;
+int DAT_000a4754;
 static SVECTOR SVECTOR_000a43ec;
 static SVECTOR SVECTOR_000a43e0;
 static SVECTOR initPlayerFacingVec;
 static SVECTOR initPlayerGravityVec;
 static SVECTOR initPlayerRightVec;
-
+static short playerFinePosMod512[4];
 
 int DAT_000a43c4;
 short DAT_000a43fc;
@@ -185,6 +189,9 @@ extern void ProcessMovement(Player* player);
 extern void SetVec184ToVec54(Player * player);
 extern void StartMovementIfNeeded(Player * player);
 extern void UpdateEnemies(SVECTOR pos);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void Vibrate99(int magnitude1, int magnitude2, int count);
+int IsFallingOrJumping(Player* player);
 
 void CreateItemsFromLevelData(void) {
     int i, j, k;
@@ -895,7 +902,6 @@ void HandlePlayerButtons(Player *player) {
     }
 }
 
-
 void CalcWhatPlayerIsStandingOn(Player *player) {
     if (player->onMovingPlatform != 0) {
         FUN_0003418c(player);
@@ -981,8 +987,6 @@ int GetBlockAt(SVECTOR* coord) {
     }
 }
 
-static short playerFinePosMod512[4];
-
 void UpdateSubpixelPositions(Player* player) {
     playerFinePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
     playerFinePosMod512[1] = (player->finePos.vy + 0x100) & 0x1FF;
@@ -1057,7 +1061,6 @@ void UpdateSubpixelPositions(Player* player) {
     player->svec_144.vy = player->subpixelPositionOnCube.vy - player->svec_154.vy;
     player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/level_update2", MovePlayerForward);
 
@@ -1373,15 +1376,6 @@ void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, 
         m->m[2][1] = -SVECTOR_000a4740.vz;
     }
 }
-
-extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
-extern void Vibrate99(int magnitude1, int magnitude2, int count);
-int IsFallingOrJumping(Player* player);
-
-int DAT_000a4748;
-int DAT_000a474c;
-int DAT_000a4750;
-int DAT_000a4754;
 
 void CheckForButtonEntity(Player* player) {
     short* ptr;
