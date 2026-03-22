@@ -25,13 +25,17 @@ extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
 extern SVECTOR SVECTOR_000a2dd8;
 extern short* entityData;
 extern short isPausedOrWaitingForRestart;
+extern int GetRotationIndexFromVector(SVECTOR vec);
+extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR * param_3);
 
-int tempNewBlock;
-static SVECTOR tempNewPlayerPos;
-static int D_000A41B0;
 static SVECTOR cubePlayerIsOn;
+static int D_000A41B0;
+static short DAT_000a41b4;
+static short DAT_000a41b8;
+static SVECTOR SVECTOR_000a41bc;
+static SVECTOR tempNewPlayerPos;
+int tempNewBlock;
 
-extern int CheckForPlayerWallHit(Player * player);
 extern int HandleMovingPlatforms(Player * player);
 extern void ClearA4374(Player *player);
 extern void EnableTurningMotionBlur(void);
@@ -393,7 +397,48 @@ void CheckPlayerJumpingStuff(Player *player) {
     FUN_00031288(player);
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", CheckForPlayerWallHit);
+int CheckForPlayerWallHit(Player *player) {
+    if (player->subpixelPositionOnCube.vz >= 412 && player->svec_144.vz >= 0) {
+        if (player->surroundingBlocks[1][2][1] < 0 && (player->subpixelPositionOnCube.vy < 412 || player->surroundingBlocks[2][2][1] < 0) && (player->subpixelPositionOnCube.vy >= 100 || player->surroundingBlocks[0][2][1] < 0)) {
+            DAT_000a41b4 = player->surroundingBlocks[0][1][1];
+            DAT_000a41b8 = (DAT_000a41b4 - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
+
+            if (DAT_000a41b4 < 5) return 0;
+
+            if (entityData[(DAT_000a41b4 - 5) * 128] != 0) return 0;
+            if (entityData[DAT_000a41b8 + 1] != OBJ_ARROW) return 0;
+
+            GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[DAT_000a41b8 + 2], &SVECTOR_000a41bc);
+
+            if (player->facingDir.vx == SVECTOR_000a41bc.vx &&
+                player->facingDir.vy == SVECTOR_000a41bc.vy &&
+                player->facingDir.vz == SVECTOR_000a41bc.vz) {
+                return 0;
+            }
+        }
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2dd8, 7000);
+        Vibrate99(0, 200, 3);
+
+        player->howMoving198 = FALLING;
+        player->howMoving0 = 3;
+
+        player->finePos.vx -= player->svec_144.vz * 2 * player->facingDir.vx;
+        player->finePos.vy -= player->svec_144.vz * 2 * player->facingDir.vy;
+        player->finePos.vz -= player->svec_144.vz * 2 * player->facingDir.vz;
+
+        if (player->svec_144.vy > 0) {
+            player->gravityVelocity = -10;
+        }
+
+        player->rotX = 0;
+        player->longJump = 0;
+        player->movementVelocity = -player->svec_144.vz;
+
+        return 1;
+    }
+    return 0;
+}
+
 
 int FUN_00031288(Player *player) {
     if (player->subpixelPositionOnCube.vy < 412) return 0;
