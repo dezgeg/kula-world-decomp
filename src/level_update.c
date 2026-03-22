@@ -45,6 +45,8 @@ short tempJ;
 short tempK;
 
 extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
+extern SVECTOR SVECTOR_000a2de4;
+extern SVECTOR SVECTOR_allMinus1;
 extern Player thePlayer;
 extern short* entityData;
 
@@ -93,6 +95,10 @@ int xMinPlusMax;
 int yMinPlusMax;
 int zMinPlusMax;
 int zoomInAndOutPhase;
+
+int DAT_000a43c8;
+int movingPlatformEntityId;
+int mpCounter;
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
@@ -219,7 +225,109 @@ int FUN_0003382c(Player* player) {
     return FUN_00033720(&player->finePos, DAT_000a43c4, 100);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", HandleMovingPlatforms);
+int HandleMovingPlatforms(Player *player) {
+    if (player->onMovingPlatform != 0) {
+        return 0;
+    }
+
+    movingPlatformEntityId = GetMovingPlatformAt(player, &SVECTOR_allMinus1);
+    if (movingPlatformEntityId != -1) {
+        SndPlaySfx(0x66, 0, &SVECTOR_000a2de4, 7000);
+        player->onMovingPlatform = 1;
+        player->howMoving0 = 0;
+        player->howMoving198 = NOT_MOVING;
+
+        DAT_000a43c8 = entityData[movingPlatformEntityId + 2];
+
+        for (mpCounter = 2; mpCounter <= entityData[movingPlatformEntityId + 17] + 1; mpCounter++) {
+            if (DAT_000a43c8 == 1) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[mpCounter][2][2] = 0;
+            }
+            if (DAT_000a43c8 == 2) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mpCounter][2] = 0;
+            }
+            if (DAT_000a43c8 == 5) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mpCounter] = 0;
+            }
+        }
+
+        player->finePos.vx -= entityData[movingPlatformEntityId + 119] - 512;
+        player->finePos.vy -= entityData[movingPlatformEntityId + 120] - 512;
+        player->finePos.vz -= entityData[movingPlatformEntityId + 121] - 512;
+
+        player->svec54.vx = entityData[movingPlatformEntityId + 119] - 512;
+        player->svec54.vy = entityData[movingPlatformEntityId + 120] - 512;
+        player->svec54.vz = entityData[movingPlatformEntityId + 121] - 512;
+
+        player->movingPlatformEntityIdStandingOn = movingPlatformEntityId;
+        player->longJump = 0;
+
+        SetLandingSquishVars();
+        FUN_0003418c(player);
+        UpdateSubpixelPositions(player);
+        return 1;
+    }
+
+    movingPlatformEntityId = FUN_00033eb0(player, &SVECTOR_allMinus1);
+    if (movingPlatformEntityId != -1) {
+        SndPlaySfx(0x66, 0, &SVECTOR_000a2de4, 7000);
+        player->onMovingPlatform = 1;
+        player->howMoving0 = 0;
+        player->howMoving198 = NOT_MOVING;
+
+        DAT_000a43c8 = entityData[movingPlatformEntityId + 2];
+
+        for (mpCounter = 2; mpCounter <= entityData[movingPlatformEntityId + 17] + 1; mpCounter++) {
+            if (DAT_000a43c8 == 1) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[mpCounter][2][2] = 0;
+            }
+            if (DAT_000a43c8 == 2) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mpCounter][2] = 0;
+            }
+            if (DAT_000a43c8 == 5) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mpCounter] = 0;
+            }
+        }
+
+        player->finePos.vx -= entityData[movingPlatformEntityId + 119] - 512;
+        player->finePos.vy -= entityData[movingPlatformEntityId + 120] - 512;
+        player->finePos.vz -= entityData[movingPlatformEntityId + 121] - 512;
+
+        switch (GetRotationIndexFromVector(player->gravityDir)) {
+            case 4:
+                player->finePos.vx = 156;
+                break;
+            case 1:
+                player->finePos.vx = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                break;
+            case 3:
+                player->finePos.vy = 156;
+                break;
+            case 2:
+                player->finePos.vy = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                break;
+            case 0:
+                player->finePos.vz = 156;
+                break;
+            case 5:
+                player->finePos.vz = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                break;
+        }
+
+        player->svec54.vx = entityData[movingPlatformEntityId + 119] - 512;
+        player->svec54.vy = entityData[movingPlatformEntityId + 120] - 512;
+        player->svec54.vz = entityData[movingPlatformEntityId + 121] - 512;
+
+        player->movingPlatformEntityIdStandingOn = movingPlatformEntityId;
+        player->longJump = 0;
+
+        SetLandingSquishVars();
+        FUN_0003418c(player);
+        UpdateSubpixelPositions(player);
+        return 1;
+    }
+    return 0;
+}
 
 int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
     if (param_2->vx == -1) {

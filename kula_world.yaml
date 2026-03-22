@@ -66,7 +66,6 @@ segments:
       - [0x0091c, .rodata, light_effect]
       - [0x00934, rodata, player_movement]
       - [0x00958, .rodata, level_update]
-      - [0x00970, rodata, level_update_2]
       - [0x00988, .rodata, level_update2]
       - [0x00a34, pad, rodata_00a34] # hack
       - [0x00a38, rodata, rodata_00a38]
