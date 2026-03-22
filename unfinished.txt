@@ -26,7 +26,6 @@ LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn
 MovePlayerDownwards: https://decomp.me/scratch/ZTPlH
 MovePlayerForward: https://decomp.me/scratch/Xc2q5
-ParseLevelDataFromTgi: https://decomp.scratch/gMseL
 ParseTextures: https://decomp.scratch/pOWE8
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 ProcessCrumblingBlocks: https://decomp.scratch/2XWwj
