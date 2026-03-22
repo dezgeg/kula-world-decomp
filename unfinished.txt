@@ -13,7 +13,6 @@ FUN_000298e0: https://decomp.scratch/WO6tU
 HandleDebugCamera: https://decomp.me/scratch/P5as1
 HandleItemTouching: https://decomp.me/scratch/0GliO
 HandleMovingPlatforms: https://decomp.scratch/zRxhB
-HandlePlayerMovementStuff: https://decomp.scratch/k8yiT
 HandleSpecialCubeTypes: https://decomp.scratch/0RSJc
 HandleTransporter: https://decomp.scratch/plraT
 InitAllDigitSprites: https://decomp.me/scratch/CmcRF

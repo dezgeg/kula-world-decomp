@@ -50,10 +50,23 @@ extern short* entityData;
 
 int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
 
+extern int GetBlockAt(SVECTOR * coord);
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
 extern int gameMode;
+
+static SVECTOR SVECTOR_000a4514;
+static SVECTOR SVECTOR_000a44b8;
+static SVECTOR SVECTOR_000a44c0;
+static VECTOR VECTOR_000a44f8;
+static VECTOR VECTOR_000a44e8;
+static MATRIX MATRIX_000a44c8;
+static int blockTypePlayerStandingOn;
+static int r1TurnDelta;
+static int DAT_000a450c;
+static int DAT_000a4508;
+static int DAT_000a4598;
 
 int D_000A4430;
 static VECTOR VECTOR_000a4434;
@@ -492,7 +505,224 @@ void HandlePauseModeRotationEffect(Player* player) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", HandlePlayerMovementStuff);
+void HandlePlayerMovementStuff(Player *player) {
+    short turningTimer;
+
+    player->playerHasControl = 1;
+
+    if (player->startTurningTo == 1) {
+        SVECTOR_000a4514 = player->rightVec;
+        player->facingDirBeforeStartingTurning = player->facingDir;
+        player->rightVec.vx = -player->facingDir.vx;
+        player->rightVec.vy = -player->facingDir.vy;
+        player->rightVec.vz = -player->facingDir.vz;
+        player->facingDir = SVECTOR_000a4514;
+        player->turningWhere = 3;
+        player->startTurningTo = -1;
+    }
+
+    if (player->startTurningTo == 2) {
+        player->facingDirBeforeStartingTurning = player->facingDir;
+        SVECTOR_000a4514.vx = -player->rightVec.vx;
+        SVECTOR_000a4514.vy = -player->rightVec.vy;
+        SVECTOR_000a4514.vz = -player->rightVec.vz;
+        player->rightVec = player->facingDir;
+        player->facingDir = SVECTOR_000a4514;
+        player->turningWhere = 4;
+        player->startTurningTo = -1;
+    }
+
+    turningTimer = player->turningTimer;
+    if (turningTimer > 0) {
+        player->turningPhase += player->turningDelta;
+        player->turningTimer--;
+        if (player->movementVelocity > 10) {
+            player->movementVelocity = 10;
+        }
+    }
+
+    if (player->turningTimer == 0) {
+        player->facingDirBeforeStartingTurning = player->facingDir;
+        if (player->turningTimer == 0) {
+            player->turningTimer--;
+            player->turningPhase = 0;
+            player->perspVec1 = player->rightVec;
+            player->perspVec3 = player->facingDir;
+            player->turnDelayTimer = 0;
+            if (player->turningLeftRelated != 2) {
+                player->turningLeftRelated = 0;
+            }
+            if (player->turningRightRelated != 2) {
+                player->turningRightRelated = 0;
+            }
+            player->startTurningTo = 0;
+            player->field119_0x1c8 = 0;
+        }
+    }
+
+    if (player->field100_0x1ac == -1 && player->field119_0x1c8 != 2) {
+        SVECTOR_000a4514 = player->perspVec2;
+        player->gravityDir.vx = -player->facingDir.vx;
+        player->gravityDir.vy = -player->facingDir.vy;
+        player->gravityDir.vz = -player->facingDir.vz;
+        player->facingDir = SVECTOR_000a4514;
+        player->field100_0x1ac = 0;
+        player->field119_0x1c8 = 1;
+    }
+
+    if (player->field100_0x1ac == 1 && player->field119_0x1c8 != 2) {
+        player->field100_0x1ac = 0;
+        player->field119_0x1c8 = 1;
+    }
+
+    if (player->viewpointRotationTimer > 0 && player->field119_0x1c8 != 2) {
+        player->viewportRotationAngle += player->viewpointRotationAngleIncrement;
+        player->viewpointRotationTimer--;
+    }
+
+    if (player->viewpointRotationTimer == 0 && player->field119_0x1c8 != 2) {
+        player->viewpointRotationTimer--;
+        player->viewportRotationAngle = 0;
+        player->perspVec2 = player->gravityDir;
+        player->perspVec3 = player->facingDir;
+        player->field119_0x1c8 = 0;
+    }
+
+    perspMatrixes[cameraIndex].m[0][0] = (u16)player->perspVec1.vx << 12;
+    perspMatrixes[cameraIndex].m[0][1] = (u16)player->perspVec1.vy << 12;
+    perspMatrixes[cameraIndex].m[0][2] = (u16)player->perspVec1.vz << 12;
+    perspMatrixes[cameraIndex].m[1][0] = (-(int)(u16)player->perspVec2.vx) << 12;
+    perspMatrixes[cameraIndex].m[1][1] = (-(int)(u16)player->perspVec2.vy) << 12;
+    perspMatrixes[cameraIndex].m[1][2] = (-(int)(u16)player->perspVec2.vz) << 12;
+    perspMatrixes[cameraIndex].m[2][0] = (u16)player->perspVec3.vx << 12;
+    perspMatrixes[cameraIndex].m[2][1] = (u16)player->perspVec3.vy << 12;
+    perspMatrixes[cameraIndex].m[2][2] = (u16)player->perspVec3.vz << 12;
+
+    VECTOR_000a44e8.vx = player->svec_184.vx;
+    VECTOR_000a44e8.vy = player->svec_184.vy;
+    VECTOR_000a44e8.vz = player->svec_184.vz;
+
+    DAT_000a450c = 0;
+    DAT_000a4508 = 0;
+    if (player->cameraR1R2TurnDirection.vx == -1) {
+        if (player->howMoving198 != FALLING && DAT_000a4598 == 0) {
+            DAT_000a450c = 1;
+            player->cameraR1TurnAmount.vx += 26;
+            if (player->cameraR1TurnAmount.vx > 650)
+                player->cameraR1TurnAmount.vx = 650;
+        }
+    }
+
+    if (player->cameraR1R2TurnDirection.vx == 1 && player->cameraR1TurnAmount.vx == 0) {
+        DAT_000a4508 = 1;
+        DAT_000a4598 += 26;
+        if (DAT_000a4598 > 650)
+            DAT_000a4598 = 650;
+    }
+
+    SVECTOR_000a44b8.vx = player->finePos.vx - (player->gravityDir.vx * 512);
+    SVECTOR_000a44b8.vy = player->finePos.vy - (player->gravityDir.vy * 512);
+    SVECTOR_000a44b8.vz = player->finePos.vz - (player->gravityDir.vz * 512);
+
+    blockTypePlayerStandingOn = GetBlockAt(&SVECTOR_000a44b8);
+    blockTypePlayerStandingOn = player->surroundingBlocks[0][1][1];
+
+    if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_FORWARD && player->jumpingOrViewportRotationTimer < 10)) {
+        if (blockTypePlayerStandingOn == -1) {
+            if (player->cameraR1TurnAmount.vx < 550) {
+                if (DAT_000a4598 == 0) {
+                    DAT_000a450c = 1;
+                    r1TurnDelta++;
+                    if (r1TurnDelta > 32)
+                        r1TurnDelta = 32;
+                    player->cameraR1TurnAmount.vx += r1TurnDelta;
+                }
+            } else {
+                DAT_000a450c = 1;
+                r1TurnDelta--;
+                if (r1TurnDelta < 10)
+                    r1TurnDelta = 10;
+                player->cameraR1TurnAmount.vx += r1TurnDelta;
+                if (player->cameraR1TurnAmount.vx > 650)
+                    player->cameraR1TurnAmount.vx = 650;
+            }
+        }
+    } else {
+        r1TurnDelta = 3;
+    }
+
+    if (DAT_000a4508 == 0 && DAT_000a4598 > 0) {
+        DAT_000a4598 -= 18;
+        if (DAT_000a4598 < 0)
+            DAT_000a4598 = 0;
+    }
+
+    if (DAT_000a450c == 0) {
+        if (player->cameraR1TurnAmount.vx > 0) {
+            player->cameraR1TurnAmount.vx -= 18;
+            if (player->cameraR1TurnAmount.vx < 0)
+                player->cameraR1TurnAmount.vx = 0;
+        }
+        if (player->cameraR1TurnAmount.vx < 0) {
+            player->cameraR1TurnAmount.vx += 18;
+            if (player->cameraR1TurnAmount.vx > 0)
+                player->cameraR1TurnAmount.vx = 0;
+        }
+    }
+
+    if (player->cameraR1R2TurnDirection.vy == 0) {
+        if (player->cameraR1TurnAmount.vy > 0) {
+            player->cameraR1TurnAmount.vy -= 40;
+            if (player->cameraR1TurnAmount.vy < 0)
+                player->cameraR1TurnAmount.vy = 0;
+        }
+        if (player->cameraR1TurnAmount.vy < 0) {
+            player->cameraR1TurnAmount.vy += 40;
+            if (player->cameraR1TurnAmount.vy > 0)
+                player->cameraR1TurnAmount.vy = 0;
+        }
+    }
+
+    RotMatrixY(player->turningPhase + player->cameraR1TurnAmount.vy, &perspMatrixes[cameraIndex]);
+    RotMatrixX(player->viewportRotationAngle, &perspMatrixes[cameraIndex]);
+
+    player->perspMatrix.m[0][0] = perspMatrixes[cameraIndex].m[0][0];
+    player->perspMatrix.m[0][1] = perspMatrixes[cameraIndex].m[0][1];
+    player->perspMatrix.m[0][2] = perspMatrixes[cameraIndex].m[0][2];
+    player->perspMatrix.m[1][0] = perspMatrixes[cameraIndex].m[1][0];
+    player->perspMatrix.m[1][1] = perspMatrixes[cameraIndex].m[1][1];
+    player->perspMatrix.m[1][2] = perspMatrixes[cameraIndex].m[1][2];
+    player->perspMatrix.m[2][0] = perspMatrixes[cameraIndex].m[2][0];
+    player->perspMatrix.m[2][1] = perspMatrixes[cameraIndex].m[2][1];
+    player->perspMatrix.m[2][2] = perspMatrixes[cameraIndex].m[2][2];
+
+    if (player->lethargyTimer > 0) {
+        RotMatrixZ(rsin((player->lethargyTimer * 64) % 4096) / 32, &perspMatrixes[cameraIndex]);
+    }
+
+    if (DAT_000a4598 != 0) {
+        RotMatrixX(250, &perspMatrixes[cameraIndex]);
+        RotMatrixX(-DAT_000a4598, &perspMatrixes[cameraIndex]);
+        ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44e8, &VECTOR_000a44e8);
+        VECTOR_000a44f8.vx = 0;
+        SVECTOR_000a44c0.vy = 0;
+        SVECTOR_000a44c0.vz = 0;
+        VECTOR_000a44f8.vz = 800 - DAT_000a4598 / 2;
+        SVECTOR_000a44c0.vx = -DAT_000a4598;
+        VECTOR_000a44f8.vy = 250 - DAT_000a4598 / 3;
+        RotMatrix(&SVECTOR_000a44c0, &MATRIX_000a44c8);
+        ApplyMatrixLV(&MATRIX_000a44c8, &VECTOR_000a44f8, &VECTOR_000a44f8);
+        perspMatrixes[cameraIndex].t[0] = -VECTOR_000a44e8.vx + VECTOR_000a44f8.vx;
+        perspMatrixes[cameraIndex].t[1] = -VECTOR_000a44e8.vy + VECTOR_000a44f8.vy;
+        perspMatrixes[cameraIndex].t[2] = -VECTOR_000a44e8.vz + VECTOR_000a44f8.vz;
+    } else {
+        RotMatrixX(player->cameraR1TurnAmount.vx + 250, &perspMatrixes[cameraIndex]);
+        ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44e8, &VECTOR_000a44e8);
+        perspMatrixes[cameraIndex].t[0] = -VECTOR_000a44e8.vx;
+        perspMatrixes[cameraIndex].t[1] = -VECTOR_000a44e8.vy + 250;
+        perspMatrixes[cameraIndex].t[2] = -VECTOR_000a44e8.vz + 800;
+    }
+}
 
 void SetInvulnerable(void) {
     thePlayer.invulnerabilityTimer = 3000;
