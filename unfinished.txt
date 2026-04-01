@@ -32,7 +32,6 @@ ProcessCubesIntoFaces: https://decomp.me/scratch/rjmZz
 ProcessFlashingBlocks: http://decomp.me/scratch/5T9GV
 ProcessMovement: https://decomp.scratch/iZVbL
 ProcessRecentlyVisitedCubes: https://decomp.me/scratch/X4b4u
-ProcessRetractableSpikes: https://decomp.scratch/Bsuue
 RecalcSkyboxes01: https://decomp.me/scratch/FfB3v
 RecalcSkyboxes2: https://decomp.scratch/lOoyN
 ScanLevelDataForBlinkingEntities: <none>

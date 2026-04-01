@@ -1,5 +1,7 @@
 #include "common.h"
 
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+
 typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
 
 typedef struct MovingPlatformEntity2 {
@@ -42,6 +44,9 @@ extern int sunglassCounter1[];
 extern int sunglassCounter2[];
 extern int sunglassDisablingState[];
 extern int sunglassSeeEverything[];
+extern int numRetractableSpikes;
+extern MATRIX perspMatrixes[];
+extern int retractingSpikeData[64 * 2];
 
 extern QuadFunc QUAD_FUNC_PTRS[6];
 extern short movingBlockEntityIndexes[16];
@@ -89,7 +94,100 @@ INCLUDE_ASM("asm/nonmatchings/update", ProcessCrumblingBlocks);
 
 INCLUDE_ASM("asm/nonmatchings/update", ProcessFlashingBlocks);
 
-INCLUDE_ASM("asm/nonmatchings/update", ProcessRetractableSpikes);
+void ProcessRetractableSpikes(void) {
+    int i;
+    SVECTOR sndPos;
+    short *eb;
+    short *pos;
+    int unkE;
+    int unk1E;
+    int counter;
+
+    for (i = 0; i < numRetractableSpikes; i++) {
+        eb = retractingSpikeData[i * 2];
+        pos = retractingSpikeData[i * 2 + 1];
+
+        unkE = eb[8];
+        unk1E = eb[16];
+        counter = eb[15];
+
+        switch (unk1E) {
+            case 0:
+                if (--counter <= 0) {
+                    counter = 4;
+                    unk1E = 1;
+                    eb[4] = 1;
+
+                    sndPos.vx = pos[0] * 512;
+                    sndPos.vy = pos[1] * 512;
+                    sndPos.vz = pos[2] * 512;
+                    ApplyMatrixSV(&perspMatrixes[cameraIndex], &sndPos, &sndPos);
+                    sndPos.vx += perspMatrixes[cameraIndex].t[0];
+                    sndPos.vy += perspMatrixes[cameraIndex].t[1];
+                    sndPos.vz += perspMatrixes[cameraIndex].t[2];
+                    SndPlaySfx(0x69, 0, &sndPos, 7000);
+                }
+                break;
+
+            case 1:
+                if (--counter >= 0) {
+                    unkE = (3 - counter) * 8;
+                } else {
+                    unkE = 0x1f;
+                    counter = 12;
+                    unk1E = 2;
+                }
+                break;
+
+            case 2:
+                if (--counter >= 0) {
+                    if ((counter & 1) == 0) {
+                        unkE = 0x1f;
+                    } else {
+                        unkE = 0x1f - (counter * 32) / 48;
+                    }
+                } else {
+                    unkE = 0x1f;
+                    counter = 12;
+                    unk1E = 3;
+                }
+                break;
+
+            case 3:
+                if (--counter <= 0) {
+                    counter = 36;
+                    unk1E = 4;
+
+                    sndPos.vx = pos[0] * 512;
+                    sndPos.vy = pos[1] * 512;
+                    sndPos.vz = pos[2] * 512;
+                    ApplyMatrixSV(&perspMatrixes[cameraIndex], &sndPos, &sndPos);
+                    sndPos.vx += perspMatrixes[cameraIndex].t[0];
+                    sndPos.vy += perspMatrixes[cameraIndex].t[1];
+                    sndPos.vz += perspMatrixes[cameraIndex].t[2];
+                    SndPlaySfx(0x6a, 0, &sndPos, 7000);
+                }
+                break;
+
+            case 4:
+                if (--counter >= 0) {
+                    unkE = (counter * 32) / 36;
+                    if (counter == 9) {
+                        eb[4] = 2;
+                    }
+                } else {
+                    unkE = 0;
+                    counter = 52;
+                    unk1E = 0;
+                }
+                break;
+        }
+
+        eb[8] = unkE;
+        eb[15] = counter;
+        eb[16] = unk1E;
+    }
+}
 
 void SetSunglassMode(int on) {
     if (!on) {
