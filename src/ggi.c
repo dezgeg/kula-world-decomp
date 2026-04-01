@@ -93,7 +93,71 @@ void* ParseGGI(GgiFile *ggi_ptr) {
     return ggiPart6Textures;
 }
 
-INCLUDE_ASM("asm/nonmatchings/ggi", ParseTextures);
+void ParseTextures(void* headerPtr, Texture *out, int unused_count) {
+    int count = *(int *)headerPtr;
+    short *p;
+    int i;
+    int isSemitrans;
+    int logWidth;
+    int unk10;
+    RECT rect;
+
+    DrawSync(0);
+    p = (short *)((int)headerPtr + 4);
+    for (i = 0; i < count; i++) {
+        logWidth = *p++;
+        if (logWidth == -1) {
+            p++;
+        } else {
+            out[i].bitsPerPixel = (u_char)logWidth;
+            isSemitrans = *p++;
+            out[i].semitrans = (isSemitrans != -1);
+            if (isSemitrans == -1) isSemitrans = 0;
+
+            unk10 = p[3];
+
+            if (logWidth != 16) {
+                rect.x = *p++;
+                rect.y = *p++;
+                out[i].clut = GetClut(rect.x, rect.y);
+                if (p[0] == 0) {
+                    rect.w = 1 << logWidth;
+                    rect.h = 1;
+                    LoadImage(&rect, p + 2);
+                    DrawSync(0);
+                    p += rect.w + 2;
+                } else {
+                    p += 2;
+                }
+            } else {
+                p += 4;
+            }
+
+            rect.x = *p++;
+            rect.y = *p++;
+            out[i].w = *p++;
+            rect.w = (out[i].w * logWidth) / 16;
+            out[i].h = *p++;
+            rect.h = out[i].h;
+
+            if (unk10 == 0) {
+                int sz;
+                LoadImage(&rect, (void *)p);
+                DrawSync(0);
+                sz = (int)rect.w * (int)rect.h;
+                p += sz;
+                if (sz & 1) {
+                    p++;
+                }
+            }
+
+            out[i].tpage = GetTPage(logWidth >> 3, isSemitrans, rect.x, rect.y);
+            out[i].u = (u_char)((rect.x % 64) * (16 / logWidth));
+            out[i].v = (u_char)(rect.y % 256);
+        }
+    }
+}
+
 
 void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int const3,
                    int addRgb, int maxRgb, int subRgb, int const16) {
