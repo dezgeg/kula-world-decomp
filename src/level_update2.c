@@ -189,7 +189,7 @@ short fireSoundTimer;
 int shouldMarkCubesVisited;
 short D_000A45CC;
 
-extern void ProcessEnemies(void);
+extern void RenderEnemies(void);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
 extern void CreateAllItemDispLists(void);
 
@@ -644,7 +644,7 @@ void ProcessPlayer(void) {
 }
 
 void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
-    ProcessEnemies();
+    RenderEnemies();
     if (!isPaused && levelEndReason == 0 && !inGetReadyScreen) {
         CalcPlayerMatrixesAndDrawPlayer(&thePlayer);
     }

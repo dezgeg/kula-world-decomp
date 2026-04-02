@@ -112,7 +112,6 @@ void InitEnemies(void) {
     }
 }
 
-
 void UpdateEnemies(SVECTOR playerPos) {
     int diff;
 
@@ -408,7 +407,7 @@ int IsCollidingWithEnemy(SVECTOR pos) {
 void Noop4() {
 }
 
-void ProcessEnemies(void) {
+void RenderEnemies(void) {
     for (enemyI = 0; enemyI < numEnemies; enemyI++) {
         if (enemies[enemyI].enemyType == OBJ_SLOW_STAR) {
             enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
@@ -736,8 +735,8 @@ int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
 
     type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];
     if (type == 0) return 1;
-    if (type >= OBJ_SLOW_STAR) return 1; // enemy
-    if (type == OBJ_PLAYER_SPAWN) return 1; // spawn
+    if (type >= OBJ_SLOW_STAR) return 1;
+    if (type == OBJ_PLAYER_SPAWN) return 1;
 
     if (type == OBJ_ICE_PATCH) return 1;
     if (type == OBJ_FIRE_PATCH) return 1;
