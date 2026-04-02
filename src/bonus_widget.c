@@ -29,7 +29,7 @@ void DrawBonusWidget(void) {
     if (bonusWidgetDataPtr >= bonusWidgetDataEnd) {
         bonusWidgetDataPtr -= BONUS_WIDGET_COLOR_DATA_LEN;
     }
-    
+
     p = bonusWidgetDataPtr;
     for (i = 0; i < numCubesRemainingInLevel[0] >> 3; i++) {
         *(Col*)&bonusWidgetSpritesMsbForeground[whichDrawDispEnv][i].sprt.r0 = *(Col*)p;
@@ -38,12 +38,12 @@ void DrawBonusWidget(void) {
             p -= BONUS_WIDGET_COLOR_DATA_LEN;
         }
     }
-    
+
     bonusWidgetDataPtr2++;
     if (bonusWidgetDataPtr2 >= bonusWidgetDataEnd) {
         bonusWidgetDataPtr2 -= BONUS_WIDGET_COLOR_DATA_LEN;
     }
-    
+
     p2 = bonusWidgetDataPtr2;
     for (i = 0; i < 8; i++) {
         *(Col*)&bonusWidgetSpritesPiechart[whichDrawDispEnv][i].sprt.r0 = *(Col*)p2;
@@ -52,26 +52,26 @@ void DrawBonusWidget(void) {
             p2 += BONUS_WIDGET_COLOR_DATA_LEN;
         }
     }
-    
+
     mod8 = numCubesRemainingInLevel[0] & 7;
     div8 = numCubesRemainingInLevel[0] >> 3;
-    
+
     if (mod8 == 0 && div8 > 0) {
         mod8 = 8;
         div8--;
     }
-    
+
     for (i = 0; i < div8; i++) {
         addPrim(&primLists[whichDrawDispEnv].gui1, &bonusWidgetSpritesMsbForeground[whichDrawDispEnv][i].tpage);
     }
-    
+
     for (i = 0; i < numBonusWidgetMsbs + 2; i++) {
         addPrim(&primLists[whichDrawDispEnv].gui1, &bonusWidgetSpritesMsbBackground[whichDrawDispEnv][i].tpage);
     }
-    
+
     for (i = 0; i < mod8; i++) {
         addPrim(&primLists[whichDrawDispEnv].gui1, &bonusWidgetSpritesPiechart[whichDrawDispEnv][i].tpage);
     }
-    
+
     addPrim(&primLists[whichDrawDispEnv].gui1, &bonusWidgetSpritesPiechart[whichDrawDispEnv][8].tpage);
 }
