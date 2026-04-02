@@ -638,9 +638,9 @@ void ProcessPlayer(void) {
     ProcessCameraAndMovement(&thePlayer);
     SetPlayerMatrix6(&thePlayer);
 
-    invisBlockVisibility.pos[0] = (int)thePlayer.finePos.vx + (int)thePlayer.svec54.vx;
-    invisBlockVisibility.pos[1] = (int)thePlayer.finePos.vy + (int)thePlayer.svec54.vy;
-    invisBlockVisibility.pos[2] = (int)thePlayer.finePos.vz + (int)thePlayer.svec54.vz;
+    invisBlockVisibility.pos[0] = thePlayer.finePos.vx + thePlayer.svec54.vx;
+    invisBlockVisibility.pos[1] = thePlayer.finePos.vy + thePlayer.svec54.vy;
+    invisBlockVisibility.pos[2] = thePlayer.finePos.vz + thePlayer.svec54.vz;
 }
 
 void ProcessEnemiesRenderItemsAndCheckFellOff(void) {

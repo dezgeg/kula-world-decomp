@@ -47,6 +47,6 @@ void InitStuff(void) {
     ClearImage(&rect, 0, 0, 0);
     SetupDisplay(0, 0, 0, 0, 0, 0);
     FntLoad(576, 256);
-    SetDumpFnt(FntOpen(16, 8, displayWidth + -0x10, displayHeight + -8, 0,
+    SetDumpFnt(FntOpen(16, 8, displayWidth - 16, displayHeight - 8, 0,
                        (displayWidth / 8 - 2) * (displayHeight / 8 - 1)));
 }
