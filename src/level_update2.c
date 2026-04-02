@@ -107,6 +107,21 @@ extern short copycatNewOrCopyMoves;
 extern Player thePlayer;
 extern short* entityData;
 
+int transportDestCubeSide;
+int transportDestRotation;
+int transporterDestEntityIdx;
+int transporterTimer;
+
+extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
+extern void CalcWhatPlayerIsStandingOn(Player * player);
+extern int IsPlayerInAir(Player * player);
+extern void SetPlayerRotation(int cubeSide, int rotation, Player * player);
+extern void SetRenderScreenFade(int speed, int enableHalfFps);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void Vibrate98(int seqId);
+extern void UpdateSubpixelPositions(Player * player);
+extern SVECTOR transporterParticlesPos;
+
 void HandlePauseModeRotationEffect(Player* player);
 
 extern int inGetReadyScreen;
@@ -1427,7 +1442,81 @@ void CheckForButtonEntity(Player* player) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", HandleTransporter);
+int HandleTransporter(Player *player) {
+    if (IsPlayerInAir(player)) {
+        player->alreadyProcessedEntityAction = 0;
+        transporterTimer = -1;
+        return 0;
+    }
+    if (player->faceTypePlayerStandingOn != 5 || entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] != 1) {
+        transporterTimer = -1;
+        return 0;
+    }
+    if (player->alreadyProcessedEntityAction != 5 && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
+        if (transporterTimer == -1) {
+            transporterTimer = 15;
+            AddParticles(3, &transporterParticlesPos, 0);
+        }
+
+        if (transporterTimer > -1) {
+            transporterTimer--;
+            player->movementInhibitTimer = 15;
+            player->rollingForward = 0;
+            player->turnDirection = 0;
+            player->jumping = 0;
+        }
+
+        if (transporterTimer == -1) {
+            int destEntityIdx;
+            int destCubeSide;
+
+            SetRenderScreenFade(0, 1);
+            Vibrate98(0);
+            player->alreadyProcessedEntityAction = 5;
+            SndPlaySfx(5, 0, &SVECTOR_000a2df4, 7000);
+            player->movementInhibitTimer = 15;
+            player->howMoving0 = 0;
+            player->rollingForward = 0;
+            player->turnDirection = 0;
+            player->jumping = 0;
+
+            transporterDestEntityIdx = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] >> 4;
+            transportDestCubeSide = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] & 15;
+
+            player->specialBlockSideOffsetPlayerIsStandingOn = transporterDestEntityIdx * 128 + transportDestCubeSide * 16;
+            player->specialBlockIndexPlayerIsStandingOn = transporterDestEntityIdx * 128;
+
+            transportDestRotation = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2];
+
+            SetPlayerRotation(transportDestCubeSide, transportDestRotation, player);
+
+            player->perspVec1 = player->rightVec;
+            player->perspVec3 = player->facingDir;
+            player->perspVec2 = player->gravityDir;
+
+            thePlayer.matrix_d4.m[0][0] = thePlayer.rightVec.vx << 12;
+            thePlayer.matrix_d4.m[1][0] = thePlayer.rightVec.vy << 12;
+            thePlayer.matrix_d4.m[2][0] = thePlayer.rightVec.vz << 12;
+            thePlayer.matrix_d4.m[0][2] = thePlayer.gravityDir.vx << 12;
+            thePlayer.matrix_d4.m[1][2] = thePlayer.gravityDir.vy << 12;
+            thePlayer.matrix_d4.m[2][2] = thePlayer.gravityDir.vz << 12;
+            thePlayer.matrix_d4.m[0][1] = -thePlayer.facingDir.vx << 12;
+            thePlayer.matrix_d4.m[1][1] = -thePlayer.facingDir.vy << 12;
+            thePlayer.matrix_d4.m[2][1] = -thePlayer.facingDir.vz << 12;
+
+            player->howMoving198 = NOT_MOVING;
+
+            player->jumpStartPos.vx = entityData[player->specialBlockIndexPlayerIsStandingOn + 125] * 512 + player->gravityDir.vx * 256;
+            player->jumpStartPos.vy = entityData[player->specialBlockIndexPlayerIsStandingOn + 126] * 512 + player->gravityDir.vy * 256;
+            player->jumpStartPos.vz = entityData[player->specialBlockIndexPlayerIsStandingOn + 127] * 512 + player->gravityDir.vz * 256;
+
+            player->finePos = player->jumpStartPos;
+            CalcWhatPlayerIsStandingOn(player);
+            return 1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_update2", HandleSpecialCubeTypes);
 
