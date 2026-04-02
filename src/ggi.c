@@ -1,23 +1,23 @@
 #include "common.h"
 
-typedef struct LocalSparkleEntry {
-    uint ptr_and_flags;
+typedef struct Sparkle {
+    uint ptrAndFlags;
     uint color;
     uint unk2;
     uint unk3;
     uint unk4;
-} LocalSparkleEntry;
+} Sparkle;
 
-typedef struct LocalGemRandomSparkleEffect {
-    uint* ggiPtr;
-    int unknown_4;
-    int const3;
+typedef struct GemSparkleEffect {
+    uint* vertexColors;
+    int numColors;
+    int probability;
     int addRgb;
     int maxRgb;
     int subRgb;
-    int const16;
-    LocalSparkleEntry sparkles[16];
-} LocalGemRandomSparkleEffect;
+    int numSparkles;
+    Sparkle sparkles[16];
+} GemSparkleEffect;
 
 // gprel-used variables (defined in this file)
 int firstBonusWidgetTexture;
@@ -44,12 +44,12 @@ int numUnk1Textures;
 int numUnk2Textures;
 
 // non-gprel-used variables (extern)
-extern LocalGemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
+extern GemSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
 extern Texture textures[150];
 
 // Prototypes
 void ParseTextures(void* headerPtr, Texture * out, int count);
-void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int const3, int addRgb, int maxRgb, int subRgb, int const16);
+void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
 void* ParseGGI(GgiFile *ggi_ptr) {
     int i, j;
@@ -159,29 +159,31 @@ void ParseTextures(void* headerPtr, Texture *out, int unused_count) {
 }
 
 
-void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int const3,
-                   int addRgb, int maxRgb, int subRgb, int const16) {
+void ParseGgiInner(int *eff, int modelType, int modelIdx, int lodIdx, int variantIdx, int probability,
+                   int addRgb, int maxRgb, int subRgb, int numSparkles) {
     int* p;
     int k;
 
+    // Calculate pointer to ModelData
     if (modelType == 0) {
-        p = (int*)((char*)ggiPart0A + (*(int*)((char*)ggiPart0A + modelIdx * 16 + i * 4) / 4) * 4);
+        p = (int*)((char*)ggiPart0A + (*(int*)((char*)ggiPart0A + modelIdx * 16 + lodIdx * 4) / 4) * 4);
     } else {
-        p = (int*)((char*)ggiPart0B + (*(int*)((char*)ggiPart0B + modelIdx * 64 + i * 16 + j * 4) / 4) * 4);
+        p = (int*)((char*)ggiPart0B + (*(int*)((char*)ggiPart0B + modelIdx * 64 + lodIdx * 16 + variantIdx * 4) / 4) * 4);
     }
 
+    // Advance to VertexColors structure
     p = (int*)((char*)p + (p[5] / 4) * 4);
 
-    eff[0] = (uint*)((char*)p + 8);
-    eff[1] = p[1] / 16;
-    eff[2] = const3;
+    eff[0] = (uint*)((char*)p + 8); // pointer to colors array
+    eff[1] = p[1] / 16; // number of vertex colors
+    eff[2] = probability;
     eff[3] = addRgb;
     eff[4] = maxRgb;
     eff[5] = subRgb;
-    eff[6] = const16;
+    eff[6] = numSparkles;
     eff += 7;
 
-    for (k = 0; k < const16; k++,eff += 5) {
+    for (k = 0; k < numSparkles; k++,eff += 5) {
         eff[0] = 0;
     }
 }
