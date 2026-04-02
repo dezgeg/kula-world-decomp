@@ -282,7 +282,7 @@ typedef struct Enemy {
     MATRIX matrix2;
     short state;
     short timer;
-    short field_b0;
+    short counter;
     byte pad_b2[2];
 } Enemy;
 

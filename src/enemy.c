@@ -93,7 +93,7 @@ void InitEnemies(void) {
                     }
                 }
 
-                enemies[numEnemies].field_b0 = -1;
+                enemies[numEnemies].counter = -1;
                 enemies[numEnemies].matrix.m[0][0] = enemies[numEnemies].matrix.m[1][1] = enemies[numEnemies].matrix.m[2][2] = 4096;
                 enemies[numEnemies].matrix.m[1][0] =
                 enemies[numEnemies].matrix.m[2][0] =
@@ -190,8 +190,8 @@ void UpdateEnemies(SVECTOR playerPos) {
             enemies[loopI].pos.vz = enemies[loopI].initPos.vz + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vz) / 4096;
         }
         if (enemies[loopI].enemyType == OBJ_CAPTURE_POD) {
-            if ((sumOfDeltas > 512 && enemies[loopI].field_b0 == -1) || !enemiesProcessedOnce) {
-                enemies[loopI].field_b0 = 0;
+            if ((sumOfDeltas > 512 && enemies[loopI].counter == -1) || !enemiesProcessedOnce) {
+                enemies[loopI].counter = 0;
                 enemies[loopI].initPos = enemies[loopI].pos;
                 enemies[loopI].timer = 0;
                 if (enemies[loopI].dir.vx != 0) {
@@ -203,42 +203,42 @@ void UpdateEnemies(SVECTOR playerPos) {
                 if (enemies[loopI].dir.vz != 0) {
                     enemies[loopI].initPos.vz = (enemies[loopI].pos.vz + 128) & 0xff00;
                 }
-                while (enemies[loopI].field_b0 == 0) {
+                while (enemies[loopI].counter == 0) {
                     switch(Rand(4)) {
                         case 0:
                             if (EnemyCanTurnRight(&enemies[loopI])) {
                                 EnemyTurnRight(&enemies[loopI]);
-                                enemies[loopI].field_b0 = 1;
+                                enemies[loopI].counter = 1;
                             }
                             break;
                         case 1:
                             if (EnemyCanTurnLeft(&enemies[loopI])) {
                                 EnemyTurnLeft(&enemies[loopI]);
-                                enemies[loopI].field_b0 = 1;
+                                enemies[loopI].counter = 1;
                             }
                             break;
                         case 2:
                             if (EnemyCanMoveForward(&enemies[loopI])) {
-                                enemies[loopI].field_b0 = 1;
+                                enemies[loopI].counter = 1;
                             }
                             break;
                         case 3:
                             if (EnemyCanMoveBackward(&enemies[loopI])) {
                                 EnemyTurnAround(&enemies[loopI]);
-                                enemies[loopI].field_b0 = 1;
+                                enemies[loopI].counter = 1;
                             }
                             break;
                     }
                 }
             }
-            if (enemies[loopI].field_b0 != -1) {
-                enemies[loopI].timer += (enemies[loopI].field_b0 * enemies[loopI].field_b0 / 8) % 4096;
+            if (enemies[loopI].counter != -1) {
+                enemies[loopI].timer += (enemies[loopI].counter * enemies[loopI].counter / 8) % 4096;
                 enemies[loopI].pos.vx = enemies[loopI].initPos.vx + enemies[loopI].dir.vx * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
                 enemies[loopI].pos.vy = enemies[loopI].initPos.vy + enemies[loopI].dir.vy * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
                 enemies[loopI].pos.vz = enemies[loopI].initPos.vz + enemies[loopI].dir.vz * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
-                enemies[loopI].field_b0++;
-                if (enemies[loopI].field_b0 > 64) {
-                    enemies[loopI].field_b0 = -1;
+                enemies[loopI].counter++;
+                if (enemies[loopI].counter > 64) {
+                    enemies[loopI].counter = -1;
                     enemies[loopI].pos = enemies[loopI].initPos;
                     SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
                     SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
@@ -246,7 +246,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                     SndPlaySfx(SFX_CAPTURE_POD, 0, &SVECTOR_000a47e8, 7000);
                 }
             }
-            if (enemies[loopI].field_b0 == -1 && enemiesProcessedOnce) {
+            if (enemies[loopI].counter == -1 && enemiesProcessedOnce) {
                 enemies[loopI].pos.vx += enemies[loopI].dir.vx * 64;
                 enemies[loopI].pos.vy += enemies[loopI].dir.vy * 64;
                 enemies[loopI].pos.vz += enemies[loopI].dir.vz * 64;
