@@ -557,7 +557,7 @@ void ProcessPlayer(void) {
         thePlayer.jumping = 0;
     }
 
-    if (thePlayer.movementInhibitTimer < 1 && thePlayer.forcedRollForwardTimer < 1 && thePlayer.faceTypePlayerStandingOn != 10) {
+    if (thePlayer.movementInhibitTimer < 1 && thePlayer.forcedRollForwardTimer < 1 && thePlayer.faceTypePlayerStandingOn != OBJ_BOUNCEPAD) {
         HandlePlayerButtons(&thePlayer);
     }
 
@@ -906,7 +906,7 @@ void HandlePlayerButtons(Player *player) {
     }
 
     if (player->surroundingBlocks[0][2][1] < 0 && player->surroundingBlocks[0][1][0] < 0 &&
-        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == 96 &&
+        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE &&
         player->jumping == 0 && player->movementVelocity > 0 && player->subpixelPositionOnCube.vz > 300) {
 
         player->rollingForward = 0;
@@ -963,21 +963,21 @@ void CalcWhatPlayerIsStandingOn(Player *player) {
             player->specialBlockIndexPlayerIsStandingOn = (player->specialBlockIndexPlayerIsStandingOn - 5) * 128;
             player->specialBlockSideOffsetPlayerIsStandingOn = player->specialBlockIndexPlayerIsStandingOn + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 5) player->faceTypePlayerStandingOn = 95;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 6) player->faceTypePlayerStandingOn = 96;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 7) player->faceTypePlayerStandingOn = 97;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 1) player->faceTypePlayerStandingOn = 1;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 2) player->faceTypePlayerStandingOn = 2;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 3) player->faceTypePlayerStandingOn = 93;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 4) player->faceTypePlayerStandingOn = 4;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_TRANSPORTER) player->faceTypePlayerStandingOn = OBJ_TRANSPORTER_BLOCK;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_CRUMBLING_BLOCK) player->faceTypePlayerStandingOn = OBJ_CRUMBLING_BLOCK_FACE;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_EXIT) player->faceTypePlayerStandingOn = OBJ_EXIT_BLOCK;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
             if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
                  player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
             }
         } else {
-            if (player->specialBlockIndexPlayerIsStandingOn == 1) player->faceTypePlayerStandingOn = 1;
-            if (player->specialBlockIndexPlayerIsStandingOn == 2) player->faceTypePlayerStandingOn = 2;
-            if (player->specialBlockIndexPlayerIsStandingOn == 3) player->faceTypePlayerStandingOn = 93;
-            if (player->specialBlockIndexPlayerIsStandingOn == 4) player->faceTypePlayerStandingOn = 4;
+            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
             if (player->specialBlockIndexPlayerIsStandingOn == 0) {
                 player->faceTypePlayerStandingOn = -1;
             }
@@ -1401,11 +1401,11 @@ void CheckForButtonEntity(Player* player) {
     if (IsFallingOrJumping(player)) {
         player->alreadyProcessedEntityAction = 0;
     } else {
-        if (player->alreadyProcessedEntityAction != 9 && player->faceTypePlayerStandingOn == 9 &&
+        if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
             (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
             (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
 
-            player->alreadyProcessedEntityAction = 9;
+            player->alreadyProcessedEntityAction = OBJ_BUTTON;
             DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
 
             if (entityData[DAT_000a4748 + 4] == 1) {
@@ -1448,11 +1448,11 @@ int HandleTransporter(Player *player) {
         transporterTimer = -1;
         return 0;
     }
-    if (player->faceTypePlayerStandingOn != 5 || entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] != 1) {
+    if (player->faceTypePlayerStandingOn != OBJ_TRANSPORTER || entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] != 1) {
         transporterTimer = -1;
         return 0;
     }
-    if (player->alreadyProcessedEntityAction != 5 && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
+    if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
         if (transporterTimer == -1) {
             transporterTimer = 15;
             AddParticles(3, &transporterParticlesPos, 0);
@@ -1472,7 +1472,7 @@ int HandleTransporter(Player *player) {
 
             SetRenderScreenFade(0, 1);
             Vibrate98(0);
-            player->alreadyProcessedEntityAction = 5;
+            player->alreadyProcessedEntityAction = OBJ_TRANSPORTER;
             SndPlaySfx(5, 0, &SVECTOR_000a2df4, 7000);
             player->movementInhibitTimer = 15;
             player->howMoving0 = 0;
@@ -1521,14 +1521,14 @@ int HandleTransporter(Player *player) {
 INCLUDE_ASM("asm/nonmatchings/level_update2", HandleSpecialCubeTypes);
 
 void SubtractLevelTimer(int param_1) {
-    if (thePlayer.faceTypePlayerStandingOn != 8 && debugDisableTimer == 0 && gameMode != 1) {
+    if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
         levelTimeLeft -= param_1;
         if (levelTimeLeft < 1) {
             levelEndReason = -2;
         }
     }
 
-    if (thePlayer.faceTypePlayerStandingOn == 8 || debugDisableTimer == 1) {
+    if (thePlayer.faceTypePlayerStandingOn == OBJ_TIMER_PAUSE || debugDisableTimer == 1) {
         drawTimerPausedWidget = 1;
     } else {
         drawTimerPausedWidget = 0;

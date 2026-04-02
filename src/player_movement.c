@@ -496,7 +496,7 @@ void HandleViewportRotationStart(Player *player) {
     }
 
     if (!IsRollingForwardBlocked(player) && player->subpixelPositionOnCube.vz > 255) {
-        if (player->faceTypePlayerStandingOn == 2) return;
+        if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) return;
 
         if (IsSubpixelZBelow257(player)) {
             MovePlayerForward(player, 256);
@@ -711,7 +711,7 @@ int CheckIfPlayerLanded(Player *player) {
     if (player->howMoving198 == 1) {
         ResetPlayerMatrix274(player);
     }
-    if (player->alreadyProcessedEntityAction != 5 && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
+    if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2dd8, 7000);
     }
     if (player->gravityVelocity == -80) {
@@ -759,9 +759,9 @@ int IsRollingForwardBlocked(Player *player) {
     if (player->surroundingBlocks[0][2][1] >= 0)
         return 1;
     if (player->surroundingBlocks[0][1][0] >= 0)
-        return player->faceTypePlayerStandingOn == 2;
+        return player->faceTypePlayerStandingOn == OBJ_ICE_PATCH;
     if (player->surroundingBlocks[0][1][2] >= 0)
-        return player->faceTypePlayerStandingOn == 2;
+        return player->faceTypePlayerStandingOn == OBJ_ICE_PATCH;
     return 1;
 }
 

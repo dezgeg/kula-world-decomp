@@ -92,6 +92,7 @@ typedef enum ObjectType {
     OBJ_INVISIBLE_PATCH = 0x03,
     OBJ_ACID_PATCH = 0x04,
     OBJ_TRANSPORTER = 0x05,
+    OBJ_CRUMBLING_BLOCK = 0x06,
     OBJ_EXIT = 0x07,
     OBJ_TIMER_PAUSE = 0x08,
     OBJ_BUTTON = 0x09,
@@ -127,6 +128,11 @@ typedef enum ObjectType {
     OBJ_FAST_STAR = 0x34,
     OBJ_CAPTURE_POD = 0x35,
     OBJ_CAPTIVATOR = 0x38,
+
+    OBJ_INVISIBLE_PATCH_BLOCK = 93,
+    OBJ_TRANSPORTER_BLOCK = 95,
+    OBJ_CRUMBLING_BLOCK_FACE = 96,
+    OBJ_EXIT_BLOCK = 97,
 } ObjectType;
 
 typedef enum HowMoving {
