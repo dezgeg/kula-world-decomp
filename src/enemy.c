@@ -6,6 +6,9 @@ int enemyPlayerDistSq;
 int numEnemies;
 int enemiesProcessedOnce;
 int enemyI;
+int loopI;
+int DAT_000a47c8;
+int sumOfDeltas;
 int DAT_000a4850;
 extern Enemy enemies[];
 
@@ -20,6 +23,7 @@ static SVECTOR SVECTOR_000a4820;
 static SVECTOR SVECTOR_000a4828;
 static SVECTOR SVECTOR_000a4830;
 static SVECTOR SVECTOR_000a4838;
+static SVECTOR SVECTOR_000a47e8;
 
 static SVECTOR SVECTOR_000a48fc;
 static SVECTOR SVECTOR_000a48e4;
@@ -41,7 +45,11 @@ extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta,
 extern short* entityData;
 extern short numEntities;
 extern void InitEnemy(int side, int rotation, Enemy* enemy);
+extern int Rand(int);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan);
 int FUN_000403ec(int blockType, int rotationIndex);
+int FUN_00040490(SVECTOR* enemyPos, Enemy* enemy);
 
 void InitEnemies(void) {
     int i, j;
@@ -105,7 +113,180 @@ void InitEnemies(void) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/enemy", UpdateEnemies);
+void UpdateEnemies(SVECTOR playerPos) {
+    int diff;
+
+    for (loopI = 0; loopI < numEnemies; loopI++) {
+        DAT_000a47c8 = FUN_00040490(&enemies[loopI].pos, &enemies[loopI]);
+
+        diff = enemies[loopI].pos.vx - enemies[loopI].initPos.vx +
+               enemies[loopI].pos.vy - enemies[loopI].initPos.vy +
+               enemies[loopI].pos.vz - enemies[loopI].initPos.vz;
+        if (diff < 0) {
+            diff = -diff;
+        }
+        sumOfDeltas = diff;
+
+        if (enemies[loopI].enemyType == OBJ_SLOW_STAR) {
+            if (DAT_000a47c8 < 256 && DAT_000a47c8 + 16 >= 256) {
+                if (FUN_0003da64(&enemies[loopI])) {
+                    FUN_0003db64(&enemies[loopI]);
+                } else if (FUN_0003dbe0(&enemies[loopI])) {
+                    FUN_0003dce0(&enemies[loopI]);
+                } else if (!FUN_0003d758(&enemies[loopI])) {
+                    FUN_0003da18(&enemies[loopI]);
+                }
+            }
+            enemies[loopI].pos.vx += enemies[loopI].dir.vx * 16;
+            enemies[loopI].pos.vy += enemies[loopI].dir.vy * 16;
+            enemies[loopI].pos.vz += enemies[loopI].dir.vz * 16;
+        }
+        if (enemies[loopI].enemyType == OBJ_TIRE && enemies[loopI].state == 0) {
+            if (!(FUN_0003d758(&enemies[loopI]) || DAT_000a47c8 >= 256 || DAT_000a47c8 + 15 < 256)) {
+                if (FUN_0003dbe0(&enemies[loopI])) {
+                    enemies[loopI].state = 2;
+                    enemies[loopI].timer = 0;
+                } else if (FUN_0003da64(&enemies[loopI])) {
+                    enemies[loopI].state = 1;
+                    enemies[loopI].timer = 0;
+                } else {
+                    enemies[loopI].state = 3;
+                    enemies[loopI].timer = 0;
+                }
+            }
+            if (enemies[loopI].state == 0) {
+                enemies[loopI].pos.vx += enemies[loopI].dir.vx * 15;
+                enemies[loopI].pos.vy += enemies[loopI].dir.vy * 15;
+                enemies[loopI].pos.vz += enemies[loopI].dir.vz * 15;
+            }
+        }
+        if (enemies[loopI].enemyType == OBJ_FAST_STAR) {
+            enemies[loopI].pos.vx = enemies[loopI].initPos.vx + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vx / 4096;
+            enemies[loopI].pos.vy = enemies[loopI].initPos.vy + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vy / 4096;
+            enemies[loopI].pos.vz = enemies[loopI].initPos.vz + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vz / 4096;
+
+            enemies[loopI].timer = (enemies[loopI].timer + 64) % 4096;
+
+            SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
+            SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
+            SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
+
+            if (enemies[loopI].timer == 1024 || enemies[loopI].timer == 3072) {
+                SndPlaySfx(SFX_FAST_MOVING_STAR, 666 + loopI, &SVECTOR_000a47e8, 2000);
+            } else {
+                SndUpdateVolumeBasedOnDirVec(666 + loopI, &SVECTOR_000a47e8);
+            }
+        }
+        if (enemies[loopI].enemyType == OBJ_CAPTIVATOR) {
+            enemies[loopI].timer += 28;
+            if (enemies[loopI].timer >= 2048) {
+                SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
+                SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
+                SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
+                SndPlaySfx(SFX_CAPTIVATOR, 0, &SVECTOR_000a47e8, 7000);
+            }
+            enemies[loopI].timer %= 2048;
+            enemies[loopI].pos.vx = enemies[loopI].initPos.vx + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vx) / 4096;
+            enemies[loopI].pos.vy = enemies[loopI].initPos.vy + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vy) / 4096;
+            enemies[loopI].pos.vz = enemies[loopI].initPos.vz + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vz) / 4096;
+        }
+        if (enemies[loopI].enemyType == OBJ_CAPTURE_POD) {
+            if ((sumOfDeltas > 512 && enemies[loopI].field_b0 == -1) || !enemiesProcessedOnce) {
+                enemies[loopI].field_b0 = 0;
+                enemies[loopI].initPos = enemies[loopI].pos;
+                enemies[loopI].timer = 0;
+                if (enemies[loopI].dir.vx != 0) {
+                    enemies[loopI].initPos.vx = (enemies[loopI].pos.vx + 128) & 0xff00;
+                }
+                if (enemies[loopI].dir.vy != 0) {
+                    enemies[loopI].initPos.vy = (enemies[loopI].pos.vy + 128) & 0xff00;
+                }
+                if (enemies[loopI].dir.vz != 0) {
+                    enemies[loopI].initPos.vz = (enemies[loopI].pos.vz + 128) & 0xff00;
+                }
+                while (enemies[loopI].field_b0 == 0) {
+                    switch(Rand(4)) {
+                        case 0:
+                            if (FUN_0003da64(&enemies[loopI])) {
+                                FUN_0003db64(&enemies[loopI]);
+                                enemies[loopI].field_b0 = 1;
+                            }
+                            break;
+                        case 1:
+                            if (FUN_0003dbe0(&enemies[loopI])) {
+                                FUN_0003dce0(&enemies[loopI]);
+                                enemies[loopI].field_b0 = 1;
+                            }
+                            break;
+                        case 2:
+                            if (FUN_0003d758(&enemies[loopI])) {
+                                enemies[loopI].field_b0 = 1;
+                            }
+                            break;
+                        case 3:
+                            if (FUN_0003d8b8(&enemies[loopI])) {
+                                FUN_0003da18(&enemies[loopI]);
+                                enemies[loopI].field_b0 = 1;
+                            }
+                            break;
+                    }
+                }
+            }
+            if (enemies[loopI].field_b0 != -1) {
+                enemies[loopI].timer += (enemies[loopI].field_b0 * enemies[loopI].field_b0 / 8) % 4096;
+                enemies[loopI].pos.vx = enemies[loopI].initPos.vx + enemies[loopI].dir.vx * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
+                enemies[loopI].pos.vy = enemies[loopI].initPos.vy + enemies[loopI].dir.vy * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
+                enemies[loopI].pos.vz = enemies[loopI].initPos.vz + enemies[loopI].dir.vz * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
+                enemies[loopI].field_b0++;
+                if (enemies[loopI].field_b0 > 64) {
+                    enemies[loopI].field_b0 = -1;
+                    enemies[loopI].pos = enemies[loopI].initPos;
+                    SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
+                    SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
+                    SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
+                    SndPlaySfx(SFX_CAPTURE_POD, 0, &SVECTOR_000a47e8, 7000);
+                }
+            }
+            if (enemies[loopI].field_b0 == -1 && enemiesProcessedOnce) {
+                enemies[loopI].pos.vx += enemies[loopI].dir.vx * 64;
+                enemies[loopI].pos.vy += enemies[loopI].dir.vy * 64;
+                enemies[loopI].pos.vz += enemies[loopI].dir.vz * 64;
+            }
+        }
+        if (enemies[loopI].state) {
+            switch (enemies[loopI].state) {
+            case 1:
+                if (enemies[loopI].timer++ < 64) {
+                    enemies[loopI].rotationVec.vz -= 16;
+                } else {
+                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                    FUN_0003db64(&enemies[loopI]);
+                    enemies[loopI].state = 0;
+                }
+                break;
+            case 2:
+                if (enemies[loopI].timer++ < 64) {
+                    enemies[loopI].rotationVec.vz += 16;
+                } else {
+                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                    FUN_0003dce0(&enemies[loopI]);
+                    enemies[loopI].state = 0;
+                }
+                break;
+            case 3:
+                if (enemies[loopI].timer++ < 64) {
+                    enemies[loopI].rotationVec.vz += 32;
+                } else {
+                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                    FUN_0003da18(&enemies[loopI]);
+                    enemies[loopI].state = 0;
+                }
+                break;
+            }
+        }
+    }
+    enemiesProcessedOnce = 1;
+}
 
 int FUN_0003d758(Enemy* e) {
     int blockType;
