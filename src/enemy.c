@@ -7,7 +7,7 @@ int numEnemies;
 int enemiesProcessedOnce;
 int enemyI;
 int loopI;
-int DAT_000a47c8;
+int blockProgress;
 int sumOfDeltas;
 int DAT_000a4850;
 extern Enemy enemies[];
@@ -48,8 +48,8 @@ extern void InitEnemy(int side, int rotation, Enemy* enemy);
 extern int Rand(int);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan);
-int FUN_000403ec(int blockType, int rotationIndex);
-int FUN_00040490(SVECTOR* enemyPos, Enemy* enemy);
+int EnemyIsBlockWalkable(int blockType, int rotationIndex);
+int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy);
 
 void InitEnemies(void) {
     int i, j;
@@ -117,7 +117,7 @@ void UpdateEnemies(SVECTOR playerPos) {
     int diff;
 
     for (loopI = 0; loopI < numEnemies; loopI++) {
-        DAT_000a47c8 = FUN_00040490(&enemies[loopI].pos, &enemies[loopI]);
+        blockProgress = EnemyGetBlockProgress(&enemies[loopI].pos, &enemies[loopI]);
 
         diff = enemies[loopI].pos.vx - enemies[loopI].initPos.vx +
                enemies[loopI].pos.vy - enemies[loopI].initPos.vy +
@@ -128,13 +128,13 @@ void UpdateEnemies(SVECTOR playerPos) {
         sumOfDeltas = diff;
 
         if (enemies[loopI].enemyType == OBJ_SLOW_STAR) {
-            if (DAT_000a47c8 < 256 && DAT_000a47c8 + 16 >= 256) {
-                if (FUN_0003da64(&enemies[loopI])) {
-                    FUN_0003db64(&enemies[loopI]);
-                } else if (FUN_0003dbe0(&enemies[loopI])) {
-                    FUN_0003dce0(&enemies[loopI]);
-                } else if (!FUN_0003d758(&enemies[loopI])) {
-                    FUN_0003da18(&enemies[loopI]);
+            if (blockProgress < 256 && blockProgress + 16 >= 256) {
+                if (EnemyCanTurnRight(&enemies[loopI])) {
+                    EnemyTurnRight(&enemies[loopI]);
+                } else if (EnemyCanTurnLeft(&enemies[loopI])) {
+                    EnemyTurnLeft(&enemies[loopI]);
+                } else if (!EnemyCanMoveForward(&enemies[loopI])) {
+                    EnemyTurnAround(&enemies[loopI]);
                 }
             }
             enemies[loopI].pos.vx += enemies[loopI].dir.vx * 16;
@@ -142,11 +142,11 @@ void UpdateEnemies(SVECTOR playerPos) {
             enemies[loopI].pos.vz += enemies[loopI].dir.vz * 16;
         }
         if (enemies[loopI].enemyType == OBJ_TIRE && enemies[loopI].state == 0) {
-            if (!(FUN_0003d758(&enemies[loopI]) || DAT_000a47c8 >= 256 || DAT_000a47c8 + 15 < 256)) {
-                if (FUN_0003dbe0(&enemies[loopI])) {
+            if (!(EnemyCanMoveForward(&enemies[loopI]) || blockProgress >= 256 || blockProgress + 15 < 256)) {
+                if (EnemyCanTurnLeft(&enemies[loopI])) {
                     enemies[loopI].state = 2;
                     enemies[loopI].timer = 0;
-                } else if (FUN_0003da64(&enemies[loopI])) {
+                } else if (EnemyCanTurnRight(&enemies[loopI])) {
                     enemies[loopI].state = 1;
                     enemies[loopI].timer = 0;
                 } else {
@@ -207,25 +207,25 @@ void UpdateEnemies(SVECTOR playerPos) {
                 while (enemies[loopI].field_b0 == 0) {
                     switch(Rand(4)) {
                         case 0:
-                            if (FUN_0003da64(&enemies[loopI])) {
-                                FUN_0003db64(&enemies[loopI]);
+                            if (EnemyCanTurnRight(&enemies[loopI])) {
+                                EnemyTurnRight(&enemies[loopI]);
                                 enemies[loopI].field_b0 = 1;
                             }
                             break;
                         case 1:
-                            if (FUN_0003dbe0(&enemies[loopI])) {
-                                FUN_0003dce0(&enemies[loopI]);
+                            if (EnemyCanTurnLeft(&enemies[loopI])) {
+                                EnemyTurnLeft(&enemies[loopI]);
                                 enemies[loopI].field_b0 = 1;
                             }
                             break;
                         case 2:
-                            if (FUN_0003d758(&enemies[loopI])) {
+                            if (EnemyCanMoveForward(&enemies[loopI])) {
                                 enemies[loopI].field_b0 = 1;
                             }
                             break;
                         case 3:
-                            if (FUN_0003d8b8(&enemies[loopI])) {
-                                FUN_0003da18(&enemies[loopI]);
+                            if (EnemyCanMoveBackward(&enemies[loopI])) {
+                                EnemyTurnAround(&enemies[loopI]);
                                 enemies[loopI].field_b0 = 1;
                             }
                             break;
@@ -260,7 +260,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                     enemies[loopI].rotationVec.vz -= 16;
                 } else {
                     enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    FUN_0003db64(&enemies[loopI]);
+                    EnemyTurnRight(&enemies[loopI]);
                     enemies[loopI].state = 0;
                 }
                 break;
@@ -269,7 +269,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                     enemies[loopI].rotationVec.vz += 16;
                 } else {
                     enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    FUN_0003dce0(&enemies[loopI]);
+                    EnemyTurnLeft(&enemies[loopI]);
                     enemies[loopI].state = 0;
                 }
                 break;
@@ -278,7 +278,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                     enemies[loopI].rotationVec.vz += 32;
                 } else {
                     enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    FUN_0003da18(&enemies[loopI]);
+                    EnemyTurnAround(&enemies[loopI]);
                     enemies[loopI].state = 0;
                 }
                 break;
@@ -288,7 +288,7 @@ void UpdateEnemies(SVECTOR playerPos) {
     enemiesProcessedOnce = 1;
 }
 
-int FUN_0003d758(Enemy* e) {
+int EnemyCanMoveForward(Enemy* e) {
     int blockType;
     int rotationIndex;
     int res;
@@ -304,7 +304,7 @@ int FUN_0003d758(Enemy* e) {
     blockType = GetBlockAt(&SVECTOR_000a4810);
     rotationIndex = GetRotationIndexFromVector(e->normalVec);
 
-    if (FUN_000403ec(blockType, rotationIndex) != 1) {
+    if (EnemyIsBlockWalkable(blockType, rotationIndex) != 1) {
         return 0;
     }
 
@@ -318,7 +318,7 @@ int FUN_0003d758(Enemy* e) {
     return res;
 }
 
-int FUN_0003d8b8(Enemy* e) {
+int EnemyCanMoveBackward(Enemy* e) {
     int res;
 
     SVECTOR_000a4820.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
@@ -329,7 +329,7 @@ int FUN_0003d8b8(Enemy* e) {
     SVECTOR_000a4828.vy = e->pos.vy - e->dir.vy * 0x200;
     SVECTOR_000a4828.vz = e->pos.vz - e->dir.vz * 0x200;
 
-    if (FUN_000403ec(GetBlockAt(&SVECTOR_000a4820), GetRotationIndexFromVector(e->normalVec)) != 1) {
+    if (EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4820), GetRotationIndexFromVector(e->normalVec)) != 1) {
         return 0;
     }
 
@@ -342,45 +342,45 @@ int FUN_0003d8b8(Enemy* e) {
     return res;
 }
 
-void FUN_0003da18(Enemy* enemy) {
+void EnemyTurnAround(Enemy* enemy) {
     enemy->dir.vx = -enemy->dir.vx;
     enemy->dir.vy = -enemy->dir.vy;
     enemy->dir.vz = -enemy->dir.vz;
-    enemy->field1_0x8.vx = -enemy->field1_0x8.vx;
-    enemy->field1_0x8.vy = -enemy->field1_0x8.vy;
-    enemy->field1_0x8.vz = -enemy->field1_0x8.vz;
+    enemy->rightVec.vx = -enemy->rightVec.vx;
+    enemy->rightVec.vy = -enemy->rightVec.vy;
+    enemy->rightVec.vz = -enemy->rightVec.vz;
 }
 
-int FUN_0003da64(Enemy* enemy) {
-    SVECTOR_000a4830.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) + (enemy->field1_0x8.vx * 0x200);
-    SVECTOR_000a4830.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) + (enemy->field1_0x8.vy * 0x200);
-    SVECTOR_000a4830.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) + (enemy->field1_0x8.vz * 0x200);
+int EnemyCanTurnRight(Enemy* enemy) {
+    SVECTOR_000a4830.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) + (enemy->rightVec.vx * 0x200);
+    SVECTOR_000a4830.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) + (enemy->rightVec.vy * 0x200);
+    SVECTOR_000a4830.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) + (enemy->rightVec.vz * 0x200);
 
-    return FUN_000403ec(GetBlockAt(&SVECTOR_000a4830), GetRotationIndexFromVector(enemy->normalVec)) == 1;
+    return EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4830), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
 
-void FUN_0003db64(Enemy* enemy) {
+void EnemyTurnRight(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
-    enemy->dir = enemy->field1_0x8;
-    enemy->field1_0x8.vx = -tmpEnemyPos.vx;
-    enemy->field1_0x8.vy = -tmpEnemyPos.vy;
-    enemy->field1_0x8.vz = -tmpEnemyPos.vz;
+    enemy->dir = enemy->rightVec;
+    enemy->rightVec.vx = -tmpEnemyPos.vx;
+    enemy->rightVec.vy = -tmpEnemyPos.vy;
+    enemy->rightVec.vz = -tmpEnemyPos.vz;
 }
 
-int FUN_0003dbe0(Enemy* enemy) {
-    SVECTOR_000a4838.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) - (enemy->field1_0x8.vx * 0x200);
-    SVECTOR_000a4838.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) - (enemy->field1_0x8.vy * 0x200);
-    SVECTOR_000a4838.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) - (enemy->field1_0x8.vz * 0x200);
+int EnemyCanTurnLeft(Enemy* enemy) {
+    SVECTOR_000a4838.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) - (enemy->rightVec.vx * 0x200);
+    SVECTOR_000a4838.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) - (enemy->rightVec.vy * 0x200);
+    SVECTOR_000a4838.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) - (enemy->rightVec.vz * 0x200);
 
-    return FUN_000403ec(GetBlockAt(&SVECTOR_000a4838), GetRotationIndexFromVector(enemy->normalVec)) == 1;
+    return EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4838), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
 
-void FUN_0003dce0(Enemy* enemy) {
+void EnemyTurnLeft(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
-    enemy->dir.vx = -enemy->field1_0x8.vx;
-    enemy->dir.vy = -enemy->field1_0x8.vy;
-    enemy->dir.vz = -enemy->field1_0x8.vz;
-    enemy->field1_0x8 = tmpEnemyPos;
+    enemy->dir.vx = -enemy->rightVec.vx;
+    enemy->dir.vy = -enemy->rightVec.vy;
+    enemy->dir.vz = -enemy->rightVec.vz;
+    enemy->rightVec = tmpEnemyPos;
 }
 
 int IsCollidingWithEnemy(SVECTOR pos) {
@@ -694,33 +694,33 @@ void InitEnemy(int side, int rotation, Enemy* enemy) {
         SVECTOR_000a48f4.vy = -1;
     }
 
-    enemy->field1_0x8 = SVECTOR_000a48e4;
+    enemy->rightVec = SVECTOR_000a48e4;
     enemy->dir = SVECTOR_000a48ec;
     enemy->normalVec = SVECTOR_000a48f4;
 
     if (rotation == 2) {
-        enemy->field1_0x8.vx = -SVECTOR_000a48ec.vx;
-        enemy->field1_0x8.vy = -SVECTOR_000a48ec.vy;
-        enemy->field1_0x8.vz = -SVECTOR_000a48ec.vz;
+        enemy->rightVec.vx = -SVECTOR_000a48ec.vx;
+        enemy->rightVec.vy = -SVECTOR_000a48ec.vy;
+        enemy->rightVec.vz = -SVECTOR_000a48ec.vz;
         enemy->dir = SVECTOR_000a48e4;
     }
     if (rotation == 3) {
-        enemy->field1_0x8.vx = -SVECTOR_000a48e4.vx;
-        enemy->field1_0x8.vy = -SVECTOR_000a48e4.vy;
-        enemy->field1_0x8.vz = -SVECTOR_000a48e4.vz;
+        enemy->rightVec.vx = -SVECTOR_000a48e4.vx;
+        enemy->rightVec.vy = -SVECTOR_000a48e4.vy;
+        enemy->rightVec.vz = -SVECTOR_000a48e4.vz;
         enemy->dir.vx = -SVECTOR_000a48ec.vx;
         enemy->dir.vy = -SVECTOR_000a48ec.vy;
         enemy->dir.vz = -SVECTOR_000a48ec.vz;
     }
     if (rotation == 4) {
-        enemy->field1_0x8 = SVECTOR_000a48ec;
+        enemy->rightVec = SVECTOR_000a48ec;
         enemy->dir.vx = -SVECTOR_000a48e4.vx;
         enemy->dir.vy = -SVECTOR_000a48e4.vy;
         enemy->dir.vz = -SVECTOR_000a48e4.vz;
     }
 }
 
-int FUN_000403ec(int blockType, int rotationIndex) {
+int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
     short type;
     int index;
 
@@ -745,7 +745,7 @@ int FUN_000403ec(int blockType, int rotationIndex) {
     return 0;
 }
 
-int FUN_00040490(SVECTOR* enemyPos, Enemy* enemy) {
+int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy) {
     SVECTOR_000a48fc.vx = (enemyPos->vx + 0x100) & 0x1ff;
     SVECTOR_000a48fc.vy = (enemyPos->vy + 0x100) & 0x1ff;
     SVECTOR_000a48fc.vz = (enemyPos->vz + 0x100) & 0x1ff;

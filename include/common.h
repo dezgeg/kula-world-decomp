@@ -270,7 +270,7 @@ typedef struct AnimatedTextureChain {
 
 typedef struct Enemy {
     SVECTOR dir;
-    SVECTOR field1_0x8;
+    SVECTOR rightVec;
     SVECTOR normalVec;
     SVECTOR pos;
     SVECTOR initPos;
