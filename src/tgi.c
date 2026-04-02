@@ -142,7 +142,7 @@ void InitCubeTextureMetadata(void) {
     short* pPart6;
     int i;
     int j;
-    int k;
+    int mipmap;
     short* p;
     int p0;
     short* de;
@@ -167,14 +167,14 @@ void InitCubeTextureMetadata(void) {
                 *de++ = GetTPage(1, 0, tx, ty);
                 *de++ = 0;
                 pPart6 += 5;
-                for (k = 0; k < 3; pPart6 += 5, k++) {
+                for (mipmap = 0; mipmap < 3; pPart6 += 5, mipmap++) {
                     *(int*)de = &tgiPart0[pPart6[i] * tgi->unk108];
                     de += 2;
                     tx = pPart6[3];
                     ty = pPart6[4];
                     mx = (tx % 64) * 4;
                     my = ty % 256;
-                    switch (k) {
+                    switch (mipmap) {
                         case 0:
                             mx += 0x1f;
                             break;
@@ -199,7 +199,6 @@ void GetHighscoreCubeStyle(ushort* pTpage, ushort* pClut, byte* pU, byte* pV, in
     CubeTextureMetadata* md;
 
     variation = HIGHSCORE_CUBE_RANDOM_TEXTURES[Rand(16)];
-    // texture = variation;
     *pSemitrans = 0;
     switch (variation) {
         default:
@@ -271,7 +270,6 @@ void InitTurningMotionBlur(void) {
 void ParseLevelDataFromTgi(void) {
     int i;
     int j;
-    unsigned k;
     int* ptr;
     int* ptr2;
 
