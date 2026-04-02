@@ -48,7 +48,7 @@ extern GemSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
 extern Texture textures[150];
 
 // Prototypes
-void ParseTextures(void* headerPtr, Texture * out, int count);
+void ParseTextures(int* headerPtr, Texture * out, int count);
 void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
 void* ParseGGI(GgiFile *ggi_ptr) {
@@ -93,68 +93,69 @@ void* ParseGGI(GgiFile *ggi_ptr) {
     return ggiPart6Textures;
 }
 
-void ParseTextures(void* headerPtr, Texture *out, int unused_count) {
-    int count = *(int *)headerPtr;
+void ParseTextures(int* headerPtr, Texture *out, int unused_count) {
+    int count = *headerPtr;
     short *p;
     int i;
-    int isSemitrans;
-    int logWidth;
-    int unk10;
+    int blendMode;
+    int bpp;
+    int alreadyLoaded;
     RECT rect;
 
     DrawSync(0);
-    p = (short *)((int)headerPtr + 4);
+    p = (short *)(headerPtr + 1);
     for (i = 0; i < count; i++) {
-        logWidth = *p++;
-        if (logWidth == -1) {
+        bpp = *p++;
+        if (bpp == -1) {
+            // padding word
             p++;
-        } else {
-            out[i].bitsPerPixel = (u_char)logWidth;
-            isSemitrans = *p++;
-            out[i].semitrans = (isSemitrans != -1);
-            if (isSemitrans == -1) isSemitrans = 0;
+            continue;
+        }
 
-            unk10 = p[3];
+        out[i].bitsPerPixel = bpp;
+        blendMode = *p++;
+        out[i].semitrans = (blendMode != -1);
+        if (blendMode == -1) blendMode = 0;
 
-            if (logWidth != 16) {
-                rect.x = *p++;
-                rect.y = *p++;
-                out[i].clut = GetClut(rect.x, rect.y);
-                if (p[0] == 0) {
-                    rect.w = 1 << logWidth;
-                    rect.h = 1;
-                    LoadImage(&rect, p + 2);
-                    DrawSync(0);
-                    p += rect.w + 2;
-                } else {
-                    p += 2;
-                }
-            } else {
-                p += 4;
-            }
+        alreadyLoaded = p[3];
 
+        if (bpp != 16) {
             rect.x = *p++;
             rect.y = *p++;
-            out[i].w = *p++;
-            rect.w = (out[i].w * logWidth) / 16;
-            out[i].h = *p++;
-            rect.h = out[i].h;
-
-            if (unk10 == 0) {
-                int sz;
-                LoadImage(&rect, (void *)p);
+            out[i].clut = GetClut(rect.x, rect.y);
+            if (p[0] == 0) {
+                rect.w = 1 << bpp;
+                rect.h = 1;
+                LoadImage(&rect, p + 2);
                 DrawSync(0);
-                sz = (int)rect.w * (int)rect.h;
-                p += sz;
-                if (sz & 1) {
-                    p++;
-                }
+                p += rect.w + 2;
+            } else {
+                // CLUT already loaded by some other texture
+                p += 2;
             }
-
-            out[i].tpage = GetTPage(logWidth >> 3, isSemitrans, rect.x, rect.y);
-            out[i].u = (u_char)((rect.x % 64) * (16 / logWidth));
-            out[i].v = (u_char)(rect.y % 256);
+        } else {
+            p += 4;
         }
+
+        rect.x = *p++;
+        rect.y = *p++;
+        out[i].w = *p++;
+        rect.w = (out[i].w * bpp) / 16;
+        out[i].h = *p++;
+        rect.h = out[i].h;
+
+        if (alreadyLoaded == 0) {
+            LoadImage(&rect, p);
+            DrawSync(0);
+            p += rect.w * rect.h;
+            if ((rect.w * rect.h) & 1) {
+                p++;
+            }
+        }
+
+        out[i].tpage = GetTPage(bpp >> 3, blendMode, rect.x, rect.y);
+        out[i].u = (rect.x % 64) * (16 / bpp);
+        out[i].v = rect.y % 256;
     }
 }
 
