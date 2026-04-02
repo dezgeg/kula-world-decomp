@@ -253,7 +253,232 @@ void TurnLeft(Player *player) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", ProcessMovement);
+void ProcessMovement(Player *player) {
+    int dummy[2];
+
+    player->turningWhereNextFrame = 0;
+    if (player->howMoving198 != JUMPING_FORWARD && player->longJump > 1) {
+        player->longJump = 0;
+    }
+
+    if (player->dying) {
+        return;
+    }
+
+    switch (player->howMoving198) {
+    case NOT_MOVING:
+        MovePlayerDownwards(player, 100);
+        if (player->surroundingBlocks[0][1][1] < 0) {
+            if (player->onMovingPlatform == 0) {
+                player->howMoving198 = FALLING;
+                player->howMoving0 = 3;
+                player->movementVelocity = 0;
+                player->gravityVelocity = -10;
+            }
+        }
+        player->rotX = 0;
+        break;
+
+    case ROLLING:
+        AutoCenterSubpixelPosition(player, 8);
+        if (player->surroundingBlocks[0][1][1] < 0) {
+            if ((ushort)(player->subpixelPositionOnCube.vz - 101) < 327) {
+                if (player->onMovingPlatform == 0) {
+                    player->howMoving198 = FALLING;
+                    player->howMoving0 = 3;
+                    player->movementVelocity = 0;
+                    player->gravityVelocity = -10;
+                }
+            }
+        }
+
+        if (player->subpixelPositionOnCube.vz > 100) {
+            player->isRotatingViewport = 0;
+        }
+
+        player->movementVelocity += 7;
+        if (player->movementVelocity > 39) {
+            player->movementVelocity = 40;
+        }
+
+        player->rotX = player->movementVelocity;
+
+        player->finePos.vx += player->movementVelocity * player->facingDir.vx;
+        player->finePos.vy += player->movementVelocity * player->facingDir.vy;
+        player->finePos.vz += player->movementVelocity * player->facingDir.vz;
+        break;
+
+    case ROTATING:
+        player->jumpingOrViewportRotationTimer++;
+        player->isRotatingViewport = 1;
+        player->turningWhereNextFrame = 1;
+        if (player->jumpingOrViewportRotationTimer == 1) {
+            player->finePos.vx += player->gravityDir.vx * 38 + player->facingDir.vx * 8;
+            player->finePos.vy += player->gravityDir.vy * 38 + player->facingDir.vy * 8;
+            player->finePos.vz += player->gravityDir.vz * 38 + player->facingDir.vz * 8;
+        }
+
+        if (player->jumpingOrViewportRotationTimer == 2) {
+            player->finePos.vx += player->gravityDir.vx * 32 + player->facingDir.vx * 22;
+            player->finePos.vy += player->gravityDir.vy * 32 + player->facingDir.vy * 22;
+            player->finePos.vz += player->gravityDir.vz * 32 + player->facingDir.vz * 22;
+        }
+
+        if (player->jumpingOrViewportRotationTimer == 3) {
+            player->finePos.vx += player->gravityDir.vx * 22 + player->facingDir.vx * 32;
+            player->finePos.vy += player->gravityDir.vy * 22 + player->facingDir.vy * 32;
+            player->finePos.vz += player->gravityDir.vz * 22 + player->facingDir.vz * 32;
+        }
+
+        if (player->jumpingOrViewportRotationTimer == 4) {
+            player->howMoving198 = ROLLING;
+            player->finePos.vx += player->gravityDir.vx * 8 + player->facingDir.vx * 39;
+            player->finePos.vy += player->gravityDir.vy * 8 + player->facingDir.vy * 39;
+            player->howMoving0 = 0;
+            player->finePos.vz += player->gravityDir.vz * 8 + player->facingDir.vz * 39;
+            MovePlayerDownwards(player, 100);
+        }
+        break;
+
+    case JUMPING_FORWARD:
+        player->jumpingOrViewportRotationTimer--;
+
+        if (player->jumpingOrViewportRotationTimer > 0) {
+            if (!player->dying) {
+                player->jumpVec.vz = player->jumpdataPtr[0];
+                player->jumpdataPtr++;
+                player->jumpVec.vx = player->jumpdataPtr[0];
+                player->jumpdataPtr++;
+                player->jumpVec.vy = player->jumpdataPtr[0];
+                player->jumpdataPtr++;
+
+                if (player->longJump) {
+                    player->jumpVec.vx = (player->jumpVec.vx * 3) / 2;
+                    player->jumpVec.vy = (player->jumpVec.vy * 3) / 2;
+                    player->jumpVec.vz = (player->jumpVec.vz * 3) / 2;
+                    player->longJump++;
+                }
+
+                ApplyMatrixSV(&player->matrix_d4, &player->jumpVec, &player->jumpVec);
+                AutoAlignJumpStartPos(player, 8);
+
+                player->finePos.vx = player->jumpStartPos.vx + player->jumpVec.vx;
+                player->finePos.vy = player->jumpStartPos.vy + player->jumpVec.vy;
+                player->finePos.vz = player->jumpStartPos.vz + player->jumpVec.vz;
+            }
+        } else {
+            if (player->longJump >= 3) {
+                player->finePos.vx = player->jumpStartPos.vx + player->facingDir.vx * 1536;
+                player->finePos.vy = player->jumpStartPos.vy + player->facingDir.vy * 1536;
+                player->finePos.vz = player->jumpStartPos.vz + player->facingDir.vz * 1536;
+            } else {
+                player->finePos.vx = player->jumpStartPos.vx + player->facingDir.vx * 1024;
+                player->finePos.vy = player->jumpStartPos.vy + player->facingDir.vy * 1024;
+                player->finePos.vz = player->jumpStartPos.vz + player->facingDir.vz * 1024;
+            }
+
+            if (CheckIfPlayerLanded(player)) {
+                player->jumpingOnMovingPlatform = 0;
+            } else {
+                player->howMoving198 = FALLING;
+                player->howMoving0 = 3;
+                player->movementVelocity = 0;
+                player->gravityVelocity = -0x28;
+                player->gravityVelocity = player->svec_144.vy;
+                if (player->gravityVelocity >= 0) {
+                    player->gravityVelocity = -player->svec_144.vy ;
+                } else {
+                    player->gravityVelocity = player->svec_144.vy;
+                }
+                player->longJump = 0;
+            }
+        }
+        break;
+
+    case FALLING:
+        if (player->rollingForward) {
+            player->rotX += 6;
+            if (player->rotX > 40) {
+                player->rotX = 40;
+            }
+        } else {
+            player->rotX--;
+            if (player->rotX < 1) {
+                player->rotX = 0;
+            }
+        }
+
+        if (player->movementVelocity > 0) {
+            player->movementVelocity = 0;
+        }
+
+        if (player->movementVelocity < 0) {
+            player->movementVelocity += 7;
+            if (player->movementVelocity > 0) {
+                player->movementVelocity = 0;
+            }
+        }
+
+        player->gravityVelocity -= 6;
+        if (player->gravityVelocity < -79) {
+            player->gravityVelocity = -80;
+        }
+
+        player->finePos.vx += (ushort)player->gravityVelocity * (ushort)player->gravityDir.vx + (ushort)player->movementVelocity * (ushort)player->facingDir.vx;
+        player->finePos.vy += (ushort)player->gravityVelocity * (ushort)player->gravityDir.vy + (ushort)player->movementVelocity * (ushort)player->facingDir.vy;
+        player->finePos.vz += (ushort)player->gravityVelocity * (ushort)player->gravityDir.vz + (ushort)player->movementVelocity * (ushort)player->facingDir.vz;
+        break;
+
+    case JUMPING_INPLACE:
+        player->jumpingOrViewportRotationTimer--;
+
+        if (player->jumpingOrViewportRotationTimer > 0) {
+            player->rotX = 0;
+            player->jumpVec.vz = player->jumpdataPtr[3] - player->jumpdataPtr[0];
+            player->jumpdataPtr++;
+            player->jumpVec.vx = player->jumpdataPtr[3] - player->jumpdataPtr[0];
+            player->jumpdataPtr++;
+            player->jumpVec.vy = player->jumpdataPtr[3] - player->jumpdataPtr[0];
+            player->jumpdataPtr++;
+
+            player->jumpVec.vx = 0;
+            player->jumpVec.vy = 0;
+
+            ApplyMatrixSV(&player->matrix_d4, &player->jumpVec, &player->jumpVec);
+
+            player->finePos.vx += player->jumpVec.vx;
+            player->finePos.vy += player->jumpVec.vy;
+            player->finePos.vz += player->jumpVec.vz;
+
+            if (player->jumpingInplaceOnTopOfMovingPlatform) {
+                player->finePos.vx += entityData[player->movingPlatformEntityIdStandingOn + 21];
+                player->finePos.vy += entityData[player->movingPlatformEntityIdStandingOn + 22];
+                player->finePos.vz += entityData[player->movingPlatformEntityIdStandingOn + 23];
+            }
+            break;
+        }
+        player->onGround = 1;
+        player->jumpingInplaceOnTopOfMovingPlatform = 0;
+        player->howMoving0 = 0;
+        player->howMoving198 = NOT_MOVING;
+
+        if (player->surroundingBlocks[0][1][1] < 0) {
+            player->howMoving198 = FALLING;
+            player->onGround = 0;
+            player->howMoving0 = 3;
+            player->movementVelocity = 0;
+            player->gravityVelocity = player->svec_144.vy;
+        } else {
+            SndPlaySfx(102, 0, &SVECTOR_000a2dd8, 7000);
+            landingSquishFrameCounter = 4;
+            landingSquishMagnitudeIncrement = 187;
+            landingSquishMagnitude = 0;
+            landingSquishDamping = 100;
+        }
+        break;
+
+    }
+}
 
 void HandleViewportRotationStart(Player *player) {
     int pad[3];
