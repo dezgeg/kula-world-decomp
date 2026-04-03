@@ -1,9 +1,7 @@
 #include "common.h"
-
 #include <LIBGTE.H>
 #include <LIBSPU.H>
 
-__asm__(".set keyStatus_, keyStatus");
 typedef struct SpuVoiceState {
     int tag;
     int volume;
@@ -20,9 +18,17 @@ typedef struct SfxFile {
     SfxFileEntry entries[1];
 } SfxFile;
 
+extern SpuVoiceState spuVoiceState[];
+extern SpuVoiceAttr perSfxVoiceAttrs[];
+extern char keyStatus[];
+extern short SFX_REMAP_TABLE[];
+extern int lethargyMode;
+
+__asm__(".set keyStatus_, keyStatus");
+extern char keyStatus_[];  // hack to make gcc not create induction variable of sprt
+
 short playingBonusMusic;
 short bonusMusicIndex;
-
 SpuCommonAttr spuCommonAttr;
 SpuReverbAttr spuReverbAttr;
 ulong spuWriteRetVal;
@@ -30,18 +36,9 @@ int sfxVolume;
 int musicVolume;
 int loadingIsComplete;
 int numSfx;
-
-extern SpuVoiceState spuVoiceState[];
-extern SpuVoiceAttr perSfxVoiceAttrs[];
-extern char keyStatus[]; /* pointless global */
-
-extern char keyStatus_[];  // hack to make gcc not create induction variable of sprt
-
-extern short SFX_REMAP_TABLE[];
 int sndSwapPanDir;
 int sfxPanning;
-
-extern int lethargyMode;
+int voiceIter;
 
 static int curPlayingSfx;
 static VECTOR panFactor;
@@ -49,8 +46,6 @@ static VECTOR panVectorSq;
 
 static VECTOR* panFactorPtr = &panFactor;
 static VECTOR* panVectorSqPtr = &panVectorSq;
-
-int voiceIter;
 
 void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     uchar* addr;
