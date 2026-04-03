@@ -7,7 +7,6 @@ CreatePlayerDispList: https://decomp.scratch/PvGtU
 DisableItemShadow: https://decomp.scratch/apQkr
 DrawScoreGraph: <none>
 DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
-FUN_000298e0: https://decomp.scratch/WO6tU
 HandleDebugCamera: https://decomp.me/scratch/P5as1
 HandleItemTouching: https://decomp.me/scratch/0GliO
 HandleSpecialCubeTypes: https://decomp.scratch/0RSJc

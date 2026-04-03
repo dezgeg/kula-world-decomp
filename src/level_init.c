@@ -347,7 +347,14 @@ void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, 
     chain->entries = (TextureChainEntry*)tce;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", FUN_000298e0);
+void FUN_000298e0(AnimatedTextureChain *tc) {
+    u32* ptr = tc + 1;
+    u32* end = tc->entries;
+    while (ptr < end) {
+        *ptr = *(u32 *)*ptr;
+        ptr += 2;
+    }
+}
 
 void InitShadowSprites(void) {
     int i;
