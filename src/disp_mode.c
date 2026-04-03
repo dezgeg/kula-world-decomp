@@ -1,12 +1,12 @@
 #include "common.h"
 
+extern DrawDisp drawdisp[2];
+
 int dispModeChangeNewWidth;
 int dispModeChangeState;
 int displayHeight;
 int displayWidth;
 int gteXScale;
-
-extern DrawDisp drawdisp[2];
 
 void UnusedSetDisplayModeChange(int param_1) {
     dispModeChangeNewWidth = param_1;
