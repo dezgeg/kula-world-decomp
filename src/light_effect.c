@@ -1,16 +1,16 @@
 #include "common.h"
 
-int AddLightEffectToCube(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8);
-
 typedef struct LightEffect {
     int color;
     void* prims[7];
 } LightEffect;
 
-int* curLightEffectDataPtr;
-int lightEffects[32 * 8];
+int AddLightEffectToCube(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8);
 
 extern int cubeStates[16 * 256];
+
+int* curLightEffectDataPtr;
+int lightEffects[32 * 8];
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
