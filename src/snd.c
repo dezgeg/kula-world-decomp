@@ -21,7 +21,6 @@ typedef struct SfxFile {
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
 extern char keyStatus[];
-extern short SFX_REMAP_TABLE[];
 extern int lethargyMode;
 
 __asm__(".set keyStatus_, keyStatus");
@@ -46,6 +45,21 @@ static VECTOR panVectorSq;
 
 static VECTOR* panFactorPtr = &panFactor;
 static VECTOR* panVectorSqPtr = &panVectorSq;
+
+short SFX_REMAP_TABLE[120] = {
+    -1, 23, 11, -1, -1, 3, -1, -1, -1, 9,
+    15, 19, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 27, 31, 24, 30, -1, -1, -1, -1, -1,
+    0, 7, 13, 13, 1, 4, 6, 8, 20, -1,
+    -1, -1, -1, 14, 14, 14, 14, 14, -1, -1,
+    -1, -1, -1, 24, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    10, 2, 5, -1, 13, 16, 17, 12, 18, 18,
+    21, 22, 25, 26, 29, 28, 32, -1, -1, -1,
+};
 
 void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     uchar* addr;
