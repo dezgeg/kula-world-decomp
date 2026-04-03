@@ -1,10 +1,8 @@
 #include "common.h"
 
-extern short* ggiPart2DepthCueingLookup;
-extern int cameraIndex;
-extern TgiFile* tgi;
-extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
+typedef struct {
+    char data[0x15c];
+} GemRandomSparkleEffect;
 
 extern void ASM_FUN_00050310(void* otag);
 extern void ASM_FUN_00052504(void* otag);
@@ -29,16 +27,25 @@ extern void SubdivideLevelGeometryPolys(void);
 extern void TurnLevelExitQuadIntoGreen(void);
 extern void UnusedAsmNoop(void);
 extern void UpdateSunglassModeDisabling(void);
+extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect * eff);
+extern void RenderDispList(void* p);
+extern void DrawPlayerSpecularSprites(void);
+extern void DrawShadowSprites(void);
+extern void RenderBonusBackground(void * ot);
+extern void RenderNonSpecialBackground(void * ot);
+extern void RenderStarfield(void * ot);
+extern void ASM_00053a64(void);
+extern void UpdateStarfield(void);
 
-int drawGeometryAndObjects;
-MATRIX levelGeometryRenderingMatrix;
-
-MATRIX MATRIX_000a5184;
+extern short* ggiPart2DepthCueingLookup;
+extern int cameraIndex;
+extern TgiFile* tgi;
+extern int whichDrawDispEnv;
+extern void* otag[2][1][1026];
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
 extern RGB farColor;
 extern RGB farColor2;
-
 extern AnimatedTextureChain bonusBlockTextureChain;
 extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
 extern AnimatedTextureChain fireBlockTextureChain;
@@ -46,30 +53,9 @@ extern InvisBlockVisibility invisBlockVisibility;
 extern AnimatedTextureChain invisibleBlockTextureChain;
 extern int isPaused;
 extern int toBeDisabledLightEffects[64];
-
-static int starfieldSinPhase1;
-static int starfieldSinPhase2;
-static int starfieldSinPhase3;
-
-static int D_000A501C;
-static int D_000A5024;
-static int D_000A5028;
-static int D_000A5030;
-static int D_000A5034;
-static int D_000A5050;
-
-SVECTOR starfieldSinVec;
-
-int D_000A51BC;
 extern int D_000A51C0;
 extern int D_000A51C4;
-
 extern MATRIX starfieldMatrix;
-
-typedef struct {
-    char data[0x15c];
-} GemRandomSparkleEffect;
-
 extern GemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
 extern int itemsDispList[10];
 extern int itemsDispListIdx;
@@ -78,17 +64,25 @@ extern void* playerEnemyDispList[4];
 extern int playerEnemyDispListIdx;
 extern int primBufUsage;
 extern void* renderedPrimsBuf;
+extern DR_TPAGE drTpages1[2][1];
+extern DR_TPAGE drTpages2[2][1];
+extern DR_AREA drawAreas[2][1];
+extern DR_OFFSET drawOffsets[2][1];
 
-extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect * eff);
-extern void RenderDispList(void* p);
-extern void DrawPlayerSpecularSprites(void);
-extern void DrawShadowSprites(void);
-
-extern void RenderBonusBackground(void * ot);
-extern void RenderNonSpecialBackground(void * ot);
-extern void RenderStarfield(void * ot);
-extern void ASM_00053a64(void);
-extern void UpdateStarfield(void);
+int drawGeometryAndObjects;
+MATRIX levelGeometryRenderingMatrix;
+MATRIX MATRIX_000a5184;
+static int starfieldSinPhase1;
+static int starfieldSinPhase2;
+static int starfieldSinPhase3;
+static int D_000A501C;
+static int D_000A5024;
+static int D_000A5028;
+static int D_000A5030;
+static int D_000A5034;
+static int D_000A5050;
+SVECTOR starfieldSinVec;
+int D_000A51BC;
 
 void RenderBackground(void) {
     MATRIX_000a5184 = perspMatrixes[cameraIndex];
@@ -176,7 +170,6 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
         playerEnemyDispListIdx = 0;
     }
 }
-
 
 void CalculateBlockLighting(void) {
     int i;
@@ -282,11 +275,6 @@ void RenderPlayerAndItems(void) {
     itemsDispListIdx = 0;
     playerEnemyDispListIdx = 0;
 }
-
-extern DR_TPAGE drTpages1[2][1];
-extern DR_TPAGE drTpages2[2][1];
-extern DR_AREA drawAreas[2][1];
-extern DR_OFFSET drawOffsets[2][1];
 
 void AddDrChangePrims(void) {
     if (tgi->skyboxFlag == 1025) {
