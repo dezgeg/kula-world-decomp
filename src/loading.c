@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <libcd.h>
 #include "zlib.h"
 
@@ -10,6 +9,19 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void UnusedLoadFullScreenPicture(void* param_1);
 extern void LoadingScreenVSyncCallback(void);
+
+extern char filenameBuf[24];
+extern int displayHeight;
+extern int displayWidth;
+extern int gameMode;
+extern int isFinal;
+extern int levelEndReason;
+extern int whichDrawDispEnv;
+extern void* otag[2][1][1026];
+extern char fileBuf[];
+
+int sizeOfSfxFile;
+int unusedReadErrorCode;
 
 char* LEVEL_DIRS[] = {
     "\\HIRO\\HIRO",
@@ -64,20 +76,7 @@ Music MUSICS[] = {
 
 char S_File_error[] = "File error:\n\n";
 
-int sizeOfSfxFile;
-int unusedReadErrorCode;
-
-extern char filenameBuf[24];
-extern int displayHeight;
-extern int displayWidth;
-extern int gameMode;
-extern int isFinal;
-extern int levelEndReason;
-extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
-
 static z_stream zlibStream_a4b80;
-extern char fileBuf[];
 
 void UnusedFileError(char* str1, char* str2) {
     VSyncCallback(NULL);
