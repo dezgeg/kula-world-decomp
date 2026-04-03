@@ -382,7 +382,7 @@ segments:
       - [0x622f0, data, menu_widgets]
       - [0x62458, data, sprite_init]
       - [0x62610, data, level_init]
-      - [0x62730, data, render2]
+      - [0x62730, .data, render2]
       - [0x627d0, .data, main]
       - [0x62a34, .data, sjis]
       - [0x62a9c, .data, cheats]
