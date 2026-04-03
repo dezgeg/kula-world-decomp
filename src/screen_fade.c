@@ -1,14 +1,14 @@
 #include "common.h"
 
-int halfFps;
-int screenFadeEnabled;
-int screenFadeSpeed;
-int screenFadeColor;
-
 extern void* otag[2][1][1026];
 extern int cameraIndex;
 extern TPolyF4 screenFadePolys[2][1];
 extern int whichDrawDispEnv;
+
+int halfFps;
+int screenFadeEnabled;
+int screenFadeSpeed;
+int screenFadeColor;
 
 void SetRenderScreenFade(int speed, int enableHalfFps) {
     screenFadeEnabled = 1;
