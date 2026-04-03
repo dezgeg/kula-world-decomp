@@ -71,6 +71,9 @@ int D_000A43E8;
 int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
 static SVECTOR SVECTOR_000a43e0;
+short debugCamY;
+short debugCamX;
+static VECTOR VECTOR_000a448c;
 static SVECTOR SVECTOR_000a449c;
 static VECTOR VECTOR_000a44a8;
 static VECTOR VECTOR_000a451c;
@@ -569,7 +572,26 @@ void ProcessCameraAndMovement(Player *player) {
     player->debugCamX = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update", HandleDebugCamera);
+void HandleDebugCamera(Player *player) {
+    player->playerHasControl = 1;
+
+    debugCamY = player->debugCamY % 4096;
+    do {} while(0);
+    debugCamX = player->debugCamX % 4096;
+
+    RotMatrixZ(debugCamX, &perspMatrixes[cameraIndex]);
+    RotMatrixX(debugCamY, &perspMatrixes[cameraIndex]);
+
+    VECTOR_000a448c.vx = -xMinPlusMax;
+    VECTOR_000a448c.vy = -yMinPlusMax;
+    VECTOR_000a448c.vz = -zMinPlusMax;
+
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a448c, &VECTOR_000a448c);
+
+    perspMatrixes[cameraIndex].t[0] = VECTOR_000a448c.vx;
+    perspMatrixes[cameraIndex].t[1] = VECTOR_000a448c.vy;
+    perspMatrixes[cameraIndex].t[2] = VECTOR_000a448c.vz + maxDistSquared;
+}
 
 void HandlePauseModeRotationEffect(Player* player) {
     player->playerHasControl = 0;
