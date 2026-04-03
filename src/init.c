@@ -4,15 +4,15 @@
 extern void ResetVibration(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 
-// gprel-used variables (defined in this file)
-int latestControllerSlotPolled;
-
 // non-gprel-used variables (extern)
 extern int displayHeight;
 extern int displayWidth;
 extern char padData[2][34];
 extern u_char padVibrationModeEntered[2];
 extern long projectionDistance;
+
+// gprel-used variables (defined in this file)
+int latestControllerSlotPolled;
 
 void InitStuff(void) {
     int j;
