@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <string.h>
 
 // Prototypes
@@ -24,19 +23,6 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR *dir, int volume);
 extern void SndProcessSpuVoices(void);
 extern uint Rand(int param_1);
 
-// gprel-used variables (defined in this file)
-short highscoreEntryCursorX;
-short highscoreEntryCursorY;
-int idleTimer;
-unsigned char rainbowColorB;
-unsigned char rainbowColorDeltaB;
-unsigned char rainbowColorDeltaG;
-unsigned char rainbowColorDeltaR;
-unsigned char rainbowColorG;
-unsigned char rainbowColorR;
-int repeatRateTimer;
-Highscore highscores[6];
-
 // non-gprel-used variables (extern)
 extern SVECTOR ZERO_SVECTOR_a3340;
 extern int curController;
@@ -55,7 +41,6 @@ extern int totalPlayTime[2];
 extern int whichDrawDispEnv;
 extern uint otag[2][1][1026];
 extern int highscoreLevelScores[6][150];
-
 extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
 extern char S__4[];
 extern char S__5[];
@@ -68,6 +53,19 @@ extern char S_FRUITS[];
 extern char S_TIME[];
 extern char S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE[];
 extern char S_FMTc[];
+
+// gprel-used variables (defined in this file)
+short highscoreEntryCursorX;
+short highscoreEntryCursorY;
+int idleTimer;
+unsigned char rainbowColorB;
+unsigned char rainbowColorDeltaB;
+unsigned char rainbowColorDeltaG;
+unsigned char rainbowColorDeltaR;
+unsigned char rainbowColorG;
+unsigned char rainbowColorR;
+int repeatRateTimer;
+Highscore highscores[6];
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
