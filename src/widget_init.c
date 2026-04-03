@@ -2,12 +2,12 @@
 
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
-static TSprite menuCursorSprite[2];
-static TSprite musicVolumeWidgetSprite[2];
-
 extern uint firstGuiTexture;
 extern TSprite sfxVolumeWidgetSprite[2];
 extern Texture textures[150];
+
+static TSprite menuCursorSprite[2];
+static TSprite musicVolumeWidgetSprite[2];
 
 void InitWidgetSprites(void) {
     TSpritePrim(&musicVolumeWidgetSprite[0], 0, 0, textures[firstGuiTexture + 13].tpage);
