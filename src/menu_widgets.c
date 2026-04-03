@@ -2,8 +2,6 @@
 
 extern void LoadMenuGfx(int menuId);
 
-extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
-extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
 extern PrimList primLists[2];
 extern TSprite bigGuiSprite1[2];
 extern TSprite bigGuiSprite2[2];
@@ -58,6 +56,17 @@ short MENU_CURSOR_X_POS[][6] = {
     {0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0},
 };
+short MENU_CURSOR_START_Y_PAUSE_MENU[20] = {
+    120, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+    100, 14, 100, 100, 80, 100, 90, 85, 120, 70,
+};
+
+short MENU_CURSOR_START_Y_MAIN_MENU[20] = {
+    130, 130, 130, 130, 130, 130, 120, 143, 131, 120,
+    143, 14, 100, 100, 80, 100, 90, 85, 100, 70,
+};
+char S_menugfx_too_high[] = "menugfx too high"; // hack
+char S_menugfx_nr_too_big[] = "menugfx nr too big"; // hack
 
 INCLUDE_ASM("asm/nonmatchings/menu_widgets", LoadMenuGfx);
 
