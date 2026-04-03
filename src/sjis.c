@@ -1,8 +1,12 @@
 #include "common.h"
-
 #include <ctype.h>
 
 // Based on ASC2SJIS.C and SJIS2ASC.C in PSX/SAMPLE/SCEE/ETC/CARDCONF/
+
+typedef union Swapper {
+    char byte[2];
+    unsigned short word;
+} Swapper;
 
 ushort SJIS_RANGES[3][2] = {
     {0x824f, 0x30},
@@ -17,12 +21,8 @@ ushort SJIS_SPECIAL_CHARS[] = {
 char S_SPECIAL_CHARS[] = {
     ' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':',
     ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '-', '~',
-};
 
-typedef union Swapper {
-    char byte[2];
-    unsigned short word;
-} Swapper;
+};
 
 int Ascii2Sjis(unsigned char ascii) {
     int sjis_code = 0;
