@@ -1,179 +1,11 @@
 #include "common.h"
 
-#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
-
 typedef struct ItemState {
     int collisionDistance;
     int type;
     MATRIX matrix;
     SVECTOR pos;
 } ItemState;
-
-int ballTextureIndex;
-int curController;
-short numCopycatMoves;
-short unusedNumCopycatRounds;
-
-int levelExitEntityOffset;
-int levelHiddenExitEntityOffset;
-
-int getBlockX;
-int getBlockY;
-int getBlockZ;
-int getBlockResult;
-
-short isPausedOrWaitingForRestart;
-
-extern int inGetReadyScreen;
-extern int isPaused;
-extern int levelEndReason;
-extern int debugDisableTimer;
-extern int drawTimerPausedWidget;
-extern int levelTimeLeft;
-extern uint fruitsCollectedBitmask;
-extern SVECTOR SVECTOR_000a2df4;
-int gameMode;
-extern int numCameras;
-static int levelWon[2];
-static SVECTOR playerCombinedPos;
-extern InvisBlockVisibility invisBlockVisibility;
-extern ItemState itemState[256];
-
-int D_000A4430;
-int D_000A43E8;
-int D_000A43DC;
-int DAT_000a4748;
-int DAT_000a474c;
-int DAT_000a4750;
-int DAT_000a4754;
-static SVECTOR SVECTOR_000a43ec;
-static SVECTOR SVECTOR_000a43e0;
-static SVECTOR initPlayerFacingVec;
-static SVECTOR initPlayerGravityVec;
-static SVECTOR initPlayerRightVec;
-static short playerFinePosMod512[4];
-
-int DAT_000a43c4;
-short DAT_000a43fc;
-short DAT_000a4400;
-short DAT_000a4404;
-short DAT_000a4408;
-short DAT_000a440c;
-short DAT_000a4410;
-static SVECTOR SVECTOR_000a4428;
-short mpVelSum;
-short tempI;
-short tempJ;
-short tempK;
-
-extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
-extern Player thePlayer;
-extern short* entityData;
-
-int ballTextureIndex;
-int curController;
-short numCopycatMoves;
-short unusedNumCopycatRounds;
-
-int getBlockX;
-int getBlockY;
-int getBlockZ;
-int getBlockResult;
-
-short isPausedOrWaitingForRestart;
-
-int hpbPrevControllerButtons;
-short copycatIdleTimer;
-short copycatStateVar;
-short curCopycatMove;
-short padCross;
-short padUp;
-short timerBeforeJumpOrRoll;
-short turnDelayEnabled;
-short turnDelayFrames;
-uint prevControllerButtons;
-uint controllerButtons;
-
-extern int GetButtonsFromReplay(void);
-extern void RecordButtonsToDevkit(int buttons);
-extern void SndMuteAllTaggedVoices(void);
-extern void WriteToDevkit(int param_1);
-extern int buttonSaveReplayMode;
-
-extern short numEntities;
-extern short* levelData;
-extern short copycatMoves[1024];
-extern short copycatNewOrCopyMoves;
-extern Player thePlayer;
-extern short* entityData;
-
-int transportDestCubeSide;
-int transportDestRotation;
-int transporterDestEntityIdx;
-int transporterTimer;
-
-extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
-extern void CalcWhatPlayerIsStandingOn(Player * player);
-extern int IsPlayerInAir(Player * player);
-extern void SetPlayerRotation(int cubeSide, int rotation, Player * player);
-extern void SetRenderScreenFade(int speed, int enableHalfFps);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
-extern void Vibrate98(int seqId);
-extern void UpdateSubpixelPositions(Player * player);
-extern SVECTOR transporterParticlesPos;
-
-void HandlePauseModeRotationEffect(Player* player);
-
-extern int inGetReadyScreen;
-extern int isPaused;
-extern int levelEndReason;
-extern int debugDisableTimer;
-extern int drawTimerPausedWidget;
-extern int levelTimeLeft;
-extern SVECTOR SVECTOR_000a2df4;
-int gameMode;
-extern int numCameras;
-static int levelWon[2];
-static SVECTOR playerCombinedPos;
-extern InvisBlockVisibility invisBlockVisibility;
-
-static SVECTOR initPlayerFacingVec;
-static SVECTOR initPlayerGravityVec;
-static SVECTOR initPlayerRightVec;
-
-extern int cameraIndex;
-extern int specialLevelType;
-extern int curWorld;
-extern int numKeysRemaining;
-extern int twoPlayerWhichPlayer;
-
-extern void CalcLevelBounds(Player* player);
-extern void CreateItemsFromLevelData(void);
-extern void HandlePlayerMovementStuff(Player* player);
-extern void InitEnemies(void);
-extern void ResetPlayerVars(Player* player);
-
-static SVECTOR SVECTOR_000a45d8;
-static SVECTOR SVECTOR_000a4638;
-static SVECTOR SVECTOR_000a4640;
-static SVECTOR SVECTOR_000a4738;
-static SVECTOR SVECTOR_000a4740;
-
-extern int FUN_00033720(SVECTOR * vec, int itemdataOff, int param_3);
-extern void FUN_0003418c(Player * player);
-extern int GetRotationIndexFromVector(SVECTOR vec);
-
-short calcI;
-short calcX2;
-short calcY2;
-short calcZ2;
-short D_000A45F8;
-short D_000A45FC;
-short D_000A4600;
-short calcJ;
-short calcK;
-static SVECTOR SVECTOR_000a4618;
-static short calcBlockType;
 
 typedef struct EntityPos {
     MATRIX matrix;
@@ -184,15 +16,29 @@ typedef struct EntityPos {
     byte reserved[8];
 } EntityPos;
 
-short pauseForStartPress;
-short fireSoundTimer;
-int shouldMarkCubesVisited;
-short D_000A45CC;
-
+extern int GetButtonsFromReplay(void);
+extern void RecordButtonsToDevkit(int buttons);
+extern void SndMuteAllTaggedVoices(void);
+extern void WriteToDevkit(int param_1);
+extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
+extern void CalcWhatPlayerIsStandingOn(Player * player);
+extern int IsPlayerInAir(Player * player);
+extern void SetPlayerRotation(int cubeSide, int rotation, Player * player);
+extern void SetRenderScreenFade(int speed, int enableHalfFps);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void Vibrate98(int seqId);
+extern void UpdateSubpixelPositions(Player * player);
+extern void CalcLevelBounds(Player* player);
+extern void CreateItemsFromLevelData(void);
+extern void HandlePlayerMovementStuff(Player* player);
+extern void InitEnemies(void);
+extern void ResetPlayerVars(Player* player);
+extern int FUN_00033720(SVECTOR * vec, int itemdataOff, int param_3);
+extern void FUN_0003418c(Player * player);
+extern int GetRotationIndexFromVector(SVECTOR vec);
 extern void RenderEnemies(void);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
 extern void CreateAllItemDispLists(void);
-
 extern void CheckPlayerJumpingStuff(Player * player);
 extern void HandleItemTouching(Player * player);
 extern void HandleSpecialCubeTypes(Player* player);
@@ -206,7 +52,138 @@ extern void StartMovementIfNeeded(Player * player);
 extern void UpdateEnemies(SVECTOR pos);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void Vibrate99(int magnitude1, int magnitude2, int count);
+
+void HandlePauseModeRotationEffect(Player* player);
 int IsFallingOrJumping(Player* player);
+
+extern int inGetReadyScreen;
+extern int isPaused;
+extern int levelEndReason;
+extern int debugDisableTimer;
+extern int drawTimerPausedWidget;
+extern int levelTimeLeft;
+extern uint fruitsCollectedBitmask;
+extern SVECTOR SVECTOR_000a2df4;
+extern int numCameras;
+extern InvisBlockVisibility invisBlockVisibility;
+extern ItemState itemState[256];
+extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
+extern Player thePlayer;
+extern short* entityData;
+extern int buttonSaveReplayMode;
+extern short numEntities;
+extern short* levelData;
+extern short copycatMoves[1024];
+extern short copycatNewOrCopyMoves;
+extern Player thePlayer;
+extern short* entityData;
+extern SVECTOR transporterParticlesPos;
+extern int inGetReadyScreen;
+extern int isPaused;
+extern int levelEndReason;
+extern int debugDisableTimer;
+extern int drawTimerPausedWidget;
+extern int levelTimeLeft;
+extern SVECTOR SVECTOR_000a2df4;
+extern int numCameras;
+extern InvisBlockVisibility invisBlockVisibility;
+extern int cameraIndex;
+extern int specialLevelType;
+extern int curWorld;
+extern int numKeysRemaining;
+extern int twoPlayerWhichPlayer;
+
+int ballTextureIndex;
+int curController;
+short numCopycatMoves;
+short unusedNumCopycatRounds;
+int levelExitEntityOffset;
+int levelHiddenExitEntityOffset;
+int getBlockX;
+int getBlockY;
+int getBlockZ;
+int getBlockResult;
+short isPausedOrWaitingForRestart;
+int gameMode;
+static int levelWon[2];
+static SVECTOR playerCombinedPos;
+int D_000A4430;
+int D_000A43E8;
+int D_000A43DC;
+int DAT_000a4748;
+int DAT_000a474c;
+int DAT_000a4750;
+int DAT_000a4754;
+static SVECTOR SVECTOR_000a43ec;
+static SVECTOR SVECTOR_000a43e0;
+static SVECTOR initPlayerFacingVec;
+static SVECTOR initPlayerGravityVec;
+static SVECTOR initPlayerRightVec;
+static short playerFinePosMod512[4];
+int DAT_000a43c4;
+short DAT_000a43fc;
+short DAT_000a4400;
+short DAT_000a4404;
+short DAT_000a4408;
+short DAT_000a440c;
+short DAT_000a4410;
+static SVECTOR SVECTOR_000a4428;
+short mpVelSum;
+short tempI;
+short tempJ;
+short tempK;
+int ballTextureIndex;
+int curController;
+short numCopycatMoves;
+short unusedNumCopycatRounds;
+int getBlockX;
+int getBlockY;
+int getBlockZ;
+int getBlockResult;
+short isPausedOrWaitingForRestart;
+int hpbPrevControllerButtons;
+short copycatIdleTimer;
+short copycatStateVar;
+short curCopycatMove;
+short padCross;
+short padUp;
+short timerBeforeJumpOrRoll;
+short turnDelayEnabled;
+short turnDelayFrames;
+uint prevControllerButtons;
+uint controllerButtons;
+int transportDestCubeSide;
+int transportDestRotation;
+int transporterDestEntityIdx;
+int transporterTimer;
+int gameMode;
+static int levelWon[2];
+static SVECTOR playerCombinedPos;
+static SVECTOR initPlayerFacingVec;
+static SVECTOR initPlayerGravityVec;
+static SVECTOR initPlayerRightVec;
+static SVECTOR SVECTOR_000a45d8;
+static SVECTOR SVECTOR_000a4638;
+static SVECTOR SVECTOR_000a4640;
+static SVECTOR SVECTOR_000a4738;
+static SVECTOR SVECTOR_000a4740;
+short calcI;
+short calcX2;
+short calcY2;
+short calcZ2;
+short D_000A45F8;
+short D_000A45FC;
+short D_000A4600;
+short calcJ;
+short calcK;
+static SVECTOR SVECTOR_000a4618;
+static short calcBlockType;
+short pauseForStartPress;
+short fireSoundTimer;
+int shouldMarkCubesVisited;
+short D_000A45CC;
+
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
 void CreateItemsFromLevelData(void) {
     int i, j, k;
@@ -694,7 +671,6 @@ void HandlePlayerButtons(Player *player) {
     }
     player->jumping = 0;
 
-
     player->rollingForward = 0;
     player->turnDirection = 0;
     player->cameraR1R2TurnDirection.vy = 0;
@@ -989,7 +965,6 @@ void CalcWhatPlayerIsStandingOn(Player *player) {
         }
     }
 }
-
 
 int GetBlockAt(SVECTOR* coord) {
     getBlockX = (coord->vx + 0x100) >> 9;
@@ -1440,7 +1415,6 @@ void CheckForButtonEntity(Player* player) {
         }
     }
 }
-
 
 int HandleTransporter(Player *player) {
     if (IsPlayerInAir(player)) {
