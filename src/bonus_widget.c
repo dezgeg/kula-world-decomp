@@ -1,10 +1,6 @@
 #include "common.h"
 
-// gprel-used variables (defined in this file)
-uint * bonusWidgetDataPtr;
-uint * bonusWidgetDataEnd;
-uint * bonusWidgetDataPtr2;
-int numBonusWidgetMsbs;
+typedef struct { uint c; } Col;
 
 // non-gprel-used variables (extern)
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
@@ -16,7 +12,11 @@ extern int numCubesRemainingInLevel[5];
 extern PrimList primLists[2];
 extern int whichDrawDispEnv;
 
-typedef struct { uint c; } Col;
+// gprel-used variables (defined in this file)
+uint * bonusWidgetDataPtr;
+uint * bonusWidgetDataEnd;
+uint * bonusWidgetDataPtr2;
+int numBonusWidgetMsbs;
 
 void DrawBonusWidget(void) {
     int i;
