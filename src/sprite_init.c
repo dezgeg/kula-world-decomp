@@ -21,16 +21,12 @@ extern DigitSprites levelTimeLeftDigitSprites;
 extern TgiFile* tgi;
 extern int displayHeight;
 extern int displayWidth;
-extern int FRUIT_BONUS_TEXT_POSITIONS1[];
-extern int FRUIT_BONUS_TEXT_POSITIONS2[];
-extern int FRUIT_WIDGET_POSITIONS[];
 extern int screenOffsetX;
 extern int screenOffsetY;
 extern int specialLevelType;
 extern POLY_FT4 hourglassSprites[2][3];
 extern POLY_FT4 lethargyEffectPoly[2];
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
-extern int BONUS_WIDGET_POSITIONS[];
 extern TSprite bonusWidgetSpritesMsbBackground[2][34];
 extern TSprite bonusWidgetSpritesMsbForeground[2][32];
 extern TSprite bonusWidgetSpritesPiechart[2][9];
@@ -44,6 +40,83 @@ extern TSprite keySprites[2][8];
 extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
+
+int KEY_SPRITE_POSITIONS[] = {
+    16, 219,
+    0, 0,
+    0, 0,
+    0, 0,
+
+    16, 219,
+    30, 219,
+    0, 0,
+    0, 0,
+
+    16, 219,
+    30, 219,
+    44, 219,
+    0, 0,
+
+    16, 219,
+    30, 219,
+    44, 219,
+    58, 219,
+
+    153, 219,
+    0, 0,
+    0, 0,
+    0, 0,
+
+    146, 219,
+    160, 219,
+    0, 0,
+    0, 0,
+
+    139, 219,
+    153, 219,
+    167, 219,
+    0, 0,
+
+    132, 219,
+    146, 219,
+    160, 219,
+    174, 219,
+};
+
+int FRUIT_WIDGET_POSITIONS[] = {
+    200, 224,
+    221, 221,
+    241, 223,
+    268, 221,
+    291, 224,
+};
+
+int FRUIT_BONUS_TEXT_POSITIONS1[] = {
+    200, 222,
+    221, 223,
+    243, 221,
+    267, 223,
+    289, 222,
+};
+
+int FRUIT_BONUS_TEXT_POSITIONS2[] = {
+    1, 1,
+    0, 1,
+    0, 1,
+    0, 1,
+    2, 1,
+};
+
+int BONUS_WIDGET_POSITIONS[] = {
+    11, 7,
+    7, 12,
+    7, 22,
+    11, 26,
+    21, 26,
+    26, 22,
+    26, 12,
+    21, 7,
+};
 
 uint BONUS_WIDGET_COLOR_DATA[96];
 uint SIZE_OF_UNK_ENTRY;
