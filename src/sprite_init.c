@@ -15,6 +15,7 @@ extern void InitLethargyEffectSprites(void);
 extern void InitScreenFadePolys(void);
 extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
+extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
 
 extern DigitSprites levelTimeLeftDigitSprites;
 extern TgiFile* tgi;
@@ -35,6 +36,14 @@ extern TSprite bonusWidgetSpritesMsbForeground[2][32];
 extern TSprite bonusWidgetSpritesPiechart[2][9];
 extern int numCubesRemainingInLevel[5];
 extern Texture textures[150];
+extern TPolyF4 screenFadePolys[2][1];
+extern TSprite copyrightSprite[2];
+extern TSprite fruitBonusTextSprites[2][10];
+extern TSprite fruitSprites[2][10];
+extern TSprite keySprites[2][8];
+extern TSprite lethargyEffectSprite[2][2];
+extern TSprite timerPausedSprite[2];
+extern TSprite titleSprite[2];
 
 uint BONUS_WIDGET_COLOR_DATA[96];
 uint SIZE_OF_UNK_ENTRY;
@@ -45,15 +54,6 @@ int* bonusWidgetDataPtr3;
 int drawBonusWidget;
 int firstBonusWidgetTexture;
 int numBonusWidgetMsbs;
-extern TPolyF4 screenFadePolys[2][1];
-extern TSprite copyrightSprite[2];
-extern TSprite fruitBonusTextSprites[2][10];
-extern TSprite fruitSprites[2][10];
-extern TSprite keySprites[2][8];
-extern TSprite lethargyEffectSprite[2][2];
-extern TSprite timerPausedSprite[2];
-extern TSprite titleSprite[2];
-
 GgiFile* ggi;
 int drawTimerPausedWidget;
 int firstFruitTexture;
@@ -326,8 +326,6 @@ void InitTimerPausedSprite(void) {
         timerPausedSprite[i].sprt.h = textures[firstGuiTexture + 19].h;
     }
 }
-
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
 
 void InitBonusWidgetSprites(void) {
     int dx;
