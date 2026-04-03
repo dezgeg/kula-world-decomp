@@ -5,12 +5,9 @@ typedef struct P {
     ulong* p1;
 } P;
 
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
-
 extern int GteTransformAndClipQuad(SVECTOR * v1, SVECTOR * v2, SVECTOR * v3, SVECTOR * v4, int out1, int out2, int out3, int out4, int* p1, int* p2, int* p3);
 extern void LoadScaledGteMatrix(MATRIX * matrix);
 
-extern int cameraIndex;
 extern int cameraIndex;
 extern int cubeStates[256 * 16];
 extern int* ggiPart0A;
@@ -19,24 +16,20 @@ extern int itemsDispList[];
 extern int itemsDispListIdx;
 extern int playerEnemyDispListIdx;
 extern int specialLevelType;
-extern int specialLevelType;
-extern int whichDrawDispEnv;
 extern int whichDrawDispEnv;
 extern POLY_FT4 shadowPrims[2][1][2][16];
 extern P shadowPrimPtrs[2][1][2][16];
 extern short* tgiPart1;
-extern short* tgiPart1;
-extern short* tgiPart3;
 extern short* tgiPart3;
 extern SVECTOR SHADOW_VERTEX1;
 extern SVECTOR SHADOW_VERTEX2;
 extern SVECTOR SHADOW_VERTEX3;
 extern SVECTOR SHADOW_VERTEX4;
-extern TgiFile * tgi;
 extern TgiFile* tgi;
 extern void* otag[2][1][1026];
-extern void* otag[2][1][1026];
 extern void* playerEnemyDispList[];
+
+#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 void Unused_FUN_0002caec(MATRIX *m, int z, int modelId, int param_4, int param_5, int param_6,int param_7, int param_8) {
     int* p;
