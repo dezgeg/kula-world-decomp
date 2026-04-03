@@ -4,9 +4,6 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void SetDebugScreenshotFilenameSuffix(int param_1);
 
-int screenshotNumBytes;
-static RECT screenshotRect;
-
 extern byte saveReplayBuf[4076];
 extern char debugFilenameBuf[];
 extern int buttonSaveReplayMode;
@@ -18,11 +15,13 @@ extern int saveReplayIsFirstSequence;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
 extern byte* saveReplayWritePtr;
-
 extern volatile short saveReplayCurrentButtons;
 extern volatile byte saveReplayCurrentButtonsShuffled;
 extern volatile int saveReplayLength;
 extern volatile byte saveReplayRleButtonCount;
+
+int screenshotNumBytes;
+static RECT screenshotRect;
 
 static char* DEBUG_SCREENSHOT_WORLD_NAMES[13] = {
     "hir",
@@ -39,9 +38,11 @@ static char* DEBUG_SCREENSHOT_WORLD_NAMES[13] = {
     "bon",
     "hid",
 };
+
 static int screenshotIndex[13] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
+
 static uint screenshotTimHeader[5] = {
     0x10, 0x2, 0x0, 0x0, 0x0
 };
