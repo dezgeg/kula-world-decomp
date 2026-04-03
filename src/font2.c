@@ -2,12 +2,11 @@
 
 extern void InitWidgetSprites(void);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
+extern void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y,
+                         int texIndex);
 
 extern int displayWidth;
 extern uint firstGuiTexture;
-
-extern void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y,
-                         int texIndex);
 
 void InitFont(void) {
     int i;
