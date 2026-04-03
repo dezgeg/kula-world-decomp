@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <string.h>
 
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
@@ -37,6 +36,17 @@ extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern uint prevControllerButtons;
+extern char S_[];
+extern char S_1[];
+extern char S__2[];
+extern char S_2[];
+extern char S__3[];
+extern char S_FMTd_3[];
+extern char S_FMTd_4[];
+extern char S_FMTd_6[];
+extern char S_FMTd_FMTd[];
+extern char S_FMTd_FMTdFMTd[];
+extern char S_FMTd_FMTdFMTd_FMTdFMTd[];
 
 int copycatModeStartingPlayer;
 int curMenu;
@@ -57,18 +67,6 @@ short qualifyScreenCursorY;
 static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
 }
-
-extern char S_[];
-extern char S_1[];
-extern char S__2[];
-extern char S_2[];
-extern char S__3[];
-extern char S_FMTd_3[];
-extern char S_FMTd_4[];
-extern char S_FMTd_6[];
-extern char S_FMTd_FMTd[];
-extern char S_FMTd_FMTdFMTd[];
-extern char S_FMTd_FMTdFMTd_FMTdFMTd[];
 
 void UpdateScoreAtEndOfLevel(void) {
     int bonusScore;
