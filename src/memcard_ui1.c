@@ -1,16 +1,10 @@
 #include "common.h"
-
 #include "zlib.h"
 
 // Prototypes
 extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
-
-// gprel-used variables (defined in this file)
-int inflateRetCode;
-int whichLevelEndSpriteLoaded;
-z_stream zlibStream_a4dd4; // also used non-gprel
 
 // non-gprel-used variables (extern)
 extern int displayWidth;
@@ -34,11 +28,15 @@ extern TSprite saveSlot2Sprite1[2];
 extern TSprite saveSlot2Sprite2[2];
 extern TSprite saveSlot3Sprite1[2];
 extern TSprite saveSlot3Sprite2[2];
-
 extern char S_Fatal_error_in_jens_2d_eng[];
 extern char S_sign_too_high[];
 extern char S_sign_nr_too_big[];
 extern char S_1_0_4[];
+
+// gprel-used variables (defined in this file)
+int inflateRetCode;
+int whichLevelEndSpriteLoaded;
+z_stream zlibStream_a4dd4; // also used non-gprel
 
 void InitMemcardUi(void) {
     RECT rect;
