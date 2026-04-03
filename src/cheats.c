@@ -14,6 +14,17 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TweakSkyboxColors(uint param_1);
 
+extern CheatState cheatState[9];
+extern uint controllerButtons;
+extern int finalUnlocked;
+extern int gameState;
+extern int isPaused;
+extern int levelEndReason;
+extern int levelPlayTime[2];
+extern int levelScore;
+extern int specialLevelType;
+extern uint prevControllerButtons;
+
 static uint CHEAT_BUTTONS[][8] = {
     { PAD_L1, PAD_CIRCLE, PAD_L, PAD_R, PAD_L2, PAD_L, PAD_R2, PAD_R2, },
     { PAD_R, PAD_CIRCLE, PAD_SQUARE, PAD_L1, PAD_SQUARE, PAD_CIRCLE, PAD_CIRCLE, PAD_SQUARE, },
@@ -35,17 +46,6 @@ int cheated;
 
 int sioCheatActivated = 0; // .sdata
 SVECTOR SVECTOR_000a3334 = { 0, 0, 0, 0}; // .sdata
-
-extern CheatState cheatState[9];
-extern uint controllerButtons;
-extern int finalUnlocked;
-extern int gameState;
-extern int isPaused;
-extern int levelEndReason;
-extern int levelPlayTime[2];
-extern int levelScore;
-extern int specialLevelType;
-extern uint prevControllerButtons;
 
 void ResetCheats(void) {
     int i, j;
