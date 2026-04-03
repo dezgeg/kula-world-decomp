@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <libcd.h>
 #include <libgpu.h>
 
@@ -9,6 +8,15 @@ extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering,
                          u_char use24Bit);
 extern void SndSetMusicVolume(void);
+
+extern CdlFILE musicCdlfile;
+extern CdlLOC musicBonusLoc;
+extern CdlLOC musicCdlLoc;
+extern CdlLOC savedMusicCdlLoc;
+extern Music BONUS_MUSICS[3];
+extern Music MUSICS[11];
+extern int musicCdMode;
+extern int whichDrawDispEnv;
 
 short bonusMusicIndex = 0;
 short playingBonusMusic = 0;
@@ -26,16 +34,6 @@ int savedMusicCurSector;
 int savedMusicEndSector;
 int savedMusicStartSector;
 int savedMusicXaChan;
-
-extern CdlFILE musicCdlfile;
-extern CdlLOC musicBonusLoc;
-extern CdlLOC musicCdlLoc;
-extern CdlLOC savedMusicCdlLoc;
-extern Music BONUS_MUSICS[3];
-extern Music MUSICS[11];
-extern int musicCdMode;
-
-extern int whichDrawDispEnv;
 
 void PlayMusic(int world) {
     extern char S_File_error[];
@@ -247,6 +245,7 @@ void UnusedDebugPrintMusicVariables(void) {
             savedMusicStartSector, savedMusicEndSector, savedMusicCurSector);
 }
 
+// XXX: These variables have to be here in order to match
 static CdlLOC musicCurLoc = { 0, 0, 0, 0 };
 static char PAD[8] = { 0 }; // hack
 
