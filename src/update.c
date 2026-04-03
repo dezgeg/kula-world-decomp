@@ -1,9 +1,5 @@
 #include "common.h"
 
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
-
-typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
-
 typedef struct MovingPlatformEntity2 {
     short tag;
     short movementDirection;
@@ -33,6 +29,10 @@ typedef struct MovingPlatformEntity2 {
     char pad4[12];
 } MovingPlatformEntity2;
 
+typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
+
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+
 extern TgiFile* tgi;
 extern int turningMotionBlurEnabled;
 extern int turningMotionBlurPhase;
@@ -47,7 +47,6 @@ extern int sunglassSeeEverything[];
 extern int numRetractableSpikes;
 extern MATRIX perspMatrixes[];
 extern int retractingSpikeData[64 * 2];
-
 extern QuadFunc QUAD_FUNC_PTRS[6];
 extern short movingBlockEntityIndexes[16];
 extern short* entityData;
@@ -200,7 +199,6 @@ void SetSunglassMode(int on) {
         sunglassSeeEverything[cameraIndex] = 1;
     }
 }
-
 
 void UpdateSunglassModeDisabling(void) {
     int idx = cameraIndex;
