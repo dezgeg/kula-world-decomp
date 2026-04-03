@@ -1,6 +1,25 @@
 #include "common.h"
 #include <libgte.h>
 
+extern int GetBlockAt(SVECTOR* coord);
+extern int GetRotationIndexFromVector(SVECTOR v);
+extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7, int p8, int blockX, int blockY, int blockZ, int dirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int p16, MATRIX* gteMatrix, int shadowColor, int p19);
+extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
+extern void InitEnemy(int side, int rotation, Enemy* enemy);
+extern int Rand(int);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan);
+
+int EnemyIsBlockWalkable(int blockType, int rotationIndex);
+int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy);
+
+extern Enemy enemies[];
+extern int cameraIndex;
+extern Enemy enemies[];
+extern MATRIX perspMatrixes[];
+extern short* entityData;
+extern short numEntities;
+
 int collI;
 int enemyPlayerDistSq;
 int numEnemies;
@@ -10,8 +29,6 @@ int loopI;
 int blockProgress;
 int sumOfDeltas;
 int DAT_000a4850;
-extern Enemy enemies[];
-
 static SVECTOR tmpEnemyPos;
 static SVECTOR tmpEnemyScreenPos;
 static SVECTOR tmpEnemyPixelPos;
@@ -24,32 +41,13 @@ static SVECTOR SVECTOR_000a4828;
 static SVECTOR SVECTOR_000a4830;
 static SVECTOR SVECTOR_000a4838;
 static SVECTOR SVECTOR_000a47e8;
-
 static SVECTOR SVECTOR_000a48fc;
 static SVECTOR SVECTOR_000a48e4;
 static SVECTOR SVECTOR_000a48ec;
 static SVECTOR SVECTOR_000a48f4;
-
 static MATRIX rotationMatrix;
 MATRIX MATRIX_000a48a4;
 static MATRIX MATRIX_000a48c4;
-
-extern int cameraIndex;
-extern Enemy enemies[];
-extern MATRIX perspMatrixes[];
-
-extern int GetBlockAt(SVECTOR* coord);
-extern int GetRotationIndexFromVector(SVECTOR v);
-extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7, int p8, int blockX, int blockY, int blockZ, int dirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int p16, MATRIX* gteMatrix, int shadowColor, int p19);
-extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
-extern short* entityData;
-extern short numEntities;
-extern void InitEnemy(int side, int rotation, Enemy* enemy);
-extern int Rand(int);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
-extern void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan);
-int EnemyIsBlockWalkable(int blockType, int rotationIndex);
-int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy);
 
 void InitEnemies(void) {
     int i, j;
