@@ -29,8 +29,6 @@ extern TSprite saveSlot2Sprite2[2];
 extern TSprite saveSlot3Sprite1[2];
 extern TSprite saveSlot3Sprite2[2];
 extern char S_Fatal_error_in_jens_2d_eng[];
-extern char S_sign_too_high[];
-extern char S_sign_nr_too_big[];
 extern char S_1_0_4[];
 
 // gprel-used variables (defined in this file)
@@ -70,7 +68,7 @@ void InitMemcardUi(void) {
             whichDrawDispEnv = 0;
             PutDrawAndDispEnvs();
             FntPrint(S_Fatal_error_in_jens_2d_eng);
-            FntPrint(S_sign_too_high);
+            FntPrint("sign too high");
             FntFlush(-1);
             whichDrawDispEnv = 1;
             PutDrawAndDispEnvs();
@@ -98,7 +96,7 @@ void InitMemcardUi(void) {
             whichDrawDispEnv = 0;
             PutDrawAndDispEnvs();
             FntPrint(S_Fatal_error_in_jens_2d_eng);
-            FntPrint(S_sign_nr_too_big);
+            FntPrint("sign nr too big");
             FntFlush(-1);
             whichDrawDispEnv = 1;
             PutDrawAndDispEnvs();

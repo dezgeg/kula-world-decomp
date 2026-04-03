@@ -447,6 +447,7 @@ segments:
       - [0x921d0, data, libapi/pad]
       - [0x921e0, .sdata, lensflare]
       - [0x922b4, sdata, nonmatched/sdata_922b4]
+      - [0x92368, .sdata, memcard_ui1]
       - [0x92388, .sdata, background_cubes]
       - [0x923d0, .sdata, psx_button_background]
       - [0x923d8, .sdata, spinning_selection]
