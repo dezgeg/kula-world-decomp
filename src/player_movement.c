@@ -1,5 +1,31 @@
 #include "common.h"
 
+extern void EnableScreenShake(int param_1, int param_2, int param_3);
+extern int GetBlockAt(SVECTOR * coord);
+extern void MovePlayerDownwards(Player * player, int param_2);
+extern void ResetPlayerMatrix274(Player * player);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void UpdateSubpixelPositions(Player * player);
+extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
+extern int GetRotationIndexFromVector(SVECTOR vec);
+extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR * param_3);
+extern int HandleMovingPlatforms(Player * player);
+extern void ClearA4374(Player *player);
+extern void EnableTurningMotionBlur(void);
+extern int FUN_0003382c(); // XXX: this should take Player* player
+extern void JumpingOnMovingPlatform(Player *player);
+extern void MovePlayerForward(Player * player, int delta);
+extern void SetCubeVisited(int x, int y, int z, int visitType);
+extern int IsSubpixelZBelow257(Player * player);
+
+extern short *ggiPart5JumpAnimData;
+extern int gameMode;
+extern int levelTimeLeft;
+extern SVECTOR SVECTOR_000a2dd8;
+extern short* entityData;
+extern short isPausedOrWaitingForRestart;
+extern int shouldMarkCubesVisited;
+
 short idleSquishSinPhase;
 short idleSquishMagnitude;
 static SVECTOR SVECTOR_000a4358;
@@ -11,23 +37,6 @@ short landingSquishMagnitudeIncrement;
 short landingSquishMagnitude;
 short landingSquishFrameCounter;
 short landingSquishDamping;
-extern short *ggiPart5JumpAnimData;
-extern int gameMode;
-extern int levelTimeLeft;
-
-extern void EnableScreenShake(int param_1, int param_2, int param_3);
-extern int GetBlockAt(SVECTOR * coord);
-extern void MovePlayerDownwards(Player * player, int param_2);
-extern void ResetPlayerMatrix274(Player * player);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
-extern void UpdateSubpixelPositions(Player * player);
-extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
-extern SVECTOR SVECTOR_000a2dd8;
-extern short* entityData;
-extern short isPausedOrWaitingForRestart;
-extern int GetRotationIndexFromVector(SVECTOR vec);
-extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR * param_3);
-
 static SVECTOR cubePlayerIsOn;
 static int D_000A41B0;
 static short DAT_000a41b4;
@@ -35,23 +44,11 @@ static short DAT_000a41b8;
 static SVECTOR SVECTOR_000a41bc;
 static SVECTOR tempNewPlayerPos;
 int tempNewBlock;
-
-extern int HandleMovingPlatforms(Player * player);
-extern void ClearA4374(Player *player);
-extern void EnableTurningMotionBlur(void);
-extern int FUN_0003382c(); // XXX: this should take Player* player
-extern void JumpingOnMovingPlatform(Player *player);
-extern void MovePlayerForward(Player * player, int delta);
-extern void SetCubeVisited(int x, int y, int z, int visitType);
-extern int shouldMarkCubesVisited;
-extern int IsSubpixelZBelow257(Player * player);
-
 void StartJumpingForward(Player *player);
 void StartJumpingInplace(Player *player);
 void StartRollingForward(Player *player);
 void TurnLeft(Player *player);
 void TurnRight(Player *player);
-
 
 void ResetPlayerVars(Player *player) {
     player->howMoving198 = NOT_MOVING;
@@ -663,7 +660,6 @@ int CheckForPlayerWallHit(Player *player) {
     }
     return 0;
 }
-
 
 int FUN_00031288(Player *player) {
     if (player->subpixelPositionOnCube.vy < 412) return 0;
