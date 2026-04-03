@@ -1,13 +1,7 @@
 #include "common.h"
-
 #include <libmcrd.h>
 
 extern void ShowMemCardFullScreenText(char* str);
-
-int INT_000a5690;
-int memCardDataValid;
-long mcResult;
-long tempMcResult;
 
 extern DrawDisp drawdisp[2];
 extern Highscore highscores[6];
@@ -34,6 +28,13 @@ extern int vibrationEnabled;
 extern long mcCmd;
 extern short numFruits;
 extern short turnDelayEnabled;
+extern char S_KULA_WORLD[];
+extern char S_BESCES_01000KULA[16];
+
+int INT_000a5690;
+int memCardDataValid;
+long mcResult;
+long tempMcResult;
 
 static inline void SetDispScreen(ushort x, ushort y) {
     drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
@@ -186,9 +187,6 @@ int LoadSaveSlot(uint slot) {
     }
     return 1;
 }
-
-extern char S_KULA_WORLD[];
-extern char S_BESCES_01000KULA[16];
 
 int SaveMemCard(uint slot) {
     int ret;
