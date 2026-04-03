@@ -17,6 +17,21 @@ typedef struct LocalMovingPlatformEntity {
     short posX, posY, posZ;       // 0xee, 0xf0, 0xf2
 } LocalMovingPlatformEntity;
 
+extern int GetBlockAt(SVECTOR * coord);
+
+// non-gprel-used variables (extern)
+extern short* entityData;
+extern short numEntities;
+extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
+extern SVECTOR SVECTOR_000a2de4;
+extern SVECTOR SVECTOR_allMinus1;
+extern Player thePlayer;
+extern short* entityData;
+extern int cameraIndex;
+extern MATRIX perspMatrixes[];
+extern int specialLevelType;
+extern int gameMode;
+
 // gprel-used variables (defined in this file)
 int D_000A4398; // mpOff
 int D_000A439C; // swapMovingPlatformDir
@@ -26,11 +41,6 @@ int DAT_000a43ac;
 int D_000A43B0;
 int mpLengthScaled;
 int mI;
-
-// non-gprel-used variables (extern)
-extern short* entityData;
-extern short numEntities;
-
 int DAT_000a43c4;
 short DAT_000a43fc;
 short DAT_000a4400;
@@ -43,21 +53,7 @@ short mpVelSum;
 short tempI;
 short tempJ;
 short tempK;
-
-extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
-extern SVECTOR SVECTOR_000a2de4;
-extern SVECTOR SVECTOR_allMinus1;
-extern Player thePlayer;
-extern short* entityData;
-
 int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
-
-extern int GetBlockAt(SVECTOR * coord);
-extern int cameraIndex;
-extern MATRIX perspMatrixes[];
-extern int specialLevelType;
-extern int gameMode;
-
 static SVECTOR SVECTOR_000a4514;
 static SVECTOR SVECTOR_000a44b8;
 static SVECTOR SVECTOR_000a44c0;
@@ -69,14 +65,12 @@ static int r1TurnDelta;
 static int DAT_000a450c;
 static int DAT_000a4508;
 static int DAT_000a4598;
-
 int D_000A4430;
 static VECTOR VECTOR_000a4434;
 int D_000A43E8;
 int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
 static SVECTOR SVECTOR_000a43e0;
-
 static SVECTOR SVECTOR_000a449c;
 static VECTOR VECTOR_000a44a8;
 static VECTOR VECTOR_000a451c;
@@ -89,13 +83,11 @@ static VECTOR initPlayerGravityDir;
 static VECTOR facingGravityProd;
 static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
-
 int maxDistSquared;
 int xMinPlusMax;
 int yMinPlusMax;
 int zMinPlusMax;
 int zoomInAndOutPhase;
-
 int DAT_000a43c8;
 int movingPlatformEntityId;
 int mpCounter;
