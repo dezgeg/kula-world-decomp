@@ -2,10 +2,6 @@
 
 extern void LoadMenuGfx(int menuId);
 
-int bigGuiSpriteFade;
-int menuCursorSinPhase;
-int whichLevelEndSpriteLoaded;
-
 extern short MENU_CURSOR_MOVE_SPEED[15][6];
 extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
 extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
@@ -25,6 +21,10 @@ extern int musicVolume;
 extern int sfxVolume;
 extern int whichDrawDispEnv;
 extern uint firstGuiTexture;
+
+int bigGuiSpriteFade;
+int menuCursorSinPhase;
+int whichLevelEndSpriteLoaded;
 
 void DrawWidgets(int menuId, int cursorPos) {
     if (menuId == 2 || menuId == 3) {
