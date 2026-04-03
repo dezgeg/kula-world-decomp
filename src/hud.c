@@ -5,14 +5,6 @@ typedef struct DigitSprites {
 } DigitSprites;
 
 extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
-extern int BONUS_WIDGET_COLOR_DATA_LEN;
-extern uint BONUS_WIDGET_COLOR_DATA[96];
-extern SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5];
-extern TSprite fruitBonusTextSprites[2][5][2];
-extern TSprite fruitSprites[2][5][2];
-extern int fruitsCollectedBitmask;
-extern int specialLevelType;
-
 extern void DrawBonusWidget(void);
 extern void DrawHourglassAndTimer(void);
 extern void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value);
@@ -22,30 +14,13 @@ extern void DrawScore(void);
 extern void DrawTimeAttackWidgets(void);
 extern void UpdateStaticHourglassClut(void);
 
-int* bonusWidgetDataEnd;
-int* bonusWidgetDataPtr3;
-int drawBonusWidget;
-int drawCopycatWidgets;
-int drawFruitWidgets;
-int drawHourglassWidget;
-int drawKeyWidget;
-int drawScoreWidget;
-int drawTimeAttackWidgets;
-int drawTimerPausedWidget;
-int fruitBonusTextIndex;
-int fruitBonusTextTimer;
-int fruitWidgetDisplayMode;
-int hourglassIsRotating;
-int hourglassRotationTimer;
-int levelTimeLeft;
-int numKeysInLevel;
-int smoothIncrementingScore;
-GgiFile* ggi;
-short* ggiPart1HourglassAnim;
-uint firstGuiTexture;
-
-static short HOURGLASS_ANIM_DATA[29][2];
-
+extern int BONUS_WIDGET_COLOR_DATA_LEN;
+extern uint BONUS_WIDGET_COLOR_DATA[96];
+extern SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5];
+extern TSprite fruitBonusTextSprites[2][5][2];
+extern TSprite fruitSprites[2][5][2];
+extern int fruitsCollectedBitmask;
+extern int specialLevelType;
 extern DigitSprites copycatPlayer1ScoreDigitSprites;
 extern DigitSprites copycatPlayer2ScoreDigitSprites;
 extern DigitSprites levelScoreSprite;
@@ -75,6 +50,29 @@ extern short hourglassClut[60];
 extern Texture textures[150];
 extern TSprite keySprites[2][4][2];
 extern TSprite timerPausedSprite[2];
+
+int* bonusWidgetDataEnd;
+int* bonusWidgetDataPtr3;
+int drawBonusWidget;
+int drawCopycatWidgets;
+int drawFruitWidgets;
+int drawHourglassWidget;
+int drawKeyWidget;
+int drawScoreWidget;
+int drawTimeAttackWidgets;
+int drawTimerPausedWidget;
+int fruitBonusTextIndex;
+int fruitBonusTextTimer;
+int fruitWidgetDisplayMode;
+int hourglassIsRotating;
+int hourglassRotationTimer;
+int levelTimeLeft;
+int numKeysInLevel;
+int smoothIncrementingScore;
+GgiFile* ggi;
+short* ggiPart1HourglassAnim;
+uint firstGuiTexture;
+static short HOURGLASS_ANIM_DATA[29][2];
 
 void DrawHud(void) {
     addPrim(&primLists[whichDrawDispEnv].gui3, &hudDrTpages[whichDrawDispEnv]);
