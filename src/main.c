@@ -34,7 +34,6 @@ extern void VariousInit(void);
 extern void WriteToDevkit(int param_1);
 
 extern int copycatModeStartingPlayer;
-extern int DEMO_LEVELS[3];
 extern int dispenvScreenX;
 extern int dispenvScreenY;
 extern int drawCopyright;
@@ -91,6 +90,40 @@ int whichDrawDispEnv;
 short numFruits;
 
 static z_stream levelLoadZlibStream;
+
+int DEMO_LEVELS[] = {4, 19, 41};
+int TIME_TRIAL_PAR_TIMES[] = {
+    1, 6, 5, 12, 3,
+    16, 19, 9, 8, 14,
+    12, 13, 10, 5, 22,
+    12, 14, 12, 16, 16,
+    1, 3, 9, 14, 7,
+    12, 7, 8, 8, 13,
+    3, 7, 5, 13, 14,
+    5, 14, 12, 7, 13,
+    18, 23, 23, 21, 27,
+    16, 16, 6, 16, 15,
+    5, 23, 8, 19, 7,
+    20, 11, 18, 45, 27,
+    1, 13, 12, 32, 26,
+    18, 19, 24, 33, 18,
+    25, 14, 16, 26, 31,
+    15, 18, 3, 8, 12,
+    9, 46, 14, 23, 18,
+    13, 4, 15, 17, 21,
+    11, 18, 27, 15, 39,
+    20, 19, 41, 30, 50,
+    30, 39, 30, 16, 21,
+    28, 16, 25, 20, 17,
+    34, 35, 13, 8, 18,
+    20, 6, 10, 22, 9,
+    7, 19, 18, 22, 6,
+    31, 32, 29, 18, 20,
+    32, 20, 36, 24, 26,
+    17, 35, 34, 34, 10,
+    16, 55, 44, 51, 35,
+    29, 32, 54, 40, 18,
+};
 
 void main(void) {
     extern char S_FMTx[];
