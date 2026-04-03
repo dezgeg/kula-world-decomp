@@ -1,7 +1,5 @@
 #include "common.h"
 
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
-
 typedef struct P {
     ulong* p0;
     ulong* p1;
@@ -47,6 +45,12 @@ typedef struct FlashingEntity {
 } FlashingEntity;
 
 extern uint Rand(int param_1);
+extern void ProcessCubesIntoFaces(void);
+extern void ScanLevelDataForMovingBlocks1(void);
+extern void InitLasers2(void);
+extern void ProcessMovingPlatforms2(void);
+extern void FUN_000298e0(AnimatedTextureChain * textureChain);
+extern void ScanLevelDataForRetractableSpikes(void);
 
 extern POLY_FT4 shadowPrims[2][1][2][16];
 extern POLY_FT4 specularPrims[2][1][16];
@@ -58,6 +62,25 @@ extern uint firstGuiTexture;
 extern uint firstGuiTexture;
 extern int cubeStates[16 * 256];
 extern short flashingBlockEntityIndexes[64];
+extern byte D_000735B5[];
+extern byte D_00073634[];
+extern uint D_00073798[];
+extern byte D_000737D4[];
+extern byte BYTE_ARRAY_00073588[52];
+extern byte BYTE_ARRAY_000735bc[124];
+extern byte BYTE_ARRAY_0007379c[60];
+extern uint SIZE_OF_UNK_ENTRY;
+extern uint UINT_ARRAY_00073638[89];
+extern uint UINT_ARRAY_000737d8[16];
+extern AnimatedTextureChain bonusBlockTextureChain;
+extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
+extern int curWorld;
+extern AnimatedTextureChain fireBlockTextureChain;
+extern AnimatedTextureChain invisibleBlockTextureChain;
+extern uint UNK_ENTRIES[];
+extern int invisBlockVisibility[6];
+extern int gameMode;
+extern int numKeysInLevel;
 
 TgiFile* tgi;
 FaceData* faceDataPtr;
@@ -72,36 +95,9 @@ int cubeCounter;
 int numCubesInLevelTmp;
 int numCubesRemainingInLevel[5];
 int numberOfCubeFaces;
-
-extern byte D_000735B5[];
-extern byte D_00073634[];
-extern uint D_00073798[];
-extern byte D_000737D4[];
-
-extern byte BYTE_ARRAY_00073588[52];
-extern byte BYTE_ARRAY_000735bc[124];
-extern byte BYTE_ARRAY_0007379c[60];
-extern uint SIZE_OF_UNK_ENTRY;
-extern uint UINT_ARRAY_00073638[89];
-extern uint UINT_ARRAY_000737d8[16];
-extern AnimatedTextureChain bonusBlockTextureChain;
-extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
-extern int curWorld;
-extern AnimatedTextureChain fireBlockTextureChain;
-extern AnimatedTextureChain invisibleBlockTextureChain;
-extern uint UNK_ENTRIES[];
-
-extern void ProcessCubesIntoFaces(void);
-extern void ScanLevelDataForMovingBlocks1(void);
-extern void InitLasers2(void);
-extern void ProcessMovingPlatforms2(void);
-extern void FUN_000298e0(AnimatedTextureChain * textureChain);
-extern void ScanLevelDataForRetractableSpikes(void);
-
-extern int invisBlockVisibility[6];
-extern int gameMode;
-extern int numKeysInLevel;
 short* levelData;
+
+#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 void ProcessLevelData(void) {
     int i;
