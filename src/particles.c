@@ -9,6 +9,14 @@ typedef struct Particle {
     int lightEffectId;
 } Particle;
 
+extern Particle particles[2][16];
+extern int firstParticleTexture;
+extern int numParticleTextures;
+extern int cameraIndex;
+extern int numCameras;
+extern POLY_FT4 particlePolyTemplates[7];
+extern Texture textures[150];
+
 static byte PARTICLE_COLOR_DATA[7][3];
 static short PARTICLE_TYPE_0[450];
 static short PARTICLE_TYPE_1[258];
@@ -19,14 +27,6 @@ static short PARTICLE_TYPE_8[354];
 static short PARTICLE_TYPE_9[330];
 static short* PARTICLE_TYPE_PTRS[12];
 static int numParticles[2];
-extern Particle particles[2][16];
-
-extern int firstParticleTexture;
-extern int numParticleTextures;
-extern int cameraIndex;
-extern int numCameras;
-extern POLY_FT4 particlePolyTemplates[7];
-extern Texture textures[150];
 
 void InitParticles(void) {
     int i;
