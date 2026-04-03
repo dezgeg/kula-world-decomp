@@ -1054,9 +1054,71 @@ void UpdateSubpixelPositions(Player* player) {
     player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", MovePlayerForward);
+void MovePlayerForward(Player *player, short delta) {
+    if (player->facingDir.vx == 1) {
+        player->finePos.vx = ((player->finePos.vx + 256) >> 9 << 9);
+        player->finePos.vx += delta;
+        player->finePos.vx -= 256;
+    }
+    if (player->facingDir.vx == -1) {
+        player->finePos.vx = ((player->finePos.vx + 256) >> 9 << 9);
+        player->finePos.vx -= delta;
+        player->finePos.vx += 256;
+    }
+    if (player->facingDir.vy == 1) {
+        player->finePos.vy = ((player->finePos.vy + 256) >> 9 << 9);
+        player->finePos.vy += delta;
+        player->finePos.vy -= 256;
+    }
+    if (player->facingDir.vy == -1) {
+        player->finePos.vy = ((player->finePos.vy + 256) >> 9 << 9);
+        player->finePos.vy -= delta;
+        player->finePos.vy += 256;
+    }
+    if (player->facingDir.vz == 1) {
+        player->finePos.vz = ((player->finePos.vz + 256) >> 9 << 9);
+        player->finePos.vz += delta;
+        player->finePos.vz -= 256;
+    }
+    if (player->facingDir.vz == -1) {
+        player->finePos.vz = ((player->finePos.vz + 256) >> 9 << 9);
+        player->finePos.vz -= delta;
+        player->finePos.vz += 256;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", MovePlayerDownwards);
+void MovePlayerDownwards(Player *player, short delta) {
+    if (player->gravityDir.vx == 1) {
+        player->finePos.vx = player->finePos.vx >> 9 << 9;
+        player->finePos.vx += delta;
+        player->finePos.vx += 256;
+    }
+    if (player->gravityDir.vx == -1) {
+        player->finePos.vx = player->finePos.vx >> 9 << 9;
+        player->finePos.vx -= delta;
+        player->finePos.vx += 256;
+    }
+    if (player->gravityDir.vy == 1) {
+        player->finePos.vy = player->finePos.vy >> 9 << 9;
+        player->finePos.vy += delta;
+        player->finePos.vy += 256;
+    }
+    if (player->gravityDir.vy == -1) {
+        player->finePos.vy = player->finePos.vy >> 9 << 9;
+        player->finePos.vy -= delta;
+        player->finePos.vy += 256;
+    }
+    if (player->gravityDir.vz == 1) {
+        player->finePos.vz = player->finePos.vz >> 9 << 9;
+        player->finePos.vz += delta;
+        player->finePos.vz += 256;
+    }
+    if (player->gravityDir.vz == -1) {
+        player->finePos.vz = player->finePos.vz >> 9 << 9;
+        player->finePos.vz -= delta;
+        player->finePos.vz += 256;
+    }
+}
 
 int GetRotationIndexFromVector(SVECTOR v) {
     if (v.vx == 1) return 1;
