@@ -23,6 +23,41 @@ typedef struct CubeTextureMetadata {
 extern void InitCubeTextureMetadata(void);
 extern void InitTurningMotionBlur(void);
 extern void LoadImagesFromTgiPart9(short* p);
+extern void DisableScreenShake(void);
+extern void InitLasers(void);
+extern void InitManySprites(void);
+extern void InitPlayerSpecularSprite(void);
+extern void InitShadowSprites(void);
+extern void ParseKeysAndSpecialLevelFromItemData(void);
+extern void ProcessLevelData(void);
+extern void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countOfSomethingI, int countOfSomethingJ, int param_5);
+extern void RecalcSkyboxes2(void);
+extern void ResetCheats(void);
+extern void ResetVibration(void);
+extern void ScanLevelDataForBlinkingEntities(void);
+extern void SetupDisplay(int isbg, int bgR, int bgG, int bgB, int useDithering, int use24Bit);
+extern void TweakSkyboxColors(uint param_1);
+
+extern CubeTextureMetadata cubeTextureMetadata[1300];
+extern DR_TPAGE drTpages1[2][1];
+extern DR_TPAGE drTpages2[2][1];
+extern DR_TPAGE hudDrTpages[2];
+extern int HIGHSCORE_CUBE_RANDOM_TEXTURES[16];
+extern int INT_ARRAY_000a2cd8[7];
+extern int LOD_THRESHOLDS[9];
+extern int turningMotionBlurTable[9 * 7];
+extern short DAT_00171314;
+extern short DAT_00171316[];
+extern short uncompLevelData[];
+extern short cubeIndexes[39304];
+extern void* cubeStates[256*8];
+extern int isFinal;
+extern int lightEffects[32 * 8];
+extern int recentlyVisitedCubeFaces[4 * 32];
+extern int sunglassDisablingState[1];
+extern int sunglassSeeEverything[1];
+extern int toBeDisabledLightEffects[64];
+extern int unkOtagLengths[2][1];
 
 // gprel-used variables (defined in this file)
 int DAT_000a4128;
@@ -46,49 +81,11 @@ short* tgiPart7;
 short* tgiPart8;
 short* tgiPart9;
 short* tgiPart10;
-
-extern CubeTextureMetadata cubeTextureMetadata[1300];
-extern DR_TPAGE drTpages1[2][1];
-extern DR_TPAGE drTpages2[2][1];
-extern DR_TPAGE hudDrTpages[2];
-extern int HIGHSCORE_CUBE_RANDOM_TEXTURES[16];
-extern int INT_ARRAY_000a2cd8[7];
-extern int LOD_THRESHOLDS[9];
-extern int turningMotionBlurTable[9 * 7];
-
-extern short DAT_00171314;
-extern short DAT_00171316[];
-extern short uncompLevelData[];
-extern short cubeIndexes[39304];
-extern void* cubeStates[256*8];
-extern int isFinal;
-extern int lightEffects[32 * 8];
-extern int recentlyVisitedCubeFaces[4 * 32];
-extern int sunglassDisablingState[1];
-extern int sunglassSeeEverything[1];
-extern int toBeDisabledLightEffects[64];
-extern int unkOtagLengths[2][1];
-
 short* entityData;
 short* levelData;
 short numEntities;
 int specialLevelType;
 int wasSpecialLevel;
-
-extern void DisableScreenShake(void);
-extern void InitLasers(void);
-extern void InitManySprites(void);
-extern void InitPlayerSpecularSprite(void);
-extern void InitShadowSprites(void);
-extern void ParseKeysAndSpecialLevelFromItemData(void);
-extern void ProcessLevelData(void);
-extern void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countOfSomethingI, int countOfSomethingJ, int param_5);
-extern void RecalcSkyboxes2(void);
-extern void ResetCheats(void);
-extern void ResetVibration(void);
-extern void ScanLevelDataForBlinkingEntities(void);
-extern void SetupDisplay(int isbg, int bgR, int bgG, int bgB, int useDithering, int use24Bit);
-extern void TweakSkyboxColors(uint param_1);
 
 void* ParseTGI(TgiFile* tgiBuf) {
     int i;
