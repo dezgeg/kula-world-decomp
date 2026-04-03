@@ -2,10 +2,8 @@
 
 extern void LoadMenuGfx(int menuId);
 
-extern short MENU_CURSOR_MOVE_SPEED[15][6];
 extern short MENU_CURSOR_START_Y_MAIN_MENU[20];
 extern short MENU_CURSOR_START_Y_PAUSE_MENU[20];
-extern short MENU_CURSOR_X_POS[12][6];
 extern PrimList primLists[2];
 extern TSprite bigGuiSprite1[2];
 extern TSprite bigGuiSprite2[2];
@@ -25,6 +23,41 @@ extern uint firstGuiTexture;
 int bigGuiSpriteFade;
 int menuCursorSinPhase;
 int whichLevelEndSpriteLoaded;
+
+short MENU_CURSOR_MOVE_SPEED[][6] = {
+    {28, 29, 21, 26, 0, 0},
+    {31, 47, 27, 36, 0, 0},
+    {7, 8, 46, 36, 31, 16},
+    {7, 8, 46, 36, 31, 16},
+    {23, 34, 36, 16, 0, 0},
+    {26, 34, 16, 0, 0, 0},
+    {36, 23, 34, 36, 16, 0},
+    {16, 24, 16, 13, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {12, 8, 0, 0, 0, 0},
+};
+short MENU_CURSOR_X_POS[][6] = {
+    {2, 2, 1, 0, 0, 0},
+    {0, 0, 0, 1, 0, 0},
+    {-37, -37, 2, -14, -13, -1},
+    {-37, -37, 2, -14, -13, -1},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {2, 0, 0, 0, 0, 0},
+    {0, 1, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0},
+};
 
 void DrawWidgets(int menuId, int cursorPos) {
     if (menuId == 2 || menuId == 3) {

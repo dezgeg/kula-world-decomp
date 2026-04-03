@@ -379,7 +379,7 @@ segments:
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
       - [0x622d8, .data, copycat_ui]
-      - [0x622f0, data, menu_widgets]
+      - [0x622f0, .data, menu_widgets]
       - [0x62458, data, sprite_init]
       - [0x62610, data, level_init]
       - [0x62730, .data, render2]
