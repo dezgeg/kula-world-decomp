@@ -1,12 +1,5 @@
 #include "common.h"
 
-static int lethargyAngleCounter;
-static int lethargyColorCounter;
-static POLY_FT4 lethargyEffectPoly[2];
-static int lethargyMode;
-static int lethargySinMagnitude;
-static int lethargyUnusedCounter;
-
 extern int displayHeight;
 extern int displayWidth;
 extern int gteXScale;
@@ -15,6 +8,13 @@ extern TSprite lethargyEffectSprite[2][2];
 extern int numCameras;
 extern PrimList primLists[2];
 extern int whichDrawDispEnv;
+
+static int lethargyAngleCounter;
+static int lethargyColorCounter;
+static POLY_FT4 lethargyEffectPoly[2];
+static int lethargyMode;
+static int lethargySinMagnitude;
+static int lethargyUnusedCounter;
 
 void EnableLethargy(int enable) {
     if (numCameras < 2) {
