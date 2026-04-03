@@ -1,8 +1,5 @@
 #include "common.h"
 
-extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
-
 typedef struct CubeState {
     Quad* quadPtrs[6];
     int field1_0x18[6];
@@ -20,10 +17,8 @@ typedef struct RecentlyVisitedCube {
     void* unkC;
 } RecentlyVisitedCube;
 
-#define CS_SIZE 16
-#define CS_SIDES_VISITED 12
-#define CS_VISITED 14
-#define CS_STYLE 15
+extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern int cubeStates[16 * 256];
 extern RecentlyVisitedCube recentlyVisitedCubeFaces[32];
@@ -31,6 +26,10 @@ extern SVECTOR SVECTOR_000a2dd0;
 extern int levelScore;
 extern int numCubesRemainingInLevel[5];
 
+#define CS_SIZE 16
+#define CS_SIDES_VISITED 12
+#define CS_VISITED 14
+#define CS_STYLE 15
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 int IsCubeVisited(int x, int y, int z) {
