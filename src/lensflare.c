@@ -20,10 +20,6 @@ typedef struct FramebufferFetch {
 
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
-extern SVECTOR SUN_POS_IN_SPECIAL_LEVEL[2];
-extern SVECTOR SUN_POS_IN_WORLD[13];
-extern short LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[13][3];
-extern short LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[2][3];
 extern FramebufferFetch framebufferFetches[16];
 extern MATRIX perspMatrixes[1];
 extern SPair lensFlareSpriteMidpoints[16];
@@ -50,6 +46,48 @@ int lensFlareScreenX;
 int lensFlareScreenY;
 int numLensFlareSprites;
 int sunIntensityOnScreen;
+
+short LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[2][3] = {
+    {0, 0, 0},
+    {0, 0, 0},
+};
+
+short LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[13][3] = {
+    {24576, 768, 24},
+    {24576, 768, 24},
+    {24576, 768, 24},
+    {24576, 768, 24},
+    {23552, 768, 24},
+    {24576, 768, 24},
+    {-17408, 1504, 47},
+    {24576, 768, 24},
+    {-17408, 1504, 47},
+    {-17408, 1504, 47},
+    {11264, 736, 24},
+    {24576, 768, 24},
+    {24576, 768, 24},
+};
+
+SVECTOR SUN_POS_IN_SPECIAL_LEVEL[2] = {
+    {0, 4096, 0, 0},
+    {0, -4096, 0, 0},
+};
+
+SVECTOR SUN_POS_IN_WORLD[13] = {
+    {0, 4096, 0, 0},
+    {0, 4096, 0, 0},
+    {4096, 0, 0, 0},
+    {0, 4096, 0, 0},
+    {4096, 400, -200, 0},
+    {0, 4096, 0, 0},
+    {0, 4096, 0, 0},
+    {4096, 0, 0, 0},
+    {0, 4096, 0, 0},
+    {0, 4096, 0, 0},
+    {4096, 400, 0, 0},
+    {0, 4096, 0, 0},
+    {4096, 0, 0, 0},
+};
 
 void InitLensFlareSprite(short posMul, short textureIdx, int scaleHeight) {
     if (numLensFlareSprites < 16) {
