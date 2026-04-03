@@ -1,8 +1,5 @@
 #include "common.h"
 
-int dispenvScreenX;
-int dispenvScreenY;
-
 extern DR_AREA drawAreas[2][1];
 extern DR_AREA hudDrawAreas[2];
 extern DR_OFFSET drawOffsets[2][1];
@@ -14,14 +11,17 @@ extern int screenOffsetX;
 extern int screenOffsetY;
 extern int whichDrawDispEnv;
 
-void PutDrawAndDispEnvs(void) {
-    PutDrawEnv(&drawdisp[whichDrawDispEnv].draw);
-    PutDispEnv(&drawdisp[whichDrawDispEnv].disp);
-}
+int dispenvScreenX;
+int dispenvScreenY;
 
 static inline void SetDispScreen(ushort x, ushort y) {
     drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
     drawdisp[0].disp.screen.y = drawdisp[1].disp.screen.y = y;
+}
+
+void PutDrawAndDispEnvs(void) {
+    PutDrawEnv(&drawdisp[whichDrawDispEnv].draw);
+    PutDispEnv(&drawdisp[whichDrawDispEnv].disp);
 }
 
 void SetupDisplay(int isbg, int bgR, int bgG, int bgB, int useDithering, int use24Bit) {
