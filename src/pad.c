@@ -1,6 +1,7 @@
 #include "common.h"
-
 #include <LIBPAD.H>
+
+void ResetVibration();
 
 extern int isDemoMode;
 
@@ -20,8 +21,6 @@ static int vibrationAngleIncrement;
 static int vibrationCounterMax;
 static int vibrationCounter;
 static char* vibrationSeqPtr;
-
-extern void ResetVibration();
 
 static char VIBRATION_SEQ_DATA[];
 
