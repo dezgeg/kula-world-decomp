@@ -49,13 +49,6 @@ extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
 extern int sprintf(char * s, const char * format, ...);
 
-// Variables
-int INT_000a5690;
-uint mcResult;
-int memCardDataValid;
-int saveSlot;
-long tempMcResult;
-
 extern LINE_F3 LINE_F3_ARRAY_000a49a0[2];
 extern LINE_F3 LINE_F3_ARRAY_000a49d0[2];
 extern SVECTOR SVECTOR_000a2fac;
@@ -75,7 +68,6 @@ extern PrimList primLists[2];
 extern char stringbuf[64];
 extern TgiFile * tgi;
 extern int whichDrawDispEnv;
-
 extern char S_CHECKING_MEMORY_CARD_PLEASE_WAIT[];
 extern char S_FMTd_2[];
 extern char S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD[];
@@ -90,6 +82,13 @@ extern char S_SAVING_DO_NOT_REMOVE_MEMORY_CARD[];
 extern char S_SIZE_FMTd_BLOCK[];
 extern char S_SIZE_FMTd_BLOCKS[];
 extern char S_XYZ[];
+
+// Variables
+int INT_000a5690;
+uint mcResult;
+int memCardDataValid;
+int saveSlot;
+long tempMcResult;
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
