@@ -16,20 +16,6 @@ extern void TimeTrialDifficultySelectionMenu(void);
 extern void TwoPlayerLevelSelectMenu(void);
 extern void TwoPlayerMenu(void);
 
-short qualifyScreenCursorX;
-short qualifyScreenCursorY;
-int copycatModeStartingPlayer;
-int curMenu;
-int cursorPosInMenu[8];
-int isPaused;
-int levelScoreSummaryConfirmed;
-int menuUnkAlwaysZero;
-int repeatRateTimer;
-int savePointMenuConfirmed;
-int timeTrialAtEndOfWorld;
-int twoPlayerLevelSelectionCursorPos;
-int wasPausedPreviousFrame;
-
 extern SVECTOR ZERO_SVECTOR_a3340;
 extern char scoreText[128];
 extern int TIME_TRIAL_PAR_TIMES[150];
@@ -85,6 +71,22 @@ extern LINE_F3 screenAdjustLine1[2];
 extern LINE_F3 screenAdjustLine2[2];
 extern DrawDisp drawdisp[2];
 extern PrimList primLists[2];
+extern char S_FMTd_4[];
+extern char S_FMTd_5[];
+
+short qualifyScreenCursorX;
+short qualifyScreenCursorY;
+int copycatModeStartingPlayer;
+int curMenu;
+int cursorPosInMenu[8];
+int isPaused;
+int levelScoreSummaryConfirmed;
+int menuUnkAlwaysZero;
+int repeatRateTimer;
+int savePointMenuConfirmed;
+int timeTrialAtEndOfWorld;
+int twoPlayerLevelSelectionCursorPos;
+int wasPausedPreviousFrame;
 
 static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
@@ -816,7 +818,6 @@ void TimeTrialDifficultySelectionMenu(void) {
     }
 }
 
-extern char S_FMTd_4[];
 void TwoPlayerLevelSelectMenu(void) {
     int i;
 
@@ -911,7 +912,6 @@ void UnusedInitFailedToQualifyScreen(void) {
     timeTrialAtEndOfWorld = 1;
 }
 
-extern char S_FMTd_5[];
 void TimeTrialFailedToQualifyScreen(void) {
     int i;
     int j;
