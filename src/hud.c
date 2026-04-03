@@ -16,7 +16,6 @@ extern void UpdateStaticHourglassClut(void);
 
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
 extern uint BONUS_WIDGET_COLOR_DATA[96];
-extern SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5];
 extern TSprite fruitBonusTextSprites[2][5][2];
 extern TSprite fruitSprites[2][5][2];
 extern int fruitsCollectedBitmask;
@@ -45,7 +44,6 @@ extern int twoPlayerWhichPlayer;
 extern int whichDrawDispEnv;
 extern POLY_FT4 hourglassSprites[2][3];
 extern PrimList primLists[2];
-extern RECT hourglassClutRect;
 extern short hourglassClut[60];
 extern Texture textures[150];
 extern TSprite keySprites[2][4][2];
@@ -72,7 +70,33 @@ int smoothIncrementingScore;
 GgiFile* ggi;
 short* ggiPart1HourglassAnim;
 uint firstGuiTexture;
-static short HOURGLASS_ANIM_DATA[29][2];
+
+RECT hourglassClutRect = {0, 0, 60, 1};
+
+static short HOURGLASS_ANIM_DATA[29][2] = {
+    {0, 0}, {-31711, -31711}, {-30654, -30654}, {-29597, -29597},
+    {-28540, -28540}, {-27483, -27483}, {-26426, -26426}, {-25369, -25369},
+    {-24312, -24312}, {-23255, -23255}, {-22198, -22198}, {-21141, -21141},
+    {-20084, -20084}, {-19027, -19027}, {-17970, -17970}, {-16913, -16913},
+    {-15856, -15856}, {-14799, -14799}, {-13742, -13742}, {-12685, -12685},
+    {-11628, -11628}, {-10571, -10571}, {-9514, -9514}, {-8457, -8457},
+    {-7400, -7400}, {-6343, -6343}, {-5286, -5286}, {-4229, -4229},
+    {-3172, 3897}
+};
+
+static int pad = 0; // hack
+
+int TIME_STR_DIGIT_DIVISORS[9] = {
+    360000, 36000, 3600, 0, 600, 60, 0, 10, 1
+};
+
+SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5] = {
+    {208, 233, -1, 0},
+    {228, 232, -1, 0},
+    {253, 232, -1, 0},
+    {278, 232, -1, 0},
+    {299, 234, -1, 0}
+};
 
 void DrawHud(void) {
     addPrim(&primLists[whichDrawDispEnv].gui3, &hudDrTpages[whichDrawDispEnv]);
