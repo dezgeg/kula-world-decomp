@@ -110,5 +110,3 @@ void DrawBigGuiSprite(int param_1) {
         DrawPrim(&bigGuiSprite2[whichDrawDispEnv]);
     }
 }
-
-INCLUDE_ASM("asm/nonmatchings/level_end_screen", LoadMenuGfx);

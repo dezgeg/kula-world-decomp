@@ -59,6 +59,8 @@ short MENU_CURSOR_X_POS[][6] = {
     {0, 0, 0, 0, 0, 0},
 };
 
+INCLUDE_ASM("asm/nonmatchings/menu_widgets", LoadMenuGfx);
+
 void DrawWidgets(int menuId, int cursorPos) {
     if (menuId == 2 || menuId == 3) {
         musicVolumeWidgetSprite[whichDrawDispEnv].sprt.x0 = displayWidth / 2 + (musicVolume - 6) * 5 + 2;
