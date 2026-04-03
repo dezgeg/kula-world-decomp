@@ -4,7 +4,6 @@ extern void LoadLevelEndReasonGfx(int unused);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern PrimList primLists[2];
-extern SVECTOR SVECTOR_000a2ab4;
 extern TSprite bigGuiSprite1[2];
 extern TSprite bigGuiSprite2[2];
 extern int gameMode;
@@ -15,9 +14,13 @@ extern int whichDrawDispEnv;
 extern uint prevControllerButtons;
 
 int bigGuiSpriteFade;
-int gameOverScreenFade;
-int gameOverScreenState;
-int whichLevelEndSpriteLoaded;
+
+SVECTOR SVECTOR_000a2ab4 = { 0, 0, 0, 0 };
+char S_Fatal_error_in_jens_2d_eng[] = "Fatal error in jens 2d-eng:\n\n";
+int whichLevelEndSpriteLoaded = 34;
+int gameOverScreenState = 0;
+int gameOverScreenFade = 0;
+char S_1_0_4[] = "1.0.4"; // hack
 
 void InitLevelEndScreen(void) {
     whichLevelEndSpriteLoaded = 48;
