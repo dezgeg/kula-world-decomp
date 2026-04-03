@@ -19,6 +19,10 @@ typedef struct GemSparkleEffect {
     Sparkle sparkles[16];
 } GemSparkleEffect;
 
+// non-gprel-used variables (extern)
+extern GemSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
+extern Texture textures[150];
+
 // gprel-used variables (defined in this file)
 int firstBonusWidgetTexture;
 int firstFruitTexture;
@@ -42,10 +46,6 @@ int numGuiTextTextures;
 int numParticleTextures;
 int numUnk1Textures;
 int numUnk2Textures;
-
-// non-gprel-used variables (extern)
-extern GemSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
-extern Texture textures[150];
 
 // Prototypes
 void ParseTextures(int* headerPtr, Texture * out, int count);
@@ -158,7 +158,6 @@ void ParseTextures(int* headerPtr, Texture *out, int unused_count) {
         out[i].v = rect.y % 256;
     }
 }
-
 
 void ParseGgiInner(int *eff, int modelType, int modelIdx, int lodIdx, int variantIdx, int probability,
                    int addRgb, int maxRgb, int subRgb, int numSparkles) {
