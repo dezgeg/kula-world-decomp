@@ -13,7 +13,6 @@ InitLasers2: https://decomp.scratch/LWRua
 InitLasers: http://decomp.me/scratch/qhHUf
 InitLasers: http://decomp.me/scratch/Rap4x
 InitScoreGraph: <none>
-IsSubpixelZBelow257: https://decomp.scratch/VShme
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn

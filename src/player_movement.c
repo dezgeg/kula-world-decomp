@@ -4,7 +4,6 @@ extern int FUN_0003382c(); // XXX: this should take Player* player
 extern int GetBlockAt(SVECTOR * coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int HandleMovingPlatforms(Player * player);
-extern int IsSubpixelZBelow257(Player * player);
 extern void ClearA4374(Player *player);
 extern void CreatePlayerDispList(MATRIX * m, int const0x100, int ballTextureIndex, int const0, int colorR, int colorG, int colorB, int const0_, int blockX, int blockY, int blockZ, int blockDirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int otherBlockDirIndex, MATRIX * gteMatrix, int shadowColor, int param_19, MATRIX* param_20, int param_21, int param_22, int const0_23, int const0_24, int const0xb2, SVECTOR * param_26);
 extern void EnableScreenShake(int param_1, int param_2, int param_3);
@@ -795,7 +794,14 @@ int IsRollingForwardBlocked(Player *player) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/player_movement", IsSubpixelZBelow257);
+int IsSubpixelZBelow257(Player *player) {
+    if (player->subpixelPositionOnCube.vz > 0xff) {
+        if (player->svec_154.vz < 257) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 void AutoCenterSubpixelPosition(Player *player, int amount) {
     if (player->subpixelPositionOnCube.vx < 0x100 - amount) {
