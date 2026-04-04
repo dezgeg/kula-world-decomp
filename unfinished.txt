@@ -1,5 +1,4 @@
 CalcLevelBounds: https://decomp.scratch/CTYFE
-CalcPlayerMatrixesAndDrawPlayer: https://decomp.scratch/5MgRF
 CopyQuadData: https://decomp.me/scratch/kyhIu
 CreateAllItemDispLists: https://decomp.scratch/r8cry
 CreateItemDispList: https://decomp.me/scratch/Q9HSg
