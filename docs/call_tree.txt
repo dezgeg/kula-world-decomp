@@ -1,0 +1,991 @@
+main() {
+  InitStuff() {
+    ResetCallback();
+    ResetGraph();
+    SetGraphDebug();
+    MemCardInit();
+    MemCardStart();
+    PadInitDirect();
+    PadStartCom();
+    ResetVibration();
+    InitGeom();
+    SetGeomScreen();
+    SetVideoMode();
+    SetDispMask();
+    ClearImage();
+    SetupDisplay();
+    FntLoad();
+    FntOpen();
+    SetDumpFnt();
+  }
+  WriteToDevkit() {
+  }
+  SetupDisplay();
+  CdInit();
+  ReadDataFile() {
+    CdSearchFile();
+    VSyncCallback();
+    SetupDisplay();
+    CdControl();
+    CdRead();
+    CdReadSync();
+  }
+  SndInitFromSfxFile() {
+    SpuInit();
+    SpuSetTransferStartAddr();
+    SpuWrite();
+    SpuIsTransferCompleted();
+    SpuClearReverbWorkArea();
+    SpuSetCommonAttr();
+    SpuSetReverbModeParam();
+    SpuSetReverbDepth();
+    SpuSetReverb();
+  }
+  LoadWarningTim() {
+    SetupDisplay();
+    CdSearchFile();
+    VSyncCallback();
+    CdControl();
+    CdRead();
+    CdReadSync();
+    inflate();
+  }
+  ParseGGI() {
+    ParseTextures() {
+    }
+    ParseGgiInner() {
+    }
+  }
+  InitFont() {
+    InitWidgetSprites() {
+    }
+    SetFontEntry();
+  }
+  InitVariousUiSpriteTemplates() {
+  }
+  InitHighscores() {
+  }
+  InitCopycatUiTextures() {
+  }
+  InitSpinningSelectionSprites() {
+  }
+  LoadingScreen() {
+    DrawBigGuiSprite() {
+      LoadLevelEndReasonGfx() {
+        inflate();
+      }
+      DrawPrim();
+    }
+    SetupDisplay();
+    InitPsxButtonBackgroundSprites() {
+    }
+    VSyncCallback();
+  }
+  LoadSaveFromMemoryCard() {
+    MemCardAccept();
+    MemCardSync();
+    MemCardReadFile();
+    LoadHighscoresFromMemcardData() {
+    }
+  }
+  ParseTGI() {
+    InitTurningMotionBlur() {
+    }
+    InitCubeTextureMetadata() {
+    }
+    LoadImagesFromTgiPart9() {
+    }
+  }
+  PlayMusic() {
+    SndSetMusicVolume();
+    CdSearchFile();
+    CdInit();
+    VSyncCallback();
+    SetupDisplay();
+    CdPosToInt();
+    CdReadSync();
+    CdControlB();
+    CdControl();
+    SpuSetReverb();
+  }
+  VSyncCallback();
+  inflate();
+  SwitchFromBonusToNormalMusic() {
+    SndSetMusicVolume();
+    CdReadSync();
+    CdControlB();
+    VSyncCallback();
+    SetupDisplay();
+    SpuSetReverb();
+  }
+  ParseLevelDataFromTgi() {
+    InitLasers() {
+    }
+    ParseKeysAndSpecialLevelFromItemData() {
+    }
+    ResetVibration();
+    DisableScreenShake() {
+    }
+    ProcessLevelData() {
+      InitAnimatedTextureChain();
+      ProcessCubesIntoFaces() {
+        GetFaceTypeOfBlockType();
+        GetFaceTypeAtRelativeToDir();
+        SetFaceData() {
+        }
+        CoordHash();
+        AddQuadToAnimatedTextureChain();
+        GetRandomTextureRotation();
+      }
+      ScanLevelDataForMovingBlocks1() {
+        SetFaceData() {
+        }
+        AddQuadToAnimatedTextureChain();
+      }
+      InitLasers2() {
+        SetFaceData() {
+        }
+      }
+      CopyQuadData() {
+      }
+      ScanLevelDataForCrumblingBlocks() {
+      }
+      ScanLevelDataForFlashingBlocks() {
+      }
+      ProcessMovingPlatforms2() {
+      }
+      FUN_000298e0() {
+      }
+      ScanLevelDataForRetractableSpikes() {
+      }
+    }
+    InitManySprites() {
+      InitHourglassSprites() {
+        InitDigitSprites() {
+        }
+      }
+      InitLethargyEffectSprites() {
+      }
+      InitKeySprites() {
+      }
+      InitBonusWidgetSprites() {
+      }
+      InitFruitSprites() {
+      }
+      InitScreenFadePolys() {
+      }
+      InitTitleSprite() {
+      }
+      InitCopyrightSprite() {
+      }
+      InitTimerPausedSprite() {
+      }
+      InitAllDigitSprites();
+    }
+    ResetCheats() {
+    }
+    InitShadowSprites() {
+    }
+    InitPlayerSpecularSprite() {
+    }
+    ScanLevelDataForBlinkingEntities() {
+    }
+    RecalcSkyboxes01() {
+      SkyboxSinCos();
+    }
+    RecalcSkyboxes2() {
+    }
+    TweakSkyboxColors() {
+    }
+    SetupDisplay();
+  }
+  LevelInit() {
+    ScanLevelDataForMovingBlocks2() {
+      MoveMovingPlatforms() {
+      }
+    }
+    MoveMovingPlatforms() {
+    }
+    InitEnemies() {
+      InitEnemy() {
+      }
+    }
+    CreateItemsFromLevelData() {
+      SetEntityRotation() {
+      }
+    }
+    SetPlayerRotation() {
+    }
+    SetPlayerMatrix6() {
+    }
+    CalcWhatPlayerIsStandingOn() {
+      FUN_0003418c() {
+      }
+      FUN_00033720() {
+      }
+    }
+    ResetPlayerVars() {
+    }
+    HandlePlayerMovementStuff() {
+    }
+    CalcLevelBounds() {
+      HandlePlayerMovementStuff() {
+      }
+    }
+  }
+  ResetCopycatMode() {
+  }
+  VariousInit() {
+    InitParticles() {
+    }
+    InitLensFlareSprites() {
+      InitLensFlareSprite();
+    }
+    InitLevelEndScreen() {
+    }
+  }
+  PlayBonusMusic() {
+    SndSetMusicVolume();
+    CdSearchFile();
+    CdInit();
+    VSyncCallback();
+    SetupDisplay();
+    CdPosToInt();
+    CdReadSync();
+    CdControlB();
+    SpuSetReverb();
+  }
+  MainGameLoop() {
+    InitAllDigitSprites();
+    InitReplaySaving() {
+    }
+    InitReplayPlayback() {
+    }
+    VSyncCallback();
+    StoreImage();
+    WaitForVBlank() {
+    }
+    UnusedProcessDisplayModeChange() {
+      SetGeomOffset();
+    }
+    SetGeomScreen();
+    SndProcessSpuVoices();
+    HandleCheats() {
+      TweakSkyboxColors() {
+      }
+      SetupDisplay();
+      EnableLethargy() {
+      }
+      AddSIO();
+      SetInvulnerable() {
+      }
+    }
+    UpdateVibration() {
+    }
+    ProcessScreenShake() {
+    }
+    SndMuteAllTaggedVoices();
+    ProcessPlayer() {
+      SubtractLevelTimer() {
+      }
+      HandlePlayerButtons() {
+        WriteToDevkit() {
+        }
+        RecordButtonsToDevkit() {
+        }
+        GetButtonsFromReplay() {
+        }
+        SndMuteAllTaggedVoices();
+      }
+      MoveMovingPlatforms() {
+      }
+      UpdateEnemies() {
+        EnemyGetBlockProgress() {
+        }
+        EnemyCanTurnRight();
+        EnemyTurnRight() {
+        }
+        EnemyCanTurnLeft();
+        EnemyTurnLeft() {
+        }
+        EnemyCanMoveForward();
+        EnemyTurnAround() {
+        }
+        EnemyCanMoveBackward();
+      }
+      HandleSpecialCubeTypes() {
+        GetVectorBasedOnTwoDirs() {
+        }
+        IsPlayerInAir();
+        SetCubeVisited() {
+          SetCubeFaceVisited() {
+          }
+        }
+        SetSunglassMode() {
+        }
+        EnableLethargy() {
+        }
+        SubtractLevelTimer() {
+        }
+        CheckForButtonEntity() {
+          IsFallingOrJumping() {
+          }
+        }
+        HandleTransporter() {
+          IsPlayerInAir();
+          AddParticles();
+          SetRenderScreenFade() {
+          }
+          SetPlayerRotation() {
+          }
+          CalcWhatPlayerIsStandingOn() {
+            FUN_0003418c() {
+            }
+            FUN_00033720() {
+            }
+          }
+        }
+        CalcWhatPlayerIsStandingOn() {
+          FUN_0003418c() {
+          }
+          FUN_00033720() {
+          }
+        }
+        UpdateSubpixelPositions() {
+        }
+      }
+      IsCollidingWithEnemy() {
+      }
+      StartMovementIfNeeded() {
+        TurnLeft() {
+          EnableTurningMotionBlur() {
+          }
+        }
+        StartJumpingForward() {
+          JumpingOnMovingPlatform() {
+          }
+          ClearA4374() {
+          }
+        }
+        TurnRight() {
+          EnableTurningMotionBlur() {
+          }
+        }
+        StartJumpingInplace() {
+          JumpingOnMovingPlatform() {
+          }
+        }
+        StartRollingForward() {
+          IsRollingForwardBlocked() {
+          }
+        }
+      }
+      ProcessMovement() {
+        MovePlayerDownwards() {
+        }
+        AutoCenterSubpixelPosition() {
+        }
+        AutoAlignJumpStartPos() {
+        }
+        CheckIfPlayerLanded() {
+          ResetPlayerMatrix274() {
+          }
+          EnableScreenShake() {
+          }
+          MovePlayerDownwards() {
+          }
+          UpdateSubpixelPositions() {
+          }
+        }
+      }
+      CalcWhatPlayerIsStandingOn() {
+        FUN_0003418c() {
+        }
+        FUN_00033720() {
+        }
+      }
+      UpdateSubpixelPositions() {
+      }
+      HandleViewportRotationStart() {
+        IsSubpixelZBelow257() {
+        }
+        MovePlayerForward() {
+        }
+        IsRollingForwardBlocked() {
+        }
+        SetCubeVisited() {
+          SetCubeFaceVisited() {
+          }
+        }
+      }
+      CheckPlayerJumpingStuff() {
+        HandleMovingPlatforms() {
+          GetMovingPlatformAt() {
+            FUN_000344b0() {
+            }
+            FUN_00033720() {
+            }
+          }
+          FUN_00033eb0() {
+            FUN_000344b0() {
+            }
+            FUN_00033720() {
+            }
+          }
+          SetLandingSquishVars() {
+          }
+          FUN_0003418c() {
+          }
+          UpdateSubpixelPositions() {
+          }
+        }
+        CheckIfPlayerLanded() {
+          ResetPlayerMatrix274() {
+          }
+          EnableScreenShake() {
+          }
+          MovePlayerDownwards() {
+          }
+          UpdateSubpixelPositions() {
+          }
+        }
+        CheckForPlayerWallHit() {
+          GetVectorBasedOnTwoDirs() {
+          }
+        }
+        MovePlayerForward() {
+        }
+        FUN_00031288() {
+          FUN_0003382c() {
+            FUN_00033720() {
+            }
+          }
+        }
+      }
+      SetVec184ToVec54() {
+      }
+      HandleItemTouching() {
+        AddLightEffect();
+        AddParticles();
+        EnableLethargy() {
+        }
+        SetSunglassMode() {
+        }
+        DisableItemShadow() {
+        }
+      }
+      ProcessCameraAndMovement() {
+        HandleDebugCamera() {
+        }
+        HandlePlayerMovementStuff() {
+        }
+        FUN_00034518() {
+        }
+      }
+      SetPlayerMatrix6() {
+      }
+    }
+    SetPausedOrWaitingForRestart() {
+      HandlePauseModeRotationEffect() {
+      }
+    }
+    RenderBackground() {
+      RenderBonusBackground() {
+      }
+      ASM_00053a64() {
+      }
+      UpdateStarfield() {
+        ApplyMatrix();
+      }
+      RenderStarfield() {
+      }
+      RenderNonSpecialBackground() {
+      }
+    }
+    RenderEverythingElseAndProcessSomeStuff() {
+      TurnLevelExitQuadIntoGreen() {
+      }
+      UpdateSunglassModeDisabling() {
+      }
+      ProcessMovingPlatforms2() {
+      }
+      ProcessCrumblingBlocks() {
+        GetFaceTypeAtRelativeToDir();
+        GetCubeIndexRelativeToDir();
+        EnableScreenShake() {
+        }
+      }
+      CubeTextureStuff() {
+      }
+      ProcessRecentlyVisitedCubes() {
+      }
+      ProcessFlashingBlocks() {
+      }
+      ProcessRetractableSpikes() {
+      }
+      ProcessEnabledLightEffects() {
+      }
+      ProcessInvisibleBlockVisibility() {
+      }
+      ProcessLightEffects() {
+        FUN_00051f24() {
+        }
+      }
+      CalculateBlockLighting() {
+        GetShortFromGgiPart2() {
+        }
+      }
+      SetFarColor();
+      RenderLevelGeometryQuads() {
+      }
+      ProcessTurningMotionBlur() {
+      }
+      ASM_FUN_00050310() {
+        FUN_00050468() {
+        }
+      }
+      UnusedAsmNoop();
+      ProcessEnemiesRenderItemsAndCheckFellOff() {
+        RenderEnemies() {
+          CreateEnemyDispList() {
+            LoadScaledGteMatrix();
+            GteTransformAndClipQuad();
+          }
+          RotMatrixZYX();
+        }
+        CalcPlayerMatrixesAndDrawPlayer() {
+          SetBallShapeAndRotationWhenJumping() {
+          }
+          SetBallShapeAndRotationWhenRollingOrIdle() {
+          }
+          CreatePlayerDispList() {
+            LoadScaledGteMatrix();
+            GteTransformAndClipQuad();
+          }
+        }
+        CreateAllItemDispLists() {
+          RotMatrixZYX();
+          CreateItemDispList() {
+            AddLightEffect();
+            SetLightEffectToBeDisabled();
+            SetLightEffectColor();
+          }
+        }
+      }
+      RenderItems_() {
+        CreateAllItemDispLists() {
+          RotMatrixZYX();
+          CreateItemDispList() {
+            AddLightEffect();
+            SetLightEffectToBeDisabled();
+            SetLightEffectColor();
+          }
+        }
+      }
+      SubdivideLevelGeometryPolys() {
+        FUN_00050790() {
+          FUN_00051964() {
+          }
+        }
+      }
+      ProcessDisabledLightEffects() {
+      }
+      DisableLightEffect();
+      ASM_FUN_00052504() {
+      }
+      DrawScreenFade() {
+      }
+      RenderPlayerAndItems() {
+        SetFarColor();
+        UpdateGemRandomSparkleEffect() {
+        }
+        RenderDispList() {
+        }
+        DrawPlayerSpecularSprites() {
+        }
+        DrawShadowSprites() {
+        }
+      }
+    }
+    AddDrChangePrims() {
+    }
+    ProcessAndRenderParticles() {
+      DisableLightEffect();
+      SetLightEffectColor();
+    }
+    DrawLensFlares() {
+    }
+    DrawHud() {
+      DrawLethargyEffects() {
+      }
+      DrawHourglassAndTimer() {
+        UpdateStaticHourglassClut() {
+        }
+      }
+      DrawKeyWidgets() {
+      }
+      DrawFruitWidgets() {
+        AddParticles();
+      }
+      DrawScore() {
+      }
+      DrawTimeAttackWidgets() {
+        DrawTimeAttackTimer() {
+        }
+      }
+      DrawBonusWidget() {
+      }
+    }
+    PauseOrMainMenu() {
+      DrawTitleAndCopyrightSprites() {
+      }
+      HandleMenus0To6() {
+        MainMenu() {
+          DrawWidgets();
+          HighScoreUi() {
+            SndMuteAllVoices();
+            DrawWidgets();
+            InitPsxButtonBackgroundSprites() {
+            }
+            InitHighscoreCubes() {
+              GetHighscoreCubeStyle() {
+              }
+            }
+            InitScoreGraph() {
+            }
+            SndProcessSpuVoices();
+            FormatTime();
+            DrawScoreGraph() {
+            }
+            DrawPsxButtonBackground() {
+            }
+            DrawHighScoreCubes() {
+            }
+          }
+        }
+        OptionsMenu() {
+          DrawWidgets();
+          SetBigGuiSpriteVisible();
+          DrawStaticUiSprite();
+          SndSetMusicVolume();
+        }
+        ScreenAdjustMenu() {
+          DrawWidgets();
+        }
+        SinglePlayerMenu() {
+          SinglePlayerMenuWhenFinalUnlocked() {
+            DrawWidgets();
+            InitAllDigitSprites();
+            LoadSaveMenu() {
+              InitMemcardUi() {
+                inflate();
+                SetupDisplay();
+              }
+              InitPsxButtonBackgroundSprites() {
+              }
+              InitSpinningSelectionSprites() {
+              }
+              LoadSaveSlot() {
+                MemCardAccept();
+                MemCardSync();
+                MemCardReadFile();
+                LoadHighscoresFromMemcardData() {
+                }
+              }
+              InitScoreGraph() {
+              }
+              SndProcessSpuVoices();
+              SetBigGuiSpriteVisible();
+              DrawPsxButtonBackground() {
+              }
+              ShowMemCardFullScreenText() {
+                SndProcessSpuVoices();
+                DrawPsxButtonBackground() {
+                }
+              }
+              UpdateMemcardMenuSaveSelectionSprites() {
+              }
+              DrawScoreGraph() {
+              }
+              DrawSaveSlotSprites() {
+              }
+              DrawStaticUiSprite();
+              FormatTime();
+              DrawWidgets();
+            }
+          }
+          DrawWidgets();
+          InitAllDigitSprites();
+          LoadSaveMenu() {
+            InitMemcardUi() {
+              inflate();
+              SetupDisplay();
+            }
+            InitPsxButtonBackgroundSprites() {
+            }
+            InitSpinningSelectionSprites() {
+            }
+            LoadSaveSlot() {
+              MemCardAccept();
+              MemCardSync();
+              MemCardReadFile();
+              LoadHighscoresFromMemcardData() {
+              }
+            }
+            InitScoreGraph() {
+            }
+            SndProcessSpuVoices();
+            SetBigGuiSpriteVisible();
+            DrawPsxButtonBackground() {
+            }
+            ShowMemCardFullScreenText() {
+              SndProcessSpuVoices();
+              DrawPsxButtonBackground() {
+              }
+            }
+            UpdateMemcardMenuSaveSelectionSprites() {
+            }
+            DrawScoreGraph() {
+            }
+            DrawSaveSlotSprites() {
+            }
+            DrawStaticUiSprite();
+            FormatTime();
+            DrawWidgets();
+          }
+        }
+        TwoPlayerMenu() {
+          DrawWidgets();
+          InitAllDigitSprites();
+        }
+        TimeTrialDifficultySelectionMenu() {
+          DrawWidgets();
+          InitAllDigitSprites();
+        }
+        TwoPlayerLevelSelectMenu() {
+          SetBigGuiSpriteVisible();
+          DrawWidgets();
+          Update2PlayerLevelSelectionSprites() {
+          }
+          SetFancyTextColor() {
+          }
+          InitAllDigitSprites();
+        }
+      }
+      SetBigGuiSpriteVisible();
+      DrawStaticUiSprite();
+      QuitAreYouSureMenu() {
+        DrawWidgets();
+        QuitToMainMenu() {
+        }
+      }
+      ScreenAdjustMenu() {
+        DrawWidgets();
+      }
+      OptionsMenu() {
+        DrawWidgets();
+        SetBigGuiSpriteVisible();
+        DrawStaticUiSprite();
+        SndSetMusicVolume();
+      }
+      PauseMenu() {
+        DrawWidgets();
+      }
+    }
+    _sio_control();
+    ReceiveBufFromSio() {
+      SetupDisplay();
+      _sio_control();
+    }
+    GetReadyScreen() {
+      SetBigGuiSpriteVisible();
+      DrawStaticUiSprite();
+      DrawWidgets();
+    }
+    SavePointMenu() {
+      DrawWidgets();
+      MemCardUi() {
+        LoadSaveSlot() {
+          MemCardAccept();
+          MemCardSync();
+          MemCardReadFile();
+          LoadHighscoresFromMemcardData() {
+          }
+        }
+        InitMemcardUi() {
+          inflate();
+          SetupDisplay();
+        }
+        InitPsxButtonBackgroundSprites() {
+        }
+        InitSpinningSelectionSprites() {
+        }
+        InitScoreGraph() {
+        }
+        SndProcessSpuVoices();
+        SetBigGuiSpriteVisible();
+        DrawPsxButtonBackground() {
+        }
+        UpdateMemcardMenuSaveSelectionSprites() {
+        }
+        DrawScoreGraph() {
+        }
+        DrawSaveSlotSprites() {
+        }
+        DrawStaticUiSprite();
+        FormatTime();
+        ShowMemCardFullScreenText() {
+          SndProcessSpuVoices();
+          DrawPsxButtonBackground() {
+          }
+        }
+        SaveMemCard() {
+          MemCardAccept();
+          MemCardSync();
+          Ascii2Sjis();
+          MemCardCreateFile();
+          MemCardWriteFile();
+          LoadHighscoresFromMemcardData() {
+          }
+        }
+        DrawWidgets();
+        FormatMemcard() {
+          MemCardAccept();
+          MemCardSync();
+          ShowMemCardFullScreenText() {
+            SndProcessSpuVoices();
+            DrawPsxButtonBackground() {
+            }
+          }
+          MemCardFormat();
+        }
+        MemCardUiPart() {
+          MemCardAccept();
+          MemCardSync();
+          MemCardGetDirentry();
+          MemCardReadFile();
+          LooksLikeAscii();
+          Sjis2Ascii();
+          SndProcessSpuVoices();
+          SetBigGuiSpriteVisible();
+          DrawPsxButtonBackground() {
+          }
+          AskSaveOverwrite() {
+            SndProcessSpuVoices();
+            SetBigGuiSpriteVisible();
+            DrawPsxButtonBackground() {
+            }
+          }
+          MemCardDeleteFile();
+        }
+      }
+    }
+    RenderPlayerOrCopycatLabels();
+    QuitToMainMenu() {
+    }
+    LevelCompletedOrDied() {
+    }
+    DecideNextLevel() {
+    }
+    ResetLethargyEffect() {
+    }
+    ResetVibration();
+    InitParticles() {
+    }
+    UpdateScoreAtEndOfLevel() {
+    }
+    DrawBigGuiSprite() {
+      LoadLevelEndReasonGfx() {
+        inflate();
+      }
+      DrawPrim();
+    }
+    DrawLevelScoreSummary() {
+      DrawStaticUiSprite();
+      FullyFinishLevelEndScreenFades() {
+      }
+      TimeTrialFailedToQualifyScreen() {
+        DrawMenuCursorSprite() {
+        }
+        DrawStaticUiSprite();
+        FormatTime();
+      }
+      FormatTime();
+    }
+    ShowEndingFmv() {
+      MusicPause() {
+        CdControlB();
+        CdReadSync();
+        SpuSetReverb();
+      }
+      SndSetMusicVolume();
+      StoreImage();
+      FmvMainLoop() {
+        CdSearchFile();
+        StrSetDefDecEnv();
+        StrInit();
+        DecDCTvlcBuild();
+        StrNextVlc();
+        StrKickCd();
+        SetDispMask();
+        ClearImage();
+        DecDCTin();
+        DecDCTout();
+        StGetBackloc();
+        StrSync();
+        SetDefDispEnv();
+        PutDispEnv();
+        DecDCToutCallback();
+        StUnSetRing();
+        CdControlB();
+        ResetGraph();
+        StopCallback();
+      }
+      ClearImage();
+      SetupDisplay();
+      SwitchFromBonusToNormalMusic() {
+        SndSetMusicVolume();
+        CdReadSync();
+        CdControlB();
+        VSyncCallback();
+        SetupDisplay();
+        SpuSetReverb();
+      }
+    }
+    ResetCallback();
+    HighScoreUi() {
+      SndMuteAllVoices();
+      DrawWidgets();
+      InitPsxButtonBackgroundSprites() {
+      }
+      InitHighscoreCubes() {
+        GetHighscoreCubeStyle() {
+        }
+      }
+      InitScoreGraph() {
+      }
+      SndProcessSpuVoices();
+      FormatTime();
+      DrawScoreGraph() {
+      }
+      DrawPsxButtonBackground() {
+      }
+      DrawHighScoreCubes() {
+      }
+    }
+  }
+  SndMuteAllVoices();
+}
+
+FIXME: These are missing but should be there
+  DirFunc0
+  DirFunc1
+  DirFunc2
+  DirFunc3
+  DirFunc4
+  DirFunc5
+  FadeOutBigGuiSprite
+  FadePsxButtonBackground
+  LoadingScreenVSyncCallback
+  MainGameVSyncCallback
+  SndFadeVoiceVolume
