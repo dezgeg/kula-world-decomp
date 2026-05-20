@@ -814,7 +814,7 @@ void HandlePlayerButtons(Player *player) {
                 }
 
                 if (player->rollingForward == 1 && player->jumping == 0 && player->surroundingBlocks[0][2][1] < 0 &&
-                    (player->surroundingBlocks[0][1][0] > -1 || player->surroundingBlocks[0][1][2] > -1)) {
+                    (player->surroundingBlocks[0][1][0] >= 0 || player->surroundingBlocks[0][1][2] >= 0)) {
                     player->rollingForward = 0;
                 }
 
