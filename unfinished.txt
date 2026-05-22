@@ -19,7 +19,6 @@ MainGameLoop: https://decomp.me/scratch/A0Tmn
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 ProcessCrumblingBlocks: https://decomp.scratch/2XWwj
 ProcessCubesIntoFaces: https://decomp.me/scratch/rjmZz
-ProcessFlashingBlocks: http://decomp.me/scratch/5T9GV
 RecalcSkyboxes01: https://decomp.me/scratch/FfB3v
 RecalcSkyboxes2: https://decomp.scratch/lOoyN
 ScanLevelDataForBlinkingEntities: <none>

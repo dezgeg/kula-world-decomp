@@ -1,5 +1,8 @@
 #include "common.h"
 
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34  + (y) * 34  + (z)]
+#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
+
 typedef struct MovingPlatformEntity2 {
     short tag;
     short movementDirection;
@@ -29,6 +32,18 @@ typedef struct MovingPlatformEntity2 {
     char pad4[12];
 } MovingPlatformEntity2;
 
+typedef struct FlashingEntity {
+    short tag;
+    short cubeType;
+    short initState;
+    short state;
+    short counter;
+    short pad[120];
+    short x;
+    short y;
+    short z;
+} FlashingEntity;
+
 typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
 
 extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
@@ -51,6 +66,11 @@ extern QuadFunc QUAD_FUNC_PTRS[6];
 extern short movingBlockEntityIndexes[16];
 extern short* entityData;
 extern int numMovingPlatforms;
+extern Quad* cubeStates[256];
+extern short flashingBlockEntityIndexes[64];
+extern short* levelData;
+extern int numFlashingBlocks;
+extern int specialLevelType;
 
 void ProcessMovingPlatforms2(void) {
     MovingPlatformEntity2 *mpe;
@@ -91,7 +111,126 @@ void ProcessMovingPlatforms2(void) {
 
 INCLUDE_ASM("asm/nonmatchings/update", ProcessCrumblingBlocks);
 
-INCLUDE_ASM("asm/nonmatchings/update", ProcessFlashingBlocks);
+void ProcessFlashingBlocks(void) {
+    Quad *quad;
+    int i;
+    int j;
+    uint color;
+    int counter;
+    int x;
+    int y;
+    int z;
+    int cubeIndex;
+    FlashingEntity *eb;
+
+    for (i = 0; i < numFlashingBlocks; i++) {
+        eb = (FlashingEntity *)(entityData + flashingBlockEntityIndexes[i] * 128);
+        counter = eb->counter;
+        z = (int)eb->z;
+        x = (int)eb->x;
+        y = (int)eb->y;
+        cubeIndex = CUBE_INDEX_AT(x, y, z);
+        switch(eb->state) {
+        case 0:
+            counter--;
+            if (counter <= 0) {
+                for (j = 0; j < 6; j++) {
+                    quad = cubeStates[cubeIndex * 16 + j];
+                    // FIXME: no idea why volatile makes this match
+                    if (*(volatile int*)&specialLevelType == 1) {
+                        quad->flags.u16 = 0x107;
+                    } else {
+                        quad->flags.u16 = 0x10f;
+                    }
+                    quad->color = 0;
+                }
+                counter = 8;
+                CUBE_TYPE_AT(x, y, z) = eb->cubeType;
+                eb->state = 1;
+            }
+            break;
+        case 1:
+            counter--;
+            if (counter > 0) {
+                color = ((8 - counter) * 0xff) / 8;
+                color = color << 16 | color << 8 | color;
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = color;
+                }
+            } else {
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
+                }
+                eb->state = 2;
+                counter = 4 ;
+            }
+            break;
+        case 2:
+            counter--;
+            if (counter > 0) {
+                color = counter * 56 + 32;
+                color = color << 16 | color << 8 | color;
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = color;
+                }
+            } else {
+                for (j = 0; j < 6; j++) {
+                    quad = cubeStates[cubeIndex * 16 + j];
+                    *(char *)((int)&quad->flags + 1) = 0;
+                    quad->color = 0x808080;
+                }
+                eb->state = 3;
+                counter = 76;
+            }
+            break;
+        case 3:
+            counter--;
+            if (counter <= 0) {
+                eb->state = 4;
+                counter = 8;
+                for (j = 0; j < 6; j++) {
+                    quad = cubeStates[cubeIndex * 16 + j];
+                    *(byte *)((int)&quad->flags + 1) = 1;
+                    quad->color = 0x202020;
+                }
+            }
+            break;
+        case 4:
+            counter--;
+            if (counter > 0) {
+                color = 256 - counter * 28;
+                color = color << 16 | color << 8 | color;
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = color;
+                }
+            } else {
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
+                }
+                eb->state = 5;
+                counter = 16;
+            }
+            break;
+        case 5:
+            counter--;
+            if (counter > 0) {
+                color = counter * 255 / 16;
+                color = color << 16 | color << 8 | color;
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->color = color;
+                }
+            } else {
+                for (j = 0; j < 6; j++) {
+                    cubeStates[cubeIndex * 16 + j]->flags.u8 = 6;
+                }
+                counter = 76;
+                CUBE_TYPE_AT(x, y, z) = -1;
+                eb->state = 0;
+            }
+        }
+        eb->counter = counter;
+    }
+}
 
 void ProcessRetractableSpikes(void) {
     int i;

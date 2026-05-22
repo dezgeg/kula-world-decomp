@@ -62,7 +62,7 @@ segments:
       - [0x00814, .rodata, level_init]
       - [0x0082c, rodata, level_init_2]
       - [0x00838, rodata, rodata_00838]
-      - [0x0085c, .rodata, update]
+      - [0x00844, .rodata, update]
       - [0x00870, rodata, update]
       - [0x008d4, .rodata, block_utils]
       - [0x0091c, .rodata, light_effect]
