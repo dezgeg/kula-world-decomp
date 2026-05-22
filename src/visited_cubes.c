@@ -10,11 +10,15 @@ typedef struct CubeState {
     int field6_0x3c;
 } CubeState;
 
+typedef struct RecentlyVisitedCubeData {
+    Quad* quad;
+    int counter;
+} RecentlyVisitedCubeData;
+
 typedef struct RecentlyVisitedCube {
-    void* unk0;
-    void* unk4;
-    void* unk8;
-    void* unkC;
+    void** link;
+    RecentlyVisitedCubeData data;
+    int pad;
 } RecentlyVisitedCube;
 
 extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
@@ -93,19 +97,55 @@ void SetCubeFaceVisited(int x,int y,int z,int whichSide,int visitType) {
                 if (*pSideFlag == (int*)-1) {
                     p = recentlyVisitedCubeFaces;
                     for (i = 0; i < 32; i++) {
-                        if (p[i].unk0 == (void*)-1) {
+                        if (p[i].link == (void**)-1) {
                             break;
                         }
                     }
                     *pSideFlag = (int*)(i * sizeof(RecentlyVisitedCube) + (int)p);
-                    p[i].unk0 = pSideFlag;
-                    p[i].unk4 = quad;
-                    p[i].unk8 = 0;
+                    p[i].link = (void**)pSideFlag;
+                    p[i].data.quad = quad;
+                    p[i].data.counter = 0;
                 }
             }
         }
     }
 }
 
-// https://decomp.me/scratch/X4b4u
-INCLUDE_ASM("asm/nonmatchings/visited_cubes", ProcessRecentlyVisitedCubes);
+void ProcessRecentlyVisitedCubes(void) {
+    RecentlyVisitedCube *p;
+    int i;
+    void **link;
+    int counter;
+    Quad *quad;
+    int color;
+    int r, g, b;
+
+    p = recentlyVisitedCubeFaces;
+    for (i = 0; i < 32; i++) {
+        link = p->link;
+        if (link != (void**)-1) {
+            counter = p->data.counter;
+            counter += 0x80;
+            if (counter >= 0x1000) {
+                *link = (void*)-1;
+                p->link = (void**)-1;
+            } else {
+                p->data.counter = counter;
+                quad = p->data.quad;
+                color = quad->color;
+
+                r = (color & 0xff);
+                g = (color >> 8) & 0xff;
+                b = (color >> 16) & 0xff;
+
+                r = ((r - 0xa0) * counter >> 12) + 0xa0;
+                g = ((g - 0xa0) * counter >> 12) + 0xa0;
+                b = ((b - 0xa0) * counter >> 12) + 0xa0;
+
+                color = (b << 16) | (g << 8) | r;
+                quad->color = color;
+            }
+        }
+        p++;
+    }
+}

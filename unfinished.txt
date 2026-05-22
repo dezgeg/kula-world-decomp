@@ -20,7 +20,6 @@ ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 ProcessCrumblingBlocks: https://decomp.scratch/2XWwj
 ProcessCubesIntoFaces: https://decomp.me/scratch/rjmZz
 ProcessFlashingBlocks: http://decomp.me/scratch/5T9GV
-ProcessRecentlyVisitedCubes: https://decomp.me/scratch/X4b4u
 RecalcSkyboxes01: https://decomp.me/scratch/FfB3v
 RecalcSkyboxes2: https://decomp.scratch/lOoyN
 ScanLevelDataForBlinkingEntities: <none>
