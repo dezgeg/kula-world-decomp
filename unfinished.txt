@@ -1,5 +1,4 @@
 CalcLevelBounds: https://decomp.scratch/CTYFE
-CopyQuadData: https://decomp.me/scratch/kyhIu
 CreateAllItemDispLists: https://decomp.scratch/r8cry
 CreateItemDispList: https://decomp.me/scratch/Q9HSg
 CreatePlayerDispList: https://decomp.scratch/PvGtU

@@ -15,6 +15,8 @@ typedef struct FaceData {
     int color;
 } FaceData;
 
+typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
+
 typedef struct {
     short entityType;
     short pad2;
@@ -81,6 +83,8 @@ extern uint UNK_ENTRIES[];
 extern int invisBlockVisibility[6];
 extern int gameMode;
 extern int numKeysInLevel;
+extern QuadFunc QUAD_FUNC_PTRS[6];
+extern char cubeTextureMetadata[];
 
 TgiFile* tgi;
 FaceData* faceDataPtr;
@@ -96,8 +100,13 @@ int numCubesInLevelTmp;
 int numCubesRemainingInLevel[5];
 int numberOfCubeFaces;
 short* levelData;
+int quadSomethingCount;
+int quadSomethingStartIndex;
+short* tgiPart5;
+int D_000A54F4;
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
+#define QUAD_BASE ((Quad*)0x191000)
 
 void ProcessLevelData(void) {
     int i;
@@ -315,7 +324,35 @@ void SetFaceData(int index, void** pointerInsideCubeState, int texIdx, int flags
     ((int*)fd)[1] = color;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", CopyQuadData);
+void CopyQuadData(void) {
+    FaceData* fd;
+    Quad* q;
+    int i;
+    int j = 0;
+    int dir;
+    int idx;
+
+    for (i = quadSomethingStartIndex; i < quadSomethingStartIndex + quadSomethingCount; i++) {
+        for (fd = faceDataPtr; fd < faceDataPtr + numberOfCubeFaces; fd++) {
+            if (fd->texIdx != i) {
+                continue;
+            }
+            *fd->pointerInsideCubeState = q = &QUAD_BASE[j];
+            q->flags.i32 = fd->flags;
+            *(int*)&q->otagIndex = 0xffff;
+            dir = fd->dir;
+            idx = (tgiPart5[i*2] * 3 + tgiPart5[i*2+1] * tgi->unk12c[dir]) * 32;
+            q->metadata = &cubeTextureMetadata[idx];
+            q->color = fd->color;
+            j++;
+            QUAD_FUNC_PTRS[dir](q, 512, fd->x, fd->y, fd->z, fd->textureRotation);
+        }
+    }
+    // permuter hack
+    idx = j;
+    D_000A54F4 = idx;
+}
+
 
 void InitAnimatedTextureChain(AnimatedTextureChain* dst, int numEntries, int numFrames1,
                               int numFrames2, void* ptr1, void* ptr2, void* ptr3, void* ptr4,
