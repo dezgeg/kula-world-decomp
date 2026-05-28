@@ -3,7 +3,7 @@ CreateAllItemDispLists: https://decomp.scratch/r8cry
 CreateItemDispList: https://decomp.me/scratch/Q9HSg
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DisableItemShadow: https://decomp.scratch/apQkr
-DrawScoreGraph: <none>
+DrawScoreGraph: https://decomp.me/scratch/KHxMt
 DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 HandleItemTouching: https://decomp.me/scratch/0GliO
 HandleSpecialCubeTypes: https://decomp.scratch/0RSJc
@@ -11,7 +11,7 @@ InitAllDigitSprites: https://decomp.me/scratch/CmcRF
 InitLasers2: https://decomp.scratch/LWRua
 InitLasers: http://decomp.me/scratch/qhHUf
 InitLasers: http://decomp.me/scratch/Rap4x
-InitScoreGraph: <none>
+InitScoreGraph: https://decomp.me/scratch/cMAKo
 LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn
