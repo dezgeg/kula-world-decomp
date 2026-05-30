@@ -248,8 +248,6 @@ S_SPECIAL_CHARS = 0x00073278; // type:asciz
 S_MAX_SORT_OBJ_too_small = 0x00099e84; // type:asciz
 // "ot_obj overflow! MRLEN_OBJ too small!"
 S_ot_obj_overflow_MRLEN_OBJ_too_small = 0x00099ea0; // type:asciz
-// "Library Programs (c) 1993-1997 Sony Computer Entertainment Inc., All Rights Reserved."
-S_Library_Programs_c_1993_1997_Sony_Computer_Entertainment_Inc_All_Rights_Reserved = 0x000a0e48; // type:asciz
 // "Fatal error in jens 2d-eng:\n\n"
 S_Fatal_error_in_jens_2d_eng = 0x000a2abc; // type:asciz
 // "1.0.4"

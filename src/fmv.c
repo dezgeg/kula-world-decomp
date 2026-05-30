@@ -58,7 +58,7 @@ static int fmvEnded;
 
 // .bss
 extern DECDCTTAB vlc_table;
-extern int stCdIntrFlag;
+extern int LIBCD_CDROM_StCdIntrFlag;
 
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
@@ -278,9 +278,9 @@ void StrCallback() {
     RECT snap_rect;
 
     if (dec.is24bit) {
-        if (stCdIntrFlag) {
+        if (LIBCD_CDROM_StCdIntrFlag) {
             StCdInterrupt();
-            stCdIntrFlag = 0;
+            LIBCD_CDROM_StCdIntrFlag = 0;
         }
     }
     id = dec.imgid;
