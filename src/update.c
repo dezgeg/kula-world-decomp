@@ -406,4 +406,24 @@ void TurnLevelExitQuadIntoGreen(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/update", DisableItemShadow);
+int DisableItemShadow(int entityIndex, int side, int const0) {
+    Quad *quad;
+    int cubeIndex;
+    short *ed = entityData + entityIndex * 128;
+
+    cubeIndex = CUBE_INDEX_AT(ed[125], ed[126], ed[127]);
+
+    if ((int)cubeStates[cubeIndex * 16 + 15] == 0) {
+        quad = (Quad*)cubeStates[cubeIndex * 16 + side];
+        if (specialLevelType == 1) {
+            quad->flags.i32 = (quad->flags.i32 & 0xfffeffff) | (const0 << 16);
+        } else {
+            quad->flags.b[3] = const0;
+        }
+    }
+
+    if ((int)cubeStates[cubeIndex * 16 + 15] == 2) {
+        quad = (Quad*)cubeStates[cubeIndex * 16 + side];
+        quad->flags.b[3] = const0;
+    }
+}

@@ -447,4 +447,29 @@ void InitPlayerSpecularSprite(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForBlinkingEntities);
+void ScanLevelDataForBlinkingEntities(void) {
+    int j, i;
+    short *ent;
+
+    for (i = 0; i < numEntities; i++) {
+        if (entityData[i * 128] == 0) {
+            for (j = 0; j < 6; j++) {
+                ent = (short *)((i * 128 + j * 16) * 2 + (int)entityData);
+                switch (ent[1]) {
+                    case 7:
+                        ent[15] = 16;
+                        ent[16] = 255;
+                        break;
+                    case 5:
+                        ent[15] = 16;
+                        ent[16] = 255;
+                        break;
+                    case 9:
+                        ent[15] = 16;
+                        ent[16] = 255;
+                        break;
+                }
+            }
+        }
+    }
+}
