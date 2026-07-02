@@ -8,7 +8,7 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 // non-gprel-used variables (extern)
 extern int displayWidth;
-extern int* MENU_DEFLATED_SPRITES_PTR2;
+extern int* MENU_DEFLATED_SPRITES2_PTR;
 extern int whichDrawDispEnv;
 extern MemcardData memCardData;
 extern PrimList primLists[2];
@@ -49,9 +49,9 @@ void InitMemcardUi(void) {
     char* buf2;
 
     if (whichLevelEndSpriteLoaded != 200) {
-        len = MENU_DEFLATED_SPRITES_PTR2[2 + tex * 2];
-        offset = MENU_DEFLATED_SPRITES_PTR2[1 + tex * 2];
-        buf = (char*)MENU_DEFLATED_SPRITES_PTR2 + offset;
+        len = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
+        offset = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];
+        buf = (char*)MENU_DEFLATED_SPRITES2_PTR + offset;
         zlibStream_a4dd4.avail_in = len;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
@@ -89,7 +89,7 @@ void InitMemcardUi(void) {
         LoadImage(&rect, 0x1EA040);
         DrawSync(0);
         tex++;
-        if (MENU_DEFLATED_SPRITES_PTR2[0] < tex) {
+        if (MENU_DEFLATED_SPRITES2_PTR[0] < tex) {
             SetupDisplay(1, 0x80, 0, 0, 0, 0);
             FntFlush(-1);
             DrawSync(0);
@@ -103,9 +103,9 @@ void InitMemcardUi(void) {
             for (;;)
                 ;
         }
-        len2 = MENU_DEFLATED_SPRITES_PTR2[2 + tex * 2];
-        offset2 = MENU_DEFLATED_SPRITES_PTR2[1 + tex * 2]  & 0xFFFFFFFFFFFFFFFFu; // XXX permuter mess
-        buf = (char *) MENU_DEFLATED_SPRITES_PTR2 + offset2;
+        len2 = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
+        offset2 = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2]  & 0xFFFFFFFFFFFFFFFFu; // XXX permuter mess
+        buf = (char *) MENU_DEFLATED_SPRITES2_PTR + offset2;
         zlibStream_a4dd4.avail_in = len2;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
