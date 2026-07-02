@@ -42,9 +42,6 @@ extern CubeTextureMetadata cubeTextureMetadata[1300];
 extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
-extern int HIGHSCORE_CUBE_RANDOM_TEXTURES[16];
-extern int INT_ARRAY_000a2cd8[7];
-extern int LOD_THRESHOLDS[9];
 extern int turningMotionBlurTable[9 * 7];
 extern short DAT_00171314;
 extern short DAT_00171316[];
@@ -86,6 +83,10 @@ short* levelData;
 short numEntities;
 int specialLevelType;
 int wasSpecialLevel;
+
+int INT_ARRAY_000a2cd8[7] = { 28, 23, 22, 15, 40, 30, 20 };
+int LOD_THRESHOLDS[9] = { 0, 30, 43, 55, 66, 76, 85, 93, 100 };
+int HIGHSCORE_CUBE_RANDOM_TEXTURES[16] = { 666, 666, 666, 666, 666, 666, 4, 4, 4, 4, 668, 668, 668, 6, 6, 0 };
 
 void* ParseTGI(TgiFile* tgiBuf) {
     int i;
