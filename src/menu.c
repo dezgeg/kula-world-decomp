@@ -16,7 +16,6 @@ extern void TimeTrialDifficultySelectionMenu(void);
 extern void TwoPlayerLevelSelectMenu(void);
 extern void TwoPlayerMenu(void);
 
-extern SVECTOR ZERO_SVECTOR_a3340;
 extern char scoreText[128];
 extern int TIME_TRIAL_PAR_TIMES[150];
 extern int byteCountToReceiveFromSio;
@@ -70,22 +69,26 @@ extern LINE_F3 screenAdjustLine1[2];
 extern LINE_F3 screenAdjustLine2[2];
 extern DrawDisp drawdisp[2];
 extern PrimList primLists[2];
-extern char S_FMTd_4[];
-extern char S_FMTd_5[];
-
 short qualifyScreenCursorX;
 short qualifyScreenCursorY;
-int copycatModeStartingPlayer;
-int curMenu;
+
 int cursorPosInMenu[8];
-int isPaused;
 int levelScoreSummaryConfirmed;
 int menuUnkAlwaysZero;
 int repeatRateTimer;
 int savePointMenuConfirmed;
-int timeTrialAtEndOfWorld;
 int twoPlayerLevelSelectionCursorPos;
-int wasPausedPreviousFrame;
+
+int idleTimer = 0;
+SVECTOR ZERO_SVECTOR_a3340 = {0, 0, 0, 0};
+int copycatModeStartingPlayer = 0;
+int isPaused = 0;
+int wasPausedPreviousFrame = 0;
+int curMenu = 0;
+char S_FMTd_3[8] = "%d \n";
+char S_FMTd_4[4] = "%d\n";
+int timeTrialAtEndOfWorld = 0;
+char S_FMTd_5[12] = "%d";
 
 static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
@@ -97,7 +100,6 @@ static inline void SetDispScreen(ushort x, ushort y) {
 }
 
 void PauseOrMainMenu(void) {
-    extern char S_FMTd_3[];
     char buf[64];
 
     if (gameState == 0) {
