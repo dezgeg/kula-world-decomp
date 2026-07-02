@@ -41,7 +41,6 @@ extern int totalPlayTime[2];
 extern int whichDrawDispEnv;
 extern uint otag[2][1][1026];
 extern int highscoreLevelScores[6][150];
-extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
 extern char S__4[];
 extern char S__5[];
 extern char S_FMTs_3[];
@@ -58,14 +57,13 @@ extern char S_FMTc[];
 short highscoreEntryCursorX;
 short highscoreEntryCursorY;
 int idleTimer;
-unsigned char rainbowColorB;
-unsigned char rainbowColorDeltaB;
-unsigned char rainbowColorDeltaG;
-unsigned char rainbowColorDeltaR;
-unsigned char rainbowColorG;
 unsigned char rainbowColorR;
+unsigned char rainbowColorB;
+unsigned char rainbowColorG;
 int repeatRateTimer;
 Highscore highscores[6];
+
+extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
@@ -115,6 +113,10 @@ void InitHighscores(void) {
     sprintf(highscores[4].name, S_SAVE_4);
     sprintf(highscores[5].name, S_PLAYER);
 }
+
+unsigned char rainbowColorDeltaR;
+unsigned char rainbowColorDeltaG;
+unsigned char rainbowColorDeltaB;
 
 void HighScoreUi(int param_1) {
     int maxScore;
