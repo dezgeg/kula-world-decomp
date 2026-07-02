@@ -51,7 +51,6 @@ extern int sprintf(char * s, const char * format, ...);
 
 extern LINE_F3 LINE_F3_ARRAY_000a49a0[2];
 extern LINE_F3 LINE_F3_ARRAY_000a49d0[2];
-extern SVECTOR SVECTOR_000a2fac;
 extern uint controllerButtons;
 extern int curController;
 extern struct DIRENTRY direntry;
@@ -68,31 +67,20 @@ extern PrimList primLists[2];
 extern char stringbuf[64];
 extern TgiFile * tgi;
 extern int whichDrawDispEnv;
-extern char S_CHECKING_MEMORY_CARD_PLEASE_WAIT[];
-extern char S_FMTd_2[];
-extern char S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE[];
-extern char S_NAME[];
-extern char S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD[];
-extern char S_PLEASE_SELECT_FILE_TO_REPLACE[];
-extern char S_PRESS_g_TO_CONTINUE_e_TO_CANCEL[];
-extern char S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_SAVING_DO_NOT_REMOVE_MEMORY_CARD[];
-extern char S_SIZE_FMTd_BLOCK[];
-extern char S_SIZE_FMTd_BLOCKS[];
-extern char S_XYZ[];
 
 // Variables
+int saveSlot = 0;
+int memCardDataValid = 0;
+SVECTOR SVECTOR_000a2fac = {0};
 int INT_000a5690;
 uint mcResult;
-int memCardDataValid;
-int saveSlot;
 long tempMcResult;
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
+
+char S_BESCES_01000KULA[32] = "BESCES-01000KULA";
 
 int LoadSaveMenu(void) {
     int i, j, k;
@@ -239,7 +227,7 @@ int LoadSaveMenu(void) {
 
                 if (TestButton(PAD_CROSS)) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    ShowMemCardFullScreenText(S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD);
+                    ShowMemCardFullScreenText("LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n");
                     if (LoadSaveSlot(saveSlot) == 1) {
                         return 1;
                     }
@@ -253,16 +241,16 @@ int LoadSaveMenu(void) {
                 DrawSaveSlotSprites(0);
 
                 if (memCardData.saveslots[saveSlot].isFinal == 0) {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 15 + memCardData.saveslots[saveSlot].curLevel + 1);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].curWorld * 15 + memCardData.saveslots[saveSlot].curLevel + 1);
                 } else {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 2 + memCardData.saveslots[saveSlot].curLevel + 151);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].curWorld * 2 + memCardData.saveslots[saveSlot].curLevel + 151);
                 }
                 DrawTextFancyFont(stringbuf, 110, 89);
                 DrawStaticUiSprite(3, 20, 89, 0);
                 DrawStaticUiSprite(11, 20, 108, 0);
 
                 if (memCardData.saveslots[saveSlot].gameMode == 0) {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].score);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].score);
                     DrawTextFancyFont(stringbuf, 280, 89);
                     DrawStaticUiSprite(5, 130, 89, 0);
                     DrawStaticUiSprite(12, 100, 108, 0);
@@ -292,7 +280,7 @@ int LoadSaveMenu(void) {
 
                 if (TestButton(PAD_CROSS)) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                    ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
                     for (i = 0; ; i++) {
                         if (memCardData.saveslots[(saveSlot + i) % 4].valid != 0) break;
@@ -458,16 +446,16 @@ int MemCardUi(void) {
 
             if (memCardData.saveslots[saveSlot].valid == 1) {
                 if (memCardData.saveslots[saveSlot].isFinal == 0) {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 15 + memCardData.saveslots[saveSlot].curLevel + 1);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].curWorld * 15 + memCardData.saveslots[saveSlot].curLevel + 1);
                 } else {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].curWorld * 2 + memCardData.saveslots[saveSlot].curLevel + 151);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].curWorld * 2 + memCardData.saveslots[saveSlot].curLevel + 151);
                 }
                 DrawTextFancyFont(stringbuf, 110, 89);
                 DrawStaticUiSprite(3, 20, 89, 0);
                 DrawStaticUiSprite(11, 20, 108, 0);
 
                 if (memCardData.saveslots[saveSlot].gameMode == 0) {
-                    sprintf(stringbuf, S_FMTd_2, memCardData.saveslots[saveSlot].score);
+                    sprintf(stringbuf, "%d \n", memCardData.saveslots[saveSlot].score);
                     DrawTextFancyFont(stringbuf, 280, 89);
                     DrawStaticUiSprite(5, 130, 89, 0);
                     DrawStaticUiSprite(12, 100, 108, 0);
@@ -482,7 +470,7 @@ int MemCardUi(void) {
             if (TestButton(PAD_CROSS)) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                 if (memCardData.saveslots[saveSlot].valid == 0) {
-                    ShowMemCardFullScreenText(S_SAVING_DO_NOT_REMOVE_MEMORY_CARD);
+                    ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
                     if (SaveMemCard(saveSlot) == 1) {
                         return 1;
                     }
@@ -504,7 +492,7 @@ int MemCardUi(void) {
                 break;
             case McErrNewCard:
                 INT_000a5690 = 0;
-                ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                 LoadSaveSlot(-1);
                 if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
                     INT_000a5690 = 1;
@@ -523,7 +511,7 @@ int MemCardUi(void) {
                 }
                 if (TestButton(PAD_CROSS)) {
                     if (cursorPos == 0) {
-                        ShowMemCardFullScreenText(S_CHECKING_MEMORY_CARD_PLEASE_WAIT);
+                        ShowMemCardFullScreenText("CHECKING MEMORY CARD\n\nPLEASE WAIT\n");
                         FormatMemcard();
                         LoadSaveSlot(-1);
                         if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
@@ -544,12 +532,12 @@ int MemCardUi(void) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                     switch (MemCardUiPart()) {
                         case 1:
-                            ShowMemCardFullScreenText(S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD);
+                            ShowMemCardFullScreenText("REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n");
                             if (SaveMemCard(saveSlot) == 1) {
                                 return 1;
                             }
                             INT_000a5690 = 0;
-                            ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                            ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                             LoadSaveSlot(-1);
                             if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
                                 INT_000a5690 = 1;
@@ -558,7 +546,7 @@ int MemCardUi(void) {
                             break;
                         case 0:
                             INT_000a5690 = 0;
-                            ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                            ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                             LoadSaveSlot(-1);
                             if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
                                 INT_000a5690 = 1;
@@ -572,7 +560,7 @@ int MemCardUi(void) {
                 }
                 if (TestButton(PAD_CIRCLE)) {
                     INT_000a5690 = 0;
-                    ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                    ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
                     if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
                         INT_000a5690 = 1;
@@ -584,7 +572,7 @@ int MemCardUi(void) {
                 DrawWidgets(17, 0);
                 if (TestButton(PAD_CROSS)) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    ShowMemCardFullScreenText(S_SAVING_DO_NOT_REMOVE_MEMORY_CARD);
+                    ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
                     if (SaveMemCard(saveSlot) == 1) {
                         return 1;
                     }
@@ -600,7 +588,7 @@ int MemCardUi(void) {
             if (TestButton(PAD_CROSS) && mcResult) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                 INT_000a5690 = 0;
-                ShowMemCardFullScreenText(S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD);
+                ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                 LoadSaveSlot(-1);
                 if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
                     INT_000a5690 = 1;
@@ -649,7 +637,7 @@ int MemCardUiPart(void) {
 
     for (idx = 0; idx < 15; idx++) {
         if (files < 1) break;
-        MemCardGetDirentry(0, S_XYZ, &direntry, &files, idx, 1);
+        MemCardGetDirentry(0, "*XYZ", &direntry, &files, idx, 1);
 
         if (MemCardReadFile(0, direntry.name, (u_long*)&memcardBuf, 0, 256) == 1 && files > 0) {
             MemCardSync(0, &mcCmd, &tempMcResult);
@@ -843,25 +831,25 @@ int MemCardUiPart(void) {
             if (TestButton(PAD_CIRCLE)) break;
 
             SetTextParams(displayWidth / 2, displayHeight / 2 - 105, 1, 128, 128, 128);
-            DrawTextCrappyFont(S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE);
+            DrawTextCrappyFont("MEMORY CARD IS FULL.\nYOU MUST REPLACE ANOTHER FILE\n");
 
             SetTextParams(20, displayHeight / 2 + 40, 0, 128, 128, 128);
-            DrawTextCrappyFont(S_NAME);
+            DrawTextCrappyFont("NAME:\n");
             SetTextParams(60, displayHeight / 2 + 40, 0, 128, 128, 128);
             DrawTextCrappyFont(fileNames[cursorY * 3 + cursorX]);
 
             SetTextParams(20, displayHeight / 2 + 52, 0, 128, 128, 128);
             if (fileSizes[cursorY * 3 + cursorX] == 1) {
-                sprintf(stringbuf, S_SIZE_FMTd_BLOCK, fileSizes[cursorY * 3 + cursorX]);
+                sprintf(stringbuf, "SIZE: %d BLOCK\n", fileSizes[cursorY * 3 + cursorX]);
             } else {
-                sprintf(stringbuf, S_SIZE_FMTd_BLOCKS, fileSizes[cursorY * 3 + cursorX]);
+                sprintf(stringbuf, "SIZE: %d BLOCKS\n", fileSizes[cursorY * 3 + cursorX]);
             }
             DrawTextCrappyFont(stringbuf);
 
             SetTextParams(displayWidth / 2, displayHeight / 2 + 70, 1, 128, 128, 128);
-            DrawTextCrappyFont(S_PLEASE_SELECT_FILE_TO_REPLACE);
-            DrawTextCrappyFont(S_PRESS_g_TO_CONTINUE_e_TO_CANCEL);
-            DrawTextCrappyFont(S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD);
+            DrawTextCrappyFont("PLEASE SELECT FILE TO REPLACE\n");
+            DrawTextCrappyFont("PRESS g TO CONTINUE, e TO CANCEL\n");
+            DrawTextCrappyFont("OR h TO RE-READ ANOTHER MEMORY CARD.\n");
 
             setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0xc0, 0xc0, 0xc0);
             setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0xc0, 0xc0, 0xc0);
