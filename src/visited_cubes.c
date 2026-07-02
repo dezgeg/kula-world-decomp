@@ -26,9 +26,10 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern int cubeStates[16 * 256];
 extern RecentlyVisitedCube recentlyVisitedCubeFaces[32];
-extern SVECTOR SVECTOR_000a2dd0;
 extern int levelScore;
 extern int numCubesRemainingInLevel[5];
+
+static SVECTOR SVECTOR_000a2dd0 = {};
 
 #define CS_SIZE 16
 #define CS_SIDES_VISITED 12

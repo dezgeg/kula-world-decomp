@@ -459,7 +459,7 @@ segments:
       - [0x924a8, sdata, nonmatched/sdata_924a8]
       - [0x924d8, .sdata, tgi]
       - [0x92558, .sdata, render2]
-      - [0x925d0, sdata, visited_cubes]
+      - [0x925d0, .sdata, visited_cubes]
       - [0x925d8, sdata, nonmatched/sdata_925d8]
       - [0x929fc, .sdata, sjis]
       - [0x92a08, .sdata, devkit]
