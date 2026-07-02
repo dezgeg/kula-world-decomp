@@ -41,17 +41,7 @@ extern int totalPlayTime[2];
 extern int whichDrawDispEnv;
 extern uint otag[2][1][1026];
 extern int highscoreLevelScores[6][150];
-extern char S__4[];
-extern char S__5[];
-extern char S_FMTs_3[];
-extern char S_SCORE[];
-extern char S_TIMETRIAL[];
 extern char S_FMTd_4[];
-extern char S_LEVEL[];
-extern char S_FRUITS[];
-extern char S_TIME[];
-extern char S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE[];
-extern char S_FMTc[];
 
 // gprel-used variables (defined in this file)
 short highscoreEntryCursorX;
@@ -63,19 +53,17 @@ unsigned char rainbowColorG;
 int repeatRateTimer;
 Highscore highscores[6];
 
-extern char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10];
+char S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[3][10] = {
+    "ABCDEFGHIJ",
+    "KLMNOPQRST",
+    "UVWXYZ.-<>"
+};
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
 void InitHighscores(void) {
-    extern char S_LEIF[];
-    extern char S_SAVE_1[];
-    extern char S_SAVE_2[];
-    extern char S_SAVE_3[];
-    extern char S_SAVE_4[];
-    extern char S_PLAYER[];
     int levelScore;
     int i;
     int j;
@@ -106,17 +94,17 @@ void InitHighscores(void) {
         }
     }
 
-    sprintf(highscores[0].name, S_LEIF);
-    sprintf(highscores[1].name, S_SAVE_1);
-    sprintf(highscores[2].name, S_SAVE_2);
-    sprintf(highscores[3].name, S_SAVE_3);
-    sprintf(highscores[4].name, S_SAVE_4);
-    sprintf(highscores[5].name, S_PLAYER);
+    sprintf(highscores[0].name, "LEIF");
+    sprintf(highscores[1].name, "SAVE 1");
+    sprintf(highscores[2].name, "SAVE 2");
+    sprintf(highscores[3].name, "SAVE 3");
+    sprintf(highscores[4].name, "SAVE 4");
+    sprintf(highscores[5].name, "PLAYER");
 }
 
-unsigned char rainbowColorDeltaR;
-unsigned char rainbowColorDeltaG;
-unsigned char rainbowColorDeltaB;
+unsigned char rainbowColorDeltaR = 1;
+unsigned char rainbowColorDeltaG = 2;
+unsigned char rainbowColorDeltaB = 3;
 
 void HighScoreUi(int param_1) {
     int maxScore;
@@ -323,14 +311,14 @@ LABEL_SKIP_ENTRY:
             }
 
             SetTextParams(26, 45, 0, -1, -1, -1);
-            DrawTextCrappyFont(S__4);
+            DrawTextCrappyFont("\n");
             for (i = 0; i < 6; i++) {
                 waveX = 0;
                 if (local_50 + 50 * i >= 3072) {
                     waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
                 }
                 SetTextParams(waveX + 11, -1, -1, -1, -1, -1);
-                DrawTextCrappyFont(i == cursorIndex ? S__5 : S__4);
+                DrawTextCrappyFont(i == cursorIndex ? "-           -\n" : "\n");
             }
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE) || TestButton(PAD_START)) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
@@ -361,10 +349,10 @@ LABEL_SKIP_ENTRY:
 
         v = 54;
         SetTextParams(54, 45, 1, 128, 128, 128);
-        DrawTextCrappyFont(S__4);
+        DrawTextCrappyFont("\n");
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
-            sprintf(buf, S_FMTs_3, highscores[i].name);
+            sprintf(buf, "%s\n", highscores[i].name);
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
             } else {
@@ -379,7 +367,7 @@ LABEL_SKIP_ENTRY:
         }
 
         SetTextParams(152, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont(S_SCORE);
+        DrawTextCrappyFont("SCORE\n");
         v = 156;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
@@ -391,7 +379,7 @@ LABEL_SKIP_ENTRY:
             if (highscores[i].score >= 0) {
                 sprintf(buf, S_FMTd_4, highscores[i].score);
             } else {
-                sprintf(buf, S_TIMETRIAL);
+                sprintf(buf, "TIMETRIAL\n");
                 waveX += 16;
             }
             if (i == 0) {
@@ -403,7 +391,7 @@ LABEL_SKIP_ENTRY:
         }
 
         SetTextParams(208, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont(S_LEVEL);
+        DrawTextCrappyFont("LEVEL\n");
         v = 198;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
@@ -422,7 +410,7 @@ LABEL_SKIP_ENTRY:
         }
 
         SetTextParams(268, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont(S_FRUITS);
+        DrawTextCrappyFont("FRUITS\n");
         v = 255;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
@@ -441,7 +429,7 @@ LABEL_SKIP_ENTRY:
         }
 
         SetTextParams(312, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont(S_TIME);
+        DrawTextCrappyFont("TIME\n");
         v = 316;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
@@ -468,7 +456,7 @@ LABEL_SKIP_ENTRY:
             DrawScoreGraph();
         } else {
             SetTextParams(displayWidth / 2, 129, 1, 128, 128, 128);
-            DrawTextCrappyFont(S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE);
+            DrawTextCrappyFont("\nCONGRATULATIONS,\nPLEASE WRITE YOUR SIGNATURE\n\n");
             for (i = 0; i < 3; i++) {
                 for (j = 0; j < 10; j++) {
                     if (j == highscoreEntryCursorX && i == highscoreEntryCursorY) {
@@ -476,7 +464,7 @@ LABEL_SKIP_ENTRY:
                     } else {
                         SetTextParams(j * 14 + 90, i * 14 + 178, 1, 64, 64, 64);
                     }
-                    sprintf(buf, S_FMTc, S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[i][j]);
+                    sprintf(buf, "%c\n", S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[i][j]);
                     DrawTextCrappyFont(buf);
                 }
             }
