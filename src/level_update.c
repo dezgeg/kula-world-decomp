@@ -64,7 +64,7 @@ static int DAT_000a450c;
 static int DAT_000a4508;
 static int DAT_000a4598;
 int D_000A4430;
-static VECTOR VECTOR_000a4434;
+static VECTOR levelEntryCamPos;
 int D_000A43E8;
 int D_000A43DC;
 static SVECTOR SVECTOR_000a43ec;
@@ -74,10 +74,10 @@ short debugCamX;
 static VECTOR VECTOR_000a448c;
 static SVECTOR SVECTOR_000a449c;
 static VECTOR VECTOR_000a44a8;
-static VECTOR VECTOR_000a451c;
-static VECTOR VECTOR_000a452c;
-static VECTOR VECTOR_000a453c;
-static VECTOR VECTOR_000a454c;
+static VECTOR levelEntryBezierP0;
+static VECTOR levelEntryBezierP1;
+static VECTOR levelEntryBezierP2;
+static VECTOR levelEntryBezierP3;
 static VECTOR initPlayerFacingDir;
 static VECTOR initPlayerFacingDirCoarse;
 static VECTOR initPlayerGravityDir;
@@ -477,7 +477,7 @@ int FUN_000344b0(int a0, int a1) {
     return 0;
 }
 
-void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, short t, short shift) {
+void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR* out, short t, short shift) {
     int inv_t = (1 << (shift * 2 / 3)) - t;
 
     int inv_t2 = inv_t * inv_t;
@@ -488,23 +488,23 @@ void FUN_00034518(VECTOR* v1, VECTOR* v2, VECTOR* v3, VECTOR* v4, VECTOR* v5, sh
     int inv_t_3 = inv_t * 3;
     int t_3 = t * 3;
 
-    v5->vx = (inv_t3 >> shift) * v1->vx;
-    v5->vx += ((t * inv_t_3 * inv_t) >> shift) * v2->vx;
-    v5->vx += ((t * t_3 * inv_t) >> shift) * v3->vx;
-    v5->vx += (t3 >> shift) * v4->vx;
-    v5->vx >>= shift;
+    out->vx = (inv_t3 >> shift) * p0->vx;
+    out->vx += ((t * inv_t_3 * inv_t) >> shift) * p1->vx;
+    out->vx += ((t * t_3 * inv_t) >> shift) * p2->vx;
+    out->vx += (t3 >> shift) * p3->vx;
+    out->vx >>= shift;
 
-    v5->vy = (inv_t3 >> shift) * v1->vy;
-    v5->vy += ((t * inv_t_3 * inv_t) >> shift) * v2->vy;
-    v5->vy += ((t * t_3 * inv_t) >> shift) * v3->vy;
-    v5->vy += (t3 >> shift) * v4->vy;
-    v5->vy >>= shift;
+    out->vy = (inv_t3 >> shift) * p0->vy;
+    out->vy += ((t * inv_t_3 * inv_t) >> shift) * p1->vy;
+    out->vy += ((t * t_3 * inv_t) >> shift) * p2->vy;
+    out->vy += (t3 >> shift) * p3->vy;
+    out->vy >>= shift;
 
-    v5->vz = (inv_t3 >> shift) * v1->vz;
-    v5->vz += ((t * inv_t_3 * inv_t) >> shift) * v2->vz;
-    v5->vz += ((t * t_3 * inv_t) >> shift) * v3->vz;
-    v5->vz += (t3 >> shift) * v4->vz;
-    v5->vz >>= shift;
+    out->vz = (inv_t3 >> shift) * p0->vz;
+    out->vz += ((t * inv_t_3 * inv_t) >> shift) * p1->vz;
+    out->vz += ((t * t_3 * inv_t) >> shift) * p2->vz;
+    out->vz += (t3 >> shift) * p3->vz;
+    out->vz >>= shift;
 
     D_000A4430 = inv_t;
 }
@@ -523,7 +523,7 @@ void ProcessCameraAndMovement(Player *player) {
     }
 
     player->copycatMoveIndex = 0;
-    FUN_00034518(&VECTOR_000a451c, &VECTOR_000a452c, &VECTOR_000a453c, &VECTOR_000a454c, &VECTOR_000a4434, (short)levelEntryAnimTimer, 15);
+    EvaluateCubicBezier(&levelEntryBezierP0, &levelEntryBezierP1, &levelEntryBezierP2, &levelEntryBezierP3, &levelEntryCamPos, (short)levelEntryAnimTimer, 15);
 
     initPlayerFacingDirCoarse.vx = initPlayerFacingDir.vx / 1024;
     initPlayerFacingDirCoarse.vy = initPlayerFacingDir.vy / 1024;
@@ -547,11 +547,11 @@ void ProcessCameraAndMovement(Player *player) {
     RotMatrixX(250, &perspMatrixes[cameraIndex]);
     RotMatrixZ((1024 - levelEntryAnimTimer) * 2, &perspMatrixes[cameraIndex]);
 
-    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a4434, &VECTOR_000a4434);
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &levelEntryCamPos, &levelEntryCamPos);
 
-    perspMatrixes[cameraIndex].t[0] = -VECTOR_000a4434.vx;
-    perspMatrixes[cameraIndex].t[1] = -VECTOR_000a4434.vy + 250;
-    perspMatrixes[cameraIndex].t[2] = -VECTOR_000a4434.vz + 800 + (1024 - levelEntryAnimTimer) * 14000 / 1024;
+    perspMatrixes[cameraIndex].t[0] = -levelEntryCamPos.vx;
+    perspMatrixes[cameraIndex].t[1] = -levelEntryCamPos.vy + 250;
+    perspMatrixes[cameraIndex].t[2] = -levelEntryCamPos.vz + 800 + (1024 - levelEntryAnimTimer) * 14000 / 1024;
 
     player->movementInhibitTimer = 2000;
 
