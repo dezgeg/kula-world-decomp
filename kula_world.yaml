@@ -461,6 +461,8 @@ segments:
       - [0x92558, .sdata, render2]
       - [0x925d0, .sdata, visited_cubes]
       - [0x925d8, sdata, nonmatched/sdata_925d8]
+      - [0x925d8, sdata, player_movement]
+      - [0x925e4, sdata, nonmatched/sdata_925e4]
       - [0x929fc, .sdata, sjis]
       - [0x92a08, .sdata, devkit]
       - [0x92b2c, .sdata, rand]
