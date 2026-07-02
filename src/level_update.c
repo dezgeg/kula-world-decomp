@@ -23,8 +23,6 @@ extern int GetBlockAt(SVECTOR * coord);
 extern short* entityData;
 extern short numEntities;
 extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
-extern SVECTOR SVECTOR_000a2de4;
-extern SVECTOR SVECTOR_allMinus1;
 extern Player thePlayer;
 extern short* entityData;
 extern int cameraIndex;
@@ -94,6 +92,9 @@ int zoomInAndOutPhase;
 int DAT_000a43c8;
 int movingPlatformEntityId;
 int mpCounter;
+
+SVECTOR SVECTOR_000a2de4 = {};
+SVECTOR SVECTOR_allMinus1 = { -1, -1, -1 };
 
 INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
 
