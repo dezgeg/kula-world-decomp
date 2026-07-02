@@ -32,7 +32,6 @@ extern int dispenvScreenY;
 extern int displayHeight;
 extern int displayWidth;
 extern int drawCopyright;
-extern int drawCopyright;
 extern int finalUnlocked;
 extern int gameMode;
 extern int gameState;
