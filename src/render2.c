@@ -5,13 +5,56 @@ typedef struct P {
     ulong* p1;
 } P;
 
+typedef struct ItemEntry {
+    short id;
+    short rotation;
+    short variant;
+    short state;
+    short unk8;
+    short power1;
+    short power2;
+    short unkE;
+    short unk10;
+    short unk12;
+    short unk14;
+    short unk16;
+    short unk18;
+    short unk1A;
+    short counter;
+    short unk1E;
+} ItemEntry;
+
+#define IE_ID 1
+#define IE_VARIANT 3
+#define IE_STATE 4
+#define IE_UNK8 8
+#define IE_COUNTER 15
+#define IE_UNK16 16
+
+typedef struct EntityBlock {
+    short tag;
+    ItemEntry items[6];
+    short pad[28];
+    short x;
+    short y;
+    short z;
+} EntityBlock;
+
 extern int GteTransformAndClipQuad(SVECTOR * v1, SVECTOR * v2, SVECTOR * v3, SVECTOR * v4, int out1, int out2, int out3, int out4, int* p1, int* p2, int* p3);
 extern void LoadScaledGteMatrix(MATRIX * matrix);
 
+extern int AddLightEffect(int x, int y, int z, int whichSide);
+extern void SetLightEffectColor(int param_1, int param_2);
+extern void SetLightEffectToBeDisabled(int param_1);
+
+extern int EXIT_LIGHT_COLORS_PER_WORLD[10];
+extern int TRANSPORTER_COLORS[4][3];
 extern int cameraIndex;
-extern int cubeStates[256 * 16];
+extern int curWorld;
+extern void* cubeStates[256 * 16];
+extern short* entityData;
 extern int* ggiPart0A;
-extern int* ggiPart0A;
+extern int* ggiPart0B;
 extern int itemsDispList[];
 extern int itemsDispListIdx;
 extern int playerEnemyDispListIdx;
@@ -180,4 +223,186 @@ LAB_shadow:
 
 INCLUDE_ASM("asm/nonmatchings/render2", CreatePlayerDispList);
 
-INCLUDE_ASM("asm/nonmatchings/render2", CreateItemDispList);
+void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
+    int* colorPtr;
+    EntityBlock *ent;
+    int blinkState;
+    int lightEffectId;
+    int depth;
+    int depthOffset;
+    int colorR;
+    int colorG;
+    int colorB;
+    Quad *quad;
+    int* p;
+    short* e;
+    int two = 2;
+
+    short *entBase = entityData + entityIndex * 128;
+    quad = cubeStates[16 * CUBE_INDEX_AT(*(entBase + 125), *(entBase + 126), *(entBase + 127)) + dirIndexInBlock];
+    e = entBase + dirIndexInBlock * 16;
+    if (specialLevelType == 1) {
+        colorPtr = (int *)((char *)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 156));
+    } else {
+        colorPtr = (int *)((char *)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 24));
+    }
+    colorR = colorPtr[0];
+    colorG = colorPtr[1];
+    colorB = colorPtr[2];
+    depthOffset = 0;
+    switch(e[IE_ID]) {
+    case 5:
+        // transporter
+        lightEffectId = e[IE_UNK16] & 0xff;
+        blinkState = e[IE_UNK16] >> 8;
+        depthOffset = 1;
+        if (e[IE_STATE] == 1) {
+            e[IE_COUNTER]--;
+            if (e[IE_COUNTER] < 1) {
+                e[IE_COUNTER] = 16;
+                if (blinkState == 0) {
+                    ent = (EntityBlock *)(entityData + entityIndex * 128);
+                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
+                    blinkState = 1;
+                    e[IE_UNK16] = lightEffectId | 0x100;
+                } else {
+                    blinkState = 0;
+                    SetLightEffectToBeDisabled(lightEffectId);
+                    e[IE_UNK16] = 0xff;
+                }
+            }
+            if (blinkState == 1) {
+                colorR = colorR * TRANSPORTER_COLORS[e[IE_VARIANT]][0] >> 12;
+                colorG = colorG * TRANSPORTER_COLORS[e[IE_VARIANT]][1] >> 12;
+                colorB = colorB * TRANSPORTER_COLORS[e[IE_VARIANT]][2] >> 12;
+                SetLightEffectColor(lightEffectId, BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]]);
+            }
+            break;
+        }
+        depthOffset = 1;
+        goto disable_light;
+    default:
+        break;
+    case 7:
+        // exit
+        depthOffset = 1;
+        lightEffectId = e[IE_UNK16] & 0xff;
+        blinkState = e[IE_UNK16] >> 8;
+        if (e[IE_STATE] == 1) {
+            e[IE_COUNTER]--;
+            if (e[IE_COUNTER] < 1) {
+                e[IE_COUNTER] = 16;
+                if (blinkState == 0) {
+                    ent = (EntityBlock *)(entityData + entityIndex * 128);
+                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
+                    blinkState = 1;
+                    e[IE_UNK16] = lightEffectId | 0x100;
+                } else {
+                    blinkState = 0;
+                    SetLightEffectToBeDisabled(lightEffectId);
+                    e[IE_UNK16] = 0xff;
+                }
+            }
+            if (blinkState == 1) {
+                colorPtr = EXIT_LIGHT_COLORS_PER_WORLD[curWorld];
+                colorR = (colorR << 13) >> 12;
+                colorG = (colorG << 13) >> 12;
+                colorB = (colorB << 13) >> 12;
+                SetLightEffectColor(lightEffectId,colorPtr);
+            }
+            break;
+        }
+        depthOffset = 1;
+        goto disable_light;
+    case 9:
+        // button
+        depthOffset = 1;
+        lightEffectId = e[IE_UNK16] & 0xff;
+        blinkState = e[IE_UNK16] >> 8;
+        if (e[IE_STATE] == 1) {
+            e[IE_COUNTER]--;
+            if (e[IE_COUNTER] < 1) {
+                e[IE_COUNTER] = 0x10;
+                if (blinkState == 0) {
+                    ent = (EntityBlock *)(entityData + entityIndex * 128);
+                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
+                    blinkState = 1;
+                    e[IE_UNK16] = lightEffectId | 0x100;
+                } else {
+                    blinkState = 0;
+                    SetLightEffectToBeDisabled(lightEffectId);
+                    e[IE_UNK16] = 0xff;
+                }
+            }
+            if (blinkState == 1) {
+                colorPtr = BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]];
+                colorR = (colorR << 13) >> 12;
+                colorG = (colorG << 13) >> 12;
+                colorB = (colorB << 13) >> 12;
+                SetLightEffectColor(lightEffectId,colorPtr);
+            }
+            break;
+        }
+        depthOffset = 1;
+disable_light:
+        if (lightEffectId != 0xff) {
+            SetLightEffectToBeDisabled(lightEffectId);
+            e[IE_UNK16] = 0xff;
+        }
+        break;
+    case 10:
+    case 11:
+    case 12:
+    case 26:
+    case 28:
+        depthOffset = 1;
+        break;
+    }
+
+    if (z < 400) {
+        return;
+    }
+    
+    z >>= 6;
+    depth = quad->otagIndex;
+    if (depth == -1) {
+        depth = z;
+    } else {
+        depth += depthOffset - two;
+    }
+    if (depth < 0) {
+        return;
+    }
+    // 0: otag pointer
+    itemsDispList[itemsDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][depth+1];
+    // 1: always zero
+    itemsDispList[itemsDispListIdx++] = 0;
+    // 2: depth value
+    if (specialLevelType == 1) {
+        itemsDispList[itemsDispListIdx++] = tgiPart3[depth];
+    } else {
+        itemsDispList[itemsDispListIdx++] = tgiPart1[depth];
+    }
+    // 3: color R
+    // 4: color G
+    // 5: color B
+    itemsDispList[itemsDispListIdx++] = colorR;
+    itemsDispList[itemsDispListIdx++] = colorG;
+    itemsDispList[itemsDispListIdx++] = colorB;
+    z = e[IE_ID] * 16;
+    if (depth > tgi->lodDistance[5]) {
+        z += 8;
+    } else if (depth > tgi->lodDistance[6]) {
+        z += 4;
+    }
+    z += e[IE_VARIANT];
+    // 6: model ptr
+    itemsDispList[itemsDispListIdx++] = &ggiPart0B[ggiPart0B[z] / 4];
+    // 7: unknown
+    itemsDispList[itemsDispListIdx++] = e[IE_UNK8];
+    // 8+: matrix
+    p = m;
+    for (z = 0; z < 8; z++) {
+        itemsDispList[itemsDispListIdx++] = *p++;
+    }
+}
