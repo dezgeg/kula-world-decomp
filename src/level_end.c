@@ -36,22 +36,10 @@ extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern uint prevControllerButtons;
-extern char S_[];
-extern char S_1[];
-extern char S__2[];
-extern char S_2[];
-extern char S__3[];
-extern char S_FMTd_3[];
-extern char S_FMTd_4[];
-extern char S_FMTd_6[];
-extern char S_FMTd_FMTd[];
-extern char S_FMTd_FMTdFMTd[];
-extern char S_FMTd_FMTdFMTd_FMTdFMTd[];
 
 int copycatModeStartingPlayer;
 int curMenu;
 int cursorPosInMenu[8];
-int DAT_000a3374;
 int idleTimer;
 int isPaused;
 int levelScoreSummaryConfirmed;
@@ -63,6 +51,12 @@ int timeTrialAtEndOfWorld;
 int wasPausedPreviousFrame;
 short qualifyScreenCursorX;
 short qualifyScreenCursorY;
+
+int DAT_000a3374 = 0;
+
+// HACK: these are in menu.c. Probably these files should be merged.
+extern char S_FMTd_3[];
+extern char S_FMTd_4[];
 
 static inline int TestButton(int button) {
     return (controllerButtons & (~prevControllerButtons & button)) != 0;
@@ -119,18 +113,18 @@ void UpdateScoreAtEndOfLevel(void) {
 
 void FormatTime(int time, char* s, int showPlus) {
     if (time < 0) {
-        s += sprintf(s, S_);
+        s += sprintf(s, "-");
     }
     if (time > 0 && showPlus > 0) {
-        s += sprintf(s, S__2);
+        s += sprintf(s, "+");
     }
 
     if (abs(time) > 3600) {
-        sprintf(s, S_FMTd_FMTdFMTd_FMTdFMTd, abs(time) / 3600,
+        sprintf(s, "%d:%d%d:%d%d\n", abs(time) / 3600,
                 abs(time) / 600 + (abs(time) / 3600) * -6, abs(time) / 60 + (abs(time) / 600) * -10,
                 abs(time) / 10 + (abs(time) / 60) * -6, abs(time) % 10);
     } else {
-        sprintf(s, S_FMTd_FMTdFMTd, abs(time) / 60, abs(time) / 10 + (abs(time) / 60) * -6,
+        sprintf(s, "%d:%d%d\n", abs(time) / 60, abs(time) / 10 + (abs(time) / 60) * -6,
                 abs(time) % 10);
     }
 }
@@ -161,7 +155,7 @@ void DrawLevelScoreSummary(void) {
         }
         if (levelEndReason > 0 || specialLevelType == 1) {
             y2off = 18;
-            sprintf(scoreText, S_FMTd_FMTd, oldScore, levelScore - levelScoreSummaryScoreTicker);
+            sprintf(scoreText, "%d \n%d \n", oldScore, levelScore - levelScoreSummaryScoreTicker);
         } else {
             y2off = 0;
             if (isFinal == 0) {
@@ -172,10 +166,10 @@ void DrawLevelScoreSummary(void) {
             if (penalty > 5000) {
                 penalty = 5000;
             }
-            sprintf(scoreText, S_FMTd_6, penalty);
+            sprintf(scoreText, "-%d \n", penalty);
             DrawStaticUiSprite(13, 64, 176, 0);
             DrawTextFancyFont(scoreText, 266, 176);
-            sprintf(scoreText, S_FMTd_FMTd, oldScore, levelScoreSummaryScoreTicker - levelScore);
+            sprintf(scoreText, "%d \n%d \n", oldScore, levelScoreSummaryScoreTicker - levelScore);
         }
         y1 = y2off | 0x8c;
         DrawTextFancyFont(scoreText, 266, y1);
@@ -309,14 +303,14 @@ void DrawLevelScoreSummary(void) {
                         } else {
                             FormatTime(totalPlayTime[i], buf, 1);
                             DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 158);
-                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i, 176);
-                            DrawTextFancyFont(S__3, 0xc1 + 0x53 * i, 0xcb);
+                            DrawTextFancyFont("-:--\n", 0xc1 + 0x53 * i, 176);
+                            DrawTextFancyFont("-:--\n", 0xc1 + 0x53 * i, 0xcb);
                         }
                     }
                     DrawStaticUiSprite(14, 134, 140, 0);
-                    DrawTextFancyFont(S_1, 201, 140);
+                    DrawTextFancyFont("1\n", 201, 140);
                     DrawStaticUiSprite(14, 217, 140, 0);
-                    DrawTextFancyFont(S_2, 284, 140);
+                    DrawTextFancyFont("2\n", 284, 140);
                     DrawStaticUiSprite(4, 42, 158, 0);
                     DrawStaticUiSprite(1, 72, 158, 0);
                     DrawStaticUiSprite(3, 42, 176, 0);
@@ -329,9 +323,9 @@ void DrawLevelScoreSummary(void) {
                         DrawStaticUiSprite(0xe, 0x49 + i * 0x67, 0xa0, 0);
                         sprintf(scoreText, S_FMTd_4, i);
                         if (i == 0) {
-                            DrawTextFancyFont(S_1, 0x8c, 0xa0);
+                            DrawTextFancyFont("1\n", 0x8c, 0xa0);
                         } else {
-                            DrawTextFancyFont(S_2, 0x8c + i * 0x67, 0xa0);
+                            DrawTextFancyFont("2\n", 0x8c + i * 0x67, 0xa0);
                         }
                         FormatTime(totalPlayTime[i], buf, 1);
                         DrawTextFancyFont(buf, 0x84 + 0x67 * i, 0xba);

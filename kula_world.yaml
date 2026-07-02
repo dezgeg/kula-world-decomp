@@ -472,7 +472,7 @@ segments:
       - [0x92b2c, .sdata, rand]
       - [0x92b30, .sdata, cheats]
       - [0x92b3c, sdata, menu]
-      - [0x92b74, sdata, level_end]
+      - [0x92b74, .sdata, level_end]
       - [0x92bc0, sdata, highscore]
       - [0x92c8c, .sdata, loading]
       - [0x92e38, .sdata, music]
