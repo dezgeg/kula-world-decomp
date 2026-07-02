@@ -25,7 +25,7 @@ options:
   asm_jtbl_label_macro: jlabel
   asm_data_macro: dlabel
 
-  section_order: [".rodata", ".text", ".data", ".sdata", ".bss"]
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
   # ld_section_labels: [".rodata", ".text", ".data", ".sdata", ".bss"]
   # auto_all_sections: [".data", ".rodata", ".bss"]
 
@@ -487,7 +487,7 @@ segments:
       - [0x9338c, .sdata, zlib_inffast]
       - [0x933c0, .sdata, zlib_zutil]
       - [0x93474, .sdata, zlib_calloc]
-      - [0x934b0, sdata, nonmatched/sdata_934b0]
+      - [0x934b0, sbss, nonmatched/sbss_934b0]
       - { type: bss, vram: 0xa5a1c, name: nonmatched/bss_a5a1c }
       - { type: bss, vram: 0xbd628, name: libgpu/font }
       - { type: bss, vram: 0xc1a38, name: libgpu/sys }
