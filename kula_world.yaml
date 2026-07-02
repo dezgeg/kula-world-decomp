@@ -460,7 +460,7 @@ segments:
       - [0x924d8, .sdata, tgi]
       - [0x92558, .sdata, render2]
       - [0x925d0, .sdata, visited_cubes]
-      - [0x925d8, sdata, player_movement]
+      - [0x925d8, .sdata, player_movement]
       - [0x925e4, .sdata, level_update]
       - [0x925f4, sdata, level_update2]
       - [0x92654, sdata, main]

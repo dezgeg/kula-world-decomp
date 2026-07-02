@@ -39,7 +39,6 @@ extern short* entityData;
 extern short *ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
 extern short * levelData;
-extern SVECTOR SVECTOR_000a2dd8;
 
 int tempNewBlock;
 short DAT_000a4374;
@@ -82,6 +81,9 @@ static SVECTOR SVECTOR_000a4360;
 static SVECTOR SVECTOR_000a4368;
 static SVECTOR tempBlock;
 static SVECTOR tempNewPlayerPos;
+
+SVECTOR SVECTOR_000a2dd8 = {};
+int PAD_000A2DE0 = 0;
 
 void ResetPlayerVars(Player *player) {
     player->howMoving198 = NOT_MOVING;
