@@ -28,7 +28,6 @@ extern int vibrationEnabled;
 extern long mcCmd;
 extern short numFruits;
 extern short turnDelayEnabled;
-extern char S_KULA_WORLD[];
 extern char S_BESCES_01000KULA[16];
 
 int INT_000a5690;
@@ -114,11 +113,10 @@ void LoadHighscoresFromMemcardData(void) {
 }
 
 void FormatMemcard(void) {
-    extern char S_FORMATTING_MEMORY_CARD_PLEASE_WAIT[];
     MemCardAccept(0);
     MemCardSync(0, &mcCmd, &tempMcResult);
     if (tempMcResult == McErrNotFormat) {
-        ShowMemCardFullScreenText(S_FORMATTING_MEMORY_CARD_PLEASE_WAIT);
+        ShowMemCardFullScreenText("FORMATTING MEMORY CARD\n\nPLEASE WAIT\n");
         tempMcResult = MemCardFormat(0);
     }
     mcResult = tempMcResult;
@@ -200,7 +198,7 @@ int SaveMemCard(uint slot) {
         memCardData.header.magic[1] = 'C';
         memCardData.header.iconFlags = 0x11;
         memCardData.header.blockNumber = 1;
-        sprintf(buf, S_KULA_WORLD);
+        sprintf(buf, "KULA WORLD");
         for (i = 0; i < 32; i++) {
             memCardData.header.title[i] = Ascii2Sjis(buf[i]);
         }

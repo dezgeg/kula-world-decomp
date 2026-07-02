@@ -467,7 +467,7 @@ segments:
       - [0x92654, sdata, main]
       - [0x927a4, sdata, memcard_ui]
       - [0x92984, sdata, memcard_ui2]
-      - [0x929C8, sdata, memcard2]
+      - [0x929C8, .sdata, memcard2]
       - [0x929fc, .sdata, sjis]
       - [0x92a08, .sdata, devkit]
       - [0x92b2c, .sdata, rand]
