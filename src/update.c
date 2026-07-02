@@ -44,33 +44,51 @@ typedef struct FlashingEntity {
     short z;
 } FlashingEntity;
 
+typedef struct CrumblingBlockEntity {
+    short entityType;
+    short state;
+    short counter;
+    byte pad[244];
+    short x;
+    short y;
+    short z;
+} CrumblingBlockEntity;
+
 typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
 
+extern int FlipDir(int dir);
+extern int GetCubeIndexRelativeToDir(int x, int y, int z, int idx);
+extern int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dirIndex);
+extern void EnableScreenShake(int param_1, int param_2, int param_3);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void Vibrate100(int constant, int amplitude, int angleIncrement, int max);
+extern void Vibrate101(int param_1);
 
-extern TgiFile* tgi;
-extern int turningMotionBlurEnabled;
-extern int turningMotionBlurPhase;
-extern int turningMotionBlurTable[70];
-extern int numKeysRemaining;
-extern Quad** levelExitQuadPPtr;
 extern int cameraIndex;
+extern int numCrumblingBlocks;
+extern int numFlashingBlocks;
+extern int numKeysRemaining;
+extern int numMovingPlatforms;
+extern int numRetractableSpikes;
+extern int retractingSpikeData[64 * 2];
+extern int specialLevelType;
 extern int sunglassCounter1[];
 extern int sunglassCounter2[];
 extern int sunglassDisablingState[];
 extern int sunglassSeeEverything[];
-extern int numRetractableSpikes;
+extern int turningMotionBlurEnabled;
+extern int turningMotionBlurPhase;
+extern int turningMotionBlurTable[70];
 extern MATRIX perspMatrixes[];
-extern int retractingSpikeData[64 * 2];
-extern QuadFunc QUAD_FUNC_PTRS[6];
-extern short movingBlockEntityIndexes[16];
-extern short* entityData;
-extern int numMovingPlatforms;
 extern Quad* cubeStates[256];
+extern QuadFunc QUAD_FUNC_PTRS[6];
+extern Quad** levelExitQuadPPtr;
+extern short crumblingBlockEntityIndexes[64];
+extern short* entityData;
 extern short flashingBlockEntityIndexes[64];
 extern short* levelData;
-extern int numFlashingBlocks;
-extern int specialLevelType;
+extern short movingBlockEntityIndexes[16];
+extern TgiFile* tgi;
 
 void ProcessMovingPlatforms2(void) {
     MovingPlatformEntity2 *mpe;
@@ -108,8 +126,58 @@ void ProcessMovingPlatforms2(void) {
         }
     }
 }
+void ProcessCrumblingBlocks(void) {
+    int i;
+    int x, y, z;
+    int x9, y9, z9;
+    int dir;
+    int faceType;
+    CrumblingBlockEntity *eb;
+    int state;
+    int cubeIndex;
 
-INCLUDE_ASM("asm/nonmatchings/update", ProcessCrumblingBlocks);
+    for (i = 0; i < numCrumblingBlocks; i++) {
+        Quad **quads = (Quad**)cubeStates;
+        eb = (CrumblingBlockEntity *)&entityData[crumblingBlockEntityIndexes[i] * 128];
+        x = eb->x;
+        x9 = x << 9;
+        y = eb->y;
+        z = eb->z;
+        y9 = y << 9;
+        z9 = z << 9;
+        cubeIndex =  CUBE_INDEX_AT(x, y, z);
+
+        switch (eb->state) {
+            case 2:
+                for (dir = 0; dir < 6; dir++) {
+                    quads[cubeIndex * 16 + dir]->flags.u8 |= 1;
+                    faceType = GetFaceTypeAtRelativeToDir(x, y, z, dir);
+                    if (faceType != -1 && faceType != -2 && faceType != 3 && faceType != 5) {
+                        quads[GetCubeIndexRelativeToDir(x, y, z, dir) * 16 + FlipDir(dir)]->flags.u8 |= 1;
+                    }
+                }
+                eb->state = 3;
+                EnableScreenShake(4, 30, 3);
+                Vibrate100(200, 0, 0, 1);
+                Vibrate101(40);
+                /* fallthrough */
+            case 3:
+                eb->counter -= 32;
+                if (eb->counter >= 0) {
+                    for (dir = 0; dir < 6; dir++) {
+                        QUAD_FUNC_PTRS[dir](quads[cubeIndex * 16 + dir], eb->counter, x9, y9, z9, 0);
+                    }
+                } else {
+                    for (dir = 0; dir < 6; dir++) {
+                        quads[cubeIndex * 16 + dir]->flags.i32 &= ~1;
+                    }
+                    eb->state = 0;
+                    levelData[x * 1156 + y * 34 + z] = -1;
+                }
+                break;
+        }
+    }
+}
 
 void ProcessFlashingBlocks(void) {
     Quad *quad;

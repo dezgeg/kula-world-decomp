@@ -13,7 +13,6 @@ LoadLevelEndReasonGfx: https://decomp.me/scratch/DYXGq
 LoadMenuGfx: https://decomp.me/scratch/LHZmY
 MainGameLoop: https://decomp.me/scratch/A0Tmn
 ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
-ProcessCrumblingBlocks: https://decomp.scratch/2XWwj
 ProcessCubesIntoFaces: https://decomp.me/scratch/rjmZz
 RecalcSkyboxes01: https://decomp.me/scratch/FfB3v
 ScanLevelDataForMovingBlocks1: https://decomp.scratch/qU5tz
