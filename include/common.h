@@ -264,14 +264,14 @@ typedef struct TextureChainEntry {
 typedef struct AnimatedTextureChain {
     void* endPtr;
     TextureChainEntry* entries;
-    int numFrames1;
-    int numFrames2;
-    void* ptr1;
-    void* ptr2;
-    void* ptr3;
-    void* ptr4;
-    int initToAlwaysZero9;
-    int initToAlwaysZero10;
+    int numFlagAnimFrames;
+    int numColorAnimFrames;
+    char* flagAnimData0;
+    char* flagAnimData1;
+    uint* colorAnimData0;
+    uint* colorAnimData1;
+    uint* colorAnimData2;
+    uint* colorAnimData3;
 } AnimatedTextureChain;
 
 typedef struct Enemy {

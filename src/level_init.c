@@ -64,22 +64,22 @@ extern uint firstGuiTexture;
 extern uint firstGuiTexture;
 extern int cubeStates[16 * 256];
 extern short flashingBlockEntityIndexes[64];
-extern byte D_000735B5[];
-extern byte D_00073634[];
-extern uint D_00073798[];
-extern byte D_000737D4[];
-extern byte BYTE_ARRAY_00073588[52];
-extern byte BYTE_ARRAY_000735bc[124];
-extern byte BYTE_ARRAY_0007379c[60];
-extern uint SIZE_OF_UNK_ENTRY;
-extern uint UINT_ARRAY_00073638[89];
-extern uint UINT_ARRAY_000737d8[16];
+extern byte FIRE_BLOCK_ANIM_FLAG_DATA_END[];
+extern byte INVIS_BLOCK_ANIM_FLAG_DATA_END[];
+extern uint INVIS_BLOCK_ANIM_COLOR_DATA_END[];
+extern byte BONUS_BLOCK_ANIM_FLAG_DATA0_END[];
+extern byte FIRE_BLOCK_ANIM_FLAG_DATA[52];
+extern byte INVIS_BLOCK_ANIM_FLAG_DATA[124];
+extern byte BONUS_BLOCK_ANIM_FLAG_DATA0[60];
+extern uint NUM_TEXTURE_ANIM_FRAMES;
+extern uint INVIS_BLOCK_ANIM_COLOR_DATA[89];
+extern uint BONUS_BLOCK_ANIM_FLAG_DATA1[16];
 extern AnimatedTextureChain bonusBlockTextureChain;
 extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
 extern int curWorld;
 extern AnimatedTextureChain fireBlockTextureChain;
 extern AnimatedTextureChain invisibleBlockTextureChain;
-extern uint UNK_ENTRIES[];
+extern uint TEXTURE_ANIM_DATA[];
 extern int invisBlockVisibility[6];
 extern int gameMode;
 extern int numKeysInLevel;
@@ -117,18 +117,25 @@ void ProcessLevelData(void) {
     numCubesInLevelTmp = 0;
     cubeCounter = 0;
 
-    InitAnimatedTextureChain(fbtc, 0x80, D_000735B5 - BYTE_ARRAY_00073588, 0, BYTE_ARRAY_00073588, NULL, NULL, NULL, 0, 0);
-    InitAnimatedTextureChain(ibtc, 0x200, D_00073634 - BYTE_ARRAY_000735bc, D_00073798 - UINT_ARRAY_00073638, BYTE_ARRAY_000735bc, NULL, UINT_ARRAY_00073638, NULL, 0, 0);
+    InitAnimatedTextureChain(fbtc, 0x80,
+            FIRE_BLOCK_ANIM_FLAG_DATA_END - FIRE_BLOCK_ANIM_FLAG_DATA, 0,
+            FIRE_BLOCK_ANIM_FLAG_DATA, NULL,
+            NULL, NULL, NULL, NULL);
+    InitAnimatedTextureChain(ibtc, 0x200,
+            INVIS_BLOCK_ANIM_FLAG_DATA_END - INVIS_BLOCK_ANIM_FLAG_DATA, INVIS_BLOCK_ANIM_COLOR_DATA_END - INVIS_BLOCK_ANIM_COLOR_DATA,
+            INVIS_BLOCK_ANIM_FLAG_DATA, NULL,
+            INVIS_BLOCK_ANIM_COLOR_DATA, NULL, NULL, NULL);
 
     if (specialLevelType == 1) {
-        uint* unkEntries = UNK_ENTRIES;
-        InitAnimatedTextureChain(&crumblingSpecialBlockTextureChain, 0x300, 0, SIZE_OF_UNK_ENTRY, NULL, NULL,
-                                 unkEntries + (curWorld % 2) * (SIZE_OF_UNK_ENTRY << 1),
-                                 unkEntries + ((curWorld % 2) * 2 + 1) * SIZE_OF_UNK_ENTRY, 0, 0);
-        InitAnimatedTextureChain(&bonusBlockTextureChain, 0x300, D_000737D4 - BYTE_ARRAY_0007379c, SIZE_OF_UNK_ENTRY, BYTE_ARRAY_0007379c,
-                                 UINT_ARRAY_000737d8,
-                                 unkEntries + (curWorld % 2) * (SIZE_OF_UNK_ENTRY << 1),
-                                 unkEntries + ((curWorld % 2) * 2 + 1) * SIZE_OF_UNK_ENTRY, 0, 0);
+        uint* animData = TEXTURE_ANIM_DATA;
+        InitAnimatedTextureChain(&crumblingSpecialBlockTextureChain, 0x300,
+                0, NUM_TEXTURE_ANIM_FRAMES,
+                NULL, NULL,
+                animData + (curWorld % 2) * (NUM_TEXTURE_ANIM_FRAMES << 1), animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
+        InitAnimatedTextureChain(&bonusBlockTextureChain, 0x300,
+                BONUS_BLOCK_ANIM_FLAG_DATA0_END - BONUS_BLOCK_ANIM_FLAG_DATA0, NUM_TEXTURE_ANIM_FRAMES,
+                BONUS_BLOCK_ANIM_FLAG_DATA0, BONUS_BLOCK_ANIM_FLAG_DATA1,
+                animData + (curWorld % 2) * (NUM_TEXTURE_ANIM_FRAMES << 1), animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
     }
 
     ProcessCubesIntoFaces();
@@ -354,20 +361,28 @@ void CopyQuadData(void) {
 }
 
 
-void InitAnimatedTextureChain(AnimatedTextureChain* dst, int numEntries, int numFrames1,
-                              int numFrames2, void* ptr1, void* ptr2, void* ptr3, void* ptr4,
-                              int zero9, int zero10) {
+void InitAnimatedTextureChain(
+        AnimatedTextureChain* dst,
+        int maxQuads,
+        int numFlagAnimFrames,
+        int numColorAnimFrames,
+        char* flagAnimData0,
+        char* flagAnimData1,
+        uint* colorAnimData0,
+        uint* colorAnimData1,
+        uint* colorAnimData2,
+        uint* colorAnimData3) {
     int* d = (int*)dst;
-    d[0] = (int)((u8*)dst + 40 + numEntries * 8);
+    d[0] = (int)((u8*)dst + 40 + maxQuads * 8);
     d[1] = (int)(dst + 1);
-    d[2] = numFrames1;
-    d[3] = numFrames2;
-    d[4] = (int)ptr1;
-    d[5] = (int)ptr2;
-    d[6] = (int)ptr3;
-    d[7] = (int)ptr4;
-    d[8] = zero9;
-    d[9] = zero10;
+    d[2] = numFlagAnimFrames;
+    d[3] = numColorAnimFrames;
+    d[4] = (int)flagAnimData0;
+    d[5] = (int)flagAnimData1;
+    d[6] = (int)colorAnimData0;
+    d[7] = (int)colorAnimData1;
+    d[8] = (int)colorAnimData2;
+    d[9] = (int)colorAnimData3;
 }
 
 void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, int initAnimFrame1,
@@ -375,10 +390,10 @@ void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, 
     void** tce = (void**)chain->entries;
     *tce++ = (void*)quadPtr;
     if (initAnimFrame1 == -1) {
-        initAnimFrame1 = Rand(chain->numFrames1);
+        initAnimFrame1 = Rand(chain->numFlagAnimFrames);
     }
     if (initAnimFrame2 == -1) {
-        initAnimFrame2 = Rand(chain->numFrames2);
+        initAnimFrame2 = Rand(chain->numColorAnimFrames);
     }
     *tce++ = (void*)(initAnimFrame2 << 16 | initAnimFrame1);
     chain->entries = (TextureChainEntry*)tce;
