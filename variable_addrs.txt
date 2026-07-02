@@ -845,6 +845,7 @@ turningMotionBlurTable = 0x000d0430; // size:252
 twoPlayerLevelSelectionCursorPos = 0x000a56d8; // type:s32
 twoPlayerWhichPlayer = 0x000a51ac; // type:s32
 unkOtagLengths = 0x000a51b0; // size:8
+unkOtag = 0x000cb620; // size:16384
 unkUnused = 0x000d5aa4; // type:s32
 unusedFrameCounter = 0x000a2ebc; // type:s32
 unusedInitStackParamEnd = 0x000bb504; // type:u32
