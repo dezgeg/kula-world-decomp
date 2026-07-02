@@ -31,10 +31,10 @@ extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect * eff);
 extern void RenderDispList(void* p);
 extern void DrawPlayerSpecularSprites(void);
 extern void DrawShadowSprites(void);
-extern void RenderBonusBackground(void * ot);
+extern void RenderBonusBackgroundPart1(void * ot);
 extern void RenderNonSpecialBackground(void * ot);
 extern void RenderStarfield(void * ot);
-extern void ASM_00053a64(void);
+extern void RenderBonusBackgroundPart2(void);
 extern void UpdateStarfield(void);
 
 extern short* ggiPart2DepthCueingLookup;
@@ -93,8 +93,8 @@ void RenderBackground(void) {
     if (cameraIndex == 0 && tgi->skyboxFlag == 0x401) {
         switch (specialLevelType) {
         case 1:
-            RenderBonusBackground(&otag[whichDrawDispEnv][cameraIndex][1025]);
-            ASM_00053a64();
+            RenderBonusBackgroundPart1(&otag[whichDrawDispEnv][cameraIndex][1025]);
+            RenderBonusBackgroundPart2();
             break;
         case 2:
             UpdateStarfield();
