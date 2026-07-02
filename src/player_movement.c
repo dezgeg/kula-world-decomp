@@ -651,7 +651,7 @@ void CheckPlayerJumpingStuff(Player *player) {
         default:
             return;
     }
-    FUN_00031288(player);
+    CheckPlayerHitCeiling(player);
 }
 
 int CheckForPlayerWallHit(Player *player) {
@@ -696,7 +696,7 @@ int CheckForPlayerWallHit(Player *player) {
     return 0;
 }
 
-int FUN_00031288(Player *player) {
+int CheckPlayerHitCeiling(Player *player) {
     if (player->subpixelPositionOnCube.vy < 412) return 0;
     if (player->svec_144.vy < 0) return 0;
 
