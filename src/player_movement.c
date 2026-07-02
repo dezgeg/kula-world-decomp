@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int FUN_0003382c(); // XXX: this should take Player* player
+extern int IsPlayerOnMovingPlatform(); // XXX: this should take Player* player
 extern int GetBlockAt(SVECTOR * coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int HandleMovingPlatforms(Player * player);
@@ -700,7 +700,7 @@ int FUN_00031288(Player *player) {
     if (player->subpixelPositionOnCube.vy < 412) return 0;
     if (player->svec_144.vy < 0) return 0;
 
-    if (FUN_0003382c() ||
+    if (IsPlayerOnMovingPlatform() ||
         player->surroundingBlocks[2][1][1] >= 0 ||
         (player->subpixelPositionOnCube.vz >= 412 && player->surroundingBlocks[2][2][1] >= 0) ||
         (player->subpixelPositionOnCube.vz < 101 && player->surroundingBlocks[2][0][1] >= 0))

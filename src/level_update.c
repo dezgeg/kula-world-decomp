@@ -51,7 +51,7 @@ short mpVelSum;
 short tempI;
 short tempJ;
 short tempK;
-int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3);
+int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance);
 static SVECTOR SVECTOR_000a4514;
 static SVECTOR SVECTOR_000a44b8;
 static SVECTOR SVECTOR_000a44c0;
@@ -186,21 +186,21 @@ void MoveMovingPlatforms(SVECTOR vec) {
 #undef EB
 }
 
-int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3) {
-    mpLengthScaled = (entityData[itemdataOff + 17] - 1) << 9;
+int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance) {
+    mpLengthScaled = (entityData[entityOffset + 17] - 1) << 9;
 
-    switch (entityData[itemdataOff + 2]) {
+    switch (entityData[entityOffset + 2]) {
     case 1:
-        DAT_000a43a8 = vec->vx + param_3 - (entityData[itemdataOff + 119] - 256);
-        DAT_000a43ac = entityData[itemdataOff + 119] + mpLengthScaled + 256 - (vec->vx - param_3);
+        DAT_000a43a8 = pos->vx + tolerance - (entityData[entityOffset + 119] - 256);
+        DAT_000a43ac = entityData[entityOffset + 119] + mpLengthScaled + 256 - (pos->vx - tolerance);
         break;
     case 2:
-        DAT_000a43a8 = vec->vy + param_3 - (entityData[itemdataOff + 120] - 256);
-        DAT_000a43ac = entityData[itemdataOff + 120] + mpLengthScaled + 256 - (vec->vy - param_3);
+        DAT_000a43a8 = pos->vy + tolerance - (entityData[entityOffset + 120] - 256);
+        DAT_000a43ac = entityData[entityOffset + 120] + mpLengthScaled + 256 - (pos->vy - tolerance);
         break;
     case 5:
-        DAT_000a43a8 = vec->vz + param_3 - (entityData[itemdataOff + 121] - 256);
-        DAT_000a43ac = entityData[itemdataOff + 121] + mpLengthScaled + 256 - (vec->vz - param_3);
+        DAT_000a43a8 = pos->vz + tolerance - (entityData[entityOffset + 121] - 256);
+        DAT_000a43ac = entityData[entityOffset + 121] + mpLengthScaled + 256 - (pos->vz - tolerance);
         break;
     }
 
@@ -210,7 +210,7 @@ int FUN_00033720(SVECTOR* vec, int itemdataOff, int param_3) {
     return 0;
 }
 
-int FUN_0003382c(Player* player) {
+int IsPlayerOnMovingPlatform(Player* player) {
     DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
     if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != 5) {
         DAT_000a43c4 = (player->surroundingBlocks[2][1][1] - 5) * 128;
@@ -218,7 +218,7 @@ int FUN_0003382c(Player* player) {
             return 0;
         }
     }
-    return FUN_00033720(&player->finePos, DAT_000a43c4, 100);
+    return IsVecWithinPlatformBounds(&player->finePos, DAT_000a43c4, 100);
 }
 
 int HandleMovingPlatforms(Player *player) {
@@ -259,12 +259,12 @@ int HandleMovingPlatforms(Player *player) {
         player->longJump = 0;
 
         SetLandingSquishVars();
-        FUN_0003418c(player);
+        UpdatePlayerSurroundingBlocks(player);
         UpdateSubpixelPositions(player);
         return 1;
     }
 
-    movingPlatformEntityId = FUN_00033eb0(player, &SVECTOR_allMinus1);
+    movingPlatformEntityId = GetAlternateMovingPlatform(player, &SVECTOR_allMinus1);
     if (movingPlatformEntityId != -1) {
         SndPlaySfx(0x66, 0, &SVECTOR_000a2de4, 7000);
         player->onMovingPlatform = 1;
@@ -318,20 +318,20 @@ int HandleMovingPlatforms(Player *player) {
         player->longJump = 0;
 
         SetLandingSquishVars();
-        FUN_0003418c(player);
+        UpdatePlayerSurroundingBlocks(player);
         UpdateSubpixelPositions(player);
         return 1;
     }
     return 0;
 }
 
-int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
-    if (param_2->vx == -1) {
+int GetMovingPlatformAt(Player* player, SVECTOR* checkPos) {
+    if (checkPos->vx == -1) {
         SVECTOR_000a43e0.vx = player->finePos.vx - player->gravityDir.vx * 512;
         SVECTOR_000a43e0.vy = player->finePos.vy - player->gravityDir.vy * 512;
         SVECTOR_000a43e0.vz = player->finePos.vz - player->gravityDir.vz * 512;
     } else {
-        SVECTOR_000a43e0 = *param_2;
+        SVECTOR_000a43e0 = *checkPos;
     }
 
     D_000A43DC = (GetBlockAt(&SVECTOR_000a43e0) - 5) * 128;
@@ -341,12 +341,12 @@ int GetMovingPlatformAt(Player* player, SVECTOR* param_2) {
             return -1;
         }
 
-        if (FUN_000344b0(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir)) != 0) {
+        if (AreDirectionsOnSameAxis(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir)) != 0) {
             return -1;
         }
 
         if (player->subpixelPositionOnCube.vy < 101) {
-            if (FUN_00033720(&player->finePos, D_000A43DC, 0) != 0) {
+            if (IsVecWithinPlatformBounds(&player->finePos, D_000A43DC, 0) != 0) {
                 goto ret_D;
             }
             return -1;
@@ -358,11 +358,11 @@ ret_D:
     return D_000A43DC;
 }
 
-int FUN_00033eb0(Player* player, SVECTOR* param_2) {
-    if (param_2->vx == -1) {
+int GetAlternateMovingPlatform(Player* player, SVECTOR* checkPos) {
+    if (checkPos->vx == -1) {
         SVECTOR_000a43ec = player->finePos;
     } else {
-        SVECTOR_000a43ec = *param_2;
+        SVECTOR_000a43ec = *checkPos;
     }
 
     D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
@@ -381,10 +381,10 @@ int FUN_00033eb0(Player* player, SVECTOR* param_2) {
         }
     }
 
-    if (FUN_000344b0(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir)) == 0) {
+    if (AreDirectionsOnSameAxis(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir)) == 0) {
         return -1;
     }
-    if (FUN_00033720(&player->finePos, D_000A43E8, 100) != 0) {
+    if (IsVecWithinPlatformBounds(&player->finePos, D_000A43E8, 100) != 0) {
         return D_000A43E8;
     }
 
@@ -408,7 +408,7 @@ void JumpingOnMovingPlatform(Player *player) {
     player->svec54.vx = player->svec54.vy = player->svec54.vz = 0;
 }
 
-void FUN_0003418c(Player *player) {
+void UpdatePlayerSurroundingBlocks(Player *player) {
     short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
     short gx, gy, gz;
     short rx, ry, rz;
@@ -470,10 +470,10 @@ void FUN_0003418c(Player *player) {
     }
 }
 
-int FUN_000344b0(int a0, int a1) {
-    if ((a0 == 1 || a0 == 4) && (a1 == 1 || a1 == 4)) return 1;
-    if ((a0 == 2 || a0 == 3) && (a1 == 2 || a1 == 3)) return 1;
-    if ((a0 == 0 || a0 == 5) && (a1 == 0 || a1 == 5)) return 1;
+int AreDirectionsOnSameAxis(int dir1, int dir2) {
+    if ((dir1 == 1 || dir1 == 4) && (dir2 == 1 || dir2 == 4)) return 1;
+    if ((dir1 == 2 || dir1 == 3) && (dir2 == 2 || dir2 == 3)) return 1;
+    if ((dir1 == 0 || dir1 == 5) && (dir2 == 0 || dir2 == 5)) return 1;
     return 0;
 }
 

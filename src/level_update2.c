@@ -33,8 +33,8 @@ extern void CreateItemsFromLevelData(void);
 extern void HandlePlayerMovementStuff(Player* player);
 extern void InitEnemies(void);
 extern void ResetPlayerVars(Player* player);
-extern int FUN_00033720(SVECTOR * vec, int itemdataOff, int param_3);
-extern void FUN_0003418c(Player * player);
+extern int IsVecWithinPlatformBounds(SVECTOR * pos, int entityOffset, int tolerance);
+extern void UpdatePlayerSurroundingBlocks(Player * player);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern void RenderEnemies(void);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
@@ -906,7 +906,7 @@ void HandlePlayerButtons(Player *player) {
 
 void CalcWhatPlayerIsStandingOn(Player *player) {
     if (player->onMovingPlatform != 0) {
-        FUN_0003418c(player);
+        UpdatePlayerSurroundingBlocks(player);
     } else {
         SVECTOR_000a4618.vx = (player->finePos.vx + 256) >> 9;
         SVECTOR_000a4618.vy = (player->finePos.vy + 256) >> 9;
@@ -930,7 +930,7 @@ void CalcWhatPlayerIsStandingOn(Player *player) {
 
                         if (calcBlockType >= 5 && entityData[(calcBlockType - 5) * 128] == 5) {
                             if (calcI == 2 || calcJ == 2) {
-                                if (FUN_00033720(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
+                                if (IsVecWithinPlatformBounds(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
                                     player->surroundingBlocks[calcI][calcJ][calcK] = -1;
                                 }
                             } else {
