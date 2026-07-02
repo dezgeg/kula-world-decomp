@@ -47,8 +47,6 @@ extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern void SetLightEffectColor(int param_1, int param_2);
 extern void SetLightEffectToBeDisabled(int param_1);
 
-extern int EXIT_LIGHT_COLORS_PER_WORLD[10];
-extern int TRANSPORTER_COLORS[4][3];
 extern int cameraIndex;
 extern int curWorld;
 extern void* cubeStates[256 * 16];
@@ -64,10 +62,6 @@ extern POLY_FT4 shadowPrims[2][1][2][16];
 extern P shadowPrimPtrs[2][1][2][16];
 extern short* tgiPart1;
 extern short* tgiPart3;
-extern SVECTOR SHADOW_VERTEX1;
-extern SVECTOR SHADOW_VERTEX2;
-extern SVECTOR SHADOW_VERTEX3;
-extern SVECTOR SHADOW_VERTEX4;
 extern TgiFile* tgi;
 extern void* otag[2][1][1026];
 extern void* playerEnemyDispList[];
@@ -83,6 +77,31 @@ int BUTTON_COLORS[] = {
     0x001919, 0x2C0000, 0x001900, 0x000019,
     0x002619, 0xC00000, 0x002600, 0x000019,
     0x003919, 0x800000, 0x003900, 0x000019,
+};
+
+SVECTOR SHADOW_VERTEX1 = { 150, 0, 150, 0 };
+SVECTOR SHADOW_VERTEX2 = { -150, 0, 150, 0 };
+SVECTOR SHADOW_VERTEX3 = { 150, 0, -150, 0 };
+SVECTOR SHADOW_VERTEX4 = { -150, 0, -150, 0 };
+
+int EXIT_LIGHT_COLORS_PER_WORLD[10] = {
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+    0x00104010,
+};
+
+int TRANSPORTER_COLORS[4][3] = {
+    { 6144, 6144, 5120 },
+    { 5120, 5120, 6144 },
+    { 5120, 6144, 5120 },
+    { 6144, 5120, 5120 },
 };
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
