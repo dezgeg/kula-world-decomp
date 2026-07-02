@@ -5,7 +5,7 @@ typedef struct {
 } GemRandomSparkleEffect;
 
 extern void ASM_FUN_00050310(void* otag);
-extern void ASM_FUN_00052504(void* otag);
+extern void DrawLasers(void* otag);
 extern void CubeTextureStuff(AnimatedTextureChain* param_1);
 extern void DisableLightEffect(int param_1);
 extern void DrawScreenFade(void);
