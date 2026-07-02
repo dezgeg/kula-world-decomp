@@ -5,7 +5,6 @@ CreatePlayerDispList: https://decomp.scratch/PvGtU
 DrawScoreGraph: https://decomp.me/scratch/KHxMt
 DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 HandleItemTouching: https://decomp.me/scratch/0GliO
-HandleSpecialCubeTypes: https://decomp.scratch/0RSJc
 InitAllDigitSprites: https://decomp.me/scratch/CmcRF
 InitLasers2: https://decomp.scratch/LWRua
 InitScoreGraph: https://decomp.me/scratch/cMAKo

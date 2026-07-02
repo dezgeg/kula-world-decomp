@@ -42,6 +42,10 @@ extern void CreateAllItemDispLists(void);
 extern void CheckPlayerJumpingStuff(Player * player);
 extern void HandleItemTouching(Player * player);
 extern void HandleSpecialCubeTypes(Player* player);
+extern void EnableLethargy(int enable);
+extern void SetCubeVisited(int x, int y, int z, int visitType);
+extern void SetSunglassMode(int on);
+extern void SndMuteVoiceByTag(int tag);
 extern void HandleViewportRotationStart(Player* player);
 extern int IsCollidingWithEnemy(SVECTOR pos);
 extern void MoveMovingPlatforms(SVECTOR pos);
@@ -92,6 +96,8 @@ extern int specialLevelType;
 extern int curWorld;
 extern int numKeysRemaining;
 extern int twoPlayerWhichPlayer;
+extern int levelScore;
+extern int numCubesRemainingInLevel[5];
 
 int ballTextureIndex;
 int curController;
@@ -179,6 +185,9 @@ short calcK;
 static SVECTOR SVECTOR_000a4618;
 static short calcBlockType;
 short pauseForStartPress;
+static SVECTOR SVECTOR_000a4778;
+static short DAT_000a4788;
+static SVECTOR cubeBelowPlayerPos;
 short fireSoundTimer;
 int shouldMarkCubesVisited;
 short D_000A45CC;
@@ -1554,7 +1563,270 @@ int HandleTransporter(Player *player) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_update2", HandleSpecialCubeTypes);
+void HandleSpecialCubeTypes(Player* player) {
+    int whichSide;
+    SVECTOR gravityDir;
+    SVECTOR dummy;
+
+    DAT_000a4788 = player->surroundingBlocks[1][1][1];
+    if (DAT_000a4788 == -2) {
+        if (thePlayer.invulnerabilityTimer == -1) {
+            if (player->movementInhibitTimer == 0) {
+                player->delayedLevelEndReason = -7;
+                player->movementInhibitTimer = 4;
+                player->movementVelocity = 0;
+                player->rotX = 0;
+                player->fireTimer = 1900;
+            }
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_ARROW) {
+        gravityDir = player->gravityDir;
+        if (gravityDir.vx == 1) {
+            whichSide = 1;
+        } else if (gravityDir.vx == -1) {
+            whichSide = 4;
+        } else if (gravityDir.vy == 1) {
+            whichSide = 2;
+        } else if (gravityDir.vy == -1) {
+            whichSide = 3;
+        } else if (gravityDir.vz == 1) {
+            whichSide = 5;
+        } else if (gravityDir.vz == -1) {
+            whichSide = 0;
+        } else {
+            whichSide = -1;
+        }
+        GetVectorBasedOnTwoDirs(whichSide, entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2], &SVECTOR_000a4778);
+        if (player->facingDir.vx != SVECTOR_000a4778.vx ||
+                player->facingDir.vy != SVECTOR_000a4778.vy ||
+                player->facingDir.vz != SVECTOR_000a4778.vz) {
+            thePlayer.rollingForward = 0;
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
+        player->rollingForward = 1;
+        player->turnDirection = 0;
+    } else if (thePlayer.startedIceSfx != 0) {
+        thePlayer.startedIceSfx = 0;
+        SndMuteVoiceByTag(2);
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_FAST_STAR) {
+        if (player->rollingForward == 0) {
+            if (player->jumping == 1 && player->howMoving198 != JUMPING_INPLACE) {
+                levelScore += 5;
+            }
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_FIRE_PATCH) {
+        if (!IsPlayerInAir(player)) {
+            if (thePlayer.invulnerabilityTimer == -1) {
+                player->fireTimer += 40;
+            }
+            if (fireSoundTimer == 0) {
+                SndPlaySfx(1, 1, &SVECTOR_000a2df4, 7000);
+            }
+            fireSoundTimer = 7;
+        }
+        if (player->onGround == 1) {
+            if (thePlayer.invulnerabilityTimer == -1) {
+                player->fireTimer += 600;
+            }
+        }
+        if (player->fireTimer > 2000) {
+            if (player->movementInhibitTimer == 0) {
+                player->dying = 1;
+                player->delayedLevelEndReason = -4;
+                player->movementVelocity = 0;
+                player->rotX = 0;
+                player->movementInhibitTimer = 25;
+            }
+        }
+    } else {
+        if (fireSoundTimer != 0) {
+            if (--fireSoundTimer == 0) {
+                SndMuteVoiceByTag(1);
+            }
+        }
+        player->fireTimer -= 15;
+        if (player->fireTimer < 0) {
+            player->fireTimer = 0;
+        }
+    }
+    if (!IsPlayerInAir(player)) {
+        if (player->acidTimer > 2000) {
+            player->acidTimer = 2000;
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_ACID_PATCH) {
+            if (player->movementInhibitTimer == 0) {
+                if (thePlayer.invulnerabilityTimer == -1) {
+                    player->delayedLevelEndReason = -6;
+                    player->movementInhibitTimer = 6;
+                    player->acidTimer += 300;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
+            if (thePlayer.startedIceSfx == 0) {
+                thePlayer.startedIceSfx = 1;
+                SndPlaySfx(2, 2, &SVECTOR_000a2df4, 7000);
+            }
+            player->fireTimer -= 150;
+            if (player->fireTimer < 0) {
+                player->fireTimer = 0;
+            }
+            player->iceColorChangeTimer += 40;
+            if (player->iceColorChangeTimer > 500) {
+                player->iceColorChangeTimer = 400;
+            }
+        } else {
+            player->iceColorChangeTimer -= 10;
+            if (player->iceColorChangeTimer < 0) {
+                player->iceColorChangeTimer = 0;
+            }
+        }
+        if (shouldMarkCubesVisited != 0) {
+            cubeBelowPlayerPos.vx = ((player->finePos.vx - (player->gravityDir.vx * 356)) + 256) >> 9;
+            cubeBelowPlayerPos.vy = ((player->finePos.vy - (player->gravityDir.vy * 356)) + 256) >> 9;
+            cubeBelowPlayerPos.vz = ((player->finePos.vz - (player->gravityDir.vz * 356)) + 256) >> 9;
+            if (cubeBelowPlayerPos.vx < 34 && cubeBelowPlayerPos.vy < 34 && cubeBelowPlayerPos.vz < 34 && cubeBelowPlayerPos.vx > 0 && cubeBelowPlayerPos.vy > 0 && cubeBelowPlayerPos.vz > 0) {
+                SetCubeVisited(cubeBelowPlayerPos.vx, cubeBelowPlayerPos.vy, cubeBelowPlayerPos.vz, 1);
+            }
+            if (numCubesRemainingInLevel[0] == 0) {
+                if (player->onGround) {
+                    levelEndReason = 2;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 2;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+        } else {
+            if (player->faceTypePlayerStandingOn == OBJ_EXIT && numKeysRemaining == 0) {
+                if (player->onGround) {
+                    levelWon[cameraIndex] = 1;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 1;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+            if (player->faceTypePlayerStandingOn == OBJ_HIDDEN_EXIT && numKeysRemaining == 0) {
+                if (player->onGround) {
+                    levelWon[cameraIndex] = 3;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 3;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE) {
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn + 1] == 1) {
+                SndPlaySfx(101, 0, &SVECTOR_000a2df4, 7000);
+                levelScore += 50;
+            }
+            entityData[player->specialBlockIndexPlayerIsStandingOn + 1] = 2;
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_SPIKE && player->movementInhibitTimer == 0 && thePlayer.invulnerabilityTimer == -1) {
+            SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+            Vibrate99(1, 255, 5);
+            if (thePlayer.movementInhibitTimer == 0) {
+                thePlayer.dying = 1;
+                thePlayer.movementVelocity = 0;
+                thePlayer.rotX = 0;
+                thePlayer.delayedLevelEndReason = -1;
+                thePlayer.movementInhibitTimer = 10;
+                thePlayer.ballBlinking = 1;
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_MOVING_SPIKE) {
+            if (entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] == 1 && thePlayer.invulnerabilityTimer == -1) {
+                if (player->onGround == 1) {
+                    Vibrate99(1, 255, 5);
+                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    if (thePlayer.movementInhibitTimer == 0) {
+                        thePlayer.dying = 1;
+                        thePlayer.movementVelocity = 0;
+                        thePlayer.rotX = 0;
+                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.movementInhibitTimer = 10;
+                        thePlayer.ballBlinking = 1;
+                    }
+                } else if (player->movementInhibitTimer == 0) {
+                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    Vibrate99(1, 255, 5);
+                    if (thePlayer.movementInhibitTimer == 0) {
+                        thePlayer.dying = 1;
+                        thePlayer.movementVelocity = 0;
+                        thePlayer.rotX = 0;
+                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.movementInhibitTimer = 10;
+                        thePlayer.ballBlinking = 1;
+                    }
+                    player->movementInhibitTimer = 9;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_BOUNCEPAD) {
+            if (player->subpixelPositionOnCube.vz > 150) {
+                player->forcedRollForwardTimer = 10;
+            }
+            if (player->faceTypePlayerStandingOn == OBJ_BOUNCEPAD && (player->subpixelPositionOnCube.vz > 230 || player->onGround == 1)) {
+                SndPlaySfx(10, 0, &SVECTOR_000a2df4, 7000);
+                Vibrate98(1);
+                player->forcedRollForwardTimer = 0;
+                player->jumping = 1;
+                if (player->longJump == 0) {
+                    player->longJump = 1;
+                }
+                player->rollingForward = 1;
+                player->turnDirection = 0;
+            }
+        }
+    }
+    if (thePlayer.sunglassTimer == 0) {
+        SetSunglassMode(0);
+    }
+    if (thePlayer.sunglassTimer > -1) {
+        thePlayer.sunglassTimer--;
+    }
+    if (thePlayer.invulnerabilityTimer > -1) {
+        thePlayer.invulnerabilityTimer--;
+    }
+    if (thePlayer.invulnerabilityTimer >= 0) {
+        if (thePlayer.bounceTimer >= 0) {
+            thePlayer.bounceTimer = -1;
+        }
+        if (thePlayer.lethargyTimer >= 0) {
+            thePlayer.lethargyTimer = 0;
+        } else {
+            goto skip_lethargy;
+        }
+    }
+    if (thePlayer.lethargyTimer == 0) {
+        EnableLethargy(0);
+    }
+    if (thePlayer.lethargyTimer > -1) {
+        thePlayer.lethargyTimer -= 2;
+        SubtractLevelTimer(4);
+    }
+skip_lethargy:
+    CheckForButtonEntity(player);
+    if (HandleTransporter(player)) {
+        CalcWhatPlayerIsStandingOn(player);
+        UpdateSubpixelPositions(player);
+        if (player->subpixelPositionOnCube.vz > 356) {
+            player->alreadyProcessedEntityAction = 0;
+        }
+    }
+    if (player->onMovingPlatform) {
+        player->svec54.vx = entityData[player->movingPlatformEntityIdStandingOn + 119] - 512;
+        player->svec54.vy = entityData[player->movingPlatformEntityIdStandingOn + 120] - 512;
+        player->svec54.vz = entityData[player->movingPlatformEntityIdStandingOn + 121] - 512;
+    } else {
+        player->svec54.vz = 0;
+        player->svec54.vy = 0;
+        player->svec54.vx = 0;
+    }
+}
 
 void SubtractLevelTimer(int param_1) {
     if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
