@@ -28,8 +28,6 @@ extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
 extern TgiFile* tgi;
 
-extern char S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO[];
-
 static inline int GetButtonsFromAnyController() {
     if (GetControllerStatus(curController) != 0) {
         controllerButtons = GetControllerButtons(curController);
@@ -70,7 +68,7 @@ int AskSaveOverwrite(void) {
         ResetTextVars();
         DrawPsxButtonBackground();
         SetTextParams(displayWidth / 2, displayHeight / 2 - 50, 1, 0x80, 0x80, 0x80);
-        DrawTextCrappyFont(S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO);
+        DrawTextCrappyFont("THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n");
         if (TestButton(PAD_CROSS)) {
             SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
             prevControllerButtons = 0xffffffff;
