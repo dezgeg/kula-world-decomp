@@ -111,7 +111,7 @@ segments:
       - [0x04400, c, text1]
       - [0x04990, c, widget_init]
       - [0x04cf0, c, lensflare]
-      - [0x05cdc, c, level_end_screen] # 2 nonmatching
+      - [0x05cdc, c, level_end_screen] # 1 nonmatching
       - [0x06ad8, c, menu_widgets]
       - [0x07a34, c, memcard_ui1]
       - [0x09710, c, menu_widgets2]
@@ -119,32 +119,32 @@ segments:
       - [0x0c2c0, c, background_cubes]
       - [0x0cf7c, c, psx_button_background]
       - [0x0d4dc, c, spinning_selection]
-      - [0x0dcd4, c, hud] # 3 nonmatching
+      - [0x0dcd4, c, hud] # 1 nonmatching
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]
       - [0x10a2c, c, title_screen]
-      - [0x10b78, c, score_graph]
+      - [0x10b78, c, score_graph] # 2 nonmatching
       - [0x1250c, c, bonus_widget]
       - [0x128b8, c, screenshake]
-      - [0x12a64, c, bios_font] # 1 nonmatching
+      - [0x12a64, c, bios_font]
       - [0x12eb0, c, ggi]
-      - [0x1343c, c, sprite_init] # 4 nonmatching
+      - [0x1343c, c, sprite_init] # 1 nonmatching
       - [0x1541c, c, prim]
-      - [0x154a8, c, tgi] # 1 nonmatching
-      - [0x16094, c, skybox]
-      - [0x16ffc, c, level_init]
+      - [0x154a8, c, tgi]
+      - [0x16094, c, skybox] # 1 nonmatching
+      - [0x16ffc, c, level_init] # 3 nonmatching
       - [0x198c4, c, dirfuncs]
       - [0x1a140, c, level_init2]
       - [0x1a27c, c, render1]
       - [0x1b334, c, update]
-      - [0x1c2ec, c, render2]
+      - [0x1c2ec, c, render2] # 1 nonmatching
       - [0x1d9ec, c, render3]
-      - [0x1dbac, c, visited_cubes] # 2 nonmatching
+      - [0x1dbac, c, visited_cubes]
       - [0x1dfcc, c, block_utils]
       - [0x1e420, c, light_effect]
       - [0x1f330, c, player_movement]
-      - [0x22818, c, level_update]
-      - [0x255dc, c, level_update2]
+      - [0x22818, c, level_update] # 2 nonmatching
+      - [0x255dc, c, level_update2] # 2 nonmatching
       - [0x2b638, c, enemy]
       - [0x2fd44, c, vsync]
       - [0x2fee8, c, stack_hacks]
@@ -162,7 +162,7 @@ segments:
       - [0x373b4, c, cheats]
       - [0x377a0, c, menu]
       - [0x3a484, c, level_end]
-      - [0x3b6c0, c, highscore] # 1 nonmatching
+      - [0x3b6c0, c, highscore]
       - [0x3cc60, c, loading]
       - [0x3d664, c, music]
       - [0x3e014, c, snd]
@@ -382,7 +382,7 @@ segments:
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, c, libcard/end]
       - [0x622d8, .data, copycat_ui]
-      - [0x622f0, .data, menu_widgets]
+      - [0x622f0, .data, menu_widgets] # 1 nonmatching
       - [0x62458, .data, sprite_init]
       - [0x62610, data, level_init]
       - [0x62730, .data, render2]
