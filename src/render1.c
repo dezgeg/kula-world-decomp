@@ -162,7 +162,7 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
             }
         }
 
-        ASM_FUN_00052504(otag[whichDrawDispEnv][cameraIndex]);
+        DrawLasers(otag[whichDrawDispEnv][cameraIndex]);
         DrawScreenFade();
         RenderPlayerAndItems();
     } else {
