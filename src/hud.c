@@ -159,8 +159,7 @@ void DrawTimeAttackWidgets(void) {
                 curPlayerTimer--;
             }
             if (levelHasBeenCompletedByPlayer[1] == 1) {
-                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, curPlayerTimer,
-                                    0);
+                DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
             } else {
                 DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0, 1);
             }
