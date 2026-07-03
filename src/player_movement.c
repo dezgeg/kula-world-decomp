@@ -844,7 +844,6 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     int v3, v4, v5;
     SVECTOR *pVec;
 
-
     if (player->turningWhere == 0) {
         if (player->howMoving198 == JUMPING_FORWARD) {
             SetBallShapeAndRotationWhenJumping(player);
@@ -931,7 +930,6 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         player->flatteningTimer = 4096;
     }
 
-
     MATRIX_000a4270.m[2][1] = 0;
     MATRIX_000a4270.m[2][0] = 0;
     MATRIX_000a4270.m[1][2] = 0;
@@ -959,7 +957,6 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     TransposeMatrix(&MATRIX_000a42d0, &MATRIX_000a42b0);
     MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a42d0, &MATRIX_000a42d0);
 
-    // TODO: something frow with operand order here?
     SVECTOR_000a4358.vx = player->finePos.vx + player->svec54.vx + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vx;
     SVECTOR_000a4358.vy = player->finePos.vy + player->svec54.vy + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vy;
     SVECTOR_000a4358.vz = player->finePos.vz + player->svec54.vz + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vz;

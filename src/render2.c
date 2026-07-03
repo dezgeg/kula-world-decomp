@@ -381,7 +381,7 @@ disable_light:
     if (z < 400) {
         return;
     }
-    
+
     z >>= 6;
     depth = quad->otagIndex;
     if (depth == -1) {

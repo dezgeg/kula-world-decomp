@@ -190,8 +190,7 @@ void UpdateVibration(void) {
     }
     vibrationSinPhase = phi + (phi2 >> 0xc) * -0x1000;
     amount = rsin(vibrationSinPhase);
-    res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) * vibrationCounter) /
-           vibrationCounterMax);
+    res = (((vibrationSinConst + (amount * vibrationSinMagnitude >> 0xc)) * vibrationCounter) / vibrationCounterMax);
     vibrationBuf[latestControllerSlotPolled][1] = res;
 }
 

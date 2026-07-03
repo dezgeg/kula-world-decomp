@@ -516,8 +516,7 @@ void ProcessPlayer(void) {
     }
 
     if (thePlayer.movementInhibitTimer != 0) {
-        short timer = thePlayer.movementInhibitTimer - 1;
-        thePlayer.movementInhibitTimer = timer;
+        thePlayer.movementInhibitTimer--;
         thePlayer.rollingForward = 0;
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
@@ -525,7 +524,7 @@ void ProcessPlayer(void) {
         if (thePlayer.delayedLevelEndReason == -4) {
             thePlayer.flatteningTimer += 210;
         }
-        if (thePlayer.delayedLevelEndReason == -1 && timer == 1) {
+        if (thePlayer.delayedLevelEndReason == -1 && thePlayer.movementInhibitTimer == 1) {
             levelEndReason = -1;
         }
         if (thePlayer.delayedLevelEndReason == -6) {
@@ -891,8 +890,8 @@ void HandlePlayerButtons(Player *player) {
     }
 
     if (player->surroundingBlocks[0][2][1] < 0 && player->surroundingBlocks[0][1][0] < 0 &&
-        player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE &&
-        player->jumping == 0 && player->movementVelocity > 0 && player->subpixelPositionOnCube.vz > 300) {
+            player->surroundingBlocks[0][1][2] < 0 && player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE &&
+            player->jumping == 0 && player->movementVelocity > 0 && player->subpixelPositionOnCube.vz > 300) {
 
         player->rollingForward = 0;
         if (player->subpixelPositionOnCube.vz > 400) {
@@ -905,73 +904,73 @@ void HandlePlayerButtons(Player *player) {
 }
 
 void CalcWhatPlayerIsStandingOn(Player *player) {
-    if (player->onMovingPlatform != 0) {
+    if (player->onMovingPlatform) {
         UpdatePlayerSurroundingBlocks(player);
-    } else {
-        SVECTOR_000a4618.vx = (player->finePos.vx + 256) >> 9;
-        SVECTOR_000a4618.vy = (player->finePos.vy + 256) >> 9;
-        SVECTOR_000a4618.vz = (player->finePos.vz + 256) >> 9;
+        return;
+    }
+    SVECTOR_000a4618.vx = (player->finePos.vx + 256) >> 9;
+    SVECTOR_000a4618.vy = (player->finePos.vy + 256) >> 9;
+    SVECTOR_000a4618.vz = (player->finePos.vz + 256) >> 9;
 
-        calcX2 = player->rightVec.vx + (SVECTOR_000a4618.vx - player->gravityDir.vx) - player->facingDir.vx;
-        calcY2 = player->rightVec.vy + (SVECTOR_000a4618.vy - player->gravityDir.vy) - player->facingDir.vy;
-        calcZ2 = player->rightVec.vz + (SVECTOR_000a4618.vz - player->gravityDir.vz) - player->facingDir.vz;
+    calcX2 = player->rightVec.vx + (SVECTOR_000a4618.vx - player->gravityDir.vx) - player->facingDir.vx;
+    calcY2 = player->rightVec.vy + (SVECTOR_000a4618.vy - player->gravityDir.vy) - player->facingDir.vy;
+    calcZ2 = player->rightVec.vz + (SVECTOR_000a4618.vz - player->gravityDir.vz) - player->facingDir.vz;
 
-        for (calcI = 0; calcI < 3; calcI++) {
-            for (calcJ = 0; calcJ < 3; calcJ++) {
-                for (calcK = 0; calcK < 3; calcK++) {
-                    D_000A45F8 = calcX2 + calcI * player->gravityDir.vx + calcJ * player->facingDir.vx - calcK * player->rightVec.vx;
-                    D_000A45FC = calcY2 + calcI * player->gravityDir.vy + calcJ * player->facingDir.vy - calcK * player->rightVec.vy;
-                    D_000A4600 = calcZ2 + calcI * player->gravityDir.vz + calcJ * player->facingDir.vz - calcK * player->rightVec.vz;
+    for (calcI = 0; calcI < 3; calcI++) {
+        for (calcJ = 0; calcJ < 3; calcJ++) {
+            for (calcK = 0; calcK < 3; calcK++) {
+                D_000A45F8 = calcX2 + calcI * player->gravityDir.vx + calcJ * player->facingDir.vx - calcK * player->rightVec.vx;
+                D_000A45FC = calcY2 + calcI * player->gravityDir.vy + calcJ * player->facingDir.vy - calcK * player->rightVec.vy;
+                D_000A4600 = calcZ2 + calcI * player->gravityDir.vz + calcJ * player->facingDir.vz - calcK * player->rightVec.vz;
 
-                    if (!(D_000A45F8 >= 1 && D_000A45FC >= 1 && D_000A4600 >= 1 && D_000A45F8 <= 32 && D_000A45FC <= 32 && D_000A4600 <= 32)) {
-                        player->surroundingBlocks[calcI][calcJ][calcK] = -1;
-                    } else {
-                        calcBlockType = player->surroundingBlocks[calcI][calcJ][calcK] = levelData[D_000A45F8 * 1156 + D_000A45FC * 34 + D_000A4600];
+                if (!(D_000A45F8 >= 1 && D_000A45FC >= 1 && D_000A4600 >= 1 && D_000A45F8 <= 32 && D_000A45FC <= 32 && D_000A4600 <= 32)) {
+                    player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                } else {
+                    calcBlockType = player->surroundingBlocks[calcI][calcJ][calcK] = levelData[D_000A45F8 * 1156 + D_000A45FC * 34 + D_000A4600];
 
-                        if (calcBlockType >= 5 && entityData[(calcBlockType - 5) * 128] == 5) {
-                            if (calcI == 2 || calcJ == 2) {
-                                if (IsVecWithinPlatformBounds(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
-                                    player->surroundingBlocks[calcI][calcJ][calcK] = -1;
-                                }
-                            } else {
+                    if (calcBlockType >= 5 && entityData[(calcBlockType - 5) * 128] == 5) {
+                        if (calcI == 2 || calcJ == 2) {
+                            if (IsVecWithinPlatformBounds(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
                                 player->surroundingBlocks[calcI][calcJ][calcK] = -1;
                             }
+                        } else {
+                            player->surroundingBlocks[calcI][calcJ][calcK] = -1;
                         }
                     }
                 }
             }
         }
+    }
 
-        player->specialBlockIndexPlayerIsStandingOn = player->surroundingBlocks[0][1][1];
+    player->specialBlockIndexPlayerIsStandingOn = player->surroundingBlocks[0][1][1];
 
-        if (player->specialBlockIndexPlayerIsStandingOn >= 5) {
-            player->specialBlockIndexPlayerIsStandingOn = (player->specialBlockIndexPlayerIsStandingOn - 5) * 128;
-            player->specialBlockSideOffsetPlayerIsStandingOn = player->specialBlockIndexPlayerIsStandingOn + GetRotationIndexFromVector(player->gravityDir) * 16;
+    if (player->specialBlockIndexPlayerIsStandingOn >= 5) {
+        player->specialBlockIndexPlayerIsStandingOn = (player->specialBlockIndexPlayerIsStandingOn - 5) * 128;
+        player->specialBlockSideOffsetPlayerIsStandingOn = player->specialBlockIndexPlayerIsStandingOn + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_TRANSPORTER) player->faceTypePlayerStandingOn = OBJ_TRANSPORTER_BLOCK;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_CRUMBLING_BLOCK) player->faceTypePlayerStandingOn = OBJ_CRUMBLING_BLOCK_FACE;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_EXIT) player->faceTypePlayerStandingOn = OBJ_EXIT_BLOCK;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
-            if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
-                 player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
-            }
-        } else {
-            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
-            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
-            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
-            if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
-            if (player->specialBlockIndexPlayerIsStandingOn == 0) {
-                player->faceTypePlayerStandingOn = -1;
-            }
-            if (player->specialBlockIndexPlayerIsStandingOn == -1) {
-                player->faceTypePlayerStandingOn = -1;
-            }
-            player->specialBlockIndexPlayerIsStandingOn = -1;
-            player->specialBlockSideOffsetPlayerIsStandingOn = -1;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_TRANSPORTER) player->faceTypePlayerStandingOn = OBJ_TRANSPORTER_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_CRUMBLING_BLOCK) player->faceTypePlayerStandingOn = OBJ_CRUMBLING_BLOCK_FACE;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_EXIT) player->faceTypePlayerStandingOn = OBJ_EXIT_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
+                player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
         }
+    } else {
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == 0) {
+            player->faceTypePlayerStandingOn = -1;
+        }
+        if (player->specialBlockIndexPlayerIsStandingOn == -1) {
+            player->faceTypePlayerStandingOn = -1;
+        }
+        player->specialBlockIndexPlayerIsStandingOn = -1;
+        player->specialBlockSideOffsetPlayerIsStandingOn = -1;
     }
 }
 
@@ -1857,9 +1856,9 @@ int IsFallingOrJumping(Player* player) {
     return 0;
 }
 
-void Unused_FUN_0003bdec(s16 *a0) {
+void Unused_FUN_0003bdec(Player *player) {
     SVECTOR v;
-    v.vx = a0[30] + (a0[6] * 1024);
-    v.vy = a0[31] + (a0[7] * 1024);
-    v.vz = a0[32] + (a0[8] * 1024);
+    v.vx = player->finePos.vx + (player->facingDir.vx * 1024);
+    v.vy = player->finePos.vy + (player->facingDir.vy * 1024);
+    v.vz = player->finePos.vz + (player->facingDir.vz * 1024);
 }

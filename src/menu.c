@@ -974,9 +974,7 @@ void TimeTrialFailedToQualifyScreen(void) {
         DrawMenuCursorSprite(116 + qualifyScreenCursorX * 150, 85 + qualifyScreenCursorY * 18);
     }
 
-    i = 0;
-
-    for (; i < 2; i++) {
+    for (i = 0; i < 2; i++) {
         DrawStaticUiSprite(3, 25 + 150 * i, 67, 0);
         DrawStaticUiSprite(1, 92 + 150 * i, 67, 0);
         for (j = 0; j < 8 && i * j < 7; j++) {
