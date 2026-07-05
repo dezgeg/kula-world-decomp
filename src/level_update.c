@@ -19,12 +19,14 @@ typedef struct LocalMovingPlatformEntity {
 
 extern int GetBlockAt(SVECTOR * coord);
 
+void MoveMovingPlatforms(SVECTOR vec);
+
 // non-gprel-used variables (extern)
 extern short* entityData;
 extern short numEntities;
 extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
 extern Player thePlayer;
-extern short* entityData;
+extern short* levelData;
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
@@ -33,70 +35,111 @@ extern int gameMode;
 // gprel-used variables (defined in this file)
 int D_000A4398; // mpOff
 int D_000A439C; // swapMovingPlatformDir
-static SVECTOR SVECTOR_000a43a0;
+int D_000A43B0;
+int D_000A43DC;
+int D_000A43E8;
+int D_000A4430;
 int DAT_000a43a8;
 int DAT_000a43ac;
-int D_000A43B0;
-int mpLengthScaled;
-int mI;
 int DAT_000a43c4;
+int DAT_000a43c8;
+int maxDistSquared;
+int mI;
+int movingPlatformEntityId;
+int mpCounter;
+int mpLengthScaled;
+int xMinPlusMax;
+int yMinPlusMax;
+int zMinPlusMax;
+int zoomInAndOutPhase;
 short DAT_000a43fc;
 short DAT_000a4400;
 short DAT_000a4404;
 short DAT_000a4408;
 short DAT_000a440c;
 short DAT_000a4410;
-static SVECTOR SVECTOR_000a4428;
+short debugCamX;
+short debugCamY;
 short mpVelSum;
 short tempI;
 short tempJ;
 short tempK;
-int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance);
-static SVECTOR SVECTOR_000a4514;
+static MATRIX MATRIX_000a44c8;
+static SVECTOR SVECTOR_000a43a0;
+static SVECTOR SVECTOR_000a43e0;
+static SVECTOR SVECTOR_000a43ec;
+static SVECTOR SVECTOR_000a4428;
+static SVECTOR SVECTOR_000a449c;
 static SVECTOR SVECTOR_000a44b8;
 static SVECTOR SVECTOR_000a44c0;
-static VECTOR VECTOR_000a44f8;
-static VECTOR VECTOR_000a44e8;
-static MATRIX MATRIX_000a44c8;
-static int blockTypePlayerStandingOn;
-static int r1TurnDelta;
-static int DAT_000a450c;
-static int DAT_000a4508;
-static int DAT_000a4598;
-int D_000A4430;
-static VECTOR levelEntryCamPos;
-int D_000A43E8;
-int D_000A43DC;
-static SVECTOR SVECTOR_000a43ec;
-static SVECTOR SVECTOR_000a43e0;
-short debugCamY;
-short debugCamX;
-static VECTOR VECTOR_000a448c;
-static SVECTOR SVECTOR_000a449c;
-static VECTOR VECTOR_000a44a8;
+static SVECTOR SVECTOR_000a4514;
+static VECTOR facingGravityProd;
+static VECTOR initPlayerFacingDir;
+static VECTOR initPlayerFacingDirCoarse;
+static VECTOR initPlayerGravityDir;
 static VECTOR levelEntryBezierP0;
 static VECTOR levelEntryBezierP1;
 static VECTOR levelEntryBezierP2;
 static VECTOR levelEntryBezierP3;
-static VECTOR initPlayerFacingDir;
-static VECTOR initPlayerFacingDirCoarse;
-static VECTOR initPlayerGravityDir;
-static VECTOR facingGravityProd;
+static VECTOR levelEntryCamPos;
+static VECTOR VECTOR_000a448c;
+static VECTOR VECTOR_000a44a8;
+static VECTOR VECTOR_000a44e8;
+static VECTOR VECTOR_000a44f8;
+
+static int blockTypePlayerStandingOn;
+static int DAT_000a4508;
+static int DAT_000a450c;
+static int DAT_000a4598;
 static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
-int maxDistSquared;
-int xMinPlusMax;
-int yMinPlusMax;
-int zMinPlusMax;
-int zoomInAndOutPhase;
-int DAT_000a43c8;
-int movingPlatformEntityId;
-int mpCounter;
+static int r1TurnDelta;
+static int trI;
+static int trJ;
+static int trK;
+static int trL;
 
 SVECTOR SVECTOR_000a2de4 = {};
 SVECTOR SVECTOR_allMinus1 = { -1, -1, -1 };
 
-INCLUDE_ASM("asm/nonmatchings/level_update", ScanLevelDataForMovingBlocks2);
+void ScanLevelDataForMovingBlocks2(void) {
+    for (trI = 0; trI < 8; trI++) {
+        for (trJ = 0; trJ < 8; trJ++) {
+            for (trK = 0; trK < 8; trK++) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[trI][trJ][trK] = -1;
+            }
+        }
+    }
+
+    for (trI = 0; trI < numEntities * 128; trI += 128) {
+        if (entityData[trI] == 5) {
+            trJ = entityData[trI + 4];
+            trK = entityData[trI + 5];
+            trL = entityData[trI + 6];
+            switch (entityData[trI + 2]) {
+                case 1:
+                    for (trJ = entityData[trI + 4]; trJ < entityData[trI + 7] + entityData[trI + 17]; trJ++) {
+                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                    }
+                    break;
+                case 2:
+                    for (trK = entityData[trI + 5]; trK < entityData[trI + 8] + entityData[trI + 17]; trK++) {
+                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                    }
+                    break;
+                case 5:
+                    for (trL = entityData[trI + 6]; trL < entityData[trI + 9] + entityData[trI + 17]; trL++) {
+                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                    }
+                    break;
+            }
+
+            entityData[trI + 19] = 0;
+            entityData[trI + 18] = entityData[trI + 18];
+        }
+    }
+    MoveMovingPlatforms(SVECTOR_000a2de4);
+}
 
 void MoveMovingPlatforms(SVECTOR vec) {
 #define EB ((LocalMovingPlatformEntity *)&entityData[D_000A4398])
