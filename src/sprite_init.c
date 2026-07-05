@@ -4,6 +4,10 @@ typedef struct DigitSprites {
     TSprite sprites[2][10];
 } DigitSprites;
 
+typedef struct Pair {
+    int x, y;
+} Pair;
+
 extern void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b);
 extern void InitAllDigitSprites(void);
 extern void InitBonusWidgetSprites(void);
@@ -16,6 +20,7 @@ extern void InitScreenFadePolys(void);
 extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
 extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void Srand(int param_1);
 
 extern DigitSprites levelTimeLeftDigitSprites;
 extern TgiFile* tgi;
@@ -40,6 +45,18 @@ extern TSprite keySprites[2][8];
 extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
+extern DigitSprites copycatPlayer1ScoreDigitSprites;
+extern DigitSprites copycatPlayer2ScoreDigitSprites;
+extern uint curController;
+extern int gameMode;
+extern DigitSprites levelScoreSprite;
+extern int numTimeTrialPlayers;
+extern DigitSprites timeAttackPlayer1CurLevelTimeDigitSprites;
+extern DigitSprites timeAttackPlayer1TotalPlaytimeDigitSprites;
+extern DigitSprites timeAttackPlayer2CurLevelTimeDigitSprites;
+extern DigitSprites timeAttackPlayer2TotalPlaytimeDigitSprites;
+extern DigitSprites totalScoreSprite;
+extern int twoPlayerWhichPlayer;
 
 int KEY_SPRITE_POSITIONS[] = {
     16, 219,
@@ -144,6 +161,7 @@ int screenFadeSpeed;
 short* ggiPart1HourglassAnim;
 static RECT hourglassClutRect;
 uint firstGuiTexture;
+int numKeysInLevel;
 
 void InitManySprites(void) {
     InitHourglassSprites();
@@ -478,4 +496,59 @@ void InitBonusWidgetSprites(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/sprite_init", InitAllDigitSprites);
+void InitAllDigitSprites(void) {
+    int i;
+    int isTwoPlayerTimeAttack;
+    Pair* p;
+    int base;
+    Pair* pBase;
+    Pair* k;
+
+    Srand(1);
+    isTwoPlayerTimeAttack = 0;
+    switch (gameMode) {
+        default:
+        InitDigitSprites(&totalScoreSprite,2,100,0xec,0x80,0x80,0x80);
+        InitDigitSprites(&levelScoreSprite,1,100,0xda,0x80,0x80,0x80);
+        break;
+        case 1:
+        if (curController == 0) {
+            InitDigitSprites(&copycatPlayer1ScoreDigitSprites,1,0x1c,0xda,0x80,0x80,0x80);
+            InitDigitSprites(&copycatPlayer2ScoreDigitSprites,1,0xf6,0xda,0x50,0x50,0x50);
+        } else {
+            InitDigitSprites(&copycatPlayer1ScoreDigitSprites,1,0x1c,0xda,0x50,0x50,0x50);
+            InitDigitSprites(&copycatPlayer2ScoreDigitSprites,1,0xf6,0xda,0x80,0x80,0x80);
+        }
+        break;
+
+        case 2:
+        if (numTimeTrialPlayers == 1) {
+            InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0x40,0xec,0x80,0x80,0x80);
+            InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0x40,0xda,0x80,0x80,0x80);
+        } else {
+            if (twoPlayerWhichPlayer == 0) {
+                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0xffffffe0,0xec,0x80,0x80, 0x80);
+                InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites,2,0xae,0xec,0x50,0x50,0x50);
+                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0xffffffe0,0xda,0x80,0x80,0x80);
+                InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites,1,0xae,0xda,0x50,0x50,0x50);
+            } else {
+                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0xffffffe0,0xec,0x50,0x50, 0x50);
+                InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites,2,0xae,0xec,0x80,0x80,0x80);
+                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0xffffffe0,0xda,0x50,0x50,0x50);
+                InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites,1,0xae,0xda,0x80,0x80,0x80);
+            }
+            isTwoPlayerTimeAttack = 1;
+        }
+        break;
+    }
+
+    // FIXME: extremely ugly
+    k = (Pair *)KEY_SPRITE_POSITIONS;
+    pBase = k + isTwoPlayerTimeAttack * 16;
+    base = numKeysInLevel * 32 + (int)pBase - 32;
+    for (i = 0; i < 8; i++) {
+        p = (Pair *)((i / 2) * 8 + base);
+        setXY0(&keySprites[0][i].sprt, p->x, p->y);
+        setXY0(&keySprites[1][i].sprt, p->x, p->y);
+    }
+}
