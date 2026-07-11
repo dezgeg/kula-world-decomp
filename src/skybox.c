@@ -1,9 +1,8 @@
 #include "common.h"
 
-// Extern variables
+extern short skyboxVertices[4][3];
 extern int firstUnk2Texture;
 extern Texture textures[150];
-
 extern int starfieldSinPhase1;
 extern int starfieldSinPhase2;
 extern int starfieldSinPhase3;
@@ -18,14 +17,167 @@ extern int D_000A51BC;
 extern int D_000A51C0;
 extern int D_000A51C4;
 
-// Global variables
+int D_000A415C;
+int D_000A4164;
+int countOfSomethingI;
+int countOfSomethingJ;
+static short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
+int skyboxAngleMul1;
+int skyboxAngleMul2;
+int skyboxAnglesProduct;
+int skyboxCountsProduct;
 int skyboxMaxAngle1;
 int skyboxMaxAngle2;
+int skyboxMaxAngle2Plus1;
+int skyboxMaxAnglesProduct;
+int skyboxParam5;
+int skyboxParam5Times2;
+int skyboxSizeMidBlk;
+int skyboxSizePolyMap;
+int skyboxSizePolys;
+int skyboxSizeVertices;
+short* tgiPart9;
 
 // Prototypes
 extern uint Rand(int param_1);
+extern void SkyboxSinCos(int angleval1, int angleval2, short * out1, short * out2, short * out3);
+extern int Square(int val);
+extern void SetShadeTex(void * p, int disable);
+extern void SetSemiTrans(void * p, int enable);
+extern void *memcpy(void *dest, const void *src, size_t n);
 
-INCLUDE_ASM("asm/nonmatchings/skybox", RecalcSkyboxes01);
+void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, int countJ, int param_5) {
+    short *ptr;
+    int i;
+    int j;
+    int maxDist;
+    int l;
+    int s;
+    int u;
+    int v;
+    int w;
+    int k;
+    short *texcoords;
+
+    skyboxAngleMul1 = angleOfSomethingI;
+    skyboxAngleMul2 = angleOfSomethingJ;
+    countOfSomethingJ = countI;
+    countOfSomethingI = countJ;
+    skyboxParam5 = param_5;
+    skyboxAnglesProduct = angleOfSomethingI * angleOfSomethingJ;
+    skyboxParam5Times2 = param_5 * 2;
+    skyboxMaxAngle1 = countI * angleOfSomethingI;
+    D_000A415C = skyboxMaxAngle1;
+    skyboxMaxAngle2 = countJ * angleOfSomethingJ;
+    skyboxMaxAngle2Plus1 = skyboxMaxAngle2 + 1;
+    skyboxCountsProduct = countI * countJ;
+    skyboxSizeMidBlk = (skyboxCountsProduct + 2) * 8;
+    skyboxMaxAnglesProduct = skyboxMaxAngle1 * skyboxMaxAngle2;
+    D_000A4164 = skyboxMaxAngle1 * skyboxMaxAngle2Plus1;
+    skyboxSizePolyMap = D_000A4164;
+    skyboxSizeVertices = (skyboxMaxAnglesProduct * 20) / 3;
+    if ((D_000A4164 & 0x1f) > 0) {
+        skyboxSizePolyMap = (D_000A4164 + 32) & -32;
+    }
+    skyboxSizePolys = D_000A4164 * skyboxParam5Times2;
+
+    ptr = (short *)0x001c3000;
+
+    for (i = 0; i < countOfSomethingI; i++) {
+        for (j = 0; j < countOfSomethingJ; j++) {
+            SkyboxSinCos(j * skyboxAngleMul1 - 1, i * skyboxAngleMul2 - 1, &skyboxVertices[0][0], &skyboxVertices[0][1], &skyboxVertices[0][2]);
+            SkyboxSinCos((j + 1) * skyboxAngleMul1, i * skyboxAngleMul2 - 1, &skyboxVertices[1][0], &skyboxVertices[1][1], &skyboxVertices[1][2]);
+            SkyboxSinCos(j * skyboxAngleMul1 - 1, (i + 1) * skyboxAngleMul2, &skyboxVertices[2][0], &skyboxVertices[2][1], &skyboxVertices[2][2]);
+            SkyboxSinCos((j + 1) * skyboxAngleMul1, (i + 1) * skyboxAngleMul2, &skyboxVertices[3][0], &skyboxVertices[3][1], &skyboxVertices[3][2]);
+
+            for (k = 0; k < 3; k++) {
+                *ptr++ = recalcSkyboxes[k] = (((skyboxVertices[0][k] + skyboxVertices[1][k]) + skyboxVertices[2][k]) + skyboxVertices[3][k]) / 4;
+            }
+
+            maxDist = 0;
+            for (k = 0; k < 4; k++) {
+                s = SquareRoot0(Square(recalcSkyboxes[0] - skyboxVertices[k][0]) +
+                               Square(recalcSkyboxes[1]  - skyboxVertices[k][1]) +
+                               Square(recalcSkyboxes[2] - skyboxVertices[k][2]));
+                if (maxDist < s)
+                    maxDist = s;
+            }
+            *ptr++ = maxDist;
+        }
+    }
+
+    *(int *)&ptr[0] = 0;
+    *(int *)&ptr[2] = 0;
+    *(int *)&ptr[4] = -1;
+    *(int *)&ptr[6] = -1;
+    ptr += 8;
+
+    if (param_5 == 36) {
+        for (i = 0; i < countOfSomethingI; i++) {
+            for (j = 0; j < countOfSomethingJ; j++) {
+                for (k = 0; k < skyboxAngleMul1; k++) {
+                    for (l = 0; l < (skyboxAngleMul2 / 3); l++) {
+                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3, &ptr[0], &ptr[1], &ptr[6]);
+                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3 + 1, &ptr[2], &ptr[3], &ptr[7]);
+                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3 + 2, &ptr[4], &ptr[5], &ptr[8]);
+                        ptr += 10;
+                    }
+                }
+            }
+        }
+    } else {
+        for (i = 0; i < countOfSomethingI; i++) {
+            for (j = 0; j < countOfSomethingJ; j++) {
+                for (k = 0; k < skyboxAngleMul2; k++) {
+                    for (l = 0; l < (skyboxAngleMul1 / 3); l++) {
+                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3, i * skyboxAngleMul2 + k, &ptr[0], &ptr[1], &ptr[6]);
+                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3 + 1, i * skyboxAngleMul2 + k, &ptr[2], &ptr[3], &ptr[7]);
+                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3 + 2, i * skyboxAngleMul2 + k, &ptr[4], &ptr[5], &ptr[8]);
+                        ptr += 10;
+                    }
+                }
+            }
+        }
+    }
+
+    ptr += skyboxSizePolyMap / 2;
+    if (skyboxParam5 == 36) {
+        unsigned char *pu = (unsigned char *)ptr;
+        for (i = 0; i < D_000A4164 * 2; i++) {
+            setPolyG4(pu);
+            pu += 36;
+        }
+    } else {
+        texcoords = tgiPart9;
+        ptr += (D_000A415C * skyboxParam5Times2) / 2;
+        for (i = 0; i < 24; i++) {
+            for (j = 0; j < 48; j++) {
+                setPolyFT4((POLY_FT4 *)ptr);
+                SetShadeTex((POLY_FT4 *)ptr, 0);
+                SetSemiTrans((POLY_FT4 *)ptr, 0);
+                setRGB0((POLY_FT4 *)ptr, 128, 128, 128);
+                ((POLY_FT4 *)(ptr))->clut = GetClut(texcoords[0], texcoords[1]);
+                ((POLY_FT4 *)(ptr))->tpage = GetTPage(1, 0, texcoords[2], texcoords[3]);
+
+                u = texcoords[4];
+                v = texcoords[5];
+                w = texcoords[6];
+                *(u_short *)&((POLY_FT4 *)(ptr))->u0 = (v << 8) | u;
+                *(u_short *)&((POLY_FT4 *)(ptr))->u1 = (v << 8) | (u + w);
+                *(u_short *)&((POLY_FT4 *)(ptr))->u2 = ((v + 15) << 8) | u;
+                *(u_short *)&((POLY_FT4 *)(ptr))->u3 = ((v + 15) << 8) | (u + w);
+                ptr += 20;
+                texcoords += 7;
+
+                for (k = 0; k < 1; k++) {
+                    memcpy(ptr, ptr - 20, 40);
+                    ptr += 20;
+                }
+            }
+        }
+    }
+}
+
 
 int RecalcSkyboxes2(void) {
     short *dst;
