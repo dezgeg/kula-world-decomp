@@ -1,0 +1,654 @@
+#include "common.h"
+
+typedef struct EntityPos {
+    MATRIX matrix;
+    short posX;
+    short posY;
+    short posZ;
+    short pad;
+    byte reserved[8];
+} EntityPos;
+
+extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
+extern void CalcWhatPlayerIsStandingOn(Player * player);
+extern int IsPlayerInAir(Player * player);
+extern void SetPlayerRotation(int cubeSide, int rotation, Player * player);
+extern void SetRenderScreenFade(int speed, int enableHalfFps);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void Vibrate98(int seqId);
+extern void UpdateSubpixelPositions(Player * player);
+extern void HandleSpecialCubeTypes(Player* player);
+extern void EnableLethargy(int enable);
+extern void SetCubeVisited(int x, int y, int z, int visitType);
+extern void SetSunglassMode(int on);
+extern void SndMuteVoiceByTag(int tag);
+extern void Vibrate99(int magnitude1, int magnitude2, int count);
+extern int IsFallingOrJumping(Player* player);
+
+extern int levelEndReason;
+extern int debugDisableTimer;
+extern int drawTimerPausedWidget;
+extern int levelTimeLeft;
+extern SVECTOR SVECTOR_000a2df4;
+extern int numCameras;
+extern InvisBlockVisibility invisBlockVisibility;
+extern Player thePlayer;
+extern short* entityData;
+extern SVECTOR transporterParticlesPos;
+extern int cameraIndex;
+extern int numKeysRemaining;
+extern int levelScore;
+extern int numCubesRemainingInLevel[5];
+
+int gameMode;
+static int levelWon[2];
+static SVECTOR playerCombinedPos;
+int DAT_000a4748;
+int DAT_000a474c;
+int DAT_000a4750;
+int DAT_000a4754;
+int transportDestCubeSide;
+int transportDestRotation;
+int transporterDestEntityIdx;
+int transporterTimer;
+static SVECTOR SVECTOR_000a4738;
+static SVECTOR SVECTOR_000a4740;
+static SVECTOR SVECTOR_000a4778;
+static short DAT_000a4788;
+static SVECTOR cubeBelowPlayerPos;
+short fireSoundTimer;
+int shouldMarkCubesVisited;
+
+INCLUDE_ASM("asm/nonmatchings/level_update3", CreateAllItemDispLists);
+
+void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
+    pos->matrix.m[2][2] = 0;
+    pos->matrix.m[2][1] = 0;
+    pos->matrix.m[2][0] = 0;
+    pos->matrix.m[1][2] = 0;
+    pos->matrix.m[1][1] = 0;
+    pos->matrix.m[1][0] = 0;
+    pos->matrix.m[0][2] = 0;
+    pos->matrix.m[0][1] = 0;
+    pos->matrix.m[0][0] = 0;
+
+    if (param_3 == 4) {
+        pos->matrix.m[2][0] = 0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[0][2] = -0x1000;
+        pos->matrix.t[0] -= param_4;
+    }
+    if (param_3 == 1) {
+        pos->matrix.m[2][0] = -0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[0][2] = 0x1000;
+        pos->matrix.t[0] += param_4;
+    }
+    if (param_3 == 3) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[2][1] = 0x1000;
+        pos->matrix.m[1][2] = -0x1000;
+        pos->matrix.t[1] -= param_4;
+    }
+    if (param_3 == 2) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[2][1] = -0x1000;
+        pos->matrix.m[1][2] = 0x1000;
+        pos->matrix.t[1] += param_4;
+    }
+    if (param_3 == 0) {
+        pos->matrix.m[0][0] = -0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[2][2] = -0x1000;
+        pos->matrix.t[2] -= param_4;
+    }
+    if (param_3 == 5) {
+        pos->matrix.m[0][0] = 0x1000;
+        pos->matrix.m[1][1] = 0x1000;
+        pos->matrix.m[2][2] = 0x1000;
+        pos->matrix.t[2] += param_4;
+    }
+
+    if (param_2 == 2) {
+        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
+        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
+        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+
+        pos->matrix.m[0][0] = -pos->matrix.m[0][1];
+        pos->matrix.m[1][0] = -pos->matrix.m[1][1];
+        pos->matrix.m[2][0] = -pos->matrix.m[2][1];
+
+        pos->matrix.m[0][1] = SVECTOR_000a4738.vx;
+        pos->matrix.m[1][1] = SVECTOR_000a4738.vy;
+        pos->matrix.m[2][1] = SVECTOR_000a4738.vz;
+    }
+    if (param_2 == 3) {
+        pos->matrix.m[0][0] = -pos->matrix.m[0][0];
+        pos->matrix.m[1][0] = -pos->matrix.m[1][0];
+        pos->matrix.m[2][0] = -pos->matrix.m[2][0];
+        pos->matrix.m[0][1] = -pos->matrix.m[0][1];
+        pos->matrix.m[1][1] = -pos->matrix.m[1][1];
+        pos->matrix.m[2][1] = -pos->matrix.m[2][1];
+    }
+    if (param_2 == 4) {
+        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
+        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
+        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+
+        pos->matrix.m[0][0] = pos->matrix.m[0][1];
+        pos->matrix.m[1][0] = pos->matrix.m[1][1];
+        pos->matrix.m[2][0] = pos->matrix.m[2][1];
+
+        pos->matrix.m[0][1] = -SVECTOR_000a4738.vx;
+        pos->matrix.m[1][1] = -SVECTOR_000a4738.vy;
+        pos->matrix.m[2][1] = -SVECTOR_000a4738.vz;
+    }
+}
+
+void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, SVECTOR* param_5) {
+    m->m[0][2] = 0;
+    m->m[0][1] = 0;
+    m->m[0][0] = 0;
+    m->m[1][2] = 0;
+    m->m[1][1] = 0;
+    m->m[1][0] = 0;
+    m->m[2][2] = 0;
+    m->m[2][1] = 0;
+    m->m[2][0] = 0;
+
+    if (param_3 == 4) {
+        param_5->vx = param_5->vx - delta;
+        m->m[2][0] = 0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[0][2] = -0x1000;
+    }
+    if (param_3 == 1) {
+        param_5->vx = param_5->vx + delta;
+        m->m[2][0] = -0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[0][2] = 0x1000;
+    }
+    if (param_3 == 3) {
+        param_5->vy = param_5->vy - delta;
+        m->m[0][0] = 0x1000;
+        m->m[2][1] = 0x1000;
+        m->m[1][2] = -0x1000;
+    }
+    if (param_3 == 2) {
+        param_5->vy = param_5->vy + delta;
+        m->m[0][0] = 0x1000;
+        m->m[2][1] = -0x1000;
+        m->m[1][2] = 0x1000;
+    }
+    if (param_3 == 0) {
+        param_5->vz = param_5->vz - delta;
+        m->m[0][0] = -0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[2][2] = -0x1000;
+    }
+    if (param_3 == 5) {
+        param_5->vz = param_5->vz + delta;
+        m->m[0][0] = 0x1000;
+        m->m[1][1] = 0x1000;
+        m->m[2][2] = 0x1000;
+    }
+
+    if (param_2 == 2) {
+        SVECTOR_000a4740.vx = m->m[0][0];
+        SVECTOR_000a4740.vy = m->m[1][0];
+        SVECTOR_000a4740.vz = m->m[2][0];
+
+        m->m[0][0] = -m->m[0][1];
+        m->m[1][0] = -m->m[1][1];
+        m->m[2][0] = -m->m[2][1];
+
+        m->m[0][1] = SVECTOR_000a4740.vx;
+        m->m[1][1] = SVECTOR_000a4740.vy;
+        m->m[2][1] = SVECTOR_000a4740.vz;
+    }
+    if (param_2 == 3) {
+        m->m[0][0] = -m->m[0][0];
+        m->m[1][0] = -m->m[1][0];
+        m->m[2][0] = -m->m[2][0];
+        m->m[0][1] = -m->m[0][1];
+        m->m[1][1] = -m->m[1][1];
+        m->m[2][1] = -m->m[2][1];
+    }
+    if (param_2 == 4) {
+        SVECTOR_000a4740.vx = m->m[0][0];
+        SVECTOR_000a4740.vy = m->m[1][0];
+        SVECTOR_000a4740.vz = m->m[2][0];
+
+        m->m[0][0] = m->m[0][1];
+        m->m[1][0] = m->m[1][1];
+        m->m[2][0] = m->m[2][1];
+
+        m->m[0][1] = -SVECTOR_000a4740.vx;
+        m->m[1][1] = -SVECTOR_000a4740.vy;
+        m->m[2][1] = -SVECTOR_000a4740.vz;
+    }
+}
+
+void CheckForButtonEntity(Player* player) {
+    short* ptr;
+    unsigned short* ptr0;
+    unsigned short* ptr2;
+    if (IsFallingOrJumping(player)) {
+        player->alreadyProcessedEntityAction = 0;
+    } else {
+        if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
+            (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
+            (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
+
+            player->alreadyProcessedEntityAction = OBJ_BUTTON;
+            DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
+
+            if (entityData[DAT_000a4748 + 4] == 1) {
+                SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
+            } else {
+                SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
+            }
+            Vibrate99(1, 0xff, 1);
+
+            ptr0 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+            DAT_000a4754 = (short)ptr0[7];
+            DAT_000a474c = ((int)(ptr0[7] << 16)) >> 20;
+            DAT_000a4750 = ptr0[7] & 0xf;
+
+            while (DAT_000a4754 != -1) {
+                if (DAT_000a4750 == 6) {
+                    ptr = (short*)(DAT_000a474c * 256 + (int)entityData);
+                    ptr[3] = (ptr[3] + 1) % 2;
+                    DAT_000a4748 = DAT_000a474c << 7;
+                    DAT_000a4754 = ptr[23];
+                    DAT_000a474c = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
+                    DAT_000a4750 = ((unsigned short*)ptr)[23] & 0xf;
+                } else {
+                    DAT_000a4748 = DAT_000a474c * 128 + DAT_000a4750 * 16;
+                    ptr2 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+                    ptr2[4] = ((short)ptr2[4] % 2) + 1;
+                    DAT_000a4754 = (short)ptr2[6];
+                    DAT_000a474c = ((int)(ptr2[6] << 16)) >> 20;
+                    DAT_000a4750 = ptr2[6] & 0xf;
+                }
+            }
+        }
+    }
+}
+
+int HandleTransporter(Player *player) {
+    if (IsPlayerInAir(player)) {
+        player->alreadyProcessedEntityAction = 0;
+        transporterTimer = -1;
+        return 0;
+    }
+    if (player->faceTypePlayerStandingOn != OBJ_TRANSPORTER || entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] != 1) {
+        transporterTimer = -1;
+        return 0;
+    }
+    if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
+        if (transporterTimer == -1) {
+            transporterTimer = 15;
+            AddParticles(3, &transporterParticlesPos, 0);
+        }
+
+        if (transporterTimer > -1) {
+            transporterTimer--;
+            player->movementInhibitTimer = 15;
+            player->rollingForward = 0;
+            player->turnDirection = 0;
+            player->jumping = 0;
+        }
+
+        if (transporterTimer == -1) {
+            int destEntityIdx;
+            int destCubeSide;
+
+            SetRenderScreenFade(0, 1);
+            Vibrate98(0);
+            player->alreadyProcessedEntityAction = OBJ_TRANSPORTER;
+            SndPlaySfx(5, 0, &SVECTOR_000a2df4, 7000);
+            player->movementInhibitTimer = 15;
+            player->howMoving0 = 0;
+            player->rollingForward = 0;
+            player->turnDirection = 0;
+            player->jumping = 0;
+
+            transporterDestEntityIdx = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] >> 4;
+            transportDestCubeSide = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] & 15;
+
+            player->specialBlockSideOffsetPlayerIsStandingOn = transporterDestEntityIdx * 128 + transportDestCubeSide * 16;
+            player->specialBlockIndexPlayerIsStandingOn = transporterDestEntityIdx * 128;
+
+            transportDestRotation = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2];
+
+            SetPlayerRotation(transportDestCubeSide, transportDestRotation, player);
+
+            player->perspVec1 = player->rightVec;
+            player->perspVec3 = player->facingDir;
+            player->perspVec2 = player->gravityDir;
+
+            thePlayer.matrix_d4.m[0][0] = thePlayer.rightVec.vx << 12;
+            thePlayer.matrix_d4.m[1][0] = thePlayer.rightVec.vy << 12;
+            thePlayer.matrix_d4.m[2][0] = thePlayer.rightVec.vz << 12;
+            thePlayer.matrix_d4.m[0][2] = thePlayer.gravityDir.vx << 12;
+            thePlayer.matrix_d4.m[1][2] = thePlayer.gravityDir.vy << 12;
+            thePlayer.matrix_d4.m[2][2] = thePlayer.gravityDir.vz << 12;
+            thePlayer.matrix_d4.m[0][1] = -thePlayer.facingDir.vx << 12;
+            thePlayer.matrix_d4.m[1][1] = -thePlayer.facingDir.vy << 12;
+            thePlayer.matrix_d4.m[2][1] = -thePlayer.facingDir.vz << 12;
+
+            player->howMoving198 = NOT_MOVING;
+
+            player->jumpStartPos.vx = entityData[player->specialBlockIndexPlayerIsStandingOn + 125] * 512 + player->gravityDir.vx * 256;
+            player->jumpStartPos.vy = entityData[player->specialBlockIndexPlayerIsStandingOn + 126] * 512 + player->gravityDir.vy * 256;
+            player->jumpStartPos.vz = entityData[player->specialBlockIndexPlayerIsStandingOn + 127] * 512 + player->gravityDir.vz * 256;
+
+            player->finePos = player->jumpStartPos;
+            CalcWhatPlayerIsStandingOn(player);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void HandleSpecialCubeTypes(Player* player) {
+    int whichSide;
+    SVECTOR gravityDir;
+    SVECTOR dummy;
+
+    DAT_000a4788 = player->surroundingBlocks[1][1][1];
+    if (DAT_000a4788 == -2) {
+        if (thePlayer.invulnerabilityTimer == -1) {
+            if (player->movementInhibitTimer == 0) {
+                player->delayedLevelEndReason = -7;
+                player->movementInhibitTimer = 4;
+                player->movementVelocity = 0;
+                player->rotX = 0;
+                player->fireTimer = 1900;
+            }
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_ARROW) {
+        gravityDir = player->gravityDir;
+        if (gravityDir.vx == 1) {
+            whichSide = 1;
+        } else if (gravityDir.vx == -1) {
+            whichSide = 4;
+        } else if (gravityDir.vy == 1) {
+            whichSide = 2;
+        } else if (gravityDir.vy == -1) {
+            whichSide = 3;
+        } else if (gravityDir.vz == 1) {
+            whichSide = 5;
+        } else if (gravityDir.vz == -1) {
+            whichSide = 0;
+        } else {
+            whichSide = -1;
+        }
+        GetVectorBasedOnTwoDirs(whichSide, entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2], &SVECTOR_000a4778);
+        if (player->facingDir.vx != SVECTOR_000a4778.vx ||
+                player->facingDir.vy != SVECTOR_000a4778.vy ||
+                player->facingDir.vz != SVECTOR_000a4778.vz) {
+            thePlayer.rollingForward = 0;
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
+        player->rollingForward = 1;
+        player->turnDirection = 0;
+    } else if (thePlayer.startedIceSfx != 0) {
+        thePlayer.startedIceSfx = 0;
+        SndMuteVoiceByTag(2);
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_FAST_STAR) {
+        if (player->rollingForward == 0) {
+            if (player->jumping == 1 && player->howMoving198 != JUMPING_INPLACE) {
+                levelScore += 5;
+            }
+        }
+    }
+    if (player->faceTypePlayerStandingOn == OBJ_FIRE_PATCH) {
+        if (!IsPlayerInAir(player)) {
+            if (thePlayer.invulnerabilityTimer == -1) {
+                player->fireTimer += 40;
+            }
+            if (fireSoundTimer == 0) {
+                SndPlaySfx(1, 1, &SVECTOR_000a2df4, 7000);
+            }
+            fireSoundTimer = 7;
+        }
+        if (player->onGround == 1) {
+            if (thePlayer.invulnerabilityTimer == -1) {
+                player->fireTimer += 600;
+            }
+        }
+        if (player->fireTimer > 2000) {
+            if (player->movementInhibitTimer == 0) {
+                player->dying = 1;
+                player->delayedLevelEndReason = -4;
+                player->movementVelocity = 0;
+                player->rotX = 0;
+                player->movementInhibitTimer = 25;
+            }
+        }
+    } else {
+        if (fireSoundTimer != 0) {
+            if (--fireSoundTimer == 0) {
+                SndMuteVoiceByTag(1);
+            }
+        }
+        player->fireTimer -= 15;
+        if (player->fireTimer < 0) {
+            player->fireTimer = 0;
+        }
+    }
+    if (!IsPlayerInAir(player)) {
+        if (player->acidTimer > 2000) {
+            player->acidTimer = 2000;
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_ACID_PATCH) {
+            if (player->movementInhibitTimer == 0) {
+                if (thePlayer.invulnerabilityTimer == -1) {
+                    player->delayedLevelEndReason = -6;
+                    player->movementInhibitTimer = 6;
+                    player->acidTimer += 300;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
+            if (thePlayer.startedIceSfx == 0) {
+                thePlayer.startedIceSfx = 1;
+                SndPlaySfx(2, 2, &SVECTOR_000a2df4, 7000);
+            }
+            player->fireTimer -= 150;
+            if (player->fireTimer < 0) {
+                player->fireTimer = 0;
+            }
+            player->iceColorChangeTimer += 40;
+            if (player->iceColorChangeTimer > 500) {
+                player->iceColorChangeTimer = 400;
+            }
+        } else {
+            player->iceColorChangeTimer -= 10;
+            if (player->iceColorChangeTimer < 0) {
+                player->iceColorChangeTimer = 0;
+            }
+        }
+        if (shouldMarkCubesVisited != 0) {
+            cubeBelowPlayerPos.vx = ((player->finePos.vx - (player->gravityDir.vx * 356)) + 256) >> 9;
+            cubeBelowPlayerPos.vy = ((player->finePos.vy - (player->gravityDir.vy * 356)) + 256) >> 9;
+            cubeBelowPlayerPos.vz = ((player->finePos.vz - (player->gravityDir.vz * 356)) + 256) >> 9;
+            if (cubeBelowPlayerPos.vx < 34 && cubeBelowPlayerPos.vy < 34 && cubeBelowPlayerPos.vz < 34 && cubeBelowPlayerPos.vx > 0 && cubeBelowPlayerPos.vy > 0 && cubeBelowPlayerPos.vz > 0) {
+                SetCubeVisited(cubeBelowPlayerPos.vx, cubeBelowPlayerPos.vy, cubeBelowPlayerPos.vz, 1);
+            }
+            if (numCubesRemainingInLevel[0] == 0) {
+                if (player->onGround) {
+                    levelEndReason = 2;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 2;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+        } else {
+            if (player->faceTypePlayerStandingOn == OBJ_EXIT && numKeysRemaining == 0) {
+                if (player->onGround) {
+                    levelWon[cameraIndex] = 1;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 1;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+            if (player->faceTypePlayerStandingOn == OBJ_HIDDEN_EXIT && numKeysRemaining == 0) {
+                if (player->onGround) {
+                    levelWon[cameraIndex] = 3;
+                } else if (player->movementInhibitTimer == 0) {
+                    player->delayedLevelEndReason = 3;
+                    player->movementInhibitTimer = 5;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE) {
+            if (entityData[player->specialBlockIndexPlayerIsStandingOn + 1] == 1) {
+                SndPlaySfx(101, 0, &SVECTOR_000a2df4, 7000);
+                levelScore += 50;
+            }
+            entityData[player->specialBlockIndexPlayerIsStandingOn + 1] = 2;
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_SPIKE && player->movementInhibitTimer == 0 && thePlayer.invulnerabilityTimer == -1) {
+            SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+            Vibrate99(1, 255, 5);
+            if (thePlayer.movementInhibitTimer == 0) {
+                thePlayer.dying = 1;
+                thePlayer.movementVelocity = 0;
+                thePlayer.rotX = 0;
+                thePlayer.delayedLevelEndReason = -1;
+                thePlayer.movementInhibitTimer = 10;
+                thePlayer.ballBlinking = 1;
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_MOVING_SPIKE) {
+            if (entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] == 1 && thePlayer.invulnerabilityTimer == -1) {
+                if (player->onGround == 1) {
+                    Vibrate99(1, 255, 5);
+                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    if (thePlayer.movementInhibitTimer == 0) {
+                        thePlayer.dying = 1;
+                        thePlayer.movementVelocity = 0;
+                        thePlayer.rotX = 0;
+                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.movementInhibitTimer = 10;
+                        thePlayer.ballBlinking = 1;
+                    }
+                } else if (player->movementInhibitTimer == 0) {
+                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    Vibrate99(1, 255, 5);
+                    if (thePlayer.movementInhibitTimer == 0) {
+                        thePlayer.dying = 1;
+                        thePlayer.movementVelocity = 0;
+                        thePlayer.rotX = 0;
+                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.movementInhibitTimer = 10;
+                        thePlayer.ballBlinking = 1;
+                    }
+                    player->movementInhibitTimer = 9;
+                }
+            }
+        }
+        if (player->faceTypePlayerStandingOn == OBJ_BOUNCEPAD) {
+            if (player->subpixelPositionOnCube.vz > 150) {
+                player->forcedRollForwardTimer = 10;
+            }
+            if (player->faceTypePlayerStandingOn == OBJ_BOUNCEPAD && (player->subpixelPositionOnCube.vz > 230 || player->onGround == 1)) {
+                SndPlaySfx(10, 0, &SVECTOR_000a2df4, 7000);
+                Vibrate98(1);
+                player->forcedRollForwardTimer = 0;
+                player->jumping = 1;
+                if (player->longJump == 0) {
+                    player->longJump = 1;
+                }
+                player->rollingForward = 1;
+                player->turnDirection = 0;
+            }
+        }
+    }
+    if (thePlayer.sunglassTimer == 0) {
+        SetSunglassMode(0);
+    }
+    if (thePlayer.sunglassTimer > -1) {
+        thePlayer.sunglassTimer--;
+    }
+    if (thePlayer.invulnerabilityTimer > -1) {
+        thePlayer.invulnerabilityTimer--;
+    }
+    if (thePlayer.invulnerabilityTimer >= 0) {
+        if (thePlayer.bounceTimer >= 0) {
+            thePlayer.bounceTimer = -1;
+        }
+        if (thePlayer.lethargyTimer >= 0) {
+            thePlayer.lethargyTimer = 0;
+        } else {
+            goto skip_lethargy;
+        }
+    }
+    if (thePlayer.lethargyTimer == 0) {
+        EnableLethargy(0);
+    }
+    if (thePlayer.lethargyTimer > -1) {
+        thePlayer.lethargyTimer -= 2;
+        SubtractLevelTimer(4);
+    }
+skip_lethargy:
+    CheckForButtonEntity(player);
+    if (HandleTransporter(player)) {
+        CalcWhatPlayerIsStandingOn(player);
+        UpdateSubpixelPositions(player);
+        if (player->subpixelPositionOnCube.vz > 356) {
+            player->alreadyProcessedEntityAction = 0;
+        }
+    }
+    if (player->onMovingPlatform) {
+        player->svec54.vx = entityData[player->movingPlatformEntityIdStandingOn + 119] - 512;
+        player->svec54.vy = entityData[player->movingPlatformEntityIdStandingOn + 120] - 512;
+        player->svec54.vz = entityData[player->movingPlatformEntityIdStandingOn + 121] - 512;
+    } else {
+        player->svec54.vz = 0;
+        player->svec54.vy = 0;
+        player->svec54.vx = 0;
+    }
+}
+
+void SubtractLevelTimer(int param_1) {
+    if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
+        levelTimeLeft -= param_1;
+        if (levelTimeLeft < 1) {
+            levelEndReason = -2;
+        }
+    }
+
+    if (thePlayer.faceTypePlayerStandingOn == OBJ_TIMER_PAUSE || debugDisableTimer == 1) {
+        drawTimerPausedWidget = 1;
+    } else {
+        drawTimerPausedWidget = 0;
+    }
+}
+
+int IsPlayerInAir(Player* player) {
+    if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_INPLACE || player->howMoving198 == JUMPING_FORWARD) && player->jumpingOrViewportRotationTimer > 1) {
+        return 1;
+    }
+    return 0;
+}
+
+int IsFallingOrJumping(Player* player) {
+    if (player->howMoving198 == FALLING || player->howMoving198 == JUMPING_INPLACE || player->howMoving198 == JUMPING_FORWARD) {
+        return 1;
+    }
+    return 0;
+}
+
+void Unused_FUN_0003bdec(Player *player) {
+    SVECTOR v;
+    v.vx = player->finePos.vx + (player->facingDir.vx * 1024);
+    v.vy = player->finePos.vy + (player->facingDir.vy * 1024);
+    v.vz = player->finePos.vz + (player->facingDir.vz * 1024);
+}
