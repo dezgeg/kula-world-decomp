@@ -73,7 +73,8 @@ segments:
       - [0x00958, .rodata, level_update]
       - [0x00988, .rodata, level_update2]
       - [0x00a34, pad, rodata_00a34] # hack
-      - [0x00a38, rodata, rodata_00a38]
+      - [0x00a38, rodata, level_update2]
+      - [0x00a90, .rodata, level_update3]
       - [0x00b44, .rodata, menu]
       - [0x00b90, .rodata, zlib_infblock]
       - [0x00bb8, .rodata, zlib_inflate]

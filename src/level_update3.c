@@ -9,6 +9,13 @@ typedef struct EntityPos {
     byte reserved[8];
 } EntityPos;
 
+typedef struct ItemState {
+    int collisionDistance;
+    int type;
+    MATRIX matrix;
+    SVECTOR pos;
+} ItemState;
+
 extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
 extern void CalcWhatPlayerIsStandingOn(Player * player);
 extern int IsPlayerInAir(Player * player);
@@ -24,6 +31,7 @@ extern void SetSunglassMode(int on);
 extern void SndMuteVoiceByTag(int tag);
 extern void Vibrate99(int magnitude1, int magnitude2, int count);
 extern int IsFallingOrJumping(Player* player);
+extern void CreateItemDispList(MATRIX * m, int z, int specialBlockType, int dirIndexInBlock);
 
 extern int levelEndReason;
 extern int debugDisableTimer;
@@ -39,10 +47,14 @@ extern int cameraIndex;
 extern int numKeysRemaining;
 extern int levelScore;
 extern int numCubesRemainingInLevel[5];
+extern MATRIX MATRIX_000a46f4;
+extern ItemState itemState[256];
+extern short numEntities;
+extern MATRIX perspMatrixes[2];
 
 int gameMode;
-static int levelWon[2];
-static SVECTOR playerCombinedPos;
+int tmpOff;
+int tmpOff2;
 int DAT_000a4748;
 int DAT_000a474c;
 int DAT_000a4750;
@@ -51,15 +63,199 @@ int transportDestCubeSide;
 int transportDestRotation;
 int transporterDestEntityIdx;
 int transporterTimer;
+short fireSoundTimer;
+int shouldMarkCubesVisited;
+
+static int levelWon[2];
+static SVECTOR playerCombinedPos;
+static int D_000A46A8;
+static int D_000A4734;
+static SVECTOR SVECTOR_000a46ac;
+static SVECTOR SVECTOR_000a46b4;
+static SVECTOR SVECTOR_000a46bc;
+static SVECTOR calcEntityPositionsVec;
+static int calcEntityPositionsDistSq;
+static MATRIX MATRIX_000a46d4;
+static MATRIX MATRIX_000a4714;
+
 static SVECTOR SVECTOR_000a4738;
 static SVECTOR SVECTOR_000a4740;
 static SVECTOR SVECTOR_000a4778;
 static short DAT_000a4788;
 static SVECTOR cubeBelowPlayerPos;
-short fireSoundTimer;
-int shouldMarkCubesVisited;
 
-INCLUDE_ASM("asm/nonmatchings/level_update3", CreateAllItemDispLists);
+void CreateAllItemDispLists(void) {
+    for (tmpOff = 0; tmpOff < numEntities * 128; tmpOff += 128) {
+        if (entityData[tmpOff] >= 5)  {
+            continue;
+        }
+        for (tmpOff2 = 0; tmpOff2 < 96; tmpOff2 += 16) {
+            if (entityData[tmpOff + tmpOff2 + 4] == 0) {
+                continue;
+            }
+            D_000A46A8 = entityData[tmpOff + tmpOff2 + 2];
+            calcEntityPositionsVec.vx = entityData[tmpOff + 125] * 512;
+            calcEntityPositionsVec.vy = entityData[tmpOff + 126] * 512;
+            calcEntityPositionsVec.vz = entityData[tmpOff + 127] * 512;
+            SVECTOR_000a46bc.vx = SVECTOR_000a46bc.vy = SVECTOR_000a46bc.vz = 0;
+
+            switch (entityData[tmpOff + tmpOff2 + 1]) {
+            case OBJ_SPIKE_TRAP:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 16) % 4096;
+                if (entityData[tmpOff + tmpOff2 + 3] == 0) {
+                    entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] + 100) % 4096;
+                }
+                if (entityData[tmpOff + tmpOff2 + 3] == 1) {
+                    entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] + 8) % 4096;
+                }
+
+                if (entityData[tmpOff + tmpOff2 + 11] > 2048) {
+                    entityData[tmpOff + tmpOff2 + 3] = 1;
+                } else {
+                    entityData[tmpOff + tmpOff2 + 3] = 0;
+                }
+
+                if (entityData[tmpOff + tmpOff2 + 3] == 1) {
+                    entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] + (entityData[tmpOff + tmpOff2 + 11] % 2048) / 2) % 4096;
+                }
+                SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 12]) * 0) / 4096; // guess
+                SVECTOR_000a46bc.vx = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 100) / 4096;
+                SVECTOR_000a46bc.vy = (rcos(entityData[tmpOff + tmpOff2 + 13]) * 100) / 4096;
+                SVECTOR_000a46ac.vy = SVECTOR_000a46ac.vx = 0;
+                SVECTOR_000a46ac.vz = 1024 - entityData[tmpOff + tmpOff2 + 13];
+                RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_BUTTON:
+            case OBJ_MOVING_SPIKE:
+            case OBJ_SPIKE:
+            case OBJ_ARROW:
+                SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = SVECTOR_000a46ac.vz = 0;
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_TRANSPORTER:
+                if (entityData[tmpOff + tmpOff2 + 4] == 1 && cameraIndex == 0) {
+                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 30) % 4096;
+                }
+                SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_EXIT:
+            case OBJ_HIDDEN_EXIT:
+                if (entityData[tmpOff + tmpOff2 + 4] == 1) {
+                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 55) % 4096;
+                } else {
+                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 25) % 4096;
+                }
+                SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_APPLE:
+            case OBJ_WATERMELON:
+            case OBJ_PUMPKIN:
+            case OBJ_BANANA:
+            case OBJ_STRAWBERRY:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 24) % 4096;
+                entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] - 80) % 4096;
+                entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] - 60) % 4096;
+                SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 20) / 4096 + 10;
+                SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vx = (rsin(entityData[tmpOff + tmpOff2 + 12]) * 150) / 4096;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_KEY:
+            case OBJ_COIN:
+            case OBJ_SUNGLASSES:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 90) % 4096;
+                entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] - 70) % 4096;
+                SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 20) / 4096 + 10;
+                SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vx = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_GEM:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 35) % 4096;
+                SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vx = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_HOURGLASS:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 32) % 4096;
+                entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] - 20) % 4096;
+                SVECTOR_000a46ac.vy = (rsin(entityData[tmpOff + tmpOff2 + 11]) / 2) + 30;
+                SVECTOR_000a46ac.vx = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 12];
+                RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_LETHARGY_PILL:
+            case OBJ_BOUNCY_PILL:
+            case OBJ_INVINCIBILITY_PILL:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 80) % 4096;
+                entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] + 25) % 4096;
+                SVECTOR_000a46ac.vy = entityData[tmpOff + tmpOff2 + 11];
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 12];
+                SVECTOR_000a46ac.vx = 0;
+                RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_PURPLE_PRESENT:
+            case OBJ_RED_PRESENT:
+            case OBJ_YELLOW_PRESENT:
+            case OBJ_BLUE_PRESENT:
+            case OBJ_GREEN_PRESENT:
+                entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 17) % 4096;
+                SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                break;
+
+            case OBJ_BOUNCEPAD:
+                SVECTOR_000a46ac.vz = 0;
+                SVECTOR_000a46ac.vy = 0;
+                SVECTOR_000a46ac.vx = 0;
+                RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                calcEntityPositionsDistSq = (calcEntityPositionsVec.vx - thePlayer.finePos.vx) * (calcEntityPositionsVec.vx - thePlayer.finePos.vx) +
+                             (calcEntityPositionsVec.vy - thePlayer.finePos.vy) * (calcEntityPositionsVec.vy - thePlayer.finePos.vy) +
+                             (calcEntityPositionsVec.vz - thePlayer.finePos.vz) * (calcEntityPositionsVec.vz - thePlayer.finePos.vz);
+
+                if (calcEntityPositionsDistSq < 490000) {
+                    if (entityData[tmpOff + tmpOff2 + 11] > 0)
+                        entityData[tmpOff + tmpOff2 + 11]--;
+                    MATRIX_000a4714.m[2][2] = (MATRIX_000a4714.m[2][2] * entityData[tmpOff + tmpOff2 + 11]) / 16;
+                } else if (entityData[tmpOff + tmpOff2 + 11] < 16) {
+                    entityData[tmpOff + tmpOff2 + 11] += 4;
+                    MATRIX_000a4714.m[2][2] = (MATRIX_000a4714.m[2][2] * entityData[tmpOff + tmpOff2 + 11]) / 16;
+                }
+                break;
+            }
+
+            D_000A4734 = entityData[tmpOff + tmpOff2 + 5];
+            ApplyMatrixSV(&itemState[D_000A4734].matrix, &SVECTOR_000a46bc, &SVECTOR_000a46bc);
+            calcEntityPositionsVec.vx = itemState[D_000A4734].pos.vx = SVECTOR_000a46bc.vx + itemState[D_000A4734].matrix.t[0];
+            calcEntityPositionsVec.vy = itemState[D_000A4734].pos.vy = SVECTOR_000a46bc.vy + itemState[D_000A4734].matrix.t[1];
+            calcEntityPositionsVec.vz = itemState[D_000A4734].pos.vz = SVECTOR_000a46bc.vz + itemState[D_000A4734].matrix.t[2];
+            MulMatrix0(&itemState[D_000A4734].matrix, &MATRIX_000a4714, &MATRIX_000a46f4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a46f4, &MATRIX_000a46d4);
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &calcEntityPositionsVec, &SVECTOR_000a46b4);
+            MATRIX_000a46d4.t[0] = SVECTOR_000a46b4.vx + perspMatrixes[cameraIndex].t[0];
+            MATRIX_000a46d4.t[1] = SVECTOR_000a46b4.vy + perspMatrixes[cameraIndex].t[1];
+            MATRIX_000a46d4.t[2] = SVECTOR_000a46b4.vz + perspMatrixes[cameraIndex].t[2];
+            CreateItemDispList(&MATRIX_000a46d4, MATRIX_000a46d4.t[2], tmpOff / 128, tmpOff2 / 16);
+        }
+    }
+}
 
 void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
     pos->matrix.m[2][2] = 0;
