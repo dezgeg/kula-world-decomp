@@ -1,7 +1,6 @@
 CalcLevelBounds: https://decomp.me/scratch/516al
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DrawScoreGraph: https://decomp.me/scratch/KHxMt
-DrawTimeAttackTimer: https://decomp.me/scratch/1yWKd
 HandleItemTouching: https://decomp.me/scratch/0GliO
 InitLasers2: https://decomp.me/scratch/yyAJu
 InitScoreGraph: https://decomp.me/scratch/cMAKo

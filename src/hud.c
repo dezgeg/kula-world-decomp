@@ -332,7 +332,95 @@ void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value) {
 }
 
 // https://decomp.me/scratch/1yWKd
-INCLUDE_ASM("asm/nonmatchings/hud", DrawTimeAttackTimer);
+void DrawTimeAttackTimer(DigitSprites *ds, int style, int value, int onlyDashes) {
+    int divisor;
+    int i;
+    int smallestDrawnDigitIndex;
+    int digit;
+    int v;
+    int charWidth;
+    int shouldDraw;
+    int w;
+    // FIXME: complete mess
+    int texId;
+    int texId2;
+    int texId3;
+    int three = 3;
+
+    texId = style + 3;
+    charWidth = textures[firstGuiTexture + texId].w / 13;
+    if (onlyDashes == 1) {
+        setUV0(&ds->sprites[whichDrawDispEnv][9].sprt,
+                textures[firstGuiTexture + texId].u + charWidth * 11,
+                textures[firstGuiTexture + texId].v);
+        addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][9]);
+
+        setUV0(&ds->sprites[whichDrawDispEnv][8].sprt,
+                textures[firstGuiTexture + texId].u + charWidth * 11,
+                textures[firstGuiTexture + texId].v);
+        addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][8]);
+
+        setUV0(&ds->sprites[whichDrawDispEnv][7].sprt,
+                textures[firstGuiTexture + texId].u + charWidth * 10,
+                textures[firstGuiTexture + texId].v);
+        addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][7]);
+
+        setUV0(&ds->sprites[whichDrawDispEnv][6].sprt,
+                textures[firstGuiTexture + texId].u + charWidth * 11,
+                textures[firstGuiTexture + texId].v);
+        addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][6]);
+    } else {
+        v = abs(value);
+        if (v > 3600000) {
+            v = 3599999;
+        }
+        smallestDrawnDigitIndex = 6;
+        shouldDraw = 0;
+        i = 1;
+        texId3 = texId;
+        for (; i < 10; i++) {
+            if (i == 4 || i == 7) {
+                continue;
+            }
+            if (i > 5) {
+                shouldDraw = 1;
+            }
+            divisor = TIME_STR_DIGIT_DIVISORS[i - 1];
+            digit = v / divisor;
+            if (digit != 0 || shouldDraw == 1) {
+                if (i < smallestDrawnDigitIndex) {
+                    smallestDrawnDigitIndex = i;
+                }
+                shouldDraw = 1;
+                setUV0(&ds->sprites[whichDrawDispEnv][i].sprt,
+                    textures[firstGuiTexture + texId3].u + digit * charWidth,
+                    textures[firstGuiTexture + texId3].v);
+                v -= digit * divisor;
+            }
+        }
+        texId2 = style + 3;
+
+        setUV0(&ds->sprites[whichDrawDispEnv][7].sprt,
+            textures[firstGuiTexture + texId2].u + 10 * charWidth,
+            textures[firstGuiTexture + texId2].v);
+        if (smallestDrawnDigitIndex < 4) {
+            setUV0(&ds->sprites[whichDrawDispEnv][4].sprt,
+                textures[firstGuiTexture + texId2].u + 10 * charWidth,
+                textures[firstGuiTexture + texId2].v);
+        }
+
+        if (value != 0) {
+            smallestDrawnDigitIndex--;
+            setUV0(&ds->sprites[whichDrawDispEnv][smallestDrawnDigitIndex].sprt,
+                textures[firstGuiTexture + texId2].u + (value < 0 ? charWidth * 11 : charWidth * 12 ),
+                textures[firstGuiTexture + (style + three)].v);
+        }
+
+        for (i = 9; i >= smallestDrawnDigitIndex; i--) {
+            addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][i]);
+        }
+    }
+}
 
 void UpdateStaticHourglassClut(void) {
     int i;
