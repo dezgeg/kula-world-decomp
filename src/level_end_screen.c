@@ -1,19 +1,56 @@
 #include "common.h"
+#include "zlib.h"
 
-extern void LoadLevelEndReasonGfx(int unused);
+typedef struct DeflatedEntry {
+    int offset;
+    int len;
+} DeflatedEntry;
+
+typedef struct DeflatedSprites {
+    int count;
+    DeflatedEntry entries[1];
+} DeflatedSprites;
+
+typedef struct X {
+    char pad1[20];
+    char clut[40];
+    short w;
+    short h;
+    char data[1];
+} X;
+
+extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
+extern byte menuGfxBuf[32768];
+extern DeflatedSprites* D_00074C4C;
+extern DeflatedSprites* deflatedSprites;
+extern int copycatPlayerScores[2];
+extern int curLevel;
+extern int curWorld;
+extern int DAT_000a3374;
+extern int displayWidth;
+extern int gameMode;
+extern int isFinal;
+extern int levelEndReason;
+extern int levelHasBeenCompletedByPlayer[2];
+extern int levelPlayTime[2];
+extern int* MENU_DEFLATED_SPRITES2_PTR;
+extern int numTimeTrialPlayers;
+extern int specialLevelType;
+extern int timeTrialDifficulty;
+extern int totalPlayTime[2];
+extern int totalScore;
+extern int twoPlayerWhichPlayer;
+extern int whichDrawDispEnv;
 extern PrimList primLists[2];
 extern TSprite bigGuiSprite1[2];
 extern TSprite bigGuiSprite2[2];
-extern int gameMode;
-extern int levelEndReason;
-extern int specialLevelType;
-extern int totalScore;
-extern int whichDrawDispEnv;
 extern uint prevControllerButtons;
 
 int bigGuiSpriteFade;
+z_stream zlibStream_a4dd4;
+int inflateRetCode;
 
 SVECTOR SVECTOR_000a2ab4 = { 0, 0, 0, 0 };
 char S_Fatal_error_in_jens_2d_eng[] = "Fatal error in jens 2d-eng:\n\n";
