@@ -105,7 +105,7 @@ segments:
       - [0x01978, rodata, libmcrd/libmcrd]
       - [0x01af0, rodata, libmcrd/userfunc]
       - [0x01b0c, c, various_init]
-      - [0x01b4c, c, particles] # 1 nonmatching
+      - [0x01b4c, c, particles]
       - [0x031c8, c, copycat_ui]
       - [0x0355c, c, font]
       - [0x036c8, c, font2]
@@ -120,7 +120,7 @@ segments:
       - [0x0c2c0, c, background_cubes]
       - [0x0cf7c, c, psx_button_background]
       - [0x0d4dc, c, spinning_selection]
-      - [0x0dcd4, c, hud] # 1 nonmatching
+      - [0x0dcd4, c, hud]
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]
       - [0x10a2c, c, title_screen]
@@ -129,11 +129,11 @@ segments:
       - [0x128b8, c, screenshake]
       - [0x12a64, c, bios_font]
       - [0x12eb0, c, ggi]
-      - [0x1343c, c, sprite_init] # 1 nonmatching
+      - [0x1343c, c, sprite_init]
       - [0x1541c, c, prim]
       - [0x154a8, c, tgi]
-      - [0x16094, c, skybox] # 1 nonmatching
-      - [0x16ffc, c, level_init] # 3 nonmatching
+      - [0x16094, c, skybox]
+      - [0x16ffc, c, level_init] # 2 nonmatching
       - [0x198c4, c, dirfuncs]
       - [0x1a140, c, level_init2]
       - [0x1a27c, c, render1]
@@ -144,7 +144,7 @@ segments:
       - [0x1dfcc, c, block_utils]
       - [0x1e420, c, light_effect]
       - [0x1f330, c, player_movement]
-      - [0x22818, c, level_update] # 2 nonmatching
+      - [0x22818, c, level_update] # 1 nonmatching
       - [0x255dc, c, level_update2] # 1 nonmatching
       - [0x29284, c, level_update3]
       - [0x2b638, c, enemy]
