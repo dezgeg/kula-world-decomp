@@ -7,6 +7,5 @@ InitScoreGraph: https://decomp.me/scratch/cMAKo
 LoadLevelEndReasonGfx: https://decomp.me/scratch/Bsf5T
 LoadMenuGfx: https://decomp.me/scratch/a4Otj
 MainGameLoop: https://decomp.me/scratch/k3ZHh
-ProcessAndRenderParticles: https://decomp.me/scratch/PaoVU
 ProcessCubesIntoFaces: https://decomp.me/scratch/Bvv1f
 ScanLevelDataForMovingBlocks1: https://decomp.scratch/qU5tz
