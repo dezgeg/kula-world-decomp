@@ -19,6 +19,7 @@ typedef struct LocalMovingPlatformEntity {
 
 extern int GetBlockAt(SVECTOR * coord);
 
+void HandlePlayerMovementStuff(Player *player);
 void MoveMovingPlatforms(SVECTOR vec);
 
 // non-gprel-used variables (extern)
@@ -77,6 +78,7 @@ static VECTOR facingGravityProd;
 static VECTOR initPlayerFacingDir;
 static VECTOR initPlayerFacingDirCoarse;
 static VECTOR initPlayerGravityDir;
+static VECTOR initPlayerRightDir;
 static VECTOR levelEntryBezierP0;
 static VECTOR levelEntryBezierP1;
 static VECTOR levelEntryBezierP2;
@@ -91,8 +93,12 @@ static int blockTypePlayerStandingOn;
 static int DAT_000a4508;
 static int DAT_000a450c;
 static int DAT_000a4598;
+static int distSquared;
 static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
+static int levelXMin, levelXMax;
+static int levelYMin, levelYMax;
+static int levelZMin, levelZMax;
 static int r1TurnDelta;
 static int trI;
 static int trJ;
