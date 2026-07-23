@@ -62,8 +62,6 @@ segments:
     subsegments:
       - [0x00800, .rodata, hud]
       - [0x00814, .rodata, level_init]
-      - [0x0082c, rodata, level_init_2]
-      - [0x00838, rodata, rodata_00838]
       - [0x00844, .rodata, update]
       - [0x00870, pad, rodata_00870] # hack
       - [0x00874, .rodata, render2]
@@ -133,7 +131,7 @@ segments:
       - [0x1541c, c, prim]
       - [0x154a8, c, tgi]
       - [0x16094, c, skybox]
-      - [0x16ffc, c, level_init] # 2 nonmatching
+      - [0x16ffc, c, level_init] # 1 nonmatching
       - [0x198c4, c, dirfuncs]
       - [0x1a140, c, level_init2]
       - [0x1a27c, c, render1]

@@ -92,6 +92,7 @@ extern int gameMode;
 extern int numKeysInLevel;
 extern QuadFunc QUAD_FUNC_PTRS[6];
 extern char cubeTextureMetadata[];
+extern short UNK_ENT5_STUFF[3][4][12];
 
 TgiFile* tgi;
 FaceData* faceDataPtr;
@@ -114,6 +115,8 @@ int D_000A54F4;
 void* PTR_DAT_000a2cb0;
 void** levelExitQuadPPtr;
 int numPlainTileTextureVariations;
+int numMovingPlatforms;
+short movingBlockEntityIndexes[16];
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 #define QUAD_BASE ((Quad*)0x191000)
@@ -438,7 +441,73 @@ void ParseKeysAndSpecialLevelFromItemData(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", ScanLevelDataForMovingBlocks1);
+void ScanLevelDataForMovingBlocks1(void) {
+    int i;
+    int x_inc;
+    int y_inc;
+    int z_inc;
+    int length;
+    int flags;
+    short *entity;
+    int j;
+    short *pStuff;
+    int offUnk;
+    int dir;
+    int val;
+
+    switch (specialLevelType) {
+        default: flags = 0xd; break;
+        case 1: flags = 0x20005; break;
+        case 2: flags = 0xf; break;
+    }
+
+    numMovingPlatforms = 0;
+    for (i = 0; i < numEntities; i++) {
+        if ((entityData + (i * 128))[0] != 5) {
+            continue;
+        }
+        entity = entityData + (i * 128);
+        movingBlockEntityIndexes[numMovingPlatforms++] = (short)i;
+        length = (int)entity[17];
+
+        switch (entity[2]) {
+            case 1: offUnk = 0; x_inc = 512; y_inc = 0; z_inc = 0; break;
+            case 2: offUnk = 1; x_inc = 0; y_inc = 512; z_inc = 0; break;
+            default: x_inc = 0; y_inc = 0; z_inc = 512; offUnk = 2; break;
+        }
+
+        for (j = 0; j < length; j++) {
+            if (length == 1) pStuff = UNK_ENT5_STUFF[offUnk][0];
+            else if (j == 0) pStuff = UNK_ENT5_STUFF[offUnk][1];
+            else if (j < length - 1) pStuff = UNK_ENT5_STUFF[offUnk][2];
+            else pStuff = UNK_ENT5_STUFF[offUnk][3];
+
+            for (dir = 0; dir < 6; dir++) {
+                val = pStuff[dir*2];
+                if (val == -1) {
+                    ((Quad **)(entity + 71 + j * 12))[dir] = (Quad*)0xffffffff;
+                } else {
+                    if (val == -2) {
+                        SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
+                                    quadSomethingStartIndex + tgi->unk150 + Rand(numPlainTileTextureVariations),
+                                    flags, dir, 0, 0, 0, pStuff[dir*2+1], 0x808080);
+                    } else {
+                        SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
+                                    quadSomethingStartIndex + val,
+                                    flags, dir, 0, 0, 0, pStuff[dir*2+1], 0x808080);
+                    }
+
+                    if (specialLevelType == 1) {
+                        AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
+                            &((Quad **)(entity + 71 + j * 12))[dir], -1,
+                            CoordHash(j * x_inc + 512, j * y_inc + 512, j * z_inc + 512, dir, 64, NUM_TEXTURE_ANIM_FRAMES));
+                    }
+                    numberOfCubeFaces++;
+                 }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level_init", InitLasers2);
 
