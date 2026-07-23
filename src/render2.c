@@ -40,29 +40,34 @@ typedef struct EntityBlock {
     short z;
 } EntityBlock;
 
+extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern int GteTransformAndClipQuad(SVECTOR * v1, SVECTOR * v2, SVECTOR * v3, SVECTOR * v4, int out1, int out2, int out3, int out4, int* p1, int* p2, int* p3);
 extern void LoadScaledGteMatrix(MATRIX * matrix);
-
-extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern void SetLightEffectColor(int param_1, int param_2);
 extern void SetLightEffectToBeDisabled(int param_1);
 
 extern int cameraIndex;
 extern int curWorld;
-extern void* cubeStates[256 * 16];
-extern short* entityData;
+extern int displayHeight;
+extern int displayWidth;
 extern int* ggiPart0A;
 extern int* ggiPart0B;
 extern int itemsDispList[];
 extern int itemsDispListIdx;
 extern int playerEnemyDispListIdx;
+extern int projectionDistance;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
+extern MATRIX perspMatrixes[2];
 extern POLY_FT4 shadowPrims[2][1][2][16];
+extern POLY_FT4 specularPrims[2][1][16];
 extern P shadowPrimPtrs[2][1][2][16];
+extern P specularPrimPtrs[2][1][16];
+extern short* entityData;
 extern short* tgiPart1;
 extern short* tgiPart3;
 extern TgiFile* tgi;
+extern void* cubeStates[256 * 16];
 extern void* otag[2][1][1026];
 extern void* playerEnemyDispList[];
 
