@@ -1,8 +1,33 @@
 #include "common.h"
+#include "zlib.h"
 
-extern void LoadMenuGfx(int menuId);
+typedef struct DeflatedEntry {
+    int offset;
+    int len;
+} DeflatedEntry;
 
+typedef struct DeflatedSprites {
+    int count;
+    DeflatedEntry entries[1];
+} DeflatedSprites;
+
+extern void PutDrawAndDispEnvs(void);
+extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
+extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+
+extern char S_1_0_4[];
+extern char S_Fatal_error_in_jens_2d_eng[];
+extern int displayWidth;
+extern int gameState;
+extern int* MENU_DEFLATED_SPRITES1_PTR;
+extern int menuGfxHeight;
+extern int menuGfxWidth;
+extern int musicVolume;
+extern int pauseMenuSprite;
+extern int sfxVolume;
+extern int whichDrawDispEnv;
 extern PrimList primLists[2];
+extern Texture textures[150];
 extern TSprite bigGuiSprite1[2];
 extern TSprite bigGuiSprite2[2];
 extern TSprite buttonHelpSprite1[2];
@@ -10,17 +35,13 @@ extern TSprite buttonHelpSprite2[2];
 extern TSprite menuCursorSprite[2];
 extern TSprite musicVolumeWidgetSprite[2];
 extern TSprite sfxVolumeWidgetSprite[2];
-extern Texture textures[150];
-extern int displayWidth;
-extern int gameState;
-extern int musicVolume;
-extern int sfxVolume;
-extern int whichDrawDispEnv;
 extern uint firstGuiTexture;
 
 int bigGuiSpriteFade;
 int menuCursorSinPhase;
 int whichLevelEndSpriteLoaded;
+int inflateRetCode;
+z_stream zlibStream_a4dd4;
 
 short MENU_CURSOR_MOVE_SPEED[][6] = {
     {28, 29, 21, 26, 0, 0},
