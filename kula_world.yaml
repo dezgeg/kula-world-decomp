@@ -169,12 +169,16 @@ segments:
       - [0x3eef8, c, init]
       - [0x3f07c, c, disp]
       - [0x3f47c, c, pad]
-      # Begin of 1st hand asm section
-      - [0x3f968, c, nonmatched/code_3f968]
-      - [0x422dc, c, nonmatched/hacks1]
-      - [0x42330, c, nonmatched/gte]
-      - [0x424f4, c, nonmatched/hacks2]
-      # End of 1st hand asm section
+      - [0x3f968, c, nonmatched/asm_texture_anim]
+      - [0x3fb00, c, nonmatched/asm_noops]
+      - [0x3fb10, c, nonmatched/asm_double_link]
+      - [0x3fd4c, c, nonmatched/asm_subdivide]
+      - [0x412b4, c, nonmatched/asm_light_effect]
+      - [0x41d04, c, nonmatched/asm_laser]
+      - [0x422b8, c, nonmatched/asm_vblank]
+      - [0x422dc, c, nonmatched/asm_hacks1]
+      - [0x42330, c, nonmatched/asm_gte]
+      - [0x424f4, c, nonmatched/asm_hacks2]
       - [0x42550, c, fmv]
       # Begin of 2nd hand asm section
       - [0x43264, c, nonmatched/render]
