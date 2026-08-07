@@ -42,13 +42,13 @@ extern Texture textures[150];
 extern void* otag[2][1][1026];
 
 static byte PARTICLE_COLOR_DATA[7][3];
-static short PARTICLE_TYPE_0[450];
-static short PARTICLE_TYPE_1[258];
-static short PARTICLE_TYPE_2_6_7[338];
-static short PARTICLE_TYPE_3[394];
-static short PARTICLE_TYPE_4_5_10[362];
-static short PARTICLE_TYPE_8[354];
-static short PARTICLE_TYPE_9[330];
+extern short PARTICLE_TYPE_0[];
+extern short PARTICLE_TYPE_1[];
+extern short PARTICLE_TYPE_2_6_7[];
+extern short PARTICLE_TYPE_3[];
+extern short PARTICLE_TYPE_4_5_10[];
+extern short PARTICLE_TYPE_8[];
+extern short PARTICLE_TYPE_9[];
 static short* PARTICLE_TYPE_PTRS[12];
 static int numParticles[2];
 
