@@ -133,61 +133,84 @@ char* sioWritePtr;
 int buttonSaveReplayMode;
 int byteCountToReceiveFromSio;
 int curFileLength;
-int curLevel;
-int curWorld;
-int curWorld2;
-int debugBonusLevels;
-int demoIndex;
-int demoTimer;
-int devkitAltBoot;
-int displayHeight;
-int displayModeHasBeenSet;
-int displayWidth;
 int dispModeChangeState;
-int finalUnlocked;
 int fruitsCollectedBitmask;
-int gameState;
-int gotSioData;
-int highestLevelReached;
 int inflateRetCode1;
 int inflateRetCode2;
 int inflateRetCode3;
 int inGetReadyScreen;
 int isDemoMode;
-int isFinal;
 int latestPlayerToFinish;
 int levelAfterBonusLevel;
 int levelEndReason;
 int levelHasBeenCompletedByPlayer[2];
 int levelPlayTime[2];
 int levelScore;
-int loadedInitialSave;
-int loadNewWorld;
 int mainGameLoopRetVal;
 int menuIdleTimer;
-int numCameras;
 int numTimeTrialPlayers;
 int prevLevelEndReason;
-int prevLevelTimeLeft;
 int savedFruitsCollectedBitmask;
-int screenOffsetY;
-int skipNextLoad;
 int startingPlayerForThisLevel;
-int timeTrialDifficulty;
 int totalPlayTime[2];
 int totalScore;
 int twoPlayerWhichPlayer;
-int unusedFrameCounter;
-int unusedRenderPhase;
-int vsyncCounter;
 int whichDrawDispEnv;
-long projectionDistance;
-short copycatNewOrCopyMoves;
 short numFruits;
 
 static z_stream levelLoadZlibStream;
 
-int DEMO_LEVELS[] = {4, 19, 41};
+int D_000A2E54[4] = { 0, 0, 0, 0 };
+int numCameras = 1;
+int cameraIndex = 0;
+int displayWidth = 320;
+int gteXScale = 4096;
+int displayHeight = 256;
+int gteYScale = 4096;
+long projectionDistance = 160;
+int screenOffsetX = 320;
+int screenOffsetY = 256;
+int devkitAltBoot = 0;
+int gotSioData = 0;
+int prevLevelTimeLeft = 0;
+int numKeysRemaining = 0;
+int D_000A2E98 = 0;
+int highestLevelReached = 30;
+int curLevel = 0;
+int curWorld = 0;
+int curWorld2 = 0;
+int loadNewWorld = 1;
+int skipNextLoad = 0;
+int loadedInitialSave = 0;
+int displayModeHasBeenSet = 0;
+int unusedFrameCounter = 0;
+int gameState = 0;
+int demoTimer = 400;
+int demoIndex = 0;
+int D_000A2ECC = 0;
+int debugBonusLevels = 0;
+int debugDisableTimer = 0;
+int finalUnlocked = 0;
+int isFinal = 0;
+int musicShouldLoop = 1;
+int D_000A2EE4[6] = { 0, 0, 0, 0, 0, 0 };
+short copycatNewOrCopyMoves = 0;
+short D_000A2EFE = 0;
+int timeTrialDifficulty = 0;
+SVECTOR ZERO_SVECTOR_a2f04 = { 0, 0, 0, 0 };
+char S_rescue_session_saved_as_psx_cube_pad_rescue_pad[] = "rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n";
+char S_to_replay[] = "to replay:\n";
+char S_replay[] = "replay!\n\n";
+char S_FMTx[] = "%x\n";
+char S_1_0_4_2[] = "1.0.4";
+int vsyncCounter = 0;
+int unusedRenderPhase = 666;
+char S_NO_CONTROLLER[] = "NO CONTROLLER!\n";
+char S_DEMO_MODE[] = "DEMO MODE\n";
+char S_recived_FMTd[] = "recived %d\n";
+char S_of_FMTd_bytes[] = "of %d bytes\n";
+
+int DEMO_LEVELS[] = { 4, 19, 41 };
 int TIME_TRIAL_PAR_TIMES[] = {
     1, 6, 5, 12, 3,
     16, 19, 9, 8, 14,
@@ -345,7 +368,8 @@ void main(void) {
             } else {
                 memcpy(0x15E000, 0x650000, 0x66b000 - 0x650000);
             }
-            if (gotSioData == 0) goto loadFromPak;
+            if (gotSioData == 0)
+                goto loadFromPak;
         } else {
         loadFromPak:
             levelLoadZlibStream.avail_in = *(uint*)(0x156008 + curLevel * 8);
@@ -607,9 +631,6 @@ LAB_00042f60:
 }
 
 void ReceiveBufFromSio(void) {
-    extern char S_recived_FMTd[];
-    extern char S_of_FMTd_bytes[];
-
     int i;
 
     SetupDisplay(1, 128, 0, 0, 0, 0);
