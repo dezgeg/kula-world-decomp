@@ -207,8 +207,6 @@ int vsyncCounter = 0;
 int unusedRenderPhase = 666;
 char S_NO_CONTROLLER[] = "NO CONTROLLER!\n";
 char S_DEMO_MODE[] = "DEMO MODE\n";
-char S_recived_FMTd[] = "recived %d\n";
-char S_of_FMTd_bytes[] = "of %d bytes\n";
 
 int DEMO_LEVELS[] = { 4, 19, 41 };
 int TIME_TRIAL_PAR_TIMES[] = {
@@ -650,8 +648,8 @@ void ReceiveBufFromSio(void) {
         }
         *sioWritePtr++ = _sio_control(0, 4, 0);
         if ((i & 0xff) == 0 || i == byteCountToReceiveFromSio - 1) {
-            FntPrint(S_recived_FMTd, i + 1);
-            FntPrint(S_of_FMTd_bytes, byteCountToReceiveFromSio);
+            FntPrint("recived %d\n", i + 1);
+            FntPrint("of %d bytes\n", byteCountToReceiveFromSio);
             FntFlush(-1);
             whichDrawDispEnv = !whichDrawDispEnv;
             PutDrawAndDispEnvs();
