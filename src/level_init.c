@@ -46,6 +46,12 @@ typedef struct FlashingEntity {
     short z;
 } FlashingEntity;
 
+extern void DirFunc0(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern void DirFunc1(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern void DirFunc2(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern void DirFunc3(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern void DirFunc4(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern void DirFunc5(Quad* quad, int width, int x, int y, int z, int textureRotation);
 extern int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dirIndex);
 extern int GetFaceTypeOfBlockType(int blockType);
 extern uint Rand(int param_1);
@@ -90,8 +96,8 @@ extern uint TEXTURE_ANIM_DATA[];
 extern int invisBlockVisibility[6];
 extern int gameMode;
 extern int numKeysInLevel;
-extern QuadFunc QUAD_FUNC_PTRS[6];
 extern char cubeTextureMetadata[];
+
 short UNK_ENT5_STUFF[3][4][12] = {
     {
         { 3, 1, 0, 0, 3, 1, 3, 1, 0, 0, 3, 1 },
@@ -112,9 +118,21 @@ short UNK_ENT5_STUFF[3][4][12] = {
         { -1, 666, 1, 1, 1, 2, 1, 0, 1, 3, 0, 0 },
     },
 };
+int D_000A2CAC = 0x666;
+void* PTR_DAT_000a2cb0 = &D_000A2CAC;
+FaceData* faceDataPtr = (FaceData*)0x001F2000;
+int primBufUsage = 0;
+int maxPrimBufUsage = 0;
+QuadFunc QUAD_FUNC_PTRS[6] = {
+    DirFunc0,
+    DirFunc1,
+    DirFunc2,
+    DirFunc3,
+    DirFunc4,
+    DirFunc5,
+};
 
 TgiFile* tgi;
-FaceData* faceDataPtr;
 short* entityData;
 int numCrumblingBlocks;
 short numEntities;
@@ -131,7 +149,6 @@ int quadSomethingCount;
 int quadSomethingStartIndex;
 short* tgiPart5;
 int D_000A54F4;
-void* PTR_DAT_000a2cb0;
 void** levelExitQuadPPtr;
 int numPlainTileTextureVariations;
 int numMovingPlatforms;

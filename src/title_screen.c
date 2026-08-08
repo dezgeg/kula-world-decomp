@@ -6,7 +6,7 @@ extern int sunIntensityOnScreen;
 extern TSprite titleSprite[2];
 extern int whichDrawDispEnv;
 
-int drawCopyright;
+int drawCopyright = 1;
 
 void DrawTitleAndCopyrightSprites(void) {
     int color;
