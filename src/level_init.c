@@ -24,16 +24,6 @@ typedef struct {
     char pad[250];
 } CrumblingBlockEntity;
 
-typedef struct CubeState {
-    Quad* quadPtrs[6];
-    int field1_0x18[6];
-    char sideVisited[6];
-    char field3_0x36;
-    char field4_0x37;
-    int visited;
-    int field6_0x3c;
-} CubeState;
-
 typedef struct FlashingEntity {
     short entityType;
     short cubeType;

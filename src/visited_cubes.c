@@ -1,26 +1,5 @@
 #include "common.h"
 
-typedef struct CubeState {
-    Quad* quadPtrs[6];
-    int field1_0x18[6];
-    char sideVisited[6];
-    char field3_0x36;
-    char field4_0x37;
-    int visited;
-    int field6_0x3c;
-} CubeState;
-
-typedef struct RecentlyVisitedCubeData {
-    Quad* quad;
-    int counter;
-} RecentlyVisitedCubeData;
-
-typedef struct RecentlyVisitedCube {
-    void** link;
-    RecentlyVisitedCubeData data;
-    int pad;
-} RecentlyVisitedCube;
-
 extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
@@ -94,7 +73,7 @@ void SetCubeFaceVisited(int x,int y,int z,int whichSide,int visitType) {
             quad = cs->quadPtrs[whichSide];
             if (quad != (Quad *)0xffffffff) {
                 quad->flags.b[2] = quad->flags.b[2] & 0xf9 | (visitType * 2) & 6;
-                pSideFlag = &cs->field1_0x18[whichSide];
+                pSideFlag = &cs->visitList[whichSide];
                 if (*pSideFlag == (int*)-1) {
                     p = recentlyVisitedCubeFaces;
                     for (i = 0; i < 32; i++) {

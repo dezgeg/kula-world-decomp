@@ -256,6 +256,26 @@ typedef struct Quad {
     byte reserved[104];
 } Quad;
 
+typedef struct RecentlyVisitedCubeData {
+    Quad* quad;
+    int counter;
+} RecentlyVisitedCubeData;
+
+typedef struct RecentlyVisitedCube {
+    void** link;
+    RecentlyVisitedCubeData data;
+    int pad;
+} RecentlyVisitedCube;
+
+typedef struct CubeState {
+    Quad* quadPtrs[6];
+    RecentlyVisitedCube* visitList[6];
+    char sideVisited[6];
+    short pad;
+    int visitType;
+    int style;
+} CubeState;
+
 typedef struct TextureChainEntry {
     Quad** quadPtr;
     void* anim;
