@@ -515,7 +515,7 @@ main() {
         EnableScreenShake() {
         }
       }
-      CubeTextureStuff() {
+      AnimateTextures() {
       }
       ProcessRecentlyVisitedCubes() {
       }
@@ -528,7 +528,7 @@ main() {
       ProcessInvisibleBlockVisibility() {
       }
       ProcessLightEffects() {
-        FUN_00051f24() {
+        UpdateQuadColor() {
         }
       }
       CalculateBlockLighting() {
@@ -540,7 +540,7 @@ main() {
       }
       ProcessTurningMotionBlur() {
       }
-      ASM_FUN_00050310() {
+      MakeOtagDoublyLinked() {
         FUN_00050468() {
         }
       }

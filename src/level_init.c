@@ -98,7 +98,7 @@ extern int gameMode;
 extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
 
-short UNK_ENT5_STUFF[3][4][12] = {
+short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
     {
         { 3, 1, 0, 0, 3, 1, 3, 1, 0, 0, 3, 1 },
         { 1, 3, -1, 666, 1, 3, 1, 3, 0, 0, 1, 1 },
@@ -513,10 +513,10 @@ void ScanLevelDataForMovingBlocks1(void) {
         }
 
         for (j = 0; j < length; j++) {
-            if (length == 1) pStuff = UNK_ENT5_STUFF[offUnk][0];
-            else if (j == 0) pStuff = UNK_ENT5_STUFF[offUnk][1];
-            else if (j < length - 1) pStuff = UNK_ENT5_STUFF[offUnk][2];
-            else pStuff = UNK_ENT5_STUFF[offUnk][3];
+            if (length == 1) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][0];
+            else if (j == 0) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][1];
+            else if (j < length - 1) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][2];
+            else pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][3];
 
             for (dir = 0; dir < 6; dir++) {
                 val = pStuff[dir*2];

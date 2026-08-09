@@ -4,9 +4,9 @@ typedef struct {
     char data[0x15c];
 } GemRandomSparkleEffect;
 
-extern void ASM_FUN_00050310(void* otag);
+extern void MakeOtagDoublyLinked(void* otag);
 extern void DrawLasers(void* otag);
-extern void CubeTextureStuff(AnimatedTextureChain* param_1);
+extern void AnimateTextures(AnimatedTextureChain* param_1);
 extern void DisableLightEffect(int param_1);
 extern void DrawScreenFade(void);
 extern void ProcessCrumblingBlocks(void);
@@ -117,12 +117,12 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
         if (cameraIndex == 0) {
             ProcessMovingPlatforms2();
             ProcessCrumblingBlocks();
-            CubeTextureStuff(&fireBlockTextureChain);
-            CubeTextureStuff(&invisibleBlockTextureChain);
+            AnimateTextures(&fireBlockTextureChain);
+            AnimateTextures(&invisibleBlockTextureChain);
 
             if (specialLevelType == 1) {
-                CubeTextureStuff(&crumblingSpecialBlockTextureChain);
-                CubeTextureStuff(&bonusBlockTextureChain);
+                AnimateTextures(&crumblingSpecialBlockTextureChain);
+                AnimateTextures(&bonusBlockTextureChain);
                 ProcessRecentlyVisitedCubes();
             }
 
@@ -143,7 +143,7 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
 
         RenderLevelGeometryQuads(otag[whichDrawDispEnv][cameraIndex]);
         ProcessTurningMotionBlur();
-        ASM_FUN_00050310(otag[whichDrawDispEnv][cameraIndex]);
+        MakeOtagDoublyLinked(otag[whichDrawDispEnv][cameraIndex]);
         UnusedAsmNoop();
 
         if (isPaused == 0) {
