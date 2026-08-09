@@ -631,6 +631,7 @@ void CopyQuadData(void) {
             if (fd->texIdx != i) {
                 continue;
             }
+            // Sets cubeState->quadPtr[dir] to final Quad
             *fd->pointerInsideCubeState = q = &QUAD_BASE[j];
             q->flags.i32 = fd->flags;
             *(int*)&q->otagIndex = 0xffff;

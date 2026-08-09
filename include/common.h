@@ -253,7 +253,7 @@ typedef struct Quad {
     int xy3;
     int z01;
     int z23;
-    byte reserved[104];
+    POLY_GT4 quads[2]; // used in case of no subdivision during rendering
 } Quad;
 
 typedef struct RecentlyVisitedCubeData {
