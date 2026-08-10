@@ -63,7 +63,7 @@ extern void SetPausedOrWaitingForRestart(void);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void ShowEndingFmv(int fmvI);
-extern void SndInitFromSfxFile(void * file, int length); // hack
+extern void SndInitFromSfxFile(void* file, int length); // hack
 extern void SndMuteAllTaggedVoices(void);
 extern void SndMuteAllVoices(void);
 extern void SndMuteVoiceByTag(int tag);
@@ -126,7 +126,7 @@ extern uint controllerButtons;
 extern uint prevControllerButtons;
 extern void* otag[2][1][1026];
 extern void* renderedPrimsBuf;
-extern void * REPLAY_INPUT_PTRS;
+extern void* REPLAY_INPUT_PTRS;
 extern void* unkOtag[2][1][32][64];
 
 char* sioWritePtr;
@@ -283,7 +283,6 @@ void main(void) {
     curFileLength = ReadDataFile(curWorld, 1, 0xFD000);
     SndInitFromSfxFile(0xFD000, curFileLength);
     LoadWarningTim();
-    /* piracy screen music */
     SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
     /* ggi */
     curFileLength = ReadDataFile(curWorld, 3, 0xFD000);

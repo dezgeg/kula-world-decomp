@@ -40,7 +40,7 @@ void ProcessScreenShake(void) {
             screenShakeEnabled = 0;
             SetDispScreen(dispenvScreenX, dispenvScreenY);
         } else {
-            if ((screenShakeDirectionMask & 1) != 0) {
+            if (screenShakeDirectionMask & 1) {
                 rng = Rand(screenShakeMagnitude << 1);
                 v = dispenvScreenX + ((rng - screenShakeMagnitude) * screenShakeTimer) /
                                              screenShakeDivisor;
@@ -49,7 +49,7 @@ void ProcessScreenShake(void) {
                 }
                 drawdisp[whichDrawDispEnv].disp.screen.x = v;
             }
-            if ((screenShakeDirectionMask & 2) != 0) {
+            if (screenShakeDirectionMask & 2) {
                 rng = Rand(screenShakeMagnitude << 1);
                 v = dispenvScreenY + ((rng - screenShakeMagnitude) * screenShakeTimer) /
                                              screenShakeDivisor;

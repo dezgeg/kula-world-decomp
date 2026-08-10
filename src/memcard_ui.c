@@ -828,7 +828,8 @@ int MemCardUiPart(void) {
                 return -1;
             }
 
-            if (TestButton(PAD_CIRCLE)) break;
+            if (TestButton(PAD_CIRCLE))
+                break;
 
             SetTextParams(displayWidth / 2, displayHeight / 2 - 105, 1, 128, 128, 128);
             DrawTextCrappyFont("MEMORY CARD IS FULL.\nYOU MUST REPLACE ANOTHER FILE\n");

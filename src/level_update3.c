@@ -431,42 +431,43 @@ void CheckForButtonEntity(Player* player) {
     unsigned short* ptr2;
     if (IsFallingOrJumping(player)) {
         player->alreadyProcessedEntityAction = 0;
-    } else {
-        if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
-            (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
-            (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
+        return;
+    }
 
-            player->alreadyProcessedEntityAction = OBJ_BUTTON;
-            DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
+    if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
+        (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
+        (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
 
-            if (entityData[DAT_000a4748 + 4] == 1) {
-                SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
+        player->alreadyProcessedEntityAction = OBJ_BUTTON;
+        DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
+
+        if (entityData[DAT_000a4748 + 4] == 1) {
+            SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
+        } else {
+            SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
+        }
+        Vibrate99(1, 0xff, 1);
+
+        ptr0 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+        DAT_000a4754 = (short)ptr0[7];
+        DAT_000a474c = ((int)(ptr0[7] << 16)) >> 20;
+        DAT_000a4750 = ptr0[7] & 0xf;
+
+        while (DAT_000a4754 != -1) {
+            if (DAT_000a4750 == 6) {
+                ptr = (short*)(DAT_000a474c * 256 + (int)entityData);
+                ptr[3] = (ptr[3] + 1) % 2;
+                DAT_000a4748 = DAT_000a474c << 7;
+                DAT_000a4754 = ptr[23];
+                DAT_000a474c = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
+                DAT_000a4750 = ((unsigned short*)ptr)[23] & 0xf;
             } else {
-                SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
-            }
-            Vibrate99(1, 0xff, 1);
-
-            ptr0 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
-            DAT_000a4754 = (short)ptr0[7];
-            DAT_000a474c = ((int)(ptr0[7] << 16)) >> 20;
-            DAT_000a4750 = ptr0[7] & 0xf;
-
-            while (DAT_000a4754 != -1) {
-                if (DAT_000a4750 == 6) {
-                    ptr = (short*)(DAT_000a474c * 256 + (int)entityData);
-                    ptr[3] = (ptr[3] + 1) % 2;
-                    DAT_000a4748 = DAT_000a474c << 7;
-                    DAT_000a4754 = ptr[23];
-                    DAT_000a474c = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
-                    DAT_000a4750 = ((unsigned short*)ptr)[23] & 0xf;
-                } else {
-                    DAT_000a4748 = DAT_000a474c * 128 + DAT_000a4750 * 16;
-                    ptr2 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
-                    ptr2[4] = ((short)ptr2[4] % 2) + 1;
-                    DAT_000a4754 = (short)ptr2[6];
-                    DAT_000a474c = ((int)(ptr2[6] << 16)) >> 20;
-                    DAT_000a4750 = ptr2[6] & 0xf;
-                }
+                DAT_000a4748 = DAT_000a474c * 128 + DAT_000a4750 * 16;
+                ptr2 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+                ptr2[4] = ((short)ptr2[4] % 2) + 1;
+                DAT_000a4754 = (short)ptr2[6];
+                DAT_000a474c = ((int)(ptr2[6] << 16)) >> 20;
+                DAT_000a4750 = ptr2[6] & 0xf;
             }
         }
     }
@@ -592,7 +593,7 @@ void HandleSpecialCubeTypes(Player* player) {
     if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
         player->rollingForward = 1;
         player->turnDirection = 0;
-    } else if (thePlayer.startedIceSfx != 0) {
+    } else if (thePlayer.startedIceSfx) {
         thePlayer.startedIceSfx = 0;
         SndMuteVoiceByTag(2);
     }
@@ -770,7 +771,7 @@ void HandleSpecialCubeTypes(Player* player) {
     if (thePlayer.sunglassTimer == 0) {
         SetSunglassMode(0);
     }
-    if (thePlayer.sunglassTimer > -1) {
+    if (thePlayer.sunglassTimer >= 0) {
         thePlayer.sunglassTimer--;
     }
     if (thePlayer.invulnerabilityTimer > -1) {
@@ -789,7 +790,7 @@ void HandleSpecialCubeTypes(Player* player) {
     if (thePlayer.lethargyTimer == 0) {
         EnableLethargy(0);
     }
-    if (thePlayer.lethargyTimer > -1) {
+    if (thePlayer.lethargyTimer >= 0) {
         thePlayer.lethargyTimer -= 2;
         SubtractLevelTimer(4);
     }
@@ -816,7 +817,7 @@ skip_lethargy:
 void SubtractLevelTimer(int param_1) {
     if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
         levelTimeLeft -= param_1;
-        if (levelTimeLeft < 1) {
+        if (levelTimeLeft <= 0) {
             levelEndReason = -2;
         }
     }

@@ -27,13 +27,13 @@ extern void SubdivideLevelGeometryPolys(void);
 extern void TurnLevelExitQuadIntoGreen(void);
 extern void UnusedAsmNoop(void);
 extern void UpdateSunglassModeDisabling(void);
-extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect * eff);
+extern void UpdateGemRandomSparkleEffect(GemRandomSparkleEffect* eff);
 extern void RenderDispList(void* p);
 extern void DrawPlayerSpecularSprites(void);
 extern void DrawShadowSprites(void);
-extern void RenderBonusBackgroundPart1(void * ot);
-extern void RenderNonSpecialBackground(void * ot);
-extern void RenderStarfield(void * ot);
+extern void RenderBonusBackgroundPart1(void* ot);
+extern void RenderNonSpecialBackground(void* ot);
+extern void RenderStarfield(void* ot);
 extern void RenderBonusBackgroundPart2(void);
 extern void UpdateStarfield(void);
 
@@ -126,7 +126,7 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
                 ProcessRecentlyVisitedCubes();
             }
 
-            if (isPaused == 0) {
+            if (!isPaused) {
                 ProcessFlashingBlocks();
                 ProcessRetractableSpikes();
             }
@@ -182,8 +182,7 @@ void CalculateBlockLighting(void) {
 
     p = &unk[0][0];
     col = 0;
-    i = 0;
-    for (; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         coord = perspMatrixes[cameraIndex].m[2][i];
         ret = GetShortFromGgiPart2(abs(coord));
         col += ret;
@@ -244,14 +243,10 @@ int GetShortFromGgiPart2(int param_1) {
 
 void RenderPlayerAndItems(void) {
     int i, j;
-    int iDl = itemsDispListIdx;
-    int pDl = playerEnemyDispListIdx;
     int temp;
 
-    itemsDispList[iDl] = 0;
-    playerEnemyDispList[pDl] = NULL;
-    itemsDispListIdx = iDl + 1;
-    playerEnemyDispListIdx = pDl + 1;
+    itemsDispList[itemsDispListIdx++] = NULL;
+    playerEnemyDispList[playerEnemyDispListIdx++] = NULL;
 
     SetFarColor(farColor2[0], farColor2[1], farColor2[2]);
 
@@ -266,7 +261,7 @@ void RenderPlayerAndItems(void) {
     RenderDispList(playerEnemyDispList);
     DrawShadowSprites();
 
-    temp = (int)renderedPrimsBuf + 0xffe87000;
+    temp = (int)renderedPrimsBuf - 0x179000;
     primBufUsage = temp - (whichDrawDispEnv * 0xc000);
     if (primBufUsage > maxPrimBufUsage) {
         maxPrimBufUsage = primBufUsage;
@@ -326,14 +321,20 @@ void UpdateStarfield(void) {
     vx = D_000A51BC;
     vy = D_000A51C0;
     vz = D_000A51C4;
-    while (vx > 6552) vx -= 13106;
-    while (vx < -6553) vx += 13106;
+    while (vx > 6552)
+        vx -= 13106;
+    while (vx < -6553)
+        vx += 13106;
 
-    while (vy > 6552) vy -= 13106;
-    while (vy < -6553) vy += 13106;
+    while (vy > 6552)
+        vy -= 13106;
+    while (vy < -6553)
+        vy += 13106;
 
-    while (vz > 6552) vz -= 13106;
-    while (vz < -6553) vz += 13106;
+    while (vz > 6552)
+        vz -= 13106;
+    while (vz < -6553)
+        vz += 13106;
 
     svec.vx = vx;
     svec.vy = vy;

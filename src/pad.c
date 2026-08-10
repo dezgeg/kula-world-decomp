@@ -26,7 +26,7 @@ static char VIBRATION_SEQ_DATA[];
 
 static char* VIBRATION_SEQS[] = {
     &VIBRATION_SEQ_DATA,
-    &VIBRATION_SEQ_DATA[0] + 90,
+    &VIBRATION_SEQ_DATA[90],
 };
 
 static char VIBRATION_SEQ_DATA[] = {

@@ -4,12 +4,12 @@ extern int IsPlayerOnMovingPlatform(); // XXX: this should take Player* player
 extern int GetBlockAt(SVECTOR * coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int HandleMovingPlatforms(Player * player);
-extern void ClearA4374(Player *player);
+extern void ClearA4374(Player* player);
 extern void CreatePlayerDispList(MATRIX * m, int const0x100, int ballTextureIndex, int const0, int colorR, int colorG, int colorB, int const0_, int blockX, int blockY, int blockZ, int blockDirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int otherBlockDirIndex, MATRIX * gteMatrix, int shadowColor, int param_19, MATRIX* param_20, int param_21, int param_22, int const0_23, int const0_24, int const0xb2, SVECTOR * param_26);
 extern void EnableScreenShake(int param_1, int param_2, int param_3);
 extern void EnableTurningMotionBlur(void);
 extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR * param_3);
-extern void JumpingOnMovingPlatform(Player *player);
+extern void JumpingOnMovingPlatform(Player* player);
 extern void MatrixFromDirectionIndex(MATRIX * m, int p2, int dirIndex, int delta, SVECTOR * vec);
 extern void MovePlayerDownwards(Player * player, int param_2);
 extern void MovePlayerForward(Player * player, int delta);
@@ -19,11 +19,11 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
 extern void UpdateSubpixelPositions(Player * player);
 extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
 
-void StartJumpingForward(Player *player);
-void StartJumpingInplace(Player *player);
-void StartRollingForward(Player *player);
-void TurnLeft(Player *player);
-void TurnRight(Player *player);
+void StartJumpingForward(Player* player);
+void StartJumpingInplace(Player* player);
+void StartRollingForward(Player* player);
+void TurnLeft(Player* player);
+void TurnRight(Player* player);
 
 extern int ballTextureIndex;
 extern int cameraIndex;
@@ -85,7 +85,7 @@ static SVECTOR tempNewPlayerPos;
 SVECTOR SVECTOR_000a2dd8 = {};
 int PAD_000A2DE0 = 0;
 
-void ResetPlayerVars(Player *player) {
+void ResetPlayerVars(Player* player) {
     player->howMoving198 = NOT_MOVING;
     player->field119_0x1c8 = 0;
     player->viewpointRotationTimer = 0;
@@ -137,81 +137,82 @@ void ResetPlayerVars(Player *player) {
     player->matrix_274.m[0][1] = 0;
 }
 
-void SetVec184ToVec54(Player *player) {
+void SetVec184ToVec54(Player* player) {
     player->svec_184.vx = player->finePos.vx + player->svec54.vx;
     player->svec_184.vy = player->finePos.vy + player->svec54.vy;
     player->svec_184.vz = player->finePos.vz + player->svec54.vz;
 }
 
-void StartMovementIfNeeded(Player *player) {
-    if (gameMode != 1) {
-        if (gameMode < 2) {
-            if (gameMode != 0) return;
-        } else if (gameMode != 2) {
-            return;
-        }
-
-        if (player->howMoving198 == JUMPING_FORWARD) return;
-        if (player->howMoving198 == JUMPING_INPLACE) {
-            if (player->turnDirection == 1) TurnLeft(player);
-            if (player->turnDirection == -1) TurnRight(player);
-            return;
-        }
-        if (player->howMoving198 == ROLLING && player->jumping == 1) {
-            StartJumpingForward(player);
-        }
-        if (player->howMoving198 == NOT_MOVING) {
-            if (player->jumping == 1) {
-                if (player->rollingForward == 1) {
-                    StartJumpingForward(player);
+void StartMovementIfNeeded(Player* player) {
+    switch (gameMode) {
+        case 0:
+        case 2:
+            if (player->howMoving198 == JUMPING_FORWARD)
+                return;
+            if (player->howMoving198 == JUMPING_INPLACE) {
+                if (player->turnDirection == 1)
+                    TurnLeft(player);
+                if (player->turnDirection == -1)
+                    TurnRight(player);
+                return;
+            }
+            if (player->howMoving198 == ROLLING && player->jumping == 1) {
+                StartJumpingForward(player);
+            }
+            if (player->howMoving198 == NOT_MOVING) {
+                if (player->jumping == 1) {
+                    if (player->rollingForward == 1) {
+                        StartJumpingForward(player);
+                    } else {
+                        StartJumpingInplace(player);
+                    }
                 } else {
-                    StartJumpingInplace(player);
+                    if (player->rollingForward == 1) {
+                        StartRollingForward(player);
+                    } else {
+                        if (player->turnDirection == 1) {
+                            TurnLeft(player);
+                        }
+                        if (player->turnDirection == -1) {
+                            TurnRight(player);
+                        }
+                    }
                 }
-            } else {
+            }
+            return;
+        case 1:
+            if (player->howMoving198 == NOT_MOVING) {
+                if (player->jumping == 1) {
+                    if (player->rollingForward == 1) {
+                        StartJumpingForward(player);
+                    } else {
+                        StartJumpingInplace(player);
+                    }
+                    return;
+                }
                 if (player->rollingForward == 1) {
                     StartRollingForward(player);
-                } else {
-                    if (player->turnDirection == 1) {
-                        TurnLeft(player);
-                    }
-                    if (player->turnDirection == -1) {
-                        TurnRight(player);
-                    }
+                    return;
+                }
+                if (player->turnDirection == 1) {
+                    TurnLeft(player);
+                }
+                if (player->turnDirection == -1) {
+                    TurnRight(player);
                 }
             }
-        }
-    } else {
-        if (player->howMoving198 == NOT_MOVING) {
-            if (player->jumping == 1) {
-                if (player->rollingForward == 1) {
-                    StartJumpingForward(player);
-                } else {
-                    StartJumpingInplace(player);
-                }
-                return;
+            if (player->howMoving198 == ROLLING && player->jumping == 1) {
+                StartJumpingForward(player);
             }
-            if (player->rollingForward == 1) {
-                StartRollingForward(player);
-                return;
-            }
-            if (player->turnDirection == 1) {
-                TurnLeft(player);
-            }
-            if (player->turnDirection == -1) {
-                TurnRight(player);
-            }
-        }
-        if (player->howMoving198 == ROLLING && player->jumping == 1) {
-            StartJumpingForward(player);
-        }
+            return;
     }
 }
 
-void StartJumpingForward(Player *player) {
+void StartJumpingForward(Player* player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
         player->onGround = 0;
         player->howMoving198 = JUMPING_FORWARD;
-        if (player->onMovingPlatform != 0) {
+        if (player->onMovingPlatform) {
             JumpingOnMovingPlatform(player);
         }
         player->jumpingInplaceOnTopOfMovingPlatform = 0;
@@ -227,7 +228,7 @@ void StartJumpingForward(Player *player) {
     }
 }
 
-void StartRollingForward(Player *player) {
+void StartRollingForward(Player* player) {
     if (player->surroundingBlocks[0][1][1] >= 0) {
         if (IsRollingForwardBlocked(player) || player->subpixelPositionOnCube.vz < 256) {
             player->howMoving0 = 2;
@@ -237,7 +238,7 @@ void StartRollingForward(Player *player) {
     }
 }
 
-void StartJumpingInplace(Player *player) {
+void StartJumpingInplace(Player* player) {
     player->howMoving198 = JUMPING_INPLACE;
     if (player->onMovingPlatform) {
         JumpingOnMovingPlatform(player);
@@ -251,7 +252,7 @@ void StartJumpingInplace(Player *player) {
     player->jumpdataPtr += 4;
 }
 
-void TurnRight(Player *player) {
+void TurnRight(Player* player) {
     int pad[2];
 
     if (player->startTurningTo == 0 && player->field119_0x1c8 == 0) {
@@ -268,7 +269,7 @@ void TurnRight(Player *player) {
     }
 }
 
-void TurnLeft(Player *player) {
+void TurnLeft(Player* player) {
     int pad[2];
 
     if (player->startTurningTo == 0 && player->field119_0x1c8 == 0) {
@@ -285,7 +286,7 @@ void TurnLeft(Player *player) {
     }
 }
 
-void ProcessMovement(Player *player) {
+void ProcessMovement(Player* player) {
     int dummy[2];
 
     player->turningWhereNextFrame = 0;
@@ -512,10 +513,12 @@ void ProcessMovement(Player *player) {
     }
 }
 
-void HandleViewportRotationStart(Player *player) {
+void HandleViewportRotationStart(Player* player) {
     int pad[3];
-    if (player->dying != 0) return;
-    if (player->howMoving198 != ROLLING) return;
+    if (player->dying)
+        return;
+    if (player->howMoving198 != ROLLING)
+        return;
 
     if (IsSubpixelZBelow257(player)) {
         if (player->rollingForward == 0 || player->turnDirection != 0) {
@@ -528,7 +531,8 @@ void HandleViewportRotationStart(Player *player) {
     }
 
     if (!IsRollingForwardBlocked(player) && player->subpixelPositionOnCube.vz > 255) {
-        if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) return;
+        if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH)
+            return;
 
         if (IsSubpixelZBelow257(player)) {
             MovePlayerForward(player, 256);
@@ -589,7 +593,7 @@ void HandleViewportRotationStart(Player *player) {
     }
 }
 
-void CheckPlayerJumpingStuff(Player *player) {
+void CheckPlayerJumpingStuff(Player* player) {
     if (player->dying) {
         return;
     }
@@ -603,11 +607,11 @@ void CheckPlayerJumpingStuff(Player *player) {
                     return;
                 }
             }
-            if (player->jumpingOrViewportRotationTimer < 1) {
+            if (player->jumpingOrViewportRotationTimer <= 0) {
                 return;
             }
             if (CheckForPlayerWallHit(player)) {
-                if (player->jumpingOnMovingPlatform == 0) {
+                if (!player->jumpingOnMovingPlatform) {
                     return;
                 }
                 if (player->jumpingOrViewportRotationTimer < 12) {
@@ -654,16 +658,19 @@ void CheckPlayerJumpingStuff(Player *player) {
     CheckPlayerHitCeiling(player);
 }
 
-int CheckForPlayerWallHit(Player *player) {
+int CheckForPlayerWallHit(Player* player) {
     if (player->subpixelPositionOnCube.vz >= 412 && player->svec_144.vz >= 0) {
         if (player->surroundingBlocks[1][2][1] < 0 && (player->subpixelPositionOnCube.vy < 412 || player->surroundingBlocks[2][2][1] < 0) && (player->subpixelPositionOnCube.vy >= 100 || player->surroundingBlocks[0][2][1] < 0)) {
             DAT_000a41b4 = player->surroundingBlocks[0][1][1];
             DAT_000a41b8 = (DAT_000a41b4 - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-            if (DAT_000a41b4 < 5) return 0;
+            if (DAT_000a41b4 < 5)
+                return 0;
 
-            if (entityData[(DAT_000a41b4 - 5) * 128] != 0) return 0;
-            if (entityData[DAT_000a41b8 + 1] != OBJ_ARROW) return 0;
+            if (entityData[(DAT_000a41b4 - 5) * 128] != 0)
+                return 0;
+            if (entityData[DAT_000a41b8 + 1] != OBJ_ARROW)
+                return 0;
 
             GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[DAT_000a41b8 + 2], &SVECTOR_000a41bc);
 
@@ -696,9 +703,11 @@ int CheckForPlayerWallHit(Player *player) {
     return 0;
 }
 
-int CheckPlayerHitCeiling(Player *player) {
-    if (player->subpixelPositionOnCube.vy < 412) return 0;
-    if (player->svec_144.vy < 0) return 0;
+int CheckPlayerHitCeiling(Player* player) {
+    if (player->subpixelPositionOnCube.vy < 412)
+        return 0;
+    if (player->svec_144.vy < 0)
+        return 0;
 
     if (IsPlayerOnMovingPlatform() ||
         player->surroundingBlocks[2][1][1] >= 0 ||
@@ -710,6 +719,7 @@ int CheckPlayerHitCeiling(Player *player) {
 
         player->finePos.vx -= player->svec_144.vy * (player->gravityDir.vx + player->gravityDir.vx);
         player->finePos.vy -= player->svec_144.vy * (player->gravityDir.vy + player->gravityDir.vy);
+        player->finePos.vz -= player->svec_144.vy * (player->gravityDir.vz + player->gravityDir.vz);
 
         player->movementVelocity = 0;
         player->rotX = 0;
@@ -717,8 +727,6 @@ int CheckPlayerHitCeiling(Player *player) {
         player->howMoving198 = FALLING;
         player->howMoving0 = 3;
         player->longJump = 0;
-
-        player->finePos.vz -= player->svec_144.vy * (player->gravityDir.vz + player->gravityDir.vz);
         player->gravityVelocity = -player->svec_144.vy;
 
         return 1;
@@ -727,7 +735,7 @@ int CheckPlayerHitCeiling(Player *player) {
     return 0;
 }
 
-int CheckIfPlayerLanded(Player *player) {
+int CheckIfPlayerLanded(Player* player) {
     int dummy[2];
     tempNewPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
     tempNewPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
@@ -739,7 +747,7 @@ int CheckIfPlayerLanded(Player *player) {
         return 0;
     }
 
-    if (player->howMoving198 == 1) {
+    if (player->howMoving198 == JUMPING_FORWARD) {
         ResetPlayerMatrix274(player);
     }
     if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
@@ -786,7 +794,7 @@ void SetLandingSquishVars(void) {
     landingSquishDamping = 100;
 }
 
-int IsRollingForwardBlocked(Player *player) {
+int IsRollingForwardBlocked(Player* player) {
     if (player->surroundingBlocks[0][2][1] >= 0)
         return 1;
     if (player->surroundingBlocks[0][1][0] >= 0)
@@ -796,7 +804,7 @@ int IsRollingForwardBlocked(Player *player) {
     return 1;
 }
 
-int IsSubpixelZBelow257(Player *player) {
+int IsSubpixelZBelow257(Player* player) {
     if (player->subpixelPositionOnCube.vz > 0xff) {
         if (player->svec_154.vz < 257) {
             return 1;
@@ -805,7 +813,7 @@ int IsSubpixelZBelow257(Player *player) {
     return 0;
 }
 
-void AutoCenterSubpixelPosition(Player *player, int amount) {
+void AutoCenterSubpixelPosition(Player* player, int amount) {
     if (player->subpixelPositionOnCube.vx < 0x100 - amount) {
         player->finePos.vx += amount * player->rightVec.vx;
         player->finePos.vy += amount * player->rightVec.vy;
@@ -817,7 +825,7 @@ void AutoCenterSubpixelPosition(Player *player, int amount) {
     }
 }
 
-void AutoAlignJumpStartPos(Player *player, int amount) {
+void AutoAlignJumpStartPos(Player* player, int amount) {
     if (player->subpixelPositionOnCube.vx < 0x100 - amount) {
         player->jumpStartPos.vx += amount * player->rightVec.vx;
         player->jumpStartPos.vy += amount * player->rightVec.vy;
@@ -860,17 +868,17 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         MatrixNormal_2(&player->matrix_234, &player->matrix_234);
 
         if (player->field119_0x1c8 == 0) {
-            player->matrix_234.m[0][0] = (short)(player->rightVec.vx << 12);
-            player->matrix_234.m[1][0] = (short)(player->rightVec.vy << 12);
-            player->matrix_234.m[2][0] = (short)(player->rightVec.vz << 12);
+            player->matrix_234.m[0][0] = player->rightVec.vx << 12;
+            player->matrix_234.m[1][0] = player->rightVec.vy << 12;
+            player->matrix_234.m[2][0] = player->rightVec.vz << 12;
 
-            player->matrix_234.m[0][1] = (short)(-player->facingDir.vx << 12);
-            player->matrix_234.m[1][1] = (short)(-player->facingDir.vy << 12);
-            player->matrix_234.m[2][1] = (short)(-player->facingDir.vz << 12);
+            player->matrix_234.m[0][1] = -player->facingDir.vx << 12;
+            player->matrix_234.m[1][1] = -player->facingDir.vy << 12;
+            player->matrix_234.m[2][1] = -player->facingDir.vz << 12;
 
-            player->matrix_234.m[0][2] = (short)(-player->gravityDir.vx << 12);
-            player->matrix_234.m[1][2] = (short)(-player->gravityDir.vy << 12);
-            player->matrix_234.m[2][2] = (short)(-player->gravityDir.vz << 12);
+            player->matrix_234.m[0][2] = -player->gravityDir.vx << 12;
+            player->matrix_234.m[1][2] = -player->gravityDir.vy << 12;
+            player->matrix_234.m[2][2] = -player->gravityDir.vz << 12;
         }
     }
 
@@ -1120,11 +1128,11 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     player->turningWhere = player->turningWhereNextFrame;
 }
 
-void ClearA4374(Player *player) {
+void ClearA4374(Player* player) {
     DAT_000a4374 = 0;
 }
 
-void SetBallShapeAndRotationWhenJumping(Player *player) {
+void SetBallShapeAndRotationWhenJumping(Player* player) {
     RotMatrixX(player->rotX * -6, &player->matrix_254);
 
     if (player->field_2bc > -750 && player->jumpingOrViewportRotationTimer > 12) {
@@ -1142,7 +1150,7 @@ void SetBallShapeAndRotationWhenJumping(Player *player) {
     }
 }
 
-void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
+void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
     RotMatrixX(player->rotX * -6, &player->matrix_254);
     if (landingSquishFrameCounter > 0) {
         landingSquishFrameCounter--;
@@ -1164,7 +1172,7 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player *player) {
     player->ballMorphShape = idleSquishMagnitude + landingSquishMagnitude;
 }
 
-void ResetPlayerMatrix274(Player *player) {
+void ResetPlayerMatrix274(Player* player) {
     MulMatrix0(&player->matrix_274, &player->matrix_254, &player->matrix_254);
     player->matrix_274.m[2][1] = 0;
     player->matrix_274.m[2][0] = 0;

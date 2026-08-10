@@ -331,7 +331,6 @@ void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value) {
     }
 }
 
-// https://decomp.me/scratch/1yWKd
 void DrawTimeAttackTimer(DigitSprites *ds, int style, int value, int onlyDashes) {
     int divisor;
     int i;

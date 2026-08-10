@@ -31,7 +31,7 @@ uint firstGuiTexture;
 int firstLensFlareOrPsxButtonTexture;
 int firstParticleTexture;
 int firstUnk2Texture;
-GgiFile * ggi;
+GgiFile* ggi;
 void* ggiPart0A;
 void* ggiPart0B;
 void* ggiPart1HourglassAnim;

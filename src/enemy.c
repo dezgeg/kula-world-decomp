@@ -650,15 +650,9 @@ void RenderEnemies(void) {
 }
 
 void InitEnemy(int side, int rotation, Enemy* enemy) {
-    SVECTOR_000a48f4.vz = 0;
-    SVECTOR_000a48f4.vy = 0;
-    SVECTOR_000a48f4.vx = 0;
-    SVECTOR_000a48ec.vz = 0;
-    SVECTOR_000a48ec.vy = 0;
-    SVECTOR_000a48ec.vx = 0;
-    SVECTOR_000a48e4.vz = 0;
-    SVECTOR_000a48e4.vy = 0;
-    SVECTOR_000a48e4.vx = 0;
+    SVECTOR_000a48f4.vx = SVECTOR_000a48f4.vy = SVECTOR_000a48f4.vz = 0;
+    SVECTOR_000a48ec.vx = SVECTOR_000a48ec.vy = SVECTOR_000a48ec.vz = 0;
+    SVECTOR_000a48e4.vx = SVECTOR_000a48e4.vy = SVECTOR_000a48e4.vz = 0;
 
     if (side == 5) {
         SVECTOR_000a48f4.vz = 1;

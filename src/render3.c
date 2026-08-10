@@ -31,9 +31,9 @@ void DrawShadowSprites(void) {
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 16; j++) {
             p0 = shadowPrimPtrs[whichDrawDispEnv][cameraIndex][i][j].p0;
-            if (p0 != 0xffffffff) {
+            if (p0 != -1) {
                 addPrim(p0, shadowPrimPtrs[whichDrawDispEnv][cameraIndex][i][j].p1);
-                shadowPrimPtrs[whichDrawDispEnv][cameraIndex][i][j].p0 = 0xffffffff;
+                shadowPrimPtrs[whichDrawDispEnv][cameraIndex][i][j].p0 = -1;
             }
         }
     }
@@ -45,9 +45,9 @@ void DrawPlayerSpecularSprites(void) {
 
     for (i = 0; i < 16; i++) {
         p0 = specularPrimPtrs[whichDrawDispEnv][cameraIndex][i].p0;
-        if (p0 != 0xffffffff) {
+        if (p0 != -1) {
             addPrim(p0, specularPrimPtrs[whichDrawDispEnv][cameraIndex][i].p1);
-            specularPrimPtrs[whichDrawDispEnv][cameraIndex][i].p0 = 0xffffffff;
+            specularPrimPtrs[whichDrawDispEnv][cameraIndex][i].p0 = -1;
         }
     }
 }

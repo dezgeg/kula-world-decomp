@@ -44,7 +44,7 @@ static inline void ClearMemCardData() {
     uint i;
     char* p = &memCardData;
     for (i = 0; i < 8196; i++) {
-        (*p++) = 0;
+        *p++ = 0;
     }
 }
 

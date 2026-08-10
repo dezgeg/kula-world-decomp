@@ -93,7 +93,11 @@ typedef enum ObjectType {
     OBJ_ACID_PATCH = 0x04,
     OBJ_TRANSPORTER = 0x05,
     OBJ_CRUMBLING_BLOCK = 0x06,
+    // Collision danger!
+    OBJ_FLASHING_BLOCK = 0x07,
     OBJ_EXIT = 0x07,
+    // Collision danger!
+    OBJ_LASER = 0x08,
     OBJ_TIMER_PAUSE = 0x08,
     OBJ_BUTTON = 0x09,
     OBJ_BOUNCEPAD = 0x0A,

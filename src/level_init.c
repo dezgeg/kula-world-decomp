@@ -62,8 +62,6 @@ extern POLY_FT4 specularPrims[2][1][16];
 extern P shadowPrimPtrs[2][1][2][16];
 extern P specularPrimPtrs[2][1][16];
 extern Texture textures[150];
-extern Texture textures[150];
-extern uint firstGuiTexture;
 extern uint firstGuiTexture;
 extern int cubeStates[16 * 256];
 extern short flashingBlockEntityIndexes[64];
@@ -79,11 +77,11 @@ extern uint INVIS_BLOCK_ANIM_COLOR_DATA[89];
 extern uint BONUS_BLOCK_ANIM_FLAG_DATA1[16];
 extern AnimatedTextureChain bonusBlockTextureChain;
 extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
-extern int curWorld;
 extern AnimatedTextureChain fireBlockTextureChain;
 extern AnimatedTextureChain invisibleBlockTextureChain;
 extern uint TEXTURE_ANIM_DATA[];
 extern int invisBlockVisibility[6];
+extern int curWorld;
 extern int gameMode;
 extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
@@ -240,13 +238,13 @@ void ProcessCubesIntoFaces(void) {
                 xFine = x << 9;
                 yFine = y << 9;
                 zFine = z << 9;
-                for (; dir < 6; dir++, csptr+=4) {
+                for (; dir < 6; dir++, csptr += 4) {
                     if (style == 0 && blockType >= 5) {
                         type = entityData[((blockType - 5) * 128 + 1) + dir * 16];
-                        if (type == 29) {
-                            type = 8; // 8 = clock?
+                        if (type == OBJ_PLAYER_SPAWN_PAUSED) {
+                            type = OBJ_TIMER_PAUSE;
                         }
-                        if (type > 49) {
+                        if (type >= OBJ_SLOW_STAR) {
                             // enemy
                             type = 0;
                         }
@@ -258,7 +256,7 @@ void ProcessCubesIntoFaces(void) {
                     }
                     relType = GetFaceTypeAtRelativeToDir(x,y,z,dir);
                     switch(type) {
-                    case 3: // invis block
+                    case OBJ_INVISIBLE_PATCH:
                         if (!((relType >= 0 && relType <= 1) || (relType >= 2 && relType <= 3) || relType == 4)) {
                             SetFaceData(numberOfCubeFaces++,
                                         (void**)(cubeCounter * 64 + csptr),quadSomethingStartIndex + 6, 0x100, dir,
@@ -269,8 +267,7 @@ void ProcessCubesIntoFaces(void) {
                             ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
                         }
                         break;
-                    case -6:
-                        // crumbling?
+                    case -OBJ_CRUMBLING_BLOCK:
                         flags = 0xc;
                         if (!((relType >= 0 && relType <= 1) || relType == 2 || relType == 4 || relType == 6)) {
                             flags = 0xd;
@@ -290,23 +287,23 @@ void ProcessCubesIntoFaces(void) {
                         ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
                         break;
 
-                    case -7:
-                            // flashing?
-                            flags = 0xd;
-                            textureIdx = quadSomethingStartIndex + tgi->unk150;
-                            textureRotation = GetRandomTextureRotation();
-                            if (specialLevelType == 1) {
-                                AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
-                                                    CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                                flags = 5;
-                            }
-                            SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),
-                                                    textureIdx,flags,dir,xFine,yFine,zFine,textureRotation,
-                                                    0xa0a0a0);
-                            isNonempty = 1;
-                            newCube = 1;
-                            ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                            break;
+                    case -OBJ_EXIT:
+                        // FIXME: flashing or exit - which one is it?
+                        flags = 0xd;
+                        textureIdx = quadSomethingStartIndex + tgi->unk150;
+                        textureRotation = GetRandomTextureRotation();
+                        if (specialLevelType == 1) {
+                            AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
+                                                CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
+                            flags = 5;
+                        }
+                        SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),
+                                                textureIdx,flags,dir,xFine,yFine,zFine,textureRotation,
+                                                0xa0a0a0);
+                        isNonempty = 1;
+                        newCube = 1;
+                        ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
+                        break;
 
                     default:
                         if (!((relType >= 0 && relType < 2) || relType == 2 || relType == 4)) {
@@ -319,18 +316,19 @@ void ProcessCubesIntoFaces(void) {
                             } else {
                                 textureIdx += numPlainTileTextureVariations + type;
                                 if (type > 19) {
+                                    // item or enemy
                                     flags = 0x100000d;
                                 }
                             }
                             if (specialLevelType == 1) {
                                 flags &= ~8;
-                                if (type == 0 || type > 0x13) {
+                                if (type == 0 || type > 19) {
                                     textureRotation = Rand(4);
                                     AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
                                         CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES)
                                     );
                                     flags &= 0xffffff;
-                                    if (type > 0x13) {
+                                    if (type > 19) {
                                         flags |= 0x10000;
                                     }
                                 } else {
@@ -339,7 +337,7 @@ void ProcessCubesIntoFaces(void) {
                                                           -1,CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
                                 }
                             }
-                            if (relType == 6) {
+                            if (relType == OBJ_CRUMBLING_BLOCK) {
                                 flags &= ~1;
                             }
                             if (specialLevelType == 2) {
@@ -353,8 +351,7 @@ void ProcessCubesIntoFaces(void) {
                                 }
                             }
 
-                            if (type == 7) {
-                                // level exit
+                            if (type == OBJ_EXIT) {
                                 levelExitQuadPPtr = (void**)(cubeCounter * 64 + csptr);
                             }
                             SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),textureIdx,flags,dir,
@@ -542,7 +539,7 @@ void ScanLevelDataForCrumblingBlocks(void) {
 
     numCrumblingBlocks = 0;
     for (i = 0; i < numEntities; i++) {
-        if (((CrumblingBlockEntity*)entityData)[i].entityType == 6) {
+        if (((CrumblingBlockEntity*)entityData)[i].entityType == OBJ_CRUMBLING_BLOCK) {
             crumblingBlockEntityIndexes[numCrumblingBlocks++] = i;
             ((CrumblingBlockEntity*)entityData)[i].counter = 0x200;
         }
@@ -563,7 +560,7 @@ void ScanLevelDataForFlashingBlocks(void) {
     numFlashingBlocks = 0;
     for (i = 0; i < numEntities; i++) {
         eb = (FlashingEntity*)(entityData + i * 128);
-        if (eb->entityType == 7) {
+        if (eb->entityType == OBJ_FLASHING_BLOCK) {
             flashingBlockEntityIndexes[numFlashingBlocks++] = i;
             x = eb->x;
             y = eb->y;
@@ -759,15 +756,15 @@ void ScanLevelDataForBlinkingEntities(void) {
             for (j = 0; j < 6; j++) {
                 ent = (short *)((i * 128 + j * 16) * 2 + (int)entityData);
                 switch (ent[1]) {
-                    case 7:
+                    case OBJ_EXIT:
                         ent[15] = 16;
                         ent[16] = 255;
                         break;
-                    case 5:
+                    case OBJ_TRANSPORTER: // xxx: can this trigger?
                         ent[15] = 16;
                         ent[16] = 255;
                         break;
-                    case 9:
+                    case OBJ_BUTTON:
                         ent[15] = 16;
                         ent[16] = 255;
                         break;

@@ -12,7 +12,7 @@ extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
 extern void InitHighscoreCubes(void);
 extern void InitPsxButtonBackgroundSprites(int);
-extern void InitScoreGraph(void *pBuf, int *levelScores, int *unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
+extern void InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
 extern void MusicCheckForLoop(void);
 extern void PutDrawAndDispEnvs(void);
 extern void ResetTextRenderState(void);

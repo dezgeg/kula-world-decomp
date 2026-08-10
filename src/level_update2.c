@@ -280,7 +280,7 @@ void InitLasers(void) {
     int z;
 
     for (i = 0; i < numEntities * 128; i += 128) {
-        if (entityData[i + 0] != 8)
+        if (entityData[i + 0] != OBJ_LASER)
             continue;
         x = entityData[i + 4];
         y = entityData[i + 5];
@@ -907,21 +907,32 @@ void CalcWhatPlayerIsStandingOn(Player *player) {
         player->specialBlockIndexPlayerIsStandingOn = (player->specialBlockIndexPlayerIsStandingOn - 5) * 128;
         player->specialBlockSideOffsetPlayerIsStandingOn = player->specialBlockIndexPlayerIsStandingOn + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_TRANSPORTER) player->faceTypePlayerStandingOn = OBJ_TRANSPORTER_BLOCK;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_CRUMBLING_BLOCK) player->faceTypePlayerStandingOn = OBJ_CRUMBLING_BLOCK_FACE;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_EXIT) player->faceTypePlayerStandingOn = OBJ_EXIT_BLOCK;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
-        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_TRANSPORTER)
+            player->faceTypePlayerStandingOn = OBJ_TRANSPORTER_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_CRUMBLING_BLOCK)
+            player->faceTypePlayerStandingOn = OBJ_CRUMBLING_BLOCK_FACE;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_EXIT)
+            player->faceTypePlayerStandingOn = OBJ_EXIT_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_FIRE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ICE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_INVISIBLE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+        if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
         if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
                 player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
         }
     } else {
-        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH) player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
-        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ICE_PATCH) player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
-        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_INVISIBLE_PATCH) player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
-        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ACID_PATCH) player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_FIRE_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ICE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_ICE_PATCH;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_INVISIBLE_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_INVISIBLE_PATCH_BLOCK;
+        if (player->specialBlockIndexPlayerIsStandingOn == OBJ_ACID_PATCH)
+            player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
         if (player->specialBlockIndexPlayerIsStandingOn == 0) {
             player->faceTypePlayerStandingOn = -1;
         }

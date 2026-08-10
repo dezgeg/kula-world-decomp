@@ -45,7 +45,7 @@ uint* buttonsPtr;
 int cheated;
 
 int sioCheatActivated = 0; // .sdata
-SVECTOR SVECTOR_000a3334 = { 0, 0, 0, 0}; // .sdata
+SVECTOR SVECTOR_000a3334 = { 0, 0, 0, 0 }; // .sdata
 
 void ResetCheats(void) {
     int i, j;
@@ -161,7 +161,7 @@ void HandleCheats(void) {
         if (cheatState[7].preventActivation == 0) {
             cheatState[7].preventActivation = 1;
             cheated = 1;
-            levelPlayTime[0] = levelPlayTime[0] + -1500;
+            levelPlayTime[0] -= 1500;
         }
     }
     if (cheatState[8].activated == 1) {

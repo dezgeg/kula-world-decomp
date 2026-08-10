@@ -128,7 +128,7 @@ void DrawBigGuiSprite(int param_1) {
     if (gameOverScreenFade > 0x80) {
         gameOverScreenFade = 0x80;
     }
-    if (gameOverScreenState == 1 && gameOverScreenFade > 0x7f) {
+    if (gameOverScreenState == 1 && gameOverScreenFade >= 0x80) {
         gameOverScreenState = 2;
     }
     if (param_1 == 0 && (levelEndReason > -9 || gameOverScreenState == 3)) {

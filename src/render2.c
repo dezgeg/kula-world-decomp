@@ -276,7 +276,7 @@ void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
     depthOffset = 0;
     switch(e[IE_ID]) {
     case 5:
-        // transporter
+        // FIXME: is this transporter or something else?
         lightEffectId = e[IE_UNK16] & 0xff;
         blinkState = e[IE_UNK16] >> 8;
         depthOffset = 1;
@@ -307,8 +307,7 @@ void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
         goto disable_light;
     default:
         break;
-    case 7:
-        // exit
+    case OBJ_EXIT:
         depthOffset = 1;
         lightEffectId = e[IE_UNK16] & 0xff;
         blinkState = e[IE_UNK16] >> 8;
@@ -338,8 +337,7 @@ void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
         }
         depthOffset = 1;
         goto disable_light;
-    case 9:
-        // button
+    case OBJ_BUTTON:
         depthOffset = 1;
         lightEffectId = e[IE_UNK16] & 0xff;
         blinkState = e[IE_UNK16] >> 8;
@@ -374,11 +372,11 @@ disable_light:
             e[IE_UNK16] = 0xff;
         }
         break;
-    case 10:
-    case 11:
-    case 12:
-    case 26:
-    case 28:
+    case OBJ_BOUNCEPAD:
+    case OBJ_MOVING_SPIKE:
+    case OBJ_SPIKE:
+    case OBJ_HIDDEN_EXIT:
+    case OBJ_ARROW:
         depthOffset = 1;
         break;
     }
@@ -422,7 +420,7 @@ disable_light:
     z += e[IE_VARIANT];
     // 6: model ptr
     itemsDispList[itemsDispListIdx++] = &ggiPart0B[ggiPart0B[z] / 4];
-    // 7: unknown
+    // 7: variant?
     itemsDispList[itemsDispListIdx++] = e[IE_UNK8];
     // 8+: matrix
     p = m;

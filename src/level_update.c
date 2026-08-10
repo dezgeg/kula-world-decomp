@@ -125,17 +125,17 @@ void ScanLevelDataForMovingBlocks2(void) {
             switch (entityData[trI + 2]) {
                 case 1:
                     for (trJ = entityData[trI + 4]; trJ < entityData[trI + 7] + entityData[trI + 17]; trJ++) {
-                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
                     }
                     break;
                 case 2:
                     for (trK = entityData[trI + 5]; trK < entityData[trI + 8] + entityData[trI + 17]; trK++) {
-                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
                     }
                     break;
                 case 5:
                     for (trL = entityData[trI + 6]; trL < entityData[trI + 9] + entityData[trI + 17]; trL++) {
-                        levelData[trJ * 1156 + trK * 34 + trL]= entityData[trI + 20];
+                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
                     }
                     break;
             }
@@ -150,7 +150,7 @@ void ScanLevelDataForMovingBlocks2(void) {
 void MoveMovingPlatforms(SVECTOR vec) {
 #define EB ((LocalMovingPlatformEntity *)&entityData[D_000A4398])
     for (D_000A4398 = 0; D_000A4398 < (int)numEntities << 7; D_000A4398 += 128) {
-        if (EB->tag == 5) {
+        if (EB->tag == OBJ_TRANSPORTER) {
             D_000A439C = 0;
             EB->velX = 0;
             EB->velY = 0;
@@ -261,9 +261,9 @@ int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance) {
 
 int IsPlayerOnMovingPlatform(Player* player) {
     DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
-    if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != 5) {
+    if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != OBJ_TRANSPORTER) {
         DAT_000a43c4 = (player->surroundingBlocks[2][1][1] - 5) * 128;
-        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4 ] != 5) {
+        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4 ] != OBJ_TRANSPORTER) {
             return 0;
         }
     }
@@ -271,13 +271,13 @@ int IsPlayerOnMovingPlatform(Player* player) {
 }
 
 int HandleMovingPlatforms(Player *player) {
-    if (player->onMovingPlatform != 0) {
+    if (player->onMovingPlatform) {
         return 0;
     }
 
     movingPlatformEntityId = GetMovingPlatformAt(player, &SVECTOR_allMinus1);
     if (movingPlatformEntityId != -1) {
-        SndPlaySfx(0x66, 0, &SVECTOR_000a2de4, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
@@ -315,7 +315,7 @@ int HandleMovingPlatforms(Player *player) {
 
     movingPlatformEntityId = GetAlternateMovingPlatform(player, &SVECTOR_allMinus1);
     if (movingPlatformEntityId != -1) {
-        SndPlaySfx(0x66, 0, &SVECTOR_000a2de4, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
@@ -386,16 +386,16 @@ int GetMovingPlatformAt(Player* player, SVECTOR* checkPos) {
     D_000A43DC = (GetBlockAt(&SVECTOR_000a43e0) - 5) * 128;
 
     if (D_000A43DC >= 0) {
-        if (entityData[D_000A43DC] != 5) {
+        if (entityData[D_000A43DC] != OBJ_TRANSPORTER) {
             return -1;
         }
 
-        if (AreDirectionsOnSameAxis(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir)) != 0) {
+        if (AreDirectionsOnSameAxis(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir))) {
             return -1;
         }
 
         if (player->subpixelPositionOnCube.vy < 101) {
-            if (IsVecWithinPlatformBounds(&player->finePos, D_000A43DC, 0) != 0) {
+            if (IsVecWithinPlatformBounds(&player->finePos, D_000A43DC, 0)) {
                 goto ret_D;
             }
             return -1;
@@ -416,7 +416,7 @@ int GetAlternateMovingPlatform(Player* player, SVECTOR* checkPos) {
 
     D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
 
-    if (D_000A43E8 < 0 || entityData[D_000A43E8] != 5) {
+    if (D_000A43E8 < 0 || entityData[D_000A43E8] != OBJ_TRANSPORTER) {
         SVECTOR_000a43ec.vx -= player->gravityDir.vx * 512;
         SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
         SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
@@ -430,17 +430,17 @@ int GetAlternateMovingPlatform(Player* player, SVECTOR* checkPos) {
         }
     }
 
-    if (AreDirectionsOnSameAxis(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir)) == 0) {
+    if (!AreDirectionsOnSameAxis(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir))) {
         return -1;
     }
-    if (IsVecWithinPlatformBounds(&player->finePos, D_000A43E8, 100) != 0) {
+    if (IsVecWithinPlatformBounds(&player->finePos, D_000A43E8, 100)) {
         return D_000A43E8;
     }
 
     return -1;
 }
 
-void JumpingOnMovingPlatform(Player *player) {
+void JumpingOnMovingPlatform(Player* player) {
     player->jumpingOnMovingPlatform = 1;
     player->onMovingPlatform = 0;
 
@@ -562,7 +562,7 @@ INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
 
 void ProcessCameraAndMovement(Player *player) {
     player->playerHasControl = 0;
-    if (levelEntryAnimTimer >= 1025 || gameMode == 1) {
+    if (levelEntryAnimTimer > 1024 || gameMode == 1) {
         if (player->debugCameraMode != 0) {
             HandleDebugCamera(player);
         } else {
@@ -607,7 +607,7 @@ void ProcessCameraAndMovement(Player *player) {
     if (levelEntryAnimTimer > 880) {
         levelEntryAnimTimer += levelEntryAnimTimerIncrement;
         levelEntryAnimTimerIncrement--;
-        if (levelEntryAnimTimerIncrement < 1) {
+        if (levelEntryAnimTimerIncrement <= 0) {
             levelEntryAnimTimerIncrement = 1;
         }
     } else {
@@ -626,7 +626,7 @@ void HandleDebugCamera(Player *player) {
     player->playerHasControl = 1;
 
     debugCamY = player->debugCamY % 4096;
-    do {} while(0);
+    do {} while(0); // HACK
     debugCamX = player->debugCamX % 4096;
 
     RotMatrixZ(debugCamX, &perspMatrixes[cameraIndex]);

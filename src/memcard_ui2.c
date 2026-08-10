@@ -47,7 +47,7 @@ int AskSaveOverwrite(void) {
     while (1) {
         DrawSync(0);
         VSync(0);
-        whichDrawDispEnv = whichDrawDispEnv == 0;
+        whichDrawDispEnv = !whichDrawDispEnv;
         PutDrawAndDispEnvs();
         for (i = 0; i < numCameras; i++) {
             ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);

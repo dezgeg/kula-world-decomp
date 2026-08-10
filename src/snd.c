@@ -393,7 +393,6 @@ void SndMuteAllVoices(void) {
 
 void SndSetMusicVolume(void) {
     int vol;
-    SpuCommonAttr* ca;
 
     spuCommonAttr.mask = 0x2c3;
     spuCommonAttr.mvol.left = 0x3fff;
@@ -406,9 +405,8 @@ void SndSetMusicVolume(void) {
         }
     }
 
-    ca = &spuCommonAttr;
     spuCommonAttr.cd.mix = 1;
     spuCommonAttr.cd.volume.left = (vol * 0x3fff) / 0xc;
     spuCommonAttr.cd.volume.right = spuCommonAttr.cd.volume.left;
-    SpuSetCommonAttr(ca);
+    SpuSetCommonAttr(&spuCommonAttr);
 }
