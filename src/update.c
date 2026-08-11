@@ -140,9 +140,9 @@ void ProcessCrumblingBlocks(void) {
         Quad **quads = (Quad**)cubeStates;
         eb = (CrumblingBlockEntity *)&entityData[crumblingBlockEntityIndexes[i] * 128];
         x = eb->x;
-        x9 = x << 9;
         y = eb->y;
         z = eb->z;
+        x9 = x << 9;
         y9 = y << 9;
         z9 = z << 9;
         cubeIndex =  CUBE_INDEX_AT(x, y, z);
@@ -150,10 +150,10 @@ void ProcessCrumblingBlocks(void) {
         switch (eb->state) {
             case 2:
                 for (dir = 0; dir < 6; dir++) {
-                    quads[cubeIndex * 16 + dir]->flags.u8 |= 1;
+                    quads[cubeIndex * 16 + dir]->flags.u8 |= 1; // QF_ACTIVE
                     faceType = GetFaceTypeAtRelativeToDir(x, y, z, dir);
                     if (faceType != -1 && faceType != -2 && faceType != 3 && faceType != 5) {
-                        quads[GetCubeIndexRelativeToDir(x, y, z, dir) * 16 + FlipDir(dir)]->flags.u8 |= 1;
+                        quads[GetCubeIndexRelativeToDir(x, y, z, dir) * 16 + FlipDir(dir)]->flags.u8 |= 1; // QF_ACTIVE
                     }
                 }
                 eb->state = 3;
@@ -169,7 +169,7 @@ void ProcessCrumblingBlocks(void) {
                     }
                 } else {
                     for (dir = 0; dir < 6; dir++) {
-                        quads[cubeIndex * 16 + dir]->flags.i32 &= ~1;
+                        quads[cubeIndex * 16 + dir]->flags.i32 &= ~1; // QF_ACTIVE
                     }
                     eb->state = 0;
                     levelData[x * 1156 + y * 34 + z] = -1;
@@ -206,9 +206,9 @@ void ProcessFlashingBlocks(void) {
                     quad = cubeStates[cubeIndex * 16 + j];
                     // FIXME: no idea why volatile makes this match
                     if (*(volatile int*)&specialLevelType == 1) {
-                        quad->flags.u16 = 0x107;
+                        quad->flags.u16 = 0x107; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_INVISIBLE
                     } else {
-                        quad->flags.u16 = 0x10f;
+                        quad->flags.u16 = 0x10f; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_GOURAUD | QF_INVISIBLE
                     }
                     quad->color = 0;
                 }
@@ -244,7 +244,7 @@ void ProcessFlashingBlocks(void) {
             } else {
                 for (j = 0; j < 6; j++) {
                     quad = cubeStates[cubeIndex * 16 + j];
-                    *(char *)((int)&quad->flags + 1) = 0;
+                    *(char *)((int)&quad->flags + 1) = 0; // QF_INVISIBLE
                     quad->color = 0x808080;
                 }
                 eb->state = 3;
@@ -258,7 +258,7 @@ void ProcessFlashingBlocks(void) {
                 counter = 8;
                 for (j = 0; j < 6; j++) {
                     quad = cubeStates[cubeIndex * 16 + j];
-                    *(byte *)((int)&quad->flags + 1) = 1;
+                    *(byte *)((int)&quad->flags + 1) = 1; // QF_INVISIBLE
                     quad->color = 0x202020;
                 }
             }
@@ -289,7 +289,7 @@ void ProcessFlashingBlocks(void) {
                 }
             } else {
                 for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->flags.u8 = 6;
+                    cubeStates[cubeIndex * 16 + j]->flags.u8 = 6; // QF_SEMITRANSPARENT | QF_BACKFACE_CULL
                 }
                 counter = 76;
                 CUBE_TYPE_AT(x, y, z) = -1;
@@ -470,7 +470,7 @@ void ProcessTurningMotionBlur(void) {
 
 void TurnLevelExitQuadIntoGreen(void) {
     if (numKeysRemaining == 0) {
-        ((byte*)&(*levelExitQuadPPtr)->flags)[3] = 1;
+        ((byte*)&(*levelExitQuadPPtr)->flags)[3] = 1; // QF_ITEM_SHADOW
     }
 }
 

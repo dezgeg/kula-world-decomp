@@ -236,6 +236,15 @@ typedef struct Music {
 } Music;
 
 typedef struct Quad {
+    // QF_ACTIVE = bit 0 - enables/disables drawing the quad
+    // QF_SEMITRANSPARENT = bit 1 - enables semitransparency flag on the primitive
+    // QF_BACKFACE_CULL = bit 2 - enable backface culling?
+    // QF_GOURAUD = bit 3 - enable depth-cued gouraud?
+    // QF_LIGHT_EFFECT = bit 4 - light effect is active on this quad (enable per-vertex colors)
+    // QF_INVISIBLE = bit 8 - apply alpha modulation
+    // QF_BONUS_ITEM_SHADOW = bit 16 - item shadow rendered in bonus levels?
+    // QF_VISITED_TYPE = bits 17-18 - visit counter
+    // QF_ITEM_SHADOW = bit 24 - enable item shadow / turn level exit green
     union {
         uint i32;
         ushort u16;
@@ -248,9 +257,9 @@ typedef struct Quad {
     void* metadata;
     uint color;
     int unk;
-    int rgb0;
     int rgb1;
     int rgb2;
+    int rgb3;
     int xy0;
     int xy1;
     int xy2;

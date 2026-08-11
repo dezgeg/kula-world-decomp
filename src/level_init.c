@@ -268,17 +268,17 @@ void ProcessCubesIntoFaces(void) {
                         }
                         break;
                     case -OBJ_CRUMBLING_BLOCK:
-                        flags = 0xc;
+                        flags = 0xc; // QF_BACKFACE_CULL | QF_GOURAUD
                         if (!((relType >= 0 && relType <= 1) || relType == 2 || relType == 4 || relType == 6)) {
-                            flags = 0xd;
+                            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                         }
                         if (specialLevelType == 1) {
                             AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
                                     (Quad**)(cubeCounter * 64 + csptr),-1, CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                            flags &= ~8;
+                            flags &= ~8; // QF_BACKFACE_CULL
                         }
                         if (specialLevelType == 2) {
-                            flags |= 2;
+                            flags |= 2; // QF_SEMITRANSPARENT
                         }
                         SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr),
                                     quadSomethingStartIndex + 4,flags,dir,xFine,yFine,zFine,0,0x808080);
@@ -289,13 +289,13 @@ void ProcessCubesIntoFaces(void) {
 
                     case -OBJ_EXIT:
                         // FIXME: flashing or exit - which one is it?
-                        flags = 0xd;
+                        flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                         textureIdx = quadSomethingStartIndex + tgi->unk150;
                         textureRotation = GetRandomTextureRotation();
                         if (specialLevelType == 1) {
                             AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
                                                 CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                            flags = 5;
+                            flags = 5; // QF_ACTIVE | QF_BACKFACE_CULL
                         }
                         SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),
                                                 textureIdx,flags,dir,xFine,yFine,zFine,textureRotation,
@@ -307,7 +307,7 @@ void ProcessCubesIntoFaces(void) {
 
                     default:
                         if (!((relType >= 0 && relType < 2) || relType == 2 || relType == 4)) {
-                            flags = 0xd;
+                            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                             textureRotation = 0;
                             textureIdx = quadSomethingStartIndex + tgi->unk150;
                             if (type == 0) {
@@ -317,11 +317,11 @@ void ProcessCubesIntoFaces(void) {
                                 textureIdx += numPlainTileTextureVariations + type;
                                 if (type > 19) {
                                     // item or enemy
-                                    flags = 0x100000d;
+                                    flags = 0x100000d; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD | QF_ITEM_SHADOW
                                 }
                             }
                             if (specialLevelType == 1) {
-                                flags &= ~8;
+                                flags &= ~8; // QF_GOURAUD
                                 if (type == 0 || type > 19) {
                                     textureRotation = Rand(4);
                                     AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
@@ -329,7 +329,7 @@ void ProcessCubesIntoFaces(void) {
                                     );
                                     flags &= 0xffffff;
                                     if (type > 19) {
-                                        flags |= 0x10000;
+                                        flags |= 0x10000; // QF_BONUS_ITEM_SHADOW
                                     }
                                 } else {
                                     AddQuadToAnimatedTextureChain
@@ -338,28 +338,28 @@ void ProcessCubesIntoFaces(void) {
                                 }
                             }
                             if (relType == OBJ_CRUMBLING_BLOCK) {
-                                flags &= ~1;
+                                flags &= ~1; // QF_ACTIVE
                             }
                             if (specialLevelType == 2) {
-                                // semitransparent
-                                flags |= 2;
+                                flags |= 2; // QF_SEMITRANSPARENT
                             }
                             if (style == 2 && blockType >= 5) {
                                 itemType = entityData[((blockType - 5) * 128 + 1) + dir * 16];
                                 if (itemType >= 20 && itemType < 50 && itemType != 26 && itemType != 28 && itemType != 30) {
-                                    flags |= 0x1000000;
+                                    flags |= 0x1000000; // QF_ITEM_SHADOW
                                 }
                             }
 
                             if (type == OBJ_EXIT) {
                                 levelExitQuadPPtr = (void**)(cubeCounter * 64 + csptr);
                             }
-                            SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),textureIdx,flags,dir,
-                                                    xFine,yFine,zFine,textureRotation,0x808080);
+                            SetFaceData(numberOfCubeFaces++,
+                                    (void**)(cubeCounter * 64 + csptr), textureIdx, flags, dir,
+                                    xFine, yFine, zFine, textureRotation, 0x808080);
                             isNonempty = 1;
                             newCube = 1;
                             ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                            if (type == 1) {
+                            if (type == OBJ_FIRE_PATCH) {
                                 AddQuadToAnimatedTextureChain(&fireBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,0);
                             }
                         }
@@ -474,39 +474,64 @@ void ScanLevelDataForMovingBlocks1(void) {
     short *entity;
     int j;
     short *pStuff;
-    int offUnk;
+    int texDataIdx;
     int dir;
     int val;
 
     switch (specialLevelType) {
-        default: flags = 0xd; break;
-        case 1: flags = 0x20005; break;
-        case 2: flags = 0xf; break;
+        default:
+            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
+            break;
+        case 1:
+            flags = 0x20005; // QF_ACTIVE | QF_BACKFACE_CULL | QF_VISITED_TYPE(1)
+            break;
+        case 2:
+            flags = 0xf; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_GOURAUD
+            break;
     }
 
     numMovingPlatforms = 0;
     for (i = 0; i < numEntities; i++) {
-        if ((entityData + (i * 128))[0] != 5) {
+        if (entityData[i * 128] != 5) {
             continue;
         }
-        entity = entityData + (i * 128);
+        entity = &entityData[i * 128];
         movingBlockEntityIndexes[numMovingPlatforms++] = (short)i;
         length = (int)entity[17];
 
         switch (entity[2]) {
-            case 1: offUnk = 0; x_inc = 512; y_inc = 0; z_inc = 0; break;
-            case 2: offUnk = 1; x_inc = 0; y_inc = 512; z_inc = 0; break;
-            default: x_inc = 0; y_inc = 0; z_inc = 512; offUnk = 2; break;
+            case 1:
+                texDataIdx = 0;
+                x_inc = 512;
+                y_inc = 0;
+                z_inc = 0;
+                break;
+            case 2:
+                texDataIdx = 1;
+                x_inc = 0;
+                y_inc = 512;
+                z_inc = 0;
+                break;
+            default:
+                x_inc = 0;
+                y_inc = 0;
+                z_inc = 512;
+                texDataIdx = 2;
+                break;
         }
 
         for (j = 0; j < length; j++) {
-            if (length == 1) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][0];
-            else if (j == 0) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][1];
-            else if (j < length - 1) pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][2];
-            else pStuff = MOVING_BLOCK_TEXTURE_DATA[offUnk][3];
+            if (length == 1)
+                pStuff = MOVING_BLOCK_TEXTURE_DATA[texDataIdx][0];
+            else if (j == 0)
+                pStuff = MOVING_BLOCK_TEXTURE_DATA[texDataIdx][1];
+            else if (j < length - 1)
+                pStuff = MOVING_BLOCK_TEXTURE_DATA[texDataIdx][2];
+            else
+                pStuff = MOVING_BLOCK_TEXTURE_DATA[texDataIdx][3];
 
             for (dir = 0; dir < 6; dir++) {
-                val = pStuff[dir*2];
+                val = pStuff[dir * 2];
                 if (val == -1) {
                     ((Quad **)(entity + 71 + j * 12))[dir] = (Quad*)0xffffffff;
                 } else {
@@ -578,7 +603,7 @@ void ScanLevelDataForFlashingBlocks(void) {
             } else {
                 for (dir = 0; dir < 6; dir++) {
                     quad = cubeStates[16 * ci + dir];
-                    *(u8*)&quad->flags = 0xf;
+                    *(u8*)&quad->flags = 0xf; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_GOURAUD
                     quad->color = 0x808080;
                 }
                 eb->state = 3;
