@@ -236,20 +236,11 @@ int TIME_TRIAL_PAR_TIMES[] = {
     29, 32, 54, 40, 18,
 };
 
-extern char S_DEMO_MODE[];
-extern char S_NO_CONTROLLER[];
-
 static inline int TestButton(uint button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
 void main(void) {
-    extern char S_FMTx[];
-    extern char S_rescue_session_saved_as_psx_cube_pad_rescue_pad[];
-    extern char S_to_replay[];
-    extern char S_replay[];
-    extern char S_1_0_4_2[];
-
     int i;
     int j;
 
