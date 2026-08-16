@@ -16,73 +16,328 @@ typedef struct ItemState {
     SVECTOR pos;
 } ItemState;
 
+int IsFallingOrJumping(Player* player);
+int IsPlayerInAir(Player* player);
+void HandleSpecialCubeTypes(Player* player);
+
+extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern void CalcWhatPlayerIsStandingOn(Player* player);
-extern int IsPlayerInAir(Player* player);
-extern void SetPlayerRotation(int cubeSide, int rotation, Player* player);
-extern void SetRenderScreenFade(int speed, int enableHalfFps);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
-extern void Vibrate98(int seqId);
-extern void UpdateSubpixelPositions(Player* player);
-extern void HandleSpecialCubeTypes(Player* player);
+extern void CreateItemDispList(MATRIX* m, int z, int specialBlockType, int dirIndexInBlock);
+extern void DisableItemShadow(int entityIndex, int side, int const0);
 extern void EnableLethargy(int enable);
 extern void SetCubeVisited(int x, int y, int z, int visitType);
+extern void SetPlayerRotation(int cubeSide, int rotation, Player* player);
+extern void SetRenderScreenFade(int speed, int enableHalfFps);
 extern void SetSunglassMode(int on);
 extern void SndMuteVoiceByTag(int tag);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void UpdateSubpixelPositions(Player* player);
+extern void Vibrate100(int constant, int amplitude, int arrowIncrement, int max);
+extern void Vibrate101(int param_1);
+extern void Vibrate98(int seqId);
 extern void Vibrate99(int magnitude1, int magnitude2, int count);
-extern int IsFallingOrJumping(Player* player);
-extern void CreateItemDispList(MATRIX* m, int z, int specialBlockType, int dirIndexInBlock);
 
-extern int levelEndReason;
+extern int cameraIndex;
 extern int debugDisableTimer;
 extern int drawTimerPausedWidget;
+extern int hourglassIsRotating;
+extern int KEY_SPRITE_POSITIONS[];
+extern int KEY_SPRITE_POSITIONS2[];
+extern int levelEndReason;
+extern int levelPlayTime[2];
+extern int levelScore;
 extern int levelTimeLeft;
-extern SVECTOR SVECTOR_000a2df4;
-extern int numCameras;
-extern InvisBlockVisibility invisBlockVisibility;
+extern int numCubesRemainingInLevel[5];
+extern int numKeysInLevel;
+extern int numKeysRemaining;
+extern int numTimeTrialPlayers;
+extern int twoPlayerWhichPlayer;
+extern ItemState itemState[256];
+extern MATRIX MATRIX_000a46f4;
+extern MATRIX perspMatrixes[2];
 extern Player thePlayer;
 extern short* entityData;
-extern SVECTOR transporterParticlesPos;
-extern int cameraIndex;
-extern int numKeysRemaining;
-extern int levelScore;
-extern int numCubesRemainingInLevel[5];
-extern MATRIX MATRIX_000a46f4;
-extern ItemState itemState[256];
 extern short numEntities;
-extern MATRIX perspMatrixes[2];
+extern SVECTOR fruit1ScreenSpaceParticlesPos;
+extern SVECTOR fruit2ScreenSpaceParticlesPos;
+extern SVECTOR fruit3ScreenSpaceParticlesPos;
+extern SVECTOR fruit4ScreenSpaceParticlesPos;
+extern SVECTOR fruit5ScreenSpaceParticlesPos;
+extern SVECTOR SVECTOR_000a2df4;
+extern SVECTOR SVECTOR_000a2dfc;
+extern SVECTOR transporterParticlesPos;
+extern uint fruitsCollectedBitmask;
 
-int gameMode;
-int tmpOff;
-int tmpOff2;
 int DAT_000a4748;
 int DAT_000a474c;
 int DAT_000a4750;
 int DAT_000a4754;
+int gameMode;
+int levelExitEntityOffset;
+int levelHiddenExitEntityOffset;
+int shouldMarkCubesVisited;
+int tmpOff;
+int tmpOff2;
 int transportDestCubeSide;
 int transportDestRotation;
 int transporterDestEntityIdx;
 int transporterTimer;
 short fireSoundTimer;
-int shouldMarkCubesVisited;
 
-static int levelWon[2];
-static SVECTOR playerCombinedPos;
+static int calcEntityPositionsDistSq;
 static int D_000A46A8;
 static int D_000A4734;
+static int distSquared2;
+static int dontDisableItemShadow;
+static int entityBlockOffset;
+static int handleItemTouchI;
+static int handleItemTouchIter;
+static int handleItemTouchJ;
+static int itemOffset;
+static int levelWon[2];
+static int playerRadius;
+static int touchItemIdx;
+static MATRIX MATRIX_000a46d4;
+static MATRIX MATRIX_000a4714;
+static short DAT_000a4788;
+static short touchCubeX;
+static short touchCubeY;
+static short touchCubeZ;
+static short touchSide;
+static SVECTOR calcEntityPositionsVec;
+static SVECTOR cubeBelowPlayerPos;
+static SVECTOR keyScreenSpaceParticlesPos;
 static SVECTOR SVECTOR_000a46ac;
 static SVECTOR SVECTOR_000a46b4;
 static SVECTOR SVECTOR_000a46bc;
-static SVECTOR calcEntityPositionsVec;
-static int calcEntityPositionsDistSq;
-static MATRIX MATRIX_000a46d4;
-static MATRIX MATRIX_000a4714;
-
 static SVECTOR SVECTOR_000a4738;
 static SVECTOR SVECTOR_000a4740;
 static SVECTOR SVECTOR_000a4778;
-static short DAT_000a4788;
-static SVECTOR cubeBelowPlayerPos;
+static SVECTOR tempPlayerPos;
+
+void HandleItemTouching(Player *player) {
+    int* ptr;
+
+    tempPlayerPos = player->finePos;
+    playerRadius = 10000;
+
+    for (handleItemTouchIter = 0; handleItemTouchIter < 3; handleItemTouchIter++) {
+        for (handleItemTouchI = 0; handleItemTouchI < 3; handleItemTouchI++) {
+            for (handleItemTouchJ = 0; handleItemTouchJ < 3; handleItemTouchJ++) {
+                entityBlockOffset = (player->surroundingBlocks[handleItemTouchIter][handleItemTouchI][handleItemTouchJ] - 5) * 128;
+                if (entityBlockOffset < 0) {
+                    continue;
+                }
+
+                if (entityData[entityBlockOffset] >= 5) {
+                    continue;
+                }
+
+                for (itemOffset = 0; itemOffset < 96; itemOffset += 16) {
+                    touchItemIdx = entityData[entityBlockOffset + itemOffset + 5];
+
+                    if (entityData[entityBlockOffset + itemOffset + 4] == 0 || itemState[touchItemIdx].type == 0) {
+                        continue;
+                    }
+
+                    distSquared2 = (tempPlayerPos.vx - itemState[touchItemIdx].pos.vx) * (tempPlayerPos.vx - itemState[touchItemIdx].pos.vx) +
+                                   (tempPlayerPos.vy - itemState[touchItemIdx].pos.vy) * (tempPlayerPos.vy - itemState[touchItemIdx].pos.vy) +
+                                   (tempPlayerPos.vz - itemState[touchItemIdx].pos.vz) * (tempPlayerPos.vz - itemState[touchItemIdx].pos.vz);
+
+                    if (distSquared2 >= itemState[touchItemIdx].collisionDistance + playerRadius) {
+                        continue;
+                    }
+                    touchCubeX = entityData[entityBlockOffset + 125];
+                    touchCubeY = entityData[entityBlockOffset + 126];
+                    touchCubeZ = entityData[entityBlockOffset + 127];
+                    touchSide = itemOffset / 16;
+                    dontDisableItemShadow = 0;
+
+                    switch (entityData[entityBlockOffset + itemOffset + 1]) {
+                        case OBJ_SPIKE_TRAP:
+                            if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
+                                if (thePlayer.invulnerabilityTimer == -1 && thePlayer.movementInhibitTimer == 0) {
+                                    thePlayer.delayedLevelEndReason = -5;
+                                    thePlayer.dying = 1;
+                                    thePlayer.movementVelocity = 0;
+                                    thePlayer.rotX = 0;
+                                    thePlayer.movementInhibitTimer = 10;
+                                    thePlayer.ballBlinking = 1;
+                                }
+                                dontDisableItemShadow = 1;
+                            } else {
+                                AddParticles(7, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                                levelScore += 1550;
+                            }
+                            break;
+
+                        case OBJ_LETHARGY_PILL:
+                            AddParticles(9, &itemState[touchItemIdx].pos,  AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            thePlayer.lethargyTimer = 300;
+                            EnableLethargy(1);
+                            Vibrate100(120, 120, 200, 1);
+                            Vibrate101(200);
+                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            break;
+
+                        case OBJ_INVINCIBILITY_PILL:
+                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            thePlayer.invulnerabilityTimer = 700;
+                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            break;
+
+                        case OBJ_BOUNCY_PILL:
+                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            thePlayer.bounceTimer = 700;
+                            SndPlaySfx(SFX_BOUNCE_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            break;
+
+                        case OBJ_SUNGLASSES:
+                            SndPlaySfx(SFX_SUNGLASSES_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            AddParticles(8, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            thePlayer.sunglassTimer = 700;
+                            levelScore += 500;
+                            SetSunglassMode(1);
+                            break;
+
+                        case OBJ_KEY:
+                            ptr = (int*)((char*)KEY_SPRITE_POSITIONS - 0x20);
+                            if (gameMode == 2 && numTimeTrialPlayers == 2) {
+                                ptr = (int*)((char*)KEY_SPRITE_POSITIONS2 - 0x20);
+                            }
+
+                            {
+                                int *p = (int*)(numKeysInLevel * 32 + (int)ptr);
+                                keyScreenSpaceParticlesPos.vx = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8) + 6;
+                                keyScreenSpaceParticlesPos.vy = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8 + 4) + 11;
+                            }
+                            asm volatile("");
+                            keyScreenSpaceParticlesPos.vz = -1;
+
+                            AddParticles(0, &keyScreenSpaceParticlesPos, 0);
+                            AddParticles(6, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            numKeysRemaining--;
+                            levelScore += 1000;
+                            if (numKeysRemaining == 0) {
+                                entityData[levelExitEntityOffset + 3] = 0;
+                                entityData[levelExitEntityOffset + 4] = 1;
+                                entityData[levelHiddenExitEntityOffset + 4] = 1;
+                                SndPlaySfx(SFX_LAST_KEY_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            } else {
+                                SndPlaySfx(SFX_KEY_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            }
+                            break;
+
+                        case OBJ_GEM:
+                            AddParticles(7, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            levelScore += 2975;
+                            SndPlaySfx(SFX_GEM_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            break;
+
+                        case OBJ_COIN:
+                            AddParticles(2, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_COIN_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
+                                levelScore += 750;
+                            }
+                            if (entityData[entityBlockOffset + itemOffset + 3] == 1) {
+                                levelScore += 500;
+                            }
+                            if (entityData[entityBlockOffset + itemOffset + 3] == 2) {
+                                levelScore += 250;
+                            }
+                            break;
+
+                        case OBJ_APPLE:
+                            if (gameMode != 2) {
+                                AddParticles(0, &fruit1ScreenSpaceParticlesPos, 0);
+                            }
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_1, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 1;
+                            levelPlayTime[twoPlayerWhichPlayer] -= 200;
+                            break;
+
+                        case OBJ_WATERMELON:
+                            if (gameMode != 2) {
+                                AddParticles(0, &fruit2ScreenSpaceParticlesPos, 0);
+                            }
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_2, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 2;
+                            levelPlayTime[twoPlayerWhichPlayer] -= 200;
+                            break;
+
+                        case OBJ_PUMPKIN:
+                            if (gameMode != 2) {
+                                AddParticles(0, &fruit3ScreenSpaceParticlesPos, 0);
+                            }
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_3, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 4;
+                            levelPlayTime[twoPlayerWhichPlayer] -= 200;
+                            break;
+
+                        case OBJ_BANANA:
+                            if (gameMode != 2) {
+                                AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
+                            }
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_4, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 8;
+                            levelPlayTime[twoPlayerWhichPlayer] -= 200;
+                            break;
+
+                        case OBJ_STRAWBERRY:
+                            if (gameMode != 2) {
+                                AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
+                            }
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 0x10;
+                            levelPlayTime[twoPlayerWhichPlayer] -= 200;
+                            break;
+
+                        case OBJ_FRUIT_BOWL:
+                            AddParticles(0, &fruit1ScreenSpaceParticlesPos, 0);
+                            AddParticles(0, &fruit2ScreenSpaceParticlesPos, 0);
+                            AddParticles(0, &fruit3ScreenSpaceParticlesPos, 0);
+                            AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
+                            AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
+                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
+                            levelScore += 2500;
+                            fruitsCollectedBitmask |= 0x1f;
+                            break;
+
+                        case OBJ_HOURGLASS:
+                            SndPlaySfx(SFX_HOURGLASS, 0, &SVECTOR_000a2df4, 7000);
+                            levelTimeLeft = 4999 - levelTimeLeft;
+                            hourglassIsRotating = 1;
+                            levelScore += (levelTimeLeft / 50) * 10;
+                            AddParticles(1, &SVECTOR_000a2dfc, 0);
+                            AddParticles(10, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            break;
+                    }
+
+                    if (!dontDisableItemShadow) {
+                        entityData[entityBlockOffset + itemOffset + 4] = 0;
+                        entityData[entityBlockOffset + itemOffset + 1] = 0;
+                        DisableItemShadow(entityBlockOffset / 128, itemOffset / 16, 0);
+                    } else {
+                        dontDisableItemShadow = 0;
+                    }
+                }
+            }
+        }
+    }
+}
 
 void CreateAllItemDispLists(void) {
     for (tmpOff = 0; tmpOff < numEntities * 128; tmpOff += 128) {

@@ -7,20 +7,16 @@ typedef struct ItemState {
     SVECTOR pos;
 } ItemState;
 
-extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern int GetButtonsFromReplay(void);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int IsCollidingWithEnemy(SVECTOR pos);
 extern int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance);
-extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern void CalcLevelBounds(Player* player);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
 extern void CalcWhatPlayerIsStandingOn(Player* player);
 extern void CheckPlayerJumpingStuff(Player* player);
 extern void CreateAllItemDispLists(void);
 extern void CreateItemsFromLevelData(void);
-extern void DisableItemShadow(int entityIndex, int side, int const0);
-extern void EnableLethargy(int enable);
 extern void HandleItemTouching(Player* player);
 extern void HandlePauseModeRotationEffect(Player* player);
 extern void HandlePlayerMovementStuff(Player* player);
@@ -34,7 +30,6 @@ extern void RecordButtonsToDevkit(int buttons);
 extern void RenderEnemies(void);
 extern void ResetPlayerVars(Player* player);
 extern void SetPlayerRotation(int cubeSide, int rotation, Player* player);
-extern void SetSunglassMode(int on);
 extern void SetVec184ToVec54(Player* player);
 extern void SndMuteAllTaggedVoices(void);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
@@ -42,28 +37,17 @@ extern void StartMovementIfNeeded(Player* player);
 extern void UpdateEnemies(SVECTOR pos);
 extern void UpdatePlayerSurroundingBlocks(Player* player);
 extern void UpdateSubpixelPositions(Player* player);
-extern void Vibrate100(int constant, int amplitude, int arrowIncrement, int max);
-extern void Vibrate101(int param_1);
-extern void Vibrate99(int magnitude1, int magnitude2, int count);
 extern void WriteToDevkit(int param_1);
 
 extern int buttonSaveReplayMode;
 extern int cameraIndex;
 extern int curWorld;
-extern int hourglassIsRotating;
 extern int inGetReadyScreen;
 extern int isPaused;
-extern int KEY_SPRITE_POSITIONS[];
-extern int KEY_SPRITE_POSITIONS2[];
 extern int levelEndReason;
-extern int levelPlayTime[2];
-extern int levelScore;
 extern int levelTimeLeft;
-extern int MENU_CURSOR_X_POS[];
 extern int numCameras;
-extern int numKeysInLevel;
 extern int numKeysRemaining;
-extern int numTimeTrialPlayers;
 extern int specialLevelType;
 extern int twoPlayerWhichPlayer;
 extern InvisBlockVisibility invisBlockVisibility;
@@ -122,6 +106,9 @@ short pauseForStartPress;
 short timerBeforeJumpOrRoll;
 short turnDelayFrames;
 short unusedNumCopycatRounds;
+uint controllerButtons;
+uint prevControllerButtons;
+
 static int levelWon[2];
 static short playerFinePosMod512[4];
 static SVECTOR initPlayerFacingVec;
@@ -132,24 +119,6 @@ static SVECTOR SVECTOR_000a45d8;
 static SVECTOR SVECTOR_000a4618;
 static SVECTOR SVECTOR_000a4638;
 static SVECTOR SVECTOR_000a4640;
-uint controllerButtons;
-uint prevControllerButtons;
-
-static int handleItemTouchIter;
-static int handleItemTouchI;
-static int handleItemTouchJ;
-static int itemOffset;
-static int entityBlockOffset;
-static int distSquared2;
-static int touchItemIdx;
-static int playerRadius;
-static int dontDisableItemShadow;
-static short touchCubeX;
-static short touchCubeY;
-static short touchCubeZ;
-static short touchSide;
-static SVECTOR tempPlayerPos;
-static SVECTOR keyScreenSpaceParticlesPos;
 
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
@@ -1236,5 +1205,3 @@ void SetPlayerMatrix6(Player* player) {
     player->matrix_d4.m[1][1] = -player->facingDir.vy << 12;
     player->matrix_d4.m[2][1] = -player->facingDir.vz << 12;
 }
-
-INCLUDE_ASM("asm/nonmatchings/level_update2", HandleItemTouching);
