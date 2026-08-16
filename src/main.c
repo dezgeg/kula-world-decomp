@@ -245,6 +245,10 @@ int TIME_TRIAL_PAR_TIMES[] = {
 extern char S_DEMO_MODE[];
 extern char S_NO_CONTROLLER[];
 
+static inline int TestButton(uint button) {
+    return controllerButtons & (button & ~prevControllerButtons);
+}
+
 void main(void) {
     extern char S_FMTx[];
     extern char S_rescue_session_saved_as_psx_cube_pad_rescue_pad[];
@@ -407,7 +411,474 @@ void SioRecvVsyncCallback(void) {
     vsyncCounter = vsyncCounter + 1;
 }
 
+#ifdef NON_MATCHING
+int MainGameLoop(void) {
+    // s0: auto generated induction var
+    int i; // s1
+    int j;
+    int k;
+    int controllerStatuses[2];
+    int pad[16];
+    RECT rect;
+    int tex;
+    int end; // s7
+    int slot;
+    // s4: auto generated induction var
+    // s5: auto generated induction var
+    // s6: auto generated, holds 1
+    // s8: auto generated induction var
+
+    inGetReadyScreen = 0;
+    end = 0;
+    InitAllDigitSprites();
+    if (curWorld2 * 15 + curLevel > highestLevelReached && curLevel < 15) {
+        highestLevelReached = curWorld2 * 15 + curLevel;
+    }
+    if (gameMode == 1) {
+        twoPlayerWhichPlayer = curController;
+    }
+    if (gameMode == 2) {
+        if (numTimeTrialPlayers == 1) {
+            levelPlayTime[twoPlayerWhichPlayer] =(-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * 50;
+        } else {
+            levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] * 50;
+        }
+    } else {
+        levelPlayTime[twoPlayerWhichPlayer] = 0;
+    }
+    if (gameMode == 2 && numTimeTrialPlayers == 2) {
+        inGetReadyScreen = 1;
+    }
+    savePointMenuConfirmed = 0;
+    levelScoreSummaryConfirmed = 0;
+    demoTimer = 400;
+    menuIdleTimer = 0;
+    for (i = 0; i < 2; i++) {
+        controllerStatuses[i] = GetControllerStatus(i);
+    }
+    whichDrawDispEnv = 0;
+    for (i = 0; i < 1; i++) {
+        ClearOTagR(otag[whichDrawDispEnv][i],1026);
+    }
+    ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+    dispModeChangeState = 0;
+    buttonSaveReplayMode = 0;
+    if (isDemoMode == 1) {
+        buttonSaveReplayMode = 2;
+    }
+    switch (buttonSaveReplayMode) {
+        case 1:
+            InitReplaySaving();
+            break;
+        case 2:
+            InitReplayPlayback((&REPLAY_INPUT_PTRS)[(demoIndex + 2) % 3]);
+            break;
+    }
+    VSyncCallback(MainGameVSyncCallback);
+    gotVsync = 0;
+    while (!end) {
+        DrawSync(0);
+        rect.w = 1;
+        rect.h = 1;
+        for (i = 0; i < 16; i++) {
+            rect.x = framebufferFetches[i].x + (whichDrawDispEnv == 0 ? displayWidth : 0) ;
+            rect.y = framebufferFetches[i].y;
+            StoreImage(&rect,&tex);
+            DrawSync(0);
+            framebufferFetches[i].texel = tex & 0x7fff;
+        }
+        if (lethargyMode != 0 || halfFps == 1) {
+            VSync(2);
+        } else {
+            WaitForVBlank();
+        }
+        whichDrawDispEnv = !whichDrawDispEnv;
+        renderedPrimsBuf = 0x179000 + whichDrawDispEnv * 0xc000;
+        UnusedProcessDisplayModeChange();
+        PutDrawAndDispEnvs();
+        SetGeomScreen(projectionDistance);
+
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(otag[whichDrawDispEnv][i],1026);
+        }
+        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        for (i = 0; i < numCameras; i++) {
+            for (j = unkOtagLengths[whichDrawDispEnv][i]; j > 0;) {
+                j--;
+                ClearOTagR(&unkOtag[whichDrawDispEnv][i][j][0], 64);
+                DrawSync(0);
+            }
+            unkOtagLengths[whichDrawDispEnv][i] = 0;
+        }
+        ResetTextRenderState();
+        ResetTextVars();
+        unkUnused = 0;
+        unusedRenderPhase = 0;
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[whichDrawDispEnv ? 0 : 1][i][tgi->skyboxFlag]);
+        }
+        unusedRenderPhase = 1;
+        DrawOTag(&primLists[whichDrawDispEnv ? 0 : 1].gui3);
+        unusedRenderPhase = 2;
+        SndProcessSpuVoices();
+        prevControllerButtons = controllerButtons;
+        if (gameMode == 2) {
+            curController = twoPlayerWhichPlayer;
+        }
+        if (GetControllerStatus(curController) != 0) {
+            slot = curController;
+        } else {
+            slot = (curController + 1) % 2;
+        }
+        controllerButtons = GetControllerButtons(slot);
+        HandleCheats();
+        UpdateVibration();
+        ProcessScreenShake();
+        if (controllerStatuses[0] != GetControllerStatus(0) || controllerStatuses[1] != GetControllerStatus(1)) {
+            if (levelEndReason == 0) {
+                if (isPaused == 0 && isDemoMode == 0 && inGetReadyScreen == 0) {
+                    isPaused = 1;
+                }
+            }
+            for (i = 0; i < 2; i++) {
+                controllerStatuses[i] = GetControllerStatus(i);
+            }
+        }
+        if (GetControllerStatus(0) == 0 && GetControllerStatus(1) == 0) {
+            if (levelEndReason == 0 && isPaused == 0 && isDemoMode == 0 && inGetReadyScreen == 0) {
+                isPaused = 1;
+                SndMuteAllTaggedVoices();
+            }
+            if (isPaused == 1 && gameState != 0) {
+                SetTextParams(displayWidth / 2 + 10,180,1,0x80,0x80,0x80);
+            } else {
+                SetTextParams(displayWidth / 2 + 10,127,1,0x80,0x80,0x80);
+            }
+            DrawTextCrappyFont(S_NO_CONTROLLER);
+        }
+        if (isDemoMode == 1) {
+            SetTextParams(displayWidth / 2,116,1,0x80,0x80,0x80);
+            DrawTextCrappyFont(S_DEMO_MODE);
+        }
+        if (gameMode != 2 || numTimeTrialPlayers != 2) {
+            inGetReadyScreen = 0;
+        }
+        if (controllerButtons & PAD_SELECT && isPaused == 1 && gameState != 0) {
+            drawHourglassWidget = 0;
+            drawTimerPausedWidget = 0;
+            drawKeyWidget = 0;
+            drawScoreWidget = 0;
+            drawFruitWidgets = 0;
+            drawBonusWidget = 0;
+            drawTimeAttackWidgets = 0;
+            drawCopycatWidgets = 0;
+            drawGeometryAndObjects = 0;
+        }
+        if (isPaused == 0 && levelEndReason == 0 && inGetReadyScreen == 0) {
+            ProcessPlayer();
+        } else {
+            SetPausedOrWaitingForRestart();
+        }
+        RenderBackground();
+        RenderEverythingElseAndProcessSomeStuff();
+        AddDrChangePrims();
+        ProcessAndRenderParticles();
+        DrawLensFlares(0);
+        if (prevControllerButtons == controllerButtons) {
+            menuIdleTimer++;
+        } else {
+            menuIdleTimer = 0;
+        }
+        if (gameState != 0) {
+            DrawHud();
+        }
+        if (isDemoMode == 1 && gameState == 0 && demoTimer >= 0) {
+            demoTimer--;
+            if (demoTimer < 1) {
+                controllerButtons |= PAD_CROSS;
+            }
+        }
+        MusicCheckForLoop();
+        if (isPaused == 1 && drawGeometryAndObjects == 1) {
+            PauseOrMainMenu();
+        }
+        if (sioCheatActivated == 1 && _sio_control(0,0,0) & 2) {
+            gotSioData = 0;
+            VSyncCallback(SioRecvVsyncCallback);
+            if ((_sio_control(0,4,0) & 0xff) == 'K') {
+                vsyncCounter = 0;
+                do {
+                    if (_sio_control(0,0,0) & 2)
+                        break;
+                } while (vsyncCounter < 51);
+                if (vsyncCounter < 51) {
+                    byteCountToReceiveFromSio = _sio_control(0,4,0) & 0xff;
+                    vsyncCounter = 0;
+                    while ((_sio_control(0,0,0) & 2) == 0)
+                        ;
+                    if (vsyncCounter > 50)
+                        break;
+                    byteCountToReceiveFromSio +=  (_sio_control(0,4,0) & 0xff) * 0x100;
+                    ReceiveBufFromSio();
+                    if (gameState != 0) {
+                        isPaused = 0;
+                        levelEndReason = 1;
+                    }
+                }
+            }
+            VSyncCallback(0);
+            VSyncCallback(MainGameVSyncCallback);
+            gotVsync = 0;
+        }
+        if (inGetReadyScreen == 1 && gameMode == 2 && gameState != 0) {
+            inGetReadyScreen = GetReadyScreen();
+        }
+        if (levelTimeLeft < 1000 && levelTimeLeft % 50 > 25 && prevLevelTimeLeft % 50 < 25 &&
+                levelTimeLeft > 0 && isPaused == 0 && levelEndReason == 0) {
+            if (levelTimeLeft % 100 < 50) {
+                SndPlaySfx(SFX_HOURGLASS_TICK, 0, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 250));
+            } else {
+                SndPlaySfx(SFX_HOURGLASS_TICK, 37000, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 250));
+            }
+        }
+        prevLevelTimeLeft = levelTimeLeft;
+        if (levelEndReason != 0) {
+            if (prevLevelEndReason != 0 && levelScoreSummaryConfirmed == 1) {
+                if (!((((levelEndReason < 1 && specialLevelType < 1) ||
+                         (((isDemoMode || gotSioData) ||
+                            ((gameMode != 0 && ((gameMode != 2 || (numTimeTrialPlayers != 1)))))))) ||
+                        (curLevel != (curLevel / 5) * 5)) ||
+                     ((((gameMode == 2 && ((curLevel != 0 || (timeTrialAtEndOfWorld)))) ||
+                         (14 < curLevel)) ||
+                        ((((levelEndReason == 3 || (cheated)) || (debugBonusLevels)) ||
+                         ((isFinal && (curWorld2 != 4))))))))) {
+                    SavePointMenu();
+                } else {
+                    savePointMenuConfirmed = 1;
+                    controllerButtons = PAD_CROSS;
+                    prevControllerButtons = 0;
+                }
+            }
+            drawHourglassWidget = 0;
+            drawTimerPausedWidget = 0;
+            drawKeyWidget = 0;
+            drawScoreWidget = 0;
+            drawFruitWidgets = 0;
+            drawBonusWidget = 0;
+            drawTimeAttackWidgets = 0;
+            drawCopycatWidgets = 0;
+            drawGeometryAndObjects = 1;
+        } else {
+            drawHourglassWidget = 0;
+            drawTimerPausedWidget = 0;
+            drawKeyWidget = 0;
+            drawScoreWidget = 0;
+            drawFruitWidgets = 0;
+            drawBonusWidget = 0;
+            drawTimeAttackWidgets = 0;
+            drawCopycatWidgets = 0;
+            drawGeometryAndObjects = 1;
+            if (gameMode == 0) {
+                drawHourglassWidget = 1;
+                drawKeyWidget = 1;
+                drawScoreWidget = 1;
+                drawFruitWidgets = 1;
+                if (isFinal == 1) {
+                    drawFruitWidgets = 0;
+                }
+            }
+            if (gameMode == 1) {
+                drawHourglassWidget = 0;
+                drawKeyWidget = 0;
+                drawScoreWidget = 0;
+                drawFruitWidgets = 0;
+            }
+            if (gameMode == 2) {
+                drawHourglassWidget = 1;
+                drawTimeAttackWidgets = 1;
+                drawKeyWidget = 1;
+            }
+            if (specialLevelType == 1) {
+                drawKeyWidget = 0;
+                drawFruitWidgets = 1;
+                drawBonusWidget = 1;
+            }
+            if (specialLevelType == 2) {
+                drawFruitWidgets = 0;
+            }
+        }
+        if (gameMode == 1 && gameState != 0) {
+            if (isPaused == 0 && levelEndReason == 0) {
+                if (copycatNewOrCopyMoves == 1) {
+                    RenderPlayerOrCopycatLabels(1,0x80);
+                } else {
+                    RenderPlayerOrCopycatLabels(0,0x80);
+                }
+            }
+            if (twoPlayerWhichPlayer == 0) {
+                RenderPlayerOrCopycatLabels(2,0x80);
+                RenderPlayerOrCopycatLabels(3,0x50);
+            }
+            else {
+                RenderPlayerOrCopycatLabels(2,0x50);
+                RenderPlayerOrCopycatLabels(3,0x80);
+            }
+            drawCopycatWidgets = 1;
+        }
+        if (levelEndReason == 0) {
+            if (gameState != 0 && isPaused == 0 && inGetReadyScreen == 0) {
+                levelPlayTime[twoPlayerWhichPlayer]++;
+                if (lethargyMode != 0) {
+                    levelPlayTime[twoPlayerWhichPlayer]++;
+                }
+            }
+            if (levelEndReason == 0 && gameMode == 2 && gameState != 0 && numTimeTrialPlayers == 2) {
+                if (twoPlayerWhichPlayer == 0) {
+                    RenderPlayerOrCopycatLabels(2, 0x80);
+                    RenderPlayerOrCopycatLabels(3, 0x50);
+                } else {
+                    RenderPlayerOrCopycatLabels(2, 0x50);
+                    RenderPlayerOrCopycatLabels(3, 0x80);
+                }
+            }
+        }
+        FntFlush(-1);
+        unusedFrameCounter++;
+        if (isDemoMode == 0 && menuIdleTimer >= 2000 && controllerButtons == 0 && gameState == 0) {
+            wasPausedPreviousFrame = 0;
+            gameMode = 0;
+            screenOffsetY = displayHeight;
+            totalPlayTime[0] = 0;
+            numCameras = 1;
+            isPaused = 0;
+            cursorPosInMenu[curMenu] = 0;
+            curMenu = 0;
+            gameState = 1;
+            InitAllDigitSprites();
+            isDemoMode = 1;
+            levelScore = 0;
+            totalScore = 0;
+            for (i = 0; i < 150; i++) {
+                levelScores[i] = -1;
+            }
+            return -1;
+        }
+        if (isDemoMode == 1 && (GetControllerButtons(0) != 0 || GetControllerButtons(1) != 0)) {
+            QuitToMainMenu();
+        }
+        if (levelEndReason != 0) {
+            if ((TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) ||
+                    TestButton(PAD_CIRCLE)|| TestButton(PAD_START)) && savePointMenuConfirmed == 1) {
+                end = 1;
+            }
+        }
+        if (gameState > 1) {
+            end = 1;
+        }
+        if (levelEndReason == 0) {
+            if (loadNewWorld) {
+                end = 1;
+            }            
+        } else {
+            if (prevLevelEndReason == 0) {
+                if (levelEndReason < 0) {
+                    if (specialLevelType > 0) {
+                        levelScore = 0;
+                    }
+                    if (gameMode == 1) {
+                        copycatPlayerScores[(curController + 1) % 2]++;
+                    }
+                }
+                LevelCompletedOrDied();
+                DecideNextLevel();
+                SndMuteAllTaggedVoices();
+                ResetLethargyEffect();
+                ResetVibration();
+                InitParticles();
+                UpdateScoreAtEndOfLevel();
+            }
+            if (levelScoreSummaryConfirmed == 0 && levelEndReason >= -10) {
+                DrawBigGuiSprite(0);
+                DrawLevelScoreSummary();
+            }
+            goto skip;
+        }
+        if (end) {
+            LevelCompletedOrDied();
+            DecideNextLevel();
+        }
+        skip:
+        prevLevelEndReason = levelEndReason;
+    }
+    VSyncCallback(0);
+    if (levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
+        for (i = 0; i < numTimeTrialPlayers; i++) {
+            levelHasBeenCompletedByPlayer[i] = 0;
+        }
+    }
+    if (gameMode == 0) {
+        if (totalScore < 0 || curWorld >= 10) {
+            if (isDemoMode != 1) {
+                if (isFinal == 0) {
+                    if (curWorld > 9) {
+                        ShowEndingFmv(0);
+                        ResetCallback();
+                    }
+                    HighScoreUi(1);
+                }
+                if (curWorld > 9) {
+                    finalUnlocked = 1;
+                    curWorld = 0;
+                    totalScore = -1;
+                }
+                for (i = 0; i < 10; i++) {
+                    for (k = 0; k < 15; k++) {
+                        levelScores[i * 15 + k] = -1;
+                    }
+                }
+            }
+        }
+    }
+    if (curWorld > 9 && loadNewWorld == 1) {
+        i = totalPlayTime[0];
+        if (gameMode == 2 && numTimeTrialPlayers == 1 && i + timeTrialDifficulty / 50 < 1) {
+            ShowEndingFmv(0);
+            ResetCallback();
+        }
+        finalUnlocked = 1;
+        gameMode = 0;
+        curWorld = 0;
+        totalScore = -1;
+    }
+    if (totalScore < 0) {
+        if (isDemoMode == 1) {
+            isDemoMode = 0;
+        }
+        if (gotSioData == 0) {
+            curLevel = 0;
+            if (curWorld2 != 0 || gameMode == 1 || isFinal == 1) {
+                curWorld = 0;
+                loadNewWorld = 1;
+            }
+            isFinal = 0;
+        }
+        gameState = 4;
+        totalScore = 0;
+        fruitsCollectedBitmask = 0;
+        savedFruitsCollectedBitmask = 0;
+        isPaused = 1;
+    }
+    if (gameState == 4) {
+        gameState = 0;
+        gameMode = 0;
+    }
+    levelScore = 0;
+    levelPlayTime[twoPlayerWhichPlayer] = 0;
+    return levelEndReason;
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/main", MainGameLoop);
+#endif
 
 void LevelCompletedOrDied(void) {
     int i;

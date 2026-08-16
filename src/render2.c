@@ -245,7 +245,156 @@ LAB_shadow:
     }
 }
 
+#ifdef NON_MATCHING
+void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, int colorR, int colorG, int colorB, int const0_arg8,
+                          uint blockX, uint blockY, uint blockZ, int dir,
+                          uint otherBlockX, uint otherBlockY, uint otherBlockZ, int otherDir,
+                          MATRIX *gteMatrix, int shadowColor, int shadowFlag, MATRIX *param_20, int *const0_2048,
+                          uint const4000, int const0_arg23, int const0_arg24, int const178, SVECTOR *param_26) {
+    int nextVertexId;
+    POLY_FT4 *shadowPrim;
+    long scratch[4];
+    int i,j;
+    int shadowDepth;
+    int result2;
+    int off;
+    Quad* q;
+
+    if (z < 256)
+        return;
+    z >>= 6;
+
+    if (blockX < 34 && blockY < 34 && blockZ < 34 &&
+            CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
+            (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
+        shadowDepth = q->otagIndex;
+    } else {
+        shadowDepth = -1;
+    }
+
+    if (otherBlockX < 34 && otherBlockY < 34 && otherBlockZ < 34) {
+        int cubeIndex = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ);
+        if (cubeIndex != (short)-1) {
+            Quad* q = (Quad*)cubeStates[cubeIndex * 16 + otherDir];
+            if (q != (Quad*)-1) {
+                result2 = q->otagIndex;
+                shadowDepth = (ushort)shadowDepth;
+                goto LAB_shadow;
+            }
+        }
+    }
+
+    result2 = -1;
+    shadowDepth = (ushort)shadowDepth;
+
+LAB_shadow:
+    result2 &= 0xffff;
+    if (result2 < shadowDepth) {
+        shadowDepth = result2;
+    }
+
+    if (shadowDepth == 0xffff) {
+        shadowDepth = z;
+    } else {
+        shadowDepth -= 2;
+    }
+
+    if (shadowDepth < 0) return;
+
+    playerEnemyDispList[playerEnemyDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
+    playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg8;
+
+    if (specialLevelType == 1) {
+        playerEnemyDispList[playerEnemyDispListIdx++] = (void*)(int)tgiPart3[shadowDepth];
+    } else {
+        playerEnemyDispList[playerEnemyDispListIdx++] = (void*)(int)tgiPart1[shadowDepth];
+    }
+
+    playerEnemyDispList[playerEnemyDispListIdx++] = colorR;
+    playerEnemyDispList[playerEnemyDispListIdx++] = colorG;
+    playerEnemyDispList[playerEnemyDispListIdx++] = colorB;
+
+    modelId *= 4;
+    if (z > tgi->lodDistance[5]) {
+        modelId += 2;
+    } else if (z > tgi->lodDistance[6]) {
+        modelId += 1;
+    }
+
+    playerEnemyDispList[playerEnemyDispListIdx++] = &ggiPart0A[ggiPart0A[modelId] / 4];
+    playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg4;
+
+    {
+        int* mPtr = (int*)matrix;
+        for (z = 0; z < 8; z++) {
+            playerEnemyDispList[playerEnemyDispListIdx++] = (void*)*mPtr++;
+        }
+    }
+    {
+        int* p20 = (int*)param_20;
+        for (z = 0; z < 5; z++) {
+            playerEnemyDispList[playerEnemyDispListIdx++] = (void*)*p20++;
+        }
+    }
+
+    playerEnemyDispList[playerEnemyDispListIdx++] = const0_2048;
+    playerEnemyDispList[playerEnemyDispListIdx++] = (const4000 << 16) | const0_arg23;
+    playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg24;
+    playerEnemyDispList[playerEnemyDispListIdx++] = const178;
+    playerEnemyDispListIdx = playerEnemyDispListIdx + 7;
+
+    for (nextVertexId = 0; nextVertexId < 16; nextVertexId++) {
+        if (shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p0 == (ulong*)-1) break;
+    }
+
+    LoadScaledGteMatrix(gteMatrix);
+    shadowPrim = &shadowPrims[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId];
+
+    if (GteTransformAndClipQuad(&SHADOW_VERTEX1, &SHADOW_VERTEX2, &SHADOW_VERTEX3, &SHADOW_VERTEX4,
+                            (int)&shadowPrim->x0, (int)&shadowPrim->x1, (int)&shadowPrim->x2, (int)&shadowPrim->x3,
+                            (int*)&scratch[0], (int*)&scratch[1], (int*)&scratch[2]) > 0) {
+        shadowPrim->r0 = shadowColor;
+        shadowPrim->g0 = shadowColor;
+        shadowPrim->b0 = shadowColor;
+        shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p0 = (ulong*)&otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
+        shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p1 = (ulong*)shadowPrim;
+    }
+
+    for (nextVertexId = 0; nextVertexId < 4; nextVertexId++) {
+        if (specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 == (ulong*)-1) break;
+    }
+
+    LoadScaledGteMatrix(&perspMatrixes[cameraIndex]);
+    {
+        scratch[1] = RotTransPers(param_26, &scratch[3], &scratch[0], &scratch[2]);
+        if (scratch[1] >= 0) {
+            int y = scratch[3] >> 16;
+            scratch[3] &= 0xffff;
+            if (y >= 0 && y <= displayHeight && scratch[3] >= 0 && scratch[3] < displayWidth) {
+                int y01, y23, x02, x13;
+                scratch[1] = (projectionDistance * 20) / (scratch[1] * 4);
+                y01 = (y - scratch[1]) << 16;
+                y23 = (y + scratch[1]) << 16;
+                x02 = (scratch[3] - scratch[1]);
+                x13 = (scratch[3] + scratch[1]);
+
+                shadowPrim = &specularPrims[whichDrawDispEnv][cameraIndex][nextVertexId];
+
+                *(int*)&shadowPrim->x0 = y01 | x02;
+                *(int*)&shadowPrim->x1 = y01 | x13;
+                *(int*)&shadowPrim->x2 = y23 | x02;
+                *(int*)&shadowPrim->x3 = y23 | x13;
+
+                specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 = (ulong*)&otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
+
+                specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p1 = (ulong*)shadowPrim;
+            }
+        }
+    }
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/render2", CreatePlayerDispList);
+#endif
 
 void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
     int* colorPtr;

@@ -558,7 +558,89 @@ void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR*
     D_000A4430 = inv_t;
 }
 
+#ifdef NON_MATCHING
+void CalcLevelBounds(Player *player) {
+    int x, y, z;
+
+    player->playerHasControl = 0;
+    HandlePlayerMovementStuff(player);
+
+    initPlayerGravityDir.vx = player->gravityDir.vx << 12;
+    initPlayerGravityDir.vy = player->gravityDir.vy << 12;
+    initPlayerGravityDir.vz = player->gravityDir.vz << 12;
+
+    initPlayerFacingDir.vx = player->facingDir.vx << 12;
+    initPlayerFacingDir.vy = player->facingDir.vy << 12;
+    initPlayerFacingDir.vz = player->facingDir.vz << 12;
+
+    initPlayerRightDir.vx = player->rightVec.vx << 12;
+    initPlayerRightDir.vy = player->rightVec.vy << 12;
+    initPlayerRightDir.vz = player->rightVec.vz << 12;
+
+    DAT_000a4598 = 0;
+    levelEntryAnimTimer = 0;
+    levelEntryAnimTimerIncrement = 16;
+
+    levelXMin = levelYMin = levelZMin = 34;
+    levelXMax = levelYMax = levelZMax = 0;
+
+    for (x = 0; x < 34; x++) {
+        for (y = 0; y < 34; y++) {
+            for (z = 0; z < 34; z++) {
+                if (levelData[x * 1156 + y * 34 + z] != -1) {
+                    if (x < levelXMin) levelXMin = x;
+                    if (y < levelYMin) levelYMin = y;
+                    if (z < levelZMin) levelZMin = z;
+                    if (x > levelXMax) levelXMax = x;
+                    if (y > levelYMax) levelYMax = y;
+                    if (z > levelZMax) levelZMax = z;
+                }
+            }
+        }
+    }
+
+    maxDistSquared = 0, xMinPlusMax = levelXMax + levelXMin;
+    yMinPlusMax = levelYMin + levelYMax;
+    zMinPlusMax = levelZMin + levelZMax;
+
+    for (x = 0; x < 34; x++) {
+        for (y = 0; y < 34; y++) {
+            for (z = 0; z < 34; z++) {
+                if (levelData[x * 1156 + y * 34 + z] != -1) {
+                    distSquared = (x * 2 - xMinPlusMax) * (x * 2 - xMinPlusMax) + (y * 2 - yMinPlusMax) * (y * 2 - yMinPlusMax) + (z * 2 - zMinPlusMax) * (z * 2 - zMinPlusMax);
+                    if (distSquared > maxDistSquared) {
+                        maxDistSquared = distSquared;
+                    }
+                }
+            }
+        }
+    }
+
+    xMinPlusMax <<= 8;
+    yMinPlusMax <<= 8;
+    zMinPlusMax <<= 8;
+
+    maxDistSquared = (SquareRoot0(maxDistSquared) << 8) + 1200;
+
+    levelEntryBezierP3.vx = player->svec_184.vx + player->gravityDir.vx * 100;
+    levelEntryBezierP3.vy = player->svec_184.vy + player->gravityDir.vy * 100;
+    levelEntryBezierP3.vz = player->svec_184.vz + player->gravityDir.vz * 100;
+
+    levelEntryBezierP0.vx = levelEntryBezierP3.vx - initPlayerFacingDir.vx - initPlayerRightDir.vx;
+    levelEntryBezierP0.vy = levelEntryBezierP3.vy - initPlayerFacingDir.vy - initPlayerRightDir.vy;
+    levelEntryBezierP0.vz = levelEntryBezierP3.vz - initPlayerFacingDir.vz - initPlayerRightDir.vz;
+
+    levelEntryBezierP1.vx = levelEntryBezierP0.vx + (levelEntryBezierP3.vx - levelEntryBezierP0.vx) / 4 + initPlayerRightDir.vx / 3;
+    levelEntryBezierP1.vy = levelEntryBezierP0.vy + (levelEntryBezierP3.vy - levelEntryBezierP0.vy) / 4 + initPlayerRightDir.vy / 3;
+    levelEntryBezierP1.vz = levelEntryBezierP0.vz + (levelEntryBezierP3.vz - levelEntryBezierP0.vz) / 4 + initPlayerRightDir.vz / 3;
+
+    levelEntryBezierP2.vx = levelEntryBezierP3.vx - initPlayerFacingDir.vx / 2;
+    levelEntryBezierP2.vy = levelEntryBezierP3.vy - initPlayerFacingDir.vy / 2;
+    levelEntryBezierP2.vz = levelEntryBezierP3.vz - initPlayerFacingDir.vz / 2;
+}
+#else
 INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
+#endif
 
 void ProcessCameraAndMovement(Player *player) {
     player->playerHasControl = 0;
