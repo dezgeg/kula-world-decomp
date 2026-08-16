@@ -78,7 +78,9 @@ int KEY_SPRITE_POSITIONS[] = {
     30, 219,
     44, 219,
     58, 219,
+};
 
+int KEY_SPRITE_POSITIONS2[] = {
     153, 219,
     0, 0,
     0, 0,

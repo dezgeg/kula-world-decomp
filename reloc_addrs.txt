@@ -108,3 +108,7 @@ rom:0x1174C reloc:MIPS_NONE symbol:null
 rom:0x11754 reloc:MIPS_NONE symbol:null
 rom:0x11768 reloc:MIPS_NONE symbol:null
 rom:0x11770 reloc:MIPS_NONE symbol:null
+rom:0x289D4 reloc:MIPS_HI16 symbol:KEY_SPRITE_POSITIONS addend:-0x20
+rom:0x289D8 reloc:MIPS_LO16 symbol:KEY_SPRITE_POSITIONS addend:-0x20
+rom:0x289F8 reloc:MIPS_HI16 symbol:KEY_SPRITE_POSITIONS2 addend:-0x20
+rom:0x289FC reloc:MIPS_LO16 symbol:KEY_SPRITE_POSITIONS2 addend:-0x20
