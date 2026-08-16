@@ -196,21 +196,12 @@ int debugDisableTimer = 0;
 int finalUnlocked = 0;
 int isFinal = 0;
 int musicShouldLoop = 1;
+
 int D_000A2EE4[6] = { 0, 0, 0, 0, 0, 0 };
 short copycatNewOrCopyMoves = 0;
 short D_000A2EFE = 0;
 int timeTrialDifficulty = 0;
 SVECTOR ZERO_SVECTOR_a2f04 = { 0, 0, 0, 0 };
-char S_rescue_session_saved_as_psx_cube_pad_rescue_pad[] = "rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n";
-char S_to_replay[] = "to replay:\n";
-char S_replay[] = "replay!\n\n";
-char S_FMTx[] = "%x\n";
-char S_1_0_4_2[] = "1.0.4";
-int vsyncCounter = 0;
-int unusedRenderPhase = 666;
-char S_NO_CONTROLLER[] = "NO CONTROLLER!\n";
-char S_DEMO_MODE[] = "DEMO MODE\n";
-
 int DEMO_LEVELS[] = { 4, 19, 41 };
 int TIME_TRIAL_PAR_TIMES[] = {
     1, 6, 5, 12, 3,
@@ -274,9 +265,9 @@ void main(void) {
         DrawSync(0);
         whichDrawDispEnv = 0;
         PutDrawAndDispEnvs();
-        FntPrint(S_rescue_session_saved_as_psx_cube_pad_rescue_pad);
-        FntPrint(S_to_replay);
-        FntPrint(S_replay);
+        FntPrint("rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n");
+        FntPrint("to replay:\n");
+        FntPrint("replay!\n\n");
         FntFlush(-1);
         whichDrawDispEnv = 1;
         PutDrawAndDispEnvs();
@@ -294,7 +285,7 @@ void main(void) {
     /* ggi */
     curFileLength = ReadDataFile(curWorld, 3, 0xFD000);
     i = ParseGGI(0xFD000);
-    printf(S_FMTx, i);
+    printf("%x\n", i);
     InitFont();
     InitVariousUiSpriteTemplates();
     InitHighscores();
@@ -363,7 +354,7 @@ void main(void) {
                 levelLoadZlibStream.next_in = 0x15D800;
                 levelLoadZlibStream.avail_out = 0x60000;
                 levelLoadZlibStream.next_out = 0x15E000;
-                inflateRetCode1 = inflateInit_(&levelLoadZlibStream, S_1_0_4_2, 0x38);
+                inflateRetCode1 = inflateInit_(&levelLoadZlibStream, "1.0.4", 0x38);
                 inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
                 inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
                 if (inflateRetCode1 < 0 || inflateRetCode2 < 0 || inflateRetCode3 < 0) {
@@ -380,7 +371,7 @@ void main(void) {
             levelLoadZlibStream.next_in = 0x156000 + *(int*)(0x156004 + curLevel * 8);
             levelLoadZlibStream.avail_out = 0x60000;
             levelLoadZlibStream.next_out = 0x15E000;
-            inflateRetCode1 = inflateInit_(&levelLoadZlibStream, S_1_0_4_2, 0x38);
+            inflateRetCode1 = inflateInit_(&levelLoadZlibStream, "1.0.4", 0x38);
             inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
             inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
         }
@@ -409,6 +400,10 @@ void main(void) {
         VSync(0);
     } while (1);
 }
+
+// XXX: must be here to match
+int vsyncCounter = 0;
+int unusedRenderPhase = 666;
 
 void SioRecvVsyncCallback(void) {
     vsyncCounter = vsyncCounter + 1;
@@ -556,11 +551,11 @@ int MainGameLoop(void) {
             } else {
                 SetTextParams(displayWidth / 2 + 10,127,1,0x80,0x80,0x80);
             }
-            DrawTextCrappyFont(S_NO_CONTROLLER);
+            DrawTextCrappyFont("NO CONTROLLER!\n");
         }
         if (isDemoMode == 1) {
             SetTextParams(displayWidth / 2,116,1,0x80,0x80,0x80);
-            DrawTextCrappyFont(S_DEMO_MODE);
+            DrawTextCrappyFont("DEMO MODE\n");
         }
         if (gameMode != 2 || numTimeTrialPlayers != 2) {
             inGetReadyScreen = 0;
