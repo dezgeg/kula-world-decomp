@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern int retractingSpikeData[64*2];
+extern int retractingSpikeData[64 * 2];
 
 short* entityData;
 short numEntities;

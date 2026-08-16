@@ -172,7 +172,6 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, finalX, finalY);
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
-
             }
             if (str[startIdx] == '+') {
                 if (textCharIdx + 2 > 299) {

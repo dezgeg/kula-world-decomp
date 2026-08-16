@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern int whichDrawDispEnv;
 extern PrimList primLists[2];

@@ -289,7 +289,7 @@ void InitFruitSprites(void) {
 
     for (i = 0; i < 10; i++) {
         tex = i + 22;
-        TSpritePrim(&fruitBonusTextSprites[0][i],0,0,textures[firstGuiTexture + tex].tpage);
+        TSpritePrim(&fruitBonusTextSprites[0][i], 0, 0, textures[firstGuiTexture + tex].tpage);
         x = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2];
         y = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2 + 1];
         if ((i / 2) * 2 == i - 1) {
@@ -508,9 +508,9 @@ void InitAllDigitSprites(void) {
     isTwoPlayerTimeAttack = 0;
     switch (gameMode) {
         default:
-        InitDigitSprites(&totalScoreSprite,2,100,0xec,0x80,0x80,0x80);
-        InitDigitSprites(&levelScoreSprite,1,100,0xda,0x80,0x80,0x80);
-        break;
+            InitDigitSprites(&totalScoreSprite, 2, 100, 0xec, 0x80, 0x80, 0x80);
+            InitDigitSprites(&levelScoreSprite, 1, 100, 0xda, 0x80, 0x80, 0x80);
+            break;
         case 1:
             if (curController == 0) {
                 InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, 0xda, 0x80, 0x80, 0x80);
@@ -543,11 +543,11 @@ void InitAllDigitSprites(void) {
     }
 
     // FIXME: extremely ugly
-    k = (Pair *)KEY_SPRITE_POSITIONS;
+    k = (Pair*)KEY_SPRITE_POSITIONS;
     pBase = k + isTwoPlayerTimeAttack * 16;
     base = numKeysInLevel * 32 + (int)pBase - 32;
     for (i = 0; i < 8; i++) {
-        p = (Pair *)((i / 2) * 8 + base);
+        p = (Pair*)((i / 2) * 8 + base);
         setXY0(&keySprites[0][i].sprt, p->x, p->y);
         setXY0(&keySprites[1][i].sprt, p->x, p->y);
     }

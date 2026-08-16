@@ -115,7 +115,8 @@ void ParseTextures(int* headerPtr, Texture* out, int unused_count) {
         out[i].bitsPerPixel = bpp;
         blendMode = *p++;
         out[i].semitrans = (blendMode != -1);
-        if (blendMode == -1) blendMode = 0;
+        if (blendMode == -1)
+            blendMode = 0;
 
         alreadyLoaded = p[3];
 
@@ -159,8 +160,8 @@ void ParseTextures(int* headerPtr, Texture* out, int unused_count) {
     }
 }
 
-void ParseGgiInner(int *eff, int modelType, int modelIdx, int lodIdx, int variantIdx, int probability,
-                   int addRgb, int maxRgb, int subRgb, int numSparkles) {
+void ParseGgiInner(int* eff, int modelType, int modelIdx, int lodIdx, int variantIdx,
+                   int probability, int addRgb, int maxRgb, int subRgb, int numSparkles) {
     int* p;
     int k;
 
@@ -175,7 +176,7 @@ void ParseGgiInner(int *eff, int modelType, int modelIdx, int lodIdx, int varian
     p = (int*)((char*)p + (p[5] / 4) * 4);
 
     eff[0] = (uint*)((char*)p + 8); // pointer to colors array
-    eff[1] = p[1] / 16; // number of vertex colors
+    eff[1] = p[1] / 16;             // number of vertex colors
     eff[2] = probability;
     eff[3] = addRgb;
     eff[4] = maxRgb;

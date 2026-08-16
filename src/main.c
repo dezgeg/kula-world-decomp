@@ -21,7 +21,7 @@ extern void DrawBigGuiSprite(int param_1);
 extern void DrawHud(void);
 extern void DrawLensFlares(int unknown);
 extern void DrawLevelScoreSummary(void);
-extern void DrawTextCrappyFont(char * str);
+extern void DrawTextCrappyFont(char* str);
 extern void HandleCheats(void);
 extern void HighScoreUi(int unk);
 extern void InitAllDigitSprites(void);
@@ -29,7 +29,7 @@ extern void InitCopycatUiTextures(void);
 extern void InitFont(void);
 extern void InitHighscores(void);
 extern void InitParticles(void);
-extern void InitReplayPlayback(char * param_1);
+extern void InitReplayPlayback(char* param_1);
 extern void InitReplaySaving(void);
 extern void InitSpinningSelectionSprites(void);
 extern void InitStuff(void);
@@ -446,9 +446,9 @@ int MainGameLoop(void) {
     }
     whichDrawDispEnv = 0;
     for (i = 0; i < 1; i++) {
-        ClearOTagR(otag[whichDrawDispEnv][i],1026);
+        ClearOTagR(otag[whichDrawDispEnv][i], 1026);
     }
-    ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+    ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
     dispModeChangeState = 0;
     buttonSaveReplayMode = 0;
     if (isDemoMode == 1) {
@@ -469,9 +469,9 @@ int MainGameLoop(void) {
         rect.w = 1;
         rect.h = 1;
         for (i = 0; i < 16; i++) {
-            rect.x = framebufferFetches[i].x + (whichDrawDispEnv == 0 ? displayWidth : 0) ;
+            rect.x = framebufferFetches[i].x + (whichDrawDispEnv == 0 ? displayWidth : 0);
             rect.y = framebufferFetches[i].y;
-            StoreImage(&rect,&tex);
+            StoreImage(&rect, &tex);
             DrawSync(0);
             framebufferFetches[i].texel = tex & 0x7fff;
         }
@@ -487,9 +487,9 @@ int MainGameLoop(void) {
         SetGeomScreen(projectionDistance);
 
         for (i = 0; i < numCameras; i++) {
-            ClearOTagR(otag[whichDrawDispEnv][i],1026);
+            ClearOTagR(otag[whichDrawDispEnv][i], 1026);
         }
-        ClearOTagR(&primLists[whichDrawDispEnv].main,4);
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
         for (i = 0; i < numCameras; i++) {
             for (j = unkOtagLengths[whichDrawDispEnv][i]; j > 0;) {
                 j--;
@@ -538,14 +538,14 @@ int MainGameLoop(void) {
                 SndMuteAllTaggedVoices();
             }
             if (isPaused == 1 && gameState != 0) {
-                SetTextParams(displayWidth / 2 + 10,180,1,0x80,0x80,0x80);
+                SetTextParams(displayWidth / 2 + 10, 180, 1, 0x80, 0x80, 0x80);
             } else {
-                SetTextParams(displayWidth / 2 + 10,127,1,0x80,0x80,0x80);
+                SetTextParams(displayWidth / 2 + 10, 127, 1, 0x80, 0x80, 0x80);
             }
             DrawTextCrappyFont("NO CONTROLLER!\n");
         }
         if (isDemoMode == 1) {
-            SetTextParams(displayWidth / 2,116,1,0x80,0x80,0x80);
+            SetTextParams(displayWidth / 2, 116, 1, 0x80, 0x80, 0x80);
             DrawTextCrappyFont("DEMO MODE\n");
         }
         if (gameMode != 2 || numTimeTrialPlayers != 2) {
@@ -590,23 +590,23 @@ int MainGameLoop(void) {
         if (isPaused == 1 && drawGeometryAndObjects == 1) {
             PauseOrMainMenu();
         }
-        if (sioCheatActivated == 1 && _sio_control(0,0,0) & 2) {
+        if (sioCheatActivated == 1 && _sio_control(0, 0, 0) & 2) {
             gotSioData = 0;
             VSyncCallback(SioRecvVsyncCallback);
-            if ((_sio_control(0,4,0) & 0xff) == 'K') {
+            if ((_sio_control(0, 4, 0) & 0xff) == 'K') {
                 vsyncCounter = 0;
                 do {
-                    if (_sio_control(0,0,0) & 2)
+                    if (_sio_control(0, 0, 0) & 2)
                         break;
                 } while (vsyncCounter < 51);
                 if (vsyncCounter < 51) {
-                    byteCountToReceiveFromSio = _sio_control(0,4,0) & 0xff;
+                    byteCountToReceiveFromSio = _sio_control(0, 4, 0) & 0xff;
                     vsyncCounter = 0;
-                    while ((_sio_control(0,0,0) & 2) == 0)
+                    while ((_sio_control(0, 0, 0) & 2) == 0)
                         ;
                     if (vsyncCounter > 50)
                         break;
-                    byteCountToReceiveFromSio +=  (_sio_control(0,4,0) & 0xff) * 0x100;
+                    byteCountToReceiveFromSio += (_sio_control(0, 4, 0) & 0xff) * 0x100;
                     ReceiveBufFromSio();
                     if (gameState != 0) {
                         isPaused = 0;
@@ -698,18 +698,17 @@ int MainGameLoop(void) {
         if (gameMode == 1 && gameState != 0) {
             if (isPaused == 0 && levelEndReason == 0) {
                 if (copycatNewOrCopyMoves == 1) {
-                    RenderPlayerOrCopycatLabels(1,0x80);
+                    RenderPlayerOrCopycatLabels(1, 0x80);
                 } else {
-                    RenderPlayerOrCopycatLabels(0,0x80);
+                    RenderPlayerOrCopycatLabels(0, 0x80);
                 }
             }
             if (twoPlayerWhichPlayer == 0) {
-                RenderPlayerOrCopycatLabels(2,0x80);
-                RenderPlayerOrCopycatLabels(3,0x50);
-            }
-            else {
-                RenderPlayerOrCopycatLabels(2,0x50);
-                RenderPlayerOrCopycatLabels(3,0x80);
+                RenderPlayerOrCopycatLabels(2, 0x80);
+                RenderPlayerOrCopycatLabels(3, 0x50);
+            } else {
+                RenderPlayerOrCopycatLabels(2, 0x50);
+                RenderPlayerOrCopycatLabels(3, 0x80);
             }
             drawCopycatWidgets = 1;
         }
@@ -796,7 +795,7 @@ int MainGameLoop(void) {
             LevelCompletedOrDied();
             DecideNextLevel();
         }
-        skip:
+    skip:
         prevLevelEndReason = levelEndReason;
     }
     VSyncCallback(0);
@@ -1053,7 +1052,8 @@ void DecideNextLevel(void) {
             }
         }
         if (specialLevelType > 0) {
-            if (curLevel >= *(int*)0x156000) goto LAB_00042f60;
+            if (curLevel >= *(int*)0x156000)
+                goto LAB_00042f60;
             if (debugBonusLevels == 2) {
                 if (levelEndReason > 0) {
                     curLevel++;

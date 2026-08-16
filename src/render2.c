@@ -140,7 +140,7 @@ void Unused_FUN_0002caec(MATRIX *m, int z, int modelId, int param_4, int param_5
     itemsDispList[itemsDispListIdx++] = &ggiPart0A[ggiPart0A[modelId] / 4];
     itemsDispList[itemsDispListIdx++] = param_4;
 
-    p = (int *)m;
+    p = (int*)m;
     for (z = 0; z < 8; z++) {
         itemsDispList[itemsDispListIdx++] = *p++;
     }
@@ -151,7 +151,7 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
                         uint otherBlockX, uint otherBlockY, uint otherBlockZ, int otherDir,
                         MATRIX *gteMatrix, int shadowColor, int shadowFlag) {
     int nextVertexId;
-    POLY_FT4 *shadowPrim;
+    POLY_FT4* shadowPrim;
     int screenCoords[3];
     int i;
     int shadowDepth;
@@ -252,9 +252,9 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
                           MATRIX *gteMatrix, int shadowColor, int shadowFlag, MATRIX *param_20, int *const0_2048,
                           uint const4000, int const0_arg23, int const0_arg24, int const178, SVECTOR *param_26) {
     int nextVertexId;
-    POLY_FT4 *shadowPrim;
+    POLY_FT4* shadowPrim;
     long scratch[4];
-    int i,j;
+    int i, j;
     int shadowDepth;
     int result2;
     int off;
@@ -396,9 +396,9 @@ LAB_shadow:
 INCLUDE_ASM("asm/nonmatchings/render2", CreatePlayerDispList);
 #endif
 
-void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
+void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) {
     int* colorPtr;
-    EntityBlock *ent;
+    EntityBlock* ent;
     int blinkState;
     int lightEffectId;
     int depth;
@@ -406,7 +406,7 @@ void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
     int colorR;
     int colorG;
     int colorB;
-    Quad *quad;
+    Quad* quad;
     int* p;
     short* e;
     int two = 2;
@@ -417,7 +417,7 @@ void CreateItemDispList(MATRIX *m,int z,int entityIndex,int dirIndexInBlock) {
     if (specialLevelType == 1) {
         colorPtr = (int *)((char *)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 156));
     } else {
-        colorPtr = (int *)((char *)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 24));
+        colorPtr = (int*)((char*)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 24));
     }
     colorR = colorPtr[0];
     colorG = colorPtr[1];
@@ -545,7 +545,7 @@ disable_light:
         return;
     }
     // 0: otag pointer
-    itemsDispList[itemsDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][depth+1];
+    itemsDispList[itemsDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][depth + 1];
     // 1: always zero
     itemsDispList[itemsDispListIdx++] = 0;
     // 2: depth value

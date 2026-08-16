@@ -720,24 +720,35 @@ int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
     short type;
     int index;
 
-    if (blockType == -1) return 0;
-    if (blockType == -2) return 0;
+    if (blockType == -1)
+        return 0;
+    if (blockType == -2)
+        return 0;
 
-    if (blockType < 5) return 1;
+    if (blockType < 5)
+        return 1;
 
     type = entityData[(blockType - 5) * 128];
 
-    if (type == 5) return 0;
-    if (type == 6) return 1;
+    if (type == 5)
+        return 0;
+    if (type == 6)
+        return 1;
 
     type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];
-    if (type == 0) return 1;
-    if (type >= OBJ_SLOW_STAR) return 1;
-    if (type == OBJ_PLAYER_SPAWN) return 1;
+    if (type == 0)
+        return 1;
+    if (type >= OBJ_SLOW_STAR)
+        return 1;
+    if (type == OBJ_PLAYER_SPAWN)
+        return 1;
 
-    if (type == OBJ_ICE_PATCH) return 1;
-    if (type == OBJ_FIRE_PATCH) return 1;
-    if (type == OBJ_ACID_PATCH) return 1;
+    if (type == OBJ_ICE_PATCH)
+        return 1;
+    if (type == OBJ_FIRE_PATCH)
+        return 1;
+    if (type == OBJ_ACID_PATCH)
+        return 1;
     return 0;
 }
 

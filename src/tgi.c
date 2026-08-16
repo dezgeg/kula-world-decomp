@@ -47,7 +47,7 @@ extern short DAT_00171314;
 extern short DAT_00171316[];
 extern short uncompLevelData[];
 extern short cubeIndexes[39304];
-extern void* cubeStates[256*8];
+extern void* cubeStates[256 * 8];
 extern int isFinal;
 extern int lightEffects[32 * 8];
 extern int recentlyVisitedCubeFaces[4 * 32];
@@ -346,15 +346,15 @@ void ParseLevelDataFromTgi(void) {
     if (tgi->skyboxFlag == 1025) {
         if (specialLevelType != wasSpecialLevel || recalcSkyboxes == 1) {
             switch (specialLevelType) {
-            case 0:
-                RecalcSkyboxes01(3, 5, 16, 5, 40);
-                break;
-            case 1:
-                RecalcSkyboxes01(4, 3, 16, 10, 36);
-                break;
-            case 2:
-                RecalcSkyboxes2();
-                break;
+                case 0:
+                    RecalcSkyboxes01(3, 5, 16, 5, 40);
+                    break;
+                case 1:
+                    RecalcSkyboxes01(4, 3, 16, 10, 36);
+                    break;
+                case 2:
+                    RecalcSkyboxes2();
+                    break;
             }
             recalcSkyboxes = 0;
         }
