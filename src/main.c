@@ -16,6 +16,7 @@ extern int MainGameLoop(void);
 extern int ParseGGI(void* ggi); // hack
 extern uint ReadDataFile(int world, int filetype, void* buf);
 extern void AddDrChangePrims(void);
+extern void DecideNextLevel(void);
 extern void DrawBigGuiSprite(int param_1);
 extern void DrawHud(void);
 extern void DrawLensFlares(int unknown);
@@ -34,6 +35,7 @@ extern void InitSpinningSelectionSprites(void);
 extern void InitStuff(void);
 extern void InitVariousUiSpriteTemplates(void);
 extern void LevelInit(void);
+extern void LevelCompletedOrDied(void);
 extern void LoadingScreen(void);
 extern void LoadSaveFromMemoryCard(void);
 extern void LoadWarningTim(void);
@@ -50,6 +52,7 @@ extern void ProcessPlayer(void);
 extern void ProcessScreenShake(void);
 extern void PutDrawAndDispEnvs(void);
 extern void QuitToMainMenu(void);
+extern void ReceiveBufFromSio(void);
 extern void RenderBackground(void);
 extern void RenderEverythingElseAndProcessSomeStuff(void);
 extern void RenderPlayerOrCopycatLabels(int sprite, char color);
@@ -411,7 +414,6 @@ void SioRecvVsyncCallback(void) {
     vsyncCounter = vsyncCounter + 1;
 }
 
-#ifdef NON_MATCHING
 int MainGameLoop(void) {
     // s0: auto generated induction var
     int i; // s1
@@ -775,13 +777,14 @@ int MainGameLoop(void) {
         if (gameState > 1) {
             end = 1;
         }
-        if (levelEndReason == 0) {
+        slot = levelEndReason; // XXX: ugly
+        if (slot == 0) {
             if (loadNewWorld) {
                 end = 1;
-            }            
+            }
         } else {
             if (prevLevelEndReason == 0) {
-                if (levelEndReason < 0) {
+                if (slot < 0) {
                     if (specialLevelType > 0) {
                         levelScore = 0;
                     }
@@ -876,9 +879,6 @@ int MainGameLoop(void) {
     levelPlayTime[twoPlayerWhichPlayer] = 0;
     return levelEndReason;
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/main", MainGameLoop);
-#endif
 
 void LevelCompletedOrDied(void) {
     int i;
