@@ -5,4 +5,5 @@ IncludeBlocks: Preserve
 DerivePointerAlignment: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: Never
 SpacesBeforeTrailingComments: 1
