@@ -558,7 +558,6 @@ void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR*
     D_000A4430 = inv_t;
 }
 
-#ifdef NON_MATCHING
 void CalcLevelBounds(Player *player) {
     int x, y, z;
 
@@ -599,9 +598,10 @@ void CalcLevelBounds(Player *player) {
         }
     }
 
-    maxDistSquared = 0, xMinPlusMax = levelXMax + levelXMin;
-    yMinPlusMax = levelYMin + levelYMax;
-    zMinPlusMax = levelZMin + levelZMax;
+    xMinPlusMax = levelXMin - (-levelXMax);
+    yMinPlusMax = levelYMin - (-levelYMax);
+    zMinPlusMax = levelZMin - (-levelZMax);
+    maxDistSquared = 0;
 
     for (x = 0; x < 34; x++) {
         for (y = 0; y < 34; y++) {
@@ -638,9 +638,6 @@ void CalcLevelBounds(Player *player) {
     levelEntryBezierP2.vy = levelEntryBezierP3.vy - initPlayerFacingDir.vy / 2;
     levelEntryBezierP2.vz = levelEntryBezierP3.vz - initPlayerFacingDir.vz / 2;
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/level_update", CalcLevelBounds);
-#endif
 
 void ProcessCameraAndMovement(Player *player) {
     player->playerHasControl = 0;

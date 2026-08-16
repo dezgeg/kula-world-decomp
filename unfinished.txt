@@ -1,4 +1,3 @@
-CalcLevelBounds: https://decomp.me/scratch/516al
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DrawScoreGraph: https://decomp.me/scratch/KHxMt
 HandleItemTouching: https://decomp.me/scratch/0GliO
