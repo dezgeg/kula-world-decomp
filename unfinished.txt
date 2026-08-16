@@ -4,6 +4,5 @@ DrawScoreGraph: https://decomp.me/scratch/KHxMt
 HandleItemTouching: https://decomp.me/scratch/0GliO
 InitLasers2: https://decomp.me/scratch/yyAJu
 InitScoreGraph: https://decomp.me/scratch/cMAKo
-LoadLevelEndReasonGfx: https://decomp.me/scratch/Bsf5T
 LoadMenuGfx: https://decomp.me/scratch/a4Otj
 MainGameLoop: https://decomp.me/scratch/k3ZHh

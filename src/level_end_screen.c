@@ -65,8 +65,203 @@ void InitLevelEndScreen(void) {
     bigGuiSpriteFade = 0;
 }
 
-// https://decomp.me/scratch/DYXGq
-INCLUDE_ASM("asm/nonmatchings/level_end_screen", LoadLevelEndReasonGfx);
+void LoadLevelEndReasonGfx() {
+    int whichGfx;
+    short x0;
+    short y0;
+    RECT rect;
+    short h;
+    short w;
+    int playTime;
+    int len;
+    int off;
+    char* ptr;
+    int dest;
+    // 2 = spiked
+    // 4 = time out
+    // 6 = fell off
+    // 8 = fire
+    // 10 = captured
+    whichGfx = -levelEndReason * 2;
+    if (levelEndReason >= 0) {
+        // 20 == well done
+        whichGfx = 20;
+        if (gameMode == 2) {
+            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * 50;
+            if (playTime < 1) {
+                // 34 = very well done
+                whichGfx = 34;
+            }
+            if (playTime > 1000) {
+                // 36 = level cleared
+                whichGfx = 36;
+            }
+        }
+    } else {
+        if (totalScore < 0 && specialLevelType == 0 && gameMode == 0) {
+            if (gameOverScreenState == 0) {
+                gameOverScreenState = 1;
+            }
+            if (gameOverScreenState == 3) {
+                // 18 = game over
+                whichGfx = 18;
+            }
+        }
+    }
+    if (gameMode == 1 && curLevel == 0 && (copycatPlayerScores[0] > 5 || copycatPlayerScores[1] > 5) && levelEndReason < 0) {
+        /* 30 = player 2 won */
+        whichGfx = 30;
+        if (copycatPlayerScores[1] < copycatPlayerScores[0]) {
+            // 28 = player 1 won
+            whichGfx = 28;
+        }
+        if (copycatPlayerScores[0] == copycatPlayerScores[1]) {
+            // 32 = draw
+            whichGfx = 32;
+        }
+    }
+    if (gameMode == 0 && isFinal == 1 && levelEndReason > 0 && curWorld == 10) {
+        // 12 = final complete
+        whichGfx = 12;
+    }
+    if (gameMode == 2) {
+        if (levelEndReason > 0 && curLevel == 0 && totalScore >= 0 && DAT_000a3374 == 1 && numTimeTrialPlayers == 1) {
+            whichGfx = 24;
+            if (totalPlayTime[0] > 0) {
+                // 22 = you failed to qualify
+                whichGfx = 22;
+            }
+        }
+        if (gameMode == 2 && numTimeTrialPlayers == 2 && curLevel == 14 && levelEndReason > 0 && levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
+            // 30 = player 2 won
+            whichGfx = 30;
+            if (totalPlayTime[0] < totalPlayTime[1]) {
+                // 28 = player 1 won
+                whichGfx = 28;
+            }
+            if (totalPlayTime[0] == totalPlayTime[1]) {
+                // 32 = draw
+                whichGfx = 32;
+            }
+        }
+    }
+    if (levelEndReason == 0) {
+        // 0 = loading
+        whichGfx = 0;
+    }
+
+    if (whichGfx == whichLevelEndSpriteLoaded || whichGfx > MENU_DEFLATED_SPRITES2_PTR[0] - 2 || (levelEndReason == -10 && whichGfx == 20)) {
+        return;
+    }
+    if (whichGfx == 0) {
+        bigGuiSpriteFade = 0;
+    }
+    len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
+    off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
+    ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off;
+    dest = 0x1EA000;
+    zlibStream_a4dd4.avail_in = len;
+    zlibStream_a4dd4.next_in = ptr;
+    zlibStream_a4dd4.avail_out = 0x10000;
+    zlibStream_a4dd4.next_out = dest;
+    inflateRetCode = inflateInit_(&zlibStream_a4dd4,S_1_0_4,0x38);
+    inflateRetCode = inflate(&zlibStream_a4dd4,4);
+    inflateRetCode = inflateEnd(&zlibStream_a4dd4);
+
+    w = *(short*)0x1ea03c;
+    h = *(short*)0x1ea03e;
+    x0 = (displayWidth - 4 * w) / 2;
+    if (whichGfx < 18) {
+        y0 = 5;
+        if (gameMode == 1 || (gameMode == 2 && numTimeTrialPlayers == 1)) {
+            y0 = 20;
+        }
+    } else {
+        y0 = 50;
+    }
+    if (whichGfx == 12) {
+        y0 = 50;
+    }
+    if (whichGfx == 0) {
+        y0 = 60;
+    }
+    if (whichGfx == 24 || whichGfx == 22) {
+        y0 = 10;
+    }
+    if (h + 94 < 0x100) {
+        rect.x = 704;
+        rect.y = 94;
+        rect.h = 1;
+        rect.w = 16;
+        DrawSync(0);
+        LoadImage(&rect, 0x1EA014);
+        DrawSync(0);
+        rect.x = 704;
+        rect.y = 95;
+        rect.w = w;
+        rect.h = h;
+        LoadImage(&rect, 0x1EA040);
+        DrawSync(0);
+        whichGfx++;
+        if (whichGfx <= MENU_DEFLATED_SPRITES2_PTR[0] - 1) {
+            len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
+            off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
+            ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off;
+            dest = 0x1EA000;
+            zlibStream_a4dd4.avail_in = len;
+            zlibStream_a4dd4.next_in = ptr;
+            zlibStream_a4dd4.avail_out = 0x10000;
+            zlibStream_a4dd4.next_out = dest;
+
+            inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
+            inflateRetCode = inflate(&zlibStream_a4dd4, 4);
+            inflateRetCode = inflateEnd(&zlibStream_a4dd4);
+            w = *(short*)0x1ea03c;
+            h = *(short*)0x1ea03e;
+            rect.x = 720;
+            rect.y = 94;
+            rect.w = 16;
+            rect.h = 1;
+            LoadImage(&rect, 0x1EA014);
+            DrawSync(0);
+            if (w * 4 < 0x81) {
+                rect.x = 736;
+                rect.y = 94;
+            }
+            else {
+                rect.x = 704;
+                rect.y = 175;
+            }
+            rect.w = w;
+            rect.h = h;
+            LoadImage(&rect, 0x1EA040);
+            DrawSync(0);
+
+            TSpritePrim(bigGuiSprite2,0,0,GetTPage(0,2,704,94));
+            setXY0(&bigGuiSprite2[0].sprt, x0, y0);
+            SetSemiTrans(&bigGuiSprite2[0].sprt,2);
+            SetShadeTex(&bigGuiSprite2[0].sprt,0);
+            bigGuiSprite2[0].sprt.clut = GetClut(704, 94);
+            setWH(&bigGuiSprite2[0].sprt, w * 4, h);
+            setUV0(&bigGuiSprite2[0].sprt, 0, 0x5f);
+            bigGuiSprite2[1] = bigGuiSprite2[0];
+
+            TSpritePrim(bigGuiSprite1,0,0,GetTPage(0,1,736,94));
+            setXY0(&bigGuiSprite1[0].sprt, x0, y0);
+            SetSemiTrans(&bigGuiSprite1[0].sprt,1);
+            SetShadeTex(&bigGuiSprite1[0].sprt,0);
+            bigGuiSprite1[0].sprt.clut = GetClut(720,94);
+            setWH(&bigGuiSprite1[0].sprt, w * 4, h);
+            if (w * 4 < 129) {
+                setUV0(&bigGuiSprite1[0].sprt, 128, 94);
+            } else {
+                setUV0(&bigGuiSprite1[0].sprt, 0, 175);
+            }
+            bigGuiSprite1[1] = bigGuiSprite1[0];
+            whichLevelEndSpriteLoaded = whichGfx - 1;
+        }
+    }
+}
 
 void FadeOutBigGuiSprite(void) {
     bigGuiSpriteFade -= 20;
