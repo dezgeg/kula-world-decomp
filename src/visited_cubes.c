@@ -57,12 +57,12 @@ void SetCubeVisited(int x, int y, int z, int visitType) {
     }
 }
 
-void SetCubeFaceVisited(int x,int y,int z,int whichSide,int visitType) {
+void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visitType) {
     int cubeIndex;
     int i;
-    int **pSideFlag;
-    Quad *quad;
-    RecentlyVisitedCube *p;
+    int** pSideFlag;
+    Quad* quad;
+    RecentlyVisitedCube* p;
     CubeState* cs;
 
     cubeIndex = CUBE_INDEX_AT(x, y, z);
@@ -71,7 +71,7 @@ void SetCubeFaceVisited(int x,int y,int z,int whichSide,int visitType) {
         if (*(cs->sideVisited + whichSide) != visitType) {
             *(cs->sideVisited + whichSide) = visitType;
             quad = cs->quadPtrs[whichSide];
-            if (quad != (Quad *)0xffffffff) {
+            if (quad != (Quad*)0xffffffff) {
                 quad->flags.b[2] = quad->flags.b[2] & 0xf9 | (visitType * 2) & 6;
                 pSideFlag = &cs->visitList[whichSide];
                 if (*pSideFlag == (int*)-1) {
@@ -92,11 +92,11 @@ void SetCubeFaceVisited(int x,int y,int z,int whichSide,int visitType) {
 }
 
 void ProcessRecentlyVisitedCubes(void) {
-    RecentlyVisitedCube *p;
+    RecentlyVisitedCube* p;
     int i;
-    void **link;
+    void** link;
     int counter;
-    Quad *quad;
+    Quad* quad;
     int color;
     int r, g, b;
 

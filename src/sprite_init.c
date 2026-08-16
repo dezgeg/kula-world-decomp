@@ -19,7 +19,7 @@ extern void InitLethargyEffectSprites(void);
 extern void InitScreenFadePolys(void);
 extern void InitTimerPausedSprite(void);
 extern void InitTitleSprite(void);
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void Srand(int param_1);
 
 extern DigitSprites levelTimeLeftDigitSprites;
@@ -512,14 +512,14 @@ void InitAllDigitSprites(void) {
         InitDigitSprites(&levelScoreSprite,1,100,0xda,0x80,0x80,0x80);
         break;
         case 1:
-        if (curController == 0) {
-            InitDigitSprites(&copycatPlayer1ScoreDigitSprites,1,0x1c,0xda,0x80,0x80,0x80);
-            InitDigitSprites(&copycatPlayer2ScoreDigitSprites,1,0xf6,0xda,0x50,0x50,0x50);
-        } else {
-            InitDigitSprites(&copycatPlayer1ScoreDigitSprites,1,0x1c,0xda,0x50,0x50,0x50);
-            InitDigitSprites(&copycatPlayer2ScoreDigitSprites,1,0xf6,0xda,0x80,0x80,0x80);
-        }
-        break;
+            if (curController == 0) {
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, 0xda, 0x80, 0x80, 0x80);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, 0xda, 0x50, 0x50, 0x50);
+            } else {
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, 0xda, 0x50, 0x50, 0x50);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, 0xda, 0x80, 0x80, 0x80);
+            }
+            break;
 
         case 2:
         if (numTimeTrialPlayers == 1) {

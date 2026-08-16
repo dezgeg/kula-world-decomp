@@ -244,7 +244,7 @@ int SaveMemCard(uint slot) {
             memCardData.saveslots[slot].isFinal = isFinal;
             memCardData.saveslots[slot].gameMode = gameMode;
         }
-        ret = MemCardCreateFile(0,S_BESCES_01000KULA,1);
+        ret = MemCardCreateFile(0, S_BESCES_01000KULA, 1);
         if (ret == 0 || ret == McErrAlreadyExist) {
             if (MemCardWriteFile(0,S_BESCES_01000KULA, (long*)&memCardData,0,0x1000) == McErrCardNotExist) {
                 MemCardSync(0,&mcCmd,&tempMcResult);

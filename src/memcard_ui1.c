@@ -105,7 +105,7 @@ void InitMemcardUi(void) {
         }
         len2 = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
         offset2 = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];
-        buf = (char *) MENU_DEFLATED_SPRITES2_PTR + offset2;
+        buf = (char*)MENU_DEFLATED_SPRITES2_PTR + offset2;
         zlibStream_a4dd4.avail_in = len2;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;

@@ -331,7 +331,7 @@ void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value) {
     }
 }
 
-void DrawTimeAttackTimer(DigitSprites *ds, int style, int value, int onlyDashes) {
+void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes) {
     int divisor;
     int i;
     int smallestDrawnDigitIndex;

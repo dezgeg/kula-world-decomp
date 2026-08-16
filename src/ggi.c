@@ -51,7 +51,7 @@ int numUnk2Textures;
 void ParseTextures(int* headerPtr, Texture * out, int count);
 void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
-void* ParseGGI(GgiFile *ggi_ptr) {
+void* ParseGGI(GgiFile* ggi_ptr) {
     int i, j;
     int* pOff;
 
@@ -93,9 +93,9 @@ void* ParseGGI(GgiFile *ggi_ptr) {
     return ggiPart6Textures;
 }
 
-void ParseTextures(int* headerPtr, Texture *out, int unused_count) {
+void ParseTextures(int* headerPtr, Texture* out, int unused_count) {
     int count = *headerPtr;
-    short *p;
+    short* p;
     int i;
     int blendMode;
     int bpp;
@@ -103,7 +103,7 @@ void ParseTextures(int* headerPtr, Texture *out, int unused_count) {
     RECT rect;
 
     DrawSync(0);
-    p = (short *)(headerPtr + 1);
+    p = (short*)(headerPtr + 1);
     for (i = 0; i < count; i++) {
         bpp = *p++;
         if (bpp == -1) {
@@ -183,7 +183,7 @@ void ParseGgiInner(int *eff, int modelType, int modelIdx, int lodIdx, int varian
     eff[6] = numSparkles;
     eff += 7;
 
-    for (k = 0; k < numSparkles; k++,eff += 5) {
+    for (k = 0; k < numSparkles; k++, eff += 5) {
         eff[0] = 0;
     }
 }

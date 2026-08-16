@@ -15,7 +15,7 @@ typedef struct FaceData {
     int color;
 } FaceData;
 
-typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
+typedef void (*QuadFunc)(Quad* quad, int width, int x, int y, int z, int textureRotation);
 
 typedef struct {
     short entityType;
@@ -225,7 +225,7 @@ void ProcessCubesIntoFaces(void) {
     for (z = 1; z < 33; z++) {
         for (y = 1; y < 33; y++) {
             for (x = 1; x < 33; x++) {
-                blockType = levelData[x*34*34 + y * 34 + z];
+                blockType = levelData[x * 34 * 34 + y * 34 + z];
                 style = GetFaceTypeOfBlockType(blockType);
                 if (!((style >= 0 && style <= 1) || (style >= 2 && style <= 3) || style == 4 || (style >= 6 && style <= 7))) {
                     continue;
@@ -367,7 +367,7 @@ void ProcessCubesIntoFaces(void) {
                 }
                 if (isNonempty == 1) {
                     int t = cubeCounter;
-                    CUBE_INDEX_AT(x,y,z) = t;
+                    CUBE_INDEX_AT(x, y, z) = t;
                     cubeStates[t * 16 + 14] = 0;
                     cubeStates[t * 16 + 15] = style;
                     cubeCounter = t + 1;
@@ -378,7 +378,6 @@ void ProcessCubesIntoFaces(void) {
             }
         }
     }
-
 }
 
 int CoordHash(int x, int y, int z, int dir, int div, int mod) {
@@ -471,9 +470,9 @@ void ScanLevelDataForMovingBlocks1(void) {
     int z_inc;
     int length;
     int flags;
-    short *entity;
+    short* entity;
     int j;
-    short *pStuff;
+    short* pStuff;
     int texDataIdx;
     int dir;
     int val;
@@ -658,7 +657,7 @@ void CopyQuadData(void) {
             q->flags.i32 = fd->flags;
             *(int*)&q->otagIndex = 0xffff;
             dir = fd->dir;
-            idx = (tgiPart5[i*2] * 3 + tgiPart5[i*2+1] * tgi->unk12c[dir]) * 32;
+            idx = (tgiPart5[i * 2] * 3 + tgiPart5[i * 2 + 1] * tgi->unk12c[dir]) * 32;
             q->metadata = &cubeTextureMetadata[idx];
             q->color = fd->color;
             j++;
@@ -709,11 +708,11 @@ void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, 
     chain->entries = (TextureChainEntry*)tce;
 }
 
-void FUN_000298e0(AnimatedTextureChain *tc) {
+void FUN_000298e0(AnimatedTextureChain* tc) {
     u32* ptr = tc + 1;
     u32* end = tc->entries;
     while (ptr < end) {
-        *ptr = *(u32 *)*ptr;
+        *ptr = *(u32*)*ptr;
         ptr += 2;
     }
 }
@@ -774,12 +773,12 @@ void InitPlayerSpecularSprite(void) {
 
 void ScanLevelDataForBlinkingEntities(void) {
     int j, i;
-    short *ent;
+    short* ent;
 
     for (i = 0; i < numEntities; i++) {
         if (entityData[i * 128] == 0) {
             for (j = 0; j < 6; j++) {
-                ent = (short *)((i * 128 + j * 16) * 2 + (int)entityData);
+                ent = (short*)((i * 128 + j * 16) * 2 + (int)entityData);
                 switch (ent[1]) {
                     case OBJ_EXIT:
                         ent[15] = 16;

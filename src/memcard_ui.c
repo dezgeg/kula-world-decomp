@@ -18,11 +18,11 @@ extern void DrawPsxButtonBackground(void);
 extern void DrawSaveSlotSprites(int isSave);
 extern void DrawScoreGraph(void);
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
-extern void DrawTextCrappyFont(char * str);
-extern void DrawTextFancyFont(char * str, short x, short y);
+extern void DrawTextCrappyFont(char* str);
+extern void DrawTextFancyFont(char* str, short x, short y);
 extern void DrawWidgets(int menuId, int cursorPos);
 extern void FormatMemcard(void);
-extern void FormatTime(int time, char * s, int showPlus);
+extern void FormatTime(int time, char* s, int showPlus);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
 extern void InitMemcardUi(void);
@@ -30,7 +30,7 @@ extern void InitPsxButtonBackgroundSprites(int);
 extern void InitScoreGraph(void * pBuf, int * levelScores, int * unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
 extern void InitSpinningSelectionSprites(void);
 extern int LoadSaveSlot(int slot);
-extern int LooksLikeAscii(char * param_1);
+extern int LooksLikeAscii(char* param_1);
 extern int MemCardUiPart(void);
 extern void MusicCheckForLoop(void);
 extern void PutDrawAndDispEnvs(void);
@@ -38,16 +38,16 @@ extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
 extern int SaveMemCard(int slot);
 extern void SetBigGuiSpriteVisible(void);
-extern void SetSemiTrans(void * p, int enable);
-extern void SetShadeTex(void * p, int disable);
+extern void SetSemiTrans(void* p, int enable);
+extern void SetShadeTex(void* p, int disable);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
-extern void ShowMemCardFullScreenText(char * str);
+extern void ShowMemCardFullScreenText(char* str);
 extern char Sjis2Ascii(int sjis);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
-extern int sprintf(char * s, const char * format, ...);
+extern int sprintf(char* s, const char* format, ...);
 
 extern LINE_F3 LINE_F3_ARRAY_000a49a0[2];
 extern LINE_F3 LINE_F3_ARRAY_000a49d0[2];
@@ -65,7 +65,7 @@ extern void* otag[2][1][1026];
 extern uint prevControllerButtons;
 extern PrimList primLists[2];
 extern char stringbuf[64];
-extern TgiFile * tgi;
+extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 
 // Variables
@@ -145,7 +145,7 @@ int LoadSaveMenu(void) {
 
             ResetTextRenderState();
 
-             for (i = 0; i < numCameras; i++) {
+            for (i = 0; i < numCameras; i++) {
                 DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
             }
             DrawOTag(&primLists[!whichDrawDispEnv].gui3);

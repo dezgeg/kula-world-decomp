@@ -1,6 +1,6 @@
 #include "common.h"
 
-#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34  + (y) * 34  + (z)]
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34 + (y) * 34 + (z)]
 #define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 typedef struct MovingPlatformEntity2 {
@@ -54,13 +54,13 @@ typedef struct CrumblingBlockEntity {
     short z;
 } CrumblingBlockEntity;
 
-typedef void (*QuadFunc)(Quad *quad, int width, int x, int y, int z, int textureRotation);
+typedef void (*QuadFunc)(Quad* quad, int width, int x, int y, int z, int textureRotation);
 
 extern int FlipDir(int dir);
 extern int GetCubeIndexRelativeToDir(int x, int y, int z, int idx);
 extern int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dirIndex);
 extern void EnableScreenShake(int param_1, int param_2, int param_3);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void Vibrate100(int constant, int amplitude, int angleIncrement, int max);
 extern void Vibrate101(int param_1);
 
@@ -91,7 +91,7 @@ extern short movingBlockEntityIndexes[16];
 extern TgiFile* tgi;
 
 void ProcessMovingPlatforms2(void) {
-    MovingPlatformEntity2 *mpe;
+    MovingPlatformEntity2* mpe;
     Quad* quad;
     int i;
     int j;
@@ -101,13 +101,13 @@ void ProcessMovingPlatforms2(void) {
     int z;
 
     for (i = 0; i < numMovingPlatforms; i++) {
-        mpe = (MovingPlatformEntity2 *) &entityData[movingBlockEntityIndexes[i] * 128];
+        mpe = (MovingPlatformEntity2*)&entityData[movingBlockEntityIndexes[i] * 128];
         x = mpe->posX;
         y = mpe->posY;
         z = mpe->posZ;
         for (j = 0; j < mpe->length; j++) {
             for (dir = 0; dir < 6; dir++) {
-                quad = *(Quad **)((char *)mpe + j * 24 + dir * 4 + 142);
+                quad = *(Quad**)((char*)mpe + j * 24 + dir * 4 + 142);
                 if (quad != (Quad*)-1) {
                     QUAD_FUNC_PTRS[dir](quad, 512, x, y, z, -1);
                 }
@@ -132,20 +132,20 @@ void ProcessCrumblingBlocks(void) {
     int x9, y9, z9;
     int dir;
     int faceType;
-    CrumblingBlockEntity *eb;
+    CrumblingBlockEntity* eb;
     int state;
     int cubeIndex;
 
     for (i = 0; i < numCrumblingBlocks; i++) {
-        Quad **quads = (Quad**)cubeStates;
-        eb = (CrumblingBlockEntity *)&entityData[crumblingBlockEntityIndexes[i] * 128];
+        Quad** quads = (Quad**)cubeStates;
+        eb = (CrumblingBlockEntity*)&entityData[crumblingBlockEntityIndexes[i] * 128];
         x = eb->x;
         y = eb->y;
         z = eb->z;
         x9 = x << 9;
         y9 = y << 9;
         z9 = z << 9;
-        cubeIndex =  CUBE_INDEX_AT(x, y, z);
+        cubeIndex = CUBE_INDEX_AT(x, y, z);
 
         switch (eb->state) {
             case 2:
@@ -180,7 +180,7 @@ void ProcessCrumblingBlocks(void) {
 }
 
 void ProcessFlashingBlocks(void) {
-    Quad *quad;
+    Quad* quad;
     int i;
     int j;
     uint color;
@@ -303,8 +303,8 @@ void ProcessFlashingBlocks(void) {
 void ProcessRetractableSpikes(void) {
     int i;
     SVECTOR sndPos;
-    short *eb;
-    short *pos;
+    short* eb;
+    short* pos;
     int unkE;
     int unk1E;
     int counter;
@@ -475,9 +475,9 @@ void TurnLevelExitQuadIntoGreen(void) {
 }
 
 int DisableItemShadow(int entityIndex, int side, int const0) {
-    Quad *quad;
+    Quad* quad;
     int cubeIndex;
-    short *ed = entityData + entityIndex * 128;
+    short* ed = entityData + entityIndex * 128;
 
     cubeIndex = CUBE_INDEX_AT(ed[125], ed[126], ed[127]);
 

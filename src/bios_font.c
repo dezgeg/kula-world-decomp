@@ -95,7 +95,7 @@ void SetupBiosFontStr(ushort *str, int x, int y, int param_4, int fg, int bg, in
             y + (i / param_4) * 16);
         SetSemiTrans(&biosStrSprites[0][i].sprt, param_7 != -1);
         SetShadeTex(&biosStrSprites[0][i].sprt, 0);
-        biosStrSprites[0][i].sprt.clut = GetClut(0x270,0xf0);
+        biosStrSprites[0][i].sprt.clut = GetClut(0x270, 0xf0);
         biosStrSprites[0][i].sprt.w = 16;
         biosStrSprites[0][i].sprt.h = 16;
         setUV0(&biosStrSprites[0][i].sprt, (i * 16 % 256), 0xf0);

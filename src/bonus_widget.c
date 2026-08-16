@@ -20,8 +20,8 @@ void DrawBonusWidget(void) {
     int i;
     int div8;
     int mod8;
-    uint *p;
-    uint *p2;
+    uint* p;
+    uint* p2;
 
     bonusWidgetDataPtr++;
     if (bonusWidgetDataPtr >= bonusWidgetDataEnd) {

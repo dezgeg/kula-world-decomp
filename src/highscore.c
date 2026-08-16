@@ -5,9 +5,9 @@
 extern void DrawHighScoreCubes(void);
 extern void DrawPsxButtonBackground(void);
 extern void DrawScoreGraph(void);
-extern void DrawTextCrappyFont(char *str);
+extern void DrawTextCrappyFont(char* str);
 extern void DrawWidgets(int menuId, int cursorPos);
-extern void FormatTime(int time, char *s, int showPlus);
+extern void FormatTime(int time, char* s, int showPlus);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
 extern void InitHighscoreCubes(void);
@@ -19,7 +19,7 @@ extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
 extern void SndMuteAllVoices(void);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR *dir, int volume);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 extern uint Rand(int param_1);
 
@@ -158,7 +158,7 @@ void HighScoreUi(int param_1) {
             highscores[0].fruits = numFruits;
             highscores[0].time = totalPlayTime[0];
             highscores[0].score = maxScore;
-            highscores[0].level = curLevel + curWorld2 * 15  + 1;
+            highscores[0].level = curLevel + curWorld2 * 15 + 1;
             if (curWorld2 == 9 && curWorld == 10) {
                 highscores[0].level = 151;
             }

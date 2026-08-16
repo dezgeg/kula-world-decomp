@@ -11,17 +11,17 @@ extern int AddLightEffect(int x, int y, int z, int whichSide);
 extern int GetButtonsFromReplay(void);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int IsCollidingWithEnemy(SVECTOR pos);
-extern int IsVecWithinPlatformBounds(SVECTOR * pos, int entityOffset, int tolerance);
-extern void AddParticles(int type, SVECTOR * pos, int lightEffectId);
+extern int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance);
+extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern void CalcLevelBounds(Player* player);
 extern void CalcPlayerMatrixesAndDrawPlayer(Player* player);
-extern void CalcWhatPlayerIsStandingOn(Player * player);
-extern void CheckPlayerJumpingStuff(Player * player);
+extern void CalcWhatPlayerIsStandingOn(Player* player);
+extern void CheckPlayerJumpingStuff(Player* player);
 extern void CreateAllItemDispLists(void);
 extern void CreateItemsFromLevelData(void);
 extern void DisableItemShadow(int entityIndex, int side, int const0);
 extern void EnableLethargy(int enable);
-extern void HandleItemTouching(Player * player);
+extern void HandleItemTouching(Player* player);
 extern void HandlePauseModeRotationEffect(Player* player);
 extern void HandlePlayerMovementStuff(Player* player);
 extern void HandleSpecialCubeTypes(Player* player);
@@ -33,15 +33,15 @@ extern void ProcessMovement(Player* player);
 extern void RecordButtonsToDevkit(int buttons);
 extern void RenderEnemies(void);
 extern void ResetPlayerVars(Player* player);
-extern void SetPlayerRotation(int cubeSide, int rotation, Player * player);
+extern void SetPlayerRotation(int cubeSide, int rotation, Player* player);
 extern void SetSunglassMode(int on);
-extern void SetVec184ToVec54(Player * player);
+extern void SetVec184ToVec54(Player* player);
 extern void SndMuteAllTaggedVoices(void);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
-extern void StartMovementIfNeeded(Player * player);
+extern void StartMovementIfNeeded(Player* player);
 extern void UpdateEnemies(SVECTOR pos);
-extern void UpdatePlayerSurroundingBlocks(Player * player);
-extern void UpdateSubpixelPositions(Player * player);
+extern void UpdatePlayerSurroundingBlocks(Player* player);
+extern void UpdateSubpixelPositions(Player* player);
 extern void Vibrate100(int constant, int amplitude, int arrowIncrement, int max);
 extern void Vibrate101(int param_1);
 extern void Vibrate99(int magnitude1, int magnitude2, int count);
@@ -617,7 +617,7 @@ void RenderItems_() {
     CreateAllItemDispLists();
 }
 
-void HandlePlayerButtons(Player *player) {
+void HandlePlayerButtons(Player* player) {
     if (turnDelayEnabled) {
         turnDelayFrames = 6;
     } else {
@@ -862,7 +862,7 @@ void HandlePlayerButtons(Player *player) {
     }
 }
 
-void CalcWhatPlayerIsStandingOn(Player *player) {
+void CalcWhatPlayerIsStandingOn(Player* player) {
     if (player->onMovingPlatform) {
         UpdatePlayerSurroundingBlocks(player);
         return;
@@ -1032,7 +1032,7 @@ void UpdateSubpixelPositions(Player* player) {
     player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
 }
 
-void MovePlayerForward(Player *player, short delta) {
+void MovePlayerForward(Player* player, short delta) {
     if (player->facingDir.vx == 1) {
         player->finePos.vx = ((player->finePos.vx + 256) >> 9 << 9);
         player->finePos.vx += delta;
@@ -1065,7 +1065,7 @@ void MovePlayerForward(Player *player, short delta) {
     }
 }
 
-void MovePlayerDownwards(Player *player, short delta) {
+void MovePlayerDownwards(Player* player, short delta) {
     if (player->gravityDir.vx == 1) {
         player->finePos.vx = player->finePos.vx >> 9 << 9;
         player->finePos.vx += delta;

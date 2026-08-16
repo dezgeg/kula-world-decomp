@@ -19,7 +19,7 @@ typedef struct X {
     char data[1];
 } X;
 
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern byte menuGfxBuf[32768];
@@ -164,8 +164,8 @@ void LoadLevelEndReasonGfx() {
     zlibStream_a4dd4.next_in = ptr;
     zlibStream_a4dd4.avail_out = 0x10000;
     zlibStream_a4dd4.next_out = dest;
-    inflateRetCode = inflateInit_(&zlibStream_a4dd4,S_1_0_4,0x38);
-    inflateRetCode = inflate(&zlibStream_a4dd4,4);
+    inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
+    inflateRetCode = inflate(&zlibStream_a4dd4, 4);
     inflateRetCode = inflateEnd(&zlibStream_a4dd4);
 
     w = *(short*)0x1ea03c;
@@ -227,8 +227,7 @@ void LoadLevelEndReasonGfx() {
             if (w * 4 < 0x81) {
                 rect.x = 736;
                 rect.y = 94;
-            }
-            else {
+            } else {
                 rect.x = 704;
                 rect.y = 175;
             }
@@ -237,20 +236,20 @@ void LoadLevelEndReasonGfx() {
             LoadImage(&rect, 0x1EA040);
             DrawSync(0);
 
-            TSpritePrim(bigGuiSprite2,0,0,GetTPage(0,2,704,94));
+            TSpritePrim(bigGuiSprite2, 0, 0, GetTPage(0, 2, 704, 94));
             setXY0(&bigGuiSprite2[0].sprt, x0, y0);
-            SetSemiTrans(&bigGuiSprite2[0].sprt,2);
-            SetShadeTex(&bigGuiSprite2[0].sprt,0);
+            SetSemiTrans(&bigGuiSprite2[0].sprt, 2);
+            SetShadeTex(&bigGuiSprite2[0].sprt, 0);
             bigGuiSprite2[0].sprt.clut = GetClut(704, 94);
             setWH(&bigGuiSprite2[0].sprt, w * 4, h);
             setUV0(&bigGuiSprite2[0].sprt, 0, 0x5f);
             bigGuiSprite2[1] = bigGuiSprite2[0];
 
-            TSpritePrim(bigGuiSprite1,0,0,GetTPage(0,1,736,94));
+            TSpritePrim(bigGuiSprite1, 0, 0, GetTPage(0, 1, 736, 94));
             setXY0(&bigGuiSprite1[0].sprt, x0, y0);
-            SetSemiTrans(&bigGuiSprite1[0].sprt,1);
-            SetShadeTex(&bigGuiSprite1[0].sprt,0);
-            bigGuiSprite1[0].sprt.clut = GetClut(720,94);
+            SetSemiTrans(&bigGuiSprite1[0].sprt, 1);
+            SetShadeTex(&bigGuiSprite1[0].sprt, 0);
+            bigGuiSprite1[0].sprt.clut = GetClut(720, 94);
             setWH(&bigGuiSprite1[0].sprt, w * 4, h);
             if (w * 4 < 129) {
                 setUV0(&bigGuiSprite1[0].sprt, 128, 94);

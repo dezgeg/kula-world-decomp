@@ -59,8 +59,7 @@ void InitVariousUiSpriteTemplates(void) {
         TSpritePrim(&textDrawTemplateSprites1[i], 0, 0,
                     textures[firstGuiTextTexture + 4 + (i - 19) * 2].tpage);
         // bug, wrong texture idx used
-        SetSemiTrans(&textDrawTemplateSprites1[i].sprt,
-                     textures[firstGuiTextTexture].semitrans);
+        SetSemiTrans(&textDrawTemplateSprites1[i].sprt, textures[firstGuiTextTexture].semitrans);
         SetShadeTex(&textDrawTemplateSprites1[i].sprt, 0);
         setUV0(&textDrawTemplateSprites1[i].sprt,
                textures[firstGuiTextTexture + 4 + (i - 19) * 2].u,

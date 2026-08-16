@@ -3,7 +3,10 @@
 
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR v);
-extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7, int p8, int blockX, int blockY, int blockZ, int dirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int p16, MATRIX* gteMatrix, int shadowColor, int p19);
+extern void CreateEnemyDispList(MATRIX* m, int screenZ, int modelId, int p4, int p5, int p6, int p7,
+                                int p8, int blockX, int blockY, int blockZ, int dirIndex,
+                                int otherBlockX, int otherBlockY, int otherBlockZ, int p16,
+                                MATRIX* gteMatrix, int shadowColor, int p19);
 extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
 extern void InitEnemy(int side, int rotation, Enemy* enemy);
 extern int Rand(int);
@@ -102,7 +105,9 @@ void InitEnemies(void) {
 
                 RotMatrixZ(1024, &enemies[numEnemies].matrix);
 
-                MatrixFromDirectionIndex(&enemies[numEnemies].matrix2, rotation, GetRotationIndexFromVector(enemies[numEnemies].normalVec), -200, &tmpEnemyPos);
+                MatrixFromDirectionIndex(&enemies[numEnemies].matrix2, rotation,
+                                         GetRotationIndexFromVector(enemies[numEnemies].normalVec),
+                                         -200, &tmpEnemyPos);
 
                 numEnemies++;
             }
@@ -202,7 +207,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                     enemies[loopI].initPos.vz = (enemies[loopI].pos.vz + 128) & 0xff00;
                 }
                 while (enemies[loopI].counter == 0) {
-                    switch(Rand(4)) {
+                    switch (Rand(4)) {
                         case 0:
                             if (EnemyCanTurnRight(&enemies[loopI])) {
                                 EnemyTurnRight(&enemies[loopI]);

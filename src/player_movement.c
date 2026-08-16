@@ -1,22 +1,28 @@
 #include "common.h"
 
 extern int IsPlayerOnMovingPlatform(); // XXX: this should take Player* player
-extern int GetBlockAt(SVECTOR * coord);
+extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
-extern int HandleMovingPlatforms(Player * player);
+extern int HandleMovingPlatforms(Player* player);
 extern void ClearA4374(Player* player);
-extern void CreatePlayerDispList(MATRIX * m, int const0x100, int ballTextureIndex, int const0, int colorR, int colorG, int colorB, int const0_, int blockX, int blockY, int blockZ, int blockDirIndex, int otherBlockX, int otherBlockY, int otherBlockZ, int otherBlockDirIndex, MATRIX * gteMatrix, int shadowColor, int param_19, MATRIX* param_20, int param_21, int param_22, int const0_23, int const0_24, int const0xb2, SVECTOR * param_26);
+extern void CreatePlayerDispList(MATRIX* m, int const0x100, int ballTextureIndex, int const0,
+                                 int colorR, int colorG, int colorB, int const0_, int blockX,
+                                 int blockY, int blockZ, int blockDirIndex, int otherBlockX,
+                                 int otherBlockY, int otherBlockZ, int otherBlockDirIndex,
+                                 MATRIX* gteMatrix, int shadowColor, int param_19, MATRIX* param_20,
+                                 int param_21, int param_22, int const0_23, int const0_24,
+                                 int const0xb2, SVECTOR* param_26);
 extern void EnableScreenShake(int param_1, int param_2, int param_3);
 extern void EnableTurningMotionBlur(void);
-extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR * param_3);
+extern void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR* param_3);
 extern void JumpingOnMovingPlatform(Player* player);
-extern void MatrixFromDirectionIndex(MATRIX * m, int p2, int dirIndex, int delta, SVECTOR * vec);
-extern void MovePlayerDownwards(Player * player, int param_2);
-extern void MovePlayerForward(Player * player, int delta);
-extern void ResetPlayerMatrix274(Player * player);
+extern void MatrixFromDirectionIndex(MATRIX* m, int p2, int dirIndex, int delta, SVECTOR* vec);
+extern void MovePlayerDownwards(Player* player, int param_2);
+extern void MovePlayerForward(Player* player, int delta);
+extern void ResetPlayerMatrix274(Player* player);
 extern void SetCubeVisited(int x, int y, int z, int visitType);
-extern void SndPlaySfx(int sfx, int tag, SVECTOR * dir, int volume);
-extern void UpdateSubpixelPositions(Player * player);
+extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
+extern void UpdateSubpixelPositions(Player* player);
 extern void Vibrate99(byte magnitude1, byte magnitude2, int count);
 
 void StartJumpingForward(Player* player);
@@ -36,15 +42,15 @@ extern MATRIX MATRIX_000a42b0;
 extern MATRIX MATRIX_000a4330;
 extern MATRIX perspMatrixes[];
 extern short* entityData;
-extern short *ggiPart5JumpAnimData;
+extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
-extern short * levelData;
+extern short* levelData;
 
 int tempNewBlock;
 short DAT_000a4374;
 short idleSquishMagnitude;
 short idleSquishSinPhase;
-short *initJumpTimerPtr;
+short* initJumpTimerPtr;
 short landingSquishDamping;
 short landingSquishFrameCounter;
 short landingSquishMagnitude;
@@ -840,8 +846,8 @@ void AutoAlignJumpStartPos(Player* player, int amount) {
 void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     int turningWhere;
     int iVar7;
-    MATRIX *pMatrix1;
-    MATRIX *pMatrix2;
+    MATRIX* pMatrix1;
+    MATRIX* pMatrix2;
     int xy, xy_00;
     int dirIndex;
     int uVar4, uVar5, uVar6, uVar8;
@@ -850,7 +856,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     int val;
     int s;
     int v3, v4, v5;
-    SVECTOR *pVec;
+    SVECTOR* pVec;
 
     if (player->turningWhere == 0) {
         if (player->howMoving198 == JUMPING_FORWARD) {
@@ -1041,7 +1047,6 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     } else {
         D_000A41F8 = GetRotationIndexFromVector(player->gravityDir);
     }
-
 
     SVECTOR_000a4228 = player->finePos;
     D_000A41E0 = player->subpixelPositionOnCube.vy;

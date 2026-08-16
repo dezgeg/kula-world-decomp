@@ -43,9 +43,7 @@ static int screenshotIndex[13] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-static uint screenshotTimHeader[5] = {
-    0x10, 0x2, 0x0, 0x0, 0x0
-};
+static uint screenshotTimHeader[5] = {0x10, 0x2, 0x0, 0x0, 0x0};
 
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     int num;

@@ -40,7 +40,7 @@ short* tgiPart9;
 
 // Prototypes
 extern uint Rand(int param_1);
-extern void SkyboxSinCos(int angleval1, int angleval2, short * out1, short * out2, short * out3);
+extern void SkyboxSinCos(int angleval1, int angleval2, short* out1, short* out2, short* out3);
 extern int Square(int val);
 extern void SetShadeTex(void * p, int disable);
 extern void SetSemiTrans(void * p, int enable);
@@ -57,7 +57,7 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     int v;
     int w;
     int k;
-    short *texcoords;
+    short* texcoords;
 
     skyboxAngleMul1 = angleOfSomethingI;
     skyboxAngleMul2 = angleOfSomethingJ;
@@ -142,7 +142,7 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
 
     ptr += skyboxSizePolyMap / 2;
     if (skyboxParam5 == 36) {
-        unsigned char *pu = (unsigned char *)ptr;
+        unsigned char* pu = (unsigned char*)ptr;
         for (i = 0; i < D_000A4164 * 2; i++) {
             setPolyG4(pu);
             pu += 36;
@@ -178,11 +178,10 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     }
 }
 
-
 int RecalcSkyboxes2(void) {
-    short *dst;
-    short *ptr;
-    short *ptr2;
+    short* dst;
+    short* ptr;
+    short* ptr2;
     int x;
     int i;
     int y;
@@ -191,7 +190,7 @@ int RecalcSkyboxes2(void) {
     int k;
     int l;
     int *u1, *u2;
-    u32 *p_u32;
+    u32* p_u32;
     int clut;
     int outer_i;
     int dummy[16];
@@ -273,7 +272,7 @@ int RecalcSkyboxes2(void) {
                     do {
                         dst[9] = -1;
                         dst += 10;
-                    } while(0);
+                    } while (0);
                 }
             }
         }
@@ -324,7 +323,7 @@ int Square(int param_1) {
     return param_1 * param_1;
 }
 
-void SkyboxSinCos(int angleval1, int angleval2, short *out1, short *out2, short *out3) {
+void SkyboxSinCos(int angleval1, int angleval2, short* out1, short* out2, short* out3) {
     int cosParam2;
     int cosParam1;
     int sinParam2;
