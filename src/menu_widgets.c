@@ -13,7 +13,7 @@ typedef struct DeflatedSprites {
 
 extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
-extern void TSpritePrim(TSprite * ts, int dfe, int dtd, int tpage);
+extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern char S_1_0_4[];
 extern char S_Fatal_error_in_jens_2d_eng[];
@@ -255,8 +255,8 @@ void DrawWidgets(int menuId, int cursorPos) {
             musicVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_MAIN_MENU[menuId] + 20;
             sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_MAIN_MENU[menuId];
         } else {
-            musicVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 =  MENU_CURSOR_START_Y_PAUSE_MENU[menuId] + 20;
-            sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 =  MENU_CURSOR_START_Y_PAUSE_MENU[menuId];
+            musicVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_PAUSE_MENU[menuId] + 20;
+            sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_PAUSE_MENU[menuId];
         }
         addPrim(&primLists[whichDrawDispEnv].main, &musicVolumeWidgetSprite[whichDrawDispEnv]);
         addPrim(&primLists[whichDrawDispEnv].main, &sfxVolumeWidgetSprite[whichDrawDispEnv]);

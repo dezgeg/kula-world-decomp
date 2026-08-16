@@ -88,14 +88,12 @@ void LoadHighscoresFromMemcardData(void) {
             highscores[i + 1].fruits = memCardData.saveslots[i].fruits;
 
             if (memCardData.saveslots[i].isFinal == 0) {
-                highscores[i + 1].level =
-                    memCardData.saveslots[i].curWorld * 15 + memCardData.saveslots[i].curLevel + 1;
+                highscores[i + 1].level = memCardData.saveslots[i].curWorld * 15 + memCardData.saveslots[i].curLevel + 1;
                 for (j = 0; j < 150; j++) {
                     highscoreLevelScores[i + 1][j] = memCardData.saveslots[i].levelScores[j];
                 }
             } else {
-                highscores[i + 1].level =
-                    memCardData.saveslots[i].curWorld * 2 + memCardData.saveslots[i].curLevel + 151;
+                highscores[i + 1].level = memCardData.saveslots[i].curWorld * 2 + memCardData.saveslots[i].curLevel + 151;
                 for (j = 0; j < 150; j++) {
                     highscoreLevelScores[i + 1][j] = 0;
                 }
@@ -246,8 +244,8 @@ int SaveMemCard(uint slot) {
         }
         ret = MemCardCreateFile(0, S_BESCES_01000KULA, 1);
         if (ret == 0 || ret == McErrAlreadyExist) {
-            if (MemCardWriteFile(0,S_BESCES_01000KULA, (long*)&memCardData,0,0x1000) == McErrCardNotExist) {
-                MemCardSync(0,&mcCmd,&tempMcResult);
+            if (MemCardWriteFile(0, S_BESCES_01000KULA, (long*)&memCardData, 0, 0x1000) == McErrCardNotExist) {
+                MemCardSync(0, &mcCmd, &tempMcResult);
                 if (tempMcResult != 0) {
                     INT_000a5690 = 1;
                     mcResult = tempMcResult;

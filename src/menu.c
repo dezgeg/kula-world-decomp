@@ -791,7 +791,7 @@ void TimeTrialDifficultySelectionMenu(void) {
             numTimeTrialPlayers = 1;
             twoPlayerWhichPlayer = 0;
             for (i = 0; i < numTimeTrialPlayers; i++) {
-                levelPlayTime[i] = (- TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] -timeTrialDifficulty ) * 50;
+                levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
                 totalPlayTime[i] = 0;
                 levelHasBeenCompletedByPlayer[i] = 0;
             }

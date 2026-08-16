@@ -51,7 +51,7 @@ extern void ScanLevelDataForRetractableSpikes(void);
 int CoordHash(int x, int y, int z, int dir, int div, int mod);
 int GetRandomTextureRotation(void);
 void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, int initAnimFrame1, int initAnimFrame2);
-void FUN_000298e0(AnimatedTextureChain * textureChain);
+void FUN_000298e0(AnimatedTextureChain* textureChain);
 void InitLasers2(void);
 void ProcessCubesIntoFaces(void);
 void ScanLevelDataForMovingBlocks1(void);

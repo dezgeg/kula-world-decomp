@@ -172,7 +172,7 @@ void DrawTimeAttackWidgets(void) {
             if (levelHasBeenCompletedByPlayer[0] != 1) {
                 DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0, 1);
             } else {
-                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites,1,curPlayerTimer,0);
+                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
             }
         }
     } else {
@@ -472,86 +472,86 @@ void DrawFruitWidgets(void) {
     int wd;
 
     switch (fruitWidgetDisplayMode) {
-    case 0:
-        for (i = 0; i < ggi->numFruitTextures / 2; i++) {
-            if (((fruitsCollectedBitmask >> i) & 1) == 0) {
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][0]);
-            } else {
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
+        case 0:
+            for (i = 0; i < ggi->numFruitTextures / 2; i++) {
+                if (((fruitsCollectedBitmask >> i) & 1) == 0) {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][0]);
+                } else {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
+                }
             }
-        }
-        if (fruitsCollectedBitmask == 0x1f) {
-            fruitWidgetDisplayMode = 1;
-            fruitBonusTextIndex = 0;
-            fruitBonusTextTimer = 7;
-        }
-        break;
-    case 1:
-        for (i = 0; i < 5; i++) {
-            if (i >= fruitBonusTextIndex) {
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
-            } else {
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][1]);
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][0]);
-            }
-        }
-        fruitBonusTextTimer--;
-        if (fruitBonusTextTimer < 0) {
-            fruitBonusTextTimer = 7;
-            AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
-            fruitBonusTextIndex++;
-            if (fruitBonusTextIndex == 5) {
-                fruitWidgetDisplayMode = 2;
-                fruitBonusTextTimer = 100;
-            }
-        }
-        break;
-    case 2:
-        for (i = 0; i < 5; i++) {
-            addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][1]);
-            addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][0]);
-        }
-        if (specialLevelType != 1) {
-            fruitBonusTextTimer--;
-            if (fruitBonusTextTimer < 0) {
-                fruitWidgetDisplayMode = 3;
-                fruitBonusTextIndex = 5;
+            if (fruitsCollectedBitmask == 0x1f) {
+                fruitWidgetDisplayMode = 1;
+                fruitBonusTextIndex = 0;
                 fruitBonusTextTimer = 7;
             }
-        }
-        break;
-    case 3:
-        for (i = 0; i < 5; i++) {
-            if (i >= fruitBonusTextIndex) {
-                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
-            } else {
+            break;
+        case 1:
+            for (i = 0; i < 5; i++) {
+                if (i >= fruitBonusTextIndex) {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
+                } else {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][1]);
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][0]);
+                }
+            }
+            fruitBonusTextTimer--;
+            if (fruitBonusTextTimer < 0) {
+                fruitBonusTextTimer = 7;
+                AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
+                fruitBonusTextIndex++;
+                if (fruitBonusTextIndex == 5) {
+                    fruitWidgetDisplayMode = 2;
+                    fruitBonusTextTimer = 100;
+                }
+            }
+            break;
+        case 2:
+            for (i = 0; i < 5; i++) {
                 addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][1]);
                 addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][0]);
             }
-        }
-        fruitBonusTextTimer--;
-        if (fruitBonusTextTimer < 0) {
-            fruitBonusTextTimer = 7;
-            fruitBonusTextIndex--;
-            if (fruitBonusTextIndex == -1) {
-                fruitWidgetDisplayMode = 4;
-                fruitBonusTextTimer = 100;
-            } else {
-                AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
+            if (specialLevelType != 1) {
+                fruitBonusTextTimer--;
+                if (fruitBonusTextTimer < 0) {
+                    fruitWidgetDisplayMode = 3;
+                    fruitBonusTextIndex = 5;
+                    fruitBonusTextTimer = 7;
+                }
             }
-        }
-        break;
-    case 4:
-        for (i = 0; i < 5; i++) {
-            addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
-        }
-        fruitBonusTextTimer--;
-        if (fruitBonusTextTimer < 0) {
-            fruitWidgetDisplayMode = 1;
-            fruitBonusTextIndex = 0;
-            fruitBonusTextTimer = 7;
-        }
-        break;
+            break;
+        case 3:
+            for (i = 0; i < 5; i++) {
+                if (i >= fruitBonusTextIndex) {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
+                } else {
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][1]);
+                    addPrim(&primLists[whichDrawDispEnv].gui1, &fruitBonusTextSprites[whichDrawDispEnv][i][0]);
+                }
+            }
+            fruitBonusTextTimer--;
+            if (fruitBonusTextTimer < 0) {
+                fruitBonusTextTimer = 7;
+                fruitBonusTextIndex--;
+                if (fruitBonusTextIndex == -1) {
+                    fruitWidgetDisplayMode = 4;
+                    fruitBonusTextTimer = 100;
+                } else {
+                    AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
+                }
+            }
+            break;
+        case 4:
+            for (i = 0; i < 5; i++) {
+                addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][1]);
+            }
+            fruitBonusTextTimer--;
+            if (fruitBonusTextTimer < 0) {
+                fruitWidgetDisplayMode = 1;
+                fruitBonusTextIndex = 0;
+                fruitBonusTextTimer = 7;
+            }
+            break;
     }
     if (fruitWidgetDisplayMode != 0) {
         bonusWidgetDataPtr3++;

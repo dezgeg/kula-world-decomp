@@ -31,7 +31,7 @@ typedef struct BiosTextWriter {
     Tim tim;
 } BiosTextWriter;
 
-void SetupBiosFontStr(ushort *str, int x, int y, int param_4, int fg, int bg, int param_7, Tim *tim) {
+void SetupBiosFontStr(ushort* str, int x, int y, int param_4, int fg, int bg, int param_7, Tim* tim) {
     RECT rect;
     int i;
     int j;

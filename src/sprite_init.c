@@ -298,8 +298,8 @@ void InitFruitSprites(void) {
         }
         setXY0(&fruitBonusTextSprites[0][i].sprt, x, y);
         setRGB0(&fruitBonusTextSprites[0][i].sprt, 0x80, 0x80, 0x80);
-        SetSemiTrans(&fruitBonusTextSprites[0][i].sprt,textures[firstGuiTexture + tex].semitrans);
-        SetShadeTex(&fruitBonusTextSprites[0][i].sprt,0);
+        SetSemiTrans(&fruitBonusTextSprites[0][i].sprt, textures[firstGuiTexture + tex].semitrans);
+        SetShadeTex(&fruitBonusTextSprites[0][i].sprt, 0);
         fruitBonusTextSprites[0][i].sprt.clut = textures[firstGuiTexture + tex].clut;
         fruitBonusTextSprites[0][i].sprt.w = textures[firstGuiTexture + tex].w;
         fruitBonusTextSprites[0][i].sprt.h = textures[firstGuiTexture + tex].h;
@@ -326,19 +326,19 @@ void InitLethargyEffectSprites(void) {
         lethargyEffectPoly[i].tpage = textures[firstGuiTexture + 6].tpage;
         lethargyEffectPoly[i].clut = textures[firstGuiTexture + 6].clut;
 
-        TSpritePrim(&lethargyEffectSprite[i][0], 0, tgi->normalLevelBgColor[1], GetTPage(2,0,i == 1 ? 0 : displayWidth,0));
+        TSpritePrim(&lethargyEffectSprite[i][0], 0, tgi->normalLevelBgColor[1], GetTPage(2, 0, i == 1 ? 0 : displayWidth, 0));
         setXY0(&lethargyEffectSprite[i][0].sprt, 0, 0);
         setWH(&lethargyEffectSprite[i][0].sprt, 256, displayHeight);
         setUV0(&lethargyEffectSprite[i][0].sprt, 0, 0);
-        SetSemiTrans(&lethargyEffectSprite[i][0].sprt,1);
-        SetShadeTex(&lethargyEffectSprite[i][0].sprt,0);
+        SetSemiTrans(&lethargyEffectSprite[i][0].sprt, 1);
+        SetShadeTex(&lethargyEffectSprite[i][0].sprt, 0);
         if (displayWidth > 256) {
-            TSpritePrim(&lethargyEffectSprite[i][1], 0,tgi->normalLevelBgColor[1], GetTPage(2,0,i == 1 ? 256 : 256 + displayWidth,0));
+            TSpritePrim(&lethargyEffectSprite[i][1], 0, tgi->normalLevelBgColor[1], GetTPage(2, 0, i == 1 ? 256 : 256 + displayWidth, 0));
             setXY0(&lethargyEffectSprite[i][1].sprt, 256, 0);
             setWH(&lethargyEffectSprite[i][1].sprt, displayWidth - 256, displayHeight);
             setUV0(&lethargyEffectSprite[i][1].sprt, 0, 0);
-            SetSemiTrans(&lethargyEffectSprite[i][1].sprt,1);
-            SetShadeTex(&lethargyEffectSprite[i][1].sprt,0);
+            SetSemiTrans(&lethargyEffectSprite[i][1].sprt, 1);
+            SetShadeTex(&lethargyEffectSprite[i][1].sprt, 0);
         }
     }
 }
@@ -434,9 +434,9 @@ void InitBonusWidgetSprites(void) {
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 9; j++) {
-            TSpritePrim(&bonusWidgetSpritesPiechart[i][j],0,0,textures[firstBonusWidgetTexture + j].tpage);
+            TSpritePrim(&bonusWidgetSpritesPiechart[i][j], 0, 0, textures[firstBonusWidgetTexture + j].tpage);
             SetSemiTrans(&bonusWidgetSpritesPiechart[i][j].sprt, textures[firstBonusWidgetTexture + j].semitrans);
-            SetShadeTex(&bonusWidgetSpritesPiechart[i][j].sprt,0);
+            SetShadeTex(&bonusWidgetSpritesPiechart[i][j].sprt, 0);
             setRGB0(&bonusWidgetSpritesPiechart[i][j].sprt, 0x80, 0x80, 0x80);
             bonusWidgetSpritesPiechart[i][j].sprt.clut = textures[firstBonusWidgetTexture + j].clut;
             bonusWidgetSpritesPiechart[i][j].sprt.u0 = textures[firstBonusWidgetTexture + j].u;
@@ -455,10 +455,10 @@ void InitBonusWidgetSprites(void) {
         setXY0(&bonusWidgetSpritesPiechart[i][8].sprt, 268, 7);
 
         for (j = 0; j < numBonusWidgetMsbs; j++) {
-            TSpritePrim(&bonusWidgetSpritesMsbForeground[i][j],0,0,textures[firstBonusWidgetTexture + 9].tpage);
+            TSpritePrim(&bonusWidgetSpritesMsbForeground[i][j], 0, 0, textures[firstBonusWidgetTexture + 9].tpage);
             setXY0(&bonusWidgetSpritesMsbForeground[i][j].sprt, 268 + -6 * j, 25);
-            SetSemiTrans(&bonusWidgetSpritesMsbForeground[i][j].sprt,  textures[firstBonusWidgetTexture + 9].semitrans);
-            SetShadeTex(&bonusWidgetSpritesMsbForeground[i][j].sprt,0);
+            SetSemiTrans(&bonusWidgetSpritesMsbForeground[i][j].sprt, textures[firstBonusWidgetTexture + 9].semitrans);
+            SetShadeTex(&bonusWidgetSpritesMsbForeground[i][j].sprt, 0);
             setRGB0(&bonusWidgetSpritesMsbForeground[i][j].sprt, 0x80, 0x80, 0x80);
             bonusWidgetSpritesMsbForeground[i][j].sprt.clut = textures[firstBonusWidgetTexture + 9].clut;
             bonusWidgetSpritesMsbForeground[i][j].sprt.u0 = textures[firstBonusWidgetTexture + 9].u;
@@ -482,10 +482,10 @@ void InitBonusWidgetSprites(void) {
                 dy = 0;
             }
 
-            TSpritePrim(&bonusWidgetSpritesMsbBackground[i][j],0,0,textures[texIdx].tpage);
-            setXY0(&bonusWidgetSpritesMsbBackground[i][j].sprt, -6 * (j-1) + 267 + dx , 20 + dy);
-            SetSemiTrans(&bonusWidgetSpritesMsbBackground[i][j].sprt,  textures[texIdx].semitrans);
-            SetShadeTex(&bonusWidgetSpritesMsbBackground[i][j].sprt,0);
+            TSpritePrim(&bonusWidgetSpritesMsbBackground[i][j], 0, 0, textures[texIdx].tpage);
+            setXY0(&bonusWidgetSpritesMsbBackground[i][j].sprt, -6 * (j - 1) + 267 + dx, 20 + dy);
+            SetSemiTrans(&bonusWidgetSpritesMsbBackground[i][j].sprt, textures[texIdx].semitrans);
+            SetShadeTex(&bonusWidgetSpritesMsbBackground[i][j].sprt, 0);
             setRGB0(&bonusWidgetSpritesMsbBackground[i][j].sprt, 0x80, 0x80, 0x80);
             bonusWidgetSpritesMsbBackground[i][j].sprt.clut = textures[texIdx].clut;
             bonusWidgetSpritesMsbBackground[i][j].sprt.u0 = textures[texIdx].u;
@@ -522,24 +522,24 @@ void InitAllDigitSprites(void) {
             break;
 
         case 2:
-        if (numTimeTrialPlayers == 1) {
-            InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0x40,0xec,0x80,0x80,0x80);
-            InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0x40,0xda,0x80,0x80,0x80);
-        } else {
-            if (twoPlayerWhichPlayer == 0) {
-                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0xffffffe0,0xec,0x80,0x80, 0x80);
-                InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites,2,0xae,0xec,0x50,0x50,0x50);
-                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0xffffffe0,0xda,0x80,0x80,0x80);
-                InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites,1,0xae,0xda,0x50,0x50,0x50);
+            if (numTimeTrialPlayers == 1) {
+                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0x40, 0xec, 0x80, 0x80, 0x80);
+                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0x40, 0xda, 0x80, 0x80, 0x80);
             } else {
-                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites,2,0xffffffe0,0xec,0x50,0x50, 0x50);
-                InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites,2,0xae,0xec,0x80,0x80,0x80);
-                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites,1,0xffffffe0,0xda,0x50,0x50,0x50);
-                InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites,1,0xae,0xda,0x80,0x80,0x80);
+                if (twoPlayerWhichPlayer == 0) {
+                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, 0xec, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, 0xec, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, 0xda, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, 0xda, 0x50, 0x50, 0x50);
+                } else {
+                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, 0xec, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, 0xec, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, 0xda, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, 0xda, 0x80, 0x80, 0x80);
+                }
+                isTwoPlayerTimeAttack = 1;
             }
-            isTwoPlayerTimeAttack = 1;
-        }
-        break;
+            break;
     }
 
     // FIXME: extremely ugly

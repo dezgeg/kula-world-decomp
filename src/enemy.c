@@ -257,33 +257,33 @@ void UpdateEnemies(SVECTOR playerPos) {
         }
         if (enemies[loopI].state) {
             switch (enemies[loopI].state) {
-            case 1:
-                if (enemies[loopI].timer++ < 64) {
-                    enemies[loopI].rotationVec.vz -= 16;
-                } else {
-                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    EnemyTurnRight(&enemies[loopI]);
-                    enemies[loopI].state = 0;
-                }
-                break;
-            case 2:
-                if (enemies[loopI].timer++ < 64) {
-                    enemies[loopI].rotationVec.vz += 16;
-                } else {
-                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    EnemyTurnLeft(&enemies[loopI]);
-                    enemies[loopI].state = 0;
-                }
-                break;
-            case 3:
-                if (enemies[loopI].timer++ < 64) {
-                    enemies[loopI].rotationVec.vz += 32;
-                } else {
-                    enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                    EnemyTurnAround(&enemies[loopI]);
-                    enemies[loopI].state = 0;
-                }
-                break;
+                case 1:
+                    if (enemies[loopI].timer++ < 64) {
+                        enemies[loopI].rotationVec.vz -= 16;
+                    } else {
+                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnRight(&enemies[loopI]);
+                        enemies[loopI].state = 0;
+                    }
+                    break;
+                case 2:
+                    if (enemies[loopI].timer++ < 64) {
+                        enemies[loopI].rotationVec.vz += 16;
+                    } else {
+                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnLeft(&enemies[loopI]);
+                        enemies[loopI].state = 0;
+                    }
+                    break;
+                case 3:
+                    if (enemies[loopI].timer++ < 64) {
+                        enemies[loopI].rotationVec.vz += 32;
+                    } else {
+                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnAround(&enemies[loopI]);
+                        enemies[loopI].state = 0;
+                    }
+                    break;
             }
         }
     }

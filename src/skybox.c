@@ -42,12 +42,12 @@ short* tgiPart9;
 extern uint Rand(int param_1);
 extern void SkyboxSinCos(int angleval1, int angleval2, short* out1, short* out2, short* out3);
 extern int Square(int val);
-extern void SetShadeTex(void * p, int disable);
-extern void SetSemiTrans(void * p, int enable);
-extern void *memcpy(void *dest, const void *src, size_t n);
+extern void SetShadeTex(void* p, int disable);
+extern void SetSemiTrans(void* p, int enable);
+extern void* memcpy(void* dest, const void* src, size_t n);
 
 void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, int countJ, int param_5) {
-    short *ptr;
+    short* ptr;
     int i;
     int j;
     int maxDist;
@@ -81,7 +81,7 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     }
     skyboxSizePolys = D_000A4164 * skyboxParam5Times2;
 
-    ptr = (short *)0x001c3000;
+    ptr = (short*)0x001c3000;
 
     for (i = 0; i < countOfSomethingI; i++) {
         for (j = 0; j < countOfSomethingJ; j++) {
@@ -106,10 +106,10 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
         }
     }
 
-    *(int *)&ptr[0] = 0;
-    *(int *)&ptr[2] = 0;
-    *(int *)&ptr[4] = -1;
-    *(int *)&ptr[6] = -1;
+    *(int*)&ptr[0] = 0;
+    *(int*)&ptr[2] = 0;
+    *(int*)&ptr[4] = -1;
+    *(int*)&ptr[6] = -1;
     ptr += 8;
 
     if (param_5 == 36) {

@@ -1,9 +1,9 @@
 #include "common.h"
 
 typedef struct LocalMovingPlatformEntity {
-    short tag;                // 0x0
-    short movementDirection;  // 0x2
-    short pad_4[2];           // 0x4, 0x6
+    short tag;                    // 0x0
+    short movementDirection;      // 0x2
+    short pad_4[2];               // 0x4, 0x6
     short startX, startY, startZ; // 0x8, 0xa, 0xc
     short endX, endY, endZ;       // 0xe, 0x10, 0x12
     short pad_14[6];              // 0x14 - 0x1f
@@ -17,9 +17,9 @@ typedef struct LocalMovingPlatformEntity {
     short posX, posY, posZ;       // 0xee, 0xf0, 0xf2
 } LocalMovingPlatformEntity;
 
-extern int GetBlockAt(SVECTOR * coord);
+extern int GetBlockAt(SVECTOR* coord);
 
-void HandlePlayerMovementStuff(Player *player);
+void HandlePlayerMovementStuff(Player* player);
 void MoveMovingPlatforms(SVECTOR vec);
 
 // non-gprel-used variables (extern)
@@ -148,7 +148,7 @@ void ScanLevelDataForMovingBlocks2(void) {
 }
 
 void MoveMovingPlatforms(SVECTOR vec) {
-#define EB ((LocalMovingPlatformEntity *)&entityData[D_000A4398])
+#define EB ((LocalMovingPlatformEntity*)&entityData[D_000A4398])
     for (D_000A4398 = 0; D_000A4398 < (int)numEntities << 7; D_000A4398 += 128) {
         if (EB->tag == OBJ_TRANSPORTER) {
             D_000A439C = 0;
@@ -239,18 +239,18 @@ int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance) {
     mpLengthScaled = (entityData[entityOffset + 17] - 1) << 9;
 
     switch (entityData[entityOffset + 2]) {
-    case 1:
-        DAT_000a43a8 = pos->vx + tolerance - (entityData[entityOffset + 119] - 256);
-        DAT_000a43ac = entityData[entityOffset + 119] + mpLengthScaled + 256 - (pos->vx - tolerance);
-        break;
-    case 2:
-        DAT_000a43a8 = pos->vy + tolerance - (entityData[entityOffset + 120] - 256);
-        DAT_000a43ac = entityData[entityOffset + 120] + mpLengthScaled + 256 - (pos->vy - tolerance);
-        break;
-    case 5:
-        DAT_000a43a8 = pos->vz + tolerance - (entityData[entityOffset + 121] - 256);
-        DAT_000a43ac = entityData[entityOffset + 121] + mpLengthScaled + 256 - (pos->vz - tolerance);
-        break;
+        case 1:
+            DAT_000a43a8 = pos->vx + tolerance - (entityData[entityOffset + 119] - 256);
+            DAT_000a43ac = entityData[entityOffset + 119] + mpLengthScaled + 256 - (pos->vx - tolerance);
+            break;
+        case 2:
+            DAT_000a43a8 = pos->vy + tolerance - (entityData[entityOffset + 120] - 256);
+            DAT_000a43ac = entityData[entityOffset + 120] + mpLengthScaled + 256 - (pos->vy - tolerance);
+            break;
+        case 5:
+            DAT_000a43a8 = pos->vz + tolerance - (entityData[entityOffset + 121] - 256);
+            DAT_000a43ac = entityData[entityOffset + 121] + mpLengthScaled + 256 - (pos->vz - tolerance);
+            break;
     }
 
     if (DAT_000a43a8 >= 0 && DAT_000a43ac >= 0) {
@@ -263,14 +263,14 @@ int IsPlayerOnMovingPlatform(Player* player) {
     DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
     if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != OBJ_TRANSPORTER) {
         DAT_000a43c4 = (player->surroundingBlocks[2][1][1] - 5) * 128;
-        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4 ] != OBJ_TRANSPORTER) {
+        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != OBJ_TRANSPORTER) {
             return 0;
         }
     }
     return IsVecWithinPlatformBounds(&player->finePos, DAT_000a43c4, 100);
 }
 
-int HandleMovingPlatforms(Player *player) {
+int HandleMovingPlatforms(Player* player) {
     if (player->onMovingPlatform) {
         return 0;
     }
@@ -457,7 +457,7 @@ void JumpingOnMovingPlatform(Player* player) {
     player->svec54.vx = player->svec54.vy = player->svec54.vz = 0;
 }
 
-void UpdatePlayerSurroundingBlocks(Player *player) {
+void UpdatePlayerSurroundingBlocks(Player* player) {
     short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
     short gx, gy, gz;
     short rx, ry, rz;
@@ -510,7 +510,7 @@ void UpdatePlayerSurroundingBlocks(Player *player) {
     }
 
     {
-        MovingPlatformEntity *mpe = (MovingPlatformEntity *)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
+        MovingPlatformEntity* mpe = (MovingPlatformEntity*)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
         mpVelSum = mpe->velX + mpe->velY + mpe->velZ;
     }
 
@@ -520,9 +520,12 @@ void UpdatePlayerSurroundingBlocks(Player *player) {
 }
 
 int AreDirectionsOnSameAxis(int dir1, int dir2) {
-    if ((dir1 == 1 || dir1 == 4) && (dir2 == 1 || dir2 == 4)) return 1;
-    if ((dir1 == 2 || dir1 == 3) && (dir2 == 2 || dir2 == 3)) return 1;
-    if ((dir1 == 0 || dir1 == 5) && (dir2 == 0 || dir2 == 5)) return 1;
+    if ((dir1 == 1 || dir1 == 4) && (dir2 == 1 || dir2 == 4))
+        return 1;
+    if ((dir1 == 2 || dir1 == 3) && (dir2 == 2 || dir2 == 3))
+        return 1;
+    if ((dir1 == 0 || dir1 == 5) && (dir2 == 0 || dir2 == 5))
+        return 1;
     return 0;
 }
 
@@ -558,7 +561,7 @@ void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR*
     D_000A4430 = inv_t;
 }
 
-void CalcLevelBounds(Player *player) {
+void CalcLevelBounds(Player* player) {
     int x, y, z;
 
     player->playerHasControl = 0;
@@ -587,12 +590,18 @@ void CalcLevelBounds(Player *player) {
         for (y = 0; y < 34; y++) {
             for (z = 0; z < 34; z++) {
                 if (levelData[x * 1156 + y * 34 + z] != -1) {
-                    if (x < levelXMin) levelXMin = x;
-                    if (y < levelYMin) levelYMin = y;
-                    if (z < levelZMin) levelZMin = z;
-                    if (x > levelXMax) levelXMax = x;
-                    if (y > levelYMax) levelYMax = y;
-                    if (z > levelZMax) levelZMax = z;
+                    if (x < levelXMin)
+                        levelXMin = x;
+                    if (y < levelYMin)
+                        levelYMin = y;
+                    if (z < levelZMin)
+                        levelZMin = z;
+                    if (x > levelXMax)
+                        levelXMax = x;
+                    if (y > levelYMax)
+                        levelYMax = y;
+                    if (z > levelZMax)
+                        levelZMax = z;
                 }
             }
         }
@@ -639,7 +648,7 @@ void CalcLevelBounds(Player *player) {
     levelEntryBezierP2.vz = levelEntryBezierP3.vz - initPlayerFacingDir.vz / 2;
 }
 
-void ProcessCameraAndMovement(Player *player) {
+void ProcessCameraAndMovement(Player* player) {
     player->playerHasControl = 0;
     if (levelEntryAnimTimer > 1024 || gameMode == 1) {
         if (player->debugCameraMode != 0) {
@@ -701,7 +710,7 @@ void ProcessCameraAndMovement(Player *player) {
     player->debugCamX = 0;
 }
 
-void HandleDebugCamera(Player *player) {
+void HandleDebugCamera(Player* player) {
     player->playerHasControl = 1;
 
     debugCamY = player->debugCamY % 4096;
@@ -756,7 +765,7 @@ void HandlePauseModeRotationEffect(Player* player) {
     }
 }
 
-void HandlePlayerMovementStuff(Player *player) {
+void HandlePlayerMovementStuff(Player* player) {
     short turningTimer;
 
     player->playerHasControl = 1;

@@ -145,7 +145,7 @@ int AddLightEffect(int x, int y, int z, int whichSide) {
     return i;
 }
 
-int AddLightEffectToCube(int x,int y,int z,int dir,int param_5,int param_6,int param_7,int param_8) {
+int AddLightEffectToCube(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8) {
     int msb;
     Quad* quad;
     int ci;
