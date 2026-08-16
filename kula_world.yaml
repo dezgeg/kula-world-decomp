@@ -20,6 +20,7 @@ options:
   migrate_rodata_to_functions: False
   auto_decompile_empty_functions: False
   ld_generate_symbol_per_data_segment: False
+  disassemble_all: True
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
