@@ -86,10 +86,166 @@ short MENU_CURSOR_START_Y_MAIN_MENU[20] = {
     130, 130, 130, 130, 130, 130, 120, 143, 131, 120,
     143, 14, 100, 100, 80, 100, 90, 85, 100, 70,
 };
-char S_menugfx_too_high[] = "menugfx too high"; // hack
-char S_menugfx_nr_too_big[] = "menugfx nr too big"; // hack
 
-INCLUDE_ASM("asm/nonmatchings/menu_widgets", LoadMenuGfx);
+void LoadMenuGfx(int menuId) {
+    RECT rect;
+    short height;
+    short width;
+    uint unk;
+    uint x;
+    ushort y;
+    int spriteId = menuId * 2 + 50;
+    int len;
+    int offset;
+    int offset2;
+    char* buf;
+    int dest;
+
+    if (spriteId == whichLevelEndSpriteLoaded || menuId * 2 > MENU_DEFLATED_SPRITES1_PTR[0]) {
+        return;
+    }
+
+    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
+    offset = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
+    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset;
+    dest = 0x1EA000;
+    zlibStream_a4dd4.avail_in = len;
+    zlibStream_a4dd4.next_in = buf;
+    zlibStream_a4dd4.avail_out = 0x10000;
+    zlibStream_a4dd4.next_out = dest;
+    inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
+    inflateRetCode = inflate(&zlibStream_a4dd4, 4);
+    inflateRetCode = inflateEnd(&zlibStream_a4dd4);
+    height = *(short*)0x1ea03e;
+    width = *(short*)0x1ea03c;
+    unk = displayWidth - width * 4;
+    x = (unk + (unk >> 31)) >> 1;
+    if (gameState == 0) {
+        y = MENU_CURSOR_START_Y_MAIN_MENU[menuId];
+    } else {
+        y = MENU_CURSOR_START_Y_PAUSE_MENU[menuId];
+    }
+    if (height + 94 > 0xff) {
+        SetupDisplay(1, 128, 0, 0, 0, 0);
+        FntFlush(-1);
+        DrawSync(0);
+        whichDrawDispEnv = 0;
+        PutDrawAndDispEnvs();
+        FntPrint(S_Fatal_error_in_jens_2d_eng);
+        FntPrint("menugfx too high");
+        FntFlush(-1);
+        whichDrawDispEnv = 1;
+        PutDrawAndDispEnvs();
+        while (1)
+            ;
+    }
+    rect.x = 704;
+    rect.y = 94;
+    rect.h = 1;
+    rect.w = 16;
+    DrawSync(0);
+    LoadImage(&rect, 0x1EA014);
+    DrawSync(0);
+    rect.x = 704;
+    rect.y = 95;
+    rect.w = width;
+    rect.h = height;
+    LoadImage(&rect, 0x1EA040);
+    DrawSync(0);
+    spriteId++;
+    if (spriteId - 50 > MENU_DEFLATED_SPRITES1_PTR[0]) {
+        SetupDisplay(1, 0x80, 0, 0, 0, 0);
+        FntFlush(-1);
+        DrawSync(0);
+        whichDrawDispEnv = 0;
+        PutDrawAndDispEnvs();
+        FntPrint(S_Fatal_error_in_jens_2d_eng);
+        FntPrint("menugfx nr too big");
+        FntFlush(-1);
+        whichDrawDispEnv = 1;
+        PutDrawAndDispEnvs();
+        while (1)
+            ;
+    }
+    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
+    offset2 = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
+    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset2;
+    dest = 0x1EA000;
+    zlibStream_a4dd4.avail_in = len;
+    zlibStream_a4dd4.next_in = buf;
+    zlibStream_a4dd4.avail_out = 0x10000;
+    zlibStream_a4dd4.next_out = dest;
+    inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
+    inflateRetCode = inflate(&zlibStream_a4dd4, 4);
+    inflateRetCode = inflateEnd(&zlibStream_a4dd4);
+    width = *(short*)0x1EA03C;
+    height = *(short*)0x1EA03E;
+    rect.x = 720;
+    rect.y = 94;
+    rect.w = 16;
+    rect.h = 1;
+    LoadImage(&rect, 0x1EA014);
+    DrawSync(0);
+    if (width * 4 < 129) {
+        rect.x = 736;
+        rect.y = 94;
+    } else {
+        rect.x = 704;
+        rect.y = 175;
+    }
+    rect.w = width;
+    rect.h = height;
+    LoadImage(&rect, 0x1EA040);
+    DrawSync(0);
+
+    TSpritePrim(&bigGuiSprite2[0], 0, 0, GetTPage(0, 2, 704, 94));
+    setRGB0(&bigGuiSprite2[0].sprt, 0x80, 0x80, 0x80);
+    setXY0(&bigGuiSprite2[0].sprt, x, y);
+    SetSemiTrans(&bigGuiSprite2[0].sprt, 2);
+    SetShadeTex(&bigGuiSprite2[0].sprt, 0);
+    bigGuiSprite2[0].sprt.clut = GetClut(704, 94);
+    setWH(&bigGuiSprite2[0].sprt, width * 4, height);
+    setUV0(&bigGuiSprite2[0].sprt, 0, 95);
+
+    TSpritePrim(&bigGuiSprite1[0], 0, 0, GetTPage(0, 1, 736, 94));
+    setRGB0(&bigGuiSprite1[0].sprt, 0x80, 0x80, 0x80);
+    setXY0(&bigGuiSprite1[0].sprt, x, y);
+    SetSemiTrans(&bigGuiSprite1[0].sprt, 1);
+    SetShadeTex(&bigGuiSprite1[0].sprt, 0);
+    bigGuiSprite1[0].sprt.clut = GetClut(720, 94);
+    setWH(&bigGuiSprite1[0].sprt, width * 4, height);
+    if (width * 4 < 129) {
+        setUV0(&bigGuiSprite1[0].sprt, 128, 94);
+    } else {
+        setUV0(&bigGuiSprite1[0].sprt, 0, 175);
+    }
+    if (spriteId == 67) {
+        buttonHelpSprite2[0] = bigGuiSprite2[0];
+        buttonHelpSprite1[0] = bigGuiSprite1[0];
+
+        bigGuiSprite2[0].sprt.h = 43;
+
+        setUV0(&buttonHelpSprite2[0].sprt, 0, 138);
+        buttonHelpSprite2[0].sprt.h = height - 43;
+        buttonHelpSprite2[0].sprt.y0 = y + 74;
+        buttonHelpSprite2[0].sprt.x0 = x;
+
+        bigGuiSprite1[0].sprt.h = 43;
+        if (width * 4 < 129) {
+            setUV0(&buttonHelpSprite1[0].sprt, 128, 137);
+        } else {
+            setUV0(&buttonHelpSprite1[0].sprt, 0, 218);
+        }
+        buttonHelpSprite2[1] = buttonHelpSprite2[0];
+        buttonHelpSprite1[0].sprt.h = height - 43;
+        buttonHelpSprite1[0].sprt.x0 = x;
+        buttonHelpSprite1[0].sprt.y0 = y + 74;
+        buttonHelpSprite1[1] = buttonHelpSprite1[0];
+    }
+    bigGuiSprite2[1] = bigGuiSprite2[0];
+    bigGuiSprite1[1] = bigGuiSprite1[0];
+    whichLevelEndSpriteLoaded = spriteId - 1;
+}
 
 void DrawWidgets(int menuId, int cursorPos) {
     if (menuId == 2 || menuId == 3) {
