@@ -244,7 +244,10 @@ typedef struct Quad {
     // QF_INVISIBLE = bit 8 - apply alpha modulation
     // QF_BONUS_ITEM_SHADOW = bit 16 - item shadow rendered in bonus levels?
     // QF_VISITED_TYPE = bits 17-18 - visit counter
-    // QF_ITEM_SHADOW = bit 24 - enable item shadow / turn level exit green
+    // bits 24-31 choose texture variant, which can mean:
+    //  - laser color (0-3)
+    //  - level exit color (0 = red, 1 = green)
+    //  - item shadow present
     union {
         uint i32;
         ushort u16;
@@ -558,18 +561,18 @@ typedef struct TgiFile {
     RGB specialLevelModelMediumColor;
     RGB specialLevelModelLightColor;
     BlockColors specialBlockColors;
-    int unk108;
-    int skyboxFlag;
-    int lodDistance[7];
+    int unk108; // always 99
+    int skyboxFlag; // always 1025
+    int lodDistance[7]; // always [90, 70, 40, 20, 80, 60, 40]
     int sideBrightness[6];
     int randomTileRotation;
-    int unk148;
-    int unk14c;
-    int unk150;
-    int numPlainTileTextureVariationsNormalLevel;
-    int unk158;
-    int numPlainTileTextureVariationsSpecialLevel;
-    int unk160;
+    int unused148;
+    int unused14c;
+    int numFixedTextures; // always 7
+    int numPlainTileTextureVariationsNormalLevel; // always 4
+    int numObjTexturesNormalLevel; // always 50
+    int numPlainTileTextureVariationsSpecialLevel; // always 1
+    int numObjTexturesSpecialLevel; // always 50
     int part0Words;
     int part1Words;
     int part2Words;
@@ -582,6 +585,13 @@ typedef struct TgiFile {
     int part9Words;
     int part10Words;
 } TgiFile;
+// Texture indexing:
+// 0-3: Moving block sides
+// 4: Crumbling block
+// 5: Laser emitter
+// 6: Invisible
+// 7-10: Plain tile variations
+// 11-: based on object type
 
 typedef struct GgiFile {
     int numFruitTextures;

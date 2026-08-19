@@ -258,6 +258,7 @@ void ProcessCubesIntoFaces(void) {
                     switch(type) {
                     case OBJ_INVISIBLE_PATCH:
                         if (!((relType >= 0 && relType <= 1) || (relType >= 2 && relType <= 3) || relType == 4)) {
+                            // 6 == invisible
                             SetFaceData(numberOfCubeFaces++,
                                         (void**)(cubeCounter * 64 + csptr),quadSomethingStartIndex + 6, 0x100, dir,
                                         xFine,yFine,zFine,0,0x808080);
@@ -280,6 +281,7 @@ void ProcessCubesIntoFaces(void) {
                         if (specialLevelType == 2) {
                             flags |= 2; // QF_SEMITRANSPARENT
                         }
+                        // 4 == crumbling
                         SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr),
                                     quadSomethingStartIndex + 4,flags,dir,xFine,yFine,zFine,0,0x808080);
                         isNonempty = 1;
@@ -290,7 +292,7 @@ void ProcessCubesIntoFaces(void) {
                     case -OBJ_EXIT:
                         // FIXME: flashing or exit - which one is it?
                         flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
-                        textureIdx = quadSomethingStartIndex + tgi->unk150;
+                        textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
                         textureRotation = GetRandomTextureRotation();
                         if (specialLevelType == 1) {
                             AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
@@ -309,7 +311,7 @@ void ProcessCubesIntoFaces(void) {
                         if (!((relType >= 0 && relType < 2) || relType == 2 || relType == 4)) {
                             flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                             textureRotation = 0;
-                            textureIdx = quadSomethingStartIndex + tgi->unk150;
+                            textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
                             if (type == 0) {
                                 textureIdx += Rand(numPlainTileTextureVariations);
                                 textureRotation = GetRandomTextureRotation();
@@ -536,7 +538,7 @@ void ScanLevelDataForMovingBlocks1(void) {
                 } else {
                     if (val == -2) {
                         SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
-                                    quadSomethingStartIndex + tgi->unk150 + Rand(numPlainTileTextureVariations),
+                                    quadSomethingStartIndex + tgi->numFixedTextures + Rand(numPlainTileTextureVariations),
                                     flags, dir, 0, 0, 0, pStuff[dir*2+1], 0x808080);
                     } else {
                         SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
@@ -673,10 +675,10 @@ void CopyQuadData(void) {
 void InitAnimatedTextureChain(
         AnimatedTextureChain* dst,
         int maxQuads,
-        int numFlagAnimFrames,
+        int numTexAnimFrames,
         int numColorAnimFrames,
-        char* flagAnimData0,
-        char* flagAnimData1,
+        char* texAnimData0,
+        char* texAnimData1,
         uint* colorAnimData0,
         uint* colorAnimData1,
         uint* colorAnimData2,
@@ -684,10 +686,10 @@ void InitAnimatedTextureChain(
     int* d = (int*)dst;
     d[0] = (int)((u8*)dst + 40 + maxQuads * 8);
     d[1] = (int)(dst + 1);
-    d[2] = numFlagAnimFrames;
+    d[2] = numTexAnimFrames;
     d[3] = numColorAnimFrames;
-    d[4] = (int)flagAnimData0;
-    d[5] = (int)flagAnimData1;
+    d[4] = (int)texAnimData0;
+    d[5] = (int)texAnimData1;
     d[6] = (int)colorAnimData0;
     d[7] = (int)colorAnimData1;
     d[8] = (int)colorAnimData2;

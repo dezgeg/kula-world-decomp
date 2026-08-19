@@ -207,10 +207,10 @@ void GetHighscoreCubeStyle(ushort* pTpage, ushort* pClut, byte* pU, byte* pV, in
             *pSemitrans = 1;
             break;
         case 666:
-            texture = tgi->unk150 + Rand(tgi->numPlainTileTextureVariationsNormalLevel);
+            texture = tgi->numFixedTextures + Rand(tgi->numPlainTileTextureVariationsNormalLevel);
             break;
         case 668:
-            texture = tgi->unk150 + tgi->numPlainTileTextureVariationsNormalLevel + 2;
+            texture = tgi->numFixedTextures + tgi->numPlainTileTextureVariationsNormalLevel + 2;
             break;
     }
     md = &cubeTextureMetadata[tgiPart5[texture * 2] * 3 + tgiPart5[texture * 2 + 1]];
@@ -291,15 +291,15 @@ void ParseLevelDataFromTgi(void) {
 
     if (specialLevelType == 1) {
         numPlainTileTextureVariations = tgi->numPlainTileTextureVariationsSpecialLevel;
-        DAT_000a4128 = tgi->unk160;
-        quadSomethingStartIndex = tgi->unk150 + tgi->numPlainTileTextureVariationsNormalLevel + tgi->unk158;
+        DAT_000a4128 = tgi->numObjTexturesSpecialLevel;
+        quadSomethingStartIndex = tgi->numFixedTextures + tgi->numPlainTileTextureVariationsNormalLevel + tgi->numObjTexturesNormalLevel;
     } else {
         quadSomethingStartIndex = 0;
         numPlainTileTextureVariations = tgi->numPlainTileTextureVariationsNormalLevel;
-        DAT_000a4128 = tgi->unk158;
+        DAT_000a4128 = tgi->numObjTexturesNormalLevel;
     }
 
-    quadSomethingCount = tgi->unk150 + numPlainTileTextureVariations + DAT_000a4128;
+    quadSomethingCount = tgi->numFixedTextures + numPlainTileTextureVariations + DAT_000a4128;
 
     ProcessLevelData();
     InitManySprites();
