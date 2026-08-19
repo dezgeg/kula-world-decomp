@@ -40,7 +40,7 @@ short* tgiPart9;
 
 // Prototypes
 extern uint Rand(int param_1);
-extern void SkyboxSinCos(int angleval1, int angleval2, short* out1, short* out2, short* out3);
+extern void SkyboxSinCos(int azimuth, int elevation, short* outX, short* outY, short* outZ);
 extern int Square(int val);
 extern void SetShadeTex(void* p, int disable);
 extern void SetSemiTrans(void* p, int enable);
@@ -142,10 +142,9 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
 
     ptr += skyboxSizePolyMap / 2;
     if (skyboxParam5 == 36) {
-        unsigned char* pu = (unsigned char*)ptr;
-        for (i = 0; i < D_000A4164 * 2; i++) {
+        POLY_G4* pu = (unsigned char*)ptr;
+        for (i = 0; i < D_000A4164 * 2; pu++, i++) {
             setPolyG4(pu);
-            pu += 36;
         }
     } else {
         texcoords = tgiPart9;
@@ -323,42 +322,43 @@ int Square(int param_1) {
     return param_1 * param_1;
 }
 
-void SkyboxSinCos(int angleval1, int angleval2, short* out1, short* out2, short* out3) {
-    int cosParam2;
-    int cosParam1;
-    int sinParam2;
-    int sinParam1;
-    int angleval2_;
-    int out1_val;
+void SkyboxSinCos(int azimuth, int elevation, short* outX, short* outY, short* outZ) {
+    int elevationAngle;
+    int xzRadius;
+    int sinAzimuth;
+    int cosAzimuth;
+    int x;
+    int y;
 
-    if (angleval1 < 0) {
-        angleval1 = angleval1 + skyboxMaxAngle1;
+    if (azimuth < 0) {
+        azimuth = azimuth + skyboxMaxAngle1;
     }
-    if (skyboxMaxAngle1 <= angleval1) {
-        angleval1 = angleval1 - skyboxMaxAngle1;
+    if (skyboxMaxAngle1 <= azimuth) {
+        azimuth = azimuth - skyboxMaxAngle1;
     }
-    if (angleval2 < 0) {
-        angleval2 = 0;
+    if (elevation < 0) {
+        elevation = 0;
     }
-    angleval2_ = angleval2 << 11;
-    if (skyboxMaxAngle2 <= angleval2) {
-        angleval2 = skyboxMaxAngle2 - 1;
-        angleval2_ = angleval2 << 11;
+    elevationAngle = elevation << 11;
+    if (skyboxMaxAngle2 <= elevation) {
+        elevation = skyboxMaxAngle2 - 1;
+        elevationAngle = elevation << 11;
     }
-    cosParam2 = rcos(angleval2_ / (skyboxMaxAngle2 - 1) + 0x400);
-    cosParam1 = rcos((angleval1 << 12) / skyboxMaxAngle1);
-    cosParam1 = cosParam1 * cosParam2;
-    if (cosParam1 < 0) {
-        cosParam1 = cosParam1 + 0xfff;
+    xzRadius = rcos(elevationAngle / (skyboxMaxAngle2 - 1) + 0x400);
+    cosAzimuth = rcos((azimuth << 12) / skyboxMaxAngle1);
+    cosAzimuth = cosAzimuth * xzRadius;
+    if (cosAzimuth < 0) {
+        cosAzimuth = cosAzimuth + 0xfff;
     }
-    out1_val = cosParam1 >> 12;
-    sinParam2 = rsin(angleval2_ / (skyboxMaxAngle2 - 1) + 0x400);
-    sinParam1 = rsin((angleval1 << 12) / skyboxMaxAngle1);
-    sinParam1 = sinParam1 * cosParam2;
-    if (sinParam1 < 0) {
-        sinParam1 = sinParam1 + 0xfff;
+    x = cosAzimuth >> 12;
+    y = rsin(elevationAngle / (skyboxMaxAngle2 - 1) + 0x400);
+    sinAzimuth = rsin((azimuth << 12) / skyboxMaxAngle1);
+    sinAzimuth = sinAzimuth * xzRadius;
+    if (sinAzimuth < 0) {
+        sinAzimuth = sinAzimuth + 0xfff;
     }
-    *out1 = (short)out1_val;
-    *out2 = (short)sinParam2;
-    *out3 = (short)(sinParam1 >> 12);
+
+    *outX = x;
+    *outY = y;
+    *outZ = sinAzimuth >> 12;
 }
