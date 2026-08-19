@@ -657,7 +657,7 @@ void CopyQuadData(void) {
             q->flags.i32 = fd->flags;
             *(int*)&q->otagIndex = 0xffff;
             dir = fd->dir;
-            idx = (tgiPart5[i * 2] * 3 + tgiPart5[i * 2 + 1] * tgi->unk12c[dir]) * 32;
+            idx = (tgiPart5[i * 2] * 3 + tgiPart5[i * 2 + 1] * tgi->sideBrightness[dir]) * 32;
             q->metadata = &cubeTextureMetadata[idx];
             q->color = fd->color;
             j++;

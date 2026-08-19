@@ -561,7 +561,7 @@ typedef struct TgiFile {
     int unk108;
     int skyboxFlag;
     int lodDistance[7];
-    int unk12c[6];
+    int sideBrightness[6];
     int randomTileRotation;
     int unk148;
     int unk14c;

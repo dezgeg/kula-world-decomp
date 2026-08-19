@@ -415,9 +415,9 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     quad = cubeStates[16 * CUBE_INDEX_AT(*(entBase + 125), *(entBase + 126), *(entBase + 127)) + dirIndexInBlock];
     e = entBase + dirIndexInBlock * 16;
     if (specialLevelType == 1) {
-        colorPtr = (int *)((char *)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 156));
+        colorPtr = (int *)((char *)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 156));
     } else {
-        colorPtr = (int*)((char*)tgi + (tgi->unk12c[dirIndexInBlock] * 12 + 24));
+        colorPtr = (int*)((char*)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 24));
     }
     colorR = colorPtr[0];
     colorG = colorPtr[1];
