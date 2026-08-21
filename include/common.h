@@ -585,11 +585,36 @@ typedef struct TgiFile {
     int part9Words;
     int part10Words;
 } TgiFile;
-// Texture indexing:
+
+// Part 0: cube texture distance-based fog CLUT lookup table
+// Part 1: Model depth cueing table for normal level (short[2048])
+// Part 2: Cube texture depth cueing table for normal level (short[2048])
+// Part 3: Model fog table for special level (short[2048])
+// Part 4: Cube texture depth cueing table for special level (short[2048])
+// Part 5: Cube texture variant index table. Table of struct {
+//     short part6Index; // Index into part 6 table
+//     short numVariants; // Number of variants / animation frames for this logical texture
+// };
+// Part 6: Cube texture metadata. Table of struct {
+//     short baseClut[3];   // Full 64x64 CLUT IDs for 3 brightness levels
+//     short baseVramX;     // VRAM X
+//     short baseVramY;     // VRAM Y
+//     struct {
+//         short paletteIdx[3]; // Part 0 palette indexes for 3 brightness levels
+//         short vramX; // VRAM X for this mipmap level
+//         short vramY; // VRAM Y for this mipmap level
+//     } mipmaps[3];
+// };
+// Part 7: Special level background animation data
+// Part 8: Special level background vertex data
+// Part 9: Skybox texture metadata & textures
+// Part 10: Cube texture data
+
+// Texture indexing into part 5:
 // 0-3: Moving block sides
 // 4: Crumbling block
 // 5: Laser emitter
-// 6: Invisible
+// 6: Invisible block
 // 7-10: Plain tile variations
 // 11-: based on object type
 
