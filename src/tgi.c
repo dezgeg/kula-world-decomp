@@ -85,7 +85,7 @@ int specialLevelType;
 int wasSpecialLevel;
 
 int INT_ARRAY_000a2cd8[7] = { 28, 23, 22, 15, 40, 30, 20 };
-int LOD_THRESHOLDS[9] = { 0, 30, 43, 55, 66, 76, 85, 93, 100 };
+int LOD_THRESHOLDS[9] = { 0, 30, 43, 55, 66, 76, 85, 93, 100 }; // percentage
 int HIGHSCORE_CUBE_RANDOM_TEXTURES[16] = { 666, 666, 666, 666, 666, 666, 4, 4, 4, 4, 668, 668, 668, 6, 6, 0 };
 
 void* ParseTGI(TgiFile* tgiBuf) {
@@ -294,9 +294,9 @@ void ParseLevelDataFromTgi(void) {
         DAT_000a4128 = tgi->numObjTexturesSpecialLevel;
         quadSomethingStartIndex = tgi->numFixedTextures + tgi->numPlainTileTextureVariationsNormalLevel + tgi->numObjTexturesNormalLevel;
     } else {
-        quadSomethingStartIndex = 0;
         numPlainTileTextureVariations = tgi->numPlainTileTextureVariationsNormalLevel;
         DAT_000a4128 = tgi->numObjTexturesNormalLevel;
+        quadSomethingStartIndex = 0;
     }
 
     quadSomethingCount = tgi->numFixedTextures + numPlainTileTextureVariations + DAT_000a4128;
