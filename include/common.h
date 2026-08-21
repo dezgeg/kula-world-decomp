@@ -561,7 +561,7 @@ typedef struct TgiFile {
     RGB specialLevelModelMediumColor;
     RGB specialLevelModelLightColor;
     BlockColors specialBlockColors;
-    int unk108; // always 99
+    int numDepthClueCluts; // always 99
     int skyboxFlag; // always 1025
     int lodDistance[7]; // always [90, 70, 40, 20, 80, 60, 40]
     int sideBrightness[6];

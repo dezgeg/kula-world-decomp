@@ -1,7 +1,7 @@
 #include "common.h"
 
-typedef struct Entry {
-    short* clut;
+typedef struct TextureMipLevel {
+    short* clutTable; // distance-indexed lookup table (pointing to tgi part 0)
     union {
         short u16;
         struct {
@@ -10,14 +10,14 @@ typedef struct Entry {
         } u8;
     } uv;
     short tpage;
-} Entry;
+} TextureMipLevel;
 
 typedef struct CubeTextureMetadata {
-    short unk0;
-    short unk2;
-    short unk4;
-    short unk6;
-    Entry entries[3];
+    short fullClut;
+    short fullUv;
+    short fullTpage;
+    short pad;
+    TextureMipLevel mipmaps[3];
 } CubeTextureMetadata;
 
 extern void InitCubeTextureMetadata(void);
@@ -156,17 +156,17 @@ void InitCubeTextureMetadata(void) {
             for (j = 0; j < p[1]; j++) {
                 pPart6 = &tgiPart6[20 * (p0 + j)];
                 de = &cubeTextureMetadata[p0 * 3 + i * p[1] + j];
-                *de++ = pPart6[i];
+                *de++ = pPart6[i]; // fullClut
                 tx = pPart6[3];
                 ty = pPart6[4];
                 mx = (tx % 64) * 2;
                 my = ty % 256;
-                *de++ = my << 8 | mx;
-                *de++ = GetTPage(1, 0, tx, ty);
-                *de++ = 0;
+                *de++ = my << 8 | mx; // fullUv
+                *de++ = GetTPage(1, 0, tx, ty); // fullTpage
+                *de++ = 0; // pad
                 pPart6 += 5;
                 for (mipmap = 0; mipmap < 3; pPart6 += 5, mipmap++) {
-                    *(int*)de = &tgiPart0[pPart6[i] * tgi->unk108];
+                    *(int*)de = &tgiPart0[pPart6[i] * tgi->numDepthClueCluts]; // clutTable
                     de += 2;
                     tx = pPart6[3];
                     ty = pPart6[4];
@@ -183,8 +183,8 @@ void InitCubeTextureMetadata(void) {
                             mx += 0x7;
                             break;
                     }
-                    *de++ = my << 8 | mx;
-                    *de++ = GetTPage(0, 0, tx, ty);
+                    *de++ = my << 8 | mx; // uv
+                    *de++ = GetTPage(0, 0, tx, ty); // tpage
                 }
             }
         }
@@ -214,10 +214,10 @@ void GetHighscoreCubeStyle(ushort* pTpage, ushort* pClut, byte* pU, byte* pV, in
             break;
     }
     md = &cubeTextureMetadata[tgiPart5[texture * 2] * 3 + tgiPart5[texture * 2 + 1]];
-    *pTpage = md->entries[0].tpage | 0x20;
-    *pClut = *md->entries[0].clut;
-    *pU = md->entries[0].uv.u8.u - 0x1f;
-    *pV = md->entries[0].uv.u8.v;
+    *pTpage = md->mipmaps[0].tpage | 0x20;
+    *pClut = *md->mipmaps[0].clutTable;
+    *pU = md->mipmaps[0].uv.u8.u - 0x1f;
+    *pV = md->mipmaps[0].uv.u8.v;
 }
 
 void LoadImagesFromTgiPart9(short* p) {
