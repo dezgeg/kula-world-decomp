@@ -92,17 +92,17 @@ void RenderBackground(void) {
 
     if (cameraIndex == 0 && tgi->skyboxFlag == 0x401) {
         switch (specialLevelType) {
-        case 1:
-            RenderBonusBackgroundPart1(&otag[whichDrawDispEnv][cameraIndex][1025]);
-            RenderBonusBackgroundPart2();
-            break;
-        case 2:
-            UpdateStarfield();
-            RenderStarfield(&otag[whichDrawDispEnv][cameraIndex][1025]);
-            break;
-        default:
-            RenderNonSpecialBackground(&otag[whichDrawDispEnv][cameraIndex][1025]);
-            break;
+            case 1:
+                RenderBonusBackgroundPart1(&otag[whichDrawDispEnv][cameraIndex][1025]);
+                RenderBonusBackgroundPart2();
+                break;
+            case 2:
+                UpdateStarfield();
+                RenderStarfield(&otag[whichDrawDispEnv][cameraIndex][1025]);
+                break;
+            default:
+                RenderNonSpecialBackground(&otag[whichDrawDispEnv][cameraIndex][1025]);
+                break;
         }
     }
 }

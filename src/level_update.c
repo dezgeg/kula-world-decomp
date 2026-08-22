@@ -616,7 +616,9 @@ void CalcLevelBounds(Player* player) {
         for (y = 0; y < 34; y++) {
             for (z = 0; z < 34; z++) {
                 if (levelData[x * 1156 + y * 34 + z] != -1) {
-                    distSquared = (x * 2 - xMinPlusMax) * (x * 2 - xMinPlusMax) + (y * 2 - yMinPlusMax) * (y * 2 - yMinPlusMax) + (z * 2 - zMinPlusMax) * (z * 2 - zMinPlusMax);
+                    distSquared = (x * 2 - xMinPlusMax) * (x * 2 - xMinPlusMax) +
+                                  (y * 2 - yMinPlusMax) * (y * 2 - yMinPlusMax) +
+                                  (z * 2 - zMinPlusMax) * (z * 2 - zMinPlusMax);
                     if (distSquared > maxDistSquared) {
                         maxDistSquared = distSquared;
                     }

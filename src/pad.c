@@ -76,7 +76,8 @@ int GetControllerStatus(int slot) {
 
     if (padData[slot][0] == 0) {
         typeMsb = padData[slot][1] >> 4;
-        if (typeMsb == 4 || typeMsb == 5 || typeMsb == 7) return 1;
+        if (typeMsb == 4 || typeMsb == 5 || typeMsb == 7)
+            return 1;
     }
     return 0;
 }

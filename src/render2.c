@@ -159,7 +159,8 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
     int off;
     Quad* q;
 
-    if (z < 400) return;
+    if (z < 400)
+        return;
     z >>= 6;
 
     if (blockX < 34 && blockY < 34 && blockZ < 34 &&
@@ -195,7 +196,8 @@ LAB_shadow:
         shadowDepth -= 2;
     }
 
-    if (shadowDepth < 0) return;
+    if (shadowDepth < 0)
+        return;
 
     playerEnemyDispList[playerEnemyDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg8;
@@ -299,7 +301,8 @@ LAB_shadow:
         shadowDepth -= 2;
     }
 
-    if (shadowDepth < 0) return;
+    if (shadowDepth < 0)
+        return;
 
     playerEnemyDispList[playerEnemyDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg8;
@@ -414,7 +417,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     quad = cubeStates[16 * CUBE_INDEX_AT(*(entBase + 125), *(entBase + 126), *(entBase + 127)) + dirIndexInBlock];
     e = entBase + dirIndexInBlock * 16;
     if (specialLevelType == 1) {
-        colorPtr = (int *)((char *)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 156));
+        colorPtr = (int*)((char*)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 156));
     } else {
         colorPtr = (int*)((char*)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 24));
     }

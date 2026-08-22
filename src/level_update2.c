@@ -140,82 +140,87 @@ void CreateItemsFromLevelData(void) {
             itemState[k].type = 0;
 
             switch (entityData[eoff + 1]) {
-            case OBJ_APPLE:
-            case OBJ_WATERMELON:
-            case OBJ_PUMPKIN:
-            case OBJ_BANANA:
-            case OBJ_STRAWBERRY:
-                itemState[k].collisionDistance = 32400;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 386;
-                if (!(fruitsCollectedBitmask & 0x10)) entityData[eoff + 1] = OBJ_STRAWBERRY;
-                if (!(fruitsCollectedBitmask & 0x08)) entityData[eoff + 1] = OBJ_BANANA;
-                if (!(fruitsCollectedBitmask & 0x04)) entityData[eoff + 1] = OBJ_PUMPKIN;
-                if (!(fruitsCollectedBitmask & 0x02)) entityData[eoff + 1] = OBJ_WATERMELON;
-                if (!(fruitsCollectedBitmask & 0x01)) entityData[eoff + 1] = OBJ_APPLE;
-                break;
-            case OBJ_LETHARGY_PILL:
-            case OBJ_BOUNCY_PILL:
-            case OBJ_INVINCIBILITY_PILL:
-            case OBJ_SUNGLASSES:
-                itemState[k].collisionDistance = 25600;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 386;
-                break;
-            case OBJ_COIN:
-                itemState[k].collisionDistance = 25600;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 406;
-                break;
-            case OBJ_SPIKE_TRAP:
-                itemState[k].collisionDistance = 25600;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 416;
-                break;
-            case OBJ_HOURGLASS:
-                itemState[k].collisionDistance = 25600;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 436;
-                break;
-            case OBJ_GEM:
-                itemState[k].collisionDistance = 25600;
-                itemState[k].type = 1;
-                if (entityData[eoff + 3] == 0) {
+                case OBJ_APPLE:
+                case OBJ_WATERMELON:
+                case OBJ_PUMPKIN:
+                case OBJ_BANANA:
+                case OBJ_STRAWBERRY:
+                    itemState[k].collisionDistance = 32400;
+                    itemState[k].type = 1;
                     entityData[eoff + 9] = 386;
-                } else {
+                    if (!(fruitsCollectedBitmask & 0x10))
+                        entityData[eoff + 1] = OBJ_STRAWBERRY;
+                    if (!(fruitsCollectedBitmask & 0x08))
+                        entityData[eoff + 1] = OBJ_BANANA;
+                    if (!(fruitsCollectedBitmask & 0x04))
+                        entityData[eoff + 1] = OBJ_PUMPKIN;
+                    if (!(fruitsCollectedBitmask & 0x02))
+                        entityData[eoff + 1] = OBJ_WATERMELON;
+                    if (!(fruitsCollectedBitmask & 0x01))
+                        entityData[eoff + 1] = OBJ_APPLE;
+                    break;
+                case OBJ_LETHARGY_PILL:
+                case OBJ_BOUNCY_PILL:
+                case OBJ_INVINCIBILITY_PILL:
+                case OBJ_SUNGLASSES:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 386;
+                    break;
+                case OBJ_COIN:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 406;
+                    break;
+                case OBJ_SPIKE_TRAP:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 416;
+                    break;
+                case OBJ_HOURGLASS:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
                     entityData[eoff + 9] = 436;
-                }
-                break;
-            case OBJ_EXIT:
-                levelExitEntityOffset = eoff;
-                entityData[eoff + 3] = 1;
-                entityData[eoff + 9] = 500;
-                break;
-            case OBJ_HIDDEN_EXIT:
-                levelHiddenExitEntityOffset = eoff;
-                entityData[eoff + 4] = 0;
-                entityData[eoff + 9] = 500;
-                break;
-            case OBJ_KEY:
-                itemState[k].collisionDistance = 22500;
-                numKeysRemaining++;
-                itemState[k].type = 1;
-                entityData[eoff + 9] = 386;
-                break;
-            case OBJ_BOUNCEPAD:
-                entityData[eoff + 11] = 16;
-                entityData[eoff + 9] = 256;
-                break;
-            case OBJ_TRANSPORTER:
-            case OBJ_BUTTON:
-            case OBJ_MOVING_SPIKE:
-            case OBJ_SPIKE:
-            case OBJ_ARROW:
-                entityData[eoff + 9] = 256;
-                break;
-            default:
-                shouldCreate = 0;
-                break;
+                    break;
+                case OBJ_GEM:
+                    itemState[k].collisionDistance = 25600;
+                    itemState[k].type = 1;
+                    if (entityData[eoff + 3] == 0) {
+                        entityData[eoff + 9] = 386;
+                    } else {
+                        entityData[eoff + 9] = 436;
+                    }
+                    break;
+                case OBJ_EXIT:
+                    levelExitEntityOffset = eoff;
+                    entityData[eoff + 3] = 1;
+                    entityData[eoff + 9] = 500;
+                    break;
+                case OBJ_HIDDEN_EXIT:
+                    levelHiddenExitEntityOffset = eoff;
+                    entityData[eoff + 4] = 0;
+                    entityData[eoff + 9] = 500;
+                    break;
+                case OBJ_KEY:
+                    itemState[k].collisionDistance = 22500;
+                    numKeysRemaining++;
+                    itemState[k].type = 1;
+                    entityData[eoff + 9] = 386;
+                    break;
+                case OBJ_BOUNCEPAD:
+                    entityData[eoff + 11] = 16;
+                    entityData[eoff + 9] = 256;
+                    break;
+                case OBJ_TRANSPORTER:
+                case OBJ_BUTTON:
+                case OBJ_MOVING_SPIKE:
+                case OBJ_SPIKE:
+                case OBJ_ARROW:
+                    entityData[eoff + 9] = 256;
+                    break;
+                default:
+                    shouldCreate = 0;
+                    break;
             }
 
             if (shouldCreate) {
@@ -693,9 +698,12 @@ void HandlePlayerButtons(Player* player) {
             break;
 
         case 1:
-            if (player->playerHasControl == 0) break;
-            if (copycatStateVar == 1) break;
-            if (copycatStateVar == 2) break;
+            if (player->playerHasControl == 0)
+                break;
+            if (copycatStateVar == 1)
+                break;
+            if (copycatStateVar == 2)
+                break;
             {
                 if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
                     copycatIdleTimer++;
@@ -756,10 +764,14 @@ void HandlePlayerButtons(Player* player) {
 
                 if (player->turnDirection != 0 || player->rollingForward != 0 || player->jumping != 0) {
                     curCopycatMove = 0;
-                    if (player->turnDirection == -1) curCopycatMove = 1;
-                    if (player->turnDirection == 1) curCopycatMove |= 2;
-                    if (player->rollingForward == 1) curCopycatMove |= 4;
-                    if (player->jumping == 1) curCopycatMove |= 8;
+                    if (player->turnDirection == -1)
+                        curCopycatMove = 1;
+                    if (player->turnDirection == 1)
+                        curCopycatMove |= 2;
+                    if (player->rollingForward == 1)
+                        curCopycatMove |= 4;
+                    if (player->jumping == 1)
+                        curCopycatMove |= 8;
 
                     if (copycatMoves[player->copycatMoveIndex] == -1) {
                         copycatMoves[player->copycatMoveIndex] = curCopycatMove;
@@ -798,16 +810,24 @@ void HandlePlayerButtons(Player* player) {
         }
         player->debugCamY = 0;
         player->debugCamX = 0;
-        if (controllerButtons & PAD_D) player->debugCamY = -25;
-        if (controllerButtons & PAD_U) player->debugCamY = 25;
-        if (controllerButtons & PAD_L) player->debugCamX = 32;
-        if (controllerButtons & PAD_R) player->debugCamX = -32;
+        if (controllerButtons & PAD_D)
+            player->debugCamY = -25;
+        if (controllerButtons & PAD_U)
+            player->debugCamY = 25;
+        if (controllerButtons & PAD_L)
+            player->debugCamX = 32;
+        if (controllerButtons & PAD_R)
+            player->debugCamX = -32;
 
-        if ((controllerButtons & PAD_L1) & ~prevControllerButtons) player->debugCameraParam -= 4;
-        if ((controllerButtons & PAD_L2) & ~prevControllerButtons) player->debugCameraParam += 4;
+        if ((controllerButtons & PAD_L1) & ~prevControllerButtons)
+            player->debugCameraParam -= 4;
+        if ((controllerButtons & PAD_L2) & ~prevControllerButtons)
+            player->debugCameraParam += 4;
 
-        if (player->debugCameraParam > 19) player->debugCameraParam = 20;
-        if (player->debugCameraParam < 5) player->debugCameraParam = 4;
+        if (player->debugCameraParam > 19)
+            player->debugCameraParam = 20;
+        if (player->debugCameraParam < 5)
+            player->debugCameraParam = 4;
 
         player->debugCamY %= 4096;
         player->debugCamX %= 4096;
@@ -1068,12 +1088,18 @@ void MovePlayerDownwards(Player* player, short delta) {
 }
 
 int GetRotationIndexFromVector(SVECTOR v) {
-    if (v.vx == 1) return 1;
-    if (v.vx == -1) return 4;
-    if (v.vy == 1) return 2;
-    if (v.vy == -1) return 3;
-    if (v.vz == 1) return 5;
-    if (v.vz == -1) return 0;
+    if (v.vx == 1)
+        return 1;
+    if (v.vx == -1)
+        return 4;
+    if (v.vy == 1)
+        return 2;
+    if (v.vy == -1)
+        return 3;
+    if (v.vz == 1)
+        return 5;
+    if (v.vz == -1)
+        return 0;
     return -1;
 }
 

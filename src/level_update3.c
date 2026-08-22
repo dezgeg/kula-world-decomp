@@ -116,7 +116,7 @@ static SVECTOR SVECTOR_000a4740;
 static SVECTOR SVECTOR_000a4778;
 static SVECTOR tempPlayerPos;
 
-void HandleItemTouching(Player *player) {
+void HandleItemTouching(Player* player) {
     int* ptr;
 
     tempPlayerPos = player->finePos;
@@ -692,7 +692,6 @@ void CheckForButtonEntity(Player* player) {
     if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
         (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
         (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
-
         player->alreadyProcessedEntityAction = OBJ_BUTTON;
         DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
 

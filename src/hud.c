@@ -443,24 +443,22 @@ void UpdateStaticHourglassClut(void) {
     hourglassClut[div28 * 2 + 30] = HOURGLASS_ANIM_DATA[27 - mod28][0];
     hourglassClut[div28 * 2 + 31] = HOURGLASS_ANIM_DATA[27 - mod28][1];
     for (; i < 15; i++) {
-        hourglassClut[i*2] = HOURGLASS_ANIM_DATA[0][0];
-        hourglassClut[i*2 + 1] = HOURGLASS_ANIM_DATA[0][1];
-        hourglassClut[i*2 + 30] = HOURGLASS_ANIM_DATA[28][0];
-        hourglassClut[i*2 + 31] = HOURGLASS_ANIM_DATA[28][1];
+        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[0][0];
+        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[0][1];
+        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[28][0];
+        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[28][1];
     }
-    LoadImage(&hourglassClutRect,hourglassClut);
+    LoadImage(&hourglassClutRect, hourglassClut);
 }
 
 void DrawKeyWidgets(void) {
     int i;
 
     for (i = numKeysInLevel - 1; i >= 0; i--) {
-        if (i < numKeysInLevel - numKeysRemaining){
-            addPrim(&primLists[whichDrawDispEnv].gui1,
-                    &keySprites[whichDrawDispEnv][i][1]);
+        if (i < numKeysInLevel - numKeysRemaining) {
+            addPrim(&primLists[whichDrawDispEnv].gui1, &keySprites[whichDrawDispEnv][i][1]);
         } else {
-            addPrim(&primLists[whichDrawDispEnv].gui1,
-                    &keySprites[whichDrawDispEnv][i][0]);
+            addPrim(&primLists[whichDrawDispEnv].gui1, &keySprites[whichDrawDispEnv][i][0]);
         }
     }
 }

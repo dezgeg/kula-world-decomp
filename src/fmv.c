@@ -215,7 +215,8 @@ int FmvMainLoop(int movieI) {
             fmvEnded = 1;
         }
 
-        if (fmvEnded == 1) break;
+        if (fmvEnded == 1)
+            break;
     }
 
     DecDCToutCallback(0);
