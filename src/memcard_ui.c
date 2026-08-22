@@ -129,7 +129,7 @@ int LoadSaveMenu(void) {
         }
     }
 
-    InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore, 16, 135, 280, 90, 0);
+    InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
 
     if (!TestButton(PAD_TRIANGLE)) {
         do {
@@ -264,26 +264,27 @@ int LoadSaveMenu(void) {
                 ResetTextRenderState();
                 SetTextParams(displayWidth / 2, 100, 1, 128, 128, 128);
                 switch (mcResult) {
-                case McErrCardInvalid:
-                    DrawWidgets(13, 0);
-                    break;
-                case McErrNotFormat:
-                    DrawWidgets(15, 0);
-                    break;
-                case McErrFileNotExist:
-                    DrawWidgets(15, 0);
-                    break;
-                case McErrCardNotExist:
-                    DrawWidgets(12, 0);
-                    break;
+                    case McErrCardInvalid:
+                        DrawWidgets(13, 0);
+                        break;
+                    case McErrNotFormat:
+                        DrawWidgets(15, 0);
+                        break;
+                    case McErrFileNotExist:
+                        DrawWidgets(15, 0);
+                        break;
+                    case McErrCardNotExist:
+                        DrawWidgets(12, 0);
+                        break;
                 }
 
                 if (TestButton(PAD_CROSS)) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                     ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
-                    for (i = 0; ; i++) {
-                        if (memCardData.saveslots[(saveSlot + i) % 4].valid != 0) break;
+                    for (i = 0;; i++) {
+                        if (memCardData.saveslots[(saveSlot + i) % 4].valid != 0)
+                            break;
                         if (i >= 4)
                             break;
                     }
@@ -344,7 +345,7 @@ int MemCardUi(void) {
         }
     }
 
-    InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore, 16, 135, 280, 90, 0);
+    InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
     if (TestButton(PAD_TRIANGLE)) {
         prevControllerButtons = -1;
         return 0;
@@ -412,7 +413,7 @@ int MemCardUi(void) {
                         }
                     }
                 }
-                InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore3, 16, 135, 280, 90, 0);
+                InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
             }
 
             if (TestButton(PAD_L)) {
@@ -432,7 +433,7 @@ int MemCardUi(void) {
                         }
                     }
                 }
-                InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore2, 16, 135, 280, 90, 0);
+                InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
             }
 
             UpdateMemcardMenuSaveSelectionSprites(saveSlot);
@@ -484,81 +485,13 @@ int MemCardUi(void) {
             SetTextParams(displayWidth / 2, 100, 1, 128, 128, 128);
 
             switch (mcResult) {
-            case McErrCardNotExist:
-                DrawWidgets(12, 0);
-                break;
-            case McErrCardInvalid:
-                DrawWidgets(13, 0);
-                break;
-            case McErrNewCard:
-                INT_000a5690 = 0;
-                ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
-                LoadSaveSlot(-1);
-                if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                    INT_000a5690 = 1;
-                else
-                    INT_000a5690 = 0;
-                break;
-            case McErrNotFormat:
-                DrawWidgets(14, cursorPos);
-                if (TestButton(PAD_U) && cursorPos == 1) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    cursorPos = 0;
-                }
-                if (TestButton(PAD_D) && cursorPos == 0) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    cursorPos = 1;
-                }
-                if (TestButton(PAD_CROSS)) {
-                    if (cursorPos == 0) {
-                        ShowMemCardFullScreenText("CHECKING MEMORY CARD\n\nPLEASE WAIT\n");
-                        FormatMemcard();
-                        LoadSaveSlot(-1);
-                        if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                            INT_000a5690 = 1;
-                        else
-                            INT_000a5690 = 0;
-                        cursorPos = 1;
-                        prevControllerButtons = -1;
-                    } else if (cursorPos == 1) {
-                        prevControllerButtons = -1;
-                        return 0;
-                    }
-                }
-                break;
-            case McErrBlockFull:
-                DrawWidgets(16, 0);
-                if (TestButton(PAD_CROSS)) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    switch (MemCardUiPart()) {
-                        case 1:
-                            ShowMemCardFullScreenText("REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n");
-                            if (SaveMemCard(saveSlot) == 1) {
-                                return 1;
-                            }
-                            INT_000a5690 = 0;
-                            ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
-                            LoadSaveSlot(-1);
-                            if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                                INT_000a5690 = 1;
-                            else
-                                INT_000a5690 = 0;
-                            break;
-                        case 0:
-                            INT_000a5690 = 0;
-                            ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
-                            LoadSaveSlot(-1);
-                            if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                                INT_000a5690 = 1;
-                            else
-                                INT_000a5690 = 0;
-                            break;
-                        case -1:
-                            prevControllerButtons = -1;
-                            return 0;
-                    }
-                }
-                if (TestButton(PAD_CIRCLE)) {
+                case McErrCardNotExist:
+                    DrawWidgets(12, 0);
+                    break;
+                case McErrCardInvalid:
+                    DrawWidgets(13, 0);
+                    break;
+                case McErrNewCard:
                     INT_000a5690 = 0;
                     ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
@@ -566,23 +499,91 @@ int MemCardUi(void) {
                         INT_000a5690 = 1;
                     else
                         INT_000a5690 = 0;
-                }
-                break;
-            case 666:
-                DrawWidgets(17, 0);
-                if (TestButton(PAD_CROSS)) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                    ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
-                    if (SaveMemCard(saveSlot) == 1) {
-                        return 1;
+                    break;
+                case McErrNotFormat:
+                    DrawWidgets(14, cursorPos);
+                    if (TestButton(PAD_U) && cursorPos == 1) {
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        cursorPos = 0;
                     }
-                }
-                if (TestButton(PAD_TRIANGLE)) {
-                    mcResult = 0;
-                    INT_000a5690 = 0;
-                    prevControllerButtons = -1;
-                }
-                break;
+                    if (TestButton(PAD_D) && cursorPos == 0) {
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        cursorPos = 1;
+                    }
+                    if (TestButton(PAD_CROSS)) {
+                        if (cursorPos == 0) {
+                            ShowMemCardFullScreenText("CHECKING MEMORY CARD\n\nPLEASE WAIT\n");
+                            FormatMemcard();
+                            LoadSaveSlot(-1);
+                            if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                                INT_000a5690 = 1;
+                            else
+                                INT_000a5690 = 0;
+                            cursorPos = 1;
+                            prevControllerButtons = -1;
+                        } else if (cursorPos == 1) {
+                            prevControllerButtons = -1;
+                            return 0;
+                        }
+                    }
+                    break;
+                case McErrBlockFull:
+                    DrawWidgets(16, 0);
+                    if (TestButton(PAD_CROSS)) {
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        switch (MemCardUiPart()) {
+                            case 1:
+                                ShowMemCardFullScreenText("REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n");
+                                if (SaveMemCard(saveSlot) == 1) {
+                                    return 1;
+                                }
+                                INT_000a5690 = 0;
+                                ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
+                                LoadSaveSlot(-1);
+                                if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                                    INT_000a5690 = 1;
+                                else
+                                    INT_000a5690 = 0;
+                                break;
+                            case 0:
+                                INT_000a5690 = 0;
+                                ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
+                                LoadSaveSlot(-1);
+                                if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                                    INT_000a5690 = 1;
+                                else
+                                    INT_000a5690 = 0;
+                                break;
+                            case -1:
+                                prevControllerButtons = -1;
+                                return 0;
+                        }
+                    }
+                    if (TestButton(PAD_CIRCLE)) {
+                        INT_000a5690 = 0;
+                        ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
+                        LoadSaveSlot(-1);
+                        if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
+                            INT_000a5690 = 1;
+                        else
+                            INT_000a5690 = 0;
+                    }
+                    break;
+                case 666:
+                    DrawWidgets(17, 0);
+                    if (TestButton(PAD_CROSS)) {
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
+                        if (SaveMemCard(saveSlot) == 1) {
+                            return 1;
+                        }
+                    }
+                    if (TestButton(PAD_TRIANGLE)) {
+                        mcResult = 0;
+                        INT_000a5690 = 0;
+                        prevControllerButtons = -1;
+                    }
+                    break;
             }
 
             if (TestButton(PAD_CROSS) && mcResult) {

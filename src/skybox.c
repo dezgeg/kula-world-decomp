@@ -151,20 +151,20 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
         ptr += (D_000A415C * skyboxParam5Times2) / 2;
         for (i = 0; i < 24; i++) {
             for (j = 0; j < 48; j++) {
-                setPolyFT4((POLY_FT4 *)ptr);
-                SetShadeTex((POLY_FT4 *)ptr, 0);
-                SetSemiTrans((POLY_FT4 *)ptr, 0);
-                setRGB0((POLY_FT4 *)ptr, 128, 128, 128);
-                ((POLY_FT4 *)(ptr))->clut = GetClut(texcoords[0], texcoords[1]);
-                ((POLY_FT4 *)(ptr))->tpage = GetTPage(1, 0, texcoords[2], texcoords[3]);
+                setPolyFT4((POLY_FT4*)ptr);
+                SetShadeTex((POLY_FT4*)ptr, 0);
+                SetSemiTrans((POLY_FT4*)ptr, 0);
+                setRGB0((POLY_FT4*)ptr, 128, 128, 128);
+                ((POLY_FT4*)(ptr))->clut = GetClut(texcoords[0], texcoords[1]);
+                ((POLY_FT4*)(ptr))->tpage = GetTPage(1, 0, texcoords[2], texcoords[3]);
 
                 u = texcoords[4];
                 v = texcoords[5];
                 w = texcoords[6];
-                *(u_short *)&((POLY_FT4 *)(ptr))->u0 = (v << 8) | u;
-                *(u_short *)&((POLY_FT4 *)(ptr))->u1 = (v << 8) | (u + w);
-                *(u_short *)&((POLY_FT4 *)(ptr))->u2 = ((v + 15) << 8) | u;
-                *(u_short *)&((POLY_FT4 *)(ptr))->u3 = ((v + 15) << 8) | (u + w);
+                *(u_short*)&((POLY_FT4*)(ptr))->u0 = (v << 8) | u;
+                *(u_short*)&((POLY_FT4*)(ptr))->u1 = (v << 8) | (u + w);
+                *(u_short*)&((POLY_FT4*)(ptr))->u2 = ((v + 15) << 8) | u;
+                *(u_short*)&((POLY_FT4*)(ptr))->u3 = ((v + 15) << 8) | (u + w);
                 ptr += 20;
                 texcoords += 7;
 

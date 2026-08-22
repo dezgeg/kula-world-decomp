@@ -254,117 +254,114 @@ void ProcessCubesIntoFaces(void) {
                             type = -style;
                         }
                     }
-                    relType = GetFaceTypeAtRelativeToDir(x,y,z,dir);
-                    switch(type) {
-                    case OBJ_INVISIBLE_PATCH:
-                        if (!((relType >= 0 && relType <= 1) || (relType >= 2 && relType <= 3) || relType == 4)) {
+                    relType = GetFaceTypeAtRelativeToDir(x, y, z, dir);
+                    switch (type) {
+                        case OBJ_INVISIBLE_PATCH:
+                            if (!((relType >= 0 && relType <= 1) || (relType >= 2 && relType <= 3) || relType == 4)) {
                             // 6 == invisible
-                            SetFaceData(numberOfCubeFaces++,
-                                        (void**)(cubeCounter * 64 + csptr),quadSomethingStartIndex + 6, 0x100, dir,
-                                        xFine,yFine,zFine,0,0x808080);
-                            AddQuadToAnimatedTextureChain(&invisibleBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
-                                CoordHash(xFine,yFine,zFine,dir,0x40,INVIS_BLOCK_ANIM_COLOR_DATA_END - INVIS_BLOCK_ANIM_COLOR_DATA));
-                            isNonempty = 1;
-                            ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                        }
-                        break;
-                    case -OBJ_CRUMBLING_BLOCK:
-                        flags = 0xc; // QF_BACKFACE_CULL | QF_GOURAUD
-                        if (!((relType >= 0 && relType <= 1) || relType == 2 || relType == 4 || relType == 6)) {
-                            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
-                        }
-                        if (specialLevelType == 1) {
-                            AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
-                                    (Quad**)(cubeCounter * 64 + csptr),-1, CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                            flags &= ~8; // QF_BACKFACE_CULL
-                        }
-                        if (specialLevelType == 2) {
-                            flags |= 2; // QF_SEMITRANSPARENT
-                        }
-                        // 4 == crumbling
-                        SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr),
-                                    quadSomethingStartIndex + 4,flags,dir,xFine,yFine,zFine,0,0x808080);
-                        isNonempty = 1;
-                        newCube = 1;
-                        ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                        break;
-
-                    case -OBJ_EXIT:
-                        // FIXME: flashing or exit - which one is it?
-                        flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
-                        textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
-                        textureRotation = GetRandomTextureRotation();
-                        if (specialLevelType == 1) {
-                            AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
-                                                CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                            flags = 5; // QF_ACTIVE | QF_BACKFACE_CULL
-                        }
-                        SetFaceData(numberOfCubeFaces++,(void**)(cubeCounter * 64 + csptr),
-                                                textureIdx,flags,dir,xFine,yFine,zFine,textureRotation,
-                                                0xa0a0a0);
-                        isNonempty = 1;
-                        newCube = 1;
-                        ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                        break;
-
-                    default:
-                        if (!((relType >= 0 && relType < 2) || relType == 2 || relType == 4)) {
-                            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
-                            textureRotation = 0;
-                            textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
-                            if (type == 0) {
-                                textureIdx += Rand(numPlainTileTextureVariations);
-                                textureRotation = GetRandomTextureRotation();
-                            } else {
-                                textureIdx += numPlainTileTextureVariations + type;
-                                if (type > 19) {
-                                    // item or enemy
-                                    flags = 0x100000d; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD | QF_ITEM_SHADOW
-                                }
+                                SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), quadSomethingStartIndex + 6, 0x100,
+                                            dir, xFine, yFine, zFine, 0, 0x808080);
+                                AddQuadToAnimatedTextureChain(&invisibleBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                                              CoordHash(xFine, yFine, zFine, dir, 0x40,
+                                                                        INVIS_BLOCK_ANIM_COLOR_DATA_END - INVIS_BLOCK_ANIM_COLOR_DATA));
+                                isNonempty = 1;
+                                ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
+                            }
+                            break;
+                        case -OBJ_CRUMBLING_BLOCK:
+                            flags = 0xc; // QF_BACKFACE_CULL | QF_GOURAUD
+                            if (!((relType >= 0 && relType <= 1) || relType == 2 || relType == 4 || relType == 6)) {
+                                flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                             }
                             if (specialLevelType == 1) {
-                                flags &= ~8; // QF_GOURAUD
-                                if (type == 0 || type > 19) {
-                                    textureRotation = Rand(4);
-                                    AddQuadToAnimatedTextureChain(&bonusBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,
-                                        CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES)
-                                    );
-                                    flags &= 0xffffff;
-                                    if (type > 19) {
-                                        flags |= 0x10000; // QF_BONUS_ITEM_SHADOW
-                                    }
-                                } else {
-                                    AddQuadToAnimatedTextureChain
-                                                        (&crumblingSpecialBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr),
-                                                          -1,CoordHash(xFine,yFine,zFine,dir,0x40,NUM_TEXTURE_ANIM_FRAMES));
-                                }
-                            }
-                            if (relType == OBJ_CRUMBLING_BLOCK) {
-                                flags &= ~1; // QF_ACTIVE
+                                AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                                              CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
+                                flags &= ~8; // QF_BACKFACE_CULL
                             }
                             if (specialLevelType == 2) {
                                 flags |= 2; // QF_SEMITRANSPARENT
                             }
-                            if (style == 2 && blockType >= 5) {
-                                itemType = entityData[((blockType - 5) * 128 + 1) + dir * 16];
-                                if (itemType >= 20 && itemType < 50 && itemType != 26 && itemType != 28 && itemType != 30) {
-                                    flags |= 0x1000000; // QF_ITEM_SHADOW
-                                }
-                            }
-
-                            if (type == OBJ_EXIT) {
-                                levelExitQuadPPtr = (void**)(cubeCounter * 64 + csptr);
-                            }
-                            SetFaceData(numberOfCubeFaces++,
-                                    (void**)(cubeCounter * 64 + csptr), textureIdx, flags, dir,
-                                    xFine, yFine, zFine, textureRotation, 0x808080);
+                        // 4 == crumbling
+                            SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), quadSomethingStartIndex + 4, flags, dir,
+                                        xFine, yFine, zFine, 0, 0x808080);
                             isNonempty = 1;
                             newCube = 1;
                             ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
-                            if (type == OBJ_FIRE_PATCH) {
-                                AddQuadToAnimatedTextureChain(&fireBlockTextureChain,(Quad**)(cubeCounter * 64 + csptr),-1,0);
+                            break;
+
+                        case -OBJ_EXIT:
+                        // FIXME: flashing or exit - which one is it?
+                            flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
+                            textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
+                            textureRotation = GetRandomTextureRotation();
+                            if (specialLevelType == 1) {
+                                AddQuadToAnimatedTextureChain(&bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                                              CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
+                                flags = 5; // QF_ACTIVE | QF_BACKFACE_CULL
                             }
-                        }
+                            SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), textureIdx, flags, dir, xFine, yFine,
+                                        zFine, textureRotation, 0xa0a0a0);
+                            isNonempty = 1;
+                            newCube = 1;
+                            ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
+                            break;
+
+                        default:
+                            if (!((relType >= 0 && relType < 2) || relType == 2 || relType == 4)) {
+                                flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
+                                textureRotation = 0;
+                                textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
+                                if (type == 0) {
+                                    textureIdx += Rand(numPlainTileTextureVariations);
+                                    textureRotation = GetRandomTextureRotation();
+                                } else {
+                                    textureIdx += numPlainTileTextureVariations + type;
+                                    if (type > 19) {
+                                    // item or enemy
+                                        flags = 0x100000d; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD | QF_ITEM_SHADOW
+                                    }
+                                }
+                                if (specialLevelType == 1) {
+                                    flags &= ~8; // QF_GOURAUD
+                                    if (type == 0 || type > 19) {
+                                        textureRotation = Rand(4);
+                                        AddQuadToAnimatedTextureChain(&bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                                                      CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
+                                        flags &= 0xffffff;
+                                        if (type > 19) {
+                                            flags |= 0x10000; // QF_BONUS_ITEM_SHADOW
+                                        }
+                                    } else {
+                                        AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
+                                                                      (Quad**)(cubeCounter * 64 + csptr), -1,
+                                                                      CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
+                                    }
+                                }
+                                if (relType == OBJ_CRUMBLING_BLOCK) {
+                                    flags &= ~1; // QF_ACTIVE
+                                }
+                                if (specialLevelType == 2) {
+                                    flags |= 2; // QF_SEMITRANSPARENT
+                                }
+                                if (style == 2 && blockType >= 5) {
+                                    itemType = entityData[((blockType - 5) * 128 + 1) + dir * 16];
+                                    if (itemType >= 20 && itemType < 50 && itemType != 26 && itemType != 28 && itemType != 30) {
+                                        flags |= 0x1000000; // QF_ITEM_SHADOW
+                                    }
+                                }
+
+                                if (type == OBJ_EXIT) {
+                                    levelExitQuadPPtr = (void**)(cubeCounter * 64 + csptr);
+                                }
+                                SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), textureIdx, flags, dir, xFine, yFine,
+                                            zFine, textureRotation, 0x808080);
+                                isNonempty = 1;
+                                newCube = 1;
+                                ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
+                                if (type == OBJ_FIRE_PATCH) {
+                                    AddQuadToAnimatedTextureChain(&fireBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1, 0);
+                                }
+                            }
                     }
                 }
                 if (isNonempty == 1) {
@@ -534,25 +531,24 @@ void ScanLevelDataForMovingBlocks1(void) {
             for (dir = 0; dir < 6; dir++) {
                 val = pStuff[dir * 2];
                 if (val == -1) {
-                    ((Quad **)(entity + 71 + j * 12))[dir] = (Quad*)0xffffffff;
+                    ((Quad**)(entity + 71 + j * 12))[dir] = (Quad*)0xffffffff;
                 } else {
                     if (val == -2) {
-                        SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
-                                    quadSomethingStartIndex + tgi->numFixedTextures + Rand(numPlainTileTextureVariations),
-                                    flags, dir, 0, 0, 0, pStuff[dir*2+1], 0x808080);
+                        SetFaceData(numberOfCubeFaces, &((Quad**)(entity + 71 + j * 12))[dir],
+                                    quadSomethingStartIndex + tgi->numFixedTextures + Rand(numPlainTileTextureVariations), flags, dir, 0, 0,
+                                    0, pStuff[dir * 2 + 1], 0x808080);
                     } else {
-                        SetFaceData(numberOfCubeFaces, &((Quad **)(entity + 71 + j * 12))[dir],
-                                    quadSomethingStartIndex + val,
-                                    flags, dir, 0, 0, 0, pStuff[dir*2+1], 0x808080);
+                        SetFaceData(numberOfCubeFaces, &((Quad**)(entity + 71 + j * 12))[dir], quadSomethingStartIndex + val, flags, dir, 0,
+                                    0, 0, pStuff[dir * 2 + 1], 0x808080);
                     }
 
                     if (specialLevelType == 1) {
-                        AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
-                            &((Quad **)(entity + 71 + j * 12))[dir], -1,
+                        AddQuadToAnimatedTextureChain(
+                            &crumblingSpecialBlockTextureChain, &((Quad**)(entity + 71 + j * 12))[dir], -1,
                             CoordHash(j * x_inc + 512, j * y_inc + 512, j * z_inc + 512, dir, 64, NUM_TEXTURE_ANIM_FRAMES));
                     }
                     numberOfCubeFaces++;
-                 }
+                }
             }
         }
     }

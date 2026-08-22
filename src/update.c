@@ -189,112 +189,112 @@ void ProcessFlashingBlocks(void) {
     int y;
     int z;
     int cubeIndex;
-    FlashingEntity *eb;
+    FlashingEntity* eb;
 
     for (i = 0; i < numFlashingBlocks; i++) {
-        eb = (FlashingEntity *)(entityData + flashingBlockEntityIndexes[i] * 128);
+        eb = (FlashingEntity*)(entityData + flashingBlockEntityIndexes[i] * 128);
         counter = eb->counter;
         z = (int)eb->z;
         x = (int)eb->x;
         y = (int)eb->y;
         cubeIndex = CUBE_INDEX_AT(x, y, z);
-        switch(eb->state) {
-        case 0:
-            counter--;
-            if (counter <= 0) {
-                for (j = 0; j < 6; j++) {
-                    quad = cubeStates[cubeIndex * 16 + j];
+        switch (eb->state) {
+            case 0:
+                counter--;
+                if (counter <= 0) {
+                    for (j = 0; j < 6; j++) {
+                        quad = cubeStates[cubeIndex * 16 + j];
                     // FIXME: no idea why volatile makes this match
-                    if (*(volatile int*)&specialLevelType == 1) {
-                        quad->flags.u16 = 0x107; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_INVISIBLE
-                    } else {
-                        quad->flags.u16 = 0x10f; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_GOURAUD | QF_INVISIBLE
+                        if (*(volatile int*)&specialLevelType == 1) {
+                            quad->flags.u16 = 0x107; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_INVISIBLE
+                        } else {
+                            quad->flags.u16 = 0x10f; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_GOURAUD | QF_INVISIBLE
+                        }
+                        quad->color = 0;
                     }
-                    quad->color = 0;
+                    counter = 8;
+                    CUBE_TYPE_AT(x, y, z) = eb->cubeType;
+                    eb->state = 1;
                 }
-                counter = 8;
-                CUBE_TYPE_AT(x, y, z) = eb->cubeType;
-                eb->state = 1;
-            }
-            break;
-        case 1:
-            counter--;
-            if (counter > 0) {
-                color = ((8 - counter) * 0xff) / 8;
-                color = color << 16 | color << 8 | color;
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = color;
+                break;
+            case 1:
+                counter--;
+                if (counter > 0) {
+                    color = ((8 - counter) * 0xff) / 8;
+                    color = color << 16 | color << 8 | color;
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = color;
+                    }
+                } else {
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
+                    }
+                    eb->state = 2;
+                    counter = 4;
                 }
-            } else {
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
+                break;
+            case 2:
+                counter--;
+                if (counter > 0) {
+                    color = counter * 56 + 32;
+                    color = color << 16 | color << 8 | color;
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = color;
+                    }
+                } else {
+                    for (j = 0; j < 6; j++) {
+                        quad = cubeStates[cubeIndex * 16 + j];
+                        *(char*)((int)&quad->flags + 1) = 0; // QF_INVISIBLE
+                        quad->color = 0x808080;
+                    }
+                    eb->state = 3;
+                    counter = 76;
                 }
-                eb->state = 2;
-                counter = 4 ;
-            }
-            break;
-        case 2:
-            counter--;
-            if (counter > 0) {
-                color = counter * 56 + 32;
-                color = color << 16 | color << 8 | color;
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = color;
+                break;
+            case 3:
+                counter--;
+                if (counter <= 0) {
+                    eb->state = 4;
+                    counter = 8;
+                    for (j = 0; j < 6; j++) {
+                        quad = cubeStates[cubeIndex * 16 + j];
+                        *(byte*)((int)&quad->flags + 1) = 1; // QF_INVISIBLE
+                        quad->color = 0x202020;
+                    }
                 }
-            } else {
-                for (j = 0; j < 6; j++) {
-                    quad = cubeStates[cubeIndex * 16 + j];
-                    *(char *)((int)&quad->flags + 1) = 0; // QF_INVISIBLE
-                    quad->color = 0x808080;
+                break;
+            case 4:
+                counter--;
+                if (counter > 0) {
+                    color = 256 - counter * 28;
+                    color = color << 16 | color << 8 | color;
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = color;
+                    }
+                } else {
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
+                    }
+                    eb->state = 5;
+                    counter = 16;
                 }
-                eb->state = 3;
-                counter = 76;
-            }
-            break;
-        case 3:
-            counter--;
-            if (counter <= 0) {
-                eb->state = 4;
-                counter = 8;
-                for (j = 0; j < 6; j++) {
-                    quad = cubeStates[cubeIndex * 16 + j];
-                    *(byte *)((int)&quad->flags + 1) = 1; // QF_INVISIBLE
-                    quad->color = 0x202020;
+                break;
+            case 5:
+                counter--;
+                if (counter > 0) {
+                    color = counter * 255 / 16;
+                    color = color << 16 | color << 8 | color;
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->color = color;
+                    }
+                } else {
+                    for (j = 0; j < 6; j++) {
+                        cubeStates[cubeIndex * 16 + j]->flags.u8 = 6; // QF_SEMITRANSPARENT | QF_BACKFACE_CULL
+                    }
+                    counter = 76;
+                    CUBE_TYPE_AT(x, y, z) = -1;
+                    eb->state = 0;
                 }
-            }
-            break;
-        case 4:
-            counter--;
-            if (counter > 0) {
-                color = 256 - counter * 28;
-                color = color << 16 | color << 8 | color;
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = color;
-                }
-            } else {
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
-                }
-                eb->state = 5;
-                counter = 16;
-            }
-            break;
-        case 5:
-            counter--;
-            if (counter > 0) {
-                color = counter * 255 / 16;
-                color = color << 16 | color << 8 | color;
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->color = color;
-                }
-            } else {
-                for (j = 0; j < 6; j++) {
-                    cubeStates[cubeIndex * 16 + j]->flags.u8 = 6; // QF_SEMITRANSPARENT | QF_BACKFACE_CULL
-                }
-                counter = 76;
-                CUBE_TYPE_AT(x, y, z) = -1;
-                eb->state = 0;
-            }
         }
         eb->counter = counter;
     }

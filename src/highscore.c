@@ -182,7 +182,7 @@ void HighScoreUi(int param_1) {
         }
     }
 
-    InitScoreGraph((void*)0x179000, highscoreLevelScores[cursorIndex], (int *)-1, 150, maxScore, 16, 140, 280, 100, 1);
+    InitScoreGraph((void*)0x179000, highscoreLevelScores[cursorIndex], (int*)-1, 150, maxScore, 16, 140, 280, 100, 1);
     highscoreEntryCursorX = 0;
     highscoreEntryCursorY = 0;
 
@@ -296,7 +296,7 @@ void HighScoreUi(int param_1) {
             if (TestButton(PAD_D)) {
                 cursorIndex = (cursorIndex + 1) % 6;
                 DrawSync(0);
-                InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int *)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
+                InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int*)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
@@ -306,7 +306,7 @@ void HighScoreUi(int param_1) {
                     cursorIndex = 5;
                 }
                 DrawSync(0);
-                InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int *)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
+                InitScoreGraph((void*)0x00179000, highscoreLevelScores[cursorIndex], (int*)0xffffffff, 150, maxScore, 16, 140, 280, 100, 1);
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 

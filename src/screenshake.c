@@ -42,8 +42,7 @@ void ProcessScreenShake(void) {
         } else {
             if (screenShakeDirectionMask & 1) {
                 rng = Rand(screenShakeMagnitude << 1);
-                v = dispenvScreenX + ((rng - screenShakeMagnitude) * screenShakeTimer) /
-                                             screenShakeDivisor;
+                v = dispenvScreenX + ((rng - screenShakeMagnitude) * screenShakeTimer) / screenShakeDivisor;
                 if (v < 0) {
                     v = 0;
                 }
@@ -51,8 +50,7 @@ void ProcessScreenShake(void) {
             }
             if (screenShakeDirectionMask & 2) {
                 rng = Rand(screenShakeMagnitude << 1);
-                v = dispenvScreenY + ((rng - screenShakeMagnitude) * screenShakeTimer) /
-                                             screenShakeDivisor;
+                v = dispenvScreenY + ((rng - screenShakeMagnitude) * screenShakeTimer) / screenShakeDivisor;
                 if (v < 0) {
                     v = 0;
                 }

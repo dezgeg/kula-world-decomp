@@ -124,8 +124,7 @@ void FormatTime(int time, char* s, int showPlus) {
                 abs(time) / 600 + (abs(time) / 3600) * -6, abs(time) / 60 + (abs(time) / 600) * -10,
                 abs(time) / 10 + (abs(time) / 60) * -6, abs(time) % 10);
     } else {
-        sprintf(s, "%d:%d%d\n", abs(time) / 60, abs(time) / 10 + (abs(time) / 60) * -6,
-                abs(time) % 10);
+        sprintf(s, "%d:%d%d\n", abs(time) / 60, abs(time) / 10 + (abs(time) / 60) * -6, abs(time) % 10);
     }
 }
 

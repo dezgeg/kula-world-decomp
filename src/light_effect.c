@@ -24,7 +24,7 @@ int AddLightEffect(int x, int y, int z, int whichSide) {
     }
     curLightEffectDataPtr = &lightEffects[i * 8 + 1];
 
-    switch(whichSide) {
+    switch (whichSide) {
         case 0:
             AddLightEffectToCube(x,y,z,0,2,2,2,2);
 

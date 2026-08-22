@@ -173,7 +173,7 @@ void HandleItemTouching(Player* player) {
                             break;
 
                         case OBJ_LETHARGY_PILL:
-                            AddParticles(9, &itemState[touchItemIdx].pos,  AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
                             thePlayer.lethargyTimer = 300;
                             EnableLethargy(1);
                             Vibrate100(120, 120, 200, 1);
@@ -208,7 +208,7 @@ void HandleItemTouching(Player* player) {
                             }
 
                             {
-                                int *p = (int*)(numKeysInLevel * 32 + (int)ptr);
+                                int* p = (int*)(numKeysInLevel * 32 + (int)ptr);
                                 keyScreenSpaceParticlesPos.vx = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8) + 6;
                                 keyScreenSpaceParticlesPos.vy = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8 + 4) + 11;
                             }

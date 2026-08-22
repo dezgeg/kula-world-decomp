@@ -426,7 +426,7 @@ int MainGameLoop(void) {
     }
     if (gameMode == 2) {
         if (numTimeTrialPlayers == 1) {
-            levelPlayTime[twoPlayerWhichPlayer] =(-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * 50;
+            levelPlayTime[twoPlayerWhichPlayer] = (-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * 50;
         } else {
             levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] * 50;
         }

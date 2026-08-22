@@ -86,7 +86,7 @@ void* ParseGGI(GgiFile* ggi_ptr) {
 
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            ParseGgiInner((int *)&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
+            ParseGgiInner((int*)&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
         }
     }
 

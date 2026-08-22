@@ -181,9 +181,9 @@ void ProcessAndRenderParticles(void) {
         fd = (Frame*)((short*)fd + 2 + (((ParticleType*)fd)->numPrims * 4 * particles[cameraIndex][i].frame));
         for (j = 0; j < ((ParticleType*)particles[cameraIndex][i].animData)->numPrims; j++) {
             scale = abs(fd->scale);
-            if (particles[cameraIndex][i].pos.vz  < 0) {
+            if (particles[cameraIndex][i].pos.vz < 0) {
                 particles[cameraIndex][i].prims[whichDrawDispEnv][j] = particlePolyTemplates[fd->templateIdx];
-                setRGB0(&particles[cameraIndex][i].prims[whichDrawDispEnv][j], fd->color,fd->color,fd->color);
+                setRGB0(&particles[cameraIndex][i].prims[whichDrawDispEnv][j], fd->color, fd->color, fd->color);
                 sx = particles[cameraIndex][i].pos.vx;
                 sy = particles[cameraIndex][i].pos.vy;
                 if (fd->angle < 0) {

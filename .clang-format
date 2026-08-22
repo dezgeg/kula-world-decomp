@@ -1,6 +1,6 @@
 BasedOnStyle: Google
 IndentWidth: 4
-ColumnLimit: 120
+ColumnLimit: 140
 IncludeBlocks: Preserve
 DerivePointerAlignment: false
 AllowShortFunctionsOnASingleLine: false

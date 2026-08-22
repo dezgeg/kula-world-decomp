@@ -448,11 +448,9 @@ void InitBonusWidgetSprites(void) {
         }
 
         for (j = 0; j < 8; j++) {
-            int *arr1 = &BONUS_WIDGET_POSITIONS[0];
-            int *arr2 = &BONUS_WIDGET_POSITIONS[0] + 1;
-            setXY0(&bonusWidgetSpritesPiechart[i][j].sprt,
-                arr1[j*2] + 268,
-                arr2[j*2] + 7);
+            int* arr1 = &BONUS_WIDGET_POSITIONS[0];
+            int* arr2 = &BONUS_WIDGET_POSITIONS[0] + 1;
+            setXY0(&bonusWidgetSpritesPiechart[i][j].sprt, arr1[j * 2] + 268, arr2[j * 2] + 7);
         }
         setXY0(&bonusWidgetSpritesPiechart[i][8].sprt, 268, 7);
 

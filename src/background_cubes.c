@@ -189,15 +189,15 @@ void DrawHighScoreCubes(void) {
         rotVec.vz = (rotVec.vz + 93) & 0xfff;
         RotMatrix(&rotVec, &highScoreCubesMatrix);
 
-        sinVal2ndX = rsin(hsCube2ndSinPhaseX + (hsCube2ndSinOffsetX + hsCube2ndIndexMulX * rsin(hsCube1stSinPhaseX) * i) >> 12 );
+        sinVal2ndX = rsin(hsCube2ndSinPhaseX + (hsCube2ndSinOffsetX + hsCube2ndIndexMulX * rsin(hsCube1stSinPhaseX) * i) >> 12);
         sinVal3rdX = rsin(hsCube3rdSinPhaseX + hsCube3rdIndexMulX * i);
         highScoreCubesMatrix.t[0] = hsCube2ndSinValMulX * sinVal2ndX + hsCube3rdSinValMulX * sinVal3rdX >> 12;
 
-        sinVal2ndY = rsin(hsCube2ndSinPhaseY + (hsCube2ndSinOffsetY + hsCube2ndIndexMulY * rsin(hsCube1stSinPhaseY) * i) >> 12 );
+        sinVal2ndY = rsin(hsCube2ndSinPhaseY + (hsCube2ndSinOffsetY + hsCube2ndIndexMulY * rsin(hsCube1stSinPhaseY) * i) >> 12);
         sinVal3rdY = rsin(hsCube3rdSinPhaseY + hsCube3rdIndexMulY * i);
         highScoreCubesMatrix.t[1] = hsCube2ndSinValMulY * sinVal2ndY + hsCube3rdSinValMulY * sinVal3rdY >> 12;
 
-        sinVal2ndZ = rsin(hsCube2ndSinPhaseZ + (hsCube2ndSinOffsetZ + hsCube2ndIndexMulZ * rsin(hsCube1stSinPhaseZ) * i) >> 12 );
+        sinVal2ndZ = rsin(hsCube2ndSinPhaseZ + (hsCube2ndSinOffsetZ + hsCube2ndIndexMulZ * rsin(hsCube1stSinPhaseZ) * i) >> 12);
         sinVal3rdZ = rsin(hsCube3rdSinPhaseZ + hsCube3rdIndexMulZ * i);
         highScoreCubesMatrix.t[2] = (hsCube2ndSinValMulZ * sinVal2ndZ + hsCube3rdSinValMulZ * sinVal3rdZ >> 12) + 1000;
 
