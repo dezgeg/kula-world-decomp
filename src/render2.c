@@ -361,34 +361,33 @@ LAB_shadow:
     }
 
     for (nextVertexId = 0; nextVertexId < 4; nextVertexId++) {
-        if (specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 == (ulong*)-1) break;
+        if (specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 == (ulong*)-1)
+            break;
     }
 
     LoadScaledGteMatrix(&perspMatrixes[cameraIndex]);
-    {
-        scratch[1] = RotTransPers(param_26, &scratch[3], &scratch[0], &scratch[2]);
-        if (scratch[1] >= 0) {
-            int y = scratch[3] >> 16;
-            scratch[3] &= 0xffff;
-            if (y >= 0 && y <= displayHeight && scratch[3] >= 0 && scratch[3] < displayWidth) {
-                int y01, y23, x02, x13;
-                scratch[1] = (projectionDistance * 20) / (scratch[1] * 4);
-                y01 = (y - scratch[1]) << 16;
-                y23 = (y + scratch[1]) << 16;
-                x02 = (scratch[3] - scratch[1]);
-                x13 = (scratch[3] + scratch[1]);
+    scratch[1] = RotTransPers(param_26, &scratch[3], &scratch[0], &scratch[2]);
+    if (scratch[1] >= 0) {
+        int y = scratch[3] >> 16;
+        scratch[3] &= 0xffff;
+        if (y >= 0 && y <= displayHeight && scratch[3] >= 0 && scratch[3] < displayWidth) {
+            int y01, y23, x02, x13;
+            scratch[1] = (projectionDistance * 20) / (scratch[1] * 4);
+            y01 = (y - scratch[1]) << 16;
+            y23 = (y + scratch[1]) << 16;
+            x02 = (scratch[3] - scratch[1]);
+            x13 = (scratch[3] + scratch[1]);
 
-                shadowPrim = &specularPrims[whichDrawDispEnv][cameraIndex][nextVertexId];
+            shadowPrim = &specularPrims[whichDrawDispEnv][cameraIndex][nextVertexId];
 
-                *(int*)&shadowPrim->x0 = y01 | x02;
-                *(int*)&shadowPrim->x1 = y01 | x13;
-                *(int*)&shadowPrim->x2 = y23 | x02;
-                *(int*)&shadowPrim->x3 = y23 | x13;
+            *(int*)&shadowPrim->x0 = y01 | x02;
+            *(int*)&shadowPrim->x1 = y01 | x13;
+            *(int*)&shadowPrim->x2 = y23 | x02;
+            *(int*)&shadowPrim->x3 = y23 | x13;
 
-                specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 = (ulong*)&otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
+            specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 = (ulong*)&otag[whichDrawDispEnv][cameraIndex][shadowDepth + 1];
 
-                specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p1 = (ulong*)shadowPrim;
-            }
+            specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p1 = (ulong*)shadowPrim;
         }
     }
 }
