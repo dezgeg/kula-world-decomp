@@ -809,8 +809,8 @@ int IsRollingForwardBlocked(Player* player) {
 }
 
 int IsSubpixelZBelow257(Player* player) {
-    if (player->subpixelPositionOnCube.vz > 0xff) {
-        if (player->svec_154.vz < 257) {
+    if (player->subpixelPositionOnCube.vz >= 0x100) {
+        if (player->svec_154.vz <= 0x100) {
             return 1;
         }
     }
