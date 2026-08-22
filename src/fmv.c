@@ -63,7 +63,7 @@ extern int LIBCD_CDROM_StCdIntrFlag;
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
 };
-static void* fmvRing  = 0x140000;
+static void* fmvRing = 0x140000;
 static void* pVlcbuf0 = 0x150000;
 static void* pVlcbuf1 = 0x1f0000;
 static void* pImgbuf0 = 0x1a0000;

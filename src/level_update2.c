@@ -911,7 +911,7 @@ void CalcWhatPlayerIsStandingOn(Player* player) {
         if (entityData[player->specialBlockIndexPlayerIsStandingOn] == OBJ_ACID_PATCH)
             player->faceTypePlayerStandingOn = OBJ_ACID_PATCH;
         if (entityData[player->specialBlockIndexPlayerIsStandingOn] == 0) {
-                player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
+            player->faceTypePlayerStandingOn = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 1];
         }
     } else {
         if (player->specialBlockIndexPlayerIsStandingOn == OBJ_FIRE_PATCH)

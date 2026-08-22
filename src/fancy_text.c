@@ -59,15 +59,13 @@ void DrawStaticUiSprite(short id, short x, short y, short count) {
             textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites1[17 + id];
             setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, color, color, color);
             setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, x + i * 16, y);
-            addPrim(&primLists[whichDrawDispEnv].main,
-                    &textDrawSprites[whichDrawDispEnv][textCharIdx]);
+            addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
             textCharIdx++;
 
             textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites2[17 + id];
             setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, color, color, color);
             setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, x + i * 16, y);
-            addPrim(&primLists[whichDrawDispEnv].main,
-                    &textDrawSprites[whichDrawDispEnv][textCharIdx]);
+            addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
             textCharIdx++;
         }
         if (textCharIdx + 2 > 299) {

@@ -269,11 +269,11 @@ void InitFruitSprites(void) {
     int tex;
 
     for (i = 0; i < ggi->numFruitTextures; i++) {
-        TSpritePrim(&fruitSprites[0][i],0,0,textures[firstFruitTexture + i].tpage);
+        TSpritePrim(&fruitSprites[0][i], 0, 0, textures[firstFruitTexture + i].tpage);
         setXY0(&fruitSprites[0][i].sprt, FRUIT_WIDGET_POSITIONS[(i / 2) * 2], FRUIT_WIDGET_POSITIONS[(i / 2) * 2 + 1]);
         setRGB0(&fruitSprites[0][i].sprt, 0x80, 0x80, 0x80);
-        SetSemiTrans(&fruitSprites[0][i].sprt,textures[firstFruitTexture + i].semitrans);
-        SetShadeTex(&fruitSprites[0][i].sprt,0);
+        SetSemiTrans(&fruitSprites[0][i].sprt, textures[firstFruitTexture + i].semitrans);
+        SetShadeTex(&fruitSprites[0][i].sprt, 0);
         fruitSprites[0][i].sprt.clut = textures[firstFruitTexture + i].clut;
         fruitSprites[0][i].sprt.w = textures[firstFruitTexture + i].w;
         fruitSprites[0][i].sprt.h = textures[firstFruitTexture + i].h;

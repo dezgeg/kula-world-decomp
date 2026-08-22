@@ -15,36 +15,56 @@ int GetFaceTypeOfBlockType(int blockType) {
 
 int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dir) {
     int type;
-    switch(dir) {
-    case 0:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x,     y, z - 1     )); // Z-
-    case 1:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x + 1, y, z         )); // X+
-    case 2:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x,     y + 1, z     )); // Y+
-    case 3:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x,     y - 1, z     )); // Y-
-    case 4:  return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x - 1, y,     z     )); // X-
-    default: return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x,     y,      z + 1)); // Z+
+    switch (dir) {
+        case 0:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y, z - 1)); // Z-
+        case 1:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x + 1, y, z)); // X+
+        case 2:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y + 1, z)); // Y+
+        case 3:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y - 1, z)); // Y-
+        case 4:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x - 1, y, z)); // X-
+        default:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y, z + 1)); // Z+
     }
 }
 
-int GetCubeIndexRelativeToDir(int x,int y,int z,int dir) {
-    switch(dir) {
-    case 0: return CUBE_INDEX_AT(x,     y, z - 1     ); // Z-
-    case 1: return CUBE_INDEX_AT(x + 1, y, z         ); // X+
-    case 2: return CUBE_INDEX_AT(x,     y + 1, z     ); // Y+
-    case 3: return CUBE_INDEX_AT(x,     y - 1, z     ); // Y-
-    case 4: return CUBE_INDEX_AT(x - 1, y,     z     ); // X-
-    case 5: return CUBE_INDEX_AT(x,     y,      z + 1); // Z+
-    default: return -1;
+int GetCubeIndexRelativeToDir(int x, int y, int z, int dir) {
+    switch (dir) {
+        case 0:
+            return CUBE_INDEX_AT(x, y, z - 1); // Z-
+        case 1:
+            return CUBE_INDEX_AT(x + 1, y, z); // X+
+        case 2:
+            return CUBE_INDEX_AT(x, y + 1, z); // Y+
+        case 3:
+            return CUBE_INDEX_AT(x, y - 1, z); // Y-
+        case 4:
+            return CUBE_INDEX_AT(x - 1, y, z); // X-
+        case 5:
+            return CUBE_INDEX_AT(x, y, z + 1); // Z+
+        default:
+            return -1;
     }
 }
 
 int FlipDir(int dir) {
-    switch(dir) {
-    case 0: return 5; // Z- -> Z+
-    case 1: return 4; // X+ -> X-
-    case 2: return 3; // Y+ -> Y-
-    case 3: return 2; // Y- -> Y+
-    case 4: return 1; // X- -> X+
-    case 5: return 0; // Z+ -> Z-
-    default: return -1;
+    switch (dir) {
+        case 0:
+            return 5; // Z- -> Z+
+        case 1:
+            return 4; // X+ -> X-
+        case 2:
+            return 3; // Y+ -> Y-
+        case 3:
+            return 2; // Y- -> Y+
+        case 4:
+            return 1; // X- -> X+
+        case 5:
+            return 0; // Z+ -> Z-
+        default:
+            return -1;
     }
 }

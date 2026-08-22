@@ -376,8 +376,7 @@ void main(void) {
             ResetCopycatMode(copycatModeStartingPlayer);
         }
         VariousInit();
-        if (gameState != 0 && gameState != 4 &&
-            (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1))) {
+        if (gameState != 0 && gameState != 4 && (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1))) {
             /* level begin sfx (but also done in other places?) */
             SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a2f04, 7000);
         }

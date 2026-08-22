@@ -174,54 +174,54 @@ void MoveMovingPlatforms(SVECTOR vec) {
                 SndUpdateVolumeBasedOnDirVec(D_000A4398 + 1, &SVECTOR_000a43a0);
 
                 switch (EB->movementDirection) {
-                case 4:
-                    EB->posX -= EB->velocity;
-                    EB->velX = -EB->velocity;
-                    if (EB->posX <= EB->startX << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 1;
-                    }
-                    break;
-                case 1:
-                    EB->posX += EB->velocity;
-                    EB->velX = EB->velocity;
-                    if (EB->posX >= EB->endX << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 4;
-                    }
-                    break;
-                case 3:
-                    EB->posY -= EB->velocity;
-                    EB->velY = -EB->velocity;
-                    if (EB->posY <= EB->startY << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 2;
-                    }
-                    break;
-                case 2:
-                    EB->posY += EB->velocity;
-                    EB->velY = EB->velocity;
-                    if (EB->posY >= EB->endY << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 3;
-                    }
-                    break;
-                case 0:
-                    EB->posZ -= EB->velocity;
-                    EB->velZ = -EB->velocity;
-                    if (EB->posZ <= EB->startZ << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 5;
-                    }
-                    break;
-                case 5:
-                    EB->posZ += EB->velocity;
-                    EB->velZ = EB->velocity;
-                    if (EB->posZ >= EB->endZ << 9) {
-                        D_000A439C = 1;
-                        EB->movementDirection = 0;
-                    }
-                    break;
+                    case 4:
+                        EB->posX -= EB->velocity;
+                        EB->velX = -EB->velocity;
+                        if (EB->posX <= EB->startX << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 1;
+                        }
+                        break;
+                    case 1:
+                        EB->posX += EB->velocity;
+                        EB->velX = EB->velocity;
+                        if (EB->posX >= EB->endX << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 4;
+                        }
+                        break;
+                    case 3:
+                        EB->posY -= EB->velocity;
+                        EB->velY = -EB->velocity;
+                        if (EB->posY <= EB->startY << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 2;
+                        }
+                        break;
+                    case 2:
+                        EB->posY += EB->velocity;
+                        EB->velY = EB->velocity;
+                        if (EB->posY >= EB->endY << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 3;
+                        }
+                        break;
+                    case 0:
+                        EB->posZ -= EB->velocity;
+                        EB->velZ = -EB->velocity;
+                        if (EB->posZ <= EB->startZ << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 5;
+                        }
+                        break;
+                    case 5:
+                        EB->posZ += EB->velocity;
+                        EB->velZ = EB->velocity;
+                        if (EB->posZ >= EB->endZ << 9) {
+                            D_000A439C = 1;
+                            EB->movementDirection = 0;
+                        }
+                        break;
                 }
             }
 

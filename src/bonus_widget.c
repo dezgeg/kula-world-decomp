@@ -1,6 +1,8 @@
 #include "common.h"
 
-typedef struct { uint c; } Col;
+typedef struct {
+    uint c;
+} Col;
 
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
 extern uint BONUS_WIDGET_COLOR_DATA[];

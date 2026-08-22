@@ -636,7 +636,8 @@ int MemCardUiPart(void) {
     }
 
     for (idx = 0; idx < 15; idx++) {
-        if (files < 1) break;
+        if (files < 1)
+            break;
         MemCardGetDirentry(0, "*XYZ", &direntry, &files, idx, 1);
 
         if (MemCardReadFile(0, direntry.name, (u_long*)&memcardBuf, 0, 256) == 1 && files > 0) {
@@ -647,7 +648,8 @@ int MemCardUiPart(void) {
                 continue;
             for (k = 0; k < 22; k++) {
                 rawName[filecount][k] = ((char*)&direntry)[k];
-                if (rawName[filecount][k] == 0) break;
+                if (rawName[filecount][k] == 0)
+                    break;
             }
 
             DrawSync(0);
@@ -684,7 +686,8 @@ int MemCardUiPart(void) {
                 for (k = 0; k < 32; k++) {
                     char bVar1 = ((char*)&memcardBuf)[4 + k];
                     fileNames[filecount][k] = bVar1;
-                    if (bVar1 == 0) break;
+                    if (bVar1 == 0)
+                        break;
                     if (bVar1 >= 'a' && bVar1 <= 'z') {
                         fileNames[filecount][k] = bVar1 + 0xe0;
                     }
@@ -693,7 +696,8 @@ int MemCardUiPart(void) {
                 for (k = 0; k < 32; k++) {
                     char cVar2 = Sjis2Ascii(((unsigned short*)&memcardBuf)[2 + k]);
                     fileNames[filecount][k] = cVar2;
-                    if (cVar2 == 0) break;
+                    if (cVar2 == 0)
+                        break;
                     if (cVar2 >= 'a' && cVar2 <= 'z') {
                         fileNames[filecount][k] = cVar2 + 0xe0;
                     }
@@ -744,7 +748,8 @@ int MemCardUiPart(void) {
                 controllerButtons = GetControllerButtons((curController + 1) % 2);
             }
 
-            if (musicShouldLoop == 1) MusicCheckForLoop();
+            if (musicShouldLoop == 1)
+                MusicCheckForLoop();
 
             if (controllerButtons == prevControllerButtons)
                 keyRepeatTimer++;

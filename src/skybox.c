@@ -97,8 +97,8 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
             maxDist = 0;
             for (k = 0; k < 4; k++) {
                 s = SquareRoot0(Square(recalcSkyboxes[0] - skyboxVertices[k][0]) +
-                               Square(recalcSkyboxes[1]  - skyboxVertices[k][1]) +
-                               Square(recalcSkyboxes[2] - skyboxVertices[k][2]));
+                                Square(recalcSkyboxes[1] - skyboxVertices[k][1]) +
+                                Square(recalcSkyboxes[2] - skyboxVertices[k][2]));
                 if (maxDist < s)
                     maxDist = s;
             }

@@ -24,7 +24,7 @@ typedef struct Particle {
 
 extern void DisableLightEffect(int param_1);
 extern uint Rand(int param_1);
-extern void SetLightEffectColor(int param_1,uint param_2);
+extern void SetLightEffectColor(int param_1, uint param_2);
 
 extern int cameraIndex;
 extern int firstParticleTexture;

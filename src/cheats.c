@@ -9,8 +9,7 @@ typedef struct CheatState {
 
 extern void EnableLethargy(int enable);
 extern void SetInvulnerable(void);
-extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering,
-                         u_char use24Bit);
+extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TweakSkyboxColors(uint param_1);
 

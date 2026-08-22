@@ -1,9 +1,12 @@
 BasedOnStyle: Google
 IndentWidth: 4
-ColumnLimit: 100
+ColumnLimit: 120
 IncludeBlocks: Preserve
 DerivePointerAlignment: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: Never
 SpacesBeforeTrailingComments: 1
+AlignConsecutiveAssignments: None
+AlignTrailingComments: Leave
+SortIncludes: false

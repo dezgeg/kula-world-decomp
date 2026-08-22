@@ -413,7 +413,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     short* e;
     int two = 2;
 
-    short *entBase = entityData + entityIndex * 128;
+    short* entBase = entityData + entityIndex * 128;
     quad = cubeStates[16 * CUBE_INDEX_AT(*(entBase + 125), *(entBase + 126), *(entBase + 127)) + dirIndexInBlock];
     e = entBase + dirIndexInBlock * 16;
     if (specialLevelType == 1) {
@@ -425,111 +425,111 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     colorG = colorPtr[1];
     colorB = colorPtr[2];
     depthOffset = 0;
-    switch(e[IE_ID]) {
-    case 5:
+    switch (e[IE_ID]) {
+        case 5:
         // FIXME: is this transporter or something else?
-        lightEffectId = e[IE_UNK16] & 0xff;
-        blinkState = e[IE_UNK16] >> 8;
-        depthOffset = 1;
-        if (e[IE_STATE] == 1) {
-            e[IE_COUNTER]--;
-            if (e[IE_COUNTER] < 1) {
-                e[IE_COUNTER] = 16;
-                if (blinkState == 0) {
-                    ent = (EntityBlock *)(entityData + entityIndex * 128);
-                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
-                    blinkState = 1;
-                    e[IE_UNK16] = lightEffectId | 0x100;
-                } else {
-                    blinkState = 0;
-                    SetLightEffectToBeDisabled(lightEffectId);
-                    e[IE_UNK16] = 0xff;
+            lightEffectId = e[IE_UNK16] & 0xff;
+            blinkState = e[IE_UNK16] >> 8;
+            depthOffset = 1;
+            if (e[IE_STATE] == 1) {
+                e[IE_COUNTER]--;
+                if (e[IE_COUNTER] < 1) {
+                    e[IE_COUNTER] = 16;
+                    if (blinkState == 0) {
+                        ent = (EntityBlock*)(entityData + entityIndex * 128);
+                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        blinkState = 1;
+                        e[IE_UNK16] = lightEffectId | 0x100;
+                    } else {
+                        blinkState = 0;
+                        SetLightEffectToBeDisabled(lightEffectId);
+                        e[IE_UNK16] = 0xff;
+                    }
                 }
+                if (blinkState == 1) {
+                    colorR = colorR * TRANSPORTER_COLORS[e[IE_VARIANT]][0] >> 12;
+                    colorG = colorG * TRANSPORTER_COLORS[e[IE_VARIANT]][1] >> 12;
+                    colorB = colorB * TRANSPORTER_COLORS[e[IE_VARIANT]][2] >> 12;
+                    SetLightEffectColor(lightEffectId, BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]]);
+                }
+                break;
             }
-            if (blinkState == 1) {
-                colorR = colorR * TRANSPORTER_COLORS[e[IE_VARIANT]][0] >> 12;
-                colorG = colorG * TRANSPORTER_COLORS[e[IE_VARIANT]][1] >> 12;
-                colorB = colorB * TRANSPORTER_COLORS[e[IE_VARIANT]][2] >> 12;
-                SetLightEffectColor(lightEffectId, BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]]);
+            depthOffset = 1;
+            goto disable_light;
+        default:
+            break;
+        case OBJ_EXIT:
+            depthOffset = 1;
+            lightEffectId = e[IE_UNK16] & 0xff;
+            blinkState = e[IE_UNK16] >> 8;
+            if (e[IE_STATE] == 1) {
+                e[IE_COUNTER]--;
+                if (e[IE_COUNTER] < 1) {
+                    e[IE_COUNTER] = 16;
+                    if (blinkState == 0) {
+                        ent = (EntityBlock*)(entityData + entityIndex * 128);
+                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        blinkState = 1;
+                        e[IE_UNK16] = lightEffectId | 0x100;
+                    } else {
+                        blinkState = 0;
+                        SetLightEffectToBeDisabled(lightEffectId);
+                        e[IE_UNK16] = 0xff;
+                    }
+                }
+                if (blinkState == 1) {
+                    colorPtr = EXIT_LIGHT_COLORS_PER_WORLD[curWorld];
+                    colorR = (colorR << 13) >> 12;
+                    colorG = (colorG << 13) >> 12;
+                    colorB = (colorB << 13) >> 12;
+                    SetLightEffectColor(lightEffectId, colorPtr);
+                }
+                break;
+            }
+            depthOffset = 1;
+            goto disable_light;
+        case OBJ_BUTTON:
+            depthOffset = 1;
+            lightEffectId = e[IE_UNK16] & 0xff;
+            blinkState = e[IE_UNK16] >> 8;
+            if (e[IE_STATE] == 1) {
+                e[IE_COUNTER]--;
+                if (e[IE_COUNTER] < 1) {
+                    e[IE_COUNTER] = 0x10;
+                    if (blinkState == 0) {
+                        ent = (EntityBlock*)(entityData + entityIndex * 128);
+                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        blinkState = 1;
+                        e[IE_UNK16] = lightEffectId | 0x100;
+                    } else {
+                        blinkState = 0;
+                        SetLightEffectToBeDisabled(lightEffectId);
+                        e[IE_UNK16] = 0xff;
+                    }
+                }
+                if (blinkState == 1) {
+                    colorPtr = BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]];
+                    colorR = (colorR << 13) >> 12;
+                    colorG = (colorG << 13) >> 12;
+                    colorB = (colorB << 13) >> 12;
+                    SetLightEffectColor(lightEffectId, colorPtr);
+                }
+                break;
+            }
+            depthOffset = 1;
+        disable_light:
+            if (lightEffectId != 0xff) {
+                SetLightEffectToBeDisabled(lightEffectId);
+                e[IE_UNK16] = 0xff;
             }
             break;
-        }
-        depthOffset = 1;
-        goto disable_light;
-    default:
-        break;
-    case OBJ_EXIT:
-        depthOffset = 1;
-        lightEffectId = e[IE_UNK16] & 0xff;
-        blinkState = e[IE_UNK16] >> 8;
-        if (e[IE_STATE] == 1) {
-            e[IE_COUNTER]--;
-            if (e[IE_COUNTER] < 1) {
-                e[IE_COUNTER] = 16;
-                if (blinkState == 0) {
-                    ent = (EntityBlock *)(entityData + entityIndex * 128);
-                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
-                    blinkState = 1;
-                    e[IE_UNK16] = lightEffectId | 0x100;
-                } else {
-                    blinkState = 0;
-                    SetLightEffectToBeDisabled(lightEffectId);
-                    e[IE_UNK16] = 0xff;
-                }
-            }
-            if (blinkState == 1) {
-                colorPtr = EXIT_LIGHT_COLORS_PER_WORLD[curWorld];
-                colorR = (colorR << 13) >> 12;
-                colorG = (colorG << 13) >> 12;
-                colorB = (colorB << 13) >> 12;
-                SetLightEffectColor(lightEffectId,colorPtr);
-            }
+        case OBJ_BOUNCEPAD:
+        case OBJ_MOVING_SPIKE:
+        case OBJ_SPIKE:
+        case OBJ_HIDDEN_EXIT:
+        case OBJ_ARROW:
+            depthOffset = 1;
             break;
-        }
-        depthOffset = 1;
-        goto disable_light;
-    case OBJ_BUTTON:
-        depthOffset = 1;
-        lightEffectId = e[IE_UNK16] & 0xff;
-        blinkState = e[IE_UNK16] >> 8;
-        if (e[IE_STATE] == 1) {
-            e[IE_COUNTER]--;
-            if (e[IE_COUNTER] < 1) {
-                e[IE_COUNTER] = 0x10;
-                if (blinkState == 0) {
-                    ent = (EntityBlock *)(entityData + entityIndex * 128);
-                    lightEffectId = AddLightEffect(ent->x,ent->y,ent->z,dirIndexInBlock);
-                    blinkState = 1;
-                    e[IE_UNK16] = lightEffectId | 0x100;
-                } else {
-                    blinkState = 0;
-                    SetLightEffectToBeDisabled(lightEffectId);
-                    e[IE_UNK16] = 0xff;
-                }
-            }
-            if (blinkState == 1) {
-                colorPtr = BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]];
-                colorR = (colorR << 13) >> 12;
-                colorG = (colorG << 13) >> 12;
-                colorB = (colorB << 13) >> 12;
-                SetLightEffectColor(lightEffectId,colorPtr);
-            }
-            break;
-        }
-        depthOffset = 1;
-disable_light:
-        if (lightEffectId != 0xff) {
-            SetLightEffectToBeDisabled(lightEffectId);
-            e[IE_UNK16] = 0xff;
-        }
-        break;
-    case OBJ_BOUNCEPAD:
-    case OBJ_MOVING_SPIKE:
-    case OBJ_SPIKE:
-    case OBJ_HIDDEN_EXIT:
-    case OBJ_ARROW:
-        depthOffset = 1;
-        break;
     }
 
     if (z < 400) {

@@ -258,27 +258,27 @@ void DrawLevelScoreSummary(void) {
                 goto LAB_0004b810;
             }
         } else {
-    LAB_0004b708:
-            FormatTime(oldScore,buf,1);
-            DrawTextFancyFont(buf,254,158);
-            FormatTime(timeSecs,buf,1);
-            DrawStaticUiSprite(4,64,158,0);
-            DrawStaticUiSprite(1,96,158,0);
-            DrawTextFancyFont(buf,254,176);
+        LAB_0004b708:
+            FormatTime(oldScore, buf, 1);
+            DrawTextFancyFont(buf, 254, 158);
+            FormatTime(timeSecs, buf, 1);
+            DrawStaticUiSprite(4, 64, 158, 0);
+            DrawStaticUiSprite(1, 96, 158, 0);
+            DrawTextFancyFont(buf, 254, 176);
             if (levelEndReason > 0) {
                 DrawStaticUiSprite(3, 64, 176, 0);
                 DrawStaticUiSprite(1, 107, 176, 0);
             } else {
                 DrawStaticUiSprite(13, 64, 176, 0);
             }
-            DrawStaticUiSprite(0,54,193,12);
-            DrawStaticUiSprite(2,64,203,0);
-            DrawStaticUiSprite(1,102,203,0);
-            FormatTime(newScore,buf,1);
-            DrawTextFancyFont(buf,254,203);
-    LAB_0004b810:
+            DrawStaticUiSprite(0, 54, 193, 12);
+            DrawStaticUiSprite(2, 64, 203, 0);
+            DrawStaticUiSprite(1, 102, 203, 0);
+            FormatTime(newScore, buf, 1);
+            DrawTextFancyFont(buf, 254, 203);
+        LAB_0004b810:
             if (numTimeTrialPlayers == 2 && levelEndReason > 0) {
-                 if (curLevel != 14 || levelHasBeenCompletedByPlayer[0] != 1 || levelHasBeenCompletedByPlayer[1] != 1) {
+                if (curLevel != 14 || levelHasBeenCompletedByPlayer[0] != 1 || levelHasBeenCompletedByPlayer[1] != 1) {
                     for (i = 0; i < 2; i++) {
                         if (latestPlayerToFinish == i || levelHasBeenCompletedByPlayer[i] == 1) {
                             if (i == latestPlayerToFinish) {

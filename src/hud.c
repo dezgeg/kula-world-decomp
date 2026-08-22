@@ -411,8 +411,8 @@ void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes)
         if (value != 0) {
             smallestDrawnDigitIndex--;
             setUV0(&ds->sprites[whichDrawDispEnv][smallestDrawnDigitIndex].sprt,
-                textures[firstGuiTexture + texId2].u + (value < 0 ? charWidth * 11 : charWidth * 12 ),
-                textures[firstGuiTexture + (style + three)].v);
+                   textures[firstGuiTexture + texId2].u + (value < 0 ? charWidth * 11 : charWidth * 12),
+                   textures[firstGuiTexture + (style + three)].v);
         }
 
         for (i = 9; i >= smallestDrawnDigitIndex; i--) {

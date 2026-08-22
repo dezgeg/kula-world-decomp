@@ -3,8 +3,7 @@
 #include "zlib.h"
 
 extern void PutDrawAndDispEnvs(void);
-extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering,
-                         u_char use24Bit);
+extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void Noop(void);
 extern void Noop2(void);
 extern void UnusedLoadFullScreenPicture(void* param_1);

@@ -173,8 +173,7 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
             panFactor.vz = dir->vz;
             Square0(panFactorPtr, panVectorSqPtr);
             volume = (volume * sfxVolume) / 0xc;
-            sfxPanning =
-                3 * SquareRoot0(panVectorSqPtr->vx + panVectorSqPtr->vy + panVectorSqPtr->vz);
+            sfxPanning = 3 * SquareRoot0(panVectorSqPtr->vx + panVectorSqPtr->vy + panVectorSqPtr->vz);
 
             if (sfxPanning > volume) {
                 sfxPanning = volume;
@@ -185,18 +184,14 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
             } else {
                 if (sndSwapPanDir) {
                     perSfxVoiceAttrs[curPlayingSfx].volume.left =
-                        (volume - sfxPanning) +
-                        ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
                     perSfxVoiceAttrs[curPlayingSfx].volume.right =
-                        (volume - sfxPanning) -
-                        ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
                 } else {
                     perSfxVoiceAttrs[curPlayingSfx].volume.right =
-                        (volume - sfxPanning) +
-                        ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
                     perSfxVoiceAttrs[curPlayingSfx].volume.left =
-                        (volume - sfxPanning) -
-                        ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
                 }
             }
             perSfxVoiceAttrs[curPlayingSfx].mask = 0;
