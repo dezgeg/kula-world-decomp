@@ -110,16 +110,16 @@ void SetDebugScreenshotFilenameSuffix(int num) {
         p++;
     }
 
-    *(p++) = '0' + y / 1000;
+    *p++ = '0' + y / 1000;
     num = y = y % 1000;
-    *(p++) = ((num / 100) + '0');
-    *(p++) = ((num %= 100) / 10) + '0';
-    *(p++) = '0' + (y = num % 10);
-    *(p++) = '.';
-    *(p++) = 't';
-    *(p++) = 'i';
-    *(p++) = 'm';
-    *(p++) = '\0';
+    *p++ = ((num / 100) + '0');
+    *p++ = ((num %= 100) / 10) + '0';
+    *p++ = '0' + (y = num % 10);
+    *p++ = '.';
+    *p++ = 't';
+    *p++ = 'i';
+    *p++ = 'm';
+    *p++ = '\0';
 }
 
 void ResetDevkitFileNumber(void) {

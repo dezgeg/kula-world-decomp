@@ -31,10 +31,9 @@ extern TSprite saveSlot3Sprite2[2];
 extern char S_Fatal_error_in_jens_2d_eng[];
 extern char S_1_0_4[];
 
-// gprel-used variables (defined in this file)
 int inflateRetCode;
 int whichLevelEndSpriteLoaded;
-z_stream zlibStream_a4dd4; // also used non-gprel
+z_stream zlibStream_a4dd4;
 
 void InitMemcardUi(void) {
     RECT rect;
@@ -89,7 +88,7 @@ void InitMemcardUi(void) {
         LoadImage(&rect, 0x1EA040);
         DrawSync(0);
         tex++;
-        if (MENU_DEFLATED_SPRITES2_PTR[0] < tex) {
+        if (tex > MENU_DEFLATED_SPRITES2_PTR[0]) {
             SetupDisplay(1, 0x80, 0, 0, 0, 0);
             FntFlush(-1);
             DrawSync(0);

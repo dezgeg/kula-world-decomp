@@ -269,15 +269,11 @@ int SaveMemCard(uint slot) {
 
 void LoadSaveFromMemoryCard(void) {
     extern char S_BESCES_01000KULA[];
-    uint i;
-    char* p = &memCardData;
 
-    for (i = 0; i < 8196; i++) {
-        *p++ = 0;
-    }
+    ClearMemCardData();
     MemCardAccept(0);
     MemCardSync(0, &mcCmd, &tempMcResult);
-    if ((tempMcResult == 0) || (tempMcResult == McErrNewCard)) {
+    if (tempMcResult == 0 || tempMcResult == McErrNewCard) {
         tempMcResult = McErrCardNotExist;
         if (MemCardReadFile(0, S_BESCES_01000KULA, (unsigned long*)&memCardData, 0, 0x1000)) {
             MemCardSync(0, &mcCmd, &tempMcResult);

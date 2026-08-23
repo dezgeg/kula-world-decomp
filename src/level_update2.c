@@ -698,93 +698,91 @@ void HandlePlayerButtons(Player* player) {
             break;
 
         case 1:
-            if (player->playerHasControl == 0)
+            if (!player->playerHasControl)
                 break;
             if (copycatStateVar == 1)
                 break;
             if (copycatStateVar == 2)
                 break;
-            {
+            if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
+                copycatIdleTimer++;
+            } else {
+                copycatIdleTimer = 0;
+            }
+
+            if (controllerButtons & PAD_U) {
+                padUp = 1;
+            }
+            if (controllerButtons & PAD_CROSS) {
+                padCross = 1;
+            }
+            if (padUp == 1 || padCross == 1) {
+                timerBeforeJumpOrRoll++;
+            }
+
+            if (timerBeforeJumpOrRoll > 4) {
+                player->jumping = padCross;
+                player->rollingForward = padUp;
+                timerBeforeJumpOrRoll = 0;
+                padCross = 0;
+                padUp = 0;
+            }
+
+            if (copycatIdleTimer < 3) {
+                timerBeforeJumpOrRoll = 0;
+                padCross = 0;
+                padUp = 0;
                 if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
-                    copycatIdleTimer++;
-                } else {
+                    if (copycatMoves[player->copycatMoveIndex] == -1) {
+                        copycatNewOrCopyMoves = 1;
+                    } else {
+                        copycatNewOrCopyMoves = 0;
+                    }
+                }
+            }
+
+            if (copycatIdleTimer < 6) {
+                player->jumping = 0;
+                player->turnDirection = 0;
+                player->rollingForward = 0;
+            } else {
+                if (controllerButtons & PAD_L) {
+                    player->turnDirection = 1;
                     copycatIdleTimer = 0;
                 }
+                if (controllerButtons & PAD_R) {
+                    player->turnDirection = -1;
+                    copycatIdleTimer = 0;
+                }
+            }
 
-                if (controllerButtons & PAD_U) {
-                    padUp = 1;
-                }
-                if (controllerButtons & PAD_CROSS) {
-                    padCross = 1;
-                }
-                if (padUp == 1 || padCross == 1) {
-                    timerBeforeJumpOrRoll++;
-                }
+            if (player->rollingForward == 1 && !player->jumping && player->surroundingBlocks[0][2][1] < 0 &&
+                (player->surroundingBlocks[0][1][0] >= 0 || player->surroundingBlocks[0][1][2] >= 0)) {
+                player->rollingForward = 0;
+            }
 
-                if (timerBeforeJumpOrRoll > 4) {
-                    player->jumping = padCross;
-                    player->rollingForward = padUp;
-                    timerBeforeJumpOrRoll = 0;
-                    padCross = 0;
-                    padUp = 0;
-                }
+            if (player->turnDirection != 0 || player->rollingForward || player->jumping) {
+                curCopycatMove = 0;
+                if (player->turnDirection == -1)
+                    curCopycatMove = 1;
+                if (player->turnDirection == 1)
+                    curCopycatMove |= 2;
+                if (player->rollingForward == 1)
+                    curCopycatMove |= 4;
+                if (player->jumping == 1)
+                    curCopycatMove |= 8;
 
-                if (copycatIdleTimer < 3) {
-                    timerBeforeJumpOrRoll = 0;
-                    padCross = 0;
-                    padUp = 0;
-                    if (player->howMoving198 == NOT_MOVING && player->startTurningTo == 0) {
-                        if (copycatMoves[player->copycatMoveIndex] == -1) {
-                            copycatNewOrCopyMoves = 1;
-                        } else {
-                            copycatNewOrCopyMoves = 0;
-                        }
+                if (copycatMoves[player->copycatMoveIndex] == -1) {
+                    copycatMoves[player->copycatMoveIndex] = curCopycatMove;
+                    if (player->copycatMoveIndex == numCopycatMoves) {
+                        copycatStateVar = 1;
                     }
-                }
-
-                if (copycatIdleTimer < 6) {
-                    player->jumping = 0;
-                    player->turnDirection = 0;
-                    player->rollingForward = 0;
                 } else {
-                    if (controllerButtons & PAD_L) {
-                        player->turnDirection = 1;
-                        copycatIdleTimer = 0;
-                    }
-                    if (controllerButtons & PAD_R) {
-                        player->turnDirection = -1;
-                        copycatIdleTimer = 0;
+                    if (copycatMoves[player->copycatMoveIndex] != curCopycatMove) {
+                        copycatStateVar = 2;
                     }
                 }
-
-                if (player->rollingForward == 1 && player->jumping == 0 && player->surroundingBlocks[0][2][1] < 0 &&
-                    (player->surroundingBlocks[0][1][0] >= 0 || player->surroundingBlocks[0][1][2] >= 0)) {
-                    player->rollingForward = 0;
-                }
-
-                if (player->turnDirection != 0 || player->rollingForward != 0 || player->jumping != 0) {
-                    curCopycatMove = 0;
-                    if (player->turnDirection == -1)
-                        curCopycatMove = 1;
-                    if (player->turnDirection == 1)
-                        curCopycatMove |= 2;
-                    if (player->rollingForward == 1)
-                        curCopycatMove |= 4;
-                    if (player->jumping == 1)
-                        curCopycatMove |= 8;
-
-                    if (copycatMoves[player->copycatMoveIndex] == -1) {
-                        copycatMoves[player->copycatMoveIndex] = curCopycatMove;
-                        if (player->copycatMoveIndex == numCopycatMoves) {
-                            copycatStateVar = 1;
-                        }
-                    } else {
-                        if (copycatMoves[player->copycatMoveIndex] != curCopycatMove) {
-                            copycatStateVar = 2;
-                        }
-                    }
-                    player->copycatMoveIndex++;
-                }
+                player->copycatMoveIndex++;
             }
             break;
     }

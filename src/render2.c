@@ -230,7 +230,9 @@ LAB_shadow:
     }
 
     for (nextVertexId = 0; nextVertexId < 16; nextVertexId++) {
-        if (shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p0 == (ulong*)-1) break;
+        if (shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p0 == (ulong*)-1) {
+            break;
+        }
     }
 
     LoadScaledGteMatrix(gteMatrix);

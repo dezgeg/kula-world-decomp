@@ -64,53 +64,54 @@ void InitEnemies(void) {
             continue;
         }
         for (j = 0; j < 6; j++) {
-            if (entityData[i * 128 + j * 16 + 1] == OBJ_SLOW_STAR ||
+            if (!(entityData[i * 128 + j * 16 + 1] == OBJ_SLOW_STAR ||
                     entityData[i * 128 + j * 16 + 1] == OBJ_TIRE ||
                     entityData[i * 128 + j * 16 + 1] == OBJ_CAPTURE_POD ||
                     entityData[i * 128 + j * 16 + 1] == OBJ_CAPTIVATOR ||
-                    entityData[i * 128 + j * 16 + 1] == OBJ_FAST_STAR) {
-                rotation = entityData[i * 128 + j * 16 + 2];
-                InitEnemy(j, rotation, &enemies[numEnemies]);
-
-                enemies[numEnemies].pos.vx = entityData[i * 128 + 125] * 512 + enemies[numEnemies].normalVec.vx * 456;
-                enemies[numEnemies].pos.vy = entityData[i * 128 + 126] * 512 + enemies[numEnemies].normalVec.vy * 456;
-                enemies[numEnemies].pos.vz = entityData[i * 128 + 127] * 512 + enemies[numEnemies].normalVec.vz * 456;
-
-                enemies[numEnemies].initPos = enemies[numEnemies].pos;
-
-                enemies[numEnemies].enemyType = entityData[i * 128 + j * 16 + 1];
-                enemies[numEnemies].rotationVec.vx = enemies[numEnemies].rotationVec.vy = enemies[numEnemies].rotationVec.vz = 0;
-                enemies[numEnemies].state = enemies[numEnemies].timer = 0;
-
-                if (enemies[numEnemies].enemyType == OBJ_CAPTIVATOR) {
-                    if (entityData[i * 128 + j * 16 + 3] == 2) {
-                        enemies[numEnemies].timer = 341;
-                    }
-                    if (entityData[i * 128 + j * 16 + 3] == 1) {
-                        enemies[numEnemies].timer = 682;
-                    }
-                    if (entityData[i * 128 + j * 16 + 3] == 0) {
-                        enemies[numEnemies].timer = 1024;
-                    }
-                }
-
-                enemies[numEnemies].counter = -1;
-                enemies[numEnemies].matrix.m[0][0] = enemies[numEnemies].matrix.m[1][1] = enemies[numEnemies].matrix.m[2][2] = 4096;
-                enemies[numEnemies].matrix.m[1][0] =
-                enemies[numEnemies].matrix.m[2][0] =
-                enemies[numEnemies].matrix.m[0][1] =
-                enemies[numEnemies].matrix.m[2][1] =
-                enemies[numEnemies].matrix.m[0][2] =
-                enemies[numEnemies].matrix.m[1][2] = 0;
-
-                RotMatrixZ(1024, &enemies[numEnemies].matrix);
-
-                MatrixFromDirectionIndex(&enemies[numEnemies].matrix2, rotation,
-                                         GetRotationIndexFromVector(enemies[numEnemies].normalVec),
-                                         -200, &tmpEnemyPos);
-
-                numEnemies++;
+                    entityData[i * 128 + j * 16 + 1] == OBJ_FAST_STAR)) {
+                continue;
             }
+            rotation = entityData[i * 128 + j * 16 + 2];
+            InitEnemy(j, rotation, &enemies[numEnemies]);
+
+            enemies[numEnemies].pos.vx = entityData[i * 128 + 125] * 512 + enemies[numEnemies].normalVec.vx * 456;
+            enemies[numEnemies].pos.vy = entityData[i * 128 + 126] * 512 + enemies[numEnemies].normalVec.vy * 456;
+            enemies[numEnemies].pos.vz = entityData[i * 128 + 127] * 512 + enemies[numEnemies].normalVec.vz * 456;
+
+            enemies[numEnemies].initPos = enemies[numEnemies].pos;
+
+            enemies[numEnemies].enemyType = entityData[i * 128 + j * 16 + 1];
+            enemies[numEnemies].rotationVec.vx = enemies[numEnemies].rotationVec.vy = enemies[numEnemies].rotationVec.vz = 0;
+            enemies[numEnemies].state = enemies[numEnemies].timer = 0;
+
+            if (enemies[numEnemies].enemyType == OBJ_CAPTIVATOR) {
+                if (entityData[i * 128 + j * 16 + 3] == 2) {
+                    enemies[numEnemies].timer = 341;
+                }
+                if (entityData[i * 128 + j * 16 + 3] == 1) {
+                    enemies[numEnemies].timer = 682;
+                }
+                if (entityData[i * 128 + j * 16 + 3] == 0) {
+                    enemies[numEnemies].timer = 1024;
+                }
+            }
+
+            enemies[numEnemies].counter = -1;
+            enemies[numEnemies].matrix.m[0][0] = enemies[numEnemies].matrix.m[1][1] = enemies[numEnemies].matrix.m[2][2] = 4096;
+            enemies[numEnemies].matrix.m[1][0] =
+            enemies[numEnemies].matrix.m[2][0] =
+            enemies[numEnemies].matrix.m[0][1] =
+            enemies[numEnemies].matrix.m[2][1] =
+            enemies[numEnemies].matrix.m[0][2] =
+            enemies[numEnemies].matrix.m[1][2] = 0;
+
+            RotMatrixZ(1024, &enemies[numEnemies].matrix);
+
+            MatrixFromDirectionIndex(&enemies[numEnemies].matrix2, rotation,
+                                        GetRotationIndexFromVector(enemies[numEnemies].normalVec),
+                                        -200, &tmpEnemyPos);
+
+            numEnemies++;
         }
     }
 }
@@ -730,9 +731,9 @@ int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
 
     type = entityData[(blockType - 5) * 128];
 
-    if (type == 5)
+    if (type == OBJ_TRANSPORTER)
         return 0;
-    if (type == 6)
+    if (type == OBJ_CRUMBLING_BLOCK)
         return 1;
 
     type = entityData[(blockType - 5) * 128 + rotationIndex * 16 + 1];

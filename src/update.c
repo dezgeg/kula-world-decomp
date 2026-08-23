@@ -204,7 +204,7 @@ void ProcessFlashingBlocks(void) {
                 if (counter <= 0) {
                     for (j = 0; j < 6; j++) {
                         quad = cubeStates[cubeIndex * 16 + j];
-                    // FIXME: no idea why volatile makes this match
+                        // FIXME: no idea why volatile makes this match
                         if (*(volatile int*)&specialLevelType == 1) {
                             quad->flags.u16 = 0x107; // QF_ACTIVE | QF_SEMITRANSPARENT | QF_BACKFACE_CULL | QF_INVISIBLE
                         } else {
@@ -331,7 +331,7 @@ void ProcessRetractableSpikes(void) {
                     sndPos.vx += perspMatrixes[cameraIndex].t[0];
                     sndPos.vy += perspMatrixes[cameraIndex].t[1];
                     sndPos.vz += perspMatrixes[cameraIndex].t[2];
-                    SndPlaySfx(0x69, 0, &sndPos, 7000);
+                    SndPlaySfx(SFX_MOVING_SPIKE_EXTEND, 0, &sndPos, 7000);
                 }
                 break;
 
@@ -371,7 +371,7 @@ void ProcessRetractableSpikes(void) {
                     sndPos.vx += perspMatrixes[cameraIndex].t[0];
                     sndPos.vy += perspMatrixes[cameraIndex].t[1];
                     sndPos.vz += perspMatrixes[cameraIndex].t[2];
-                    SndPlaySfx(0x6a, 0, &sndPos, 7000);
+                    SndPlaySfx(SFX_MOVING_SPIKE_RETRACT, 0, &sndPos, 7000);
                 }
                 break;
 
@@ -408,32 +408,30 @@ void SetSunglassMode(int on) {
 }
 
 void UpdateSunglassModeDisabling(void) {
-    int idx = cameraIndex;
-
-    switch (sunglassDisablingState[idx]) {
+    switch (sunglassDisablingState[cameraIndex]) {
         case 1:
-            if (--sunglassCounter1[idx] > 0) {
+            if (--sunglassCounter1[cameraIndex] > 0) {
                 return;
             }
-            if (--sunglassCounter2[idx] <= 0) {
-                sunglassDisablingState[idx] = 0;
+            if (--sunglassCounter2[cameraIndex] <= 0) {
+                sunglassDisablingState[cameraIndex] = 0;
                 return;
             }
-            sunglassCounter1[idx] = 8;
-            sunglassDisablingState[idx] = 2;
-            sunglassSeeEverything[idx] = 1;
+            sunglassCounter1[cameraIndex] = 8;
+            sunglassDisablingState[cameraIndex] = 2;
+            sunglassSeeEverything[cameraIndex] = 1;
             break;
         case 2:
-            if (--sunglassCounter1[idx] > 0) {
+            if (--sunglassCounter1[cameraIndex] > 0) {
                 return;
             }
-            if (--sunglassCounter2[idx] <= 0) {
-                sunglassDisablingState[idx] = 0;
+            if (--sunglassCounter2[cameraIndex] <= 0) {
+                sunglassDisablingState[cameraIndex] = 0;
                 return;
             }
-            sunglassCounter1[idx] = 8;
-            sunglassDisablingState[idx] = 1;
-            sunglassSeeEverything[idx] = 0;
+            sunglassCounter1[cameraIndex] = 8;
+            sunglassDisablingState[cameraIndex] = 1;
+            sunglassSeeEverything[cameraIndex] = 0;
             break;
     }
 }
@@ -470,7 +468,8 @@ void ProcessTurningMotionBlur(void) {
 
 void TurnLevelExitQuadIntoGreen(void) {
     if (numKeysRemaining == 0) {
-        ((byte*)&(*levelExitQuadPPtr)->flags)[3] = 1; // QF_ITEM_SHADOW
+        // Set texture variant to 1
+        ((byte*)&(*levelExitQuadPPtr)->flags)[3] = 1;
     }
 }
 

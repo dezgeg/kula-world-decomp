@@ -396,24 +396,19 @@ int vsyncCounter = 0;
 int unusedRenderPhase = 666;
 
 void SioRecvVsyncCallback(void) {
-    vsyncCounter = vsyncCounter + 1;
+    vsyncCounter++;
 }
 
 int MainGameLoop(void) {
-    // s0: auto generated induction var
-    int i; // s1
+    int i;
     int j;
     int k;
+    int temp;
     int controllerStatuses[2];
     int pad[16];
     RECT rect;
     int tex;
-    int end; // s7
-    int slot;
-    // s4: auto generated induction var
-    // s5: auto generated induction var
-    // s6: auto generated, holds 1
-    // s8: auto generated induction var
+    int end;
 
     inGetReadyScreen = 0;
     end = 0;
@@ -502,10 +497,10 @@ int MainGameLoop(void) {
         unkUnused = 0;
         unusedRenderPhase = 0;
         for (i = 0; i < numCameras; i++) {
-            DrawOTag(&otag[whichDrawDispEnv ? 0 : 1][i][tgi->skyboxFlag]);
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
         }
         unusedRenderPhase = 1;
-        DrawOTag(&primLists[whichDrawDispEnv ? 0 : 1].gui3);
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
         unusedRenderPhase = 2;
         SndProcessSpuVoices();
         prevControllerButtons = controllerButtons;
@@ -513,17 +508,17 @@ int MainGameLoop(void) {
             curController = twoPlayerWhichPlayer;
         }
         if (GetControllerStatus(curController) != 0) {
-            slot = curController;
+            temp = curController;
         } else {
-            slot = (curController + 1) % 2;
+            temp = (curController + 1) % 2;
         }
-        controllerButtons = GetControllerButtons(slot);
+        controllerButtons = GetControllerButtons(temp);
         HandleCheats();
         UpdateVibration();
         ProcessScreenShake();
         if (controllerStatuses[0] != GetControllerStatus(0) || controllerStatuses[1] != GetControllerStatus(1)) {
             if (levelEndReason == 0) {
-                if (isPaused == 0 && isDemoMode == 0 && inGetReadyScreen == 0) {
+                if (!isPaused && !isDemoMode && !inGetReadyScreen) {
                     isPaused = 1;
                 }
             }
@@ -532,7 +527,7 @@ int MainGameLoop(void) {
             }
         }
         if (GetControllerStatus(0) == 0 && GetControllerStatus(1) == 0) {
-            if (levelEndReason == 0 && isPaused == 0 && isDemoMode == 0 && inGetReadyScreen == 0) {
+            if (levelEndReason == 0 && !isPaused && !isDemoMode && !inGetReadyScreen) {
                 isPaused = 1;
                 SndMuteAllTaggedVoices();
             }
@@ -561,7 +556,7 @@ int MainGameLoop(void) {
             drawCopycatWidgets = 0;
             drawGeometryAndObjects = 0;
         }
-        if (isPaused == 0 && levelEndReason == 0 && inGetReadyScreen == 0) {
+        if (!isPaused && levelEndReason == 0 && !inGetReadyScreen) {
             ProcessPlayer();
         } else {
             SetPausedOrWaitingForRestart();
@@ -581,7 +576,7 @@ int MainGameLoop(void) {
         }
         if (isDemoMode == 1 && gameState == 0 && demoTimer >= 0) {
             demoTimer--;
-            if (demoTimer < 1) {
+            if (demoTimer <= 0) {
                 controllerButtons |= PAD_CROSS;
             }
         }
@@ -621,7 +616,7 @@ int MainGameLoop(void) {
             inGetReadyScreen = GetReadyScreen();
         }
         if (levelTimeLeft < 1000 && levelTimeLeft % 50 > 25 && prevLevelTimeLeft % 50 < 25 &&
-                levelTimeLeft > 0 && isPaused == 0 && levelEndReason == 0) {
+                levelTimeLeft > 0 && !isPaused && levelEndReason == 0) {
             if (levelTimeLeft % 100 < 50) {
                 SndPlaySfx(SFX_HOURGLASS_TICK, 0, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 250));
             } else {
@@ -695,7 +690,7 @@ int MainGameLoop(void) {
             }
         }
         if (gameMode == 1 && gameState != 0) {
-            if (isPaused == 0 && levelEndReason == 0) {
+            if (!isPaused && levelEndReason == 0) {
                 if (copycatNewOrCopyMoves == 1) {
                     RenderPlayerOrCopycatLabels(1, 0x80);
                 } else {
@@ -712,7 +707,7 @@ int MainGameLoop(void) {
             drawCopycatWidgets = 1;
         }
         if (levelEndReason == 0) {
-            if (gameState != 0 && isPaused == 0 && inGetReadyScreen == 0) {
+            if (gameState != 0 && !isPaused && !inGetReadyScreen) {
                 levelPlayTime[twoPlayerWhichPlayer]++;
                 if (lethargyMode != 0) {
                     levelPlayTime[twoPlayerWhichPlayer]++;
@@ -730,7 +725,7 @@ int MainGameLoop(void) {
         }
         FntFlush(-1);
         unusedFrameCounter++;
-        if (isDemoMode == 0 && menuIdleTimer >= 2000 && controllerButtons == 0 && gameState == 0) {
+        if (!isDemoMode && menuIdleTimer >= 2000 && controllerButtons == 0 && gameState == 0) {
             wasPausedPreviousFrame = 0;
             gameMode = 0;
             screenOffsetY = displayHeight;
@@ -761,14 +756,14 @@ int MainGameLoop(void) {
         if (gameState > 1) {
             end = 1;
         }
-        slot = levelEndReason; // XXX: ugly
-        if (slot == 0) {
+        temp = levelEndReason; // XXX: ugly
+        if (temp == 0) {
             if (loadNewWorld) {
                 end = 1;
             }
         } else {
             if (prevLevelEndReason == 0) {
-                if (slot < 0) {
+                if (temp < 0) {
                     if (specialLevelType > 0) {
                         levelScore = 0;
                     }
@@ -806,14 +801,14 @@ int MainGameLoop(void) {
     if (gameMode == 0) {
         if (totalScore < 0 || curWorld >= 10) {
             if (isDemoMode != 1) {
-                if (isFinal == 0) {
-                    if (curWorld > 9) {
+                if (!isFinal) {
+                    if (curWorld >= 10) {
                         ShowEndingFmv(0);
                         ResetCallback();
                     }
                     HighScoreUi(1);
                 }
-                if (curWorld > 9) {
+                if (curWorld >= 10) {
                     finalUnlocked = 1;
                     curWorld = 0;
                     totalScore = -1;
@@ -826,7 +821,7 @@ int MainGameLoop(void) {
             }
         }
     }
-    if (curWorld > 9 && loadNewWorld == 1) {
+    if (curWorld >= 10 && loadNewWorld == 1) {
         i = totalPlayTime[0];
         if (gameMode == 2 && numTimeTrialPlayers == 1 && i + timeTrialDifficulty / 50 < 1) {
             ShowEndingFmv(0);
@@ -870,8 +865,8 @@ void LevelCompletedOrDied(void) {
     int penalty;
     int t;
 
-    if (gameMode == 0 && gotSioData == 0) {
-        if (loadNewWorld == 0) {
+    if (gameMode == 0 && !gotSioData) {
+        if (!loadNewWorld) {
             if (levelEndReason < 0 && specialLevelType == 0) {
                 penalty = ((isFinal == 0 ? curWorld2 * 15 : curWorld2 * 2) + curLevel + 1) * 50;
                 if (penalty > 5000) {
@@ -901,7 +896,7 @@ void LevelCompletedOrDied(void) {
         }
         totalPlayTime[0] += levelPlayTime[0] / 50;
     }
-    if (gameMode != 2 || gotSioData != 0 || gameState == 4) {
+    if (gameMode != 2 || gotSioData || gameState == 4) {
         return;
     }
     latestPlayerToFinish = twoPlayerWhichPlayer;
@@ -965,10 +960,10 @@ void LevelCompletedOrDied(void) {
 }
 
 void DecideNextLevel(void) {
-    int bVar1;
+    int unfinished;
     int i;
 
-    if (gotSioData != 0) {
+    if (gotSioData) {
         return;
     }
     if (gameMode == 0 && specialLevelType == 0 && levelEndReason > 0) {
@@ -1005,19 +1000,19 @@ void DecideNextLevel(void) {
             }
             loadNewWorld = 1;
         }
-        if (curWorld > 9) {
+        if (curWorld >= 10) {
             curLevel = 0;
             curWorld = 0;
         }
     }
     if (gameMode == 2 && specialLevelType == 0 && levelEndReason > 0) {
-        bVar1 = 0;
+        unfinished = 0;
         for (i = 0; i < numTimeTrialPlayers; i++) {
             if (levelHasBeenCompletedByPlayer[i] != 1) {
-                bVar1 = 1;
+                unfinished = 1;
             }
         }
-        if (!bVar1) {
+        if (!unfinished) {
             curLevel++;
             if (curLevel == 15) {
                 curLevel = *(int*)0x156000;
@@ -1077,7 +1072,7 @@ LAB_00042f60:
             curLevel = 15;
             break;
     }
-    if (timeTrialAtEndOfWorld == 0 || gameMode != 2) {
+    if (!timeTrialAtEndOfWorld || gameMode != 2) {
         curWorld++;
     }
     loadNewWorld = 1;

@@ -1,7 +1,6 @@
 #include "common.h"
 #include <string.h>
 
-// Prototypes
 extern void DrawHighScoreCubes(void);
 extern void DrawPsxButtonBackground(void);
 extern void DrawScoreGraph(void);
@@ -23,7 +22,6 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 extern uint Rand(int param_1);
 
-// non-gprel-used variables (extern)
 extern SVECTOR ZERO_SVECTOR_a3340;
 extern int curController;
 extern int curLevel;
@@ -43,7 +41,6 @@ extern uint otag[2][1][1026];
 extern int highscoreLevelScores[6][150];
 extern char S_FMTd_4[];
 
-// gprel-used variables (defined in this file)
 short highscoreEntryCursorX;
 short highscoreEntryCursorY;
 int idleTimer;

@@ -118,38 +118,39 @@ void ScanLevelDataForMovingBlocks2(void) {
     }
 
     for (trI = 0; trI < numEntities * 128; trI += 128) {
-        if (entityData[trI] == 5) {
-            trJ = entityData[trI + 4];
-            trK = entityData[trI + 5];
-            trL = entityData[trI + 6];
-            switch (entityData[trI + 2]) {
-                case 1:
-                    for (trJ = entityData[trI + 4]; trJ < entityData[trI + 7] + entityData[trI + 17]; trJ++) {
-                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
-                    }
-                    break;
-                case 2:
-                    for (trK = entityData[trI + 5]; trK < entityData[trI + 8] + entityData[trI + 17]; trK++) {
-                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
-                    }
-                    break;
-                case 5:
-                    for (trL = entityData[trI + 6]; trL < entityData[trI + 9] + entityData[trI + 17]; trL++) {
-                        levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
-                    }
-                    break;
-            }
-
-            entityData[trI + 19] = 0;
-            entityData[trI + 18] = entityData[trI + 18];
+        if (entityData[trI] != OBJ_TRANSPORTER) {
+            continue;
         }
+        trJ = entityData[trI + 4];
+        trK = entityData[trI + 5];
+        trL = entityData[trI + 6];
+        switch (entityData[trI + 2]) {
+            case 1:
+                for (trJ = entityData[trI + 4]; trJ < entityData[trI + 7] + entityData[trI + 17]; trJ++) {
+                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                }
+                break;
+            case 2:
+                for (trK = entityData[trI + 5]; trK < entityData[trI + 8] + entityData[trI + 17]; trK++) {
+                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                }
+                break;
+            case 5:
+                for (trL = entityData[trI + 6]; trL < entityData[trI + 9] + entityData[trI + 17]; trL++) {
+                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                }
+                break;
+        }
+
+        entityData[trI + 19] = 0;
+        entityData[trI + 18] = entityData[trI + 18];
     }
     MoveMovingPlatforms(SVECTOR_000a2de4);
 }
 
 void MoveMovingPlatforms(SVECTOR vec) {
 #define EB ((LocalMovingPlatformEntity*)&entityData[D_000A4398])
-    for (D_000A4398 = 0; D_000A4398 < (int)numEntities << 7; D_000A4398 += 128) {
+    for (D_000A4398 = 0; D_000A4398 < (int)numEntities * 128; D_000A4398 += 128) {
         if (EB->tag == OBJ_TRANSPORTER) {
             D_000A439C = 0;
             EB->velX = 0;
@@ -225,7 +226,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                 }
             }
 
-            if (D_000A439C != 0) {
+            if (D_000A439C) {
                 SndMuteVoiceByTag(D_000A4398 + 1);
                 EB->counter = 40;
                 EB->flags ^= 1;

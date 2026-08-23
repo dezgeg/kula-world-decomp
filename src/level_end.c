@@ -346,7 +346,7 @@ void DrawLevelScoreSummary(void) {
                 DrawStaticUiSprite(6, 124, 225, 0);
             }
         }
-        if ((controllerButtons & PAD_CROSS) != 0) {
+        if (controllerButtons & PAD_CROSS) {
             FullyFinishLevelEndScreenFades();
             if (levelScoreSummaryScoreTicker != 0) {
                 newScore += levelScoreSummaryScoreTicker;

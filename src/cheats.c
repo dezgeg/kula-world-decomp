@@ -63,17 +63,12 @@ void ResetCheats(void) {
 
 void HandleCheats(void) {
     uint* p;
-    int buts;
-    int ch1;
-    int ref;
     int i;
     int j;
-    int k;
 
-    i = controllerButtons & ~prevControllerButtons; // XXX: permuter mess
-    buts = i;
-    if (buts != 0) {
-        *buttonsPtr = buts;
+    i = controllerButtons & ~prevControllerButtons;
+    if (i != 0) {
+        *buttonsPtr = i;
         buttonsPtr++;
         if (buttonsPtr >= buttonBuf + 8) {
             buttonsPtr -= 8;
@@ -90,7 +85,7 @@ void HandleCheats(void) {
                 }
             }
             if (j < 0) {
-                if (isPaused == 0 && gameState != 0) {
+                if (!isPaused && gameState != 0) {
                     cheatState[i].activated = 1;
                     cheatState[i].toggled ^= 1;
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a3334, 8000);
