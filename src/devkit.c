@@ -127,7 +127,7 @@ void ResetDevkitFileNumber(void) {
 }
 
 void InitReplaySaving(void) {
-    saveReplayWritePtr = (byte*)0x131014; // saveReplayBuf
+    saveReplayWritePtr = (byte*)((char*)DEVKIT_REPLAY_BUF + 0x14); // saveReplayBuf
     saveReplayRleButtonCount = 0;
     saveReplayCurrentButtonsShuffled = 0;
     saveReplayCurrentButtons = 0;
@@ -149,14 +149,14 @@ void RecordButtonsToDevkit(s32 arg0) {
     currentButtonsShuffled = saveReplayCurrentButtonsShuffled;
     currentButtons = saveReplayCurrentButtons;
 
-    *(s32*)0x131010 += 1; // saveReplayLength++
+    *(s32*)((char*)DEVKIT_REPLAY_BUF + 0x10) += 1; // saveReplayLength++
     origArg0 = arg0;
     arg0 <<= 16;
     if (arg0 >> 16 == currentButtons) {
         newCount = buttonCount + 1;
     } else {
-        if (*(s32*)0x131004 == 1) { // saveReplayIsFirstSequence == 1
-            *(s32*)0x131004 = 0;    // saveReplayIsFirstSequence = 0
+        if (*(s32*)((char*)DEVKIT_REPLAY_BUF + 0x04) == 1) { // saveReplayIsFirstSequence == 1
+            *(s32*)((char*)DEVKIT_REPLAY_BUF + 0x04) = 0;    // saveReplayIsFirstSequence = 0
         } else {
             *writePtr++ = buttonCount;
             *writePtr++ = currentButtonsShuffled;
@@ -166,8 +166,8 @@ void RecordButtonsToDevkit(s32 arg0) {
         currentButtonsShuffled = ((arg0 >> 20) & 0xF) | ((arg0 >> 21) & 0x10) |
                                  ((arg0 >> 22) & 0x20) | ((arg0 >> 24) & 0x40);
     }
-    if ((u32)writePtr > 0x131FFFU) {
-        writePtr = (u8*)0x131FFE;
+    if ((u32)writePtr > (u32)DEVKIT_REPLAY_BUF + 0xFFFU) {
+        writePtr = (u8*)((char*)DEVKIT_REPLAY_BUF + 0xFFE);
     }
     saveReplayWritePtr = writePtr;
     saveReplayRleButtonCount = newCount;
@@ -189,7 +189,7 @@ void WriteToDevkit(int param_1) {
         sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\rescue.pad");
     }
 
-    *(int*)0x131000 += 1; // devkitFileNumber++;
+    *(int*)DEVKIT_REPLAY_BUF += 1; // devkitFileNumber++;
     p = saveReplayWritePtr;
     count = saveReplayRleButtonCount;
     buts = saveReplayCurrentButtonsShuffled;
@@ -206,14 +206,14 @@ void WriteToDevkit(int param_1) {
     if (fd == -1) {
         FntPrint("can not create file:\n%s\n", debugFilenameBuf);
     } else {
-        len = (int)p - 0x131000;
+        len = (int)p - (int)DEVKIT_REPLAY_BUF;
         if (len < 0) {
             len = 0x4000;
         }
         if (len > 0x6cf000) {
             len = 0x6cf000;
         }
-        PCwrite(fd, 0x131000, len);
+        PCwrite(fd, DEVKIT_REPLAY_BUF, len);
         if (PCclose(fd) < 0) {
             FntPrint("error closing file:\n%s\n", debugFilenameBuf);
         }

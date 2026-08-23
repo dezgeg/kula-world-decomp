@@ -113,7 +113,7 @@ void InitHighscoreCubes(void) {
     hsCube1stSinPhaseZ = 0;
     hsCube1stSinPhaseIncrementZ = 0;
 
-    pmdCubesPtr = 0x1fb8f0;
+    pmdCubesPtr = HIGHSCORE_CUBES_BUF;
 
     for (i = 0; i < 10; i++) {
         pmdCubesPtr[i].count = 6;

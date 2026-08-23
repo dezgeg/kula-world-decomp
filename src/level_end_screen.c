@@ -159,7 +159,7 @@ void LoadLevelEndReasonGfx() {
     len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
     off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
     ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off;
-    dest = 0x1EA000;
+    dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
     zlibStream_a4dd4.next_in = ptr;
     zlibStream_a4dd4.avail_out = 0x10000;
@@ -168,8 +168,8 @@ void LoadLevelEndReasonGfx() {
     inflateRetCode = inflate(&zlibStream_a4dd4, 4);
     inflateRetCode = inflateEnd(&zlibStream_a4dd4);
 
-    w = *(short*)0x1ea03c;
-    h = *(short*)0x1ea03e;
+    w = *(short*)((char*)TIM_DECOMP_BUF + 0x3c);
+    h = *(short*)((char*)TIM_DECOMP_BUF + 0x3e);
     x0 = (displayWidth - 4 * w) / 2;
     if (whichGfx < 18) {
         y0 = 5;
@@ -194,20 +194,20 @@ void LoadLevelEndReasonGfx() {
         rect.h = 1;
         rect.w = 16;
         DrawSync(0);
-        LoadImage(&rect, 0x1EA014);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
         DrawSync(0);
         rect.x = 704;
         rect.y = 95;
         rect.w = w;
         rect.h = h;
-        LoadImage(&rect, 0x1EA040);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
         DrawSync(0);
         whichGfx++;
         if (whichGfx <= MENU_DEFLATED_SPRITES2_PTR[0] - 1) {
             len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
             off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
             ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off;
-            dest = 0x1EA000;
+            dest = TIM_DECOMP_BUF;
             zlibStream_a4dd4.avail_in = len;
             zlibStream_a4dd4.next_in = ptr;
             zlibStream_a4dd4.avail_out = 0x10000;
@@ -216,13 +216,13 @@ void LoadLevelEndReasonGfx() {
             inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
             inflateRetCode = inflate(&zlibStream_a4dd4, 4);
             inflateRetCode = inflateEnd(&zlibStream_a4dd4);
-            w = *(short*)0x1ea03c;
-            h = *(short*)0x1ea03e;
+            w = *(short*)((char*)TIM_DECOMP_BUF + 0x3c);
+            h = *(short*)((char*)TIM_DECOMP_BUF + 0x3e);
             rect.x = 720;
             rect.y = 94;
             rect.w = 16;
             rect.h = 1;
-            LoadImage(&rect, 0x1EA014);
+            LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
             DrawSync(0);
             if (w * 4 < 0x81) {
                 rect.x = 736;
@@ -233,7 +233,7 @@ void LoadLevelEndReasonGfx() {
             }
             rect.w = w;
             rect.h = h;
-            LoadImage(&rect, 0x1EA040);
+            LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
             DrawSync(0);
 
             TSpritePrim(bigGuiSprite2, 0, 0, GetTPage(0, 2, 704, 94));

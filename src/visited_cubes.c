@@ -14,7 +14,6 @@ static SVECTOR SVECTOR_000a2dd0 = {};
 #define CS_SIDES_VISITED 12
 #define CS_VISITED 14
 #define CS_STYLE 15
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 int IsCubeVisited(int x, int y, int z) {
     if (CUBE_INDEX_AT(x, y, z) == -1) {

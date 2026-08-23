@@ -129,7 +129,7 @@ int LoadSaveMenu(void) {
         }
     }
 
-    InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
+    InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
 
     if (!TestButton(PAD_TRIANGLE)) {
         do {
@@ -196,7 +196,7 @@ int LoadSaveMenu(void) {
                                 }
                             }
                         }
-                        InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
+                        InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
                     }
                 }
 
@@ -221,7 +221,7 @@ int LoadSaveMenu(void) {
                                 }
                             }
                         }
-                        InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
+                        InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
                     }
                 }
 
@@ -345,7 +345,7 @@ int MemCardUi(void) {
         }
     }
 
-    InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
+    InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore, 16, 135, 280, 90, 0);
     if (TestButton(PAD_TRIANGLE)) {
         prevControllerButtons = -1;
         return 0;
@@ -413,7 +413,7 @@ int MemCardUi(void) {
                         }
                     }
                 }
-                InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
+                InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
             }
 
             if (TestButton(PAD_L)) {
@@ -433,7 +433,7 @@ int MemCardUi(void) {
                         }
                     }
                 }
-                InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
+                InitScoreGraph(RENDERED_PRIMS_BUF, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
             }
 
             UpdateMemcardMenuSaveSelectionSprites(saveSlot);

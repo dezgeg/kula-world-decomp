@@ -191,12 +191,12 @@ void UnusedInflateSomething(int idx, int* data) {
     zlibStream_a4b80.avail_in = data[2 + 2 * idx];
     zlibStream_a4b80.next_in = (char*)data + data[1 + 2 * idx];
     zlibStream_a4b80.avail_out = 0x60000;
-    zlibStream_a4b80.next_out = 0xfd000;
+    zlibStream_a4b80.next_out = FILE_BUF;
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
     VSync(0);
-    UnusedLoadFullScreenPicture(0xfd000);
+    UnusedLoadFullScreenPicture(FILE_BUF);
 }
 
 void LoadWarningTim(void) {
@@ -241,7 +241,7 @@ void LoadWarningTim(void) {
         while (1)
             ;
     }
-    if (!CdRead((cdlfile.size >> 11) + 1, 0xfd000, 0x80)) {
+    if (!CdRead((cdlfile.size >> 11) + 1, (u_long*)FILE_BUF, 0x80)) {
         VSyncCallback(NULL);
         SetupDisplay(1, 0x80, 0, 0, 0, 0);
         FntFlush(-1);
@@ -258,14 +258,14 @@ void LoadWarningTim(void) {
             ;
     }
     CdReadSync(0, 0);
-    zlibStream_a4b80.next_in = 0xfd000;
+    zlibStream_a4b80.next_in = FILE_BUF;
     zlibStream_a4b80.avail_out = 0x60000;
-    zlibStream_a4b80.next_out = 0x132000;
+    zlibStream_a4b80.next_out = TGI_FILE_BUF;
     zlibStream_a4b80.avail_in = cdlfile.size;
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
-    LoadImage(&rect, 0x132014);
+    LoadImage(&rect, (u_long*)((char*)TGI_FILE_BUF + 0x14));
     DrawSync(0);
 }
 

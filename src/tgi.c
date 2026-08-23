@@ -271,9 +271,9 @@ void ParseLevelDataFromTgi(void) {
     int* ptr;
     int* ptr2;
 
-    levelData = (void*)0x0015e000;
-    entityData = (void*)0x00171316;
-    numEntities = *(short*)0x00171314;
+    levelData = LEVEL_DATA_BUF;
+    entityData = ENTITY_DATA_BUF;
+    numEntities = *(short*)ENTITY_COUNT_ADDR;
 
     InitLasers();
     ParseKeysAndSpecialLevelFromItemData();
@@ -281,7 +281,7 @@ void ParseLevelDataFromTgi(void) {
     DisableScreenShake();
 
     for (i = 0; i < 39304; i++) {
-        ((short*)0x1af000)[i] = -1;
+        ((short*)CUBE_GRID_BUF)[i] = -1;
     }
 
     ptr = cubeStates;

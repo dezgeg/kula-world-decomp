@@ -261,7 +261,7 @@ void RenderPlayerAndItems(void) {
     RenderDispList(playerEnemyDispList);
     DrawShadowSprites();
 
-    temp = (int)renderedPrimsBuf - 0x179000;
+    temp = (int)renderedPrimsBuf - (int)RENDERED_PRIMS_BUF;
     primBufUsage = temp - (whichDrawDispEnv * 0xc000);
     if (primBufUsage > maxPrimBufUsage) {
         maxPrimBufUsage = primBufUsage;

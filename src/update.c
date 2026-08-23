@@ -1,7 +1,6 @@
 #include "common.h"
 
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34 + (y) * 34 + (z)]
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
 typedef struct MovingPlatformEntity2 {
     short tag;

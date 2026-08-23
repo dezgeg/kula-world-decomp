@@ -108,7 +108,7 @@ short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
 };
 int D_000A2CAC = 0x666;
 void* PTR_DAT_000a2cb0 = &D_000A2CAC;
-FaceData* faceDataPtr = (FaceData*)0x001F2000;
+FaceData* faceDataPtr = (FaceData*)FACE_DATA_BUF;
 int primBufUsage = 0;
 int maxPrimBufUsage = 0;
 QuadFunc QUAD_FUNC_PTRS[6] = {
@@ -142,8 +142,7 @@ int numPlainTileTextureVariations;
 int numMovingPlatforms;
 short movingBlockEntityIndexes[16];
 
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
-#define QUAD_BASE ((Quad*)0x191000)
+#define QUAD_BASE ((Quad*)QUAD_BUF)
 
 void ProcessLevelData(void) {
     int i;

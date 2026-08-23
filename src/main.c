@@ -269,13 +269,13 @@ void main(void) {
     loadNewWorld = 1;
     CdInit();
     /* sfx */
-    curFileLength = ReadDataFile(curWorld, 1, 0xFD000);
-    SndInitFromSfxFile(0xFD000, curFileLength);
+    curFileLength = ReadDataFile(curWorld, 1, FILE_BUF);
+    SndInitFromSfxFile(FILE_BUF, curFileLength);
     LoadWarningTim();
     SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
     /* ggi */
-    curFileLength = ReadDataFile(curWorld, 3, 0xFD000);
-    i = ParseGGI(0xFD000);
+    curFileLength = ReadDataFile(curWorld, 3, FILE_BUF);
+    i = ParseGGI(FILE_BUF);
     printf("%x\n", i);
     InitFont();
     InitVariousUiSpriteTemplates();
@@ -312,7 +312,7 @@ void main(void) {
                 SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
             }
             /* .tgi */
-            curFileLength = ReadDataFile(curWorld, 0, 0x132000);
+            curFileLength = ReadDataFile(curWorld, 0, TGI_FILE_BUF);
             if (displayModeHasBeenSet == 0) {
                 displayWidth = 320;
                 displayHeight = 256;
@@ -321,11 +321,11 @@ void main(void) {
                 VSync(0);
                 VSync(0);
             }
-            ParseTGI(0x132000);
+            ParseTGI(TGI_FILE_BUF);
             loadingIsComplete = 888;
             curWorld2 = curWorld;
             /* .pak */
-            curFileLength = ReadDataFile(curWorld, 2, 0x156000);
+            curFileLength = ReadDataFile(curWorld, 2, LEVEL_PAK_BUF);
             PlayMusic(curWorld);
             loadNewWorld = 0;
             VSyncCallback(NULL);
@@ -333,8 +333,8 @@ void main(void) {
             loadingIsComplete = -1;
         }
         skipNextLoad = 0;
-        if (curLevel >= *(int*)0x156000) {
-            curLevel = *(int*)0x156000 - 1;
+        if (curLevel >= *(int*)LEVEL_PAK_BUF) {
+            curLevel = *(int*)LEVEL_PAK_BUF - 1;
         }
         if (curLevel < 0) {
             curLevel = 0;
@@ -342,9 +342,9 @@ void main(void) {
         if (gotSioData != 0) {
             if (gotSioData == 1) {
                 levelLoadZlibStream.avail_in = byteCountToReceiveFromSio;
-                levelLoadZlibStream.next_in = 0x15D800;
+                levelLoadZlibStream.next_in = SIO_DATA_BUF;
                 levelLoadZlibStream.avail_out = 0x60000;
-                levelLoadZlibStream.next_out = 0x15E000;
+                levelLoadZlibStream.next_out = LEVEL_DATA_BUF;
                 inflateRetCode1 = inflateInit_(&levelLoadZlibStream, "1.0.4", 0x38);
                 inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
                 inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
@@ -352,16 +352,16 @@ void main(void) {
                     gotSioData = 0;
                 }
             } else {
-                memcpy(0x15E000, 0x650000, 0x66b000 - 0x650000);
+                memcpy(LEVEL_DATA_BUF, 0x650000, 0x66b000 - 0x650000);
             }
             if (gotSioData == 0)
                 goto loadFromPak;
         } else {
         loadFromPak:
-            levelLoadZlibStream.avail_in = *(uint*)(0x156008 + curLevel * 8);
-            levelLoadZlibStream.next_in = 0x156000 + *(int*)(0x156004 + curLevel * 8);
+            levelLoadZlibStream.avail_in = *(uint*)((char*)LEVEL_PAK_BUF + 8 + curLevel * 8);
+            levelLoadZlibStream.next_in = (char*)LEVEL_PAK_BUF + *(int*)((char*)LEVEL_PAK_BUF + 4 + curLevel * 8);
             levelLoadZlibStream.avail_out = 0x60000;
-            levelLoadZlibStream.next_out = 0x15E000;
+            levelLoadZlibStream.next_out = LEVEL_DATA_BUF;
             inflateRetCode1 = inflateInit_(&levelLoadZlibStream, "1.0.4", 0x38);
             inflateRetCode2 = inflate(&levelLoadZlibStream, 4);
             inflateRetCode3 = inflateEnd(&levelLoadZlibStream);
@@ -475,7 +475,7 @@ int MainGameLoop(void) {
             WaitForVBlank();
         }
         whichDrawDispEnv = !whichDrawDispEnv;
-        renderedPrimsBuf = 0x179000 + whichDrawDispEnv * 0xc000;
+        renderedPrimsBuf = (char*)RENDERED_PRIMS_BUF + whichDrawDispEnv * 0xc000;
         UnusedProcessDisplayModeChange();
         PutDrawAndDispEnvs();
         SetGeomScreen(projectionDistance);
@@ -970,7 +970,7 @@ void DecideNextLevel(void) {
         if (levelEndReason == 3) {
             curLevel++;
             if (curLevel == 15) {
-                curLevel = *(int*)0x156000;
+                curLevel = *(int*)LEVEL_PAK_BUF;
             }
             levelAfterBonusLevel = curLevel;
             curLevel = 18;
@@ -981,12 +981,12 @@ void DecideNextLevel(void) {
                 savedFruitsCollectedBitmask = 0;
                 levelAfterBonusLevel = curLevel;
                 if (curLevel == 15 && debugBonusLevels == 0) {
-                    levelAfterBonusLevel = *(int*)0x156000;
+                    levelAfterBonusLevel = *(int*)LEVEL_PAK_BUF;
                 }
                 curLevel = ((curLevel - 1) / 5) % 3 + 15;
             } else {
                 if (curLevel == 15 && debugBonusLevels == 0) {
-                    curLevel = *(int*)0x156000;
+                    curLevel = *(int*)LEVEL_PAK_BUF;
                 }
             }
         }
@@ -1015,7 +1015,7 @@ void DecideNextLevel(void) {
         if (!unfinished) {
             curLevel++;
             if (curLevel == 15) {
-                curLevel = *(int*)0x156000;
+                curLevel = *(int*)LEVEL_PAK_BUF;
             }
             if (numTimeTrialPlayers == 2) {
                 startingPlayerForThisLevel = (startingPlayerForThisLevel + 1) % 2;
@@ -1028,7 +1028,7 @@ void DecideNextLevel(void) {
         }
     }
     if (specialLevelType > 0) {
-        if (curLevel < *(int*)0x156000 && debugBonusLevels == 0) {
+        if (curLevel < *(int*)LEVEL_PAK_BUF && debugBonusLevels == 0) {
             if (((savedFruitsCollectedBitmask & 0x1f) == 0x1f)) {
                 fruitsCollectedBitmask = 0;
                 savedFruitsCollectedBitmask = 0;
@@ -1046,18 +1046,18 @@ void DecideNextLevel(void) {
             }
         }
         if (specialLevelType > 0) {
-            if (curLevel >= *(int*)0x156000)
+            if (curLevel >= *(int*)LEVEL_PAK_BUF)
                 goto LAB_00042f60;
             if (debugBonusLevels == 2) {
                 if (levelEndReason > 0) {
                     curLevel++;
                     if (curLevel > 17)
-                        curLevel = *(int*)0x156000;
+                        curLevel = *(int*)LEVEL_PAK_BUF;
                 }
             }
         }
     }
-    if (curLevel < *(int*)0x156000) {
+    if (curLevel < *(int*)LEVEL_PAK_BUF) {
         return;
     }
 LAB_00042f60:
@@ -1066,7 +1066,7 @@ LAB_00042f60:
             curLevel = 0;
             break;
         case 1:
-            curLevel = *(int*)0x156000 - 1;
+            curLevel = *(int*)LEVEL_PAK_BUF - 1;
             break;
         case 2:
             curLevel = 15;
@@ -1086,7 +1086,7 @@ void ReceiveBufFromSio(void) {
     DrawSync(0);
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
-    sioWritePtr = 0x0015d800;
+    sioWritePtr = SIO_DATA_BUF;
     for (i = 0; i < byteCountToReceiveFromSio; i++) {
         vsyncCounter = 0;
         while ((_sio_control(0, 0, 0) & 2) == 0) {

@@ -81,7 +81,7 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     }
     skyboxSizePolys = D_000A4164 * skyboxParam5Times2;
 
-    ptr = (short*)0x001c3000;
+    ptr = (short*)SKYBOX_BUF;
 
     for (i = 0; i < countOfSomethingI; i++) {
         for (j = 0; j < countOfSomethingJ; j++) {
@@ -211,7 +211,7 @@ int RecalcSkyboxes2(void) {
     D_000A51C0 = 0;
     D_000A51C4 = 0;
 
-    ptr = (short*)0x1c3000;
+    ptr = (short*)SKYBOX_BUF;
     for (z = 0; z < 0x3332; z += 0x3332) {
         for (y = 0; y < 0x3332; y += 0x3332) {
             for (x = 0; x < 0x3332; x += 0x3332) {
@@ -237,13 +237,13 @@ int RecalcSkyboxes2(void) {
         }
     }
 
-    *(int*)0x1cd8e8 = SquareRoot0(0x7adb853);
+    *(int*)((char*)SKYBOX_BUF + 0xa8e8) = SquareRoot0(0x7adb853);
 
-    dst = (short*)0x001cd8ec;
+    dst = (short*)((char*)SKYBOX_BUF + 0xa8ec);
     for (z = -0x7FFD; z < 0x7FFD; z += 0x3332) {
         for (y = -0x7FFD; y < 0x7FFD; y += 0x3332) {
             for (x = -0x7FFD; x < 0x7FFD; x += 0x3332) {
-                ptr = (short*)0x1c3000;
+                ptr = (short*)SKYBOX_BUF;
                 for (i = 0; i < 1; i++) {
                     dst[0] = ptr[0] + x;
                     dst[1] = ptr[1] + y;
@@ -283,8 +283,8 @@ int RecalcSkyboxes2(void) {
     dst[3] = -1;
     dst += 4;
 
-    u1 = (int*)0x1cda3c;
-    p_u32 = (int*)0x1cda48;
+    u1 = (int*)((char*)SKYBOX_BUF + 0xaa3c);
+    p_u32 = (int*)((char*)SKYBOX_BUF + 0xaa48);
     for (i = 0; i < 125; i++) {
         u1[-2] = p_u32[0];
         u1[-1] = u1[4];
@@ -292,7 +292,7 @@ int RecalcSkyboxes2(void) {
         p_u32 += 87;
     }
 
-    p_u32 = (u32*)0x1c3000;
+    p_u32 = (u32*)SKYBOX_BUF;
     clut = textures[firstUnk2Texture].clut;
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 1; j++) {
@@ -315,7 +315,7 @@ int RecalcSkyboxes2(void) {
         }
     }
 
-    return (u32)dst - 0x1C3000;
+    return (u32)dst - (u32)SKYBOX_BUF;
 }
 
 int Square(int param_1) {

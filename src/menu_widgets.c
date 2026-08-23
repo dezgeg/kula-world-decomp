@@ -108,7 +108,7 @@ void LoadMenuGfx(int menuId) {
     len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
     offset = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
     buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset;
-    dest = 0x1EA000;
+    dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
     zlibStream_a4dd4.next_in = buf;
     zlibStream_a4dd4.avail_out = 0x10000;
@@ -116,8 +116,8 @@ void LoadMenuGfx(int menuId) {
     inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
     inflateRetCode = inflate(&zlibStream_a4dd4, 4);
     inflateRetCode = inflateEnd(&zlibStream_a4dd4);
-    height = *(short*)0x1ea03e;
-    width = *(short*)0x1ea03c;
+    height = *(short*)((char*)TIM_DECOMP_BUF + 0x3E);
+    width = *(short*)((char*)TIM_DECOMP_BUF + 0x3C);
     unk = displayWidth - width * 4;
     x = (unk + (unk >> 31)) >> 1;
     if (gameState == 0) {
@@ -144,13 +144,13 @@ void LoadMenuGfx(int menuId) {
     rect.h = 1;
     rect.w = 16;
     DrawSync(0);
-    LoadImage(&rect, 0x1EA014);
+    LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
     DrawSync(0);
     rect.x = 704;
     rect.y = 95;
     rect.w = width;
     rect.h = height;
-    LoadImage(&rect, 0x1EA040);
+    LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
     DrawSync(0);
     spriteId++;
     if (spriteId - 50 > MENU_DEFLATED_SPRITES1_PTR[0]) {
@@ -170,7 +170,7 @@ void LoadMenuGfx(int menuId) {
     len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
     offset2 = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
     buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset2;
-    dest = 0x1EA000;
+    dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
     zlibStream_a4dd4.next_in = buf;
     zlibStream_a4dd4.avail_out = 0x10000;
@@ -178,13 +178,13 @@ void LoadMenuGfx(int menuId) {
     inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
     inflateRetCode = inflate(&zlibStream_a4dd4, 4);
     inflateRetCode = inflateEnd(&zlibStream_a4dd4);
-    width = *(short*)0x1EA03C;
-    height = *(short*)0x1EA03E;
+    width = *(short*)((char*)TIM_DECOMP_BUF + 0x3C);
+    height = *(short*)((char*)TIM_DECOMP_BUF + 0x3E);
     rect.x = 720;
     rect.y = 94;
     rect.w = 16;
     rect.h = 1;
-    LoadImage(&rect, 0x1EA014);
+    LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
     DrawSync(0);
     if (width * 4 < 129) {
         rect.x = 736;
@@ -195,7 +195,7 @@ void LoadMenuGfx(int menuId) {
     }
     rect.w = width;
     rect.h = height;
-    LoadImage(&rect, 0x1EA040);
+    LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
     DrawSync(0);
 
     TSpritePrim(&bigGuiSprite2[0], 0, 0, GetTPage(0, 2, 704, 94));

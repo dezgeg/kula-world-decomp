@@ -25,7 +25,7 @@ void InitPsxButtonBackgroundSprites(int param_1) {
     int relativeTex;
     int i;
 
-    psxButtonBackgroundPtr = 0x1ef120;
+    psxButtonBackgroundPtr = PSX_BUTTON_BG_BUF;
     for (i = 0; i < 200; i++) {
         rng = Rand(4);
         psxButtonBackgroundPtr->buttons[i] = rng;

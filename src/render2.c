@@ -109,8 +109,6 @@ int TRANSPORTER_COLORS[4][3] = {
     { 6144, 5120, 5120 },
 };
 
-#define CUBE_INDEX_AT(x, y, z) (*(short*)(0x1af000 + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
-
 void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int param_4, int param_5, int param_6, int param_7, int param_8) {
     int* p;
 

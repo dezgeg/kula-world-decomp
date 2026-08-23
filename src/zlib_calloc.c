@@ -25,8 +25,8 @@ long kulaZAllocatorHeapUsage = 0;
 
 void zcallocInit(void) {
     char* old = kulaZAllocatorPointer;
-    kulaZAllocatorHeapUsage = (unsigned)old - 0x1F2000;
-    kulaZAllocatorPointer = 0x1F2000;
+    kulaZAllocatorHeapUsage = (unsigned)old - (unsigned)KULA_ZALLOCATOR_HEAP;
+    kulaZAllocatorPointer = KULA_ZALLOCATOR_HEAP;
 }
 
 void* zcallocUnused(unsigned num, int size) {
@@ -35,7 +35,7 @@ void* zcallocUnused(unsigned num, int size) {
     int i;
 
     kulaZAllocatorPointer = next;
-    if ((unsigned)next > 0x1fe000) {
+    if ((unsigned)next > (unsigned)KULA_ZALLOCATOR_HEAP_END) {
         VSyncCallback(NULL);
         SetupDisplay(1, 128, 0, 0, 0, 0);
         FntFlush(-1);
@@ -64,7 +64,7 @@ void* zcalloc(void* opaque, unsigned num, int size) {
     int i;
 
     kulaZAllocatorPointer = next;
-    if ((unsigned)next > 0x1fe000) {
+    if ((unsigned)next > (unsigned)KULA_ZALLOCATOR_HEAP_END) {
         VSyncCallback(NULL);
         SetupDisplay(1, 128, 0, 0, 0, 0);
         FntFlush(-1);

@@ -54,12 +54,12 @@ void InitMemcardUi(void) {
         zlibStream_a4dd4.avail_in = len;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
-        zlibStream_a4dd4.next_out = 0x1EA000;
+        zlibStream_a4dd4.next_out = TIM_DECOMP_BUF;
         inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
         inflateRetCode = inflate(&zlibStream_a4dd4, 4);
         inflateRetCode = inflateEnd(&zlibStream_a4dd4);
-        w = *(short*)0x1EA03C;
-        h = *(short*)0x1EA03E;
+        w = *(short*)((char*)TIM_DECOMP_BUF + 0x3C);
+        h = *(short*)((char*)TIM_DECOMP_BUF + 0x3E);
         if (h + 94 > 0xff) {
             SetupDisplay(1, 0x80, 0, 0, 0, 0);
             FntFlush(-1);
@@ -79,13 +79,13 @@ void InitMemcardUi(void) {
         rect.h = 1;
         rect.w = 16;
         DrawSync(0);
-        LoadImage(&rect, 0x1EA014);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
         DrawSync(0);
         rect.x = 704;
         rect.y = 0x5f;
         rect.w = w;
         rect.h = h;
-        LoadImage(&rect, 0x1EA040);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
         DrawSync(0);
         tex++;
         if (tex > MENU_DEFLATED_SPRITES2_PTR[0]) {
@@ -108,23 +108,23 @@ void InitMemcardUi(void) {
         zlibStream_a4dd4.avail_in = len2;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
-        zlibStream_a4dd4.next_out = 0x1EA000;
+        zlibStream_a4dd4.next_out = TIM_DECOMP_BUF;
         inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
         inflateRetCode = inflate(&zlibStream_a4dd4, 4);
         inflateRetCode = inflateEnd(&zlibStream_a4dd4);
-        w = *(short*)0x1EA03C;
-        h = *(short*)0x1EA03E;
+        w = *(short*)((char*)TIM_DECOMP_BUF + 0x3C);
+        h = *(short*)((char*)TIM_DECOMP_BUF + 0x3E);
         rect.x = 704;
         rect.y = 175;
         rect.w = 16;
         rect.h = 1;
-        LoadImage(&rect, 0x1EA014);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x14));
         DrawSync(0);
         rect.x = 704;
         rect.y = 176;
         rect.w = w;
         rect.h = h;
-        LoadImage(&rect, 0x1EA040);
+        LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
         DrawSync(0);
 
         TSpritePrim(loadGameSprite2, 0, 0, GetTPage(0, 2, 0x2C0, 0x5E));

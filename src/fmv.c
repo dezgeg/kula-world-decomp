@@ -63,11 +63,11 @@ extern int LIBCD_CDROM_StCdIntrFlag;
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
 };
-static void* fmvRing = 0x140000;
-static void* pVlcbuf0 = 0x150000;
-static void* pVlcbuf1 = 0x1f0000;
-static void* pImgbuf0 = 0x1a0000;
-static void* pImgbuf1 = 0x1a6000;
+static void* fmvRing = FMV_RING_BUF;
+static void* pVlcbuf0 = FMV_VLC_BUF_0;
+static void* pVlcbuf1 = FMV_VLC_BUF_1;
+static void* pImgbuf0 = FMV_IMG_BUF_0;
+static void* pImgbuf1 = FMV_IMG_BUF_1;
 
 void StrSetDefDecEnv(DECENV* dec, int x0, int y0, int x1, int y1, MovieInfo* movie);
 u_long* StrNext(DECENV* dec, MovieInfo* movie);
@@ -108,7 +108,7 @@ void ShowEndingFmv(int movieI) {
     rect.h = 256;
     rect.x = 640;
     rect.y = 0;
-    StoreImage(&rect, 0x1b6000); // FIXME symbol for this
+    StoreImage(&rect, (u_long*)FMV_VRAM_BACKUP_BUF);
     DrawSync(0);
 
     FmvMainLoop(movieI);
@@ -133,7 +133,7 @@ void ShowEndingFmv(int movieI) {
     rect.h = 256;
     rect.x = 640;
     rect.y = 0;
-    LoadImage(&rect, 0x1b6000); // FIXME symbol for this
+    LoadImage(&rect, (u_long*)FMV_VRAM_BACKUP_BUF);
     DrawSync(0);
     VSync(0);
 
