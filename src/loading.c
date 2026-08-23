@@ -17,7 +17,6 @@ extern int isFinal;
 extern int levelEndReason;
 extern int whichDrawDispEnv;
 extern void* otag[2][1][1026];
-extern char fileBuf[];
 
 int sizeOfSfxFile;
 int unusedReadErrorCode;
