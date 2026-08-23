@@ -48,8 +48,8 @@ int numUnk1Textures;
 int numUnk2Textures;
 
 // Prototypes
-void ParseTextures(int* headerPtr, Texture * out, int count);
-void ParseGgiInner(int *eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
+void ParseTextures(int* headerPtr, Texture* out, int count);
+void ParseGgiInner(int* eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
 void* ParseGGI(GgiFile* ggi_ptr) {
     int i, j;

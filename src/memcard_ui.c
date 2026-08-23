@@ -27,7 +27,7 @@ extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
 extern void InitMemcardUi(void);
 extern void InitPsxButtonBackgroundSprites(int);
-extern void InitScoreGraph(void * pBuf, int * levelScores, int * unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
+extern void InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
 extern void InitSpinningSelectionSprites(void);
 extern int LoadSaveSlot(int slot);
 extern int LooksLikeAscii(char* param_1);
@@ -196,7 +196,7 @@ int LoadSaveMenu(void) {
                                 }
                             }
                         }
-                        InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore2, 16, 135, 280, 90, 0);
+                        InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore2, 16, 135, 280, 90, 0);
                     }
                 }
 
@@ -221,7 +221,7 @@ int LoadSaveMenu(void) {
                                 }
                             }
                         }
-                        InitScoreGraph((void *)0x179000, memCardData.saveslots[saveSlot].levelScores, (int *)-1, 150, maxScore3, 16, 135, 280, 90, 0);
+                        InitScoreGraph((void*)0x179000, memCardData.saveslots[saveSlot].levelScores, (int*)-1, 150, maxScore3, 16, 135, 280, 90, 0);
                     }
                 }
 

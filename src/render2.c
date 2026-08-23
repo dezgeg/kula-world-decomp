@@ -41,8 +41,8 @@ typedef struct EntityBlock {
 } EntityBlock;
 
 extern int AddLightEffect(int x, int y, int z, int whichSide);
-extern int GteTransformAndClipQuad(SVECTOR * v1, SVECTOR * v2, SVECTOR * v3, SVECTOR * v4, int out1, int out2, int out3, int out4, int* p1, int* p2, int* p3);
-extern void LoadScaledGteMatrix(MATRIX * matrix);
+extern int GteTransformAndClipQuad(SVECTOR* v1, SVECTOR* v2, SVECTOR* v3, SVECTOR* v4, int out1, int out2, int out3, int out4, int* p1, int* p2, int* p3);
+extern void LoadScaledGteMatrix(MATRIX* matrix);
 extern void SetLightEffectColor(int param_1, int param_2);
 extern void SetLightEffectToBeDisabled(int param_1);
 
