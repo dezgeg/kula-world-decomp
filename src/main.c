@@ -604,7 +604,7 @@ int MainGameLoop(void) {
                     ReceiveBufFromSio();
                     if (gameState != 0) {
                         isPaused = 0;
-                        levelEndReason = 1;
+                        levelEndReason = LEVEL_END_EXIT;
                     }
                 }
             }
@@ -626,13 +626,13 @@ int MainGameLoop(void) {
         prevLevelTimeLeft = levelTimeLeft;
         if (levelEndReason != 0) {
             if (prevLevelEndReason != 0 && levelScoreSummaryConfirmed == 1) {
-                if (!((((levelEndReason < 1 && specialLevelType < 1) ||
+                if (!((((levelEndReason <= 0 && specialLevelType < 1) ||
                          (((isDemoMode || gotSioData) ||
                             ((gameMode != 0 && ((gameMode != 2 || (numTimeTrialPlayers != 1)))))))) ||
                         (curLevel != (curLevel / 5) * 5)) ||
                      ((((gameMode == 2 && ((curLevel != 0 || (timeTrialAtEndOfWorld)))) ||
                          (14 < curLevel)) ||
-                        ((((levelEndReason == 3 || (cheated)) || (debugBonusLevels)) ||
+                        ((((levelEndReason == LEVEL_END_HIDDEN_EXIT || (cheated)) || (debugBonusLevels)) ||
                          ((isFinal && (curWorld2 != 4))))))))) {
                     SavePointMenu();
                 } else {
@@ -779,7 +779,7 @@ int MainGameLoop(void) {
                 InitParticles();
                 UpdateScoreAtEndOfLevel();
             }
-            if (levelScoreSummaryConfirmed == 0 && levelEndReason >= -10) {
+            if (levelScoreSummaryConfirmed == 0 && levelEndReason >= LEVEL_END_TIME_TRIAL_QUIT) {
                 DrawBigGuiSprite(0);
                 DrawLevelScoreSummary();
             }
@@ -967,7 +967,7 @@ void DecideNextLevel(void) {
         return;
     }
     if (gameMode == 0 && specialLevelType == 0 && levelEndReason > 0) {
-        if (levelEndReason == 3) {
+        if (levelEndReason == LEVEL_END_HIDDEN_EXIT) {
             curLevel++;
             if (curLevel == 15) {
                 curLevel = *(int*)LEVEL_PAK_BUF;

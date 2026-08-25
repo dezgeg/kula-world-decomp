@@ -135,7 +135,7 @@ void HandleCheats(void) {
     if (cheatState[4].activated == 1) {
         cheatState[4].activated = 0;
         cheated = 1;
-        levelEndReason = 3;
+        levelEndReason = LEVEL_END_HIDDEN_EXIT;
     }
     if (cheatState[5].activated == 1) {
         cheatState[5].activated = 0;

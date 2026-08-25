@@ -100,7 +100,7 @@ void UpdateScoreAtEndOfLevel(void) {
         oldScore = newScore;
 
         menuUnkUnused = 0;
-        if (levelEndReason == -10 && numTimeTrialPlayers == 1) {
+        if (levelEndReason == LEVEL_END_TIME_TRIAL_QUIT && numTimeTrialPlayers == 1) {
             levelScoreSummaryConfirmed = 1;
         }
         if (curLevel == 0 && levelEndReason > 0 && numTimeTrialPlayers == 1) {

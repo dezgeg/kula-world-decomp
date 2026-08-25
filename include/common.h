@@ -197,6 +197,23 @@ typedef enum LevelEndGfx {
     LEVEL_END_GFX_MEMCARD_LOADED = 200,
 } LevelEndGfx;
 
+typedef enum LevelEndReason {
+    LEVEL_END_TIME_TRIAL_QUIT = -10,
+    LEVEL_END_GAME_OVER = -9,
+    LEVEL_END_WRONG_MOVE = -8,
+    LEVEL_END_LASER = -7,
+    LEVEL_END_MELTED = -6,
+    LEVEL_END_CAPTURED = -5,
+    LEVEL_END_BURNED = -4,
+    LEVEL_END_FELL_OFF = -3,
+    LEVEL_END_TIME_OUT = -2,
+    LEVEL_END_SPIKED = -1,
+    LEVEL_END_NONE = 0,
+    LEVEL_END_EXIT = 1,
+    LEVEL_END_ALL_CUBES = 2,
+    LEVEL_END_HIDDEN_EXIT = 3,
+} LevelEndReason;
+
 typedef struct PrimList {
     void* main;
     void* gui1;

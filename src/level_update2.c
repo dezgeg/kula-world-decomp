@@ -436,14 +436,14 @@ void ProcessPlayer(void) {
     }
 
     if (copycatStateVar == 1 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
-        thePlayer.delayedLevelEndReason = 1;
+        thePlayer.delayedLevelEndReason = LEVEL_END_EXIT;
         thePlayer.movementInhibitTimer = 25;
         copycatStateVar = 0;
         curController = (curController + 1) % 2;
     }
 
     if (copycatStateVar == 2 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
-        thePlayer.delayedLevelEndReason = -8;
+        thePlayer.delayedLevelEndReason = LEVEL_END_WRONG_MOVE;
         thePlayer.movementInhibitTimer = 25;
         copycatStateVar = 0;
     }
@@ -454,13 +454,13 @@ void ProcessPlayer(void) {
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
 
-        if (thePlayer.delayedLevelEndReason == -4) {
+        if (thePlayer.delayedLevelEndReason == LEVEL_END_BURNED) {
             thePlayer.flatteningTimer += 210;
         }
-        if (thePlayer.delayedLevelEndReason == -1 && thePlayer.movementInhibitTimer == 1) {
-            levelEndReason = -1;
+        if (thePlayer.delayedLevelEndReason == LEVEL_END_SPIKED && thePlayer.movementInhibitTimer == 1) {
+            levelEndReason = LEVEL_END_SPIKED;
         }
-        if (thePlayer.delayedLevelEndReason == -6) {
+        if (thePlayer.delayedLevelEndReason == LEVEL_END_MELTED) {
             thePlayer.acidTimer += 300;
         }
         if (thePlayer.movementInhibitTimer == 0) {
@@ -479,7 +479,7 @@ void ProcessPlayer(void) {
         HandlePlayerButtons(&thePlayer);
     }
 
-    if (levelWon[cameraIndex] == 1) {
+    if (levelWon[cameraIndex] == LEVEL_END_EXIT) {
         thePlayer.rollingForward = 0;
         thePlayer.turnDirection = 0;
         thePlayer.jumping = 0;
@@ -491,8 +491,8 @@ void ProcessPlayer(void) {
         thePlayer.bounceTimer++;
     }
 
-    if (levelWon[cameraIndex] == 1) {
-        if (numCameras == 1 || (levelWon[0] == 1 && levelWon[1] == 1)) {
+    if (levelWon[cameraIndex] == LEVEL_END_EXIT) {
+        if (numCameras == 1 || (levelWon[0] == LEVEL_END_EXIT && levelWon[1] == LEVEL_END_EXIT)) {
             levelEndReason = levelWon[cameraIndex];
         }
     } else if (levelWon[cameraIndex] != 0) {
@@ -505,7 +505,7 @@ void ProcessPlayer(void) {
         playerCombinedPos.vz = thePlayer.finePos.vz + thePlayer.svec54.vz;
 
         MoveMovingPlatforms(playerCombinedPos);
-        if (thePlayer.delayedLevelEndReason != -5) {
+        if (thePlayer.delayedLevelEndReason != LEVEL_END_CAPTURED) {
             UpdateEnemies(playerCombinedPos);
         }
         if (isPausedOrWaitingForRestart == 0) {
@@ -523,14 +523,14 @@ void ProcessPlayer(void) {
     }
 
     if (thePlayer.invulnerabilityTimer == -1) {
-        if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != -5) {
+        if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != LEVEL_END_CAPTURED) {
             SndPlaySfx(SFX_CAPTURED, 0, &SVECTOR_000a2df4, 7000);
             Vibrate99(1, 255, 10);
             thePlayer.dying = 1;
             thePlayer.movementInhibitTimer = 10;
             thePlayer.movementVelocity = 0;
             thePlayer.rotX = 0;
-            thePlayer.delayedLevelEndReason = -5;
+            thePlayer.delayedLevelEndReason = LEVEL_END_CAPTURED;
             thePlayer.ballBlinking = 1;
         }
     }
@@ -573,7 +573,7 @@ void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
     SVECTOR_000a45d8.vz = (thePlayer.finePos.vz + (thePlayer.gravityDir.vz << 8) + 0x100) >> 9;
 
     if (SVECTOR_000a45d8.vx < -1 || SVECTOR_000a45d8.vx > 35 || SVECTOR_000a45d8.vy < -1 || SVECTOR_000a45d8.vy > 35 || SVECTOR_000a45d8.vz < -1 || SVECTOR_000a45d8.vz > 35) {
-        levelEndReason = -3;
+        levelEndReason = LEVEL_END_FELL_OFF;
     }
 
     if (pauseForStartPress == 1 && levelEndReason == 0) {

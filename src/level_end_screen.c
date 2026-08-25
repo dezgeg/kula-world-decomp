@@ -133,7 +133,7 @@ void LoadLevelEndReasonGfx() {
         whichGfx = LEVEL_END_GFX_LOADING;
     }
 
-    if (whichGfx == whichLevelEndSpriteLoaded || whichGfx > MENU_DEFLATED_SPRITES2_PTR[0] - 2 || (levelEndReason == -10 && whichGfx == LEVEL_END_GFX_WELL_DONE)) {
+    if (whichGfx == whichLevelEndSpriteLoaded || whichGfx > MENU_DEFLATED_SPRITES2_PTR[0] - 2 || (levelEndReason == LEVEL_END_TIME_TRIAL_QUIT && whichGfx == LEVEL_END_GFX_WELL_DONE)) {
         return;
     }
     if (whichGfx == LEVEL_END_GFX_LOADING) {
@@ -308,7 +308,7 @@ void DrawBigGuiSprite(int param_1) {
     if (gameOverScreenState == 1 && gameOverScreenFade >= 0x80) {
         gameOverScreenState = 2;
     }
-    if (param_1 == 0 && (levelEndReason > -9 || gameOverScreenState == 3)) {
+    if (param_1 == 0 && (levelEndReason > LEVEL_END_GAME_OVER || gameOverScreenState == 3)) {
         setRGB0(&bigGuiSprite1[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
         setRGB0(&bigGuiSprite2[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
         addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite1[whichDrawDispEnv]);

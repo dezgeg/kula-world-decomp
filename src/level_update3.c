@@ -158,7 +158,7 @@ void HandleItemTouching(Player* player) {
                         case OBJ_SPIKE_TRAP:
                             if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
                                 if (thePlayer.invulnerabilityTimer == -1 && thePlayer.movementInhibitTimer == 0) {
-                                    thePlayer.delayedLevelEndReason = -5;
+                                    thePlayer.delayedLevelEndReason = LEVEL_END_CAPTURED;
                                     thePlayer.dying = 1;
                                     thePlayer.movementVelocity = 0;
                                     thePlayer.rotX = 0;
@@ -812,7 +812,7 @@ void HandleSpecialCubeTypes(Player* player) {
     if (DAT_000a4788 == -2) {
         if (thePlayer.invulnerabilityTimer == -1) {
             if (player->movementInhibitTimer == 0) {
-                player->delayedLevelEndReason = -7;
+                player->delayedLevelEndReason = LEVEL_END_LASER;
                 player->movementInhibitTimer = 4;
                 player->movementVelocity = 0;
                 player->rotX = 0;
@@ -876,7 +876,7 @@ void HandleSpecialCubeTypes(Player* player) {
         if (player->fireTimer > 2000) {
             if (player->movementInhibitTimer == 0) {
                 player->dying = 1;
-                player->delayedLevelEndReason = -4;
+                player->delayedLevelEndReason = LEVEL_END_BURNED;
                 player->movementVelocity = 0;
                 player->rotX = 0;
                 player->movementInhibitTimer = 25;
@@ -900,7 +900,7 @@ void HandleSpecialCubeTypes(Player* player) {
         if (player->faceTypePlayerStandingOn == OBJ_ACID_PATCH) {
             if (player->movementInhibitTimer == 0) {
                 if (thePlayer.invulnerabilityTimer == -1) {
-                    player->delayedLevelEndReason = -6;
+                    player->delayedLevelEndReason = LEVEL_END_MELTED;
                     player->movementInhibitTimer = 6;
                     player->acidTimer += 300;
                 }
@@ -934,26 +934,26 @@ void HandleSpecialCubeTypes(Player* player) {
             }
             if (numCubesRemainingInLevel[0] == 0) {
                 if (player->onGround) {
-                    levelEndReason = 2;
+                    levelEndReason = LEVEL_END_ALL_CUBES;
                 } else if (player->movementInhibitTimer == 0) {
-                    player->delayedLevelEndReason = 2;
+                    player->delayedLevelEndReason = LEVEL_END_ALL_CUBES;
                     player->movementInhibitTimer = 5;
                 }
             }
         } else {
             if (player->faceTypePlayerStandingOn == OBJ_EXIT && numKeysRemaining == 0) {
                 if (player->onGround) {
-                    levelWon[cameraIndex] = 1;
+                    levelWon[cameraIndex] = LEVEL_END_EXIT;
                 } else if (player->movementInhibitTimer == 0) {
-                    player->delayedLevelEndReason = 1;
+                    player->delayedLevelEndReason = LEVEL_END_EXIT;
                     player->movementInhibitTimer = 5;
                 }
             }
             if (player->faceTypePlayerStandingOn == OBJ_HIDDEN_EXIT && numKeysRemaining == 0) {
                 if (player->onGround) {
-                    levelWon[cameraIndex] = 3;
+                    levelWon[cameraIndex] = LEVEL_END_HIDDEN_EXIT;
                 } else if (player->movementInhibitTimer == 0) {
-                    player->delayedLevelEndReason = 3;
+                    player->delayedLevelEndReason = LEVEL_END_HIDDEN_EXIT;
                     player->movementInhibitTimer = 5;
                 }
             }
@@ -972,7 +972,7 @@ void HandleSpecialCubeTypes(Player* player) {
                 thePlayer.dying = 1;
                 thePlayer.movementVelocity = 0;
                 thePlayer.rotX = 0;
-                thePlayer.delayedLevelEndReason = -1;
+                thePlayer.delayedLevelEndReason = LEVEL_END_SPIKED;
                 thePlayer.movementInhibitTimer = 10;
                 thePlayer.ballBlinking = 1;
             }
@@ -986,7 +986,7 @@ void HandleSpecialCubeTypes(Player* player) {
                         thePlayer.dying = 1;
                         thePlayer.movementVelocity = 0;
                         thePlayer.rotX = 0;
-                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.delayedLevelEndReason = LEVEL_END_SPIKED;
                         thePlayer.movementInhibitTimer = 10;
                         thePlayer.ballBlinking = 1;
                     }
@@ -997,7 +997,7 @@ void HandleSpecialCubeTypes(Player* player) {
                         thePlayer.dying = 1;
                         thePlayer.movementVelocity = 0;
                         thePlayer.rotX = 0;
-                        thePlayer.delayedLevelEndReason = -1;
+                        thePlayer.delayedLevelEndReason = LEVEL_END_SPIKED;
                         thePlayer.movementInhibitTimer = 10;
                         thePlayer.ballBlinking = 1;
                     }
@@ -1072,7 +1072,7 @@ void SubtractLevelTimer(int param_1) {
     if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
         levelTimeLeft -= param_1;
         if (levelTimeLeft <= 0) {
-            levelEndReason = -2;
+            levelEndReason = LEVEL_END_TIME_OUT;
         }
     }
 
