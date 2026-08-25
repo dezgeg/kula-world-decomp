@@ -120,7 +120,7 @@ void HighScoreUi(int param_1) {
     cursorIndex = 5;
 
     SndMuteAllVoices();
-    DrawWidgets(11, 0);
+    DrawWidgets(MENU_SPRITE_SCORES, 0);
     InitPsxButtonBackgroundSprites(1);
     InitHighscoreCubes();
     VSync(0);
@@ -479,7 +479,7 @@ void HighScoreUi(int param_1) {
 
         DrawPsxButtonBackground();
         DrawHighScoreCubes();
-        DrawWidgets(11, 0);
+        DrawWidgets(MENU_SPRITE_SCORES, 0);
     }
     idleTimer = 0;
     DrawSync(0);

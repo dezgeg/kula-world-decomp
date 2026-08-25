@@ -189,7 +189,7 @@ void PauseMenu(void) {
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
-    DrawWidgets(1, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_PAUSE_MENU, cursorPosInMenu[curMenu]);
 
     if (TestButton(PAD_CROSS)) {
         switch (cursorPosInMenu[curMenu]) {
@@ -232,12 +232,12 @@ void OptionsMenu(void) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 6;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(2, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_OPTIONS_MENU, cursorPosInMenu[curMenu]);
     SetBigGuiSpriteVisible();
     if (gameState == 0) {
-        y = MENU_CURSOR_START_Y_MAIN_MENU[2];
+        y = MENU_CURSOR_START_Y_MAIN_MENU[MENU_SPRITE_OPTIONS_MENU];
     } else {
-        y = MENU_CURSOR_START_Y_PAUSE_MENU[2];
+        y = MENU_CURSOR_START_Y_PAUSE_MENU[MENU_SPRITE_OPTIONS_MENU];
     }
     onOffSprite = 18;
     if (turnDelayEnabled == 1) {
@@ -334,7 +334,7 @@ void OptionsMenu(void) {
 }
 
 void QuitAreYouSureMenu(void) {
-    DrawWidgets(18, 0);
+    DrawWidgets(MENU_SPRITE_QUIT_MENU, 0);
     if (TestButton(PAD_TRIANGLE)) {
         curMenu = 0;
     }
@@ -365,7 +365,7 @@ void QuitToMainMenu(void) {
 }
 
 void ScreenAdjustMenu(void) {
-    DrawWidgets(10, 0);
+    DrawWidgets(MENU_SPRITE_SCREEN_ADJUST_MENU, 0);
 
     SetLineF3(&screenAdjustLine1[whichDrawDispEnv]);
     SetLineF3(&screenAdjustLine2[whichDrawDispEnv]);
@@ -465,7 +465,7 @@ void MainMenu(void) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(0, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_MAIN_MENU, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_CROSS)) {
         drawCopyright = 0;
         switch (cursorPosInMenu[curMenu]) {
@@ -510,7 +510,7 @@ void SinglePlayerMenu(void) {
             cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
             SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
         }
-        DrawWidgets(4, cursorPosInMenu[curMenu]);
+        DrawWidgets(MENU_SPRITE_SINGLE_PLAYER_MENU, cursorPosInMenu[curMenu]);
         if (TestButton(PAD_TRIANGLE)) {
             cursorPosInMenu[curMenu] = 0;
             curMenu = 0;
@@ -612,7 +612,7 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 5;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(6, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_SINGLE_PLAYER_MENU_FINAL_UNLOCKED, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
@@ -727,7 +727,7 @@ void TwoPlayerMenu(void) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 3;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(5, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_TWO_PLAYER_MENU, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 0;
@@ -779,7 +779,7 @@ void TimeTrialDifficultySelectionMenu(void) {
         cursorPosInMenu[curMenu] = (cursorPosInMenu[curMenu] + 1) % 4;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(7, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_DIFFICULTY_SELECT_MENU, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_TRIANGLE)) {
         cursorPosInMenu[curMenu] = 0;
         curMenu = 3;
@@ -835,7 +835,7 @@ void TwoPlayerLevelSelectMenu(void) {
         twoPlayerLevelSelectionCursorPos = (twoPlayerLevelSelectionCursorPos + 1) % (highestLevelReached / 15 + 1);
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
-    DrawWidgets(8, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_SELECT_ENVIRONMENT, cursorPosInMenu[curMenu]);
     sprintf(scoreText, S_FMTd_4, twoPlayerLevelSelectionCursorPos * 15 + 1);
     Update2PlayerLevelSelectionSprites(49 + (twoPlayerLevelSelectionCursorPos + 1) * 20 + (twoPlayerLevelSelectionCursorPos / 9) * 8, 187);
     for (i = 1; i < 11; i++) {
@@ -881,7 +881,7 @@ void TwoPlayerLevelSelectMenu(void) {
 }
 
 void SavePointMenu(void) {
-    DrawWidgets(9, cursorPosInMenu[curMenu]);
+    DrawWidgets(MENU_SPRITE_SAVE_POINT_MENU, cursorPosInMenu[curMenu]);
     if (TestButton(PAD_CROSS) && MemCardUi() > 0) {
         savePointMenuConfirmed = 1;
         prevControllerButtons = 0;
@@ -899,7 +899,7 @@ int GetReadyScreen(void) {
     DrawStaticUiSprite(7, 90, 150, 0);
     DrawStaticUiSprite(twoPlayerWhichPlayer + 8, 144, 151, 0);
     DrawStaticUiSprite(6, 162, 150, 0);
-    DrawWidgets(19, 0);
+    DrawWidgets(MENU_SPRITE_GET_READY, 0);
     if (TestButton(PAD_CROSS)) {
         SndPlaySfx(SFX_LEVEL_LOAD, 0, &ZERO_SVECTOR_a3340, 7000);
         return 0;

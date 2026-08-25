@@ -265,16 +265,16 @@ int LoadSaveMenu(void) {
                 SetTextParams(displayWidth / 2, 100, 1, 128, 128, 128);
                 switch (mcResult) {
                     case McErrCardInvalid:
-                        DrawWidgets(13, 0);
+                        DrawWidgets(MENU_SPRITE_MEMCARD_BAD_CARD, 0);
                         break;
                     case McErrNotFormat:
-                        DrawWidgets(15, 0);
+                        DrawWidgets(MENU_SPRITE_MEMCARD_NO_SAVE_DATA, 0);
                         break;
                     case McErrFileNotExist:
-                        DrawWidgets(15, 0);
+                        DrawWidgets(MENU_SPRITE_MEMCARD_NO_SAVE_DATA, 0);
                         break;
                     case McErrCardNotExist:
-                        DrawWidgets(12, 0);
+                        DrawWidgets(MENU_SPRITE_MEMCARD_NOT_INSERTED, 0);
                         break;
                 }
 
@@ -486,10 +486,10 @@ int MemCardUi(void) {
 
             switch (mcResult) {
                 case McErrCardNotExist:
-                    DrawWidgets(12, 0);
+                    DrawWidgets(MENU_SPRITE_MEMCARD_NOT_INSERTED, 0);
                     break;
                 case McErrCardInvalid:
-                    DrawWidgets(13, 0);
+                    DrawWidgets(MENU_SPRITE_MEMCARD_BAD_CARD, 0);
                     break;
                 case McErrNewCard:
                     INT_000a5690 = 0;
@@ -501,7 +501,7 @@ int MemCardUi(void) {
                         INT_000a5690 = 0;
                     break;
                 case McErrNotFormat:
-                    DrawWidgets(14, cursorPos);
+                    DrawWidgets(MENU_SPRITE_MEMCARD_FORMAT_MENU, cursorPos);
                     if (TestButton(PAD_U) && cursorPos == 1) {
                         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                         cursorPos = 0;
@@ -528,7 +528,7 @@ int MemCardUi(void) {
                     }
                     break;
                 case McErrBlockFull:
-                    DrawWidgets(16, 0);
+                    DrawWidgets(MENU_SPRITE_MEMCARD_FULL, 0);
                     if (TestButton(PAD_CROSS)) {
                         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                         switch (MemCardUiPart()) {
@@ -570,7 +570,7 @@ int MemCardUi(void) {
                     }
                     break;
                 case 666:
-                    DrawWidgets(17, 0);
+                    DrawWidgets(MENU_SPRITE_MEMCARD_OVERWRITE_MENU, 0);
                     if (TestButton(PAD_CROSS)) {
                         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
                         ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");

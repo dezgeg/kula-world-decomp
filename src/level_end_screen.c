@@ -54,13 +54,13 @@ int inflateRetCode;
 
 SVECTOR SVECTOR_000a2ab4 = { 0, 0, 0, 0 };
 char S_Fatal_error_in_jens_2d_eng[] = "Fatal error in jens 2d-eng:\n\n";
-int whichLevelEndSpriteLoaded = 34;
+int whichLevelEndSpriteLoaded = LEVEL_END_GFX_VERY_WELL_DONE;
 int gameOverScreenState = 0;
 int gameOverScreenFade = 0;
 char S_1_0_4[] = "1.0.4"; // hack
 
 void InitLevelEndScreen(void) {
-    whichLevelEndSpriteLoaded = 48;
+    whichLevelEndSpriteLoaded = LEVEL_END_GFX_NONE;
     gameOverScreenState = 0;
     bigGuiSpriteFade = 0;
 }
@@ -70,31 +70,24 @@ void LoadLevelEndReasonGfx() {
     short x0;
     short y0;
     RECT rect;
-    short h;
     short w;
-    int playTime;
+    short h;
     int len;
     int off;
     char* ptr;
-    int dest;
-    // 2 = spiked
-    // 4 = time out
-    // 6 = fell off
-    // 8 = fire
-    // 10 = captured
+    void* dest;
+    int playTime;
+
     whichGfx = -levelEndReason * 2;
     if (levelEndReason >= 0) {
-        // 20 == well done
-        whichGfx = 20;
+        whichGfx = LEVEL_END_GFX_WELL_DONE;
         if (gameMode == 2) {
             playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * 50;
             if (playTime < 1) {
-                // 34 = very well done
-                whichGfx = 34;
+                whichGfx = LEVEL_END_GFX_VERY_WELL_DONE;
             }
             if (playTime > 1000) {
-                // 36 = level cleared
-                whichGfx = 36;
+                whichGfx = LEVEL_END_GFX_LEVEL_CLEARED;
             }
         }
     } else {
@@ -103,57 +96,47 @@ void LoadLevelEndReasonGfx() {
                 gameOverScreenState = 1;
             }
             if (gameOverScreenState == 3) {
-                // 18 = game over
-                whichGfx = 18;
+                whichGfx = LEVEL_END_GFX_GAME_OVER;
             }
         }
     }
     if (gameMode == 1 && curLevel == 0 && (copycatPlayerScores[0] > 5 || copycatPlayerScores[1] > 5) && levelEndReason < 0) {
-        /* 30 = player 2 won */
-        whichGfx = 30;
+        whichGfx = LEVEL_END_GFX_PLAYER_2_WON;
         if (copycatPlayerScores[1] < copycatPlayerScores[0]) {
-            // 28 = player 1 won
-            whichGfx = 28;
+            whichGfx = LEVEL_END_GFX_PLAYER_1_WON;
         }
         if (copycatPlayerScores[0] == copycatPlayerScores[1]) {
-            // 32 = draw
-            whichGfx = 32;
+            whichGfx = LEVEL_END_GFX_DRAW;
         }
     }
     if (gameMode == 0 && isFinal == 1 && levelEndReason > 0 && curWorld == 10) {
-        // 12 = final complete
-        whichGfx = 12;
+        whichGfx = LEVEL_END_GFX_FINAL_COMPLETE;
     }
     if (gameMode == 2) {
         if (levelEndReason > 0 && curLevel == 0 && totalScore >= 0 && DAT_000a3374 == 1 && numTimeTrialPlayers == 1) {
-            whichGfx = 24;
+            whichGfx = LEVEL_END_GFX_QUALIFIED;
             if (totalPlayTime[0] > 0) {
-                // 22 = you failed to qualify
-                whichGfx = 22;
+                whichGfx = LEVEL_END_GFX_FAILED_TO_QUALIFY;
             }
         }
         if (gameMode == 2 && numTimeTrialPlayers == 2 && curLevel == 14 && levelEndReason > 0 && levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
-            // 30 = player 2 won
-            whichGfx = 30;
+            whichGfx = LEVEL_END_GFX_PLAYER_2_WON;
             if (totalPlayTime[0] < totalPlayTime[1]) {
-                // 28 = player 1 won
-                whichGfx = 28;
+                whichGfx = LEVEL_END_GFX_PLAYER_1_WON;
             }
             if (totalPlayTime[0] == totalPlayTime[1]) {
-                // 32 = draw
-                whichGfx = 32;
+                whichGfx = LEVEL_END_GFX_DRAW;
             }
         }
     }
     if (levelEndReason == 0) {
-        // 0 = loading
-        whichGfx = 0;
+        whichGfx = LEVEL_END_GFX_LOADING;
     }
 
-    if (whichGfx == whichLevelEndSpriteLoaded || whichGfx > MENU_DEFLATED_SPRITES2_PTR[0] - 2 || (levelEndReason == -10 && whichGfx == 20)) {
+    if (whichGfx == whichLevelEndSpriteLoaded || whichGfx > MENU_DEFLATED_SPRITES2_PTR[0] - 2 || (levelEndReason == -10 && whichGfx == LEVEL_END_GFX_WELL_DONE)) {
         return;
     }
-    if (whichGfx == 0) {
+    if (whichGfx == LEVEL_END_GFX_LOADING) {
         bigGuiSpriteFade = 0;
     }
     len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
@@ -171,7 +154,7 @@ void LoadLevelEndReasonGfx() {
     w = *(short*)((char*)TIM_DECOMP_BUF + 0x3c);
     h = *(short*)((char*)TIM_DECOMP_BUF + 0x3e);
     x0 = (displayWidth - 4 * w) / 2;
-    if (whichGfx < 18) {
+    if (whichGfx < LEVEL_END_GFX_GAME_OVER) {
         y0 = 5;
         if (gameMode == 1 || (gameMode == 2 && numTimeTrialPlayers == 1)) {
             y0 = 20;
@@ -179,13 +162,13 @@ void LoadLevelEndReasonGfx() {
     } else {
         y0 = 50;
     }
-    if (whichGfx == 12) {
+    if (whichGfx == LEVEL_END_GFX_FINAL_COMPLETE) {
         y0 = 50;
     }
-    if (whichGfx == 0) {
+    if (whichGfx == LEVEL_END_GFX_LOADING) {
         y0 = 60;
     }
-    if (whichGfx == 24 || whichGfx == 22) {
+    if (whichGfx == LEVEL_END_GFX_QUALIFIED || whichGfx == LEVEL_END_GFX_FAILED_TO_QUALIFY) {
         y0 = 10;
     }
     if (h + 94 < 0x100) {

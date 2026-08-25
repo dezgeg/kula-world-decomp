@@ -39,7 +39,7 @@ void InitMemcardUi(void) {
     RECT rect;
     short h;
     short w;
-    int tex = 26;
+    int tex = LEVEL_END_GFX_MEMCARD_MENU;
     int len;
     int len2;
     int offset;
@@ -47,7 +47,7 @@ void InitMemcardUi(void) {
     char* buf;
     char* buf2;
 
-    if (whichLevelEndSpriteLoaded != 200) {
+    if (whichLevelEndSpriteLoaded != LEVEL_END_GFX_MEMCARD_LOADED) {
         len = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
         offset = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];
         buf = (char*)MENU_DEFLATED_SPRITES2_PTR + offset;
@@ -282,7 +282,7 @@ void InitMemcardUi(void) {
         saveBackButtonSprite1[0].sprt.w = 0x3E;
         saveBackButtonSprite1[0].sprt.h = 0x16;
         saveBackButtonSprite1[1] = saveBackButtonSprite1[0];
-        whichLevelEndSpriteLoaded = 0xC8;
+        whichLevelEndSpriteLoaded = LEVEL_END_GFX_MEMCARD_LOADED;
     }
 }
 

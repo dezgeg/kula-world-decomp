@@ -94,7 +94,7 @@ void LoadMenuGfx(int menuId) {
     uint unk;
     uint x;
     ushort y;
-    int spriteId = menuId * 2 + 50;
+    int spriteId = menuId * 2 + MENU_SPRITE_OFFSET;
     int len;
     int offset;
     int offset2;
@@ -105,8 +105,8 @@ void LoadMenuGfx(int menuId) {
         return;
     }
 
-    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
-    offset = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
+    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - MENU_SPRITE_OFFSET) * 2];
+    offset = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
     buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset;
     dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
@@ -153,7 +153,7 @@ void LoadMenuGfx(int menuId) {
     LoadImage(&rect, (u_long*)((char*)TIM_DECOMP_BUF + 0x40));
     DrawSync(0);
     spriteId++;
-    if (spriteId - 50 > MENU_DEFLATED_SPRITES1_PTR[0]) {
+    if (spriteId - MENU_SPRITE_OFFSET > MENU_DEFLATED_SPRITES1_PTR[0]) {
         SetupDisplay(1, 0x80, 0, 0, 0, 0);
         FntFlush(-1);
         DrawSync(0);
@@ -167,8 +167,8 @@ void LoadMenuGfx(int menuId) {
         while (1)
             ;
     }
-    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - 50) * 2];
-    offset2 = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - 50) * 2];
+    len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - MENU_SPRITE_OFFSET) * 2];
+    offset2 = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
     buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset2;
     dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
@@ -248,7 +248,7 @@ void LoadMenuGfx(int menuId) {
 }
 
 void DrawWidgets(int menuId, int cursorPos) {
-    if (menuId == 2 || menuId == 3) {
+    if (menuId == MENU_SPRITE_OPTIONS_MENU || menuId == MENU_SPRITE_OPTIONS_MENU_UNUSED) {
         musicVolumeWidgetSprite[whichDrawDispEnv].sprt.x0 = displayWidth / 2 + (musicVolume - 6) * 5 + 2;
         sfxVolumeWidgetSprite[whichDrawDispEnv].sprt.x0 = displayWidth / 2 + (sfxVolume - 6) * 5 + 2;
         if (gameState == 0) {
@@ -261,7 +261,7 @@ void DrawWidgets(int menuId, int cursorPos) {
         addPrim(&primLists[whichDrawDispEnv].main, &musicVolumeWidgetSprite[whichDrawDispEnv]);
         addPrim(&primLists[whichDrawDispEnv].main, &sfxVolumeWidgetSprite[whichDrawDispEnv]);
     }
-    if (menuId < 8 || menuId == 14) {
+    if (menuId < MENU_SPRITE_SELECT_ENVIRONMENT || menuId == MENU_SPRITE_MEMCARD_FORMAT_MENU) {
         menuCursorSinPhase = (menuCursorSinPhase + 100 - MENU_CURSOR_MOVE_SPEED[menuId][cursorPos]) & 0xfff;
         menuCursorSprite[whichDrawDispEnv].sprt.x0 = displayWidth / 2 +
             MENU_CURSOR_X_POS[menuId][cursorPos] +
@@ -272,22 +272,22 @@ void DrawWidgets(int menuId, int cursorPos) {
         } else {
             menuCursorSprite[whichDrawDispEnv].sprt.y0 = MENU_CURSOR_START_Y_PAUSE_MENU[menuId] + cursorPos * 20;
         }
-        if (menuId == 6) {
+        if (menuId == MENU_SPRITE_SINGLE_PLAYER_MENU_FINAL_UNLOCKED) {
             menuCursorSprite[whichDrawDispEnv].sprt.y0 += 8;
         }
-        if (menuId == 14) {
+        if (menuId == MENU_SPRITE_MEMCARD_FORMAT_MENU) {
             menuCursorSprite[whichDrawDispEnv].sprt.y0 += 60;
         }
         setRGB0(&menuCursorSprite[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
         addPrim(&primLists[whichDrawDispEnv].main, &menuCursorSprite[whichDrawDispEnv]);
     }
     LoadMenuGfx(menuId);
-    if (whichLevelEndSpriteLoaded > 49) {
+    if (whichLevelEndSpriteLoaded >= MENU_SPRITE_OFFSET) {
         addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite1[whichDrawDispEnv]);
-        if (menuId != 11) {
+        if (menuId != MENU_SPRITE_SCORES) {
             addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite2[whichDrawDispEnv]);
         }
-        if (menuId == 8) {
+        if (menuId == MENU_SPRITE_SELECT_ENVIRONMENT) {
             addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite1[whichDrawDispEnv]);
             addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite2[whichDrawDispEnv]);
         }
