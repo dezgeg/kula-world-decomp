@@ -626,14 +626,14 @@ int MainGameLoop(void) {
         prevLevelTimeLeft = levelTimeLeft;
         if (levelEndReason != 0) {
             if (prevLevelEndReason != 0 && levelScoreSummaryConfirmed == 1) {
-                if (!((((levelEndReason <= 0 && specialLevelType < 1) ||
-                         (((isDemoMode || gotSioData) ||
-                            ((gameMode != 0 && ((gameMode != 2 || (numTimeTrialPlayers != 1)))))))) ||
-                        (curLevel != (curLevel / 5) * 5)) ||
-                     ((((gameMode == 2 && ((curLevel != 0 || (timeTrialAtEndOfWorld)))) ||
-                         (14 < curLevel)) ||
-                        ((((levelEndReason == LEVEL_END_HIDDEN_EXIT || (cheated)) || (debugBonusLevels)) ||
-                         ((isFinal && (curWorld2 != 4))))))))) {
+                if ((levelEndReason > 0 || specialLevelType >= 1) &&
+                        !isDemoMode && !gotSioData &&
+                        (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1)) &&
+                        curLevel == (curLevel / 5) * 5 &&
+                        (gameMode != 2 || (curLevel == 0 && !timeTrialAtEndOfWorld)) &&
+                        curLevel <= 14 &&
+                        levelEndReason != LEVEL_END_HIDDEN_EXIT && !cheated && !debugBonusLevels &&
+                        (!isFinal || curWorld2 == 4)) {
                     SavePointMenu();
                 } else {
                     savePointMenuConfirmed = 1;
