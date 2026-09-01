@@ -1,6 +1,12 @@
 #include "common.h"
 
-extern int IsPlayerOnMovingPlatform(); // XXX: this should take Player* player
+#ifdef FIX_HORRIBLE_BUGS
+extern int IsPlayerOnMovingPlatform(Player* player);
+#else
+// This should take Player* player, but I guess they are calling the function without prototype,
+// and $a0 just happens to contain the player pointer anyway.
+extern int IsPlayerOnMovingPlatform();
+#endif
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int HandleMovingPlatforms(Player* player);
@@ -713,7 +719,11 @@ int CheckPlayerHitCeiling(Player* player) {
     if (player->svec_144.vy < 0)
         return 0;
 
+#ifdef FIX_HORRIBLE_BUGS
+    if (IsPlayerOnMovingPlatform(player) ||
+#else
     if (IsPlayerOnMovingPlatform() ||
+#endif
         player->surroundingBlocks[2][1][1] >= 0 ||
         (player->subpixelPositionOnCube.vz >= 412 && player->surroundingBlocks[2][2][1] >= 0) ||
         (player->subpixelPositionOnCube.vz < 101 && player->surroundingBlocks[2][0][1] >= 0))
