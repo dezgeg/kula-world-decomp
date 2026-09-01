@@ -9,10 +9,10 @@ static unsigned char VIBRATION_ACT_ALIGN[6] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0x
 int vibrationEnabled = 1;
 
 // sbss offset 0x94420..0x94490
-static int latestControllerSlotPolled;
-static u_char padData[2][34];
+STATIC_FOR_GP_ACCESS int latestControllerSlotPolled;
+STATIC_FOR_GP_ACCESS u_char padData[2][34];
 static u_char vibrationBuf[2][2];
-static u_char padVibrationModeEntered[];
+STATIC_FOR_GP_ACCESS u_char padVibrationModeEntered[];
 static int vibrationMode;
 static int vibrationSinConst;
 static int vibrationSinMagnitude;

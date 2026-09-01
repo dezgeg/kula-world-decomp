@@ -11,8 +11,8 @@ extern int whichDrawDispEnv;
 
 static int lethargyAngleCounter;
 static int lethargyColorCounter;
-static POLY_FT4 lethargyEffectPoly[2];
-static int lethargyMode;
+STATIC_FOR_GP_ACCESS POLY_FT4 lethargyEffectPoly[2];
+STATIC_FOR_GP_ACCESS int lethargyMode;
 static int lethargySinMagnitude;
 static int lethargyUnusedCounter;
 

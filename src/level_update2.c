@@ -109,7 +109,7 @@ short unusedNumCopycatRounds;
 uint controllerButtons;
 uint prevControllerButtons;
 
-static int levelWon[2];
+STATIC_FOR_GP_ACCESS int levelWon[2];
 static short playerFinePosMod512[4];
 static SVECTOR initPlayerFacingVec;
 static SVECTOR initPlayerGravityVec;

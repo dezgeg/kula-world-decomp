@@ -95,7 +95,7 @@ static int handleItemTouchI;
 static int handleItemTouchIter;
 static int handleItemTouchJ;
 static int itemOffset;
-static int levelWon[2];
+STATIC_FOR_GP_ACCESS int levelWon[2];
 static int playerRadius;
 static int touchItemIdx;
 static MATRIX MATRIX_000a46d4;

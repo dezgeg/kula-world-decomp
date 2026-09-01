@@ -23,6 +23,7 @@ typedef unsigned char byte;
 typedef signed char sbyte;
 
 typedef void* OT_TYPE;
+#define STATIC_FOR_GP_ACCESS static
 
 enum PadButton {
     PAD_SELECT = 0x0001,

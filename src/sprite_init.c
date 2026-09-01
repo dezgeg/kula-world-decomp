@@ -161,7 +161,7 @@ int screenFadeColor;
 int screenFadeEnabled;
 int screenFadeSpeed;
 short* ggiPart1HourglassAnim;
-static RECT hourglassClutRect;
+STATIC_FOR_GP_ACCESS RECT hourglassClutRect;
 uint firstGuiTexture;
 int numKeysInLevel;
 
