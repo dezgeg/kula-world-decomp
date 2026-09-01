@@ -25,7 +25,7 @@ extern int numCameras;
 extern uint prevControllerButtons;
 extern PrimList primLists[2];
 extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern TgiFile* tgi;
 
 static inline int GetButtonsFromAnyController() {

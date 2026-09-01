@@ -41,7 +41,7 @@ extern short* ggiPart2DepthCueingLookup;
 extern int cameraIndex;
 extern TgiFile* tgi;
 extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
 extern RGB farColor;

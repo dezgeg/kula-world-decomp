@@ -39,7 +39,7 @@ extern Particle particles[2][16];
 extern POLY_FT4 particlePolyTemplates[7];
 extern PrimList primLists[2];
 extern Texture textures[150];
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 
 static byte PARTICLE_COLOR_DATA[7][3];
 extern short PARTICLE_TYPE_0[];

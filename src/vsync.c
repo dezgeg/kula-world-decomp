@@ -13,7 +13,7 @@ extern int numCameras;
 extern int unkUnused;
 extern int unusedNumHblanks;
 extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 
 void UnusedUpdateHblankCounter() {
     unkUnused++;

@@ -15,7 +15,7 @@ extern int displayWidth;
 extern int whichDrawDispEnv;
 extern MATRIX highScoreCubesMatrix;
 extern SVECTOR hsCubeUnusedVec;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 
 int hsCube1stSinPhaseIncrementX;
 int hsCube1stSinPhaseIncrementY;

@@ -127,10 +127,10 @@ extern SVECTOR ZERO_SVECTOR_a2f04;
 extern TgiFile* tgi;
 extern uint controllerButtons;
 extern uint prevControllerButtons;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern void* renderedPrimsBuf;
 extern void* REPLAY_INPUT_PTRS;
-extern void* unkOtag[2][1][32][64];
+extern OT_TYPE unkOtag[2][1][32][64];
 
 char* sioWritePtr;
 int buttonSaveReplayMode;

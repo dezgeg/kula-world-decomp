@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern int cameraIndex;
 extern TPolyF4 screenFadePolys[2][1];
 extern int whichDrawDispEnv;

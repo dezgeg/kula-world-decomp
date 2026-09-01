@@ -16,7 +16,7 @@ extern int gameMode;
 extern int isFinal;
 extern int levelEndReason;
 extern int whichDrawDispEnv;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 
 int sizeOfSfxFile;
 int unusedReadErrorCode;

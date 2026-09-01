@@ -11,7 +11,7 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern int displayHeight;
 extern int displayWidth;
 extern int firstLensFlareOrPsxButtonTexture;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern Texture textures[150];
 extern int whichDrawDispEnv;
 

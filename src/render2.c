@@ -68,7 +68,7 @@ extern short* tgiPart1;
 extern short* tgiPart3;
 extern TgiFile* tgi;
 extern void* cubeStates[256 * 16];
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern void* playerEnemyDispList[];
 
 int BUTTON_COLORS[] = {

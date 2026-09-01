@@ -61,7 +61,7 @@ extern MemcardData memCardData;
 extern struct MemcardHdr memcardBuf;
 extern int musicShouldLoop;
 extern int numCameras;
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 extern uint prevControllerButtons;
 extern PrimList primLists[2];
 extern char stringbuf[64];

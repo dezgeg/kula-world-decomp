@@ -22,6 +22,8 @@ typedef signed int s32;
 typedef unsigned char byte;
 typedef signed char sbyte;
 
+typedef void* OT_TYPE;
+
 enum PadButton {
     PAD_SELECT = 0x0001,
     PAD_L3 = 0x0002,
@@ -215,10 +217,10 @@ typedef enum LevelEndReason {
 } LevelEndReason;
 
 typedef struct PrimList {
-    void* main;
-    void* gui1;
-    void* gui2;
-    void* gui3;
+    OT_TYPE main;
+    OT_TYPE gui1;
+    OT_TYPE gui2;
+    OT_TYPE gui3;
 } PrimList;
 
 typedef struct TSprite {

@@ -40,7 +40,7 @@ extern int screenOffsetY;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
 extern short lensFlarePositionMultipliers[16];
-extern void* otag[2][1][1026];
+extern OT_TYPE otag[2][1][1026];
 
 int lensFlareScreenX;
 int lensFlareScreenY;
