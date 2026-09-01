@@ -47,7 +47,7 @@ extern short DAT_00171314;
 extern short DAT_00171316[];
 extern short uncompLevelData[];
 extern short cubeIndexes[39304];
-extern void* cubeStates[256 * 8];
+extern void* cubeStates[256 * 16];
 extern int isFinal;
 extern int lightEffects[32 * 8];
 extern int recentlyVisitedCubeFaces[4 * 32];
