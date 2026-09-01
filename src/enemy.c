@@ -408,8 +408,10 @@ int IsCollidingWithEnemy(SVECTOR pos) {
     return 0;
 }
 
+#ifndef SKIP_UNUSED_CODE
 void Noop4() {
 }
+#endif
 
 void RenderEnemies(void) {
     for (enemyI = 0; enemyI < numEnemies; enemyI++) {

@@ -288,6 +288,7 @@ void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan) {
     }
 }
 
+#ifndef SKIP_UNUSED_CODE
 void SndUpdateVoiceNote(int tag, int note) {
     int i;
     int sfxIndex;
@@ -306,6 +307,7 @@ void SndUpdateVoiceNote(int tag, int note) {
         }
     }
 }
+#endif
 
 void SndFadeVoiceVolume(int tag) {
     int i;

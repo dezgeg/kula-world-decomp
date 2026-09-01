@@ -15,6 +15,7 @@ static SVECTOR SVECTOR_000a2dd0 = {};
 #define CS_VISITED 14
 #define CS_STYLE 15
 
+#ifndef SKIP_UNUSED_CODE
 int IsCubeVisited(int x, int y, int z) {
     if (CUBE_INDEX_AT(x, y, z) == -1) {
         return -1;
@@ -30,6 +31,7 @@ int IsCubeSideVisited(int x, int y, int z, int dir) {
 
     return ((char*)&cubeStates[CUBE_INDEX_AT(x, y, z) * CS_SIZE + CS_SIDES_VISITED])[dir];
 }
+#endif
 
 void SetCubeVisited(int x, int y, int z, int visitType) {
     int cubeIndex;

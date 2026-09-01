@@ -109,6 +109,7 @@ int TRANSPORTER_COLORS[4][3] = {
     { 6144, 5120, 5120 },
 };
 
+#ifndef SKIP_UNUSED_CODE
 void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int param_4, int param_5, int param_6, int param_7, int param_8) {
     int* p;
 
@@ -143,6 +144,7 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int param_4, int param_5
         itemsDispList[itemsDispListIdx++] = *p++;
     }
 }
+#endif
 
 void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, void* colorR, void* colorG, void* colorB, void* const0_arg8,
                         uint blockX, uint blockY, uint blockZ, int dir,

@@ -31,6 +31,7 @@ typedef struct BiosTextWriter {
     Tim tim;
 } BiosTextWriter;
 
+#ifndef SKIP_UNUSED_CODE
 void SetupBiosFontStr(ushort* str, int x, int y, int param_4, int fg, int bg, int param_7, Tim* tim) {
     RECT rect;
     int i;
@@ -111,3 +112,4 @@ void DrawBiosFontString(void) {
         addPrim(&primLists[whichDrawDispEnv].gui1, &biosStrSprites[whichDrawDispEnv][i]);
     }
 }
+#endif

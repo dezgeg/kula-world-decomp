@@ -45,6 +45,7 @@ static int screenshotIndex[13] = {
 
 static uint screenshotTimHeader[5] = {0x10, 0x2, 0x0, 0x0, 0x0};
 
+#ifndef SKIP_UNUSED_CODE
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
     int num;
     int worldNum;
@@ -125,6 +126,7 @@ void SetDebugScreenshotFilenameSuffix(int num) {
 void ResetDevkitFileNumber(void) {
     devkitFileNumber = 0;
 }
+#endif
 
 void InitReplaySaving(void) {
     saveReplayWritePtr = (byte*)((char*)DEVKIT_REPLAY_BUF + 0x14); // saveReplayBuf

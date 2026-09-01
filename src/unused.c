@@ -3,6 +3,7 @@
 extern int displayHeight;
 extern int displayWidth;
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedLoadFullScreenPicture(void* param_1) {
     int halfPaddingY;
     int halfPaddingX;
@@ -38,3 +39,4 @@ void UnusedLoadFullScreenPicture(void* param_1) {
 
     DrawSync(0);
 }
+#endif

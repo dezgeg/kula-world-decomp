@@ -82,6 +82,7 @@ int GetControllerStatus(int slot) {
     return 0;
 }
 
+#ifndef SKIP_UNUSED_CODE
 // unused
 int Return1(void) {
     return 1;
@@ -93,6 +94,7 @@ void VibrateDirectlyToBuf(char value) {
         vibrationBuf[latestControllerSlotPolled][0] = value;
     }
 }
+#endif
 
 void Vibrate100(int constant, int magnitude, int angleIncrement, int max) {
     if (vibrationEnabled) {

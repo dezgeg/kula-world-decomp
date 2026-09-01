@@ -15,12 +15,14 @@ extern int unusedNumHblanks;
 extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedUpdateHblankCounter() {
     unkUnused++;
     if (unkUnused == 15) {
         unusedNumHblanks = VSync(1);
     }
 }
+#endif
 
 void MainGameVSyncCallback() {
     gotVsync = 1;

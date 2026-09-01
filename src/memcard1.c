@@ -2,6 +2,7 @@
 
 extern MemcardData memCardData;
 
+#ifndef SKIP_UNUSED_CODE
 void ClearMemcardData(void) {
     int i;
     char* p = &memCardData;
@@ -25,3 +26,4 @@ int GetMaxSaveSlotScore(void) {
     }
     return maxScore;
 }
+#endif

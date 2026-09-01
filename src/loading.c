@@ -76,6 +76,7 @@ char S_File_error[] = "File error:\n\n";
 
 static z_stream zlibStream_a4b80;
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedFileError(char* str1, char* str2) {
     VSyncCallback(NULL);
     SetupDisplay(1, 0x80, 0, 0, 0, 0);
@@ -92,6 +93,7 @@ void UnusedFileError(char* str1, char* str2) {
     while (1)
         ;
 }
+#endif
 
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
@@ -168,6 +170,7 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     return cdlfile.size;
 }
 
+#ifndef SKIP_UNUSED_CODE
 uint UnusedReadKulaPicPak(void* unknown, char* buf) {
     CdlFILE cdlfile;
 
@@ -197,6 +200,7 @@ void UnusedInflateSomething(int idx, int* data) {
     VSync(0);
     UnusedLoadFullScreenPicture(FILE_BUF);
 }
+#endif
 
 void LoadWarningTim(void) {
     RECT rect = {0, 0, 640, 256};

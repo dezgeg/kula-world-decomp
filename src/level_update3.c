@@ -1097,9 +1097,11 @@ int IsFallingOrJumping(Player* player) {
     return 0;
 }
 
+#ifndef SKIP_UNUSED_CODE
 void Unused_FUN_0003bdec(Player* player) {
     SVECTOR v;
     v.vx = player->finePos.vx + (player->facingDir.vx * 1024);
     v.vy = player->finePos.vy + (player->facingDir.vy * 1024);
     v.vz = player->finePos.vz + (player->facingDir.vz * 1024);
 }
+#endif

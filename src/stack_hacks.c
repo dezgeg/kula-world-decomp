@@ -6,6 +6,7 @@ extern uint* savedSp;
 extern uint* unusedInitStackParamEnd;
 extern uint* unusedInitStackParamStart;
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedInitStack(uint end, uint start) {
     uint* endMasked = end & 0xfffffff;
     uint* startMasked = start & 0xfffffff;
@@ -34,3 +35,4 @@ int UnusedValidateStack(void) {
 
     return unusedInitStackParamStart - p;
 }
+#endif

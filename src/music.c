@@ -238,12 +238,14 @@ void SwitchFromBonusToNormalMusic(void) {
     playingBonusMusic = 0;
 }
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedDebugPrintMusicVariables(void) {
     FntPrint("CD INFO\nSTARTPOS %d\nENDPOS %d\nCURPOS %d\n",
             musicStartSector, musicEndSector, musicCurSector);
     FntPrint("\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n",
             savedMusicStartSector, savedMusicEndSector, savedMusicCurSector);
 }
+#endif
 
 // XXX: These variables have to be here in order to match
 static CdlLOC musicCurLoc = { 0, 0, 0, 0 };

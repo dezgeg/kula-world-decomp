@@ -907,11 +907,13 @@ int GetReadyScreen(void) {
     return 1;
 }
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedInitFailedToQualifyScreen(void) {
     qualifyScreenCursorX = 0;
     qualifyScreenCursorY = 0;
     timeTrialAtEndOfWorld = 1;
 }
+#endif
 
 void TimeTrialFailedToQualifyScreen(void) {
     int i;

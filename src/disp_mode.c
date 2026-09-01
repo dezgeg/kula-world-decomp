@@ -8,10 +8,12 @@ int displayHeight;
 int displayWidth;
 int gteXScale;
 
+#ifndef SKIP_UNUSED_CODE
 void UnusedSetDisplayModeChange(int param_1) {
     dispModeChangeNewWidth = param_1;
     dispModeChangeState = 1;
 }
+#endif
 
 void UnusedProcessDisplayModeChange(void) {
     switch (dispModeChangeState) {
