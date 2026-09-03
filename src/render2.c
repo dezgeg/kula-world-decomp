@@ -249,7 +249,6 @@ LAB_shadow:
     }
 }
 
-#ifdef NON_MATCHING
 void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, int colorR, int colorG, int colorB, int const0_arg8,
                           uint blockX, uint blockY, uint blockZ, int dir,
                           uint otherBlockX, uint otherBlockY, uint otherBlockZ, int otherDir,
@@ -263,10 +262,12 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     int result2;
     int off;
     Quad* q;
+    int shift;
 
     if (z < 256)
         return;
     z >>= 6;
+    shift = 16; // permuter hack
 
     if (blockX < 34 && blockY < 34 && blockZ < 34 &&
             CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
@@ -343,7 +344,7 @@ LAB_shadow:
     }
 
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_2048;
-    playerEnemyDispList[playerEnemyDispListIdx++] = (const4000 << 16) | const0_arg23;
+    playerEnemyDispList[playerEnemyDispListIdx++] = (const0_arg23 << shift) | const4000;
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg24;
     playerEnemyDispList[playerEnemyDispListIdx++] = const178;
     playerEnemyDispListIdx = playerEnemyDispListIdx + 7;
@@ -396,9 +397,6 @@ LAB_shadow:
         }
     }
 }
-#else
-INCLUDE_ASM("asm/nonmatchings/render2", CreatePlayerDispList);
-#endif
 
 void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) {
     int* colorPtr;
