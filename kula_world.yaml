@@ -407,7 +407,7 @@ segments:
       - [0x894c0, .data, asm_laser]
       - [0x894ec, .data, data_laser]
       - [0x8960c, .data, fmv]
-      - [0x8962c, data, nonmatched/data_8962c]
+      - [0x8962c, .data, asm_render]
       - [0x8979c, .data, zlib_infblock]
       - [0x897e8, data, libpress/libpress]
       - [0x89938, data, libpress/vlc_c]
