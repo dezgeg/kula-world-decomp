@@ -1,5 +1,5 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/asm_noops", Noop);
+void Noop() {}
 
-INCLUDE_ASM("asm/nonmatchings/asm_noops", Noop2);
+void Noop2() {}
