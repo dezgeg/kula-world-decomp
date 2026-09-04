@@ -1,3 +1,2 @@
-CreatePlayerDispList: https://decomp.scratch/PvGtU
 DrawScoreGraph: https://decomp.me/scratch/KHxMt
 InitScoreGraph: https://decomp.me/scratch/cMAKo

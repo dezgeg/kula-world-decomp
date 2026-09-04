@@ -16,6 +16,7 @@ extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
 
 #ifndef SKIP_UNUSED_CODE
+// This is used as DrawSyncCallback in some of the demos
 void UnusedUpdateHblankCounter() {
     unkUnused++;
     if (unkUnused == 15) {
