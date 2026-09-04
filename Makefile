@@ -31,7 +31,7 @@ build/SCES_010.00: build/main.elf
 	$(CROSS)-objcopy -O binary $< $@
 
 build/main.elf: $(O_FILES)
-	$(CROSS)-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -T hacks.txt -Map build/symbols.map
+	$(CROSS)-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -Map build/symbols.map
 
 build/%.i: %.c psyq build/subdirs
 	psyq/cpppsx -isystem psyq/INCLUDE/ -I include/ -undef -D__GNUC__=2 -D__OPTIMIZE__ -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C $< -o $@

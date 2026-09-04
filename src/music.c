@@ -17,8 +17,8 @@ extern Music MUSICS[11];
 extern int musicCdMode;
 extern int whichDrawDispEnv;
 
-short bonusMusicIndex = 0;
 short playingBonusMusic = 0;
+short bonusMusicIndex = 0;
 
 CdlFILTER musicCdlFilter;
 int bonusMusicSearchAttempt;
