@@ -5,7 +5,7 @@ typedef struct LightEffect {
     void* prims[7];
 } LightEffect;
 
-int AddLightEffectToCube(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8);
+int AddLightEffectToCubeFace(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8);
 
 extern int cubeStates[16 * 256];
 
@@ -25,118 +25,118 @@ int AddLightEffect(int x, int y, int z, int whichSide) {
 
     switch (whichSide) {
         case 0:
-            AddLightEffectToCube(x,y,z,0,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,0,2,2,2,2);
 
-            AddLightEffectToCube(x - 1,y,z - 1,1,0,2,0,2) &&
-                AddLightEffectToCube(x - 1,y,z,0,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,4,0,1,0,1);
+            AddLightEffectToCubeFace(x - 1,y,z - 1,1,0,2,0,2) &&
+                AddLightEffectToCubeFace(x - 1,y,z,0,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,4,0,1,0,1);
 
-            AddLightEffectToCube(x,y - 1,z - 1,2,0,0,2,2) &&
-                AddLightEffectToCube(x,y - 1,z,0,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,3,0,0,1,1);
+            AddLightEffectToCubeFace(x,y - 1,z - 1,2,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y - 1,z,0,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,3,0,0,1,1);
 
-            AddLightEffectToCube(x + 1,y,z - 1,4,2,0,2,0) &&
-                AddLightEffectToCube(x + 1,y,z,0,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,1,1,0,1,0);
+            AddLightEffectToCubeFace(x + 1,y,z - 1,4,2,0,2,0) &&
+                AddLightEffectToCubeFace(x + 1,y,z,0,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,1,1,0,1,0);
 
-            AddLightEffectToCube(x,y + 1,z - 1,3,2,2,0,0) &&
-                AddLightEffectToCube(x,y + 1,z,0,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,2,1,1,0,0);
+            AddLightEffectToCubeFace(x,y + 1,z - 1,3,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y + 1,z,0,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,2,1,1,0,0);
             break;
         case 1:
-            AddLightEffectToCube(x,y,z,1,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,1,2,2,2,2);
 
-            AddLightEffectToCube(x + 1,y,z - 1,5,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z - 1,1,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,0,0,1,0,1);
+            AddLightEffectToCubeFace(x + 1,y,z - 1,5,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z - 1,1,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,0,0,1,0,1);
 
-            AddLightEffectToCube(x + 1,y - 1,z,2,2,0,2,0) &&
-                AddLightEffectToCube(x,y - 1,z,1,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,3,0,1,0,1);
+            AddLightEffectToCubeFace(x + 1,y - 1,z,2,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y - 1,z,1,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,3,0,1,0,1);
 
-            AddLightEffectToCube(x + 1,y,z + 1,0,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z + 1,1,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,5,1,0,1,0);
+            AddLightEffectToCubeFace(x + 1,y,z + 1,0,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z + 1,1,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,5,1,0,1,0);
 
-            AddLightEffectToCube(x + 1,y + 1,z,3,2,0,2,0) &&
-                AddLightEffectToCube(x,y + 1,z,1,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,2,0,1,0,1);
+            AddLightEffectToCubeFace(x + 1,y + 1,z,3,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y + 1,z,1,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,2,0,1,0,1);
             break;
         case 2:
-            AddLightEffectToCube(x,y,z,2,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,2,2,2,2,2);
 
-            AddLightEffectToCube(x - 1,y + 1,z,1,2,2,0,0) &&
-                AddLightEffectToCube(x - 1,y,z,2,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,4,0,0,1,1);
+            AddLightEffectToCubeFace(x - 1,y + 1,z,1,2,2,0,0) &&
+                AddLightEffectToCubeFace(x - 1,y,z,2,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,4,0,0,1,1);
 
-            AddLightEffectToCube(x,y + 1,z - 1,5,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z - 1,2,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,0,0,0,1,1);
+            AddLightEffectToCubeFace(x,y + 1,z - 1,5,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z - 1,2,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,0,0,0,1,1);
 
-            AddLightEffectToCube(x + 1,y + 1,z,4,2,2,0,0) &&
-                AddLightEffectToCube(x + 1,y,z,2,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,1,0,0,1,1);
+            AddLightEffectToCubeFace(x + 1,y + 1,z,4,2,2,0,0) &&
+                AddLightEffectToCubeFace(x + 1,y,z,2,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,1,0,0,1,1);
 
-            AddLightEffectToCube(x,y + 1,z + 1,0,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z + 1,2,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,5,0,0,1,1);
+            AddLightEffectToCubeFace(x,y + 1,z + 1,0,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z + 1,2,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,5,0,0,1,1);
             break;
         case 3:
-            AddLightEffectToCube(x,y,z,3,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,3,2,2,2,2);
 
-            AddLightEffectToCube(x - 1,y - 1,z,1,0,0,2,2) &&
-                AddLightEffectToCube(x - 1,y,z,3,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,4,1,1,0,0);
+            AddLightEffectToCubeFace(x - 1,y - 1,z,1,0,0,2,2) &&
+                AddLightEffectToCubeFace(x - 1,y,z,3,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,4,1,1,0,0);
 
-            AddLightEffectToCube(x,y - 1,z + 1,0,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z + 1,3,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,5,1,1,0,0);
+            AddLightEffectToCubeFace(x,y - 1,z + 1,0,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z + 1,3,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,5,1,1,0,0);
 
-            AddLightEffectToCube(x + 1,y - 1,z,4,0,0,2,2) &&
-                AddLightEffectToCube(x + 1,y,z,3,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,1,1,1,0,0);
+            AddLightEffectToCubeFace(x + 1,y - 1,z,4,0,0,2,2) &&
+                AddLightEffectToCubeFace(x + 1,y,z,3,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,1,1,1,0,0);
 
-            AddLightEffectToCube(x,y - 1,z - 1,5,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z - 1,3,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,0,1,1,0,0);
+            AddLightEffectToCubeFace(x,y - 1,z - 1,5,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z - 1,3,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,0,1,1,0,0);
             break;
         case 4:
-            AddLightEffectToCube(x,y,z,4,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,4,2,2,2,2);
 
-            AddLightEffectToCube(x - 1,y,z + 1,0,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z + 1,4,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,5,0,1,0,1);
+            AddLightEffectToCubeFace(x - 1,y,z + 1,0,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z + 1,4,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,5,0,1,0,1);
 
-            AddLightEffectToCube(x - 1,y - 1,z,2,0,2,0,2) &&
-                AddLightEffectToCube(x,y - 1,z,4,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,3,1,0,1,0);
+            AddLightEffectToCubeFace(x - 1,y - 1,z,2,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y - 1,z,4,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,3,1,0,1,0);
 
-            AddLightEffectToCube(x - 1,y,z - 1,5,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z - 1,4,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,0,1,0,1,0);
+            AddLightEffectToCubeFace(x - 1,y,z - 1,5,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z - 1,4,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,0,1,0,1,0);
 
-            AddLightEffectToCube(x - 1,y + 1,z,3,0,2,0,2) &&
-                AddLightEffectToCube(x,y + 1,z,4,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,2,1,0,1,0);
+            AddLightEffectToCubeFace(x - 1,y + 1,z,3,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y + 1,z,4,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,2,1,0,1,0);
             break;
         case 5:
-            AddLightEffectToCube(x,y,z,5,2,2,2,2);
+            AddLightEffectToCubeFace(x,y,z,5,2,2,2,2);
 
-            AddLightEffectToCube(x + 1,y,z + 1,4,0,2,0,2) &&
-                AddLightEffectToCube(x + 1,y,z,5,0,2,0,2) &&
-                AddLightEffectToCube(x,y,z,1,0,1,0,1);
+            AddLightEffectToCubeFace(x + 1,y,z + 1,4,0,2,0,2) &&
+                AddLightEffectToCubeFace(x + 1,y,z,5,0,2,0,2) &&
+                AddLightEffectToCubeFace(x,y,z,1,0,1,0,1);
 
-            AddLightEffectToCube(x,y - 1,z + 1,2,2,2,0,0) &&
-                AddLightEffectToCube(x,y - 1,z,5,0,0,2,2) &&
-                AddLightEffectToCube(x,y,z,3,1,1,0,0);
+            AddLightEffectToCubeFace(x,y - 1,z + 1,2,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y - 1,z,5,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y,z,3,1,1,0,0);
 
-            AddLightEffectToCube(x - 1,y,z + 1,1,2,0,2,0) &&
-                AddLightEffectToCube(x - 1,y,z,5,2,0,2,0) &&
-                AddLightEffectToCube(x,y,z,4,1,0,1,0);
+            AddLightEffectToCubeFace(x - 1,y,z + 1,1,2,0,2,0) &&
+                AddLightEffectToCubeFace(x - 1,y,z,5,2,0,2,0) &&
+                AddLightEffectToCubeFace(x,y,z,4,1,0,1,0);
 
-            AddLightEffectToCube(x,y + 1,z + 1,3,0,0,2,2) &&
-                AddLightEffectToCube(x,y + 1,z,5,2,2,0,0) &&
-                AddLightEffectToCube(x,y,z,2,0,0,1,1);
+            AddLightEffectToCubeFace(x,y + 1,z + 1,3,0,0,2,2) &&
+                AddLightEffectToCubeFace(x,y + 1,z,5,2,2,0,0) &&
+                AddLightEffectToCubeFace(x,y,z,2,0,0,1,1);
             break;
     }
     *curLightEffectDataPtr++ = 0;
@@ -144,7 +144,7 @@ int AddLightEffect(int x, int y, int z, int whichSide) {
     return i;
 }
 
-int AddLightEffectToCube(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8) {
+int AddLightEffectToCubeFace(int x, int y, int z, int dir, int param_5, int param_6, int param_7, int param_8) {
     int msb;
     Quad* quad;
     int ci;
