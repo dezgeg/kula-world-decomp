@@ -20,12 +20,9 @@ typedef struct SfxFile {
 
 extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
-extern char keyStatus[];
 extern int lethargyMode;
 
-__asm__(".set keyStatus_, keyStatus");
-extern char keyStatus_[];  // hack to make gcc not create induction variable of sprt
-
+char keyStatus[24];
 short playingBonusMusic;
 short bonusMusicIndex;
 SpuCommonAttr spuCommonAttr;
@@ -219,7 +216,7 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
 void SndProcessSpuVoices(void) {
     int i;
     int sfxIndex;
-    SpuGetAllKeysStatus(keyStatus_);
+    SpuGetAllKeysStatus(keyStatus);
 
     for (i = 0; i < 24; i++) {
         if (keyStatus[i] == SPU_OFF) {
