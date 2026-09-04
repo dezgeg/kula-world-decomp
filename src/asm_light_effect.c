@@ -24,14 +24,38 @@ int SQUARE_ROOT_TABLE[] = {
     0x00000000, 0x00000000, 0x00000000,
 };
 
+#ifdef NON_MATCHING
+void UpdateGemRandomSparkleEffect() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", UpdateGemRandomSparkleEffect);
+#endif
 
+#ifdef NON_MATCHING
+void ProcessLightEffects() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessLightEffects);
+#endif
 
+#ifdef NON_MATCHING
+void UpdateQuadColor() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", UpdateQuadColor);
+#endif
 
+#ifdef NON_MATCHING
+void ProcessEnabledLightEffects() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessEnabledLightEffects);
+#endif
 
+#ifdef NON_MATCHING
+void ProcessDisabledLightEffects() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessDisabledLightEffects);
+#endif
 
+#ifdef NON_MATCHING
+void ProcessInvisibleBlockVisibility() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessInvisibleBlockVisibility);
+#endif

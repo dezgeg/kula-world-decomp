@@ -17,16 +17,44 @@ int starfieldDummy[] = { 0x00000666 };
 int numRenderedStars[] = { 0 };
 int saveRegsRenderLevelGeometry[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+#ifdef NON_MATCHING
+void RenderBonusBackgroundPart2() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderBonusBackgroundPart2);
+#endif
 
+#ifdef NON_MATCHING
+void RenderDispList() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderDispList);
+#endif
 
+#ifdef NON_MATCHING
+void RenderBonusBackgroundPart1() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderBonusBackgroundPart1);
+#endif
 
+#ifdef NON_MATCHING
+void RenderNonSpecialBackground() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderNonSpecialBackground);
+#endif
 
+#ifdef NON_MATCHING
+void TweakSkyboxColors() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", TweakSkyboxColors);
+#endif
 
+#ifdef NON_MATCHING
+void RenderStarfield() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderStarfield);
+#endif
 
+#ifdef NON_MATCHING
+void RenderLevelGeometryQuads() {}
+#else
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderLevelGeometryQuads);
+#endif
