@@ -1,4 +1,3 @@
 CreatePlayerDispList: https://decomp.scratch/PvGtU
 DrawScoreGraph: https://decomp.me/scratch/KHxMt
-InitLasers2: https://decomp.me/scratch/yyAJu
 InitScoreGraph: https://decomp.me/scratch/cMAKo

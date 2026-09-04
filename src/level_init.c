@@ -42,6 +42,7 @@ extern void DirFunc2(Quad* quad, int width, int x, int y, int z, int textureRota
 extern void DirFunc3(Quad* quad, int width, int x, int y, int z, int textureRotation);
 extern void DirFunc4(Quad* quad, int width, int x, int y, int z, int textureRotation);
 extern void DirFunc5(Quad* quad, int width, int x, int y, int z, int textureRotation);
+extern int FlipDir(int dir);
 extern int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dirIndex);
 extern int GetFaceTypeOfBlockType(int blockType);
 extern uint Rand(int param_1);
@@ -85,6 +86,13 @@ extern int curWorld;
 extern int gameMode;
 extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
+extern byte LASER_INTENSITY_DATA[];
+extern byte LASER_INTENSITY_DATA_END[];
+extern uint laserData0[4][1024];
+extern uint laserData1[4][1024];
+extern uint laserData2[4][1024];
+extern uint laserData3[4][1024];
+extern int D_000C445C;
 
 short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
     {
@@ -553,7 +561,400 @@ void ScanLevelDataForMovingBlocks1(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level_init", InitLasers2);
+void InitLasers2(void) {
+    int i;
+    int j;
+    int entI;
+    int val;
+    int* dst;
+    short* pLaser;
+    int x;
+    int y;
+    int z;
+    int cubeIdx;
+    int xLen;
+    int dir;
+    int sx, sy, sz;
+    int sx_start, sx_end;
+    int sy_start, sy_end;
+    int sz_start, sz_end;
+    short* sub;
+    int* p;
+    uint* ptr;
+    byte* intensityData;
+
+    entI = LASER_INTENSITY_DATA_END - LASER_INTENSITY_DATA;
+    for (i = 0, intensityData = LASER_INTENSITY_DATA; i < 4; i++) {
+        uint* ptr = (uint*)laserData0 + i * entI;
+        for (j = 0; j < entI; j++) {
+            switch (i) {
+                case 0:
+                    val = intensityData[j] << 3;
+                    ptr[j] = (intensityData[j] << 11) | val;
+                    break;
+                case 1:
+                    ptr[j] = intensityData[j] << 19;
+                    break;
+                case 2:
+                    ptr[j] = intensityData[j] << 11;
+                    break;
+                case 3:
+                    ptr[j] = intensityData[j] << 3;
+                    break;
+            }
+        }
+    }
+
+    dst = &D_000C445C;
+    for (entI = 0; entI < numEntities; entI++) {
+        if (entityData[entI * 128] != 8) {
+            continue;
+        }
+        pLaser = &entityData[entI * 128];
+        x = pLaser[4];
+        y = pLaser[5];
+        z = pLaser[6];
+        dir = pLaser[2];
+
+        cubeIdx = CUBE_INDEX_AT(x, y, z);
+        if (cubeIdx != -1) {
+            Quad* quad = (Quad*)cubeStates[cubeIdx * 16 + dir];
+            if (quad != -1) {
+                SetFaceData(quad, -1, quadSomethingStartIndex + 5,
+                            (pLaser[22] << 24) | 0xd,
+                            dir, x << 9, y << 9, z << 9, 0, 0x808080);
+            }
+        }
+
+        xLen = abs(x - pLaser[7]);
+        i = abs(y - pLaser[8]);
+        if (i > xLen)
+            xLen = i;
+        i = abs(z - pLaser[9]);
+        if (i > xLen)
+            xLen = i;
+
+        xLen--;
+
+        dst[0] = xLen;
+        dst[1] = (int)&pLaser[3];
+
+        p = dst + 3;
+        switch (pLaser[2]) {
+            case 1: {
+                short* lp = levelData;
+                *p = 0x908;
+                lp += (x + 1) * 1156 + y * 34 + z;
+                dst[2] = lp;
+                break;
+            }
+            case 2: {
+                short* lp = levelData;
+                *p = 0x44;
+                lp += x * 1156 + (y + 1) * 34 + z;
+                dst[2] = lp;
+                break;
+            }
+            case 5: {
+                short* lp = levelData;
+                *p = 2;
+                lp += x * 1156 + y * 34 + (z + 1);
+                dst[2] = lp;
+                break;
+            }
+        }
+
+        switch (pLaser[22]) {
+            case 0:
+                dst[4] = laserData0;
+                break;
+            case 1:
+                dst[4] = laserData1;
+                break;
+            case 2:
+                dst[4] = laserData2;
+                break;
+            case 3:
+                dst[4] = laserData3;
+                break;
+        }
+
+        i = LASER_INTENSITY_DATA_END - LASER_INTENSITY_DATA;
+        dst[5] = i;
+        ((char*)dst)[24] = Rand(i);
+        ((char*)dst)[25] = Rand(i);
+        ((char*)dst)[26] = Rand(i);
+        ((char*)dst)[27] = Rand(i);
+
+        dst += 7;
+        for (i = 0; i < xLen; i++) {
+            short* pos = (short*)dst;
+            sub = pos;
+
+            switch (pLaser[2]) {
+                case 1: {
+                    x++;
+                    sub = pos + 4;
+
+                    pos[0] = x << 9;
+                    pos[1] = y << 9;
+                    pos[2] = z << 9;
+                    pos[3] = 0;
+
+                    for (j = 0; j < 4; j++) {
+                        sx = x << 9;
+                        sy = y << 9;
+                        sz = z << 9;
+                        sx_end = sx + 256;
+                        sx_start = sx - 256;
+
+                        switch (j) {
+                            case 0:
+                                sy += 90;
+                                sz += 90;
+                                break;
+                            case 1:
+                                sy += 90;
+                                sz -= 90;
+                                break;
+                            case 2:
+                                sy -= 90;
+                                sz += 90;
+                                break;
+                            case 3:
+                                sy -= 90;
+                                sz -= 90;
+                                break;
+                        }
+
+                        sub[0] = sx_end;
+                        sub[1] = sy;
+                        sub[8] = sz + 7;
+
+                        sub[2] = sx_end;
+                        sub[3] = sy;
+                        sub[9] = sz - 7;
+
+                        sub[4] = sx_start;
+                        sub[5] = sy;
+                        sub[10] = sz + 7;
+
+                        sub[6] = sx_start;
+                        sub[7] = sy;
+                        sub[11] = sz - 7;
+
+                        sub[12] = sx_end;
+                        sub[13] = sy + 7;
+                        sub[20] = sz;
+
+                        sub[14] = sx_end;
+                        sub[15] = sy - 7;
+                        sub[21] = sz;
+
+                        sub[16] = sx_start;
+                        sub[17] = sy + 7;
+                        sub[22] = sz;
+
+                        sub[18] = sx_start;
+                        sub[19] = sy - 7;
+                        sub[23] = sz;
+
+                        sub[24] = sx_start;
+                        sub[25] = sy;
+                        sub[28] = sz;
+
+                        sub[26] = sx_end;
+                        sub[27] = sy;
+                        sub[29] = sz;
+                        sub += 30;
+                    }
+                    break;
+                }
+                case 2: {
+                    y++;
+                    sub = pos + 4;
+
+                    pos[0] = x << 9;
+                    pos[1] = y << 9;
+                    pos[2] = z << 9;
+                    pos[3] = 0;
+
+                    for (j = 0; j < 4; j++) {
+                        sx = x << 9;
+                        sz = z << 9;
+                        sy = y << 9;
+                        sy_end = sy + 256;
+                        sy_start = sy - 256;
+
+                        switch (j) {
+                            case 0:
+                                sx += 90;
+                                sz += 90;
+                                break;
+                            case 1:
+                                sx += 90;
+                                sz -= 90;
+                                break;
+                            case 2:
+                                sx -= 90;
+                                sz += 90;
+                                break;
+                            case 3:
+                                sx -= 90;
+                                sz -= 90;
+                                break;
+                        }
+
+                        sub[0] = sx + 7;
+                        sub[1] = sy_end;
+                        sub[8] = sz;
+
+                        sub[3] = sy_end;
+                        sub[2] = sx - 7;
+                        sub[9] = sz;
+
+                        sub[5] = sy_start;
+                        sub[4] = sx + 7;
+                        sub[10] = sz;
+
+                        sub[6] = sx - 7;
+                        sub[7] = sy_start;
+                        sub[11] = sz;
+
+                        sub[12] = sx;
+                        sub[13] = sy_end;
+                        sub[20] = sz + 7;
+
+                        sub[14] = sx;
+                        sub[15] = sy_end;
+                        sub[21] = sz - 7;
+
+                        sub[16] = sx;
+                        sub[17] = sy_start;
+                        sub[22] = sz + 7;
+
+                        sub[18] = sx;
+                        sub[19] = sy_start;
+                        sub[23] = sz - 7;
+
+                        sub[24] = sx;
+                        sub[25] = sy_start;
+                        sub[28] = sz;
+
+                        sub[26] = sx;
+                        sub[27] = sy_end;
+                        sub[29] = sz;
+                        sub += 30;
+                    }
+                    break;
+                }
+                case 5: {
+                    z++;
+                    sub = pos + 4;
+
+                    pos[0] = x << 9;
+                    pos[1] = y << 9;
+                    pos[2] = z << 9;
+                    pos[3] = 0;
+
+                    for (j = 0; j < 4; j++) {
+                        sx = x << 9;
+                        sy = y << 9;
+                        sz = z << 9;
+                        sz_end = sz + 256;
+                        sz_start = sz - 256;
+
+                        switch (j) {
+                            case 0:
+                                sx += 90;
+                                sy += 90;
+                                break;
+                            case 1:
+                                sx += 90;
+                                sy -= 90;
+                                break;
+                            case 2:
+                                sx -= 90;
+                                sy += 90;
+                                break;
+                            case 3:
+                                sx -= 90;
+                                sy -= 90;
+                                break;
+                        }
+
+                        sub[0] = sx + 7;
+                        sub[1] = sy;
+                        sub[8] = sz_end;
+
+                        sub[3] = sy;
+                        sub[2] = sx - 7;
+                        sub[9] = sz_end;
+
+                        sub[5] = sy;
+                        sub[4] = sx + 7;
+                        sub[10] = sz_start;
+
+                        sub[6] = sx - 7;
+                        sub[7] = sy;
+                        sub[11] = sz_start;
+
+                        sub[12] = sx;
+                        sub[13] = sy + 7;
+                        sub[20] = sz_end;
+
+                        sub[14] = sx;
+                        sub[15] = sy - 7;
+                        sub[21] = sz_end;
+
+                        sub[16] = sx;
+                        sub[17] = sy + 7;
+                        sub[22] = sz_start;
+
+                        sub[18] = sx;
+                        sub[19] = sy - 7;
+                        sub[23] = sz_start;
+
+                        sub[24] = sx;
+                        sub[25] = sy;
+                        sub[28] = sz_start;
+
+                        sub[26] = sx;
+                        sub[27] = sy;
+                        sub[29] = sz_end;
+                        sub += 30;
+                    }
+                    break;
+                }
+            }
+            dst = (int*)sub;
+        }
+
+        switch (pLaser[2]) {
+            case 1:
+                x++;
+                break;
+            case 2:
+                y++;
+                break;
+            case 5:
+                z++;
+                break;
+        }
+        dir = FlipDir(pLaser[2]);
+
+        cubeIdx = CUBE_INDEX_AT(x, y, z);
+        if (cubeIdx != -1) {
+            Quad* quad = (Quad*)cubeStates[cubeIdx * 16 + dir];
+            if (quad != -1) {
+                SetFaceData(quad, -1, quadSomethingStartIndex + 5,
+                            (pLaser[22] << 24) | 0xd, // 5 == laser emitter
+                            dir, x << 9, y << 9, z << 9, 0, 0x808080);
+            }
+        }
+    }
+    *(int*)dst = -1;
+}
 
 void ScanLevelDataForCrumblingBlocks(void) {
     int i;
