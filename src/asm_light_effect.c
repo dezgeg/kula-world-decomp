@@ -1,7 +1,7 @@
 #include "common.h"
 
 int saveRegsUpdateGemRandomSparkleEffect[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-int D_000738E0[] = { 1 };
+int sparkleRngSeed[] = { 1 };
 int saveRegsProcessLightEffects[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 int saveRegsProcessInvisibleBlockVisibility[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 int SQUARE_ROOT_TABLE[] = {

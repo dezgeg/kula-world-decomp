@@ -11,10 +11,10 @@ int saveRegsRenderNonSpecialBackground[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 int D_00099F2C[] = { 0 };
 int D_00099F30[] = { 0 };
 int saveRegsRenderStarfield[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-extern int D_00099F68[];
-int *D_00099F60[] = { D_00099F68, D_00099F68 };
-int D_00099F68[] = { 0x00000666 };
-int D_00099F6C[] = { 0 };
+extern int starfieldDummy[];
+int *starfieldOtags[] = { starfieldDummy, starfieldDummy };
+int starfieldDummy[] = { 0x00000666 };
+int numRenderedStars[] = { 0 };
 int saveRegsRenderLevelGeometry[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 INCLUDE_ASM("asm/nonmatchings/asm_render", RenderBonusBackgroundPart2);
