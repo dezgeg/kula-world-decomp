@@ -1,12 +1,12 @@
 name: Kula World (EU)
-sha1: 1f3aebfc8f5f6da368915eaa02f1b3ff1249d299
+sha1: 03323d796ebc02749b381cdd337e7002a67edf6f
 options:
   basename: kula_world
   platform: psx
   compiler: GCC
 
   base_path: .
-  target_path: SCES_010.00
+  target_path: build/truncated.bin
   ld_script_path: build/kula_world.ld
   undefined_syms_auto_path: build/undefined_syms_auto.txt
   generated_asm_macros_directory: asm/
@@ -531,4 +531,4 @@ segments:
       - { type: bss, vram: 0xc5dc0, name: libapi/chclrpad }
       - { type: bss, vram: 0xc5dd0, name: libcard/patch }
       - { type: bss, vram: 0xc5de0, name: libcard/end }
-  - [0x93800]
+  - [0x934b0]

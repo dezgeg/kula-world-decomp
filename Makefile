@@ -2,6 +2,9 @@
 .SECONDARY: # Don't delete intermediates
 SHELL := bash -e -o pipefail
 
+UNPADDED_SIZE := $(shell printf %d 0x934b0)
+PADDED_SIZE := 0x93800
+
 ifeq (, $(shell which mipsel-linux-as 2>/dev/null))
 CROSS := mipsel-linux-gnu
 else
@@ -25,10 +28,12 @@ build/subdirs:
 
 build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
+	mkdir -p build
+	dd if=SCES_010.00 of=build/truncated.bin count=1 bs=$(UNPADDED_SIZE)
 	source venv/bin/activate && splat split kula_world.yaml
 
 build/SCES_010.00: build/main.elf
-	$(CROSS)-objcopy -O binary $< $@
+	$(CROSS)-objcopy --pad-to=$(PADDED_SIZE) -O binary $< $@
 
 build/main.elf: $(O_FILES)
 	$(CROSS)-ld -nostdlib --no-check-sections -o $@ -T build/kula_world.ld -T build/undefined_syms_auto.txt -Map build/symbols.map
