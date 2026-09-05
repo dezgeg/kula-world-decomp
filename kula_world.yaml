@@ -11,6 +11,7 @@ options:
   undefined_syms_auto_path: build/undefined_syms_auto.txt
   generated_asm_macros_directory: asm/
 
+  ld_bss_is_noload: True
   gp_value: 0x000A29E0
 
   create_undefined_funcs_auto: False
@@ -59,7 +60,7 @@ segments:
     vram: 0x11000
     align: 4
     subalign: 4
-    bss_size: 0xa3cb0
+    bss_size: 0x56ae0
     subsegments:
       - [0x00800, .rodata, hud]
       - [0x00814, .rodata, level_init]
@@ -500,35 +501,36 @@ segments:
       - [0x9338c, .sdata, zlib_inffast]
       - [0x933c0, .sdata, zlib_zutil]
       - [0x93474, .sdata, zlib_calloc]
-      - [0x934b0, sbss, nonmatched/sbss_934b0]
-      - { type: bss, vram: 0xa5a1c, name: nonmatched/bss_a5a1c }
-      - { type: bss, vram: 0xbd628, name: libgpu/font }
-      - { type: bss, vram: 0xc1a38, name: libgpu/sys }
-      - { type: bss, vram: 0xc3388, name: libgte/patchgte }
-      - { type: bss, vram: 0xc3398, name: libcd/cdrom }
-      - { type: bss, vram: 0xc33e0, name: libcd/bios }
-      - { type: bss, vram: 0xc3414, name: libcd/iso9660 }
-      - { type: bss, vram: 0xc5814, name: libds/dscb }
-      - { type: bss, vram: 0xc5820, name: libcd/c_004 }
-      - { type: bss, vram: 0xc5830, name: libcd/c_005 }
-      - { type: bss, vram: 0xc5838, name: libcd/c_011 }
-      - { type: bss, vram: 0xc5848, name: libpad/padmain }
-      - { type: bss, vram: 0xc5868, name: libpad/padcmd }
-      - { type: bss, vram: 0xc5878, name: libpad/padportd }
-      - { type: bss, vram: 0xc5ae8, name: libpad/waitrc2 }
-      - { type: bss, vram: 0xc5af0, name: libspu/spu }
-      - { type: bss, vram: 0xc5b04, name: libspu/s_sca }
-      - { type: bss, vram: 0xc5b08, name: libc2/rand }
-      - { type: bss, vram: 0xc5b18, name: libc2/putchar }
-      - { type: bss, vram: 0xc5b38, name: libsio/siohandl }
-      - { type: bss, vram: 0xc5c54, name: libsio/sio }
-      - { type: bss, vram: 0xc5c60, name: libmcrd/libmcrd }
-      - { type: bss, vram: 0xc5ce0, name: libapi/first }
-      - { type: bss, vram: 0xc5d10, name: libmcrd/userfunc }
-      - { type: bss, vram: 0xc5d60, name: libmcrd/bios }
-      - { type: bss, vram: 0xc5da0, name: libapi/pad }
-      - { type: bss, vram: 0xc5db0, name: libapi/patch }
-      - { type: bss, vram: 0xc5dc0, name: libapi/chclrpad }
-      - { type: bss, vram: 0xc5dd0, name: libcard/patch }
-      - { type: bss, vram: 0xc5de0, name: libcard/end }
+      - { start: 0x934b0, type: sbss, vram: 0xa3cb0, name: nonmatched/sbss }
+      - { start: 0x934b0, type: bss, vram: 0xa5a1c, name: nonmatched/bss, bss_size: 0x54d74 }
+#      - { type: bss, vram: 0xbd628, name: libgpu/font }
+#      - { type: bss, vram: 0xc1a38, name: libgpu/sys }
+#      - { type: bss, vram: 0xc3388, name: libgte/patchgte }
+#      - { type: bss, vram: 0xc3398, name: libcd/cdrom }
+#      - { type: bss, vram: 0xc33e0, name: libcd/bios }
+#      - { type: bss, vram: 0xc3414, name: libcd/iso9660 }
+#      - { type: bss, vram: 0xc5814, name: libds/dscb }
+#      - { type: bss, vram: 0xc5820, name: libcd/c_004 }
+#      - { type: bss, vram: 0xc5830, name: libcd/c_005 }
+#      - { type: bss, vram: 0xc5838, name: libcd/c_011 }
+#      - { type: bss, vram: 0xc5848, name: libpad/padmain }
+#      - { type: bss, vram: 0xc5868, name: libpad/padcmd }
+#      - { type: bss, vram: 0xc5878, name: libpad/padportd }
+#      - { type: bss, vram: 0xc5ae8, name: libpad/waitrc2 }
+#      - { type: bss, vram: 0xc5af0, name: libspu/spu }
+#      - { type: bss, vram: 0xc5b04, name: libspu/s_sca }
+#      - { type: bss, vram: 0xc5b08, name: libc2/rand }
+#      - { type: bss, vram: 0xc5b18, name: libc2/putchar }
+#      - { type: bss, vram: 0xc5b38, name: libsio/siohandl }
+#      - { type: bss, vram: 0xc5c54, name: libsio/sio }
+#      - { type: bss, vram: 0xc5c60, name: libmcrd/libmcrd }
+#      - { type: bss, vram: 0xc5ce0, name: libapi/first }
+#      - { type: bss, vram: 0xc5d10, name: libmcrd/userfunc }
+#      - { type: bss, vram: 0xc5d60, name: libmcrd/bios }
+#      - { type: bss, vram: 0xc5da0, name: libapi/pad }
+#      - { type: bss, vram: 0xc5db0, name: libapi/patch }
+#      - { type: bss, vram: 0xc5dc0, name: libapi/chclrpad }
+#      - { type: bss, vram: 0xc5dd0, name: libcard/patch }
+#      - { type: bss, vram: 0xc5de0, name: libcard/end }
+      - [0x934b0]
   - [0x934b0]
