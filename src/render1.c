@@ -57,7 +57,7 @@ extern int D_000A51C0;
 extern int D_000A51C4;
 extern MATRIX starfieldMatrix;
 extern GemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
-extern int itemsDispList[10];
+extern int itemsDispList[2049];
 extern int itemsDispListIdx;
 extern int maxPrimBufUsage;
 extern void* playerEnemyDispList[4];
