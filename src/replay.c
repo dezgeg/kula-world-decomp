@@ -1,10 +1,10 @@
 #include "common.h"
 
-int replayEnded;
-short replayPlaybackCurrentButtons;
-char* replayPlaybackPtr;
-char replayPlaybackRleCounter;
-char replayRawButtons;
+static int replayEnded;
+static short replayPlaybackCurrentButtons;
+static char* replayPlaybackPtr;
+static char replayPlaybackRleCounter;
+static char replayRawButtons;
 
 int InitReplayPlayback(char* param_1) {
     uchar rawBtns;

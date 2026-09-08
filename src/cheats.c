@@ -37,8 +37,8 @@ static uint CHEAT_BUTTONS[][8] = {
 };
 
 // .sbss
-uint buttonBuf[8];
-uint* buttonsPtr;
+static uint buttonBuf[8];
+static uint* buttonsPtr;
 
 // .comm
 int cheated;

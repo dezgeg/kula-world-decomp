@@ -13,10 +13,10 @@ extern int numCubesRemainingInLevel[5];
 extern PrimList primLists[2];
 extern int whichDrawDispEnv;
 
-uint* bonusWidgetDataPtr;
-uint* bonusWidgetDataEnd;
-uint* bonusWidgetDataPtr2;
-int numBonusWidgetMsbs;
+STATIC_FOR_GP_ACCESS uint* bonusWidgetDataPtr;
+STATIC_FOR_GP_ACCESS uint* bonusWidgetDataEnd;
+STATIC_FOR_GP_ACCESS uint* bonusWidgetDataPtr2;
+STATIC_FOR_GP_ACCESS int numBonusWidgetMsbs;
 
 void DrawBonusWidget(void) {
     int i;

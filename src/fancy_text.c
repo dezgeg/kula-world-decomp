@@ -7,10 +7,10 @@ extern TSprite textDrawTemplateSprites2[40];
 extern int whichDrawDispEnv;
 
 int bigGuiSpriteFade;
-int fancyTextColorB;
-int fancyTextColorG;
-int fancyTextColorR;
-int textCharIdx;
+static int fancyTextColorB;
+static int fancyTextColorG;
+static int fancyTextColorR;
+STATIC_FOR_GP_ACCESS int textCharIdx;
 
 void SetFancyTextColor(int r, int g, int b) {
     fancyTextColorR = r;

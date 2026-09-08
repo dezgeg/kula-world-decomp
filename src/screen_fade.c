@@ -7,8 +7,8 @@ extern int whichDrawDispEnv;
 
 int halfFps;
 int screenFadeEnabled;
-int screenFadeSpeed;
-int screenFadeColor;
+STATIC_FOR_GP_ACCESS int screenFadeSpeed;
+STATIC_FOR_GP_ACCESS int screenFadeColor;
 
 void SetRenderScreenFade(int speed, int enableHalfFps) {
     screenFadeEnabled = 1;

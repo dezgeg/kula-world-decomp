@@ -44,7 +44,7 @@ extern OT_TYPE otag[2][1][1026];
 
 int lensFlareScreenX;
 int lensFlareScreenY;
-int numLensFlareSprites;
+static int numLensFlareSprites;
 int sunIntensityOnScreen;
 
 short LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[2][3] = {

@@ -15,7 +15,7 @@ extern OT_TYPE otag[2][1][1026];
 extern Texture textures[150];
 extern int whichDrawDispEnv;
 
-int enableGuiBackgroundScroll;
+static int enableGuiBackgroundScroll;
 PsxButtonBackground* psxButtonBackgroundPtr;
 static int guiBackgroundFadeIn = 0; // .sdata
 static int guiBackgroundAnimCounter = 0; // .sdata

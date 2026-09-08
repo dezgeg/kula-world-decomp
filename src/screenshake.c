@@ -7,11 +7,11 @@ extern int dispenvScreenY;
 extern DrawDisp drawdisp[2];
 extern int whichDrawDispEnv;
 
-int screenShakeDirectionMask;
-int screenShakeDivisor;
-int screenShakeEnabled;
-int screenShakeMagnitude;
-int screenShakeTimer;
+static int screenShakeDirectionMask;
+static int screenShakeDivisor;
+static int screenShakeEnabled;
+static int screenShakeMagnitude;
+static int screenShakeTimer;
 
 static inline void SetDispScreen(ushort x, ushort y) {
     drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;

@@ -5,17 +5,17 @@ extern PrimList primLists[2];
 extern TSprite textDrawSprites[2][300];
 extern int whichDrawDispEnv;
 
-byte textColorB;
-byte textColorG;
-byte textColorR;
-int lastFrameIdWhenTextWasDrawn;
-int textAlignMode;
-int textCharIdx;
-int textPosXEnd;
-int textPosXStart;
-int textPosYCur;
-int textPosYEnd;
-int textPosYStart;
+static byte textColorB;
+static byte textColorG;
+static byte textColorR;
+static int lastFrameIdWhenTextWasDrawn;
+static int textAlignMode;
+STATIC_FOR_GP_ACCESS int textCharIdx;
+static int textPosXEnd;
+static int textPosXStart;
+static int textPosYCur;
+static int textPosYEnd;
+static int textPosYStart;
 
 void ResetTextRenderState(void) {
     lastFrameIdWhenTextWasDrawn = -1;

@@ -7,7 +7,7 @@ extern TSprite textDrawTemplateSprites1[40];
 extern TSprite textDrawTemplateSprites2[40];
 extern Texture textures[150];
 
-int textCharIdx;
+STATIC_FOR_GP_ACCESS int textCharIdx;
 
 void InitVariousUiSpriteTemplates(void) {
     int i;

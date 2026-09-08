@@ -20,7 +20,7 @@ void z_error(const char* msg) {
         ;
 }
 
-void* kulaZAllocatorPointer;
+static void* kulaZAllocatorPointer;
 long kulaZAllocatorHeapUsage = 0;
 
 void zcallocInit(void) {

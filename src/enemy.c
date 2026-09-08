@@ -23,15 +23,15 @@ extern MATRIX perspMatrixes[];
 extern short* entityData;
 extern short numEntities;
 
-int collI;
-int enemyPlayerDistSq;
-int numEnemies;
-int enemiesProcessedOnce;
-int enemyI;
-int loopI;
-int blockProgress;
-int sumOfDeltas;
-int DAT_000a4850;
+static int collI;
+static int enemyPlayerDistSq;
+static int numEnemies;
+static int enemiesProcessedOnce;
+static int enemyI;
+static int loopI;
+static int blockProgress;
+static int sumOfDeltas;
+static int DAT_000a4850;
 static SVECTOR tmpEnemyPos;
 static SVECTOR tmpEnemyScreenPos;
 static SVECTOR tmpEnemyPixelPos;
@@ -49,7 +49,7 @@ static SVECTOR SVECTOR_000a48e4;
 static SVECTOR SVECTOR_000a48ec;
 static SVECTOR SVECTOR_000a48f4;
 static MATRIX rotationMatrix;
-MATRIX MATRIX_000a48a4;
+static MATRIX MATRIX_000a48a4;
 static MATRIX MATRIX_000a48c4;
 
 void InitEnemies(void) {

@@ -8,7 +8,7 @@ extern PrimList primLists[2];
 extern int whichDrawDispEnv;
 
 // gprel-used variables (defined in this file)
-int biosStrLen;
+static int biosStrLen;
 
 typedef struct Tim {
     uint magic;

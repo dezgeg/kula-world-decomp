@@ -20,7 +20,7 @@ extern volatile byte saveReplayCurrentButtonsShuffled;
 extern volatile int saveReplayLength;
 extern volatile byte saveReplayRleButtonCount;
 
-int screenshotNumBytes;
+static int screenshotNumBytes;
 static RECT screenshotRect;
 
 static char* DEBUG_SCREENSHOT_WORLD_NAMES[13] = {

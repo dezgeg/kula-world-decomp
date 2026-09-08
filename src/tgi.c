@@ -57,32 +57,32 @@ extern int toBeDisabledLightEffects[64];
 extern int unkOtagLengths[2][1];
 
 // gprel-used variables (defined in this file)
-int DAT_000a4128;
+static int DAT_000a4128;
 int itemsDispListIdx;
-int numPlainTileTextureVariations;
+STATIC_FOR_GP_ACCESS int numPlainTileTextureVariations;
 int playerEnemyDispListIdx;
-int quadSomethingCount;
-int quadSomethingStartIndex;
-int recalcSkyboxes;
+STATIC_FOR_GP_ACCESS int quadSomethingCount;
+STATIC_FOR_GP_ACCESS int quadSomethingStartIndex;
+STATIC_FOR_GP_ACCESS int recalcSkyboxes;
 TgiFile* tgi;
 int turningMotionBlurEnabled;
-short* tgiEnd;
-short* tgiPart0;
+static short* tgiEnd;
+static short* tgiPart0;
 short* tgiPart1;
 short* tgiPart2;
 short* tgiPart3;
 short* tgiPart4;
-short* tgiPart5;
-short* tgiPart6;
+STATIC_FOR_GP_ACCESS short* tgiPart5;
+static short* tgiPart6;
 short* tgiPart7;
 short* tgiPart8;
-short* tgiPart9;
-short* tgiPart10;
+STATIC_FOR_GP_ACCESS short* tgiPart9;
+static short* tgiPart10;
 short* entityData;
 short* levelData;
 short numEntities;
 int specialLevelType;
-int wasSpecialLevel;
+STATIC_FOR_GP_ACCESS int wasSpecialLevel;
 
 int INT_ARRAY_000a2cd8[7] = { 28, 23, 22, 15, 40, 30, 20 };
 int LOD_THRESHOLDS[9] = { 0, 30, 43, 55, 66, 76, 85, 93, 100 }; // percentage

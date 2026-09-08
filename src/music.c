@@ -21,11 +21,11 @@ short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
 
 CdlFILTER musicCdlFilter;
-int bonusMusicSearchAttempt;
+static int bonusMusicSearchAttempt;
 int musicCounter;
 int musicCurSector;
 int musicEndSector;
-int musicSearchAttempt;
+static int musicSearchAttempt;
 int musicStartSector;
 int musicUnkAlwaysZero1;
 int musicUnkAlwaysZero2;

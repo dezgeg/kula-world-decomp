@@ -38,7 +38,7 @@ extern TSprite sfxVolumeWidgetSprite[2];
 extern uint firstGuiTexture;
 
 int bigGuiSpriteFade;
-int menuCursorSinPhase;
+static int menuCursorSinPhase;
 int whichLevelEndSpriteLoaded;
 int inflateRetCode;
 z_stream zlibStream_a4dd4;

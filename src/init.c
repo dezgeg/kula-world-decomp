@@ -9,7 +9,7 @@ extern char padData[2][34];
 extern u_char padVibrationModeEntered[2];
 extern long projectionDistance;
 
-int latestControllerSlotPolled;
+STATIC_FOR_GP_ACCESS int latestControllerSlotPolled;
 
 void InitStuff(void) {
     int j;

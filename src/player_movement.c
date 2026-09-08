@@ -52,15 +52,15 @@ extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
 extern short* levelData;
 
-int tempNewBlock;
-short DAT_000a4374;
-short idleSquishMagnitude;
-short idleSquishSinPhase;
-short* initJumpTimerPtr;
-short landingSquishDamping;
-short landingSquishFrameCounter;
-short landingSquishMagnitude;
-short landingSquishMagnitudeIncrement;
+static int tempNewBlock;
+static short DAT_000a4374;
+static short idleSquishMagnitude;
+static short idleSquishSinPhase;
+static short* initJumpTimerPtr;
+static short landingSquishDamping;
+static short landingSquishFrameCounter;
+static short landingSquishMagnitude;
+static short landingSquishMagnitudeIncrement;
 
 static int ballColorB;
 static int ballColorG;

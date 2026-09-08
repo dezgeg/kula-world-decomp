@@ -9,7 +9,7 @@ int AddLightEffectToCubeFace(int x, int y, int z, int dir, int param_5, int para
 
 extern int cubeStates[16 * 256];
 
-int* curLightEffectDataPtr;
+static int* curLightEffectDataPtr;
 int lightEffects[32 * 8];
 
 

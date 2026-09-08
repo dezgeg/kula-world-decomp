@@ -22,7 +22,7 @@ extern SpuVoiceState spuVoiceState[];
 extern SpuVoiceAttr perSfxVoiceAttrs[];
 extern int lethargyMode;
 
-char keyStatus[24];
+static char keyStatus[24];
 short playingBonusMusic;
 short bonusMusicIndex;
 SpuCommonAttr spuCommonAttr;
@@ -33,8 +33,8 @@ int musicVolume;
 int loadingIsComplete;
 int numSfx;
 int sndSwapPanDir;
-int sfxPanning;
-int voiceIter;
+static int sfxPanning;
+static int voiceIter;
 
 static int curPlayingSfx;
 static VECTOR panFactor;

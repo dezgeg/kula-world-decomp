@@ -44,9 +44,9 @@ extern char S_FMTd_4[];
 short highscoreEntryCursorX;
 short highscoreEntryCursorY;
 int idleTimer;
-unsigned char rainbowColorR;
-unsigned char rainbowColorB;
-unsigned char rainbowColorG;
+static unsigned char rainbowColorR;
+static unsigned char rainbowColorB;
+static unsigned char rainbowColorG;
 int repeatRateTimer;
 Highscore highscores[6];
 

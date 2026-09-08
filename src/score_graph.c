@@ -7,14 +7,14 @@ extern PrimList primLists[2];
 extern Texture textures[150];
 extern TSprite scoreGraphSprites[2][2];
 
-int doDrawGraph;
-int drawScoreGraphHeight;
-int* drawScoreGraphHeightsBuf;
-int* drawScoreGraphLevelScores;
-int* drawScoreGraphUnusedScorePtr;
-int drawScoreGraphWidth;
-int drawScoreGraphY;
-void* drawScoreGraphPrims;
+static int doDrawGraph;
+static int drawScoreGraphHeight;
+static int* drawScoreGraphHeightsBuf;
+static int* drawScoreGraphLevelScores;
+static int* drawScoreGraphUnusedScorePtr;
+static int drawScoreGraphWidth;
+static int drawScoreGraphY;
+static void* drawScoreGraphPrims;
 uint firstGuiTexture;
 
 INCLUDE_ASM("asm/nonmatchings/score_graph", InitScoreGraph);

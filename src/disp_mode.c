@@ -2,8 +2,8 @@
 
 extern DrawDisp drawdisp[2];
 
-int dispModeChangeNewWidth;
-int dispModeChangeState;
+static int dispModeChangeNewWidth;
+STATIC_FOR_GP_ACCESS int dispModeChangeState;
 int displayHeight;
 int displayWidth;
 int gteXScale;

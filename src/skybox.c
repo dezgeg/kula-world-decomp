@@ -17,26 +17,26 @@ extern int D_000A51BC;
 extern int D_000A51C0;
 extern int D_000A51C4;
 
-int D_000A415C;
-int D_000A4164;
-int countOfSomethingI;
-int countOfSomethingJ;
-static short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
-int skyboxAngleMul1;
-int skyboxAngleMul2;
-int skyboxAnglesProduct;
-int skyboxCountsProduct;
-int skyboxMaxAngle1;
-int skyboxMaxAngle2;
-int skyboxMaxAngle2Plus1;
-int skyboxMaxAnglesProduct;
-int skyboxParam5;
-int skyboxParam5Times2;
-int skyboxSizeMidBlk;
-int skyboxSizePolyMap;
-int skyboxSizePolys;
-int skyboxSizeVertices;
-short* tgiPart9;
+static int D_000A415C;
+static int D_000A4164;
+static int countOfSomethingI;
+static int countOfSomethingJ;
+STATIC_FOR_GP_ACCESS short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
+static int skyboxAngleMul1;
+static int skyboxAngleMul2;
+static int skyboxAnglesProduct;
+static int skyboxCountsProduct;
+static int skyboxMaxAngle1;
+static int skyboxMaxAngle2;
+static int skyboxMaxAngle2Plus1;
+static int skyboxMaxAnglesProduct;
+static int skyboxParam5;
+static int skyboxParam5Times2;
+static int skyboxSizeMidBlk;
+static int skyboxSizePolyMap;
+static int skyboxSizePolys;
+static int skyboxSizeVertices;
+STATIC_FOR_GP_ACCESS short* tgiPart9;
 
 // Prototypes
 extern uint Rand(int param_1);

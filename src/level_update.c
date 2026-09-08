@@ -34,37 +34,37 @@ extern int specialLevelType;
 extern int gameMode;
 
 // gprel-used variables (defined in this file)
-int D_000A4398; // mpOff
-int D_000A439C; // swapMovingPlatformDir
-int D_000A43B0;
-int D_000A43DC;
-int D_000A43E8;
-int D_000A4430;
-int DAT_000a43a8;
-int DAT_000a43ac;
-int DAT_000a43c4;
-int DAT_000a43c8;
-int maxDistSquared;
-int mI;
-int movingPlatformEntityId;
-int mpCounter;
-int mpLengthScaled;
-int xMinPlusMax;
-int yMinPlusMax;
-int zMinPlusMax;
-int zoomInAndOutPhase;
-short DAT_000a43fc;
-short DAT_000a4400;
-short DAT_000a4404;
-short DAT_000a4408;
-short DAT_000a440c;
-short DAT_000a4410;
-short debugCamX;
-short debugCamY;
-short mpVelSum;
-short tempI;
-short tempJ;
-short tempK;
+static int D_000A4398; // mpOff
+static int D_000A439C; // swapMovingPlatformDir
+static int D_000A43B0;
+static int D_000A43DC;
+static int D_000A43E8;
+static int D_000A4430;
+static int DAT_000a43a8;
+static int DAT_000a43ac;
+static int DAT_000a43c4;
+static int DAT_000a43c8;
+static int maxDistSquared;
+static int mI;
+static int movingPlatformEntityId;
+static int mpCounter;
+static int mpLengthScaled;
+static int xMinPlusMax;
+static int yMinPlusMax;
+static int zMinPlusMax;
+static int zoomInAndOutPhase;
+static short DAT_000a43fc;
+static short DAT_000a4400;
+static short DAT_000a4404;
+static short DAT_000a4408;
+static short DAT_000a440c;
+static short DAT_000a4410;
+static short debugCamX;
+static short debugCamY;
+static short mpVelSum;
+static short tempI;
+static short tempJ;
+static short tempK;
 static MATRIX MATRIX_000a44c8;
 static SVECTOR SVECTOR_000a43a0;
 static SVECTOR SVECTOR_000a43e0;
