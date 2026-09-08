@@ -110,6 +110,7 @@ uint controllerButtons;
 uint prevControllerButtons;
 
 STATIC_FOR_GP_ACCESS int levelWon[2];
+STATIC_FOR_GP_ACCESS int unusedLevelWon;
 static short playerFinePosMod512[4];
 static SVECTOR initPlayerFacingVec;
 static SVECTOR initPlayerGravityVec;

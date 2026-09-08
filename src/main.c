@@ -157,11 +157,13 @@ int savedFruitsCollectedBitmask;
 int startingPlayerForThisLevel;
 int totalPlayTime[2];
 int totalScore;
+int unusedPlayer2TotalScore;
 int twoPlayerWhichPlayer;
 int whichDrawDispEnv;
 short numFruits;
 
 static z_stream levelLoadZlibStream;
+static int unusedLevelLoad;
 
 int D_000A2E54[4] = { 0, 0, 0, 0 };
 int numCameras = 1;

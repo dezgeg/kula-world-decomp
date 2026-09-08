@@ -114,6 +114,7 @@ static SVECTOR SVECTOR_000a46bc;
 static SVECTOR SVECTOR_000a4738;
 static SVECTOR SVECTOR_000a4740;
 static SVECTOR SVECTOR_000a4778;
+static SVECTOR unusedLevelUpdate3Vec;
 static SVECTOR tempPlayerPos;
 
 void HandleItemTouching(Player* player) {
