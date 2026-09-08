@@ -26,7 +26,7 @@ Makefile: build/kula_world.ld
 build/subdirs:
 	mkdir -p $(sort $(dir $(O_FILES))) build/subdirs
 
-build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
+build/kula_world.ld: kula_world.yaml psyq venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
 	mkdir -p build
 	for f in $$(cd psyq/ELF; echo *.A); do mkdir -p build/$$f; ar x psyq/ELF/$$f --output=build/$$f; done
