@@ -379,6 +379,26 @@ typedef struct AnimatedTextureChain {
     uint* colorAnimData3;
 } AnimatedTextureChain;
 
+typedef struct FireBlockTextureChain {
+    AnimatedTextureChain chain;
+    TextureChainEntry entries[128];
+} FireBlockTextureChain;
+
+typedef struct InvisibleBlockTextureChain {
+    AnimatedTextureChain chain;
+    TextureChainEntry entries[512];
+} InvisibleBlockTextureChain;
+
+typedef struct CrumblingSpecialBlockTextureChain {
+    AnimatedTextureChain chain;
+    TextureChainEntry entries[768];
+} CrumblingSpecialBlockTextureChain;
+
+typedef struct BonusBlockTextureChain {
+    AnimatedTextureChain chain;
+    TextureChainEntry entries[768];
+} BonusBlockTextureChain;
+
 typedef struct Enemy {
     SVECTOR dir;
     SVECTOR rightVec;
