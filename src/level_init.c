@@ -75,7 +75,7 @@ extern byte INVIS_BLOCK_ANIM_FLAG_DATA[124];
 extern byte BONUS_BLOCK_ANIM_FLAG_DATA0[60];
 extern uint NUM_TEXTURE_ANIM_FRAMES;
 extern uint INVIS_BLOCK_ANIM_COLOR_DATA[89];
-extern uint BONUS_BLOCK_ANIM_FLAG_DATA1[16];
+extern byte BONUS_BLOCK_ANIM_FLAG_DATA1[56];
 extern AnimatedTextureChain bonusBlockTextureChain;
 extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
 extern AnimatedTextureChain fireBlockTextureChain;
