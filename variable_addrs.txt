@@ -889,6 +889,7 @@ unusedNumCopycatRounds = 0x000a47bc; // type:s16
 unusedNumHblanks = 0x000de7c4; // type:s32
 unusedReadErrorCode = 0x000a59b0; // type:s32
 unusedRenderPhase = 0x000a2f68; // type:s32
+unusedZlibStream = 0x000a4bd0; // size:56
 vibrationAngleIncrement = 0x000a4c80; // type:s32
 vibrationBuf = 0x000a4c68; // size:4
 vibrationCounter = 0x000a4c88; // type:s32

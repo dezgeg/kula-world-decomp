@@ -75,6 +75,7 @@ Music MUSICS[] = {
 char S_File_error[] = "File error:\n\n";
 
 static z_stream zlibStream_a4b80;
+static z_stream unusedZlibStream;
 
 #ifndef SKIP_UNUSED_CODE
 void UnusedFileError(char* str1, char* str2) {
