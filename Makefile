@@ -29,6 +29,7 @@ build/subdirs:
 build/kula_world.ld: kula_world.yaml venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/
 	mkdir -p build
+	for f in $$(cd psyq/ELF; echo *.A); do mkdir -p build/$$f; ar x psyq/ELF/$$f --output=build/$$f; done
 	dd if=SCES_010.00 of=build/truncated.bin count=1 bs=$(UNPADDED_SIZE)
 	source venv/bin/activate && splat split kula_world.yaml
 
