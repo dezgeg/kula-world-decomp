@@ -34,7 +34,7 @@ extern int screenOffsetX;
 extern int screenOffsetY;
 extern int whichDrawDispEnv;
 extern long projectionDistance;
-extern MATRIX perspMatrixes[1];
+extern MATRIX perspMatrixes[2];
 extern Particle particles[2][16];
 extern POLY_FT4 particlePolyTemplates[7];
 extern PrimList primLists[2];
