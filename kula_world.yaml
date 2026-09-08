@@ -502,7 +502,8 @@ segments:
       - [0x933c0, .sdata, zlib_zutil]
       - [0x93474, .sdata, zlib_calloc]
       - { start: 0x934b0, type: sbss, vram: 0xa3cb0, name: nonmatched/sbss }
-      - { start: 0x934b0, type: bss, vram: 0xa5a1c, name: nonmatched/bss, bss_size: 0x54d74 }
+      - { start: 0x934b0, type: sbss, vram: 0xa4cec, name: nonmatched/scommon }
+      - { start: 0x934b0, type: bss, vram: 0xa5a1c, name: nonmatched/bss }
 #      - { type: bss, vram: 0xbd628, name: libgpu/font }
 #      - { type: bss, vram: 0xc1a38, name: libgpu/sys }
 #      - { type: bss, vram: 0xc3388, name: libgte/patchgte }
@@ -532,5 +533,6 @@ segments:
 #      - { type: bss, vram: 0xc5dc0, name: libapi/chclrpad }
 #      - { type: bss, vram: 0xc5dd0, name: libcard/patch }
 #      - { type: bss, vram: 0xc5de0, name: libcard/end }
+      - { start: 0x934b0, type: bss, vram: 0xc444c, name: nonmatched/common, bss_size: 0x36344 }
       - [0x934b0]
   - [0x934b0]
