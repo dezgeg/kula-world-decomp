@@ -33,8 +33,7 @@ int musicVolume;
 int loadingIsComplete;
 int numSfx;
 int sndSwapPanDir;
-static int sfxPanning;
-static int voiceIter;
+
 
 static int curPlayingSfx;
 static VECTOR panFactor;
@@ -147,6 +146,10 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     SpuSetReverbDepth(&spuReverbAttr);
 }
 
+static int SndPlaySfx_i;
+#define i SndPlaySfx_i
+static int SndPlaySfx_panning;
+#define panning SndPlaySfx_panning
 void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
     int pan;
     curPlayingSfx = sfx;
@@ -158,41 +161,41 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
         curPlayingSfx = SFX_REMAP_TABLE[sfx];
     }
     if (curPlayingSfx >= 0) {
-        for (voiceIter = 0; voiceIter < 23; voiceIter++) {
-            if (spuVoiceState[voiceIter].sfxIndex == -1) {
+        for (i = 0; i < 23; i++) {
+            if (spuVoiceState[i].sfxIndex == -1) {
                 break;
             }
         }
 
-        if (spuVoiceState[voiceIter].sfxIndex == -1) {
+        if (spuVoiceState[i].sfxIndex == -1) {
             panFactor.vx = dir->vx;
             panFactor.vy = dir->vy;
             panFactor.vz = dir->vz;
             Square0(panFactorPtr, panVectorSqPtr);
             volume = (volume * sfxVolume) / 0xc;
-            sfxPanning = 3 * SquareRoot0(panVectorSqPtr->vx + panVectorSqPtr->vy + panVectorSqPtr->vz);
+            panning = 3 * SquareRoot0(panVectorSqPtr->vx + panVectorSqPtr->vy + panVectorSqPtr->vz);
 
-            if (sfxPanning > volume) {
-                sfxPanning = volume;
+            if (panning > volume) {
+                panning = volume;
             }
-            if (sfxPanning == 0) {
+            if (panning == 0) {
                 perSfxVoiceAttrs[curPlayingSfx].volume.right = volume;
                 perSfxVoiceAttrs[curPlayingSfx].volume.left = volume;
             } else {
                 if (sndSwapPanDir) {
                     perSfxVoiceAttrs[curPlayingSfx].volume.left =
-                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - panning) + ((panFactorPtr->vx * (volume - panning)) / panning);
                     perSfxVoiceAttrs[curPlayingSfx].volume.right =
-                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - panning) - ((panFactorPtr->vx * (volume - panning)) / panning);
                 } else {
                     perSfxVoiceAttrs[curPlayingSfx].volume.right =
-                        (volume - sfxPanning) + ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - panning) + ((panFactorPtr->vx * (volume - panning)) / panning);
                     perSfxVoiceAttrs[curPlayingSfx].volume.left =
-                        (volume - sfxPanning) - ((panFactorPtr->vx * (volume - sfxPanning)) / sfxPanning);
+                        (volume - panning) - ((panFactorPtr->vx * (volume - panning)) / panning);
                 }
             }
             perSfxVoiceAttrs[curPlayingSfx].mask = 0;
-            perSfxVoiceAttrs[curPlayingSfx].voice = 1 << voiceIter;
+            perSfxVoiceAttrs[curPlayingSfx].voice = 1 << i;
             if (tag > 0x8000) {
                 perSfxVoiceAttrs[curPlayingSfx].note -= 0x100;
             }
@@ -200,18 +203,20 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
             if (tag > 0x8000) {
                 perSfxVoiceAttrs[curPlayingSfx].note += 0x100;
             }
-            SpuSetKey(1, 1 << voiceIter);
+            SpuSetKey(1, 1 << i);
             if (!lethargyMode) {
-                SpuSetReverbVoice(0, 1 << voiceIter);
+                SpuSetReverbVoice(0, 1 << i);
             } else {
-                SpuSetReverbVoice(1, 1 << voiceIter);
+                SpuSetReverbVoice(1, 1 << i);
             }
-            spuVoiceState[voiceIter].tag = tag;
-            spuVoiceState[voiceIter].volume = volume;
-            spuVoiceState[voiceIter].sfxIndex = curPlayingSfx;
+            spuVoiceState[i].tag = tag;
+            spuVoiceState[i].volume = volume;
+            spuVoiceState[i].sfxIndex = curPlayingSfx;
         }
     }
 }
+#undef i
+#undef panning
 
 void SndProcessSpuVoices(void) {
     int i;

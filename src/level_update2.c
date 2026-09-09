@@ -77,28 +77,13 @@ short padCross = 0;
 short padUp = 0;
 
 int ballTextureIndex;
-static int getBlockResult;
-static int getBlockX;
-static int getBlockY;
-static int getBlockZ;
-static int hpbPrevControllerButtons;
 STATIC_FOR_GP_ACCESS int levelExitEntityOffset;
 STATIC_FOR_GP_ACCESS int levelHiddenExitEntityOffset;
 int shouldMarkCubesVisited;
-static short calcBlockType;
-static short calcI;
-static short calcJ;
-static short calcK;
-static short calcX2;
-static short calcY2;
-static short calcZ2;
 static short copycatIdleTimer;
 static short copycatStateVar;
 static short curCopycatMove;
 static short D_000A45CC;
-static short D_000A45F8;
-static short D_000A45FC;
-static short D_000A4600;
 STATIC_FOR_GP_ACCESS short fireSoundTimer;
 short isPausedOrWaitingForRestart;
 static short numCopycatMoves;
@@ -116,10 +101,6 @@ static SVECTOR initPlayerFacingVec;
 static SVECTOR initPlayerGravityVec;
 static SVECTOR initPlayerRightVec;
 static SVECTOR playerCombinedPos;
-static SVECTOR SVECTOR_000a45d8;
-static SVECTOR SVECTOR_000a4618;
-static SVECTOR SVECTOR_000a4638;
-static SVECTOR SVECTOR_000a4640;
 
 #define CUBE_TYPE_AT(x, y, z) levelData[(x) * 1156 + (y) * 34 + (z)]
 
@@ -562,6 +543,8 @@ void ProcessPlayer(void) {
     invisBlockVisibility.pos[2] = thePlayer.finePos.vz + thePlayer.svec54.vz;
 }
 
+static SVECTOR ProcessEnemiesRenderItemsAndCheckFellOff_playerBlockPos;
+#define playerBlockPos ProcessEnemiesRenderItemsAndCheckFellOff_playerBlockPos
 void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
     RenderEnemies();
     if (!isPaused && levelEndReason == 0 && !inGetReadyScreen) {
@@ -569,11 +552,11 @@ void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
     }
     CreateAllItemDispLists();
 
-    SVECTOR_000a45d8.vx = (thePlayer.finePos.vx + (thePlayer.gravityDir.vx << 8) + 0x100) >> 9;
-    SVECTOR_000a45d8.vy = (thePlayer.finePos.vy + (thePlayer.gravityDir.vy << 8) + 0x100) >> 9;
-    SVECTOR_000a45d8.vz = (thePlayer.finePos.vz + (thePlayer.gravityDir.vz << 8) + 0x100) >> 9;
+    playerBlockPos.vx = (thePlayer.finePos.vx + (thePlayer.gravityDir.vx << 8) + 0x100) >> 9;
+    playerBlockPos.vy = (thePlayer.finePos.vy + (thePlayer.gravityDir.vy << 8) + 0x100) >> 9;
+    playerBlockPos.vz = (thePlayer.finePos.vz + (thePlayer.gravityDir.vz << 8) + 0x100) >> 9;
 
-    if (SVECTOR_000a45d8.vx < -1 || SVECTOR_000a45d8.vx > 35 || SVECTOR_000a45d8.vy < -1 || SVECTOR_000a45d8.vy > 35 || SVECTOR_000a45d8.vz < -1 || SVECTOR_000a45d8.vz > 35) {
+    if (playerBlockPos.vx < -1 || playerBlockPos.vx > 35 || playerBlockPos.vy < -1 || playerBlockPos.vy > 35 || playerBlockPos.vz < -1 || playerBlockPos.vz > 35) {
         levelEndReason = LEVEL_END_FELL_OFF;
     }
 
@@ -582,6 +565,7 @@ void ProcessEnemiesRenderItemsAndCheckFellOff(void) {
         isPaused = 1;
     }
 }
+#undef playerBlockPos
 
 void SetPausedOrWaitingForRestart(void) {
     isPausedOrWaitingForRestart = 1;
@@ -592,6 +576,8 @@ void RenderItems_() {
     CreateAllItemDispLists();
 }
 
+static int HandlePlayerButtons_prevButtons;
+#define prevButtons HandlePlayerButtons_prevButtons
 void HandlePlayerButtons(Player* player) {
     if (turnDelayEnabled) {
         turnDelayFrames = 6;
@@ -626,7 +612,7 @@ void HandlePlayerButtons(Player* player) {
         return;
     }
 
-    hpbPrevControllerButtons = prevControllerButtons;
+    prevButtons = prevControllerButtons;
     isPausedOrWaitingForRestart = 0;
 
     switch (gameMode) {
@@ -635,7 +621,7 @@ void HandlePlayerButtons(Player* player) {
             if (player->playerHasControl) {
                 if (player->startTurningTo == 0) {
                     if (++player->turnDelayTimer > turnDelayFrames) {
-                        hpbPrevControllerButtons = 0;
+                        prevButtons = 0;
                     }
                     if (player->startTurningLeftNextFrame == 1) {
                         player->startTurningLeftNextFrame = 0;
@@ -647,22 +633,22 @@ void HandlePlayerButtons(Player* player) {
                         player->turnDelayTimer = 0;
                         player->turnDirection = -1;
                     }
-                    if ((controllerButtons & PAD_L) & ~hpbPrevControllerButtons) {
+                    if ((controllerButtons & PAD_L) & ~prevButtons) {
                         player->startTurningLeftNextFrame = 0;
                         player->turnDelayTimer = 0;
                         player->turnDirection = 1;
                     }
-                    if ((controllerButtons & PAD_R) & ~hpbPrevControllerButtons) {
+                    if ((controllerButtons & PAD_R) & ~prevButtons) {
                         player->startTurningRightNextFrame = 0;
                         player->turnDelayTimer = 0;
                         player->turnDirection = -1;
                     }
                 } else {
                     player->turnDelayTimer = 0;
-                    if ((controllerButtons & PAD_L) & ~hpbPrevControllerButtons) {
+                    if ((controllerButtons & PAD_L) & ~prevButtons) {
                         player->startTurningLeftNextFrame = 1;
                     }
-                    if ((controllerButtons & PAD_R) & ~hpbPrevControllerButtons) {
+                    if ((controllerButtons & PAD_R) & ~prevButtons) {
                         player->startTurningRightNextFrame = 1;
                     }
                 }
@@ -849,39 +835,62 @@ void HandlePlayerButtons(Player* player) {
         player->movementVelocity = 0;
     }
 }
+#undef prevButtons
 
+static short CalcWhatPlayerIsStandingOn_blockType;
+#define blockType CalcWhatPlayerIsStandingOn_blockType
+static short CalcWhatPlayerIsStandingOn_i;
+#define i CalcWhatPlayerIsStandingOn_i
+static short CalcWhatPlayerIsStandingOn_j;
+#define j CalcWhatPlayerIsStandingOn_j
+static short CalcWhatPlayerIsStandingOn_k;
+#define k CalcWhatPlayerIsStandingOn_k
+static short CalcWhatPlayerIsStandingOn_x2;
+#define x2 CalcWhatPlayerIsStandingOn_x2
+static short CalcWhatPlayerIsStandingOn_y2;
+#define y2 CalcWhatPlayerIsStandingOn_y2
+static short CalcWhatPlayerIsStandingOn_z2;
+#define z2 CalcWhatPlayerIsStandingOn_z2
+static short CalcWhatPlayerIsStandingOn_blockX;
+#define blockX CalcWhatPlayerIsStandingOn_blockX
+static short CalcWhatPlayerIsStandingOn_blockY;
+#define blockY CalcWhatPlayerIsStandingOn_blockY
+static short CalcWhatPlayerIsStandingOn_blockZ;
+#define blockZ CalcWhatPlayerIsStandingOn_blockZ
+static SVECTOR CalcWhatPlayerIsStandingOn_playerBlockPos;
+#define playerBlockPos CalcWhatPlayerIsStandingOn_playerBlockPos
 void CalcWhatPlayerIsStandingOn(Player* player) {
     if (player->onMovingPlatform) {
         UpdatePlayerSurroundingBlocks(player);
         return;
     }
-    SVECTOR_000a4618.vx = (player->finePos.vx + 256) >> 9;
-    SVECTOR_000a4618.vy = (player->finePos.vy + 256) >> 9;
-    SVECTOR_000a4618.vz = (player->finePos.vz + 256) >> 9;
+    playerBlockPos.vx = (player->finePos.vx + 256) >> 9;
+    playerBlockPos.vy = (player->finePos.vy + 256) >> 9;
+    playerBlockPos.vz = (player->finePos.vz + 256) >> 9;
 
-    calcX2 = player->rightVec.vx + (SVECTOR_000a4618.vx - player->gravityDir.vx) - player->facingDir.vx;
-    calcY2 = player->rightVec.vy + (SVECTOR_000a4618.vy - player->gravityDir.vy) - player->facingDir.vy;
-    calcZ2 = player->rightVec.vz + (SVECTOR_000a4618.vz - player->gravityDir.vz) - player->facingDir.vz;
+    x2 = player->rightVec.vx + (playerBlockPos.vx - player->gravityDir.vx) - player->facingDir.vx;
+    y2 = player->rightVec.vy + (playerBlockPos.vy - player->gravityDir.vy) - player->facingDir.vy;
+    z2 = player->rightVec.vz + (playerBlockPos.vz - player->gravityDir.vz) - player->facingDir.vz;
 
-    for (calcI = 0; calcI < 3; calcI++) {
-        for (calcJ = 0; calcJ < 3; calcJ++) {
-            for (calcK = 0; calcK < 3; calcK++) {
-                D_000A45F8 = calcX2 + calcI * player->gravityDir.vx + calcJ * player->facingDir.vx - calcK * player->rightVec.vx;
-                D_000A45FC = calcY2 + calcI * player->gravityDir.vy + calcJ * player->facingDir.vy - calcK * player->rightVec.vy;
-                D_000A4600 = calcZ2 + calcI * player->gravityDir.vz + calcJ * player->facingDir.vz - calcK * player->rightVec.vz;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                blockX = x2 + i * player->gravityDir.vx + j * player->facingDir.vx - k * player->rightVec.vx;
+                blockY = y2 + i * player->gravityDir.vy + j * player->facingDir.vy - k * player->rightVec.vy;
+                blockZ = z2 + i * player->gravityDir.vz + j * player->facingDir.vz - k * player->rightVec.vz;
 
-                if (!(D_000A45F8 >= 1 && D_000A45FC >= 1 && D_000A4600 >= 1 && D_000A45F8 <= 32 && D_000A45FC <= 32 && D_000A4600 <= 32)) {
-                    player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                if (!(blockX >= 1 && blockY >= 1 && blockZ >= 1 && blockX <= 32 && blockY <= 32 && blockZ <= 32)) {
+                    player->surroundingBlocks[i][j][k] = -1;
                 } else {
-                    calcBlockType = player->surroundingBlocks[calcI][calcJ][calcK] = levelData[D_000A45F8 * 1156 + D_000A45FC * 34 + D_000A4600];
+                    blockType = player->surroundingBlocks[i][j][k] = levelData[blockX * 1156 + blockY * 34 + blockZ];
 
-                    if (calcBlockType >= 5 && entityData[(calcBlockType - 5) * 128] == 5) {
-                        if (calcI == 2 || calcJ == 2) {
-                            if (IsVecWithinPlatformBounds(&player->finePos, (calcBlockType - 5) * 128, 100) == 0) {
-                                player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                    if (blockType >= 5 && entityData[(blockType - 5) * 128] == 5) {
+                        if (i == 2 || j == 2) {
+                            if (IsVecWithinPlatformBounds(&player->finePos, (blockType - 5) * 128, 100) == 0) {
+                                player->surroundingBlocks[i][j][k] = -1;
                             }
                         } else {
-                            player->surroundingBlocks[calcI][calcJ][calcK] = -1;
+                            player->surroundingBlocks[i][j][k] = -1;
                         }
                     }
                 }
@@ -931,19 +940,42 @@ void CalcWhatPlayerIsStandingOn(Player* player) {
         player->specialBlockSideOffsetPlayerIsStandingOn = -1;
     }
 }
+#undef blockType
+#undef i
+#undef j
+#undef k
+#undef x2
+#undef y2
+#undef z2
+#undef blockX
+#undef blockY
+#undef blockZ
+#undef playerBlockPos
 
+static int GetBlockAt_result;
+#define result GetBlockAt_result
+static int GetBlockAt_x;
+#define x GetBlockAt_x
+static int GetBlockAt_y;
+#define y GetBlockAt_y
+static int GetBlockAt_z;
+#define z GetBlockAt_z
 int GetBlockAt(SVECTOR* coord) {
-    getBlockX = (coord->vx + 0x100) >> 9;
-    getBlockY = (coord->vy + 0x100) >> 9;
-    getBlockZ = (coord->vz + 0x100) >> 9;
+    x = (coord->vx + 0x100) >> 9;
+    y = (coord->vy + 0x100) >> 9;
+    z = (coord->vz + 0x100) >> 9;
 
-    if (getBlockX < 1 || getBlockY < 1 || getBlockZ < 1 || getBlockX > 32 || getBlockY > 32 || getBlockZ > 32) {
+    if (x < 1 || y < 1 || z < 1 || x > 32 || y > 32 || z > 32) {
         return -1;
     } else {
-        getBlockResult = CUBE_TYPE_AT(getBlockX, getBlockY, getBlockZ);
-        return getBlockResult;
+        result = CUBE_TYPE_AT(x, y, z);
+        return result;
     }
 }
+#undef result
+#undef x
+#undef y
+#undef z
 
 void UpdateSubpixelPositions(Player* player) {
     playerFinePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
@@ -1102,54 +1134,60 @@ int GetRotationIndexFromVector(SVECTOR v) {
     return -1;
 }
 
+static SVECTOR GetVectorBasedOnTwoDirs_vec1;
+#define vec1 GetVectorBasedOnTwoDirs_vec1
+static SVECTOR GetVectorBasedOnTwoDirs_vec2;
+#define vec2 GetVectorBasedOnTwoDirs_vec2
 void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR* res) {
-    SVECTOR_000a4638.vz = 0;
-    SVECTOR_000a4638.vy = 0;
-    SVECTOR_000a4638.vx = 0;
-    SVECTOR_000a4640.vz = 0;
-    SVECTOR_000a4640.vy = 0;
-    SVECTOR_000a4640.vx = 0;
+    vec1.vz = 0;
+    vec1.vy = 0;
+    vec1.vx = 0;
+    vec2.vz = 0;
+    vec2.vy = 0;
+    vec2.vx = 0;
 
     if (dir1 == 5) {
-        SVECTOR_000a4638.vx = 1;
-        SVECTOR_000a4640.vy = 1;
+        vec1.vx = 1;
+        vec2.vy = 1;
     }
     if (dir1 == 0) {
-        SVECTOR_000a4638.vx = -1;
-        SVECTOR_000a4640.vy = 1;
+        vec1.vx = -1;
+        vec2.vy = 1;
     }
     if (dir1 == 4) {
-        SVECTOR_000a4638.vz = 1;
-        SVECTOR_000a4640.vy = 1;
+        vec1.vz = 1;
+        vec2.vy = 1;
     }
     if (dir1 == 1) {
-        SVECTOR_000a4638.vz = -1;
-        SVECTOR_000a4640.vy = 1;
+        vec1.vz = -1;
+        vec2.vy = 1;
     }
     if (dir1 == 2) {
-        SVECTOR_000a4638.vx = 1;
-        SVECTOR_000a4640.vz = -1;
+        vec1.vx = 1;
+        vec2.vz = -1;
     }
     if (dir1 == 3) {
-        SVECTOR_000a4638.vx = 1;
-        SVECTOR_000a4640.vz = 1;
+        vec1.vx = 1;
+        vec2.vz = 1;
     }
 
-    *res = SVECTOR_000a4640;
+    *res = vec2;
     if (dir2 == 2) {
-        *res = SVECTOR_000a4638;
+        *res = vec1;
     }
     if (dir2 == 3) {
-        res->vx = -SVECTOR_000a4640.vx;
-        res->vy = -SVECTOR_000a4640.vy;
-        res->vz = -SVECTOR_000a4640.vz;
+        res->vx = -vec2.vx;
+        res->vy = -vec2.vy;
+        res->vz = -vec2.vz;
     }
     if (dir2 == 4) {
-        res->vx = -SVECTOR_000a4638.vx;
-        res->vy = -SVECTOR_000a4638.vy;
-        res->vz = -SVECTOR_000a4638.vz;
+        res->vx = -vec1.vx;
+        res->vy = -vec1.vy;
+        res->vz = -vec1.vz;
     }
 }
+#undef vec1
+#undef vec2
 
 void SetPlayerRotation(int cubeSide, int rotation, Player* player) {
     initPlayerRightVec.vz = 0;

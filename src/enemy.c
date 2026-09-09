@@ -23,36 +23,11 @@ extern MATRIX perspMatrixes[];
 extern short* entityData;
 extern short numEntities;
 
-static int collI;
-static int enemyPlayerDistSq;
 static int numEnemies;
 static int enemiesProcessedOnce;
-static int enemyI;
-static int loopI;
-static int blockProgress;
-static int sumOfDeltas;
-static int DAT_000a4850;
 static SVECTOR tmpEnemyPos;
-static SVECTOR tmpEnemyScreenPos;
-static SVECTOR tmpEnemyPixelPos;
-static SVECTOR tmpEnemyPixelPos2;
-static SVECTOR SVECTOR_000a4874;
 static SVECTOR unusedEnemyRotationVec;
-static SVECTOR SVECTOR_000a4810;
-static SVECTOR SVECTOR_000a4818;
-static SVECTOR SVECTOR_000a4820;
-static SVECTOR SVECTOR_000a4828;
-static SVECTOR SVECTOR_000a4830;
-static SVECTOR SVECTOR_000a4838;
-static SVECTOR SVECTOR_000a47e8;
 static SVECTOR unusedEnemyVecs[4];
-static SVECTOR SVECTOR_000a48fc;
-static SVECTOR SVECTOR_000a48e4;
-static SVECTOR SVECTOR_000a48ec;
-static SVECTOR SVECTOR_000a48f4;
-static MATRIX rotationMatrix;
-static MATRIX MATRIX_000a48a4;
-static MATRIX MATRIX_000a48c4;
 
 void InitEnemies(void) {
     int i, j;
@@ -118,173 +93,181 @@ void InitEnemies(void) {
     }
 }
 
+static int UpdateEnemies_i;
+#define i UpdateEnemies_i
+static int UpdateEnemies_blockProgress;
+#define blockProgress UpdateEnemies_blockProgress
+static int UpdateEnemies_sumOfDeltas;
+#define sumOfDeltas UpdateEnemies_sumOfDeltas
+static SVECTOR UpdateEnemies_sfxDir;
+#define sfxDir UpdateEnemies_sfxDir
 void UpdateEnemies(SVECTOR playerPos) {
     int diff;
 
-    for (loopI = 0; loopI < numEnemies; loopI++) {
-        blockProgress = EnemyGetBlockProgress(&enemies[loopI].pos, &enemies[loopI]);
+    for (i = 0; i < numEnemies; i++) {
+        blockProgress = EnemyGetBlockProgress(&enemies[i].pos, &enemies[i]);
 
-        diff = enemies[loopI].pos.vx - enemies[loopI].initPos.vx +
-               enemies[loopI].pos.vy - enemies[loopI].initPos.vy +
-               enemies[loopI].pos.vz - enemies[loopI].initPos.vz;
+        diff = enemies[i].pos.vx - enemies[i].initPos.vx +
+               enemies[i].pos.vy - enemies[i].initPos.vy +
+               enemies[i].pos.vz - enemies[i].initPos.vz;
         if (diff < 0) {
             diff = -diff;
         }
         sumOfDeltas = diff;
 
-        if (enemies[loopI].enemyType == OBJ_SLOW_STAR) {
+        if (enemies[i].enemyType == OBJ_SLOW_STAR) {
             if (blockProgress < 256 && blockProgress + 16 >= 256) {
-                if (EnemyCanTurnRight(&enemies[loopI])) {
-                    EnemyTurnRight(&enemies[loopI]);
-                } else if (EnemyCanTurnLeft(&enemies[loopI])) {
-                    EnemyTurnLeft(&enemies[loopI]);
-                } else if (!EnemyCanMoveForward(&enemies[loopI])) {
-                    EnemyTurnAround(&enemies[loopI]);
+                if (EnemyCanTurnRight(&enemies[i])) {
+                    EnemyTurnRight(&enemies[i]);
+                } else if (EnemyCanTurnLeft(&enemies[i])) {
+                    EnemyTurnLeft(&enemies[i]);
+                } else if (!EnemyCanMoveForward(&enemies[i])) {
+                    EnemyTurnAround(&enemies[i]);
                 }
             }
-            enemies[loopI].pos.vx += enemies[loopI].dir.vx * 16;
-            enemies[loopI].pos.vy += enemies[loopI].dir.vy * 16;
-            enemies[loopI].pos.vz += enemies[loopI].dir.vz * 16;
+            enemies[i].pos.vx += enemies[i].dir.vx * 16;
+            enemies[i].pos.vy += enemies[i].dir.vy * 16;
+            enemies[i].pos.vz += enemies[i].dir.vz * 16;
         }
-        if (enemies[loopI].enemyType == OBJ_TIRE && enemies[loopI].state == 0) {
-            if (!(EnemyCanMoveForward(&enemies[loopI]) || blockProgress >= 256 || blockProgress + 15 < 256)) {
-                if (EnemyCanTurnLeft(&enemies[loopI])) {
-                    enemies[loopI].state = 2;
-                    enemies[loopI].timer = 0;
-                } else if (EnemyCanTurnRight(&enemies[loopI])) {
-                    enemies[loopI].state = 1;
-                    enemies[loopI].timer = 0;
+        if (enemies[i].enemyType == OBJ_TIRE && enemies[i].state == 0) {
+            if (!(EnemyCanMoveForward(&enemies[i]) || blockProgress >= 256 || blockProgress + 15 < 256)) {
+                if (EnemyCanTurnLeft(&enemies[i])) {
+                    enemies[i].state = 2;
+                    enemies[i].timer = 0;
+                } else if (EnemyCanTurnRight(&enemies[i])) {
+                    enemies[i].state = 1;
+                    enemies[i].timer = 0;
                 } else {
-                    enemies[loopI].state = 3;
-                    enemies[loopI].timer = 0;
+                    enemies[i].state = 3;
+                    enemies[i].timer = 0;
                 }
             }
-            if (enemies[loopI].state == 0) {
-                enemies[loopI].pos.vx += enemies[loopI].dir.vx * 15;
-                enemies[loopI].pos.vy += enemies[loopI].dir.vy * 15;
-                enemies[loopI].pos.vz += enemies[loopI].dir.vz * 15;
+            if (enemies[i].state == 0) {
+                enemies[i].pos.vx += enemies[i].dir.vx * 15;
+                enemies[i].pos.vy += enemies[i].dir.vy * 15;
+                enemies[i].pos.vz += enemies[i].dir.vz * 15;
             }
         }
-        if (enemies[loopI].enemyType == OBJ_FAST_STAR) {
-            enemies[loopI].pos.vx = enemies[loopI].initPos.vx + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vx / 4096;
-            enemies[loopI].pos.vy = enemies[loopI].initPos.vy + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vy / 4096;
-            enemies[loopI].pos.vz = enemies[loopI].initPos.vz + (rsin(enemies[loopI].timer) * 600) * enemies[loopI].dir.vz / 4096;
+        if (enemies[i].enemyType == OBJ_FAST_STAR) {
+            enemies[i].pos.vx = enemies[i].initPos.vx + (rsin(enemies[i].timer) * 600) * enemies[i].dir.vx / 4096;
+            enemies[i].pos.vy = enemies[i].initPos.vy + (rsin(enemies[i].timer) * 600) * enemies[i].dir.vy / 4096;
+            enemies[i].pos.vz = enemies[i].initPos.vz + (rsin(enemies[i].timer) * 600) * enemies[i].dir.vz / 4096;
 
-            enemies[loopI].timer = (enemies[loopI].timer + 64) % 4096;
+            enemies[i].timer = (enemies[i].timer + 64) % 4096;
 
-            SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
-            SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
-            SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
+            sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
+            sfxDir.vy = enemies[i].pos.vy - playerPos.vy;
+            sfxDir.vz = enemies[i].pos.vz - playerPos.vz;
 
-            if (enemies[loopI].timer == 1024 || enemies[loopI].timer == 3072) {
-                SndPlaySfx(SFX_FAST_MOVING_STAR, 666 + loopI, &SVECTOR_000a47e8, 2000);
+            if (enemies[i].timer == 1024 || enemies[i].timer == 3072) {
+                SndPlaySfx(SFX_FAST_MOVING_STAR, 666 + i, &sfxDir, 2000);
             } else {
-                SndUpdateVolumeBasedOnDirVec(666 + loopI, &SVECTOR_000a47e8);
+                SndUpdateVolumeBasedOnDirVec(666 + i, &sfxDir);
             }
         }
-        if (enemies[loopI].enemyType == OBJ_CAPTIVATOR) {
-            enemies[loopI].timer += 28;
-            if (enemies[loopI].timer >= 2048) {
-                SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
-                SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
-                SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
-                SndPlaySfx(SFX_CAPTIVATOR, 0, &SVECTOR_000a47e8, 7000);
+        if (enemies[i].enemyType == OBJ_CAPTIVATOR) {
+            enemies[i].timer += 28;
+            if (enemies[i].timer >= 2048) {
+                sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
+                sfxDir.vy = enemies[i].pos.vy - playerPos.vy;
+                sfxDir.vz = enemies[i].pos.vz - playerPos.vz;
+                SndPlaySfx(SFX_CAPTIVATOR, 0, &sfxDir, 7000);
             }
-            enemies[loopI].timer %= 2048;
-            enemies[loopI].pos.vx = enemies[loopI].initPos.vx + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vx) / 4096;
-            enemies[loopI].pos.vy = enemies[loopI].initPos.vy + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vy) / 4096;
-            enemies[loopI].pos.vz = enemies[loopI].initPos.vz + (rsin(enemies[loopI].timer % 2048) * 400 * enemies[loopI].normalVec.vz) / 4096;
+            enemies[i].timer %= 2048;
+            enemies[i].pos.vx = enemies[i].initPos.vx + (rsin(enemies[i].timer % 2048) * 400 * enemies[i].normalVec.vx) / 4096;
+            enemies[i].pos.vy = enemies[i].initPos.vy + (rsin(enemies[i].timer % 2048) * 400 * enemies[i].normalVec.vy) / 4096;
+            enemies[i].pos.vz = enemies[i].initPos.vz + (rsin(enemies[i].timer % 2048) * 400 * enemies[i].normalVec.vz) / 4096;
         }
-        if (enemies[loopI].enemyType == OBJ_CAPTURE_POD) {
-            if ((sumOfDeltas > 512 && enemies[loopI].counter == -1) || !enemiesProcessedOnce) {
-                enemies[loopI].counter = 0;
-                enemies[loopI].initPos = enemies[loopI].pos;
-                enemies[loopI].timer = 0;
-                if (enemies[loopI].dir.vx != 0) {
-                    enemies[loopI].initPos.vx = (enemies[loopI].pos.vx + 128) & 0xff00;
+        if (enemies[i].enemyType == OBJ_CAPTURE_POD) {
+            if ((sumOfDeltas > 512 && enemies[i].counter == -1) || !enemiesProcessedOnce) {
+                enemies[i].counter = 0;
+                enemies[i].initPos = enemies[i].pos;
+                enemies[i].timer = 0;
+                if (enemies[i].dir.vx != 0) {
+                    enemies[i].initPos.vx = (enemies[i].pos.vx + 128) & 0xff00;
                 }
-                if (enemies[loopI].dir.vy != 0) {
-                    enemies[loopI].initPos.vy = (enemies[loopI].pos.vy + 128) & 0xff00;
+                if (enemies[i].dir.vy != 0) {
+                    enemies[i].initPos.vy = (enemies[i].pos.vy + 128) & 0xff00;
                 }
-                if (enemies[loopI].dir.vz != 0) {
-                    enemies[loopI].initPos.vz = (enemies[loopI].pos.vz + 128) & 0xff00;
+                if (enemies[i].dir.vz != 0) {
+                    enemies[i].initPos.vz = (enemies[i].pos.vz + 128) & 0xff00;
                 }
-                while (enemies[loopI].counter == 0) {
+                while (enemies[i].counter == 0) {
                     switch (Rand(4)) {
                         case 0:
-                            if (EnemyCanTurnRight(&enemies[loopI])) {
-                                EnemyTurnRight(&enemies[loopI]);
-                                enemies[loopI].counter = 1;
+                            if (EnemyCanTurnRight(&enemies[i])) {
+                                EnemyTurnRight(&enemies[i]);
+                                enemies[i].counter = 1;
                             }
                             break;
                         case 1:
-                            if (EnemyCanTurnLeft(&enemies[loopI])) {
-                                EnemyTurnLeft(&enemies[loopI]);
-                                enemies[loopI].counter = 1;
+                            if (EnemyCanTurnLeft(&enemies[i])) {
+                                EnemyTurnLeft(&enemies[i]);
+                                enemies[i].counter = 1;
                             }
                             break;
                         case 2:
-                            if (EnemyCanMoveForward(&enemies[loopI])) {
-                                enemies[loopI].counter = 1;
+                            if (EnemyCanMoveForward(&enemies[i])) {
+                                enemies[i].counter = 1;
                             }
                             break;
                         case 3:
-                            if (EnemyCanMoveBackward(&enemies[loopI])) {
-                                EnemyTurnAround(&enemies[loopI]);
-                                enemies[loopI].counter = 1;
+                            if (EnemyCanMoveBackward(&enemies[i])) {
+                                EnemyTurnAround(&enemies[i]);
+                                enemies[i].counter = 1;
                             }
                             break;
                     }
                 }
             }
-            if (enemies[loopI].counter != -1) {
-                enemies[loopI].timer += (enemies[loopI].counter * enemies[loopI].counter / 8) % 4096;
-                enemies[loopI].pos.vx = enemies[loopI].initPos.vx + enemies[loopI].dir.vx * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
-                enemies[loopI].pos.vy = enemies[loopI].initPos.vy + enemies[loopI].dir.vy * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
-                enemies[loopI].pos.vz = enemies[loopI].initPos.vz + enemies[loopI].dir.vz * (rcos(enemies[loopI].timer) * -65 / 4096 + 65);
-                enemies[loopI].counter++;
-                if (enemies[loopI].counter > 64) {
-                    enemies[loopI].counter = -1;
-                    enemies[loopI].pos = enemies[loopI].initPos;
-                    SVECTOR_000a47e8.vx = enemies[loopI].pos.vx - playerPos.vx;
-                    SVECTOR_000a47e8.vy = enemies[loopI].pos.vy - playerPos.vy;
-                    SVECTOR_000a47e8.vz = enemies[loopI].pos.vz - playerPos.vz;
-                    SndPlaySfx(SFX_CAPTURE_POD, 0, &SVECTOR_000a47e8, 7000);
+            if (enemies[i].counter != -1) {
+                enemies[i].timer += (enemies[i].counter * enemies[i].counter / 8) % 4096;
+                enemies[i].pos.vx = enemies[i].initPos.vx + enemies[i].dir.vx * (rcos(enemies[i].timer) * -65 / 4096 + 65);
+                enemies[i].pos.vy = enemies[i].initPos.vy + enemies[i].dir.vy * (rcos(enemies[i].timer) * -65 / 4096 + 65);
+                enemies[i].pos.vz = enemies[i].initPos.vz + enemies[i].dir.vz * (rcos(enemies[i].timer) * -65 / 4096 + 65);
+                enemies[i].counter++;
+                if (enemies[i].counter > 64) {
+                    enemies[i].counter = -1;
+                    enemies[i].pos = enemies[i].initPos;
+                    sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
+                    sfxDir.vy = enemies[i].pos.vy - playerPos.vy;
+                    sfxDir.vz = enemies[i].pos.vz - playerPos.vz;
+                    SndPlaySfx(SFX_CAPTURE_POD, 0, &sfxDir, 7000);
                 }
             }
-            if (enemies[loopI].counter == -1 && enemiesProcessedOnce) {
-                enemies[loopI].pos.vx += enemies[loopI].dir.vx * 64;
-                enemies[loopI].pos.vy += enemies[loopI].dir.vy * 64;
-                enemies[loopI].pos.vz += enemies[loopI].dir.vz * 64;
+            if (enemies[i].counter == -1 && enemiesProcessedOnce) {
+                enemies[i].pos.vx += enemies[i].dir.vx * 64;
+                enemies[i].pos.vy += enemies[i].dir.vy * 64;
+                enemies[i].pos.vz += enemies[i].dir.vz * 64;
             }
         }
-        if (enemies[loopI].state) {
-            switch (enemies[loopI].state) {
+        if (enemies[i].state) {
+            switch (enemies[i].state) {
                 case 1:
-                    if (enemies[loopI].timer++ < 64) {
-                        enemies[loopI].rotationVec.vz -= 16;
+                    if (enemies[i].timer++ < 64) {
+                        enemies[i].rotationVec.vz -= 16;
                     } else {
-                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                        EnemyTurnRight(&enemies[loopI]);
-                        enemies[loopI].state = 0;
+                        enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnRight(&enemies[i]);
+                        enemies[i].state = 0;
                     }
                     break;
                 case 2:
-                    if (enemies[loopI].timer++ < 64) {
-                        enemies[loopI].rotationVec.vz += 16;
+                    if (enemies[i].timer++ < 64) {
+                        enemies[i].rotationVec.vz += 16;
                     } else {
-                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                        EnemyTurnLeft(&enemies[loopI]);
-                        enemies[loopI].state = 0;
+                        enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnLeft(&enemies[i]);
+                        enemies[i].state = 0;
                     }
                     break;
                 case 3:
-                    if (enemies[loopI].timer++ < 64) {
-                        enemies[loopI].rotationVec.vz += 32;
+                    if (enemies[i].timer++ < 64) {
+                        enemies[i].rotationVec.vz += 32;
                     } else {
-                        enemies[loopI].rotationVec.vz = (enemies[loopI].rotationVec.vz + 256) & 0xfc00;
-                        EnemyTurnAround(&enemies[loopI]);
-                        enemies[loopI].state = 0;
+                        enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
+                        EnemyTurnAround(&enemies[i]);
+                        enemies[i].state = 0;
                     }
                     break;
             }
@@ -292,28 +275,36 @@ void UpdateEnemies(SVECTOR playerPos) {
     }
     enemiesProcessedOnce = 1;
 }
+#undef i
+#undef blockProgress
+#undef sumOfDeltas
+#undef sfxDir
 
+static SVECTOR EnemyCanMoveForward_groundPos;
+#define groundPos EnemyCanMoveForward_groundPos
+static SVECTOR EnemyCanMoveForward_fwdPos;
+#define fwdPos EnemyCanMoveForward_fwdPos
 int EnemyCanMoveForward(Enemy* e) {
     int blockType;
     int rotationIndex;
     int res;
 
-    SVECTOR_000a4810.vx = e->pos.vx - e->normalVec.vx * 400 + e->dir.vx * 0x200;
-    SVECTOR_000a4810.vy = e->pos.vy - e->normalVec.vy * 400 + e->dir.vy * 0x200;
-    SVECTOR_000a4810.vz = e->pos.vz - e->normalVec.vz * 400 + e->dir.vz * 0x200;
+    groundPos.vx = e->pos.vx - e->normalVec.vx * 400 + e->dir.vx * 0x200;
+    groundPos.vy = e->pos.vy - e->normalVec.vy * 400 + e->dir.vy * 0x200;
+    groundPos.vz = e->pos.vz - e->normalVec.vz * 400 + e->dir.vz * 0x200;
 
-    SVECTOR_000a4818.vx = e->pos.vx + e->dir.vx * 0x200;
-    SVECTOR_000a4818.vy = e->pos.vy + e->dir.vy * 0x200;
-    SVECTOR_000a4818.vz = e->pos.vz + e->dir.vz * 0x200;
+    fwdPos.vx = e->pos.vx + e->dir.vx * 0x200;
+    fwdPos.vy = e->pos.vy + e->dir.vy * 0x200;
+    fwdPos.vz = e->pos.vz + e->dir.vz * 0x200;
 
-    blockType = GetBlockAt(&SVECTOR_000a4810);
+    blockType = GetBlockAt(&groundPos);
     rotationIndex = GetRotationIndexFromVector(e->normalVec);
 
     if (EnemyIsBlockWalkable(blockType, rotationIndex) != 1) {
         return 0;
     }
 
-    res = GetBlockAt(&SVECTOR_000a4818);
+    res = GetBlockAt(&fwdPos);
 
     if (res == -1) {
         res = 1;
@@ -322,23 +313,29 @@ int EnemyCanMoveForward(Enemy* e) {
     }
     return res;
 }
+#undef groundPos
+#undef fwdPos
 
+static SVECTOR EnemyCanMoveBackward_groundPos;
+#define groundPos EnemyCanMoveBackward_groundPos
+static SVECTOR EnemyCanMoveBackward_backPos;
+#define backPos EnemyCanMoveBackward_backPos
 int EnemyCanMoveBackward(Enemy* e) {
     int res;
 
-    SVECTOR_000a4820.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
-    SVECTOR_000a4820.vy = e->pos.vy - e->normalVec.vy * 400 - e->dir.vy * 0x200;
-    SVECTOR_000a4820.vz = e->pos.vz - e->normalVec.vz * 400 - e->dir.vz * 0x200;
+    groundPos.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
+    groundPos.vy = e->pos.vy - e->normalVec.vy * 400 - e->dir.vy * 0x200;
+    groundPos.vz = e->pos.vz - e->normalVec.vz * 400 - e->dir.vz * 0x200;
 
-    SVECTOR_000a4828.vx = e->pos.vx - e->dir.vx * 0x200;
-    SVECTOR_000a4828.vy = e->pos.vy - e->dir.vy * 0x200;
-    SVECTOR_000a4828.vz = e->pos.vz - e->dir.vz * 0x200;
+    backPos.vx = e->pos.vx - e->dir.vx * 0x200;
+    backPos.vy = e->pos.vy - e->dir.vy * 0x200;
+    backPos.vz = e->pos.vz - e->dir.vz * 0x200;
 
-    if (EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4820), GetRotationIndexFromVector(e->normalVec)) != 1) {
+    if (EnemyIsBlockWalkable(GetBlockAt(&groundPos), GetRotationIndexFromVector(e->normalVec)) != 1) {
         return 0;
     }
 
-    res = GetBlockAt(&SVECTOR_000a4828);
+    res = GetBlockAt(&backPos);
     if (res == -1) {
         res = 1;
     } else {
@@ -346,6 +343,8 @@ int EnemyCanMoveBackward(Enemy* e) {
     }
     return res;
 }
+#undef groundPos
+#undef backPos
 
 void EnemyTurnAround(Enemy* enemy) {
     enemy->dir.vx = -enemy->dir.vx;
@@ -356,13 +355,16 @@ void EnemyTurnAround(Enemy* enemy) {
     enemy->rightVec.vz = -enemy->rightVec.vz;
 }
 
+static SVECTOR EnemyCanTurnRight_turnPos;
+#define turnPos EnemyCanTurnRight_turnPos
 int EnemyCanTurnRight(Enemy* enemy) {
-    SVECTOR_000a4830.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) + (enemy->rightVec.vx * 0x200);
-    SVECTOR_000a4830.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) + (enemy->rightVec.vy * 0x200);
-    SVECTOR_000a4830.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) + (enemy->rightVec.vz * 0x200);
+    turnPos.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) + (enemy->rightVec.vx * 0x200);
+    turnPos.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) + (enemy->rightVec.vy * 0x200);
+    turnPos.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) + (enemy->rightVec.vz * 0x200);
 
-    return EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4830), GetRotationIndexFromVector(enemy->normalVec)) == 1;
+    return EnemyIsBlockWalkable(GetBlockAt(&turnPos), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
+#undef turnPos
 
 void EnemyTurnRight(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
@@ -372,13 +374,16 @@ void EnemyTurnRight(Enemy* enemy) {
     enemy->rightVec.vz = -tmpEnemyPos.vz;
 }
 
+static SVECTOR EnemyCanTurnLeft_turnPos;
+#define turnPos EnemyCanTurnLeft_turnPos
 int EnemyCanTurnLeft(Enemy* enemy) {
-    SVECTOR_000a4838.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) - (enemy->rightVec.vx * 0x200);
-    SVECTOR_000a4838.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) - (enemy->rightVec.vy * 0x200);
-    SVECTOR_000a4838.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) - (enemy->rightVec.vz * 0x200);
+    turnPos.vx = enemy->pos.vx + (enemy->normalVec.vx * -400) - (enemy->rightVec.vx * 0x200);
+    turnPos.vy = enemy->pos.vy + (enemy->normalVec.vy * -400) - (enemy->rightVec.vy * 0x200);
+    turnPos.vz = enemy->pos.vz + (enemy->normalVec.vz * -400) - (enemy->rightVec.vz * 0x200);
 
-    return EnemyIsBlockWalkable(GetBlockAt(&SVECTOR_000a4838), GetRotationIndexFromVector(enemy->normalVec)) == 1;
+    return EnemyIsBlockWalkable(GetBlockAt(&turnPos), GetRotationIndexFromVector(enemy->normalVec)) == 1;
 }
+#undef turnPos
 
 void EnemyTurnLeft(Enemy* enemy) {
     tmpEnemyPos = enemy->dir;
@@ -388,338 +393,380 @@ void EnemyTurnLeft(Enemy* enemy) {
     enemy->rightVec = tmpEnemyPos;
 }
 
+static int IsCollidingWithEnemy_i;
+#define i IsCollidingWithEnemy_i
+static int IsCollidingWithEnemy_distSq;
+#define distSq IsCollidingWithEnemy_distSq
 int IsCollidingWithEnemy(SVECTOR pos) {
     int dx, dy, dz;
 
-    for (collI = 0; collI < numEnemies; collI++) {
-        dx = pos.vx - enemies[collI].pos.vx;
-        dy = pos.vy - enemies[collI].pos.vy;
-        dz = pos.vz - enemies[collI].pos.vz;
+    for (i = 0; i < numEnemies; i++) {
+        dx = pos.vx - enemies[i].pos.vx;
+        dy = pos.vy - enemies[i].pos.vy;
+        dz = pos.vz - enemies[i].pos.vz;
 
-        enemyPlayerDistSq = dx * dx + dy * dy + dz * dz;
+        distSq = dx * dx + dy * dy + dz * dz;
 
-        if (enemies[collI].enemyType == OBJ_CAPTURE_POD) {
-            if (enemyPlayerDistSq < 16200) {
+        if (enemies[i].enemyType == OBJ_CAPTURE_POD) {
+            if (distSq < 16200) {
                 return 1;
             }
-        } else if (enemyPlayerDistSq < 45000) {
+        } else if (distSq < 45000) {
             return 1;
         }
     }
 
     return 0;
 }
+#undef i
+#undef distSq
 
 #ifndef SKIP_UNUSED_CODE
 void Noop4() {
 }
 #endif
 
+static int RenderEnemies_i;
+#define i RenderEnemies_i
+static int RenderEnemies_scale;
+#define scale RenderEnemies_scale
+static SVECTOR RenderEnemies_screenPos;
+#define screenPos RenderEnemies_screenPos
+static SVECTOR RenderEnemies_pixelPos;
+#define pixelPos RenderEnemies_pixelPos
+static SVECTOR RenderEnemies_pixelPos2;
+#define pixelPos2 RenderEnemies_pixelPos2
+static SVECTOR RenderEnemies_rotVec;
+#define rotVec RenderEnemies_rotVec
+static MATRIX RenderEnemies_rotMatrix;
+#define rotMatrix RenderEnemies_rotMatrix
+static MATRIX RenderEnemies_tmpMatrix;
+#define tmpMatrix RenderEnemies_tmpMatrix
+static MATRIX RenderEnemies_dirMatrix;
+#define dirMatrix RenderEnemies_dirMatrix
 void RenderEnemies(void) {
-    for (enemyI = 0; enemyI < numEnemies; enemyI++) {
-        if (enemies[enemyI].enemyType == OBJ_SLOW_STAR) {
-            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
-            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
-            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
+    for (i = 0; i < numEnemies; i++) {
+        if (enemies[i].enemyType == OBJ_SLOW_STAR) {
+            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + 14) % 4096;
+            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - 120) % 4096;
+            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 52) % 4096;
 
-            RotMatrix(&enemies[enemyI].rotationVec, &rotationMatrix);
-            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+            RotMatrix(&enemies[i].rotationVec, &rotMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
 
-            tmpEnemyPos = enemies[enemyI].pos;
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            tmpEnemyPos = enemies[i].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            rotMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos.vx = (enemies[i].pos.vx + 256 + enemies[i].dir.vx * 150 - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos.vy = (enemies[i].pos.vy + 256 + enemies[i].dir.vy * 150 - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos.vz = (enemies[i].pos.vz + 256 + enemies[i].dir.vz * 150 - enemies[i].normalVec.vz * 300) >> 9;
 
-            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos2.vx = (enemies[i].pos.vx + 256 - (enemies[i].dir.vx * 150) - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos2.vy = (enemies[i].pos.vy + 256 - (enemies[i].dir.vy * 150) - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos2.vz = (enemies[i].pos.vz + 256 - (enemies[i].dir.vz * 150) - enemies[i].normalVec.vz * 300) >> 9;
 
-            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+            MatrixFromDirectionIndex(&dirMatrix, 0, GetRotationIndexFromVector(enemies[i].normalVec), -200, &tmpEnemyPos);
 
-            SVECTOR_000a4874.vx = 1024;
-            SVECTOR_000a4874.vz = 0;
-            SVECTOR_000a4874.vy = 0;
-            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
-            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+            rotVec.vx = 1024;
+            rotVec.vz = 0;
+            rotVec.vy = 0;
+            RotMatrix(&rotVec, &tmpMatrix);
+            MulMatrix0(&dirMatrix, &tmpMatrix, &dirMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 20, 0, 4096, 4096, 4096, 0,
-                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                &MATRIX_000a48c4, 128, 0);
+            CreateEnemyDispList(&rotMatrix, rotMatrix.t[2], 20, 0, 4096, 4096, 4096, 0,
+                                pixelPos.vx, pixelPos.vy, pixelPos.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                pixelPos2.vx, pixelPos2.vy, pixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                &dirMatrix, 128, 0);
         }
 
-        if (enemies[enemyI].enemyType == OBJ_CAPTURE_POD) {
-            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 14) % 4096;
-            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy - 120) % 4096;
-            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz + 52) % 4096;
+        if (enemies[i].enemyType == OBJ_CAPTURE_POD) {
+            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + 14) % 4096;
+            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - 120) % 4096;
+            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 52) % 4096;
 
-            RotMatrix(&enemies[enemyI].rotationVec, &rotationMatrix);
-            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+            RotMatrix(&enemies[i].rotationVec, &rotMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
 
-            tmpEnemyPos = enemies[enemyI].pos;
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            tmpEnemyPos = enemies[i].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            rotMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos.vx = (enemies[i].pos.vx + 256 + enemies[i].dir.vx * 150 - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos.vy = (enemies[i].pos.vy + 256 + enemies[i].dir.vy * 150 - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos.vz = (enemies[i].pos.vz + 256 + enemies[i].dir.vz * 150 - enemies[i].normalVec.vz * 300) >> 9;
 
-            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos2.vx = (enemies[i].pos.vx + 256 - (enemies[i].dir.vx * 150) - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos2.vy = (enemies[i].pos.vy + 256 - (enemies[i].dir.vy * 150) - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos2.vz = (enemies[i].pos.vz + 256 - (enemies[i].dir.vz * 150) - enemies[i].normalVec.vz * 300) >> 9;
 
-            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+            MatrixFromDirectionIndex(&dirMatrix, 0, GetRotationIndexFromVector(enemies[i].normalVec), -200, &tmpEnemyPos);
 
-            SVECTOR_000a4874.vx = 1024;
-            SVECTOR_000a4874.vz = 0;
-            SVECTOR_000a4874.vy = 0;
-            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
-            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+            rotVec.vx = 1024;
+            rotVec.vz = 0;
+            rotVec.vy = 0;
+            RotMatrix(&rotVec, &tmpMatrix);
+            MulMatrix0(&dirMatrix, &tmpMatrix, &dirMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 23, 0, 4096, 4096, 4096, 0,
-                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                &MATRIX_000a48c4, 128, 0);
+            CreateEnemyDispList(&rotMatrix, rotMatrix.t[2], 23, 0, 4096, 4096, 4096, 0,
+                                pixelPos.vx, pixelPos.vy, pixelPos.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                pixelPos2.vx, pixelPos2.vy, pixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                &dirMatrix, 128, 0);
         }
 
-        if (enemies[enemyI].enemyType == OBJ_CAPTIVATOR) {
-            enemies[enemyI].rotationVec.vx = 0;
-            enemies[enemyI].rotationVec.vy = 0;
-            enemies[enemyI].rotationVec.vz = (enemies[enemyI].rotationVec.vz - (rcos(enemies[enemyI].timer % 2048) * 400) / 4096) & 0xfff;
+        if (enemies[i].enemyType == OBJ_CAPTIVATOR) {
+            enemies[i].rotationVec.vx = 0;
+            enemies[i].rotationVec.vy = 0;
+            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz - (rcos(enemies[i].timer % 2048) * 400) / 4096) & 0xfff;
 
-            RotMatrixZYX(&enemies[enemyI].rotationVec, &rotationMatrix);
-            MulMatrix0(&rotationMatrix, &enemies[enemyI].matrix, &rotationMatrix);
-            MulMatrix0(&enemies[enemyI].matrix2, &rotationMatrix, &rotationMatrix);
-            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+            RotMatrixZYX(&enemies[i].rotationVec, &rotMatrix);
+            MulMatrix0(&rotMatrix, &enemies[i].matrix, &rotMatrix);
+            MulMatrix0(&enemies[i].matrix2, &rotMatrix, &rotMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
 
-            tmpEnemyPos = enemies[enemyI].pos;
-            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[enemyI].normalVec.vx * 150);
-            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[enemyI].normalVec.vy * 150);
-            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[enemyI].normalVec.vz * 150);
+            tmpEnemyPos = enemies[i].pos;
+            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[i].normalVec.vx * 150);
+            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[i].normalVec.vy * 150);
+            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[i].normalVec.vz * 150);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            rotMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            tmpEnemyPixelPos.vx = tmpEnemyPixelPos2.vx = (enemies[enemyI].initPos.vx + 256 - (enemies[enemyI].normalVec.vx * 300)) >> 9;
-            tmpEnemyPixelPos.vy = tmpEnemyPixelPos2.vy = (enemies[enemyI].initPos.vy + 256 - (enemies[enemyI].normalVec.vy * 300)) >> 9;
-            tmpEnemyPixelPos.vz = tmpEnemyPixelPos2.vz = (enemies[enemyI].initPos.vz + 256 - (enemies[enemyI].normalVec.vz * 300)) >> 9;
+            pixelPos.vx = pixelPos2.vx = (enemies[i].initPos.vx + 256 - (enemies[i].normalVec.vx * 300)) >> 9;
+            pixelPos.vy = pixelPos2.vy = (enemies[i].initPos.vy + 256 - (enemies[i].normalVec.vy * 300)) >> 9;
+            pixelPos.vz = pixelPos2.vz = (enemies[i].initPos.vz + 256 - (enemies[i].normalVec.vz * 300)) >> 9;
 
-            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), 0, &tmpEnemyPos);
+            MatrixFromDirectionIndex(&dirMatrix, 0, GetRotationIndexFromVector(enemies[i].normalVec), 0, &tmpEnemyPos);
 
-            SVECTOR_000a4874.vx = 1024;
-            SVECTOR_000a4874.vz = 0;
-            SVECTOR_000a4874.vy = 0;
-            RotMatrixZYX(&SVECTOR_000a4874, &MATRIX_000a48a4);
-            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+            rotVec.vx = 1024;
+            rotVec.vz = 0;
+            rotVec.vy = 0;
+            RotMatrixZYX(&rotVec, &tmpMatrix);
+            MulMatrix0(&dirMatrix, &tmpMatrix, &dirMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-            tmpEnemyPos = enemies[enemyI].initPos;
-            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[enemyI].normalVec.vx * 170);
-            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[enemyI].normalVec.vy * 170);
-            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[enemyI].normalVec.vz * 170);
+            tmpEnemyPos = enemies[i].initPos;
+            tmpEnemyPos.vx = tmpEnemyPos.vx - (enemies[i].normalVec.vx * 170);
+            tmpEnemyPos.vy = tmpEnemyPos.vy - (enemies[i].normalVec.vy * 170);
+            tmpEnemyPos.vz = tmpEnemyPos.vz - (enemies[i].normalVec.vz * 170);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
-            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
+            dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            DAT_000a4850 = 128 - (rsin(enemies[enemyI].timer % 2048) * 48) / 4096;
-            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 24, 0, 4096, 4096, 4096, 0,
-                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                &MATRIX_000a48c4, DAT_000a4850, 0);
+            scale = 128 - (rsin(enemies[i].timer % 2048) * 48) / 4096;
+            CreateEnemyDispList(&rotMatrix, rotMatrix.t[2], 24, 0, 4096, 4096, 4096, 0,
+                                pixelPos.vx, pixelPos.vy, pixelPos.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                pixelPos2.vx, pixelPos2.vy, pixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                &dirMatrix, scale, 0);
         }
 
-        if (enemies[enemyI].enemyType == OBJ_TIRE) {
-            if (enemies[enemyI].state == 0) {
-                enemies[enemyI].rotationVec.vx -= 64;
+        if (enemies[i].enemyType == OBJ_TIRE) {
+            if (enemies[i].state == 0) {
+                enemies[i].rotationVec.vx -= 64;
             }
-            enemies[enemyI].rotationVec.vx %= 4096;
-            enemies[enemyI].rotationVec.vy %= 4096;
-            enemies[enemyI].rotationVec.vz %= 4096;
+            enemies[i].rotationVec.vx %= 4096;
+            enemies[i].rotationVec.vy %= 4096;
+            enemies[i].rotationVec.vz %= 4096;
 
-            RotMatrixZYX(&enemies[enemyI].rotationVec, &rotationMatrix);
-            MulMatrix0(&rotationMatrix, &enemies[enemyI].matrix, &rotationMatrix);
-            MulMatrix0(&enemies[enemyI].matrix2, &rotationMatrix, &rotationMatrix);
-            MulMatrix0(&perspMatrixes[cameraIndex], &rotationMatrix, &rotationMatrix);
+            RotMatrixZYX(&enemies[i].rotationVec, &rotMatrix);
+            MulMatrix0(&rotMatrix, &enemies[i].matrix, &rotMatrix);
+            MulMatrix0(&enemies[i].matrix2, &rotMatrix, &rotMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
 
-            tmpEnemyPos = enemies[enemyI].pos;
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            tmpEnemyPos = enemies[i].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            rotMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos.vx = (enemies[i].pos.vx + 256 + enemies[i].dir.vx * 150 - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos.vy = (enemies[i].pos.vy + 256 + enemies[i].dir.vy * 150 - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos.vz = (enemies[i].pos.vz + 256 + enemies[i].dir.vz * 150 - enemies[i].normalVec.vz * 300) >> 9;
 
-            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos2.vx = (enemies[i].pos.vx + 256 - (enemies[i].dir.vx * 150) - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos2.vy = (enemies[i].pos.vy + 256 - (enemies[i].dir.vy * 150) - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos2.vz = (enemies[i].pos.vz + 256 - (enemies[i].dir.vz * 150) - enemies[i].normalVec.vz * 300) >> 9;
 
-            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+            MatrixFromDirectionIndex(&dirMatrix, 0, GetRotationIndexFromVector(enemies[i].normalVec), -200, &tmpEnemyPos);
 
-            SVECTOR_000a4874.vx = 1024;
-            SVECTOR_000a4874.vy = 0;
-            SVECTOR_000a4874.vz = enemies[enemyI].rotationVec.vz;
-            RotMatrixZYX(&SVECTOR_000a4874, &MATRIX_000a48a4);
-            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+            rotVec.vx = 1024;
+            rotVec.vy = 0;
+            rotVec.vz = enemies[i].rotationVec.vz;
+            RotMatrixZYX(&rotVec, &tmpMatrix);
+            MulMatrix0(&dirMatrix, &tmpMatrix, &dirMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
-            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
+            dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 21, 0, 4096, 4096, 4096, 0,
-                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                &MATRIX_000a48c4, 128, 1);
+            CreateEnemyDispList(&rotMatrix, rotMatrix.t[2], 21, 0, 4096, 4096, 4096, 0,
+                                pixelPos.vx, pixelPos.vy, pixelPos.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                pixelPos2.vx, pixelPos2.vy, pixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                &dirMatrix, 128, 1);
         }
 
-        if (enemies[enemyI].enemyType == OBJ_FAST_STAR) {
-            enemies[enemyI].rotationVec.vx = (enemies[enemyI].rotationVec.vx + 64) % 4096;
-            enemies[enemyI].rotationVec.vy = (enemies[enemyI].rotationVec.vy + 32) % 4096;
-            enemies[enemyI].rotationVec.vz %= 4096;
+        if (enemies[i].enemyType == OBJ_FAST_STAR) {
+            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + 64) % 4096;
+            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy + 32) % 4096;
+            enemies[i].rotationVec.vz %= 4096;
 
-            RotMatrix(&enemies[enemyI].rotationVec, &MATRIX_000a48a4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48a4, &rotationMatrix);
+            RotMatrix(&enemies[i].rotationVec, &tmpMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &tmpMatrix, &rotMatrix);
 
-            tmpEnemyPos = enemies[enemyI].pos;
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
+            tmpEnemyPos = enemies[i].pos;
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
 
-            rotationMatrix.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            rotationMatrix.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            rotationMatrix.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            rotMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            rotMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            rotMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            tmpEnemyPixelPos.vx = (enemies[enemyI].pos.vx + 256 + enemies[enemyI].dir.vx * 150 - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos.vy = (enemies[enemyI].pos.vy + 256 + enemies[enemyI].dir.vy * 150 - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos.vz = (enemies[enemyI].pos.vz + 256 + enemies[enemyI].dir.vz * 150 - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos.vx = (enemies[i].pos.vx + 256 + enemies[i].dir.vx * 150 - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos.vy = (enemies[i].pos.vy + 256 + enemies[i].dir.vy * 150 - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos.vz = (enemies[i].pos.vz + 256 + enemies[i].dir.vz * 150 - enemies[i].normalVec.vz * 300) >> 9;
 
-            tmpEnemyPixelPos2.vx = (enemies[enemyI].pos.vx + 256 - (enemies[enemyI].dir.vx * 150) - enemies[enemyI].normalVec.vx * 300) >> 9;
-            tmpEnemyPixelPos2.vy = (enemies[enemyI].pos.vy + 256 - (enemies[enemyI].dir.vy * 150) - enemies[enemyI].normalVec.vy * 300) >> 9;
-            tmpEnemyPixelPos2.vz = (enemies[enemyI].pos.vz + 256 - (enemies[enemyI].dir.vz * 150) - enemies[enemyI].normalVec.vz * 300) >> 9;
+            pixelPos2.vx = (enemies[i].pos.vx + 256 - (enemies[i].dir.vx * 150) - enemies[i].normalVec.vx * 300) >> 9;
+            pixelPos2.vy = (enemies[i].pos.vy + 256 - (enemies[i].dir.vy * 150) - enemies[i].normalVec.vy * 300) >> 9;
+            pixelPos2.vz = (enemies[i].pos.vz + 256 - (enemies[i].dir.vz * 150) - enemies[i].normalVec.vz * 300) >> 9;
 
-            MatrixFromDirectionIndex(&MATRIX_000a48c4, 0, GetRotationIndexFromVector(enemies[enemyI].normalVec), -200, &tmpEnemyPos);
+            MatrixFromDirectionIndex(&dirMatrix, 0, GetRotationIndexFromVector(enemies[i].normalVec), -200, &tmpEnemyPos);
 
-            SVECTOR_000a4874.vx = 1024;
-            SVECTOR_000a4874.vz = 0;
-            SVECTOR_000a4874.vy = 0;
-            RotMatrix(&SVECTOR_000a4874, &MATRIX_000a48a4);
-            MulMatrix0(&MATRIX_000a48c4, &MATRIX_000a48a4, &MATRIX_000a48c4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a48c4, &MATRIX_000a48c4);
+            rotVec.vx = 1024;
+            rotVec.vz = 0;
+            rotVec.vy = 0;
+            RotMatrix(&rotVec, &tmpMatrix);
+            MulMatrix0(&dirMatrix, &tmpMatrix, &dirMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &tmpEnemyScreenPos);
-            MATRIX_000a48c4.t[0] = tmpEnemyScreenPos.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a48c4.t[1] = tmpEnemyScreenPos.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a48c4.t[2] = tmpEnemyScreenPos.vz + perspMatrixes[cameraIndex].t[2];
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &tmpEnemyPos, &screenPos);
+            dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+            dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+            dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-            CreateEnemyDispList(&rotationMatrix, rotationMatrix.t[2], 22, 0, 4096, 4096, 4096, 0,
-                                tmpEnemyPixelPos.vx, tmpEnemyPixelPos.vy, tmpEnemyPixelPos.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                tmpEnemyPixelPos2.vx, tmpEnemyPixelPos2.vy, tmpEnemyPixelPos2.vz,
-                                GetRotationIndexFromVector(enemies[enemyI].normalVec),
-                                &MATRIX_000a48c4, 128, 0);
+            CreateEnemyDispList(&rotMatrix, rotMatrix.t[2], 22, 0, 4096, 4096, 4096, 0,
+                                pixelPos.vx, pixelPos.vy, pixelPos.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                pixelPos2.vx, pixelPos2.vy, pixelPos2.vz,
+                                GetRotationIndexFromVector(enemies[i].normalVec),
+                                &dirMatrix, 128, 0);
         }
     }
 }
+#undef i
+#undef scale
+#undef screenPos
+#undef pixelPos
+#undef pixelPos2
+#undef rotVec
+#undef rotMatrix
+#undef tmpMatrix
+#undef dirMatrix
 
+static SVECTOR InitEnemy_initRight;
+#define initRight InitEnemy_initRight
+static SVECTOR InitEnemy_initDir;
+#define initDir InitEnemy_initDir
+static SVECTOR InitEnemy_initNormal;
+#define initNormal InitEnemy_initNormal
 void InitEnemy(int side, int rotation, Enemy* enemy) {
-    SVECTOR_000a48f4.vx = SVECTOR_000a48f4.vy = SVECTOR_000a48f4.vz = 0;
-    SVECTOR_000a48ec.vx = SVECTOR_000a48ec.vy = SVECTOR_000a48ec.vz = 0;
-    SVECTOR_000a48e4.vx = SVECTOR_000a48e4.vy = SVECTOR_000a48e4.vz = 0;
+    initNormal.vx = initNormal.vy = initNormal.vz = 0;
+    initDir.vx = initDir.vy = initDir.vz = 0;
+    initRight.vx = initRight.vy = initRight.vz = 0;
 
     if (side == 5) {
-        SVECTOR_000a48f4.vz = 1;
-        SVECTOR_000a48ec.vy = 1;
-        SVECTOR_000a48e4.vx = 1;
+        initNormal.vz = 1;
+        initDir.vy = 1;
+        initRight.vx = 1;
     }
     if (side == 0) {
-        SVECTOR_000a48e4.vx = -1;
-        SVECTOR_000a48ec.vy = 1;
-        SVECTOR_000a48f4.vz = -1;
+        initRight.vx = -1;
+        initDir.vy = 1;
+        initNormal.vz = -1;
     }
     if (side == 4) {
-        SVECTOR_000a48ec.vy = 1;
-        SVECTOR_000a48e4.vz = 1;
-        SVECTOR_000a48f4.vx = -1;
+        initDir.vy = 1;
+        initRight.vz = 1;
+        initNormal.vx = -1;
     }
     if (side == 1) {
-        SVECTOR_000a48e4.vz = -1;
-        SVECTOR_000a48f4.vx = 1;
-        SVECTOR_000a48ec.vy = 1;
+        initRight.vz = -1;
+        initNormal.vx = 1;
+        initDir.vy = 1;
     }
     if (side == 2) {
-        SVECTOR_000a48e4.vx = 1;
-        SVECTOR_000a48ec.vz = -1;
-        SVECTOR_000a48f4.vy = 1;
+        initRight.vx = 1;
+        initDir.vz = -1;
+        initNormal.vy = 1;
     }
     if (side == 3) {
-        SVECTOR_000a48ec.vz = 1;
-        SVECTOR_000a48e4.vx = 1;
-        SVECTOR_000a48f4.vy = -1;
+        initDir.vz = 1;
+        initRight.vx = 1;
+        initNormal.vy = -1;
     }
 
-    enemy->rightVec = SVECTOR_000a48e4;
-    enemy->dir = SVECTOR_000a48ec;
-    enemy->normalVec = SVECTOR_000a48f4;
+    enemy->rightVec = initRight;
+    enemy->dir = initDir;
+    enemy->normalVec = initNormal;
 
     if (rotation == 2) {
-        enemy->rightVec.vx = -SVECTOR_000a48ec.vx;
-        enemy->rightVec.vy = -SVECTOR_000a48ec.vy;
-        enemy->rightVec.vz = -SVECTOR_000a48ec.vz;
-        enemy->dir = SVECTOR_000a48e4;
+        enemy->rightVec.vx = -initDir.vx;
+        enemy->rightVec.vy = -initDir.vy;
+        enemy->rightVec.vz = -initDir.vz;
+        enemy->dir = initRight;
     }
     if (rotation == 3) {
-        enemy->rightVec.vx = -SVECTOR_000a48e4.vx;
-        enemy->rightVec.vy = -SVECTOR_000a48e4.vy;
-        enemy->rightVec.vz = -SVECTOR_000a48e4.vz;
-        enemy->dir.vx = -SVECTOR_000a48ec.vx;
-        enemy->dir.vy = -SVECTOR_000a48ec.vy;
-        enemy->dir.vz = -SVECTOR_000a48ec.vz;
+        enemy->rightVec.vx = -initRight.vx;
+        enemy->rightVec.vy = -initRight.vy;
+        enemy->rightVec.vz = -initRight.vz;
+        enemy->dir.vx = -initDir.vx;
+        enemy->dir.vy = -initDir.vy;
+        enemy->dir.vz = -initDir.vz;
     }
     if (rotation == 4) {
-        enemy->rightVec = SVECTOR_000a48ec;
-        enemy->dir.vx = -SVECTOR_000a48e4.vx;
-        enemy->dir.vy = -SVECTOR_000a48e4.vy;
-        enemy->dir.vz = -SVECTOR_000a48e4.vz;
+        enemy->rightVec = initDir;
+        enemy->dir.vx = -initRight.vx;
+        enemy->dir.vy = -initRight.vy;
+        enemy->dir.vz = -initRight.vz;
     }
 }
+#undef initRight
+#undef initDir
+#undef initNormal
 
 int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
     short type;
@@ -757,29 +804,32 @@ int EnemyIsBlockWalkable(int blockType, int rotationIndex) {
     return 0;
 }
 
+static SVECTOR EnemyGetBlockProgress_blockPos;
+#define blockPos EnemyGetBlockProgress_blockPos
 int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy) {
-    SVECTOR_000a48fc.vx = (enemyPos->vx + 0x100) & 0x1ff;
-    SVECTOR_000a48fc.vy = (enemyPos->vy + 0x100) & 0x1ff;
-    SVECTOR_000a48fc.vz = (enemyPos->vz + 0x100) & 0x1ff;
+    blockPos.vx = (enemyPos->vx + 0x100) & 0x1ff;
+    blockPos.vy = (enemyPos->vy + 0x100) & 0x1ff;
+    blockPos.vz = (enemyPos->vz + 0x100) & 0x1ff;
 
     if (enemy->dir.vx == 1) {
-        return SVECTOR_000a48fc.vx;
+        return blockPos.vx;
     }
     if (enemy->dir.vx == -1) {
-        return 0x200 - SVECTOR_000a48fc.vx;
+        return 0x200 - blockPos.vx;
     }
     if (enemy->dir.vy == 1) {
-        return SVECTOR_000a48fc.vy;
+        return blockPos.vy;
     }
     if (enemy->dir.vy == -1) {
-        return 0x200 - SVECTOR_000a48fc.vy;
+        return 0x200 - blockPos.vy;
     }
     if (enemy->dir.vz == 1) {
-        return SVECTOR_000a48fc.vz;
+        return blockPos.vz;
     }
     if (enemy->dir.vz == -1) {
-        return 0x200 - SVECTOR_000a48fc.vz;
+        return 0x200 - blockPos.vz;
     }
 
     return -10000;
 }
+#undef blockPos

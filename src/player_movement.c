@@ -52,10 +52,7 @@ extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
 extern short* levelData;
 
-static int tempNewBlock;
 static short DAT_000a4374;
-static short idleSquishMagnitude;
-static short idleSquishSinPhase;
 static short* initJumpTimerPtr;
 static short landingSquishDamping;
 static short landingSquishFrameCounter;
@@ -65,34 +62,7 @@ static short landingSquishMagnitudeIncrement;
 static int ballColorB;
 static int ballColorG;
 static int ballColorR;
-static int D_000A41B0;
-static int D_000A41DC;
-static int D_000A41E0;
-static int D_000A41E4;
-static MATRIX MATRIX_000a4270;
-static MATRIX MATRIX_000a42d0;
-static MATRIX MATRIX_000a42f0;
-static MATRIX MATRIX_000a4310;
-static MATRIX morphMatrix;
-static short D_000A41F4;
-static short D_000A41F8;
-static short DAT_000a41b4;
-static short DAT_000a41b8;
-static short invulCnt1;
-static short invulCnt2;
-static SVECTOR cubePlayerIsOn;
-static SVECTOR otherTempBlock;
-static SVECTOR SVECTOR_000a41bc;
-static SVECTOR SVECTOR_000a4218;
-static SVECTOR SVECTOR_000a4220;
-static SVECTOR SVECTOR_000a4228;
-static SVECTOR SVECTOR_000a4240;
-static SVECTOR SVECTOR_000a4248;
 static SVECTOR SVECTOR_000a4358;
-static SVECTOR SVECTOR_000a4360;
-static SVECTOR SVECTOR_000a4368;
-static SVECTOR tempBlock;
-static SVECTOR tempNewPlayerPos;
 
 SVECTOR SVECTOR_000a2dd8 = {};
 int PAD_000A2DE0 = 0;
@@ -524,6 +494,10 @@ void ProcessMovement(Player* player) {
     }
 }
 
+static int HandleViewportRotationStart_blockType;
+#define blockType HandleViewportRotationStart_blockType
+static SVECTOR HandleViewportRotationStart_cubePos;
+#define cubePos HandleViewportRotationStart_cubePos
 void HandleViewportRotationStart(Player* player) {
     int pad[3];
     if (player->dying)
@@ -559,12 +533,12 @@ void HandleViewportRotationStart(Player* player) {
     }
 
     if (player->surroundingBlocks[1][2][1] > -1 && player->subpixelPositionOnCube.vz > 412) {
-        cubePlayerIsOn.vx = (player->finePos.vx - player->gravityDir.vx * 356 + (player->facingDir.vx << 9) + 256) >> 9;
-        cubePlayerIsOn.vy = (player->finePos.vy - player->gravityDir.vy * 356 + (player->facingDir.vy << 9) + 256) >> 9;
-        cubePlayerIsOn.vz = (player->finePos.vz - player->gravityDir.vz * 356 + (player->facingDir.vz << 9) + 256) >> 9;
+        cubePos.vx = (player->finePos.vx - player->gravityDir.vx * 356 + (player->facingDir.vx << 9) + 256) >> 9;
+        cubePos.vy = (player->finePos.vy - player->gravityDir.vy * 356 + (player->facingDir.vy << 9) + 256) >> 9;
+        cubePos.vz = (player->finePos.vz - player->gravityDir.vz * 356 + (player->facingDir.vz << 9) + 256) >> 9;
 
         if (shouldMarkCubesVisited) {
-            SetCubeVisited(cubePlayerIsOn.vx, cubePlayerIsOn.vy, cubePlayerIsOn.vz, 1);
+            SetCubeVisited(cubePos.vx, cubePos.vy, cubePos.vz, 1);
         }
 
         player->field100_0x1ac = -1;
@@ -574,11 +548,11 @@ void HandleViewportRotationStart(Player* player) {
         player->turningWhereNextFrame = 2;
     }
 
-    D_000A41B0 = player->surroundingBlocks[0][0][1];
-    if (D_000A41B0 != 0) {
-        D_000A41B0 = entityData[(D_000A41B0 - 5) * 128];
+    blockType = player->surroundingBlocks[0][0][1];
+    if (blockType != 0) {
+        blockType = entityData[(blockType - 5) * 128];
     } else {
-        D_000A41B0 = 0;
+        blockType = 0;
     }
 
     if (player->surroundingBlocks[0][1][1] < 0 && player->surroundingBlocks[0][0][0] < 0 &&
@@ -603,6 +577,8 @@ void HandleViewportRotationStart(Player* player) {
         player->facingDir = SVECTOR_000a4358;
     }
 }
+#undef blockType
+#undef cubePos
 
 void CheckPlayerJumpingStuff(Player* player) {
     if (player->dying) {
@@ -668,25 +644,31 @@ void CheckPlayerJumpingStuff(Player* player) {
     CheckPlayerHitCeiling(player);
 }
 
+static short CheckForPlayerWallHit_blockIndex;
+#define blockIndex CheckForPlayerWallHit_blockIndex
+static short CheckForPlayerWallHit_sideOffset;
+#define sideOffset CheckForPlayerWallHit_sideOffset
+static SVECTOR CheckForPlayerWallHit_arrowVec;
+#define arrowVec CheckForPlayerWallHit_arrowVec
 int CheckForPlayerWallHit(Player* player) {
     if (player->subpixelPositionOnCube.vz >= 412 && player->svec_144.vz >= 0) {
         if (player->surroundingBlocks[1][2][1] < 0 && (player->subpixelPositionOnCube.vy < 412 || player->surroundingBlocks[2][2][1] < 0) && (player->subpixelPositionOnCube.vy >= 100 || player->surroundingBlocks[0][2][1] < 0)) {
-            DAT_000a41b4 = player->surroundingBlocks[0][1][1];
-            DAT_000a41b8 = (DAT_000a41b4 - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
+            blockIndex = player->surroundingBlocks[0][1][1];
+            sideOffset = (blockIndex - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-            if (DAT_000a41b4 < 5)
+            if (blockIndex < 5)
                 return 0;
 
-            if (entityData[(DAT_000a41b4 - 5) * 128] != 0)
+            if (entityData[(blockIndex - 5) * 128] != 0)
                 return 0;
-            if (entityData[DAT_000a41b8 + 1] != OBJ_ARROW)
+            if (entityData[sideOffset + 1] != OBJ_ARROW)
                 return 0;
 
-            GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[DAT_000a41b8 + 2], &SVECTOR_000a41bc);
+            GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[sideOffset + 2], &arrowVec);
 
-            if (player->facingDir.vx == SVECTOR_000a41bc.vx &&
-                player->facingDir.vy == SVECTOR_000a41bc.vy &&
-                player->facingDir.vz == SVECTOR_000a41bc.vz) {
+            if (player->facingDir.vx == arrowVec.vx &&
+                player->facingDir.vy == arrowVec.vy &&
+                player->facingDir.vz == arrowVec.vz) {
                 return 0;
             }
         }
@@ -712,6 +694,9 @@ int CheckForPlayerWallHit(Player* player) {
     }
     return 0;
 }
+#undef blockIndex
+#undef sideOffset
+#undef arrowVec
 
 int CheckPlayerHitCeiling(Player* player) {
     if (player->subpixelPositionOnCube.vy < 412)
@@ -749,15 +734,19 @@ int CheckPlayerHitCeiling(Player* player) {
     return 0;
 }
 
+static int CheckIfPlayerLanded_newBlock;
+#define newBlock CheckIfPlayerLanded_newBlock
+static SVECTOR CheckIfPlayerLanded_newPlayerPos;
+#define newPlayerPos CheckIfPlayerLanded_newPlayerPos
 int CheckIfPlayerLanded(Player* player) {
     int dummy[2];
-    tempNewPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
-    tempNewPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
-    tempNewPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * 100);
+    newPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
+    newPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
+    newPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * 100);
 
-    tempNewBlock = GetBlockAt(&tempNewPlayerPos);
+    newBlock = GetBlockAt(&newPlayerPos);
 
-    if ((tempNewBlock >= 5 && entityData[(tempNewBlock - 5) * 128] == 5) || tempNewBlock < 0) {
+    if ((newBlock >= 5 && entityData[(newBlock - 5) * 128] == 5) || newBlock < 0) {
         return 0;
     }
 
@@ -798,6 +787,8 @@ int CheckIfPlayerLanded(Player* player) {
     }
     return 1;
 }
+#undef newBlock
+#undef newPlayerPos
 
 void SetLandingSquishVars(void) {
     int pad[2];
@@ -851,6 +842,48 @@ void AutoAlignJumpStartPos(Player* player, int amount) {
     }
 }
 
+static int CalcPlayerMatrixesAndDrawPlayer_flattenFactor;
+#define flattenFactor CalcPlayerMatrixesAndDrawPlayer_flattenFactor
+static int CalcPlayerMatrixesAndDrawPlayer_subpixelY;
+#define subpixelY CalcPlayerMatrixesAndDrawPlayer_subpixelY
+static int CalcPlayerMatrixesAndDrawPlayer_blockOffset;
+#define blockOffset CalcPlayerMatrixesAndDrawPlayer_blockOffset
+static MATRIX CalcPlayerMatrixesAndDrawPlayer_animMatrix;
+#define animMatrix CalcPlayerMatrixesAndDrawPlayer_animMatrix
+static MATRIX CalcPlayerMatrixesAndDrawPlayer_drawMatrix;
+#define drawMatrix CalcPlayerMatrixesAndDrawPlayer_drawMatrix
+static MATRIX CalcPlayerMatrixesAndDrawPlayer_dirMatrix;
+#define dirMatrix CalcPlayerMatrixesAndDrawPlayer_dirMatrix
+static MATRIX CalcPlayerMatrixesAndDrawPlayer_shadowMatrix;
+#define shadowMatrix CalcPlayerMatrixesAndDrawPlayer_shadowMatrix
+static MATRIX CalcPlayerMatrixesAndDrawPlayer_ballMorphMatrix;
+#define ballMorphMatrix CalcPlayerMatrixesAndDrawPlayer_ballMorphMatrix
+static short CalcPlayerMatrixesAndDrawPlayer_rotIdx1;
+#define rotIdx1 CalcPlayerMatrixesAndDrawPlayer_rotIdx1
+static short CalcPlayerMatrixesAndDrawPlayer_rotIdx2;
+#define rotIdx2 CalcPlayerMatrixesAndDrawPlayer_rotIdx2
+static short CalcPlayerMatrixesAndDrawPlayer_invulCounter1;
+#define invulCounter1 CalcPlayerMatrixesAndDrawPlayer_invulCounter1
+static short CalcPlayerMatrixesAndDrawPlayer_invulCounter2;
+#define invulCounter2 CalcPlayerMatrixesAndDrawPlayer_invulCounter2
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_otherBlockPos;
+#define otherBlockPos CalcPlayerMatrixesAndDrawPlayer_otherBlockPos
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_screenPos;
+#define screenPos CalcPlayerMatrixesAndDrawPlayer_screenPos
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_transVec;
+#define transVec CalcPlayerMatrixesAndDrawPlayer_transVec
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_groundPos;
+#define groundPos CalcPlayerMatrixesAndDrawPlayer_groundPos
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_shadowVec;
+#define shadowVec CalcPlayerMatrixesAndDrawPlayer_shadowVec
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_dirVec;
+#define dirVec CalcPlayerMatrixesAndDrawPlayer_dirVec
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_scaledShadowVec;
+#define scaledShadowVec CalcPlayerMatrixesAndDrawPlayer_scaledShadowVec
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_camTargetPos;
+#define camTargetPos CalcPlayerMatrixesAndDrawPlayer_camTargetPos
+static SVECTOR CalcPlayerMatrixesAndDrawPlayer_blockPos;
+#define blockPos CalcPlayerMatrixesAndDrawPlayer_blockPos
 void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     int turningWhere;
     int iVar7;
@@ -897,113 +930,113 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     }
 
     if (player->turningWhere == 1) {
-        SVECTOR_000a4220.vx = -256;
-        SVECTOR_000a4220.vy = 0;
-        SVECTOR_000a4220.vz = 0;
-        RotMatrix(&SVECTOR_000a4220, &MATRIX_000a4290);
+        transVec.vx = -256;
+        transVec.vy = 0;
+        transVec.vz = 0;
+        RotMatrix(&transVec, &MATRIX_000a4290);
         MulMatrix0(&player->matrix_234, &MATRIX_000a4290, &player->matrix_234);
     }
 
     if (player->turningWhere == 3) {
-        SVECTOR_000a4220.vx = 0;
-        SVECTOR_000a4220.vy = 0;
-        SVECTOR_000a4220.vz = -1024;
-        MulMatrix0(&player->matrix_234, &player->matrix_254, &MATRIX_000a42d0);
-        RotMatrix(&SVECTOR_000a4220, &MATRIX_000a4290);
+        transVec.vx = 0;
+        transVec.vy = 0;
+        transVec.vz = -1024;
+        MulMatrix0(&player->matrix_234, &player->matrix_254, &drawMatrix);
+        RotMatrix(&transVec, &MATRIX_000a4290);
         MulMatrix0(&MATRIX_000a4290, &player->matrix_254, &player->matrix_254);
         TransposeMatrix(&MATRIX_000a4290, &MATRIX_000a42b0);
         MulMatrix0(&player->matrix_234, &MATRIX_000a42b0, &player->matrix_234);
-        MulMatrix0(&player->matrix_234, &player->matrix_254, &MATRIX_000a42d0);
+        MulMatrix0(&player->matrix_234, &player->matrix_254, &drawMatrix);
     }
 
     if (player->turningWhere == 4) {
-        SVECTOR_000a4220.vx = 0;
-        SVECTOR_000a4220.vy = 0;
-        SVECTOR_000a4220.vz = 1024;
-        RotMatrix(&SVECTOR_000a4220, &MATRIX_000a4290);
+        transVec.vx = 0;
+        transVec.vy = 0;
+        transVec.vz = 1024;
+        RotMatrix(&transVec, &MATRIX_000a4290);
         MulMatrix0(&MATRIX_000a4290, &player->matrix_254, &player->matrix_254);
         TransposeMatrix(&MATRIX_000a4290, &MATRIX_000a42b0);
         MulMatrix0(&player->matrix_234, &MATRIX_000a42b0, &player->matrix_234);
     }
 
     if (player->turningWhere == 2) {
-        SVECTOR_000a4220.vx = -1024;
-        SVECTOR_000a4220.vy = 0;
-        SVECTOR_000a4220.vz = 0;
-        RotMatrix(&SVECTOR_000a4220, &MATRIX_000a4290);
+        transVec.vx = -1024;
+        transVec.vy = 0;
+        transVec.vz = 0;
+        RotMatrix(&transVec, &MATRIX_000a4290);
         MulMatrix0(&MATRIX_000a4290, &player->matrix_254, &player->matrix_254);
         TransposeMatrix(&MATRIX_000a4290, &MATRIX_000a42b0);
         MulMatrix0(&player->matrix_234, &MATRIX_000a42b0, &player->matrix_234);
     }
 
-    morphMatrix.m[0][0] = player->ballMorphShape + 4096;
-    morphMatrix.m[1][1] = player->ballMorphShape + 4096;
-    morphMatrix.m[2][2] = 4096 - player->ballMorphShape * 2;
-    morphMatrix.m[2][1] = 0;
-    morphMatrix.m[2][0] = 0;
-    morphMatrix.m[1][2] = 0;
-    morphMatrix.m[1][0] = 0;
-    morphMatrix.m[0][2] = 0;
-    morphMatrix.m[0][1] = 0;
+    ballMorphMatrix.m[0][0] = player->ballMorphShape + 4096;
+    ballMorphMatrix.m[1][1] = player->ballMorphShape + 4096;
+    ballMorphMatrix.m[2][2] = 4096 - player->ballMorphShape * 2;
+    ballMorphMatrix.m[2][1] = 0;
+    ballMorphMatrix.m[2][0] = 0;
+    ballMorphMatrix.m[1][2] = 0;
+    ballMorphMatrix.m[1][0] = 0;
+    ballMorphMatrix.m[0][2] = 0;
+    ballMorphMatrix.m[0][1] = 0;
 
-    D_000A41DC = player->field_2bc * 2 + player->flatteningTimer;
-    if (D_000A41DC > 4096) {
-        D_000A41DC = 4096;
+    flattenFactor = player->field_2bc * 2 + player->flatteningTimer;
+    if (flattenFactor > 4096) {
+        flattenFactor = 4096;
         player->flatteningTimer = 4096;
     }
 
-    MATRIX_000a4270.m[2][1] = 0;
-    MATRIX_000a4270.m[2][0] = 0;
-    MATRIX_000a4270.m[1][2] = 0;
-    MATRIX_000a4270.m[1][0] = 0;
-    MATRIX_000a4270.m[0][2] = 0;
-    MATRIX_000a4270.m[0][1] = 0;
-    MATRIX_000a4270.m[1][1] = (short)D_000A41DC + 4096;
-    MATRIX_000a4270.m[0][0] = (short)D_000A41DC + 4096;
-    MATRIX_000a4270.m[2][2] = 4096 - (short)D_000A41DC;
+    animMatrix.m[2][1] = 0;
+    animMatrix.m[2][0] = 0;
+    animMatrix.m[1][2] = 0;
+    animMatrix.m[1][0] = 0;
+    animMatrix.m[0][2] = 0;
+    animMatrix.m[0][1] = 0;
+    animMatrix.m[1][1] = (short)flattenFactor + 4096;
+    animMatrix.m[0][0] = (short)flattenFactor + 4096;
+    animMatrix.m[2][2] = 4096 - (short)flattenFactor;
 
-    MulMatrix0(&player->matrix_234, &morphMatrix, &MATRIX_000a42d0);
-    MulMatrix0(&MATRIX_000a42d0, &MATRIX_000a4270, &MATRIX_000a42d0);
-    MulMatrix0(&MATRIX_000a42d0, &player->matrix_254, &MATRIX_000a42d0);
+    MulMatrix0(&player->matrix_234, &ballMorphMatrix, &drawMatrix);
+    MulMatrix0(&drawMatrix, &animMatrix, &drawMatrix);
+    MulMatrix0(&drawMatrix, &player->matrix_254, &drawMatrix);
 
-    player->matrix_294.m[0][0] = MATRIX_000a42d0.m[0][0];
-    player->matrix_294.m[0][1] = MATRIX_000a42d0.m[0][1];
-    player->matrix_294.m[0][2] = MATRIX_000a42d0.m[0][2];
-    player->matrix_294.m[1][0] = MATRIX_000a42d0.m[1][0];
-    player->matrix_294.m[1][1] = MATRIX_000a42d0.m[1][1];
-    player->matrix_294.m[1][2] = MATRIX_000a42d0.m[1][2];
-    player->matrix_294.m[2][0] = MATRIX_000a42d0.m[2][0];
-    player->matrix_294.m[2][1] = MATRIX_000a42d0.m[2][1];
-    player->matrix_294.m[2][2] = MATRIX_000a42d0.m[2][2];
+    player->matrix_294.m[0][0] = drawMatrix.m[0][0];
+    player->matrix_294.m[0][1] = drawMatrix.m[0][1];
+    player->matrix_294.m[0][2] = drawMatrix.m[0][2];
+    player->matrix_294.m[1][0] = drawMatrix.m[1][0];
+    player->matrix_294.m[1][1] = drawMatrix.m[1][1];
+    player->matrix_294.m[1][2] = drawMatrix.m[1][2];
+    player->matrix_294.m[2][0] = drawMatrix.m[2][0];
+    player->matrix_294.m[2][1] = drawMatrix.m[2][1];
+    player->matrix_294.m[2][2] = drawMatrix.m[2][2];
 
-    TransposeMatrix(&MATRIX_000a42d0, &MATRIX_000a42b0);
-    MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a42d0, &MATRIX_000a42d0);
+    TransposeMatrix(&drawMatrix, &MATRIX_000a42b0);
+    MulMatrix0(&perspMatrixes[cameraIndex], &drawMatrix, &drawMatrix);
 
-    SVECTOR_000a4358.vx = player->finePos.vx + player->svec54.vx + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vx;
-    SVECTOR_000a4358.vy = player->finePos.vy + player->svec54.vy + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vy;
-    SVECTOR_000a4358.vz = player->finePos.vz + player->svec54.vz + (((4096 - D_000A41DC - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vz;
+    SVECTOR_000a4358.vx = player->finePos.vx + player->svec54.vx + (((4096 - flattenFactor - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vx;
+    SVECTOR_000a4358.vy = player->finePos.vy + player->svec54.vy + (((4096 - flattenFactor - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vy;
+    SVECTOR_000a4358.vz = player->finePos.vz + player->svec54.vz + (((4096 - flattenFactor - player->ballMorphShape * 2) * 100) / 4096 - 100) * player->gravityDir.vz;
 
-    ApplyMatrixSV(&perspMatrixes[cameraIndex], &SVECTOR_000a4358, &SVECTOR_000a4218);
+    ApplyMatrixSV(&perspMatrixes[cameraIndex], &SVECTOR_000a4358, &screenPos);
 
-    SVECTOR_000a4240.vx = (-4 * player->perspMatrix.m[1][0] - 2 * player->perspMatrix.m[2][0]) - player->perspMatrix.m[0][0];
-    SVECTOR_000a4240.vy = (-4 * player->perspMatrix.m[1][1] - 2 * player->perspMatrix.m[2][1]) - player->perspMatrix.m[0][1];
-    SVECTOR_000a4240.vz = (-4 * player->perspMatrix.m[1][2] - 2 * player->perspMatrix.m[2][2]) - player->perspMatrix.m[0][2];
+    shadowVec.vx = (-4 * player->perspMatrix.m[1][0] - 2 * player->perspMatrix.m[2][0]) - player->perspMatrix.m[0][0];
+    shadowVec.vy = (-4 * player->perspMatrix.m[1][1] - 2 * player->perspMatrix.m[2][1]) - player->perspMatrix.m[0][1];
+    shadowVec.vz = (-4 * player->perspMatrix.m[1][2] - 2 * player->perspMatrix.m[2][2]) - player->perspMatrix.m[0][2];
 
-    VectorNormalSS(&SVECTOR_000a4240, &SVECTOR_000a4240);
+    VectorNormalSS(&shadowVec, &shadowVec);
 
-    SVECTOR_000a4368 = player->finePos;
-    SVECTOR_000a4368 = SVECTOR_000a4358;
+    camTargetPos = player->finePos;
+    camTargetPos = SVECTOR_000a4358;
 
-    SVECTOR_000a4360.vx = (SVECTOR_000a4240.vx * 100) / 4096;
-    SVECTOR_000a4360.vy = (SVECTOR_000a4240.vy * 100) / 4096;
-    SVECTOR_000a4360.vz = (SVECTOR_000a4240.vz * 100) / 4096;
+    scaledShadowVec.vx = (shadowVec.vx * 100) / 4096;
+    scaledShadowVec.vy = (shadowVec.vy * 100) / 4096;
+    scaledShadowVec.vz = (shadowVec.vz * 100) / 4096;
 
-    MulMatrix0(&morphMatrix, &MATRIX_000a4270, &MATRIX_000a4330);
+    MulMatrix0(&ballMorphMatrix, &animMatrix, &MATRIX_000a4330);
     MulMatrix0(&MATRIX_000a4330, &player->perspMatrix, &MATRIX_000a4330);
 
-    MATRIX_000a42d0.t[0] = SVECTOR_000a4218.vx + perspMatrixes[cameraIndex].t[0];
-    MATRIX_000a42d0.t[1] = SVECTOR_000a4218.vy + perspMatrixes[cameraIndex].t[1];
-    MATRIX_000a42d0.t[2] = SVECTOR_000a4218.vz + perspMatrixes[cameraIndex].t[2];
+    drawMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+    drawMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+    drawMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
     if (player->fireTimer > 2200)
         player->fireTimer = 2200;
@@ -1013,131 +1046,152 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     }
 
     if ((ushort)(player->subpixelPositionOnCube.vz - 100) >= 313 && player->startTurningTo != 0 && player->turningTimer <= 13) {
-        tempBlock.vx = (player->finePos.vx + 256 + player->facingDir.vx * 150 - player->gravityDir.vx * 400) >> 9;
-        tempBlock.vy = (player->finePos.vy + 256 + player->facingDir.vy * 150 - player->gravityDir.vy * 400) >> 9;
-        tempBlock.vz = (player->finePos.vz + 256 + player->facingDir.vz * 150 - player->gravityDir.vz * 400) >> 9;
+        blockPos.vx = (player->finePos.vx + 256 + player->facingDir.vx * 150 - player->gravityDir.vx * 400) >> 9;
+        blockPos.vy = (player->finePos.vy + 256 + player->facingDir.vy * 150 - player->gravityDir.vy * 400) >> 9;
+        blockPos.vz = (player->finePos.vz + 256 + player->facingDir.vz * 150 - player->gravityDir.vz * 400) >> 9;
 
-        otherTempBlock.vx = (player->finePos.vx + 256 - player->facingDir.vx * 150 - player->gravityDir.vx * 400) >> 9;
-        otherTempBlock.vy = (player->finePos.vy + 256 - player->facingDir.vy * 150 - player->gravityDir.vy * 400) >> 9;
-        otherTempBlock.vz = (player->finePos.vz + 256 - player->facingDir.vz * 150 - player->gravityDir.vz * 400) >> 9;
+        otherBlockPos.vx = (player->finePos.vx + 256 - player->facingDir.vx * 150 - player->gravityDir.vx * 400) >> 9;
+        otherBlockPos.vy = (player->finePos.vy + 256 - player->facingDir.vy * 150 - player->gravityDir.vy * 400) >> 9;
+        otherBlockPos.vz = (player->finePos.vz + 256 - player->facingDir.vz * 150 - player->gravityDir.vz * 400) >> 9;
 
-        SVECTOR_000a4248.vx = -player->facingDir.vx;
-        SVECTOR_000a4248.vy = -player->facingDir.vy;
-        SVECTOR_000a4248.vz = -player->facingDir.vz;
+        dirVec.vx = -player->facingDir.vx;
+        dirVec.vy = -player->facingDir.vy;
+        dirVec.vz = -player->facingDir.vz;
     } else {
-        tempBlock.vx = (player->finePos.vx + 256 + player->facingDirBeforeStartingTurning.vx * 150 - player->gravityDir.vx * 400) >> 9;
-        tempBlock.vy = (player->finePos.vy + 256 + player->facingDirBeforeStartingTurning.vy * 150 - player->gravityDir.vy * 400) >> 9;
-        tempBlock.vz = (player->finePos.vz + 256 + player->facingDirBeforeStartingTurning.vz * 150 - player->gravityDir.vz * 400) >> 9;
+        blockPos.vx = (player->finePos.vx + 256 + player->facingDirBeforeStartingTurning.vx * 150 - player->gravityDir.vx * 400) >> 9;
+        blockPos.vy = (player->finePos.vy + 256 + player->facingDirBeforeStartingTurning.vy * 150 - player->gravityDir.vy * 400) >> 9;
+        blockPos.vz = (player->finePos.vz + 256 + player->facingDirBeforeStartingTurning.vz * 150 - player->gravityDir.vz * 400) >> 9;
 
-        otherTempBlock.vx = (player->finePos.vx + 256 - player->facingDirBeforeStartingTurning.vx * 150 - player->gravityDir.vx * 400) >> 9;
-        otherTempBlock.vy = (player->finePos.vy + 256 - player->facingDirBeforeStartingTurning.vy * 150 - player->gravityDir.vy * 400) >> 9;
-        otherTempBlock.vz = (player->finePos.vz + 256 - player->facingDirBeforeStartingTurning.vz * 150 - player->gravityDir.vz * 400) >> 9;
+        otherBlockPos.vx = (player->finePos.vx + 256 - player->facingDirBeforeStartingTurning.vx * 150 - player->gravityDir.vx * 400) >> 9;
+        otherBlockPos.vy = (player->finePos.vy + 256 - player->facingDirBeforeStartingTurning.vy * 150 - player->gravityDir.vy * 400) >> 9;
+        otherBlockPos.vz = (player->finePos.vz + 256 - player->facingDirBeforeStartingTurning.vz * 150 - player->gravityDir.vz * 400) >> 9;
 
-        SVECTOR_000a4248.vx = -player->facingDirBeforeStartingTurning.vx;
-        SVECTOR_000a4248.vy = -player->facingDirBeforeStartingTurning.vy;
-        SVECTOR_000a4248.vz = -player->facingDirBeforeStartingTurning.vz;
+        dirVec.vx = -player->facingDirBeforeStartingTurning.vx;
+        dirVec.vy = -player->facingDirBeforeStartingTurning.vy;
+        dirVec.vz = -player->facingDirBeforeStartingTurning.vz;
     }
 
-    if (levelData[tempBlock.vx * 1156 + tempBlock.vy * 34 + tempBlock.vz] < 0 ||
-        (levelData[tempBlock.vx * 1156 + tempBlock.vy * 34 + tempBlock.vz] == 3 && invisBlockVisibility.flip != 0)) {
-        D_000A41F4 = GetRotationIndexFromVector(SVECTOR_000a4248);
-        tempBlock = otherTempBlock;
+    if (levelData[blockPos.vx * 1156 + blockPos.vy * 34 + blockPos.vz] < 0 ||
+        (levelData[blockPos.vx * 1156 + blockPos.vy * 34 + blockPos.vz] == 3 && invisBlockVisibility.flip != 0)) {
+        rotIdx1 = GetRotationIndexFromVector(dirVec);
+        blockPos = otherBlockPos;
     } else {
-        D_000A41F4 = GetRotationIndexFromVector(player->gravityDir);
+        rotIdx1 = GetRotationIndexFromVector(player->gravityDir);
     }
 
-    if (levelData[otherTempBlock.vx * 1156 + otherTempBlock.vy * 34 + otherTempBlock.vz] < 0 ||
-        (levelData[otherTempBlock.vx * 1156 + otherTempBlock.vy * 34 + otherTempBlock.vz] == 3 && invisBlockVisibility.flip != 0)) {
-        D_000A41F8 = GetRotationIndexFromVector(SVECTOR_000a4248);
-        otherTempBlock = tempBlock;
+    if (levelData[otherBlockPos.vx * 1156 + otherBlockPos.vy * 34 + otherBlockPos.vz] < 0 ||
+        (levelData[otherBlockPos.vx * 1156 + otherBlockPos.vy * 34 + otherBlockPos.vz] == 3 && invisBlockVisibility.flip != 0)) {
+        rotIdx2 = GetRotationIndexFromVector(dirVec);
+        otherBlockPos = blockPos;
     } else {
-        D_000A41F8 = GetRotationIndexFromVector(player->gravityDir);
+        rotIdx2 = GetRotationIndexFromVector(player->gravityDir);
     }
 
-    SVECTOR_000a4228 = player->finePos;
-    D_000A41E0 = player->subpixelPositionOnCube.vy;
-    SVECTOR_000a4228.vx -= player->gravityDir.vx * 512;
-    SVECTOR_000a4228.vy -= player->gravityDir.vy * 512;
-    SVECTOR_000a4228.vz -= player->gravityDir.vz * 512;
+    groundPos = player->finePos;
+    subpixelY = player->subpixelPositionOnCube.vy;
+    groundPos.vx -= player->gravityDir.vx * 512;
+    groundPos.vy -= player->gravityDir.vy * 512;
+    groundPos.vz -= player->gravityDir.vz * 512;
 
-    turningWhereTmp = GetBlockAt(&SVECTOR_000a4228);
-    D_000A41E4 = (turningWhereTmp - 5) * 128;
+    turningWhereTmp = GetBlockAt(&groundPos);
+    blockOffset = (turningWhereTmp - 5) * 128;
 
-    if (D_000A41E4 >= 0 && entityData[D_000A41E4] == 5) {
-        D_000A41E0 = 512;
-    } else if (GetBlockAt(&SVECTOR_000a4228) < 0 && player->onMovingPlatform == 0) {
-        D_000A41E0 = 512;
+    if (blockOffset >= 0 && entityData[blockOffset] == 5) {
+        subpixelY = 512;
+    } else if (GetBlockAt(&groundPos) < 0 && player->onMovingPlatform == 0) {
+        subpixelY = 512;
     }
 
     dirIndex = GetRotationIndexFromVector(player->gravityDir);
 
-    MatrixFromDirectionIndex(&MATRIX_000a42f0, 0, dirIndex, -D_000A41E0, &SVECTOR_000a4358);
+    MatrixFromDirectionIndex(&dirMatrix, 0, dirIndex, -subpixelY, &SVECTOR_000a4358);
 
-    morphMatrix.m[2][2] = 4096;
-    D_000A41E0 = 512 - D_000A41E0;
+    ballMorphMatrix.m[2][2] = 4096;
+    subpixelY = 512 - subpixelY;
 
-    MulMatrix0(&MATRIX_000a42f0, &morphMatrix, &MATRIX_000a42f0);
-    MulMatrix0(&MATRIX_000a42f0, &MATRIX_000a4270, &MATRIX_000a42f0);
+    MulMatrix0(&dirMatrix, &ballMorphMatrix, &dirMatrix);
+    MulMatrix0(&dirMatrix, &animMatrix, &dirMatrix);
 
-    SVECTOR_000a4220.vx = 1024;
-    SVECTOR_000a4220.vz = 0;
-    SVECTOR_000a4220.vy = 0;
-    RotMatrix(&SVECTOR_000a4220, &MATRIX_000a4290);
-    MulMatrix0(&MATRIX_000a42f0, &MATRIX_000a4290, &MATRIX_000a42f0);
-    MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a42f0, &MATRIX_000a42f0);
+    transVec.vx = 1024;
+    transVec.vz = 0;
+    transVec.vy = 0;
+    RotMatrix(&transVec, &MATRIX_000a4290);
+    MulMatrix0(&dirMatrix, &MATRIX_000a4290, &dirMatrix);
+    MulMatrix0(&perspMatrixes[cameraIndex], &dirMatrix, &dirMatrix);
 
-    MATRIX_000a4310.m[0][0] = SVECTOR_000a4240.vx;
-    MATRIX_000a4310.m[0][1] = SVECTOR_000a4240.vy;
-    MATRIX_000a4310.m[0][2] = SVECTOR_000a4240.vz;
+    shadowMatrix.m[0][0] = shadowVec.vx;
+    shadowMatrix.m[0][1] = shadowVec.vy;
+    shadowMatrix.m[0][2] = shadowVec.vz;
 
     TransposeMatrix(&MATRIX_000a42b0, &MATRIX_000a4290);
-    MulMatrix0(&MATRIX_000a4310, &MATRIX_000a4290, &MATRIX_000a4310);
+    MulMatrix0(&shadowMatrix, &MATRIX_000a4290, &shadowMatrix);
 
-    ApplyMatrixSV(&perspMatrixes[cameraIndex], &SVECTOR_000a4358, &SVECTOR_000a4218);
+    ApplyMatrixSV(&perspMatrixes[cameraIndex], &SVECTOR_000a4358, &screenPos);
 
-    MATRIX_000a42f0.t[0] = SVECTOR_000a4218.vx + perspMatrixes[cameraIndex].t[0];
-    MATRIX_000a42f0.t[1] = SVECTOR_000a4218.vy + perspMatrixes[cameraIndex].t[1];
-    MATRIX_000a42f0.t[2] = SVECTOR_000a4218.vz + perspMatrixes[cameraIndex].t[2];
+    dirMatrix.t[0] = screenPos.vx + perspMatrixes[cameraIndex].t[0];
+    dirMatrix.t[1] = screenPos.vy + perspMatrixes[cameraIndex].t[1];
+    dirMatrix.t[2] = screenPos.vz + perspMatrixes[cameraIndex].t[2];
 
-    SVECTOR_000a4368.vx += SVECTOR_000a4360.vx;
-    SVECTOR_000a4368.vy += SVECTOR_000a4360.vy;
-    SVECTOR_000a4368.vz += SVECTOR_000a4360.vz;
+    camTargetPos.vx += scaledShadowVec.vx;
+    camTargetPos.vy += scaledShadowVec.vy;
+    camTargetPos.vz += scaledShadowVec.vz;
 
     ballColorR = ((player->fireTimer << 12) / 400 + 4096 - ((player->acidTimer << 12) / 2000)) - (player->iceColorChangeTimer << 12) / 2000;
     ballColorG = ((player->acidTimer << 12) / 400 + 4096 - ((player->fireTimer << 12) / 2000)) - (player->iceColorChangeTimer << 12) / 2000;
     ballColorB = ((player->iceColorChangeTimer << 12) / 400 + 4096 - ((player->acidTimer << 12) / 2000)) - (player->fireTimer << 12) / 2000;
 
     if (player->invulnerabilityTimer != -1) {
-        invulCnt1 = (invulCnt1 + 100) % 8192;
+        invulCounter1 = (invulCounter1 + 100) % 8192;
 
-        if (invulCnt1 < 4096) {
-            ballColorR += rsin(invulCnt1 % 4096) * 3;
+        if (invulCounter1 < 4096) {
+            ballColorR += rsin(invulCounter1 % 4096) * 3;
         }
-        if (invulCnt1 > 2048 && invulCnt1 < 2048 + 4096) {
-            ballColorG += rsin((invulCnt1 - 2048) % 4096) * 3;
+        if (invulCounter1 > 2048 && invulCounter1 < 2048 + 4096) {
+            ballColorG += rsin((invulCounter1 - 2048) % 4096) * 3;
         }
-        if (invulCnt1 > 4096) {
-            ballColorB += rsin((invulCnt1 - 4096) % 4096) * 3;
+        if (invulCounter1 > 4096) {
+            ballColorB += rsin((invulCounter1 - 4096) % 4096) * 3;
         }
     }
 
     if (player->ballBlinking) {
-        invulCnt2 = (invulCnt2 + 1024) % 4096;
-        ballColorR = ballColorG = ballColorB = rsin(invulCnt2) + 4096;
+        invulCounter2 = (invulCounter2 + 1024) % 4096;
+        ballColorR = ballColorG = ballColorB = rsin(invulCounter2) + 4096;
     }
 
     if (player->faceTypePlayerStandingOn == 96) {
-        D_000A41E0 = (D_000A41E0 * entityData[player->specialBlockIndexPlayerIsStandingOn + 2]) / 512;
+        subpixelY = (subpixelY * entityData[player->specialBlockIndexPlayerIsStandingOn + 2]) / 512;
     }
 
-    CreatePlayerDispList(&MATRIX_000a42d0, 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
-                         tempBlock.vx, tempBlock.vy, tempBlock.vz, D_000A41F4,
-                         otherTempBlock.vx, otherTempBlock.vy, otherTempBlock.vz, D_000A41F8,
-                         &MATRIX_000a42f0, (D_000A41E0 * 128) / 412, 0,
-                         &MATRIX_000a4310, 2048, 4000, 0, 0, 178, &SVECTOR_000a4368);
+    CreatePlayerDispList(&drawMatrix, 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
+                         blockPos.vx, blockPos.vy, blockPos.vz, rotIdx1,
+                         otherBlockPos.vx, otherBlockPos.vy, otherBlockPos.vz, rotIdx2,
+                         &dirMatrix, (subpixelY * 128) / 412, 0,
+                         &shadowMatrix, 2048, 4000, 0, 0, 178, &camTargetPos);
 
     player->turningWhere = player->turningWhereNextFrame;
 }
+#undef flattenFactor
+#undef subpixelY
+#undef blockOffset
+#undef animMatrix
+#undef drawMatrix
+#undef dirMatrix
+#undef shadowMatrix
+#undef ballMorphMatrix
+#undef rotIdx1
+#undef rotIdx2
+#undef invulCounter1
+#undef invulCounter2
+#undef otherBlockPos
+#undef screenPos
+#undef transVec
+#undef groundPos
+#undef shadowVec
+#undef dirVec
+#undef scaledShadowVec
+#undef camTargetPos
+#undef blockPos
 
 void ClearA4374(Player* player) {
     DAT_000a4374 = 0;
@@ -1161,6 +1215,10 @@ void SetBallShapeAndRotationWhenJumping(Player* player) {
     }
 }
 
+static short SetBallShapeAndRotationWhenRollingOrIdle_squishMagnitude;
+#define squishMagnitude SetBallShapeAndRotationWhenRollingOrIdle_squishMagnitude
+static short SetBallShapeAndRotationWhenRollingOrIdle_squishPhase;
+#define squishPhase SetBallShapeAndRotationWhenRollingOrIdle_squishPhase
 void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
     RotMatrixX(player->rotX * -6, &player->matrix_254);
     if (landingSquishFrameCounter > 0) {
@@ -1177,11 +1235,13 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
             landingSquishMagnitude = 0;
         }
     } else {
-        idleSquishSinPhase = (idleSquishSinPhase + (5000 - levelTimeLeft) / 40 + 40) % 4096;
-        idleSquishMagnitude = (rsin(idleSquishSinPhase) * 200) / 4096;
+        squishPhase = (squishPhase + (5000 - levelTimeLeft) / 40 + 40) % 4096;
+        squishMagnitude = (rsin(squishPhase) * 200) / 4096;
     }
-    player->ballMorphShape = idleSquishMagnitude + landingSquishMagnitude;
+    player->ballMorphShape = squishMagnitude + landingSquishMagnitude;
 }
+#undef squishMagnitude
+#undef squishPhase
 
 void ResetPlayerMatrix274(Player* player) {
     MulMatrix0(&player->matrix_274, &player->matrix_254, &player->matrix_254);

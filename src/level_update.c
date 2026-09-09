@@ -34,50 +34,17 @@ extern int specialLevelType;
 extern int gameMode;
 
 // gprel-used variables (defined in this file)
-static int D_000A4398; // mpOff
-static int D_000A439C; // swapMovingPlatformDir
 static int D_000A43B0;
-static int D_000A43DC;
-static int D_000A43E8;
 static int D_000A4430;
-static int DAT_000a43a8;
-static int DAT_000a43ac;
-static int DAT_000a43c4;
-static int DAT_000a43c8;
 static int maxDistSquared;
-static int mI;
-static int movingPlatformEntityId;
-static int mpCounter;
-static int mpLengthScaled;
 static int xMinPlusMax;
 static int yMinPlusMax;
 static int zMinPlusMax;
 static int zoomInAndOutPhase;
-static short DAT_000a43fc;
-static short DAT_000a4400;
-static short DAT_000a4404;
-static short DAT_000a4408;
-static short DAT_000a440c;
-static short DAT_000a4410;
 static short debugCamX;
 static short debugCamY;
-static short mpVelSum;
-static short tempI;
-static short tempJ;
-static short tempK;
-static MATRIX MATRIX_000a44c8;
-static SVECTOR SVECTOR_000a43a0;
-static SVECTOR SVECTOR_000a43e0;
-static SVECTOR SVECTOR_000a43ec;
-static SVECTOR SVECTOR_000a4428;
-static SVECTOR SVECTOR_000a449c;
-static SVECTOR SVECTOR_000a44b8;
-static SVECTOR SVECTOR_000a44c0;
-static SVECTOR SVECTOR_000a4514;
-static VECTOR facingGravityProd;
 static VECTOR unusedFacingGravityProd;
 static VECTOR initPlayerFacingDir;
-static VECTOR initPlayerFacingDirCoarse;
 static VECTOR unusedInitPlayerFacingDirCoarse;
 static VECTOR initPlayerGravityDir;
 static VECTOR initPlayerRightDir;
@@ -86,75 +53,78 @@ static VECTOR levelEntryBezierP1;
 static VECTOR levelEntryBezierP2;
 static VECTOR levelEntryBezierP3;
 static VECTOR levelEntryCamPos;
-static VECTOR VECTOR_000a448c;
-static VECTOR VECTOR_000a44a8;
-static VECTOR VECTOR_000a44e8;
-static VECTOR VECTOR_000a44f8;
 
-static int blockTypePlayerStandingOn;
-static int DAT_000a4508;
-static int DAT_000a450c;
 static int DAT_000a4598;
-static int distSquared;
 static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
-static int levelXMin, levelXMax;
-static int levelYMin, levelYMax;
-static int levelZMin, levelZMax;
 static int r1TurnDelta;
-static int trI;
-static int trJ;
-static int trK;
-static int trL;
 
 SVECTOR SVECTOR_000a2de4 = {};
 SVECTOR SVECTOR_allMinus1 = { -1, -1, -1 };
 
+static int ScanLevelDataForMovingBlocks2_i;
+static int ScanLevelDataForMovingBlocks2_j;
+static int ScanLevelDataForMovingBlocks2_k;
+static int ScanLevelDataForMovingBlocks2_l;
+#define i ScanLevelDataForMovingBlocks2_i
+#define j ScanLevelDataForMovingBlocks2_j
+#define k ScanLevelDataForMovingBlocks2_k
+#define l ScanLevelDataForMovingBlocks2_l
 void ScanLevelDataForMovingBlocks2(void) {
-    for (trI = 0; trI < 8; trI++) {
-        for (trJ = 0; trJ < 8; trJ++) {
-            for (trK = 0; trK < 8; trK++) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[trI][trJ][trK] = -1;
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 8; j++) {
+            for (k = 0; k < 8; k++) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[i][j][k] = -1;
             }
         }
     }
 
-    for (trI = 0; trI < numEntities * 128; trI += 128) {
-        if (entityData[trI] != OBJ_TRANSPORTER) {
+    for (i = 0; i < numEntities * 128; i += 128) {
+        if (entityData[i] != OBJ_TRANSPORTER) {
             continue;
         }
-        trJ = entityData[trI + 4];
-        trK = entityData[trI + 5];
-        trL = entityData[trI + 6];
-        switch (entityData[trI + 2]) {
+        j = entityData[i + 4];
+        k = entityData[i + 5];
+        l = entityData[i + 6];
+        switch (entityData[i + 2]) {
             case 1:
-                for (trJ = entityData[trI + 4]; trJ < entityData[trI + 7] + entityData[trI + 17]; trJ++) {
-                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                for (j = entityData[i + 4]; j < entityData[i + 7] + entityData[i + 17]; j++) {
+                    levelData[j * 1156 + k * 34 + l] = entityData[i + 20];
                 }
                 break;
             case 2:
-                for (trK = entityData[trI + 5]; trK < entityData[trI + 8] + entityData[trI + 17]; trK++) {
-                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                for (k = entityData[i + 5]; k < entityData[i + 8] + entityData[i + 17]; k++) {
+                    levelData[j * 1156 + k * 34 + l] = entityData[i + 20];
                 }
                 break;
             case 5:
-                for (trL = entityData[trI + 6]; trL < entityData[trI + 9] + entityData[trI + 17]; trL++) {
-                    levelData[trJ * 1156 + trK * 34 + trL] = entityData[trI + 20];
+                for (l = entityData[i + 6]; l < entityData[i + 9] + entityData[i + 17]; l++) {
+                    levelData[j * 1156 + k * 34 + l] = entityData[i + 20];
                 }
                 break;
         }
 
-        entityData[trI + 19] = 0;
-        entityData[trI + 18] = entityData[trI + 18];
+        entityData[i + 19] = 0;
+        entityData[i + 18] = entityData[i + 18];
     }
     MoveMovingPlatforms(SVECTOR_000a2de4);
 }
+#undef i
+#undef j
+#undef k
+#undef l
 
+static int MoveMovingPlatforms_entityOffset;
+static int MoveMovingPlatforms_reachedEnd;
+static SVECTOR MoveMovingPlatforms_sfxDir;
+#define entityOffset MoveMovingPlatforms_entityOffset
+#define reachedEnd MoveMovingPlatforms_reachedEnd
+#define sfxDir MoveMovingPlatforms_sfxDir
 void MoveMovingPlatforms(SVECTOR vec) {
-#define EB ((LocalMovingPlatformEntity*)&entityData[D_000A4398])
-    for (D_000A4398 = 0; D_000A4398 < (int)numEntities * 128; D_000A4398 += 128) {
+#define EB ((LocalMovingPlatformEntity*)&entityData[entityOffset])
+    for (entityOffset = 0; entityOffset < (int)numEntities * 128; entityOffset += 128) {
         if (EB->tag == OBJ_TRANSPORTER) {
-            D_000A439C = 0;
+            reachedEnd = 0;
             EB->velX = 0;
             EB->velY = 0;
             EB->velZ = 0;
@@ -164,24 +134,24 @@ void MoveMovingPlatforms(SVECTOR vec) {
             }
 
             if (EB->counter == 1) {
-                SVECTOR_000a43a0.vx = EB->posX - vec.vx;
-                SVECTOR_000a43a0.vy = EB->posY - vec.vy;
-                SVECTOR_000a43a0.vz = EB->posZ - vec.vz;
-                SndPlaySfx(SFX_MOVING_PLATFORM, D_000A4398 + 1, &SVECTOR_000a43a0, 8000);
+                sfxDir.vx = EB->posX - vec.vx;
+                sfxDir.vy = EB->posY - vec.vy;
+                sfxDir.vz = EB->posZ - vec.vz;
+                SndPlaySfx(SFX_MOVING_PLATFORM, entityOffset + 1, &sfxDir, 8000);
             }
 
             if (EB->counter == 0) {
-                SVECTOR_000a43a0.vx = EB->posX - vec.vx;
-                SVECTOR_000a43a0.vy = EB->posY - vec.vy;
-                SVECTOR_000a43a0.vz = EB->posZ - vec.vz;
-                SndUpdateVolumeBasedOnDirVec(D_000A4398 + 1, &SVECTOR_000a43a0);
+                sfxDir.vx = EB->posX - vec.vx;
+                sfxDir.vy = EB->posY - vec.vy;
+                sfxDir.vz = EB->posZ - vec.vz;
+                SndUpdateVolumeBasedOnDirVec(entityOffset + 1, &sfxDir);
 
                 switch (EB->movementDirection) {
                     case 4:
                         EB->posX -= EB->velocity;
                         EB->velX = -EB->velocity;
                         if (EB->posX <= EB->startX << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 1;
                         }
                         break;
@@ -189,7 +159,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                         EB->posX += EB->velocity;
                         EB->velX = EB->velocity;
                         if (EB->posX >= EB->endX << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 4;
                         }
                         break;
@@ -197,7 +167,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                         EB->posY -= EB->velocity;
                         EB->velY = -EB->velocity;
                         if (EB->posY <= EB->startY << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 2;
                         }
                         break;
@@ -205,7 +175,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                         EB->posY += EB->velocity;
                         EB->velY = EB->velocity;
                         if (EB->posY >= EB->endY << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 3;
                         }
                         break;
@@ -213,7 +183,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
                         EB->posZ -= EB->velocity;
                         EB->velZ = -EB->velocity;
                         if (EB->posZ <= EB->startZ << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 5;
                         }
                         break;
@@ -221,15 +191,15 @@ void MoveMovingPlatforms(SVECTOR vec) {
                         EB->posZ += EB->velocity;
                         EB->velZ = EB->velocity;
                         if (EB->posZ >= EB->endZ << 9) {
-                            D_000A439C = 1;
+                            reachedEnd = 1;
                             EB->movementDirection = 0;
                         }
                         break;
                 }
             }
 
-            if (D_000A439C) {
-                SndMuteVoiceByTag(D_000A4398 + 1);
+            if (reachedEnd) {
+                SndMuteVoiceByTag(entityOffset + 1);
                 EB->counter = 40;
                 EB->flags ^= 1;
             }
@@ -237,77 +207,98 @@ void MoveMovingPlatforms(SVECTOR vec) {
     }
 #undef EB
 }
+#undef entityOffset
+#undef reachedEnd
+#undef sfxDir
 
+static int IsVecWithinPlatformBounds_diffLow;
+static int IsVecWithinPlatformBounds_diffHigh;
+static int IsVecWithinPlatformBounds_lengthScaled;
+#define diffLow IsVecWithinPlatformBounds_diffLow
+#define diffHigh IsVecWithinPlatformBounds_diffHigh
+#define lengthScaled IsVecWithinPlatformBounds_lengthScaled
 int IsVecWithinPlatformBounds(SVECTOR* pos, int entityOffset, int tolerance) {
-    mpLengthScaled = (entityData[entityOffset + 17] - 1) << 9;
+    lengthScaled = (entityData[entityOffset + 17] - 1) << 9;
 
     switch (entityData[entityOffset + 2]) {
         case 1:
-            DAT_000a43a8 = pos->vx + tolerance - (entityData[entityOffset + 119] - 256);
-            DAT_000a43ac = entityData[entityOffset + 119] + mpLengthScaled + 256 - (pos->vx - tolerance);
+            diffLow = pos->vx + tolerance - (entityData[entityOffset + 119] - 256);
+            diffHigh = entityData[entityOffset + 119] + lengthScaled + 256 - (pos->vx - tolerance);
             break;
         case 2:
-            DAT_000a43a8 = pos->vy + tolerance - (entityData[entityOffset + 120] - 256);
-            DAT_000a43ac = entityData[entityOffset + 120] + mpLengthScaled + 256 - (pos->vy - tolerance);
+            diffLow = pos->vy + tolerance - (entityData[entityOffset + 120] - 256);
+            diffHigh = entityData[entityOffset + 120] + lengthScaled + 256 - (pos->vy - tolerance);
             break;
         case 5:
-            DAT_000a43a8 = pos->vz + tolerance - (entityData[entityOffset + 121] - 256);
-            DAT_000a43ac = entityData[entityOffset + 121] + mpLengthScaled + 256 - (pos->vz - tolerance);
+            diffLow = pos->vz + tolerance - (entityData[entityOffset + 121] - 256);
+            diffHigh = entityData[entityOffset + 121] + lengthScaled + 256 - (pos->vz - tolerance);
             break;
     }
 
-    if (DAT_000a43a8 >= 0 && DAT_000a43ac >= 0) {
+    if (diffLow >= 0 && diffHigh >= 0) {
         return 1;
     }
     return 0;
 }
+#undef diffLow
+#undef diffHigh
+#undef lengthScaled
 
+static int IsPlayerOnMovingPlatform_entityOffset;
+#define entityOffset IsPlayerOnMovingPlatform_entityOffset
 int IsPlayerOnMovingPlatform(Player* player) {
-    DAT_000a43c4 = (player->surroundingBlocks[1][1][1] - 5) * 128;
-    if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != OBJ_TRANSPORTER) {
-        DAT_000a43c4 = (player->surroundingBlocks[2][1][1] - 5) * 128;
-        if (DAT_000a43c4 < 0 || entityData[DAT_000a43c4] != OBJ_TRANSPORTER) {
+    entityOffset = (player->surroundingBlocks[1][1][1] - 5) * 128;
+    if (entityOffset < 0 || entityData[entityOffset] != OBJ_TRANSPORTER) {
+        entityOffset = (player->surroundingBlocks[2][1][1] - 5) * 128;
+        if (entityOffset < 0 || entityData[entityOffset] != OBJ_TRANSPORTER) {
             return 0;
         }
     }
-    return IsVecWithinPlatformBounds(&player->finePos, DAT_000a43c4, 100);
+    return IsVecWithinPlatformBounds(&player->finePos, entityOffset, 100);
 }
+#undef entityOffset
 
+static int HandleMovingPlatforms_platformDir;
+static int HandleMovingPlatforms_entityId;
+static int HandleMovingPlatforms_counter;
+#define platformDir HandleMovingPlatforms_platformDir
+#define entityId HandleMovingPlatforms_entityId
+#define counter HandleMovingPlatforms_counter
 int HandleMovingPlatforms(Player* player) {
     if (player->onMovingPlatform) {
         return 0;
     }
 
-    movingPlatformEntityId = GetMovingPlatformAt(player, &SVECTOR_allMinus1);
-    if (movingPlatformEntityId != -1) {
+    entityId = GetMovingPlatformAt(player, &SVECTOR_allMinus1);
+    if (entityId != -1) {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
 
-        DAT_000a43c8 = entityData[movingPlatformEntityId + 2];
+        platformDir = entityData[entityId + 2];
 
-        for (mpCounter = 2; mpCounter <= entityData[movingPlatformEntityId + 17] + 1; mpCounter++) {
-            if (DAT_000a43c8 == 1) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[mpCounter][2][2] = 0;
+        for (counter = 2; counter <= entityData[entityId + 17] + 1; counter++) {
+            if (platformDir == 1) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[counter][2][2] = 0;
             }
-            if (DAT_000a43c8 == 2) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mpCounter][2] = 0;
+            if (platformDir == 2) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][counter][2] = 0;
             }
-            if (DAT_000a43c8 == 5) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mpCounter] = 0;
+            if (platformDir == 5) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][counter] = 0;
             }
         }
 
-        player->finePos.vx -= entityData[movingPlatformEntityId + 119] - 512;
-        player->finePos.vy -= entityData[movingPlatformEntityId + 120] - 512;
-        player->finePos.vz -= entityData[movingPlatformEntityId + 121] - 512;
+        player->finePos.vx -= entityData[entityId + 119] - 512;
+        player->finePos.vy -= entityData[entityId + 120] - 512;
+        player->finePos.vz -= entityData[entityId + 121] - 512;
 
-        player->svec54.vx = entityData[movingPlatformEntityId + 119] - 512;
-        player->svec54.vy = entityData[movingPlatformEntityId + 120] - 512;
-        player->svec54.vz = entityData[movingPlatformEntityId + 121] - 512;
+        player->svec54.vx = entityData[entityId + 119] - 512;
+        player->svec54.vy = entityData[entityId + 120] - 512;
+        player->svec54.vz = entityData[entityId + 121] - 512;
 
-        player->movingPlatformEntityIdStandingOn = movingPlatformEntityId;
+        player->movingPlatformEntityIdStandingOn = entityId;
         player->longJump = 0;
 
         SetLandingSquishVars();
@@ -316,57 +307,57 @@ int HandleMovingPlatforms(Player* player) {
         return 1;
     }
 
-    movingPlatformEntityId = GetAlternateMovingPlatform(player, &SVECTOR_allMinus1);
-    if (movingPlatformEntityId != -1) {
+    entityId = GetAlternateMovingPlatform(player, &SVECTOR_allMinus1);
+    if (entityId != -1) {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
 
-        DAT_000a43c8 = entityData[movingPlatformEntityId + 2];
+        platformDir = entityData[entityId + 2];
 
-        for (mpCounter = 2; mpCounter <= entityData[movingPlatformEntityId + 17] + 1; mpCounter++) {
-            if (DAT_000a43c8 == 1) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[mpCounter][2][2] = 0;
+        for (counter = 2; counter <= entityData[entityId + 17] + 1; counter++) {
+            if (platformDir == 1) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[counter][2][2] = 0;
             }
-            if (DAT_000a43c8 == 2) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mpCounter][2] = 0;
+            if (platformDir == 2) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][counter][2] = 0;
             }
-            if (DAT_000a43c8 == 5) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mpCounter] = 0;
+            if (platformDir == 5) {
+                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][counter] = 0;
             }
         }
 
-        player->finePos.vx -= entityData[movingPlatformEntityId + 119] - 512;
-        player->finePos.vy -= entityData[movingPlatformEntityId + 120] - 512;
-        player->finePos.vz -= entityData[movingPlatformEntityId + 121] - 512;
+        player->finePos.vx -= entityData[entityId + 119] - 512;
+        player->finePos.vy -= entityData[entityId + 120] - 512;
+        player->finePos.vz -= entityData[entityId + 121] - 512;
 
         switch (GetRotationIndexFromVector(player->gravityDir)) {
             case 4:
                 player->finePos.vx = 156;
                 break;
             case 1:
-                player->finePos.vx = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                player->finePos.vx = entityData[entityId + 17] * 512 + 356;
                 break;
             case 3:
                 player->finePos.vy = 156;
                 break;
             case 2:
-                player->finePos.vy = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                player->finePos.vy = entityData[entityId + 17] * 512 + 356;
                 break;
             case 0:
                 player->finePos.vz = 156;
                 break;
             case 5:
-                player->finePos.vz = entityData[movingPlatformEntityId + 17] * 512 + 356;
+                player->finePos.vz = entityData[entityId + 17] * 512 + 356;
                 break;
         }
 
-        player->svec54.vx = entityData[movingPlatformEntityId + 119] - 512;
-        player->svec54.vy = entityData[movingPlatformEntityId + 120] - 512;
-        player->svec54.vz = entityData[movingPlatformEntityId + 121] - 512;
+        player->svec54.vx = entityData[entityId + 119] - 512;
+        player->svec54.vy = entityData[entityId + 120] - 512;
+        player->svec54.vz = entityData[entityId + 121] - 512;
 
-        player->movingPlatformEntityIdStandingOn = movingPlatformEntityId;
+        player->movingPlatformEntityIdStandingOn = entityId;
         player->longJump = 0;
 
         SetLandingSquishVars();
@@ -376,29 +367,36 @@ int HandleMovingPlatforms(Player* player) {
     }
     return 0;
 }
+#undef platformDir
+#undef entityId
+#undef counter
 
+static int GetMovingPlatformAt_entityOffset;
+static SVECTOR GetMovingPlatformAt_targetPos;
+#define entityOffset GetMovingPlatformAt_entityOffset
+#define targetPos GetMovingPlatformAt_targetPos
 int GetMovingPlatformAt(Player* player, SVECTOR* checkPos) {
     if (checkPos->vx == -1) {
-        SVECTOR_000a43e0.vx = player->finePos.vx - player->gravityDir.vx * 512;
-        SVECTOR_000a43e0.vy = player->finePos.vy - player->gravityDir.vy * 512;
-        SVECTOR_000a43e0.vz = player->finePos.vz - player->gravityDir.vz * 512;
+        targetPos.vx = player->finePos.vx - player->gravityDir.vx * 512;
+        targetPos.vy = player->finePos.vy - player->gravityDir.vy * 512;
+        targetPos.vz = player->finePos.vz - player->gravityDir.vz * 512;
     } else {
-        SVECTOR_000a43e0 = *checkPos;
+        targetPos = *checkPos;
     }
 
-    D_000A43DC = (GetBlockAt(&SVECTOR_000a43e0) - 5) * 128;
+    entityOffset = (GetBlockAt(&targetPos) - 5) * 128;
 
-    if (D_000A43DC >= 0) {
-        if (entityData[D_000A43DC] != OBJ_TRANSPORTER) {
+    if (entityOffset >= 0) {
+        if (entityData[entityOffset] != OBJ_TRANSPORTER) {
             return -1;
         }
 
-        if (AreDirectionsOnSameAxis(entityData[D_000A43DC + 2], GetRotationIndexFromVector(player->gravityDir))) {
+        if (AreDirectionsOnSameAxis(entityData[entityOffset + 2], GetRotationIndexFromVector(player->gravityDir))) {
             return -1;
         }
 
         if (player->subpixelPositionOnCube.vy < 101) {
-            if (IsVecWithinPlatformBounds(&player->finePos, D_000A43DC, 0)) {
+            if (IsVecWithinPlatformBounds(&player->finePos, entityOffset, 0)) {
                 goto ret_D;
             }
             return -1;
@@ -407,50 +405,60 @@ int GetMovingPlatformAt(Player* player, SVECTOR* checkPos) {
 
     return -1;
 ret_D:
-    return D_000A43DC;
+    return entityOffset;
 }
+#undef entityOffset
+#undef targetPos
 
+static int GetAlternateMovingPlatform_entityOffset;
+static SVECTOR GetAlternateMovingPlatform_targetPos;
+#define entityOffset GetAlternateMovingPlatform_entityOffset
+#define targetPos GetAlternateMovingPlatform_targetPos
 int GetAlternateMovingPlatform(Player* player, SVECTOR* checkPos) {
     if (checkPos->vx == -1) {
-        SVECTOR_000a43ec = player->finePos;
+        targetPos = player->finePos;
     } else {
-        SVECTOR_000a43ec = *checkPos;
+        targetPos = *checkPos;
     }
 
-    D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
+    entityOffset = (GetBlockAt(&targetPos) - 5) * 128;
 
-    if (D_000A43E8 < 0 || entityData[D_000A43E8] != OBJ_TRANSPORTER) {
-        SVECTOR_000a43ec.vx -= player->gravityDir.vx * 512;
-        SVECTOR_000a43ec.vy -= player->gravityDir.vy * 512;
-        SVECTOR_000a43ec.vz -= player->gravityDir.vz * 512;
+    if (entityOffset < 0 || entityData[entityOffset] != OBJ_TRANSPORTER) {
+        targetPos.vx -= player->gravityDir.vx * 512;
+        targetPos.vy -= player->gravityDir.vy * 512;
+        targetPos.vz -= player->gravityDir.vz * 512;
 
-        D_000A43E8 = (GetBlockAt(&SVECTOR_000a43ec) - 5) * 128;
-        if (D_000A43E8 < 0) {
+        entityOffset = (GetBlockAt(&targetPos) - 5) * 128;
+        if (entityOffset < 0) {
             return -1;
         }
-        if (entityData[D_000A43E8] != 5) {
+        if (entityData[entityOffset] != 5) {
             return -1;
         }
     }
 
-    if (!AreDirectionsOnSameAxis(entityData[D_000A43E8 + 2], GetRotationIndexFromVector(player->gravityDir))) {
+    if (!AreDirectionsOnSameAxis(entityData[entityOffset + 2], GetRotationIndexFromVector(player->gravityDir))) {
         return -1;
     }
-    if (IsVecWithinPlatformBounds(&player->finePos, D_000A43E8, 100)) {
-        return D_000A43E8;
+    if (IsVecWithinPlatformBounds(&player->finePos, entityOffset, 100)) {
+        return entityOffset;
     }
 
     return -1;
 }
+#undef entityOffset
+#undef targetPos
 
+static int JumpingOnMovingPlatform_i;
+#define i JumpingOnMovingPlatform_i
 void JumpingOnMovingPlatform(Player* player) {
     player->jumpingOnMovingPlatform = 1;
     player->onMovingPlatform = 0;
 
-    for (mI = 2; mI <= entityData[player->movingPlatformEntityIdStandingOn + 17] + 1; mI++) {
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[mI][2][2] =
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][mI][2] =
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][mI] = -1;
+    for (i = 2; i <= entityData[player->movingPlatformEntityIdStandingOn + 17] + 1; i++) {
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[i][2][2] =
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][i][2] =
+        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][i] = -1;
     }
 
     player->finePos.vx += entityData[player->movingPlatformEntityIdStandingOn + 119] - 512;
@@ -459,7 +467,30 @@ void JumpingOnMovingPlatform(Player* player) {
 
     player->svec54.vx = player->svec54.vy = player->svec54.vz = 0;
 }
+#undef i
 
+static short UpdatePlayerSurroundingBlocks_startX;
+static short UpdatePlayerSurroundingBlocks_startY;
+static short UpdatePlayerSurroundingBlocks_startZ;
+static short UpdatePlayerSurroundingBlocks_gridX;
+static short UpdatePlayerSurroundingBlocks_gridY;
+static short UpdatePlayerSurroundingBlocks_gridZ;
+static short UpdatePlayerSurroundingBlocks_velSum;
+static short UpdatePlayerSurroundingBlocks_i;
+static short UpdatePlayerSurroundingBlocks_j;
+static short UpdatePlayerSurroundingBlocks_k;
+static SVECTOR UpdatePlayerSurroundingBlocks_blockCheckPos;
+#define startX UpdatePlayerSurroundingBlocks_startX
+#define startY UpdatePlayerSurroundingBlocks_startY
+#define startZ UpdatePlayerSurroundingBlocks_startZ
+#define gridX UpdatePlayerSurroundingBlocks_gridX
+#define gridY UpdatePlayerSurroundingBlocks_gridY
+#define gridZ UpdatePlayerSurroundingBlocks_gridZ
+#define velSum UpdatePlayerSurroundingBlocks_velSum
+#define i UpdatePlayerSurroundingBlocks_i
+#define j UpdatePlayerSurroundingBlocks_j
+#define k UpdatePlayerSurroundingBlocks_k
+#define blockCheckPos UpdatePlayerSurroundingBlocks_blockCheckPos
 void UpdatePlayerSurroundingBlocks(Player* player) {
     short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
     short gx, gy, gz;
@@ -467,60 +498,71 @@ void UpdatePlayerSurroundingBlocks(Player* player) {
     short vx, vy, vz;
 
     vx = (player->finePos.vx + 256) >> 9;
-    SVECTOR_000a4428.vx = vx;
+    blockCheckPos.vx = vx;
     vy = (player->finePos.vy + 256) >> 9;
-    SVECTOR_000a4428.vy = vy;
+    blockCheckPos.vy = vy;
     vz = (player->finePos.vz + 256) >> 9;
-    SVECTOR_000a4428.vz = vz;
+    blockCheckPos.vz = vz;
 
     gx = player->gravityDir.vx;
     rx = player->rightVec.vx;
     gx--;
     vx -= gx;
-    DAT_000a43fc = (rx + vx) - player->facingDir.vx;
+    startX = (rx + vx) - player->facingDir.vx;
 
     gy = player->gravityDir.vy;
     ry = player->rightVec.vy;
     gy--;
     vy -= gy;
-    DAT_000a4400 = (ry + vy) - player->facingDir.vy;
+    startY = (ry + vy) - player->facingDir.vy;
 
     gz = player->gravityDir.vz;
     rz = player->rightVec.vz;
     gz--;
     vz -= gz;
-    DAT_000a4404 = (rz + vz) - player->facingDir.vz;
+    startZ = (rz + vz) - player->facingDir.vz;
 
-    for (tempI = 0; tempI < 3; tempI++) {
-        for (tempJ = 0; tempJ < 3; tempJ++) {
-            for (tempK = 0; tempK < 3; tempK++) {
-                DAT_000a4408 = (DAT_000a43fc + tempI * player->gravityDir.vx + tempJ * player->facingDir.vx) - tempK * player->rightVec.vx;
-                DAT_000a440c = (DAT_000a4400 + tempI * player->gravityDir.vy + tempJ * player->facingDir.vy) - tempK * player->rightVec.vy;
-                DAT_000a4410 = (DAT_000a4404 + tempI * player->gravityDir.vz + tempJ * player->facingDir.vz) - tempK * player->rightVec.vz;
-                player->surroundingBlocks[tempI][tempJ][tempK] = grid[DAT_000a4408][DAT_000a440c][DAT_000a4410];
-                mpVelSum = (short)player->surroundingBlocks[tempI][tempJ][tempK];
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                gridX = (startX + i * player->gravityDir.vx + j * player->facingDir.vx) - k * player->rightVec.vx;
+                gridY = (startY + i * player->gravityDir.vy + j * player->facingDir.vy) - k * player->rightVec.vy;
+                gridZ = (startZ + i * player->gravityDir.vz + j * player->facingDir.vz) - k * player->rightVec.vz;
+                player->surroundingBlocks[i][j][k] = grid[gridX][gridY][gridZ];
+                velSum = (short)player->surroundingBlocks[i][j][k];
             }
         }
     }
 
-    SVECTOR_000a4428.vx = player->finePos.vx + player->svec54.vx;
-    SVECTOR_000a4428.vy = player->finePos.vy + player->svec54.vy;
-    SVECTOR_000a4428.vz = player->finePos.vz + player->svec54.vz;
+    blockCheckPos.vx = player->finePos.vx + player->svec54.vx;
+    blockCheckPos.vy = player->finePos.vy + player->svec54.vy;
+    blockCheckPos.vz = player->finePos.vz + player->svec54.vz;
 
-    mpVelSum = GetBlockAt(&SVECTOR_000a4428);
-    if (mpVelSum == -2) {
+    velSum = GetBlockAt(&blockCheckPos);
+    if (velSum == -2) {
         player->surroundingBlocks[1][1][1] = -2;
     }
 
     {
         MovingPlatformEntity* mpe = (MovingPlatformEntity*)(player->movingPlatformEntityIdStandingOn * 2 + (int)entityData);
-        mpVelSum = mpe->velX + mpe->velY + mpe->velZ;
+        velSum = mpe->velX + mpe->velY + mpe->velZ;
     }
 
-    if (mpVelSum != 0) {
+    if (velSum != 0) {
         Vibrate99(0, 70, 2);
     }
 }
+#undef startX
+#undef startY
+#undef startZ
+#undef gridX
+#undef gridY
+#undef gridZ
+#undef velSum
+#undef i
+#undef j
+#undef k
+#undef blockCheckPos
 
 int AreDirectionsOnSameAxis(int dir1, int dir2) {
     if ((dir1 == 1 || dir1 == 4) && (dir2 == 1 || dir2 == 4))
@@ -564,6 +606,17 @@ void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR*
     D_000A4430 = inv_t;
 }
 
+static int CalcLevelBounds_distSq;
+static int CalcLevelBounds_xMin, CalcLevelBounds_xMax;
+static int CalcLevelBounds_yMin, CalcLevelBounds_yMax;
+static int CalcLevelBounds_zMin, CalcLevelBounds_zMax;
+#define distSq CalcLevelBounds_distSq
+#define xMin CalcLevelBounds_xMin
+#define xMax CalcLevelBounds_xMax
+#define yMin CalcLevelBounds_yMin
+#define yMax CalcLevelBounds_yMax
+#define zMin CalcLevelBounds_zMin
+#define zMax CalcLevelBounds_zMax
 void CalcLevelBounds(Player* player) {
     int x, y, z;
 
@@ -586,44 +639,44 @@ void CalcLevelBounds(Player* player) {
     levelEntryAnimTimer = 0;
     levelEntryAnimTimerIncrement = 16;
 
-    levelXMin = levelYMin = levelZMin = 34;
-    levelXMax = levelYMax = levelZMax = 0;
+    xMin = yMin = zMin = 34;
+    xMax = yMax = zMax = 0;
 
     for (x = 0; x < 34; x++) {
         for (y = 0; y < 34; y++) {
             for (z = 0; z < 34; z++) {
                 if (levelData[x * 1156 + y * 34 + z] != -1) {
-                    if (x < levelXMin)
-                        levelXMin = x;
-                    if (y < levelYMin)
-                        levelYMin = y;
-                    if (z < levelZMin)
-                        levelZMin = z;
-                    if (x > levelXMax)
-                        levelXMax = x;
-                    if (y > levelYMax)
-                        levelYMax = y;
-                    if (z > levelZMax)
-                        levelZMax = z;
+                    if (x < xMin)
+                        xMin = x;
+                    if (y < yMin)
+                        yMin = y;
+                    if (z < zMin)
+                        zMin = z;
+                    if (x > xMax)
+                        xMax = x;
+                    if (y > yMax)
+                        yMax = y;
+                    if (z > zMax)
+                        zMax = z;
                 }
             }
         }
     }
 
-    xMinPlusMax = levelXMin - (-levelXMax);
-    yMinPlusMax = levelYMin - (-levelYMax);
-    zMinPlusMax = levelZMin - (-levelZMax);
+    xMinPlusMax = xMin - (-xMax);
+    yMinPlusMax = yMin - (-yMax);
+    zMinPlusMax = zMin - (-zMax);
     maxDistSquared = 0;
 
     for (x = 0; x < 34; x++) {
         for (y = 0; y < 34; y++) {
             for (z = 0; z < 34; z++) {
                 if (levelData[x * 1156 + y * 34 + z] != -1) {
-                    distSquared = (x * 2 - xMinPlusMax) * (x * 2 - xMinPlusMax) +
-                                  (y * 2 - yMinPlusMax) * (y * 2 - yMinPlusMax) +
-                                  (z * 2 - zMinPlusMax) * (z * 2 - zMinPlusMax);
-                    if (distSquared > maxDistSquared) {
-                        maxDistSquared = distSquared;
+                    distSq = (x * 2 - xMinPlusMax) * (x * 2 - xMinPlusMax) +
+                             (y * 2 - yMinPlusMax) * (y * 2 - yMinPlusMax) +
+                             (z * 2 - zMinPlusMax) * (z * 2 - zMinPlusMax);
+                    if (distSq > maxDistSquared) {
+                        maxDistSquared = distSq;
                     }
                 }
             }
@@ -652,7 +705,18 @@ void CalcLevelBounds(Player* player) {
     levelEntryBezierP2.vy = levelEntryBezierP3.vy - initPlayerFacingDir.vy / 2;
     levelEntryBezierP2.vz = levelEntryBezierP3.vz - initPlayerFacingDir.vz / 2;
 }
+#undef distSq
+#undef xMin
+#undef xMax
+#undef yMin
+#undef yMax
+#undef zMin
+#undef zMax
 
+static VECTOR ProcessCameraAndMovement_facingGravityProd;
+static VECTOR ProcessCameraAndMovement_coarseFacingDir;
+#define facingGravityProd ProcessCameraAndMovement_facingGravityProd
+#define coarseFacingDir ProcessCameraAndMovement_coarseFacingDir
 void ProcessCameraAndMovement(Player* player) {
     player->playerHasControl = 0;
     if (levelEntryAnimTimer > 1024 || gameMode == 1) {
@@ -667,12 +731,12 @@ void ProcessCameraAndMovement(Player* player) {
     player->copycatMoveIndex = 0;
     EvaluateCubicBezier(&levelEntryBezierP0, &levelEntryBezierP1, &levelEntryBezierP2, &levelEntryBezierP3, &levelEntryCamPos, (short)levelEntryAnimTimer, 15);
 
-    initPlayerFacingDirCoarse.vx = initPlayerFacingDir.vx / 1024;
-    initPlayerFacingDirCoarse.vy = initPlayerFacingDir.vy / 1024;
-    initPlayerFacingDirCoarse.vz = initPlayerFacingDir.vz / 1024;
+    coarseFacingDir.vx = initPlayerFacingDir.vx / 1024;
+    coarseFacingDir.vy = initPlayerFacingDir.vy / 1024;
+    coarseFacingDir.vz = initPlayerFacingDir.vz / 1024;
 
-    VectorNormal(&initPlayerFacingDirCoarse, &initPlayerFacingDirCoarse);
-    OuterProduct12(&initPlayerFacingDirCoarse, &initPlayerGravityDir, &facingGravityProd);
+    VectorNormal(&coarseFacingDir, &coarseFacingDir);
+    OuterProduct12(&coarseFacingDir, &initPlayerGravityDir, &facingGravityProd);
     VectorNormal(&facingGravityProd, &facingGravityProd);
 
     perspMatrixes[cameraIndex].m[0][0] = (short)facingGravityProd.vx;
@@ -681,9 +745,9 @@ void ProcessCameraAndMovement(Player* player) {
     perspMatrixes[cameraIndex].m[1][0] = -(short)initPlayerGravityDir.vx;
     perspMatrixes[cameraIndex].m[1][1] = -(short)initPlayerGravityDir.vy;
     perspMatrixes[cameraIndex].m[1][2] = -(short)initPlayerGravityDir.vz;
-    perspMatrixes[cameraIndex].m[2][0] = (short)initPlayerFacingDirCoarse.vx;
-    perspMatrixes[cameraIndex].m[2][1] = (short)initPlayerFacingDirCoarse.vy;
-    perspMatrixes[cameraIndex].m[2][2] = (short)initPlayerFacingDirCoarse.vz;
+    perspMatrixes[cameraIndex].m[2][0] = (short)coarseFacingDir.vx;
+    perspMatrixes[cameraIndex].m[2][1] = (short)coarseFacingDir.vy;
+    perspMatrixes[cameraIndex].m[2][2] = (short)coarseFacingDir.vz;
 
     RotMatrixY(levelEntryAnimTimer - 1024, &perspMatrixes[cameraIndex]);
     RotMatrixX(250, &perspMatrixes[cameraIndex]);
@@ -714,7 +778,11 @@ void ProcessCameraAndMovement(Player* player) {
     player->debugCamY = 0;
     player->debugCamX = 0;
 }
+#undef facingGravityProd
+#undef coarseFacingDir
 
+static VECTOR HandleDebugCamera_transVec;
+#define transVec HandleDebugCamera_transVec
 void HandleDebugCamera(Player* player) {
     player->playerHasControl = 1;
 
@@ -725,23 +793,28 @@ void HandleDebugCamera(Player* player) {
     RotMatrixZ(debugCamX, &perspMatrixes[cameraIndex]);
     RotMatrixX(debugCamY, &perspMatrixes[cameraIndex]);
 
-    VECTOR_000a448c.vx = -xMinPlusMax;
-    VECTOR_000a448c.vy = -yMinPlusMax;
-    VECTOR_000a448c.vz = -zMinPlusMax;
+    transVec.vx = -xMinPlusMax;
+    transVec.vy = -yMinPlusMax;
+    transVec.vz = -zMinPlusMax;
 
-    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a448c, &VECTOR_000a448c);
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &transVec, &transVec);
 
-    perspMatrixes[cameraIndex].t[0] = VECTOR_000a448c.vx;
-    perspMatrixes[cameraIndex].t[1] = VECTOR_000a448c.vy;
-    perspMatrixes[cameraIndex].t[2] = VECTOR_000a448c.vz + maxDistSquared;
+    perspMatrixes[cameraIndex].t[0] = transVec.vx;
+    perspMatrixes[cameraIndex].t[1] = transVec.vy;
+    perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared;
 }
+#undef transVec
 
+static SVECTOR HandlePauseModeRotationEffect_rotVec;
+static VECTOR HandlePauseModeRotationEffect_transVec;
+#define rotVec HandlePauseModeRotationEffect_rotVec
+#define transVec HandlePauseModeRotationEffect_transVec
 void HandlePauseModeRotationEffect(Player* player) {
     player->playerHasControl = 0;
 
-    SVECTOR_000a449c.vx = (SVECTOR_000a449c.vx - 10) % 4096;
-    SVECTOR_000a449c.vy = (SVECTOR_000a449c.vy + 4) % 4096;
-    SVECTOR_000a449c.vz = (SVECTOR_000a449c.vz + 13) % 4096;
+    rotVec.vx = (rotVec.vx - 10) % 4096;
+    rotVec.vy = (rotVec.vy + 4) % 4096;
+    rotVec.vz = (rotVec.vz + 13) % 4096;
 
     if (specialLevelType == 0) {
         zoomInAndOutPhase = (zoomInAndOutPhase + 15) % 4096;
@@ -750,49 +823,69 @@ void HandlePauseModeRotationEffect(Player* player) {
         zoomInAndOutPhase = (zoomInAndOutPhase + 70) % 4096;
     }
 
-    RotMatrix(&SVECTOR_000a449c, &perspMatrixes[cameraIndex]);
+    RotMatrix(&rotVec, &perspMatrixes[cameraIndex]);
 
-    VECTOR_000a44a8.vx = -xMinPlusMax;
-    VECTOR_000a44a8.vy = -yMinPlusMax;
-    VECTOR_000a44a8.vz = -zMinPlusMax;
+    transVec.vx = -xMinPlusMax;
+    transVec.vy = -yMinPlusMax;
+    transVec.vz = -zMinPlusMax;
 
-    ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44a8, &VECTOR_000a44a8);
+    ApplyMatrixLV(&perspMatrixes[cameraIndex], &transVec, &transVec);
 
-    perspMatrixes[cameraIndex].t[0] = VECTOR_000a44a8.vx;
-    perspMatrixes[cameraIndex].t[1] = VECTOR_000a44a8.vy;
-    perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 400;
+    perspMatrixes[cameraIndex].t[0] = transVec.vx;
+    perspMatrixes[cameraIndex].t[1] = transVec.vy;
+    perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared + 400;
 
     if (specialLevelType == 0) {
-        perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 1400 + ((rsin(zoomInAndOutPhase) * 1000) / 4096);
+        perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared + 1400 + ((rsin(zoomInAndOutPhase) * 1000) / 4096);
     }
     if (specialLevelType == 1) {
-        perspMatrixes[cameraIndex].t[2] = VECTOR_000a44a8.vz + maxDistSquared + 3400 + ((rsin(zoomInAndOutPhase) * 3000) / 4096);
+        perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared + 3400 + ((rsin(zoomInAndOutPhase) * 3000) / 4096);
     }
 }
+#undef rotVec
+#undef transVec
 
+static MATRIX HandlePlayerMovementStuff_camRotMatrix;
+static SVECTOR HandlePlayerMovementStuff_groundCheckPos;
+static SVECTOR HandlePlayerMovementStuff_camRotVec;
+static SVECTOR HandlePlayerMovementStuff_tempTurnVec;
+static VECTOR HandlePlayerMovementStuff_camOffsetVec;
+static VECTOR HandlePlayerMovementStuff_camTransVec;
+static int HandlePlayerMovementStuff_blockType;
+static int HandlePlayerMovementStuff_r1TurnFlag;
+static int HandlePlayerMovementStuff_r2TurnFlag;
+#define camRotMatrix HandlePlayerMovementStuff_camRotMatrix
+#define groundCheckPos HandlePlayerMovementStuff_groundCheckPos
+#define camRotVec HandlePlayerMovementStuff_camRotVec
+#define tempTurnVec HandlePlayerMovementStuff_tempTurnVec
+#define camOffsetVec HandlePlayerMovementStuff_camOffsetVec
+#define camTransVec HandlePlayerMovementStuff_camTransVec
+#define blockType HandlePlayerMovementStuff_blockType
+#define r1TurnFlag HandlePlayerMovementStuff_r1TurnFlag
+#define r2TurnFlag HandlePlayerMovementStuff_r2TurnFlag
 void HandlePlayerMovementStuff(Player* player) {
     short turningTimer;
 
     player->playerHasControl = 1;
 
     if (player->startTurningTo == 1) {
-        SVECTOR_000a4514 = player->rightVec;
+        tempTurnVec = player->rightVec;
         player->facingDirBeforeStartingTurning = player->facingDir;
         player->rightVec.vx = -player->facingDir.vx;
         player->rightVec.vy = -player->facingDir.vy;
         player->rightVec.vz = -player->facingDir.vz;
-        player->facingDir = SVECTOR_000a4514;
+        player->facingDir = tempTurnVec;
         player->turningWhere = 3;
         player->startTurningTo = -1;
     }
 
     if (player->startTurningTo == 2) {
         player->facingDirBeforeStartingTurning = player->facingDir;
-        SVECTOR_000a4514.vx = -player->rightVec.vx;
-        SVECTOR_000a4514.vy = -player->rightVec.vy;
-        SVECTOR_000a4514.vz = -player->rightVec.vz;
+        tempTurnVec.vx = -player->rightVec.vx;
+        tempTurnVec.vy = -player->rightVec.vy;
+        tempTurnVec.vz = -player->rightVec.vz;
         player->rightVec = player->facingDir;
-        player->facingDir = SVECTOR_000a4514;
+        player->facingDir = tempTurnVec;
         player->turningWhere = 4;
         player->startTurningTo = -1;
     }
@@ -826,11 +919,11 @@ void HandlePlayerMovementStuff(Player* player) {
     }
 
     if (player->field100_0x1ac == -1 && player->field119_0x1c8 != 2) {
-        SVECTOR_000a4514 = player->perspVec2;
+        tempTurnVec = player->perspVec2;
         player->gravityDir.vx = -player->facingDir.vx;
         player->gravityDir.vy = -player->facingDir.vy;
         player->gravityDir.vz = -player->facingDir.vz;
-        player->facingDir = SVECTOR_000a4514;
+        player->facingDir = tempTurnVec;
         player->field100_0x1ac = 0;
         player->field119_0x1c8 = 1;
     }
@@ -863,15 +956,15 @@ void HandlePlayerMovementStuff(Player* player) {
     perspMatrixes[cameraIndex].m[2][1] = (u16)player->perspVec3.vy << 12;
     perspMatrixes[cameraIndex].m[2][2] = (u16)player->perspVec3.vz << 12;
 
-    VECTOR_000a44e8.vx = player->svec_184.vx;
-    VECTOR_000a44e8.vy = player->svec_184.vy;
-    VECTOR_000a44e8.vz = player->svec_184.vz;
+    camOffsetVec.vx = player->svec_184.vx;
+    camOffsetVec.vy = player->svec_184.vy;
+    camOffsetVec.vz = player->svec_184.vz;
 
-    DAT_000a450c = 0;
-    DAT_000a4508 = 0;
+    r2TurnFlag = 0;
+    r1TurnFlag = 0;
     if (player->cameraR1R2TurnDirection.vx == -1) {
         if (player->howMoving198 != FALLING && DAT_000a4598 == 0) {
-            DAT_000a450c = 1;
+            r2TurnFlag = 1;
             player->cameraR1TurnAmount.vx += 26;
             if (player->cameraR1TurnAmount.vx > 650)
                 player->cameraR1TurnAmount.vx = 650;
@@ -879,31 +972,31 @@ void HandlePlayerMovementStuff(Player* player) {
     }
 
     if (player->cameraR1R2TurnDirection.vx == 1 && player->cameraR1TurnAmount.vx == 0) {
-        DAT_000a4508 = 1;
+        r1TurnFlag = 1;
         DAT_000a4598 += 26;
         if (DAT_000a4598 > 650)
             DAT_000a4598 = 650;
     }
 
-    SVECTOR_000a44b8.vx = player->finePos.vx - (player->gravityDir.vx * 512);
-    SVECTOR_000a44b8.vy = player->finePos.vy - (player->gravityDir.vy * 512);
-    SVECTOR_000a44b8.vz = player->finePos.vz - (player->gravityDir.vz * 512);
+    groundCheckPos.vx = player->finePos.vx - (player->gravityDir.vx * 512);
+    groundCheckPos.vy = player->finePos.vy - (player->gravityDir.vy * 512);
+    groundCheckPos.vz = player->finePos.vz - (player->gravityDir.vz * 512);
 
-    blockTypePlayerStandingOn = GetBlockAt(&SVECTOR_000a44b8);
-    blockTypePlayerStandingOn = player->surroundingBlocks[0][1][1];
+    blockType = GetBlockAt(&groundCheckPos);
+    blockType = player->surroundingBlocks[0][1][1];
 
     if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_FORWARD && player->jumpingOrViewportRotationTimer < 10)) {
-        if (blockTypePlayerStandingOn == -1) {
+        if (blockType == -1) {
             if (player->cameraR1TurnAmount.vx < 550) {
                 if (DAT_000a4598 == 0) {
-                    DAT_000a450c = 1;
+                    r2TurnFlag = 1;
                     r1TurnDelta++;
                     if (r1TurnDelta > 32)
                         r1TurnDelta = 32;
                     player->cameraR1TurnAmount.vx += r1TurnDelta;
                 }
             } else {
-                DAT_000a450c = 1;
+                r2TurnFlag = 1;
                 r1TurnDelta--;
                 if (r1TurnDelta < 10)
                     r1TurnDelta = 10;
@@ -916,13 +1009,13 @@ void HandlePlayerMovementStuff(Player* player) {
         r1TurnDelta = 3;
     }
 
-    if (DAT_000a4508 == 0 && DAT_000a4598 > 0) {
+    if (r1TurnFlag == 0 && DAT_000a4598 > 0) {
         DAT_000a4598 -= 18;
         if (DAT_000a4598 < 0)
             DAT_000a4598 = 0;
     }
 
-    if (DAT_000a450c == 0) {
+    if (r2TurnFlag == 0) {
         if (player->cameraR1TurnAmount.vx > 0) {
             player->cameraR1TurnAmount.vx -= 18;
             if (player->cameraR1TurnAmount.vx < 0)
@@ -968,26 +1061,35 @@ void HandlePlayerMovementStuff(Player* player) {
     if (DAT_000a4598 != 0) {
         RotMatrixX(250, &perspMatrixes[cameraIndex]);
         RotMatrixX(-DAT_000a4598, &perspMatrixes[cameraIndex]);
-        ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44e8, &VECTOR_000a44e8);
-        VECTOR_000a44f8.vx = 0;
-        SVECTOR_000a44c0.vy = 0;
-        SVECTOR_000a44c0.vz = 0;
-        VECTOR_000a44f8.vz = 800 - DAT_000a4598 / 2;
-        SVECTOR_000a44c0.vx = -DAT_000a4598;
-        VECTOR_000a44f8.vy = 250 - DAT_000a4598 / 3;
-        RotMatrix(&SVECTOR_000a44c0, &MATRIX_000a44c8);
-        ApplyMatrixLV(&MATRIX_000a44c8, &VECTOR_000a44f8, &VECTOR_000a44f8);
-        perspMatrixes[cameraIndex].t[0] = -VECTOR_000a44e8.vx + VECTOR_000a44f8.vx;
-        perspMatrixes[cameraIndex].t[1] = -VECTOR_000a44e8.vy + VECTOR_000a44f8.vy;
-        perspMatrixes[cameraIndex].t[2] = -VECTOR_000a44e8.vz + VECTOR_000a44f8.vz;
+        ApplyMatrixLV(&perspMatrixes[cameraIndex], &camOffsetVec, &camOffsetVec);
+        camTransVec.vx = 0;
+        camRotVec.vy = 0;
+        camRotVec.vz = 0;
+        camTransVec.vz = 800 - DAT_000a4598 / 2;
+        camRotVec.vx = -DAT_000a4598;
+        camTransVec.vy = 250 - DAT_000a4598 / 3;
+        RotMatrix(&camRotVec, &camRotMatrix);
+        ApplyMatrixLV(&camRotMatrix, &camTransVec, &camTransVec);
+        perspMatrixes[cameraIndex].t[0] = -camOffsetVec.vx + camTransVec.vx;
+        perspMatrixes[cameraIndex].t[1] = -camOffsetVec.vy + camTransVec.vy;
+        perspMatrixes[cameraIndex].t[2] = -camOffsetVec.vz + camTransVec.vz;
     } else {
         RotMatrixX(player->cameraR1TurnAmount.vx + 250, &perspMatrixes[cameraIndex]);
-        ApplyMatrixLV(&perspMatrixes[cameraIndex], &VECTOR_000a44e8, &VECTOR_000a44e8);
-        perspMatrixes[cameraIndex].t[0] = -VECTOR_000a44e8.vx;
-        perspMatrixes[cameraIndex].t[1] = -VECTOR_000a44e8.vy + 250;
-        perspMatrixes[cameraIndex].t[2] = -VECTOR_000a44e8.vz + 800;
+        ApplyMatrixLV(&perspMatrixes[cameraIndex], &camOffsetVec, &camOffsetVec);
+        perspMatrixes[cameraIndex].t[0] = -camOffsetVec.vx;
+        perspMatrixes[cameraIndex].t[1] = -camOffsetVec.vy + 250;
+        perspMatrixes[cameraIndex].t[2] = -camOffsetVec.vz + 800;
     }
 }
+#undef camRotMatrix
+#undef groundCheckPos
+#undef camRotVec
+#undef tempTurnVec
+#undef camOffsetVec
+#undef camTransVec
+#undef blockType
+#undef r1TurnFlag
+#undef r2TurnFlag
 
 void SetInvulnerable(void) {
     thePlayer.invulnerabilityTimer = 3000;
