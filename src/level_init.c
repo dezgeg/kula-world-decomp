@@ -92,7 +92,7 @@ extern uint laserData0[4][1024];
 extern uint laserData1[4][1024];
 extern uint laserData2[4][1024];
 extern uint laserData3[4][1024];
-extern int D_000C445C;
+extern int laserDrawBuffer[];
 
 short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
     {
@@ -605,7 +605,7 @@ void InitLasers2(void) {
         }
     }
 
-    dst = &D_000C445C;
+    dst = laserDrawBuffer;
     for (entI = 0; entI < numEntities; entI++) {
         if (entityData[entI * 128] != 8) {
             continue;
