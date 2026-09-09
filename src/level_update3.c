@@ -54,7 +54,6 @@ extern int numKeysRemaining;
 extern int numTimeTrialPlayers;
 extern int twoPlayerWhichPlayer;
 extern ItemState itemState[256];
-extern MATRIX MATRIX_000a46f4;
 extern MATRIX perspMatrixes[2];
 extern Player thePlayer;
 extern short* entityData;
@@ -64,8 +63,8 @@ extern SVECTOR fruit2ScreenSpaceParticlesPos;
 extern SVECTOR fruit3ScreenSpaceParticlesPos;
 extern SVECTOR fruit4ScreenSpaceParticlesPos;
 extern SVECTOR fruit5ScreenSpaceParticlesPos;
-extern SVECTOR SVECTOR_000a2df4;
-extern SVECTOR SVECTOR_000a2dfc;
+extern SVECTOR ZERO_SVECTOR_a2df4;
+extern SVECTOR hourglassHudParticlePos;
 extern SVECTOR transporterParticlesPos;
 extern uint fruitsCollectedBitmask;
 
@@ -170,23 +169,23 @@ void HandleItemTouching(Player* player) {
                             EnableLethargy(1);
                             Vibrate100(120, 120, 200, 1);
                             Vibrate101(200);
-                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_INVINCIBILITY_PILL:
                             AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.invulnerabilityTimer = 700;
-                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_LETHARGY_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_BOUNCY_PILL:
                             AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.bounceTimer = 700;
-                            SndPlaySfx(SFX_BOUNCE_PILL, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_BOUNCE_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_SUNGLASSES:
-                            SndPlaySfx(SFX_SUNGLASSES_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_SUNGLASSES_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             AddParticles(8, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.sunglassTimer = 700;
                             levelScore += 500;
@@ -215,21 +214,21 @@ void HandleItemTouching(Player* player) {
                                 entityData[levelExitEntityOffset + 3] = 0;
                                 entityData[levelExitEntityOffset + 4] = 1;
                                 entityData[levelHiddenExitEntityOffset + 4] = 1;
-                                SndPlaySfx(SFX_LAST_KEY_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                                SndPlaySfx(SFX_LAST_KEY_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             } else {
-                                SndPlaySfx(SFX_KEY_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                                SndPlaySfx(SFX_KEY_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             }
                             break;
 
                         case OBJ_GEM:
                             AddParticles(7, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             levelScore += 2975;
-                            SndPlaySfx(SFX_GEM_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_GEM_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_COIN:
                             AddParticles(2, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_COIN_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_COIN_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
                                 levelScore += 750;
                             }
@@ -246,7 +245,7 @@ void HandleItemTouching(Player* player) {
                                 AddParticles(0, &fruit1ScreenSpaceParticlesPos, 0);
                             }
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_1, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_1, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 1;
                             levelPlayTime[twoPlayerWhichPlayer] -= 200;
@@ -257,7 +256,7 @@ void HandleItemTouching(Player* player) {
                                 AddParticles(0, &fruit2ScreenSpaceParticlesPos, 0);
                             }
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_2, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_2, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 2;
                             levelPlayTime[twoPlayerWhichPlayer] -= 200;
@@ -268,7 +267,7 @@ void HandleItemTouching(Player* player) {
                                 AddParticles(0, &fruit3ScreenSpaceParticlesPos, 0);
                             }
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_3, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_3, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 4;
                             levelPlayTime[twoPlayerWhichPlayer] -= 200;
@@ -279,7 +278,7 @@ void HandleItemTouching(Player* player) {
                                 AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
                             }
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_4, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_4, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 8;
                             levelPlayTime[twoPlayerWhichPlayer] -= 200;
@@ -290,7 +289,7 @@ void HandleItemTouching(Player* player) {
                                 AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
                             }
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_5, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 0x10;
                             levelPlayTime[twoPlayerWhichPlayer] -= 200;
@@ -303,17 +302,17 @@ void HandleItemTouching(Player* player) {
                             AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
                             AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
                             AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_FRUIT_5, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 0x1f;
                             break;
 
                         case OBJ_HOURGLASS:
-                            SndPlaySfx(SFX_HOURGLASS, 0, &SVECTOR_000a2df4, 7000);
+                            SndPlaySfx(SFX_HOURGLASS, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelTimeLeft = 4999 - levelTimeLeft;
                             hourglassIsRotating = 1;
                             levelScore += (levelTimeLeft / 50) * 10;
-                            AddParticles(1, &SVECTOR_000a2dfc, 0);
+                            AddParticles(1, &hourglassHudParticlePos, 0);
                             AddParticles(10, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             break;
                     }
@@ -352,6 +351,7 @@ static int CreateAllItemDispLists_distSq;
 static int CreateAllItemDispLists_entityDir;
 static int CreateAllItemDispLists_itemIdx;
 static MATRIX CreateAllItemDispLists_drawMatrix;
+static MATRIX CreateAllItemDispLists_itemRotMatrix;
 static MATRIX CreateAllItemDispLists_rotMatrix;
 static SVECTOR CreateAllItemDispLists_calcPos;
 static SVECTOR CreateAllItemDispLists_rotVec;
@@ -363,6 +363,7 @@ static SVECTOR CreateAllItemDispLists_offsetVec;
 #define entityDir CreateAllItemDispLists_entityDir
 #define itemIdx CreateAllItemDispLists_itemIdx
 #define drawMatrix CreateAllItemDispLists_drawMatrix
+#define itemRotMatrix CreateAllItemDispLists_itemRotMatrix
 #define rotMatrix CreateAllItemDispLists_rotMatrix
 #define calcPos CreateAllItemDispLists_calcPos
 #define rotVec CreateAllItemDispLists_rotVec
@@ -530,8 +531,8 @@ void CreateAllItemDispLists(void) {
             calcPos.vx = itemState[itemIdx].pos.vx = offsetVec.vx + itemState[itemIdx].matrix.t[0];
             calcPos.vy = itemState[itemIdx].pos.vy = offsetVec.vy + itemState[itemIdx].matrix.t[1];
             calcPos.vz = itemState[itemIdx].pos.vz = offsetVec.vz + itemState[itemIdx].matrix.t[2];
-            MulMatrix0(&itemState[itemIdx].matrix, &rotMatrix, &MATRIX_000a46f4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a46f4, &drawMatrix);
+            MulMatrix0(&itemState[itemIdx].matrix, &rotMatrix, &itemRotMatrix);
+            MulMatrix0(&perspMatrixes[cameraIndex], &itemRotMatrix, &drawMatrix);
             ApplyMatrixSV(&perspMatrixes[cameraIndex], &calcPos, &camPos);
             drawMatrix.t[0] = camPos.vx + perspMatrixes[cameraIndex].t[0];
             drawMatrix.t[1] = camPos.vy + perspMatrixes[cameraIndex].t[1];
@@ -546,6 +547,7 @@ void CreateAllItemDispLists(void) {
 #undef entityDir
 #undef itemIdx
 #undef drawMatrix
+#undef itemRotMatrix
 #undef rotMatrix
 #undef calcPos
 #undef rotVec
@@ -750,9 +752,9 @@ void CheckForButtonEntity(Player* player) {
         entityOffset = player->specialBlockSideOffsetPlayerIsStandingOn;
 
         if (entityData[entityOffset + 4] == 1) {
-            SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(SFX_BUTTON_PRESS, 0, &ZERO_SVECTOR_a2df4, 7000);
         } else {
-            SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &ZERO_SVECTOR_a2df4, 7000);
         }
         Vibrate99(1, 0xff, 1);
 
@@ -824,7 +826,7 @@ int HandleTransporter(Player* player) {
             SetRenderScreenFade(0, 1);
             Vibrate98(0);
             player->alreadyProcessedEntityAction = OBJ_TRANSPORTER;
-            SndPlaySfx(5, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(5, 0, &ZERO_SVECTOR_a2df4, 7000);
             player->movementInhibitTimer = 15;
             player->howMoving0 = 0;
             player->rollingForward = 0;
@@ -940,7 +942,7 @@ void HandleSpecialCubeTypes(Player* player) {
                 player->fireTimer += 40;
             }
             if (fireSoundTimer == 0) {
-                SndPlaySfx(1, 1, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(1, 1, &ZERO_SVECTOR_a2df4, 7000);
             }
             fireSoundTimer = 7;
         }
@@ -985,7 +987,7 @@ void HandleSpecialCubeTypes(Player* player) {
         if (player->faceTypePlayerStandingOn == OBJ_ICE_PATCH) {
             if (thePlayer.startedIceSfx == 0) {
                 thePlayer.startedIceSfx = 1;
-                SndPlaySfx(2, 2, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(2, 2, &ZERO_SVECTOR_a2df4, 7000);
             }
             player->fireTimer -= 150;
             if (player->fireTimer < 0) {
@@ -1036,13 +1038,13 @@ void HandleSpecialCubeTypes(Player* player) {
         }
         if (player->faceTypePlayerStandingOn == OBJ_CRUMBLING_BLOCK_FACE) {
             if (entityData[player->specialBlockIndexPlayerIsStandingOn + 1] == 1) {
-                SndPlaySfx(101, 0, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(101, 0, &ZERO_SVECTOR_a2df4, 7000);
                 levelScore += 50;
             }
             entityData[player->specialBlockIndexPlayerIsStandingOn + 1] = 2;
         }
         if (player->faceTypePlayerStandingOn == OBJ_SPIKE && player->movementInhibitTimer == 0 && thePlayer.invulnerabilityTimer == -1) {
-            SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
             Vibrate99(1, 255, 5);
             if (thePlayer.movementInhibitTimer == 0) {
                 thePlayer.dying = 1;
@@ -1057,7 +1059,7 @@ void HandleSpecialCubeTypes(Player* player) {
             if (entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] == 1 && thePlayer.invulnerabilityTimer == -1) {
                 if (player->onGround == 1) {
                     Vibrate99(1, 255, 5);
-                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
                     if (thePlayer.movementInhibitTimer == 0) {
                         thePlayer.dying = 1;
                         thePlayer.movementVelocity = 0;
@@ -1067,7 +1069,7 @@ void HandleSpecialCubeTypes(Player* player) {
                         thePlayer.ballBlinking = 1;
                     }
                 } else if (player->movementInhibitTimer == 0) {
-                    SndPlaySfx(11, 0, &SVECTOR_000a2df4, 7000);
+                    SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
                     Vibrate99(1, 255, 5);
                     if (thePlayer.movementInhibitTimer == 0) {
                         thePlayer.dying = 1;
@@ -1086,7 +1088,7 @@ void HandleSpecialCubeTypes(Player* player) {
                 player->forcedRollForwardTimer = 10;
             }
             if (player->faceTypePlayerStandingOn == OBJ_BOUNCEPAD && (player->subpixelPositionOnCube.vz > 230 || player->onGround == 1)) {
-                SndPlaySfx(10, 0, &SVECTOR_000a2df4, 7000);
+                SndPlaySfx(10, 0, &ZERO_SVECTOR_a2df4, 7000);
                 Vibrate98(1);
                 player->forcedRollForwardTimer = 0;
                 player->jumping = 1;

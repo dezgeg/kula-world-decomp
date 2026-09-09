@@ -30,7 +30,7 @@ extern short numFruits;
 extern short turnDelayEnabled;
 extern char S_BESCES_01000KULA[16];
 
-int INT_000a5690;
+int memCardHasError;
 int memCardDataValid;
 long mcResult;
 long tempMcResult;
@@ -247,18 +247,18 @@ int SaveMemCard(uint slot) {
             if (MemCardWriteFile(0, S_BESCES_01000KULA, (long*)&memCardData, 0, 0x1000) == McErrCardNotExist) {
                 MemCardSync(0, &mcCmd, &tempMcResult);
                 if (tempMcResult != 0) {
-                    INT_000a5690 = 1;
+                    memCardHasError = 1;
                     mcResult = tempMcResult;
                     return 0;
                 }
             }
         } else {
-            INT_000a5690 = 1;
+            memCardHasError = 1;
             mcResult = ret;
             return 0;
         }
     } else {
-        INT_000a5690 = 1;
+        memCardHasError = 1;
         mcResult = tempMcResult;
         return 0;
     }

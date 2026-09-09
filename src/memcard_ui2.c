@@ -15,7 +15,7 @@ extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 
 // non-gprel-used variables (extern)
-extern SVECTOR SVECTOR_000a2fac;
+extern SVECTOR ZERO_SVECTOR_a2fac;
 extern int controllerButtons;
 extern int curController;
 extern int displayHeight;
@@ -70,12 +70,12 @@ int AskSaveOverwrite(void) {
         SetTextParams(displayWidth / 2, displayHeight / 2 - 50, 1, 0x80, 0x80, 0x80);
         DrawTextCrappyFont("THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n");
         if (TestButton(PAD_CROSS)) {
-            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 1;
         }
         if (TestButton(PAD_TRIANGLE)) {
-            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
             prevControllerButtons = 0xffffffff;
             return 0;
         }

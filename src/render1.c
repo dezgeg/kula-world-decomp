@@ -56,7 +56,7 @@ extern int toBeDisabledLightEffects[64];
 extern int starfieldTransY;
 extern int starfieldTransZ;
 extern MATRIX starfieldMatrix;
-extern GemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
+extern GemRandomSparkleEffect gemRandomSparkleEffects[3][3];
 extern int itemsDispList[2049];
 extern int itemsDispListIdx;
 extern int maxPrimBufUsage;
@@ -71,7 +71,7 @@ extern DR_OFFSET drawOffsets[2][1];
 
 int drawGeometryAndObjects;
 MATRIX levelGeometryRenderingMatrix;
-MATRIX MATRIX_000a5184;
+MATRIX backgroundRenderingMatrix;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase1;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase2;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase3;
@@ -85,10 +85,10 @@ SVECTOR starfieldSinVec;
 int starfieldTransX;
 
 void RenderBackground(void) {
-    MATRIX_000a5184 = perspMatrixes[cameraIndex];
-    MATRIX_000a5184.t[0] = (MATRIX_000a5184.t[0] - 0x2000) >> 4;
-    MATRIX_000a5184.t[1] = (MATRIX_000a5184.t[1] - 0x2000) >> 4;
-    MATRIX_000a5184.t[2] = (MATRIX_000a5184.t[2] - 0x2000) >> 4;
+    backgroundRenderingMatrix = perspMatrixes[cameraIndex];
+    backgroundRenderingMatrix.t[0] = (backgroundRenderingMatrix.t[0] - 0x2000) >> 4;
+    backgroundRenderingMatrix.t[1] = (backgroundRenderingMatrix.t[1] - 0x2000) >> 4;
+    backgroundRenderingMatrix.t[2] = (backgroundRenderingMatrix.t[2] - 0x2000) >> 4;
 
     if (cameraIndex == 0 && tgi->skyboxFlag == 0x401) {
         switch (specialLevelType) {
@@ -252,7 +252,7 @@ void RenderPlayerAndItems(void) {
 
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            UpdateGemRandomSparkleEffect(&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j]);
+            UpdateGemRandomSparkleEffect(&gemRandomSparkleEffects[i][j]);
         }
     }
 

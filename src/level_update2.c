@@ -60,8 +60,8 @@ extern short* levelData;
 extern short numEntities;
 extern uint fruitsCollectedBitmask;
 
-SVECTOR SVECTOR_000a2df4 = { 0, 0, 0, 0 };
-SVECTOR SVECTOR_000a2dfc = { 160, 26, -1, 0 };
+SVECTOR ZERO_SVECTOR_a2df4 = { 0, 0, 0, 0 };
+SVECTOR hourglassHudParticlePos = { 160, 26, -1, 0 };
 SVECTOR fruit1ScreenSpaceParticlesPos = { 208, 233, -1, 0 };
 SVECTOR fruit2ScreenSpaceParticlesPos = { 228, 232, -1, 0 };
 SVECTOR fruit3ScreenSpaceParticlesPos = { 253, 232, -1, 0 };
@@ -332,9 +332,9 @@ void LevelInit(void) {
     thePlayer.acidTimer = 0;
     thePlayer.iceColorChangeTimer = 0;
 
-    thePlayer.cameraR1R2TurnDirection = SVECTOR_000a2df4;
-    thePlayer.cameraR1TurnAmount = SVECTOR_000a2df4;
-    thePlayer.svec54 = SVECTOR_000a2df4;
+    thePlayer.cameraR1R2TurnDirection = ZERO_SVECTOR_a2df4;
+    thePlayer.cameraR1TurnAmount = ZERO_SVECTOR_a2df4;
+    thePlayer.svec54 = ZERO_SVECTOR_a2df4;
 
     pauseForStartPress = 0;
     if (entityData[numEntities * 128] == 666) {
@@ -503,7 +503,7 @@ void ProcessPlayer(void) {
 
     if (thePlayer.invulnerabilityTimer == -1) {
         if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != LEVEL_END_CAPTURED) {
-            SndPlaySfx(SFX_CAPTURED, 0, &SVECTOR_000a2df4, 7000);
+            SndPlaySfx(SFX_CAPTURED, 0, &ZERO_SVECTOR_a2df4, 7000);
             Vibrate99(1, 255, 10);
             thePlayer.dying = 1;
             thePlayer.movementInhibitTimer = 10;

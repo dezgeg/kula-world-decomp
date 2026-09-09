@@ -49,8 +49,8 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
 extern int sprintf(char* s, const char* format, ...);
 
-extern LINE_F3 LINE_F3_ARRAY_000a49a0[2];
-extern LINE_F3 LINE_F3_ARRAY_000a49d0[2];
+extern LINE_F3 memCardCursorBoxLines1[2];
+extern LINE_F3 memCardCursorBoxLines2[2];
 extern uint controllerButtons;
 extern int curController;
 extern struct DIRENTRY direntry;
@@ -71,8 +71,8 @@ extern int whichDrawDispEnv;
 // Variables
 int saveSlot = 0;
 int memCardDataValid = 0;
-SVECTOR SVECTOR_000a2fac = {0};
-int INT_000a5690;
+SVECTOR ZERO_SVECTOR_a2fac = {0};
+int memCardHasError;
 uint mcResult;
 long tempMcResult;
 
@@ -184,7 +184,7 @@ int LoadSaveMenu(void) {
                     } while (memCardData.saveslots[saveSlot].valid == 0);
 
                     if (saveSlot != i) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         DrawSync(0);
                         maxScore2 = 0;
                         for (k2 = 0; k2 < 4; k2++) {
@@ -209,7 +209,7 @@ int LoadSaveMenu(void) {
                     } while (memCardData.saveslots[saveSlot].valid == 0);
 
                     if (saveSlot != i) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         DrawSync(0);
                         maxScore3 = 0;
                         for (k3 = 0; k3 < 4; k3++) {
@@ -226,7 +226,7 @@ int LoadSaveMenu(void) {
                 }
 
                 if (TestButton(PAD_CROSS)) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                     ShowMemCardFullScreenText("LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n");
                     if (LoadSaveSlot(saveSlot) == 1) {
                         return 1;
@@ -279,7 +279,7 @@ int LoadSaveMenu(void) {
                 }
 
                 if (TestButton(PAD_CROSS)) {
-                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                     ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
                     for (i = 0;; i++) {
@@ -309,13 +309,13 @@ int MemCardUi(void) {
     int status;
 
     idleTimer = 0;
-    INT_000a5690 = 0;
+    memCardHasError = 0;
     cursorPos = 1;
     LoadSaveSlot(-1);
     if (memCardDataValid == 0 && mcResult != McErrFileNotExist) {
-        INT_000a5690 = 1;
+        memCardHasError = 1;
     } else {
-        INT_000a5690 = 0;
+        memCardHasError = 0;
     }
 
     prevControllerButtons = controllerButtons;
@@ -397,9 +397,9 @@ int MemCardUi(void) {
         ResetTextVars();
         DrawPsxButtonBackground();
 
-        if (INT_000a5690 == 0) {
+        if (memCardHasError == 0) {
             if (TestButton(PAD_R)) {
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 saveSlot = (saveSlot + 1) % 4;
 
                 DrawSync(0);
@@ -417,7 +417,7 @@ int MemCardUi(void) {
             }
 
             if (TestButton(PAD_L)) {
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 saveSlot--;
                 if (saveSlot < 0)
                     saveSlot = 3;
@@ -469,14 +469,14 @@ int MemCardUi(void) {
             }
 
             if (TestButton(PAD_CROSS)) {
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 if (memCardData.saveslots[saveSlot].valid == 0) {
                     ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
                     if (SaveMemCard(saveSlot) == 1) {
                         return 1;
                     }
                 } else {
-                    INT_000a5690 = 1;
+                    memCardHasError = 1;
                     mcResult = 666;
                 }
             }
@@ -492,22 +492,22 @@ int MemCardUi(void) {
                     DrawWidgets(MENU_SPRITE_MEMCARD_BAD_CARD, 0);
                     break;
                 case McErrNewCard:
-                    INT_000a5690 = 0;
+                    memCardHasError = 0;
                     ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                     LoadSaveSlot(-1);
                     if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                        INT_000a5690 = 1;
+                        memCardHasError = 1;
                     else
-                        INT_000a5690 = 0;
+                        memCardHasError = 0;
                     break;
                 case McErrNotFormat:
                     DrawWidgets(MENU_SPRITE_MEMCARD_FORMAT_MENU, cursorPos);
                     if (TestButton(PAD_U) && cursorPos == 1) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         cursorPos = 0;
                     }
                     if (TestButton(PAD_D) && cursorPos == 0) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         cursorPos = 1;
                     }
                     if (TestButton(PAD_CROSS)) {
@@ -516,9 +516,9 @@ int MemCardUi(void) {
                             FormatMemcard();
                             LoadSaveSlot(-1);
                             if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                                INT_000a5690 = 1;
+                                memCardHasError = 1;
                             else
-                                INT_000a5690 = 0;
+                                memCardHasError = 0;
                             cursorPos = 1;
                             prevControllerButtons = -1;
                         } else if (cursorPos == 1) {
@@ -530,29 +530,29 @@ int MemCardUi(void) {
                 case McErrBlockFull:
                     DrawWidgets(MENU_SPRITE_MEMCARD_FULL, 0);
                     if (TestButton(PAD_CROSS)) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         switch (MemCardUiPart()) {
                             case 1:
                                 ShowMemCardFullScreenText("REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n");
                                 if (SaveMemCard(saveSlot) == 1) {
                                     return 1;
                                 }
-                                INT_000a5690 = 0;
+                                memCardHasError = 0;
                                 ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                                 LoadSaveSlot(-1);
                                 if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                                    INT_000a5690 = 1;
+                                    memCardHasError = 1;
                                 else
-                                    INT_000a5690 = 0;
+                                    memCardHasError = 0;
                                 break;
                             case 0:
-                                INT_000a5690 = 0;
+                                memCardHasError = 0;
                                 ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                                 LoadSaveSlot(-1);
                                 if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                                    INT_000a5690 = 1;
+                                    memCardHasError = 1;
                                 else
-                                    INT_000a5690 = 0;
+                                    memCardHasError = 0;
                                 break;
                             case -1:
                                 prevControllerButtons = -1;
@@ -560,19 +560,19 @@ int MemCardUi(void) {
                         }
                     }
                     if (TestButton(PAD_CIRCLE)) {
-                        INT_000a5690 = 0;
+                        memCardHasError = 0;
                         ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                         LoadSaveSlot(-1);
                         if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                            INT_000a5690 = 1;
+                            memCardHasError = 1;
                         else
-                            INT_000a5690 = 0;
+                            memCardHasError = 0;
                     }
                     break;
                 case 666:
                     DrawWidgets(MENU_SPRITE_MEMCARD_OVERWRITE_MENU, 0);
                     if (TestButton(PAD_CROSS)) {
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                         ShowMemCardFullScreenText("SAVING\n\nDO NOT REMOVE MEMORY CARD\n");
                         if (SaveMemCard(saveSlot) == 1) {
                             return 1;
@@ -580,21 +580,21 @@ int MemCardUi(void) {
                     }
                     if (TestButton(PAD_TRIANGLE)) {
                         mcResult = 0;
-                        INT_000a5690 = 0;
+                        memCardHasError = 0;
                         prevControllerButtons = -1;
                     }
                     break;
             }
 
             if (TestButton(PAD_CROSS) && mcResult) {
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
-                INT_000a5690 = 0;
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
+                memCardHasError = 0;
                 ShowMemCardFullScreenText("READING DATA\n\nDO NOT REMOVE MEMORY CARD\n");
                 LoadSaveSlot(-1);
                 if (memCardDataValid == 0 && mcResult != McErrFileNotExist)
-                    INT_000a5690 = 1;
+                    memCardHasError = 1;
                 else
-                    INT_000a5690 = 0;
+                    memCardHasError = 0;
             }
         }
     } while (!TestButton(PAD_TRIANGLE));
@@ -767,7 +767,7 @@ int MemCardUiPart(void) {
             DrawPsxButtonBackground();
 
             if (TestButton(PAD_CROSS)) {
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 if (AskSaveOverwrite()) {
                     idx = MemCardDeleteFile(0, rawName[cursorY * 3 + cursorX]);
                     if (idx == 0) {
@@ -784,7 +784,7 @@ int MemCardUiPart(void) {
             if (TestButton(PAD_U)) {
                 setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
                 setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 cursorY--;
                 if (cursorY < 0) {
                     cursorY = 4;
@@ -797,7 +797,7 @@ int MemCardUiPart(void) {
             if (TestButton(PAD_D)) {
                 setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
                 setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 cursorY = (cursorY + 1) % 5;
                 if (cursorY * 3 + cursorX >= filecount) {
                     cursorY = 0;
@@ -807,7 +807,7 @@ int MemCardUiPart(void) {
             if (TestButton(PAD_L)) {
                 setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
                 setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 cursorX--;
                 if (cursorX < 0) {
                     cursorX = 2;
@@ -820,7 +820,7 @@ int MemCardUiPart(void) {
             if (TestButton(PAD_R)) {
                 setRGB0(&fileSprites[3 * cursorY + cursorX][0].sprt, 0x60, 0x60, 0x60);
                 setRGB0(&fileSprites[3 * cursorY + cursorX][1].sprt, 0x60, 0x60, 0x60);
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &SVECTOR_000a2fac, 8000);
+                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                 cursorX = (cursorX + 1) % 3;
                 if (cursorY * 3 + cursorX >= filecount) {
                     cursorX = 0;
@@ -865,20 +865,20 @@ int MemCardUiPart(void) {
                 addPrim(&primLists[whichDrawDispEnv].main, &fileSprites[idx][whichDrawDispEnv]);
             }
 
-            SetLineF3(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv]);
-            SetLineF3(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv]);
-            setRGB0(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv], 255, 0, 0);
-            setXY3(&LINE_F3_ARRAY_000a49a0[whichDrawDispEnv], cursorX * 24 + 123, cursorY * 24 + 49,
+            SetLineF3(&memCardCursorBoxLines1[whichDrawDispEnv]);
+            SetLineF3(&memCardCursorBoxLines2[whichDrawDispEnv]);
+            setRGB0(&memCardCursorBoxLines1[whichDrawDispEnv], 255, 0, 0);
+            setXY3(&memCardCursorBoxLines1[whichDrawDispEnv], cursorX * 24 + 123, cursorY * 24 + 49,
                           cursorX * 24 + 140, cursorY * 24 + 49,
                           cursorX * 24 + 140, cursorY * 24 + 66);
 
-            setRGB0(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv], 255, 0, 0);
-            setXY3(&LINE_F3_ARRAY_000a49d0[whichDrawDispEnv], cursorX * 24 + 140, cursorY * 24 + 66,
+            setRGB0(&memCardCursorBoxLines2[whichDrawDispEnv], 255, 0, 0);
+            setXY3(&memCardCursorBoxLines2[whichDrawDispEnv], cursorX * 24 + 140, cursorY * 24 + 66,
                           cursorX * 24 + 123, cursorY * 24 + 66,
                           cursorX * 24 + 123, cursorY * 24 + 49);
 
-            addPrim(&primLists[whichDrawDispEnv].main, &LINE_F3_ARRAY_000a49a0[whichDrawDispEnv]);
-            addPrim(&primLists[whichDrawDispEnv].main, &LINE_F3_ARRAY_000a49d0[whichDrawDispEnv]);
+            addPrim(&primLists[whichDrawDispEnv].main, &memCardCursorBoxLines1[whichDrawDispEnv]);
+            addPrim(&primLists[whichDrawDispEnv].main, &memCardCursorBoxLines2[whichDrawDispEnv]);
         } while (!TestButton(PAD_TRIANGLE));
     }
 

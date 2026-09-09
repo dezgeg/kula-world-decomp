@@ -20,7 +20,7 @@ typedef struct GemSparkleEffect {
 } GemSparkleEffect;
 
 // non-gprel-used variables (extern)
-extern GemSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
+extern GemSparkleEffect gemRandomSparkleEffects[3][3];
 extern Texture textures[150];
 
 // gprel-used variables (defined in this file)
@@ -86,7 +86,7 @@ void* ParseGGI(GgiFile* ggi_ptr) {
 
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
-            ParseGgiInner((int*)&GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
+            ParseGgiInner((int*)&gemRandomSparkleEffects[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
         }
     }
 

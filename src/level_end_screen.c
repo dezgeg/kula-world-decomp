@@ -51,7 +51,7 @@ int bigGuiSpriteFade;
 z_stream zlibStream_a4dd4;
 int inflateRetCode;
 
-SVECTOR SVECTOR_000a2ab4 = { 0, 0, 0, 0 };
+SVECTOR ZERO_SVECTOR_a2ab4 = { 0, 0, 0, 0 };
 char S_Fatal_error_in_jens_2d_eng[] = "Fatal error in jens 2d-eng:\n\n";
 int whichLevelEndSpriteLoaded = LEVEL_END_GFX_VERY_WELL_DONE;
 int gameOverScreenState = 0;
@@ -298,7 +298,7 @@ void DrawBigGuiSprite(int param_1) {
         gameOverScreenFade = 0;
         if (gameOverScreenState == 2) {
             gameOverScreenState = 3;
-            SndPlaySfx(SFX_GAME_OVER, 0, &SVECTOR_000a2ab4, 8000);
+            SndPlaySfx(SFX_GAME_OVER, 0, &ZERO_SVECTOR_a2ab4, 8000);
         }
     }
     if (gameOverScreenFade > 0x80) {

@@ -25,7 +25,7 @@ void MoveMovingPlatforms(SVECTOR vec);
 // non-gprel-used variables (extern)
 extern short* entityData;
 extern short numEntities;
-extern short SHORT_ARRAY_ARRAY_ARRAY_000d4678[8][8][8];
+extern short playerSurroundingBlocksGrid[8][8][8];
 extern Player thePlayer;
 extern short* levelData;
 extern int cameraIndex;
@@ -57,7 +57,7 @@ static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
 static int r1TurnDelta;
 
-SVECTOR SVECTOR_000a2de4 = {};
+SVECTOR ZERO_SVECTOR_a2de4 = {};
 SVECTOR SVECTOR_allMinus1 = { -1, -1, -1 };
 
 static int ScanLevelDataForMovingBlocks2_i;
@@ -72,7 +72,7 @@ void ScanLevelDataForMovingBlocks2(void) {
     for (i = 0; i < 8; i++) {
         for (j = 0; j < 8; j++) {
             for (k = 0; k < 8; k++) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[i][j][k] = -1;
+                playerSurroundingBlocksGrid[i][j][k] = -1;
             }
         }
     }
@@ -105,7 +105,7 @@ void ScanLevelDataForMovingBlocks2(void) {
         entityData[i + 19] = 0;
         entityData[i + 18] = entityData[i + 18];
     }
-    MoveMovingPlatforms(SVECTOR_000a2de4);
+    MoveMovingPlatforms(ZERO_SVECTOR_a2de4);
 }
 #undef i
 #undef j
@@ -269,7 +269,7 @@ int HandleMovingPlatforms(Player* player) {
 
     entityId = GetMovingPlatformAt(player, &SVECTOR_allMinus1);
     if (entityId != -1) {
-        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
@@ -278,13 +278,13 @@ int HandleMovingPlatforms(Player* player) {
 
         for (counter = 2; counter <= entityData[entityId + 17] + 1; counter++) {
             if (platformDir == 1) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[counter][2][2] = 0;
+                playerSurroundingBlocksGrid[counter][2][2] = 0;
             }
             if (platformDir == 2) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][counter][2] = 0;
+                playerSurroundingBlocksGrid[2][counter][2] = 0;
             }
             if (platformDir == 5) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][counter] = 0;
+                playerSurroundingBlocksGrid[2][2][counter] = 0;
             }
         }
 
@@ -307,7 +307,7 @@ int HandleMovingPlatforms(Player* player) {
 
     entityId = GetAlternateMovingPlatform(player, &SVECTOR_allMinus1);
     if (entityId != -1) {
-        SndPlaySfx(SFX_BALL_BOUNCE, 0, &SVECTOR_000a2de4, 7000);
+        SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2de4, 7000);
         player->onMovingPlatform = 1;
         player->howMoving0 = 0;
         player->howMoving198 = NOT_MOVING;
@@ -316,13 +316,13 @@ int HandleMovingPlatforms(Player* player) {
 
         for (counter = 2; counter <= entityData[entityId + 17] + 1; counter++) {
             if (platformDir == 1) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[counter][2][2] = 0;
+                playerSurroundingBlocksGrid[counter][2][2] = 0;
             }
             if (platformDir == 2) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][counter][2] = 0;
+                playerSurroundingBlocksGrid[2][counter][2] = 0;
             }
             if (platformDir == 5) {
-                SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][counter] = 0;
+                playerSurroundingBlocksGrid[2][2][counter] = 0;
             }
         }
 
@@ -454,9 +454,9 @@ void JumpingOnMovingPlatform(Player* player) {
     player->onMovingPlatform = 0;
 
     for (i = 2; i <= entityData[player->movingPlatformEntityIdStandingOn + 17] + 1; i++) {
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[i][2][2] =
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][i][2] =
-        SHORT_ARRAY_ARRAY_ARRAY_000d4678[2][2][i] = -1;
+        playerSurroundingBlocksGrid[i][2][2] =
+        playerSurroundingBlocksGrid[2][i][2] =
+        playerSurroundingBlocksGrid[2][2][i] = -1;
     }
 
     player->finePos.vx += entityData[player->movingPlatformEntityIdStandingOn + 119] - 512;
@@ -490,7 +490,7 @@ static SVECTOR UpdatePlayerSurroundingBlocks_blockCheckPos;
 #define k UpdatePlayerSurroundingBlocks_k
 #define blockCheckPos UpdatePlayerSurroundingBlocks_blockCheckPos
 void UpdatePlayerSurroundingBlocks(Player* player) {
-    short (*grid)[8][8] = SHORT_ARRAY_ARRAY_ARRAY_000d4678;
+    short (*grid)[8][8] = playerSurroundingBlocksGrid;
     short gx, gy, gz;
     short rx, ry, rz;
     short vx, vy, vz;
