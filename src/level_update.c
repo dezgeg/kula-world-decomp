@@ -34,7 +34,7 @@ extern int specialLevelType;
 extern int gameMode;
 
 // gprel-used variables (defined in this file)
-static int D_000A43B0;
+static int unusedA43B0;
 static int unusedBezierInvT;
 static int maxDistSquared;
 static int xMinPlusMax;

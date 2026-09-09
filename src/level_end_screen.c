@@ -23,7 +23,6 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern byte menuGfxBuf[32768];
-extern DeflatedSprites* D_00074C4C;
 extern DeflatedSprites* deflatedSprites;
 extern int copycatPlayerScores[2];
 extern int curLevel;

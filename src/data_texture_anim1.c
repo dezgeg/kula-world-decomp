@@ -60,5 +60,5 @@ byte BONUS_BLOCK_ANIM_FLAG_DATA1[] = {
 byte BONUS_BLOCK_ANIM_FLAG_DATA1_END[] = {0};
 
 // FIXME: probably doesn't belong here. Unsure if pointer, too.
-extern char D_000BB610[];
-void* D_00073814[] = { D_000BB610 };
+extern char unusedBB610[];
+void* unused73814[] = { unusedBB610 };
