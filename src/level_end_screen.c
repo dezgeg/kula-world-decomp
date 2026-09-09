@@ -28,7 +28,7 @@ extern DeflatedSprites* deflatedSprites;
 extern int copycatPlayerScores[2];
 extern int curLevel;
 extern int curWorld;
-extern int DAT_000a3374;
+extern int showingTimeTrialQualifyScreen;
 extern int displayWidth;
 extern int gameMode;
 extern int isFinal;
@@ -113,7 +113,7 @@ void LoadLevelEndReasonGfx() {
         whichGfx = LEVEL_END_GFX_FINAL_COMPLETE;
     }
     if (gameMode == 2) {
-        if (levelEndReason > 0 && curLevel == 0 && totalScore >= 0 && DAT_000a3374 == 1 && numTimeTrialPlayers == 1) {
+        if (levelEndReason > 0 && curLevel == 0 && totalScore >= 0 && showingTimeTrialQualifyScreen == 1 && numTimeTrialPlayers == 1) {
             whichGfx = LEVEL_END_GFX_QUALIFIED;
             if (totalPlayTime[0] > 0) {
                 whichGfx = LEVEL_END_GFX_FAILED_TO_QUALIFY;

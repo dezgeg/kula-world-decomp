@@ -52,7 +52,7 @@ static VECTOR levelEntryBezierP2;
 static VECTOR levelEntryBezierP3;
 static VECTOR levelEntryCamPos;
 
-static int DAT_000a4598;
+static int cameraR2TurnAmount;
 static int levelEntryAnimTimer;
 static int levelEntryAnimTimerIncrement;
 static int r1TurnDelta;
@@ -633,7 +633,7 @@ void CalcLevelBounds(Player* player) {
     initPlayerRightDir.vy = player->rightVec.vy << 12;
     initPlayerRightDir.vz = player->rightVec.vz << 12;
 
-    DAT_000a4598 = 0;
+    cameraR2TurnAmount = 0;
     levelEntryAnimTimer = 0;
     levelEntryAnimTimerIncrement = 16;
 
@@ -967,7 +967,7 @@ void HandlePlayerMovementStuff(Player* player) {
     r2TurnFlag = 0;
     r1TurnFlag = 0;
     if (player->cameraR1R2TurnDirection.vx == -1) {
-        if (player->howMoving198 != FALLING && DAT_000a4598 == 0) {
+        if (player->howMoving198 != FALLING && cameraR2TurnAmount == 0) {
             r2TurnFlag = 1;
             player->cameraR1TurnAmount.vx += 26;
             if (player->cameraR1TurnAmount.vx > 650)
@@ -977,9 +977,9 @@ void HandlePlayerMovementStuff(Player* player) {
 
     if (player->cameraR1R2TurnDirection.vx == 1 && player->cameraR1TurnAmount.vx == 0) {
         r1TurnFlag = 1;
-        DAT_000a4598 += 26;
-        if (DAT_000a4598 > 650)
-            DAT_000a4598 = 650;
+        cameraR2TurnAmount += 26;
+        if (cameraR2TurnAmount > 650)
+            cameraR2TurnAmount = 650;
     }
 
     groundCheckPos.vx = player->finePos.vx - (player->gravityDir.vx * 512);
@@ -992,7 +992,7 @@ void HandlePlayerMovementStuff(Player* player) {
     if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_FORWARD && player->jumpingOrViewportRotationTimer < 10)) {
         if (blockType == -1) {
             if (player->cameraR1TurnAmount.vx < 550) {
-                if (DAT_000a4598 == 0) {
+                if (cameraR2TurnAmount == 0) {
                     r2TurnFlag = 1;
                     r1TurnDelta++;
                     if (r1TurnDelta > 32)
@@ -1013,10 +1013,10 @@ void HandlePlayerMovementStuff(Player* player) {
         r1TurnDelta = 3;
     }
 
-    if (r1TurnFlag == 0 && DAT_000a4598 > 0) {
-        DAT_000a4598 -= 18;
-        if (DAT_000a4598 < 0)
-            DAT_000a4598 = 0;
+    if (r1TurnFlag == 0 && cameraR2TurnAmount > 0) {
+        cameraR2TurnAmount -= 18;
+        if (cameraR2TurnAmount < 0)
+            cameraR2TurnAmount = 0;
     }
 
     if (r2TurnFlag == 0) {
@@ -1062,16 +1062,16 @@ void HandlePlayerMovementStuff(Player* player) {
         RotMatrixZ(rsin((player->lethargyTimer * 64) % 4096) / 32, &perspMatrixes[cameraIndex]);
     }
 
-    if (DAT_000a4598 != 0) {
+    if (cameraR2TurnAmount != 0) {
         RotMatrixX(250, &perspMatrixes[cameraIndex]);
-        RotMatrixX(-DAT_000a4598, &perspMatrixes[cameraIndex]);
+        RotMatrixX(-cameraR2TurnAmount, &perspMatrixes[cameraIndex]);
         ApplyMatrixLV(&perspMatrixes[cameraIndex], &camOffsetVec, &camOffsetVec);
         camTransVec.vx = 0;
         camRotVec.vy = 0;
         camRotVec.vz = 0;
-        camTransVec.vz = 800 - DAT_000a4598 / 2;
-        camRotVec.vx = -DAT_000a4598;
-        camTransVec.vy = 250 - DAT_000a4598 / 3;
+        camTransVec.vz = 800 - cameraR2TurnAmount / 2;
+        camRotVec.vx = -cameraR2TurnAmount;
+        camTransVec.vy = 250 - cameraR2TurnAmount / 3;
         RotMatrix(&camRotVec, &camRotMatrix);
         ApplyMatrixLV(&camRotMatrix, &camTransVec, &camTransVec);
         perspMatrixes[cameraIndex].t[0] = -camOffsetVec.vx + camTransVec.vx;

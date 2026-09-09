@@ -52,7 +52,7 @@ int wasPausedPreviousFrame;
 short qualifyScreenCursorX;
 short qualifyScreenCursorY;
 
-int DAT_000a3374 = 0;
+int showingTimeTrialQualifyScreen = 0;
 
 // HACK: these are in menu.c. Probably these files should be merged.
 extern char S_FMTd_3[];
@@ -88,7 +88,7 @@ void UpdateScoreAtEndOfLevel(void) {
         prevControllerButtons = 0xffffffff;
     }
     if (gameMode == 2) {
-        DAT_000a3374 = 0;
+        showingTimeTrialQualifyScreen = 0;
         levelScoreSummaryScoreTicker = levelPlayTime[latestPlayerToFinish] / 50;
         if (levelPlayTime[latestPlayerToFinish] < 0) {
             levelScoreSummaryScoreTicker--;
@@ -232,7 +232,7 @@ void DrawLevelScoreSummary(void) {
         }
     }
     if (gameMode == 2) {
-        if ((curLevel == 0 || timeTrialAtEndOfWorld == 1) && numTimeTrialPlayers == 1 && levelEndReason > 0 && DAT_000a3374 == 1) {
+        if ((curLevel == 0 || timeTrialAtEndOfWorld == 1) && numTimeTrialPlayers == 1 && levelEndReason > 0 && showingTimeTrialQualifyScreen == 1) {
             TimeTrialFailedToQualifyScreen();
             return;
         }
@@ -376,7 +376,7 @@ void DrawLevelScoreSummary(void) {
                         }
                     }
                     if ((curLevel == 0 || timeTrialAtEndOfWorld == 1) && numTimeTrialPlayers == 1 && levelEndReason > 0) {
-                        DAT_000a3374 = 1;
+                        showingTimeTrialQualifyScreen = 1;
                     } else {
                         levelScoreSummaryConfirmed = 1;
                     }

@@ -10,7 +10,7 @@ extern int IsPlayerOnMovingPlatform();
 extern int GetBlockAt(SVECTOR* coord);
 extern int GetRotationIndexFromVector(SVECTOR vec);
 extern int HandleMovingPlatforms(Player* player);
-extern void ClearA4374(Player* player);
+extern void ClearJumpSquish(Player* player);
 extern void CreatePlayerDispList(MATRIX* m, int const0x100, int ballTextureIndex, int const0,
                                  int colorR, int colorG, int colorB, int const0_, int blockX,
                                  int blockY, int blockZ, int blockDirIndex, int otherBlockX,
@@ -52,7 +52,7 @@ extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
 extern short* levelData;
 
-static short DAT_000a4374;
+static short jumpSquishMagnitudeIncrement;
 static short* initJumpTimerPtr;
 static short landingSquishDamping;
 static short landingSquishFrameCounter;
@@ -206,7 +206,7 @@ void StartJumpingForward(Player* player) {
         player->movementVelocity = 40;
         player->rotX = 40;
         player->jumpdataPtr += 4;
-        ClearA4374(player);
+        ClearJumpSquish(player);
     }
 }
 
@@ -1193,15 +1193,15 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
 #undef camTargetPos
 #undef blockPos
 
-void ClearA4374(Player* player) {
-    DAT_000a4374 = 0;
+void ClearJumpSquish(Player* player) {
+    jumpSquishMagnitudeIncrement = 0;
 }
 
 void SetBallShapeAndRotationWhenJumping(Player* player) {
     RotMatrixX(player->rotX * -6, &player->matrix_254);
 
     if (player->field_2bc > -750 && player->jumpingOrViewportRotationTimer > 12) {
-        player->field_2bc += DAT_000a4374;
+        player->field_2bc += jumpSquishMagnitudeIncrement;
     }
 
     if (player->jumpingOrViewportRotationTimer < -4) {

@@ -55,7 +55,7 @@ extern int toBeDisabledLightEffects[64];
 extern int unkOtagLengths[2][1];
 
 // gprel-used variables (defined in this file)
-static int DAT_000a4128;
+static int numObjTextures;
 int itemsDispListIdx;
 STATIC_FOR_GP_ACCESS int numPlainTileTextureVariations;
 int playerEnemyDispListIdx;
@@ -289,15 +289,15 @@ void ParseLevelDataFromTgi(void) {
 
     if (specialLevelType == 1) {
         numPlainTileTextureVariations = tgi->numPlainTileTextureVariationsSpecialLevel;
-        DAT_000a4128 = tgi->numObjTexturesSpecialLevel;
+        numObjTextures = tgi->numObjTexturesSpecialLevel;
         quadSomethingStartIndex = tgi->numFixedTextures + tgi->numPlainTileTextureVariationsNormalLevel + tgi->numObjTexturesNormalLevel;
     } else {
         numPlainTileTextureVariations = tgi->numPlainTileTextureVariationsNormalLevel;
-        DAT_000a4128 = tgi->numObjTexturesNormalLevel;
+        numObjTextures = tgi->numObjTexturesNormalLevel;
         quadSomethingStartIndex = 0;
     }
 
-    quadSomethingCount = tgi->numFixedTextures + numPlainTileTextureVariations + DAT_000a4128;
+    quadSomethingCount = tgi->numFixedTextures + numPlainTileTextureVariations + numObjTextures;
 
     ProcessLevelData();
     InitManySprites();

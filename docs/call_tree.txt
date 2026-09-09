@@ -364,7 +364,7 @@ main() {
         StartJumpingForward() {
           JumpingOnMovingPlatform() {
           }
-          ClearA4374() {
+          ClearJumpSquish() {
           }
         }
         TurnRight() {

@@ -114,8 +114,8 @@ short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
         { -1, 666, 1, 1, 1, 2, 1, 0, 1, 3, 0, 0 },
     },
 };
-int D_000A2CAC = 0x666;
-void* PTR_DAT_000a2cb0 = &D_000A2CAC;
+int dummyLevelExitQuad = 0x666;
+void* dummyLevelExitQuadPtr = &dummyLevelExitQuad;
 FaceData* faceDataPtr = (FaceData*)FACE_DATA_BUF;
 int primBufUsage = 0;
 int maxPrimBufUsage = 0;
@@ -228,7 +228,7 @@ void ProcessCubesIntoFaces(void) {
 
     int csptr;
 
-    levelExitQuadPPtr = &PTR_DAT_000a2cb0;
+    levelExitQuadPPtr = &dummyLevelExitQuadPtr;
     for (z = 1; z < 33; z++) {
         for (y = 1; y < 33; y++) {
             for (x = 1; x < 33; x++) {

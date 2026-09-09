@@ -1,7 +1,7 @@
 #include "common.h"
 
 int saveRegsMakeOtagDoublyLinked[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-int DAT_00073844[] = { 0, 0, 0, 0, 0, 0 };
+int doublyLinkedOtPtrs[] = { 0, 0, 0, 0, 0, 0 };
 int saveRegsUnusedAsmNoop[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 #ifdef NON_MATCHING
