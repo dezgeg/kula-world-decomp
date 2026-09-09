@@ -144,7 +144,7 @@ short* levelData;
 STATIC_FOR_GP_ACCESS int quadSomethingCount;
 STATIC_FOR_GP_ACCESS int quadSomethingStartIndex;
 STATIC_FOR_GP_ACCESS short* tgiPart5;
-int D_000A54F4;
+int numTotalQuads;
 void** levelExitQuadPPtr;
 STATIC_FOR_GP_ACCESS int numPlainTileTextureVariations;
 int numMovingPlatforms;
@@ -1064,7 +1064,7 @@ void CopyQuadData(void) {
     }
     // permuter hack
     idx = j;
-    D_000A54F4 = idx;
+    numTotalQuads = idx;
 }
 
 

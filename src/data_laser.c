@@ -26,4 +26,4 @@ u8 LASER_INTENSITY_DATA[] = {
 int LASER_INTENSITY_DATA_END[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // array hack to force this to .data
-int D_00099E08[] = { -1 };
+int isDevkitBios[] = { -1 };

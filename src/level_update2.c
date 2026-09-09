@@ -82,7 +82,7 @@ STATIC_FOR_GP_ACCESS int levelHiddenExitEntityOffset;
 int shouldMarkCubesVisited;
 static short copycatIdleTimer;
 static short copycatStateVar;
-static short D_000A45CC;
+static short specialLevelBallIndex;
 STATIC_FOR_GP_ACCESS short fireSoundTimer;
 short isPausedOrWaitingForRestart;
 static short numCopycatMoves;
@@ -353,10 +353,10 @@ void LevelInit(void) {
 
     ballTextureIndex = curWorld;
     if (shouldMarkCubesVisited != 0) {
-        ballTextureIndex = D_000A45CC + 10;
+        ballTextureIndex = specialLevelBallIndex + 10;
     }
 
-    D_000A45CC = (D_000A45CC + 1) % 3;
+    specialLevelBallIndex = (specialLevelBallIndex + 1) % 3;
 
     if (specialLevelType == 2) {
         ballTextureIndex = 13;

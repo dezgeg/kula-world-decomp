@@ -53,8 +53,8 @@ extern InvisBlockVisibility invisBlockVisibility;
 extern AnimatedTextureChain invisibleBlockTextureChain;
 extern int isPaused;
 extern int toBeDisabledLightEffects[64];
-extern int D_000A51C0;
-extern int D_000A51C4;
+extern int starfieldTransY;
+extern int starfieldTransZ;
 extern MATRIX starfieldMatrix;
 extern GemRandomSparkleEffect GemRandomSparkleEffect_ARRAY_ARRAY_000dd760[3][3];
 extern int itemsDispList[2049];
@@ -75,14 +75,14 @@ MATRIX MATRIX_000a5184;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase1;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase2;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase3;
-STATIC_FOR_GP_ACCESS int D_000A501C;
-STATIC_FOR_GP_ACCESS int D_000A5024;
-STATIC_FOR_GP_ACCESS int D_000A5028;
-STATIC_FOR_GP_ACCESS int D_000A5030;
-STATIC_FOR_GP_ACCESS int D_000A5034;
-STATIC_FOR_GP_ACCESS int D_000A5050;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseX1;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseX2;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseY1;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseY2;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseZ1;
+STATIC_FOR_GP_ACCESS int starfieldTransPhaseZ2;
 SVECTOR starfieldSinVec;
-int D_000A51BC;
+int starfieldTransX;
 
 void RenderBackground(void) {
     MATRIX_000a5184 = perspMatrixes[cameraIndex];
@@ -305,21 +305,21 @@ void UpdateStarfield(void) {
     starfieldMatrix.t[1] = 0;
     starfieldMatrix.t[2] = 0;
 
-    D_000A501C = (D_000A501C + 2) % 4096;
-    D_000A5024 = (D_000A5024 + 7) % 4096;
-    D_000A51BC = (rsin(D_000A501C) * 50000 / 4096) + (rsin(D_000A5024) * 10000 / 4096);
+    starfieldTransPhaseX1 = (starfieldTransPhaseX1 + 2) % 4096;
+    starfieldTransPhaseX2 = (starfieldTransPhaseX2 + 7) % 4096;
+    starfieldTransX = (rsin(starfieldTransPhaseX1) * 50000 / 4096) + (rsin(starfieldTransPhaseX2) * 10000 / 4096);
 
-    D_000A5028 = (D_000A5028 + 3) % 4096;
-    D_000A5030 = (D_000A5030 + 8) % 4096;
-    D_000A51C0 = (rsin(D_000A5028) * 50000 / 4096) + (rsin(D_000A5030) * 10000 / 4096);
+    starfieldTransPhaseY1 = (starfieldTransPhaseY1 + 3) % 4096;
+    starfieldTransPhaseY2 = (starfieldTransPhaseY2 + 8) % 4096;
+    starfieldTransY = (rsin(starfieldTransPhaseY1) * 50000 / 4096) + (rsin(starfieldTransPhaseY2) * 10000 / 4096);
 
-    D_000A5034 = (D_000A5034 + 2) % 4096;
-    D_000A5050 = (D_000A5050 + 6) % 4096;
-    D_000A51C4 = (rsin(D_000A5034) * 60000 / 4096) + (rsin(D_000A5050) * 10000 / 4096);
+    starfieldTransPhaseZ1 = (starfieldTransPhaseZ1 + 2) % 4096;
+    starfieldTransPhaseZ2 = (starfieldTransPhaseZ2 + 6) % 4096;
+    starfieldTransZ = (rsin(starfieldTransPhaseZ1) * 60000 / 4096) + (rsin(starfieldTransPhaseZ2) * 10000 / 4096);
 
-    vx = D_000A51BC;
-    vy = D_000A51C0;
-    vz = D_000A51C4;
+    vx = starfieldTransX;
+    vy = starfieldTransY;
+    vz = starfieldTransZ;
     while (vx > 6552)
         vx -= 13106;
     while (vx < -6553)

@@ -35,7 +35,7 @@ extern int gameMode;
 
 // gprel-used variables (defined in this file)
 static int D_000A43B0;
-static int D_000A4430;
+static int unusedBezierInvT;
 static int maxDistSquared;
 static int xMinPlusMax;
 static int yMinPlusMax;
@@ -601,7 +601,7 @@ void EvaluateCubicBezier(VECTOR* p0, VECTOR* p1, VECTOR* p2, VECTOR* p3, VECTOR*
     out->vz += (t3 >> shift) * p3->vz;
     out->vz >>= shift;
 
-    D_000A4430 = inv_t;
+    unusedBezierInvT = inv_t;
 }
 
 static int CalcLevelBounds_distSq;

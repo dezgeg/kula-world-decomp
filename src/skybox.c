@@ -7,15 +7,15 @@ extern int starfieldSinPhase1;
 extern int starfieldSinPhase2;
 extern int starfieldSinPhase3;
 extern SVECTOR starfieldSinVec;
-extern int D_000A501C;
-extern int D_000A5024;
-extern int D_000A5028;
-extern int D_000A5030;
-extern int D_000A5034;
-extern int D_000A5050;
-extern int D_000A51BC;
-extern int D_000A51C0;
-extern int D_000A51C4;
+extern int starfieldTransPhaseX1;
+extern int starfieldTransPhaseX2;
+extern int starfieldTransPhaseY1;
+extern int starfieldTransPhaseY2;
+extern int starfieldTransPhaseZ1;
+extern int starfieldTransPhaseZ2;
+extern int starfieldTransX;
+extern int starfieldTransY;
+extern int starfieldTransZ;
 
 STATIC_FOR_GP_ACCESS short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
 static int skyboxMaxAngle1;
@@ -233,15 +233,15 @@ int RecalcSkyboxes2(void) {
     starfieldSinVec.vy = 0;
     starfieldSinVec.vz = 0;
 
-    D_000A501C = 0x200;
-    D_000A5024 = 0x400;
-    D_000A5028 = 0;
-    D_000A5030 = 0x400;
-    D_000A5034 = 0;
-    D_000A5050 = 0;
-    D_000A51BC = 0;
-    D_000A51C0 = 0;
-    D_000A51C4 = 0;
+    starfieldTransPhaseX1 = 0x200;
+    starfieldTransPhaseX2 = 0x400;
+    starfieldTransPhaseY1 = 0;
+    starfieldTransPhaseY2 = 0x400;
+    starfieldTransPhaseZ1 = 0;
+    starfieldTransPhaseZ2 = 0;
+    starfieldTransX = 0;
+    starfieldTransY = 0;
+    starfieldTransZ = 0;
 
     ptr = (short*)SKYBOX_BUF;
     for (z = 0; z < 0x3332; z += 0x3332) {
