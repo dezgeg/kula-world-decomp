@@ -41,8 +41,6 @@ static int xMinPlusMax;
 static int yMinPlusMax;
 static int zMinPlusMax;
 static int zoomInAndOutPhase;
-static short debugCamX;
-static short debugCamY;
 static VECTOR unusedFacingGravityProd;
 static VECTOR initPlayerFacingDir;
 static VECTOR unusedInitPlayerFacingDirCoarse;
@@ -782,16 +780,20 @@ void ProcessCameraAndMovement(Player* player) {
 #undef coarseFacingDir
 
 static VECTOR HandleDebugCamera_transVec;
+static short HandleDebugCamera_camX;
+static short HandleDebugCamera_camY;
 #define transVec HandleDebugCamera_transVec
+#define camX HandleDebugCamera_camX
+#define camY HandleDebugCamera_camY
 void HandleDebugCamera(Player* player) {
     player->playerHasControl = 1;
 
-    debugCamY = player->debugCamY % 4096;
+    camY = player->debugCamY % 4096;
     do {} while(0); // HACK
-    debugCamX = player->debugCamX % 4096;
+    camX = player->debugCamX % 4096;
 
-    RotMatrixZ(debugCamX, &perspMatrixes[cameraIndex]);
-    RotMatrixX(debugCamY, &perspMatrixes[cameraIndex]);
+    RotMatrixZ(camX, &perspMatrixes[cameraIndex]);
+    RotMatrixX(camY, &perspMatrixes[cameraIndex]);
 
     transVec.vx = -xMinPlusMax;
     transVec.vy = -yMinPlusMax;
@@ -804,6 +806,8 @@ void HandleDebugCamera(Player* player) {
     perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared;
 }
 #undef transVec
+#undef camX
+#undef camY
 
 static SVECTOR HandlePauseModeRotationEffect_rotVec;
 static VECTOR HandlePauseModeRotationEffect_transVec;

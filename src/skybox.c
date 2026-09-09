@@ -17,25 +17,9 @@ extern int D_000A51BC;
 extern int D_000A51C0;
 extern int D_000A51C4;
 
-static int D_000A415C;
-static int D_000A4164;
-static int countOfSomethingI;
-static int countOfSomethingJ;
 STATIC_FOR_GP_ACCESS short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
-static int skyboxAngleMul1;
-static int skyboxAngleMul2;
-static int skyboxAnglesProduct;
-static int skyboxCountsProduct;
 static int skyboxMaxAngle1;
 static int skyboxMaxAngle2;
-static int skyboxMaxAngle2Plus1;
-static int skyboxMaxAnglesProduct;
-static int skyboxParam5;
-static int skyboxParam5Times2;
-static int skyboxSizeMidBlk;
-static int skyboxSizePolyMap;
-static int skyboxSizePolys;
-static int skyboxSizeVertices;
 STATIC_FOR_GP_ACCESS short* tgiPart9;
 
 // Prototypes
@@ -46,6 +30,38 @@ extern void SetShadeTex(void* p, int disable);
 extern void SetSemiTrans(void* p, int enable);
 extern void* memcpy(void* dest, const void* src, size_t n);
 
+static int RecalcSkyboxes01_angleMul1;
+static int RecalcSkyboxes01_angleMul2;
+static int RecalcSkyboxes01_countOfSomethingJ;
+static int RecalcSkyboxes01_countOfSomethingI;
+static int RecalcSkyboxes01_param5;
+static int RecalcSkyboxes01_anglesProduct;
+static int RecalcSkyboxes01_param5Times2;
+static int RecalcSkyboxes01_maxAngle1Copy;
+static int RecalcSkyboxes01_maxAngle2Plus1;
+static int RecalcSkyboxes01_countsProduct;
+static int RecalcSkyboxes01_sizeMidBlk;
+static int RecalcSkyboxes01_maxAnglesProduct;
+static int RecalcSkyboxes01_maxAnglesProduct2;
+static int RecalcSkyboxes01_sizePolyMap;
+static int RecalcSkyboxes01_sizeVertices;
+static int RecalcSkyboxes01_sizePolys;
+#define angleMul1 RecalcSkyboxes01_angleMul1
+#define angleMul2 RecalcSkyboxes01_angleMul2
+#define countOfSomethingJ RecalcSkyboxes01_countOfSomethingJ
+#define countOfSomethingI RecalcSkyboxes01_countOfSomethingI
+#define param5 RecalcSkyboxes01_param5
+#define anglesProduct RecalcSkyboxes01_anglesProduct
+#define param5Times2 RecalcSkyboxes01_param5Times2
+#define maxAngle1Copy RecalcSkyboxes01_maxAngle1Copy
+#define maxAngle2Plus1 RecalcSkyboxes01_maxAngle2Plus1
+#define countsProduct RecalcSkyboxes01_countsProduct
+#define sizeMidBlk RecalcSkyboxes01_sizeMidBlk
+#define maxAnglesProduct RecalcSkyboxes01_maxAnglesProduct
+#define maxAnglesProduct2 RecalcSkyboxes01_maxAnglesProduct2
+#define sizePolyMap RecalcSkyboxes01_sizePolyMap
+#define sizeVertices RecalcSkyboxes01_sizeVertices
+#define sizePolys RecalcSkyboxes01_sizePolys
 void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, int countJ, int param_5) {
     short* ptr;
     int i;
@@ -59,36 +75,36 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     int k;
     short* texcoords;
 
-    skyboxAngleMul1 = angleOfSomethingI;
-    skyboxAngleMul2 = angleOfSomethingJ;
+    angleMul1 = angleOfSomethingI;
+    angleMul2 = angleOfSomethingJ;
     countOfSomethingJ = countI;
     countOfSomethingI = countJ;
-    skyboxParam5 = param_5;
-    skyboxAnglesProduct = angleOfSomethingI * angleOfSomethingJ;
-    skyboxParam5Times2 = param_5 * 2;
+    param5 = param_5;
+    anglesProduct = angleOfSomethingI * angleOfSomethingJ;
+    param5Times2 = param_5 * 2;
     skyboxMaxAngle1 = countI * angleOfSomethingI;
-    D_000A415C = skyboxMaxAngle1;
+    maxAngle1Copy = skyboxMaxAngle1;
     skyboxMaxAngle2 = countJ * angleOfSomethingJ;
-    skyboxMaxAngle2Plus1 = skyboxMaxAngle2 + 1;
-    skyboxCountsProduct = countI * countJ;
-    skyboxSizeMidBlk = (skyboxCountsProduct + 2) * 8;
-    skyboxMaxAnglesProduct = skyboxMaxAngle1 * skyboxMaxAngle2;
-    D_000A4164 = skyboxMaxAngle1 * skyboxMaxAngle2Plus1;
-    skyboxSizePolyMap = D_000A4164;
-    skyboxSizeVertices = (skyboxMaxAnglesProduct * 20) / 3;
-    if ((D_000A4164 & 0x1f) > 0) {
-        skyboxSizePolyMap = (D_000A4164 + 32) & -32;
+    maxAngle2Plus1 = skyboxMaxAngle2 + 1;
+    countsProduct = countI * countJ;
+    sizeMidBlk = (countsProduct + 2) * 8;
+    maxAnglesProduct = skyboxMaxAngle1 * skyboxMaxAngle2;
+    maxAnglesProduct2 = skyboxMaxAngle1 * maxAngle2Plus1;
+    sizePolyMap = maxAnglesProduct2;
+    sizeVertices = (maxAnglesProduct * 20) / 3;
+    if ((maxAnglesProduct2 & 0x1f) > 0) {
+        sizePolyMap = (maxAnglesProduct2 + 32) & -32;
     }
-    skyboxSizePolys = D_000A4164 * skyboxParam5Times2;
+    sizePolys = maxAnglesProduct2 * param5Times2;
 
     ptr = (short*)SKYBOX_BUF;
 
     for (i = 0; i < countOfSomethingI; i++) {
         for (j = 0; j < countOfSomethingJ; j++) {
-            SkyboxSinCos(j * skyboxAngleMul1 - 1, i * skyboxAngleMul2 - 1, &skyboxVertices[0][0], &skyboxVertices[0][1], &skyboxVertices[0][2]);
-            SkyboxSinCos((j + 1) * skyboxAngleMul1, i * skyboxAngleMul2 - 1, &skyboxVertices[1][0], &skyboxVertices[1][1], &skyboxVertices[1][2]);
-            SkyboxSinCos(j * skyboxAngleMul1 - 1, (i + 1) * skyboxAngleMul2, &skyboxVertices[2][0], &skyboxVertices[2][1], &skyboxVertices[2][2]);
-            SkyboxSinCos((j + 1) * skyboxAngleMul1, (i + 1) * skyboxAngleMul2, &skyboxVertices[3][0], &skyboxVertices[3][1], &skyboxVertices[3][2]);
+            SkyboxSinCos(j * angleMul1 - 1, i * angleMul2 - 1, &skyboxVertices[0][0], &skyboxVertices[0][1], &skyboxVertices[0][2]);
+            SkyboxSinCos((j + 1) * angleMul1, i * angleMul2 - 1, &skyboxVertices[1][0], &skyboxVertices[1][1], &skyboxVertices[1][2]);
+            SkyboxSinCos(j * angleMul1 - 1, (i + 1) * angleMul2, &skyboxVertices[2][0], &skyboxVertices[2][1], &skyboxVertices[2][2]);
+            SkyboxSinCos((j + 1) * angleMul1, (i + 1) * angleMul2, &skyboxVertices[3][0], &skyboxVertices[3][1], &skyboxVertices[3][2]);
 
             for (k = 0; k < 3; k++) {
                 *ptr++ = recalcSkyboxes[k] = (((skyboxVertices[0][k] + skyboxVertices[1][k]) + skyboxVertices[2][k]) + skyboxVertices[3][k]) / 4;
@@ -115,11 +131,11 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     if (param_5 == 36) {
         for (i = 0; i < countOfSomethingI; i++) {
             for (j = 0; j < countOfSomethingJ; j++) {
-                for (k = 0; k < skyboxAngleMul1; k++) {
-                    for (l = 0; l < (skyboxAngleMul2 / 3); l++) {
-                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3, &ptr[0], &ptr[1], &ptr[6]);
-                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3 + 1, &ptr[2], &ptr[3], &ptr[7]);
-                        SkyboxSinCos(j * skyboxAngleMul1 + k, i * skyboxAngleMul2 + l * 3 + 2, &ptr[4], &ptr[5], &ptr[8]);
+                for (k = 0; k < angleMul1; k++) {
+                    for (l = 0; l < (angleMul2 / 3); l++) {
+                        SkyboxSinCos(j * angleMul1 + k, i * angleMul2 + l * 3, &ptr[0], &ptr[1], &ptr[6]);
+                        SkyboxSinCos(j * angleMul1 + k, i * angleMul2 + l * 3 + 1, &ptr[2], &ptr[3], &ptr[7]);
+                        SkyboxSinCos(j * angleMul1 + k, i * angleMul2 + l * 3 + 2, &ptr[4], &ptr[5], &ptr[8]);
                         ptr += 10;
                     }
                 }
@@ -128,11 +144,11 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     } else {
         for (i = 0; i < countOfSomethingI; i++) {
             for (j = 0; j < countOfSomethingJ; j++) {
-                for (k = 0; k < skyboxAngleMul2; k++) {
-                    for (l = 0; l < (skyboxAngleMul1 / 3); l++) {
-                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3, i * skyboxAngleMul2 + k, &ptr[0], &ptr[1], &ptr[6]);
-                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3 + 1, i * skyboxAngleMul2 + k, &ptr[2], &ptr[3], &ptr[7]);
-                        SkyboxSinCos(j * skyboxAngleMul1 + l * 3 + 2, i * skyboxAngleMul2 + k, &ptr[4], &ptr[5], &ptr[8]);
+                for (k = 0; k < angleMul2; k++) {
+                    for (l = 0; l < (angleMul1 / 3); l++) {
+                        SkyboxSinCos(j * angleMul1 + l * 3, i * angleMul2 + k, &ptr[0], &ptr[1], &ptr[6]);
+                        SkyboxSinCos(j * angleMul1 + l * 3 + 1, i * angleMul2 + k, &ptr[2], &ptr[3], &ptr[7]);
+                        SkyboxSinCos(j * angleMul1 + l * 3 + 2, i * angleMul2 + k, &ptr[4], &ptr[5], &ptr[8]);
                         ptr += 10;
                     }
                 }
@@ -140,15 +156,15 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
         }
     }
 
-    ptr += skyboxSizePolyMap / 2;
-    if (skyboxParam5 == 36) {
+    ptr += sizePolyMap / 2;
+    if (param5 == 36) {
         POLY_G4* pu = (unsigned char*)ptr;
-        for (i = 0; i < D_000A4164 * 2; pu++, i++) {
+        for (i = 0; i < maxAnglesProduct2 * 2; pu++, i++) {
             setPolyG4(pu);
         }
     } else {
         texcoords = tgiPart9;
-        ptr += (D_000A415C * skyboxParam5Times2) / 2;
+        ptr += (maxAngle1Copy * param5Times2) / 2;
         for (i = 0; i < 24; i++) {
             for (j = 0; j < 48; j++) {
                 setPolyFT4((POLY_FT4*)ptr);
@@ -177,6 +193,22 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
     }
 }
 
+#undef angleMul1
+#undef angleMul2
+#undef countOfSomethingJ
+#undef countOfSomethingI
+#undef param5
+#undef anglesProduct
+#undef param5Times2
+#undef maxAngle1Copy
+#undef maxAngle2Plus1
+#undef countsProduct
+#undef sizeMidBlk
+#undef maxAnglesProduct
+#undef maxAnglesProduct2
+#undef sizePolyMap
+#undef sizeVertices
+#undef sizePolys
 int RecalcSkyboxes2(void) {
     short* dst;
     short* ptr;

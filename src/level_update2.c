@@ -82,21 +82,18 @@ STATIC_FOR_GP_ACCESS int levelHiddenExitEntityOffset;
 int shouldMarkCubesVisited;
 static short copycatIdleTimer;
 static short copycatStateVar;
-static short curCopycatMove;
 static short D_000A45CC;
 STATIC_FOR_GP_ACCESS short fireSoundTimer;
 short isPausedOrWaitingForRestart;
 static short numCopycatMoves;
 short pauseForStartPress;
 static short timerBeforeJumpOrRoll;
-static short turnDelayFrames;
 static short unusedNumCopycatRounds;
 uint controllerButtons;
 uint prevControllerButtons;
 
 STATIC_FOR_GP_ACCESS int levelWon[2];
 STATIC_FOR_GP_ACCESS int unusedLevelWon;
-static short playerFinePosMod512[4];
 static SVECTOR initPlayerFacingVec;
 static SVECTOR initPlayerGravityVec;
 static SVECTOR initPlayerRightVec;
@@ -577,7 +574,11 @@ void RenderItems_() {
 }
 
 static int HandlePlayerButtons_prevButtons;
+static short HandlePlayerButtons_copycatMove;
+static short HandlePlayerButtons_turnDelayFrames;
 #define prevButtons HandlePlayerButtons_prevButtons
+#define copycatMove HandlePlayerButtons_copycatMove
+#define turnDelayFrames HandlePlayerButtons_turnDelayFrames
 void HandlePlayerButtons(Player* player) {
     if (turnDelayEnabled) {
         turnDelayFrames = 6;
@@ -749,23 +750,23 @@ void HandlePlayerButtons(Player* player) {
             }
 
             if (player->turnDirection != 0 || player->rollingForward || player->jumping) {
-                curCopycatMove = 0;
+                copycatMove = 0;
                 if (player->turnDirection == -1)
-                    curCopycatMove = 1;
+                    copycatMove = 1;
                 if (player->turnDirection == 1)
-                    curCopycatMove |= 2;
+                    copycatMove |= 2;
                 if (player->rollingForward == 1)
-                    curCopycatMove |= 4;
+                    copycatMove |= 4;
                 if (player->jumping == 1)
-                    curCopycatMove |= 8;
+                    copycatMove |= 8;
 
                 if (copycatMoves[player->copycatMoveIndex] == -1) {
-                    copycatMoves[player->copycatMoveIndex] = curCopycatMove;
+                    copycatMoves[player->copycatMoveIndex] = copycatMove;
                     if (player->copycatMoveIndex == numCopycatMoves) {
                         copycatStateVar = 1;
                     }
                 } else {
-                    if (copycatMoves[player->copycatMoveIndex] != curCopycatMove) {
+                    if (copycatMoves[player->copycatMoveIndex] != copycatMove) {
                         copycatStateVar = 2;
                     }
                 }
@@ -836,6 +837,8 @@ void HandlePlayerButtons(Player* player) {
     }
 }
 #undef prevButtons
+#undef copycatMove
+#undef turnDelayFrames
 
 static short CalcWhatPlayerIsStandingOn_blockType;
 #define blockType CalcWhatPlayerIsStandingOn_blockType
@@ -977,80 +980,83 @@ int GetBlockAt(SVECTOR* coord) {
 #undef y
 #undef z
 
+static short UpdateSubpixelPositions_finePosMod512[4];
+#define finePosMod512 UpdateSubpixelPositions_finePosMod512
 void UpdateSubpixelPositions(Player* player) {
-    playerFinePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
-    playerFinePosMod512[1] = (player->finePos.vy + 0x100) & 0x1FF;
-    playerFinePosMod512[2] = (player->finePos.vz + 0x100) & 0x1FF;
+    finePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
+    finePosMod512[1] = (player->finePos.vy + 0x100) & 0x1FF;
+    finePosMod512[2] = (player->finePos.vz + 0x100) & 0x1FF;
 
     player->svec_154 = player->subpixelPositionOnCube;
 
     if (player->facingDir.vx == 1) {
-        player->subpixelPositionOnCube.vz = playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vz = finePosMod512[0];
     }
     if (player->facingDir.vx == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[0];
     }
 
     if (player->facingDir.vy == 1) {
-        player->subpixelPositionOnCube.vz = playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vz = finePosMod512[1];
     }
     if (player->facingDir.vy == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[1];
     }
 
     if (player->facingDir.vz == 1) {
-        player->subpixelPositionOnCube.vz = playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vz = finePosMod512[2];
     }
     if (player->facingDir.vz == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[2];
     }
 
     if (player->gravityDir.vx == 1) {
-        player->subpixelPositionOnCube.vy = playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vy = finePosMod512[0];
     }
     if (player->gravityDir.vx == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[0];
     }
 
     if (player->gravityDir.vy == 1) {
-        player->subpixelPositionOnCube.vy = playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vy = finePosMod512[1];
     }
     if (player->gravityDir.vy == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[1];
     }
 
     if (player->gravityDir.vz == 1) {
-        player->subpixelPositionOnCube.vy = playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vy = finePosMod512[2];
     }
     if (player->gravityDir.vz == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[2];
     }
 
     if (player->rightVec.vx == 1) {
-        player->subpixelPositionOnCube.vx = playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vx = finePosMod512[0];
     }
     if (player->rightVec.vx == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[0];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[0];
     }
 
     if (player->rightVec.vy == 1) {
-        player->subpixelPositionOnCube.vx = playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vx = finePosMod512[1];
     }
     if (player->rightVec.vy == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[1];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[1];
     }
 
     if (player->rightVec.vz == 1) {
-        player->subpixelPositionOnCube.vx = playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vx = finePosMod512[2];
     }
     if (player->rightVec.vz == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - playerFinePosMod512[2];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[2];
     }
 
     player->svec_144.vx = player->subpixelPositionOnCube.vx - player->svec_154.vx;
     player->svec_144.vy = player->subpixelPositionOnCube.vy - player->svec_154.vy;
     player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
 }
+#undef finePosMod512
 
 void MovePlayerForward(Player* player, short delta) {
     if (player->facingDir.vx == 1) {

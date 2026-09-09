@@ -69,64 +69,55 @@ extern SVECTOR SVECTOR_000a2dfc;
 extern SVECTOR transporterParticlesPos;
 extern uint fruitsCollectedBitmask;
 
-static int DAT_000a4748;
-static int DAT_000a474c;
-static int DAT_000a4750;
-static int DAT_000a4754;
 int gameMode;
 STATIC_FOR_GP_ACCESS int levelExitEntityOffset;
 STATIC_FOR_GP_ACCESS int levelHiddenExitEntityOffset;
 int shouldMarkCubesVisited;
-static int tmpOff;
-static int tmpOff2;
-static int transportDestCubeSide;
-static int transportDestRotation;
-static int transporterDestEntityIdx;
-static int transporterTimer;
 STATIC_FOR_GP_ACCESS short fireSoundTimer;
 
-static int calcEntityPositionsDistSq;
-static int D_000A46A8;
-static int D_000A4734;
-static int distSquared2;
-static int dontDisableItemShadow;
-static int entityBlockOffset;
-static int handleItemTouchI;
-static int handleItemTouchIter;
-static int handleItemTouchJ;
-static int itemOffset;
 STATIC_FOR_GP_ACCESS int levelWon[2];
-static int playerRadius;
-static int touchItemIdx;
-static MATRIX MATRIX_000a46d4;
-static MATRIX MATRIX_000a4714;
-static short DAT_000a4788;
-static short touchCubeX;
-static short touchCubeY;
-static short touchCubeZ;
-static short touchSide;
-static SVECTOR calcEntityPositionsVec;
-static SVECTOR cubeBelowPlayerPos;
-static SVECTOR keyScreenSpaceParticlesPos;
-static SVECTOR SVECTOR_000a46ac;
-static SVECTOR SVECTOR_000a46b4;
-static SVECTOR SVECTOR_000a46bc;
-static SVECTOR SVECTOR_000a4738;
-static SVECTOR SVECTOR_000a4740;
-static SVECTOR SVECTOR_000a4778;
 static SVECTOR unusedLevelUpdate3Vec;
-static SVECTOR tempPlayerPos;
 
+static int HandleItemTouching_distSq;
+static int HandleItemTouching_dontDisableShadow;
+static int HandleItemTouching_entityBlockOffset;
+static int HandleItemTouching_i;
+static int HandleItemTouching_iter;
+static int HandleItemTouching_j;
+static int HandleItemTouching_itemOffset;
+static int HandleItemTouching_playerRadius;
+static int HandleItemTouching_itemIdx;
+static short HandleItemTouching_cubeX;
+static short HandleItemTouching_cubeY;
+static short HandleItemTouching_cubeZ;
+static short HandleItemTouching_side;
+static SVECTOR HandleItemTouching_keyParticlesPos;
+static SVECTOR HandleItemTouching_playerPos;
+#define distSq HandleItemTouching_distSq
+#define dontDisableShadow HandleItemTouching_dontDisableShadow
+#define entityBlockOffset HandleItemTouching_entityBlockOffset
+#define i HandleItemTouching_i
+#define iter HandleItemTouching_iter
+#define j HandleItemTouching_j
+#define itemOffset HandleItemTouching_itemOffset
+#define playerRadius HandleItemTouching_playerRadius
+#define itemIdx HandleItemTouching_itemIdx
+#define cubeX HandleItemTouching_cubeX
+#define cubeY HandleItemTouching_cubeY
+#define cubeZ HandleItemTouching_cubeZ
+#define side HandleItemTouching_side
+#define keyParticlesPos HandleItemTouching_keyParticlesPos
+#define playerPos HandleItemTouching_playerPos
 void HandleItemTouching(Player* player) {
     int* ptr;
 
-    tempPlayerPos = player->finePos;
+    playerPos = player->finePos;
     playerRadius = 10000;
 
-    for (handleItemTouchIter = 0; handleItemTouchIter < 3; handleItemTouchIter++) {
-        for (handleItemTouchI = 0; handleItemTouchI < 3; handleItemTouchI++) {
-            for (handleItemTouchJ = 0; handleItemTouchJ < 3; handleItemTouchJ++) {
-                entityBlockOffset = (player->surroundingBlocks[handleItemTouchIter][handleItemTouchI][handleItemTouchJ] - 5) * 128;
+    for (iter = 0; iter < 3; iter++) {
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 3; j++) {
+                entityBlockOffset = (player->surroundingBlocks[iter][i][j] - 5) * 128;
                 if (entityBlockOffset < 0) {
                     continue;
                 }
@@ -136,24 +127,24 @@ void HandleItemTouching(Player* player) {
                 }
 
                 for (itemOffset = 0; itemOffset < 96; itemOffset += 16) {
-                    touchItemIdx = entityData[entityBlockOffset + itemOffset + 5];
+                    itemIdx = entityData[entityBlockOffset + itemOffset + 5];
 
-                    if (entityData[entityBlockOffset + itemOffset + 4] == 0 || itemState[touchItemIdx].type == 0) {
+                    if (entityData[entityBlockOffset + itemOffset + 4] == 0 || itemState[itemIdx].type == 0) {
                         continue;
                     }
 
-                    distSquared2 = (tempPlayerPos.vx - itemState[touchItemIdx].pos.vx) * (tempPlayerPos.vx - itemState[touchItemIdx].pos.vx) +
-                                   (tempPlayerPos.vy - itemState[touchItemIdx].pos.vy) * (tempPlayerPos.vy - itemState[touchItemIdx].pos.vy) +
-                                   (tempPlayerPos.vz - itemState[touchItemIdx].pos.vz) * (tempPlayerPos.vz - itemState[touchItemIdx].pos.vz);
+                    distSq = (playerPos.vx - itemState[itemIdx].pos.vx) * (playerPos.vx - itemState[itemIdx].pos.vx) +
+                                   (playerPos.vy - itemState[itemIdx].pos.vy) * (playerPos.vy - itemState[itemIdx].pos.vy) +
+                                   (playerPos.vz - itemState[itemIdx].pos.vz) * (playerPos.vz - itemState[itemIdx].pos.vz);
 
-                    if (distSquared2 >= itemState[touchItemIdx].collisionDistance + playerRadius) {
+                    if (distSq >= itemState[itemIdx].collisionDistance + playerRadius) {
                         continue;
                     }
-                    touchCubeX = entityData[entityBlockOffset + 125];
-                    touchCubeY = entityData[entityBlockOffset + 126];
-                    touchCubeZ = entityData[entityBlockOffset + 127];
-                    touchSide = itemOffset / 16;
-                    dontDisableItemShadow = 0;
+                    cubeX = entityData[entityBlockOffset + 125];
+                    cubeY = entityData[entityBlockOffset + 126];
+                    cubeZ = entityData[entityBlockOffset + 127];
+                    side = itemOffset / 16;
+                    dontDisableShadow = 0;
 
                     switch (entityData[entityBlockOffset + itemOffset + 1]) {
                         case OBJ_SPIKE_TRAP:
@@ -166,15 +157,15 @@ void HandleItemTouching(Player* player) {
                                     thePlayer.movementInhibitTimer = 10;
                                     thePlayer.ballBlinking = 1;
                                 }
-                                dontDisableItemShadow = 1;
+                                dontDisableShadow = 1;
                             } else {
-                                AddParticles(7, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                                AddParticles(7, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                                 levelScore += 1550;
                             }
                             break;
 
                         case OBJ_LETHARGY_PILL:
-                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.lethargyTimer = 300;
                             EnableLethargy(1);
                             Vibrate100(120, 120, 200, 1);
@@ -183,20 +174,20 @@ void HandleItemTouching(Player* player) {
                             break;
 
                         case OBJ_INVINCIBILITY_PILL:
-                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.invulnerabilityTimer = 700;
                             SndPlaySfx(SFX_LETHARGY_PILL, 0, &SVECTOR_000a2df4, 7000);
                             break;
 
                         case OBJ_BOUNCY_PILL:
-                            AddParticles(9, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.bounceTimer = 700;
                             SndPlaySfx(SFX_BOUNCE_PILL, 0, &SVECTOR_000a2df4, 7000);
                             break;
 
                         case OBJ_SUNGLASSES:
                             SndPlaySfx(SFX_SUNGLASSES_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
-                            AddParticles(8, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(8, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             thePlayer.sunglassTimer = 700;
                             levelScore += 500;
                             SetSunglassMode(1);
@@ -210,14 +201,14 @@ void HandleItemTouching(Player* player) {
 
                             {
                                 int* p = (int*)(numKeysInLevel * 32 + (int)ptr);
-                                keyScreenSpaceParticlesPos.vx = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8) + 6;
-                                keyScreenSpaceParticlesPos.vy = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8 + 4) + 11;
+                                keyParticlesPos.vx = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8) + 6;
+                                keyParticlesPos.vy = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8 + 4) + 11;
                             }
                             asm volatile("");
-                            keyScreenSpaceParticlesPos.vz = -1;
+                            keyParticlesPos.vz = -1;
 
-                            AddParticles(0, &keyScreenSpaceParticlesPos, 0);
-                            AddParticles(6, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(0, &keyParticlesPos, 0);
+                            AddParticles(6, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             numKeysRemaining--;
                             levelScore += 1000;
                             if (numKeysRemaining == 0) {
@@ -231,13 +222,13 @@ void HandleItemTouching(Player* player) {
                             break;
 
                         case OBJ_GEM:
-                            AddParticles(7, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(7, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             levelScore += 2975;
                             SndPlaySfx(SFX_GEM_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
                             break;
 
                         case OBJ_COIN:
-                            AddParticles(2, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(2, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_COIN_COLLECTION, 0, &SVECTOR_000a2df4, 7000);
                             if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
                                 levelScore += 750;
@@ -254,7 +245,7 @@ void HandleItemTouching(Player* player) {
                             if (gameMode != 2) {
                                 AddParticles(0, &fruit1ScreenSpaceParticlesPos, 0);
                             }
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_1, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 1;
@@ -265,7 +256,7 @@ void HandleItemTouching(Player* player) {
                             if (gameMode != 2) {
                                 AddParticles(0, &fruit2ScreenSpaceParticlesPos, 0);
                             }
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_2, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 2;
@@ -276,7 +267,7 @@ void HandleItemTouching(Player* player) {
                             if (gameMode != 2) {
                                 AddParticles(0, &fruit3ScreenSpaceParticlesPos, 0);
                             }
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_3, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 4;
@@ -287,7 +278,7 @@ void HandleItemTouching(Player* player) {
                             if (gameMode != 2) {
                                 AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
                             }
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_4, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 8;
@@ -298,7 +289,7 @@ void HandleItemTouching(Player* player) {
                             if (gameMode != 2) {
                                 AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
                             }
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 0x10;
@@ -311,7 +302,7 @@ void HandleItemTouching(Player* player) {
                             AddParticles(0, &fruit3ScreenSpaceParticlesPos, 0);
                             AddParticles(0, &fruit4ScreenSpaceParticlesPos, 0);
                             AddParticles(0, &fruit5ScreenSpaceParticlesPos, 0);
-                            AddParticles(4, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(4, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             SndPlaySfx(SFX_FRUIT_5, 0, &SVECTOR_000a2df4, 7000);
                             levelScore += 2500;
                             fruitsCollectedBitmask |= 0x1f;
@@ -323,92 +314,129 @@ void HandleItemTouching(Player* player) {
                             hourglassIsRotating = 1;
                             levelScore += (levelTimeLeft / 50) * 10;
                             AddParticles(1, &SVECTOR_000a2dfc, 0);
-                            AddParticles(10, &itemState[touchItemIdx].pos, AddLightEffect(touchCubeX, touchCubeY, touchCubeZ, touchSide));
+                            AddParticles(10, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             break;
                     }
 
-                    if (!dontDisableItemShadow) {
+                    if (!dontDisableShadow) {
                         entityData[entityBlockOffset + itemOffset + 4] = 0;
                         entityData[entityBlockOffset + itemOffset + 1] = 0;
                         DisableItemShadow(entityBlockOffset / 128, itemOffset / 16, 0);
                     } else {
-                        dontDisableItemShadow = 0;
+                        dontDisableShadow = 0;
                     }
                 }
             }
         }
     }
 }
+#undef distSq
+#undef dontDisableShadow
+#undef entityBlockOffset
+#undef i
+#undef iter
+#undef j
+#undef itemOffset
+#undef playerRadius
+#undef itemIdx
+#undef cubeX
+#undef cubeY
+#undef cubeZ
+#undef side
+#undef keyParticlesPos
+#undef playerPos
 
+static int CreateAllItemDispLists_entityOffset;
+static int CreateAllItemDispLists_itemOffset;
+static int CreateAllItemDispLists_distSq;
+static int CreateAllItemDispLists_entityDir;
+static int CreateAllItemDispLists_itemIdx;
+static MATRIX CreateAllItemDispLists_drawMatrix;
+static MATRIX CreateAllItemDispLists_rotMatrix;
+static SVECTOR CreateAllItemDispLists_calcPos;
+static SVECTOR CreateAllItemDispLists_rotVec;
+static SVECTOR CreateAllItemDispLists_camPos;
+static SVECTOR CreateAllItemDispLists_offsetVec;
+#define entityOffset CreateAllItemDispLists_entityOffset
+#define itemOffset CreateAllItemDispLists_itemOffset
+#define distSq CreateAllItemDispLists_distSq
+#define entityDir CreateAllItemDispLists_entityDir
+#define itemIdx CreateAllItemDispLists_itemIdx
+#define drawMatrix CreateAllItemDispLists_drawMatrix
+#define rotMatrix CreateAllItemDispLists_rotMatrix
+#define calcPos CreateAllItemDispLists_calcPos
+#define rotVec CreateAllItemDispLists_rotVec
+#define camPos CreateAllItemDispLists_camPos
+#define offsetVec CreateAllItemDispLists_offsetVec
 void CreateAllItemDispLists(void) {
-    for (tmpOff = 0; tmpOff < numEntities * 128; tmpOff += 128) {
-        if (entityData[tmpOff] >= 5) {
+    for (entityOffset = 0; entityOffset < numEntities * 128; entityOffset += 128) {
+        if (entityData[entityOffset] >= 5) {
             continue;
         }
-        for (tmpOff2 = 0; tmpOff2 < 96; tmpOff2 += 16) {
-            if (entityData[tmpOff + tmpOff2 + 4] == 0) {
+        for (itemOffset = 0; itemOffset < 96; itemOffset += 16) {
+            if (entityData[entityOffset + itemOffset + 4] == 0) {
                 continue;
             }
-            D_000A46A8 = entityData[tmpOff + tmpOff2 + 2];
-            calcEntityPositionsVec.vx = entityData[tmpOff + 125] * 512;
-            calcEntityPositionsVec.vy = entityData[tmpOff + 126] * 512;
-            calcEntityPositionsVec.vz = entityData[tmpOff + 127] * 512;
-            SVECTOR_000a46bc.vx = SVECTOR_000a46bc.vy = SVECTOR_000a46bc.vz = 0;
+            entityDir = entityData[entityOffset + itemOffset + 2];
+            calcPos.vx = entityData[entityOffset + 125] * 512;
+            calcPos.vy = entityData[entityOffset + 126] * 512;
+            calcPos.vz = entityData[entityOffset + 127] * 512;
+            offsetVec.vx = offsetVec.vy = offsetVec.vz = 0;
 
-            switch (entityData[tmpOff + tmpOff2 + 1]) {
+            switch (entityData[entityOffset + itemOffset + 1]) {
                 case OBJ_SPIKE_TRAP:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 16) % 4096;
-                    if (entityData[tmpOff + tmpOff2 + 3] == 0) {
-                        entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] + 100) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 16) % 4096;
+                    if (entityData[entityOffset + itemOffset + 3] == 0) {
+                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + 100) % 4096;
                     }
-                    if (entityData[tmpOff + tmpOff2 + 3] == 1) {
-                        entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] + 8) % 4096;
+                    if (entityData[entityOffset + itemOffset + 3] == 1) {
+                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + 8) % 4096;
                     }
 
-                    if (entityData[tmpOff + tmpOff2 + 11] > 2048) {
-                        entityData[tmpOff + tmpOff2 + 3] = 1;
+                    if (entityData[entityOffset + itemOffset + 11] > 2048) {
+                        entityData[entityOffset + itemOffset + 3] = 1;
                     } else {
-                        entityData[tmpOff + tmpOff2 + 3] = 0;
+                        entityData[entityOffset + itemOffset + 3] = 0;
                     }
 
-                    if (entityData[tmpOff + tmpOff2 + 3] == 1) {
-                        entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] + (entityData[tmpOff + tmpOff2 + 11] % 2048) / 2) % 4096;
+                    if (entityData[entityOffset + itemOffset + 3] == 1) {
+                        entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] + (entityData[entityOffset + itemOffset + 11] % 2048) / 2) % 4096;
                     }
-                    SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 12]) * 0) / 4096; // guess
-                    SVECTOR_000a46bc.vx = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 100) / 4096;
-                    SVECTOR_000a46bc.vy = (rcos(entityData[tmpOff + tmpOff2 + 13]) * 100) / 4096;
-                    SVECTOR_000a46ac.vy = SVECTOR_000a46ac.vx = 0;
-                    SVECTOR_000a46ac.vz = 1024 - entityData[tmpOff + tmpOff2 + 13];
-                    RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    offsetVec.vz = (rsin(entityData[entityOffset + itemOffset + 12]) * 0) / 4096; // guess
+                    offsetVec.vx = (rsin(entityData[entityOffset + itemOffset + 13]) * 100) / 4096;
+                    offsetVec.vy = (rcos(entityData[entityOffset + itemOffset + 13]) * 100) / 4096;
+                    rotVec.vy = rotVec.vx = 0;
+                    rotVec.vz = 1024 - entityData[entityOffset + itemOffset + 13];
+                    RotMatrixZYX(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_BUTTON:
                 case OBJ_MOVING_SPIKE:
                 case OBJ_SPIKE:
                 case OBJ_ARROW:
-                    SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = SVECTOR_000a46ac.vz = 0;
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    rotVec.vx = rotVec.vy = rotVec.vz = 0;
+                    RotMatrix(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_TRANSPORTER:
-                    if (entityData[tmpOff + tmpOff2 + 4] == 1 && cameraIndex == 0) {
-                        entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 30) % 4096;
+                    if (entityData[entityOffset + itemOffset + 4] == 1 && cameraIndex == 0) {
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 30) % 4096;
                     }
-                    SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    rotVec.vx = rotVec.vy = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrix(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_EXIT:
                 case OBJ_HIDDEN_EXIT:
-                    if (entityData[tmpOff + tmpOff2 + 4] == 1) {
-                        entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 55) % 4096;
+                    if (entityData[entityOffset + itemOffset + 4] == 1) {
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 55) % 4096;
                     } else {
-                        entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 25) % 4096;
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 25) % 4096;
                     }
-                    SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    rotVec.vx = rotVec.vy = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrix(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_APPLE:
@@ -416,54 +444,54 @@ void CreateAllItemDispLists(void) {
                 case OBJ_PUMPKIN:
                 case OBJ_BANANA:
                 case OBJ_STRAWBERRY:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 24) % 4096;
-                    entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] - 80) % 4096;
-                    entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] - 60) % 4096;
-                    SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 20) / 4096 + 10;
-                    SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vx = (rsin(entityData[tmpOff + tmpOff2 + 12]) * 150) / 4096;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 24) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - 80) % 4096;
+                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - 60) % 4096;
+                    offsetVec.vz = (rsin(entityData[entityOffset + itemOffset + 13]) * 20) / 4096 + 10;
+                    rotVec.vy = 0;
+                    rotVec.vx = (rsin(entityData[entityOffset + itemOffset + 12]) * 150) / 4096;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrixZYX(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_KEY:
                 case OBJ_COIN:
                 case OBJ_SUNGLASSES:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 90) % 4096;
-                    entityData[tmpOff + tmpOff2 + 13] = (entityData[tmpOff + tmpOff2 + 13] - 70) % 4096;
-                    SVECTOR_000a46bc.vz = (rsin(entityData[tmpOff + tmpOff2 + 13]) * 20) / 4096 + 10;
-                    SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vx = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 90) % 4096;
+                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - 70) % 4096;
+                    offsetVec.vz = (rsin(entityData[entityOffset + itemOffset + 13]) * 20) / 4096 + 10;
+                    rotVec.vy = 0;
+                    rotVec.vx = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrixZYX(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_GEM:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 35) % 4096;
-                    SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vx = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 35) % 4096;
+                    rotVec.vy = 0;
+                    rotVec.vx = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrix(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_HOURGLASS:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 32) % 4096;
-                    entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] - 20) % 4096;
-                    SVECTOR_000a46ac.vy = (rsin(entityData[tmpOff + tmpOff2 + 11]) / 2) + 30;
-                    SVECTOR_000a46ac.vx = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 12];
-                    RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 32) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - 20) % 4096;
+                    rotVec.vy = (rsin(entityData[entityOffset + itemOffset + 11]) / 2) + 30;
+                    rotVec.vx = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 12];
+                    RotMatrixZYX(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_LETHARGY_PILL:
                 case OBJ_BOUNCY_PILL:
                 case OBJ_INVINCIBILITY_PILL:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] + 80) % 4096;
-                    entityData[tmpOff + tmpOff2 + 12] = (entityData[tmpOff + tmpOff2 + 12] + 25) % 4096;
-                    SVECTOR_000a46ac.vy = entityData[tmpOff + tmpOff2 + 11];
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 12];
-                    SVECTOR_000a46ac.vx = 0;
-                    RotMatrixZYX(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 80) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] + 25) % 4096;
+                    rotVec.vy = entityData[entityOffset + itemOffset + 11];
+                    rotVec.vz = entityData[entityOffset + itemOffset + 12];
+                    rotVec.vx = 0;
+                    RotMatrixZYX(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_PURPLE_PRESENT:
@@ -471,48 +499,61 @@ void CreateAllItemDispLists(void) {
                 case OBJ_YELLOW_PRESENT:
                 case OBJ_BLUE_PRESENT:
                 case OBJ_GREEN_PRESENT:
-                    entityData[tmpOff + tmpOff2 + 11] = (entityData[tmpOff + tmpOff2 + 11] - 17) % 4096;
-                    SVECTOR_000a46ac.vx = SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vz = entityData[tmpOff + tmpOff2 + 11];
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 17) % 4096;
+                    rotVec.vx = rotVec.vy = 0;
+                    rotVec.vz = entityData[entityOffset + itemOffset + 11];
+                    RotMatrix(&rotVec, &rotMatrix);
                     break;
 
                 case OBJ_BOUNCEPAD:
-                    SVECTOR_000a46ac.vz = 0;
-                    SVECTOR_000a46ac.vy = 0;
-                    SVECTOR_000a46ac.vx = 0;
-                    RotMatrix(&SVECTOR_000a46ac, &MATRIX_000a4714);
-                    calcEntityPositionsDistSq = (calcEntityPositionsVec.vx - thePlayer.finePos.vx) * (calcEntityPositionsVec.vx - thePlayer.finePos.vx) +
-                                                (calcEntityPositionsVec.vy - thePlayer.finePos.vy) * (calcEntityPositionsVec.vy - thePlayer.finePos.vy) +
-                                                (calcEntityPositionsVec.vz - thePlayer.finePos.vz) * (calcEntityPositionsVec.vz - thePlayer.finePos.vz);
+                    rotVec.vz = 0;
+                    rotVec.vy = 0;
+                    rotVec.vx = 0;
+                    RotMatrix(&rotVec, &rotMatrix);
+                    distSq = (calcPos.vx - thePlayer.finePos.vx) * (calcPos.vx - thePlayer.finePos.vx) +
+                                                (calcPos.vy - thePlayer.finePos.vy) * (calcPos.vy - thePlayer.finePos.vy) +
+                                                (calcPos.vz - thePlayer.finePos.vz) * (calcPos.vz - thePlayer.finePos.vz);
 
-                    if (calcEntityPositionsDistSq < 490000) {
-                        if (entityData[tmpOff + tmpOff2 + 11] > 0)
-                            entityData[tmpOff + tmpOff2 + 11]--;
-                        MATRIX_000a4714.m[2][2] = (MATRIX_000a4714.m[2][2] * entityData[tmpOff + tmpOff2 + 11]) / 16;
-                    } else if (entityData[tmpOff + tmpOff2 + 11] < 16) {
-                        entityData[tmpOff + tmpOff2 + 11] += 4;
-                        MATRIX_000a4714.m[2][2] = (MATRIX_000a4714.m[2][2] * entityData[tmpOff + tmpOff2 + 11]) / 16;
+                    if (distSq < 490000) {
+                        if (entityData[entityOffset + itemOffset + 11] > 0)
+                            entityData[entityOffset + itemOffset + 11]--;
+                        rotMatrix.m[2][2] = (rotMatrix.m[2][2] * entityData[entityOffset + itemOffset + 11]) / 16;
+                    } else if (entityData[entityOffset + itemOffset + 11] < 16) {
+                        entityData[entityOffset + itemOffset + 11] += 4;
+                        rotMatrix.m[2][2] = (rotMatrix.m[2][2] * entityData[entityOffset + itemOffset + 11]) / 16;
                     }
                     break;
             }
 
-            D_000A4734 = entityData[tmpOff + tmpOff2 + 5];
-            ApplyMatrixSV(&itemState[D_000A4734].matrix, &SVECTOR_000a46bc, &SVECTOR_000a46bc);
-            calcEntityPositionsVec.vx = itemState[D_000A4734].pos.vx = SVECTOR_000a46bc.vx + itemState[D_000A4734].matrix.t[0];
-            calcEntityPositionsVec.vy = itemState[D_000A4734].pos.vy = SVECTOR_000a46bc.vy + itemState[D_000A4734].matrix.t[1];
-            calcEntityPositionsVec.vz = itemState[D_000A4734].pos.vz = SVECTOR_000a46bc.vz + itemState[D_000A4734].matrix.t[2];
-            MulMatrix0(&itemState[D_000A4734].matrix, &MATRIX_000a4714, &MATRIX_000a46f4);
-            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a46f4, &MATRIX_000a46d4);
-            ApplyMatrixSV(&perspMatrixes[cameraIndex], &calcEntityPositionsVec, &SVECTOR_000a46b4);
-            MATRIX_000a46d4.t[0] = SVECTOR_000a46b4.vx + perspMatrixes[cameraIndex].t[0];
-            MATRIX_000a46d4.t[1] = SVECTOR_000a46b4.vy + perspMatrixes[cameraIndex].t[1];
-            MATRIX_000a46d4.t[2] = SVECTOR_000a46b4.vz + perspMatrixes[cameraIndex].t[2];
-            CreateItemDispList(&MATRIX_000a46d4, MATRIX_000a46d4.t[2], tmpOff / 128, tmpOff2 / 16);
+            itemIdx = entityData[entityOffset + itemOffset + 5];
+            ApplyMatrixSV(&itemState[itemIdx].matrix, &offsetVec, &offsetVec);
+            calcPos.vx = itemState[itemIdx].pos.vx = offsetVec.vx + itemState[itemIdx].matrix.t[0];
+            calcPos.vy = itemState[itemIdx].pos.vy = offsetVec.vy + itemState[itemIdx].matrix.t[1];
+            calcPos.vz = itemState[itemIdx].pos.vz = offsetVec.vz + itemState[itemIdx].matrix.t[2];
+            MulMatrix0(&itemState[itemIdx].matrix, &rotMatrix, &MATRIX_000a46f4);
+            MulMatrix0(&perspMatrixes[cameraIndex], &MATRIX_000a46f4, &drawMatrix);
+            ApplyMatrixSV(&perspMatrixes[cameraIndex], &calcPos, &camPos);
+            drawMatrix.t[0] = camPos.vx + perspMatrixes[cameraIndex].t[0];
+            drawMatrix.t[1] = camPos.vy + perspMatrixes[cameraIndex].t[1];
+            drawMatrix.t[2] = camPos.vz + perspMatrixes[cameraIndex].t[2];
+            CreateItemDispList(&drawMatrix, drawMatrix.t[2], entityOffset / 128, itemOffset / 16);
         }
     }
 }
+#undef entityOffset
+#undef itemOffset
+#undef distSq
+#undef entityDir
+#undef itemIdx
+#undef drawMatrix
+#undef rotMatrix
+#undef calcPos
+#undef rotVec
+#undef camPos
+#undef offsetVec
 
+static SVECTOR SetEntityRotation_tmpVec;
+#define tmpVec SetEntityRotation_tmpVec
 void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
     pos->matrix.m[2][2] = 0;
     pos->matrix.m[2][1] = 0;
@@ -562,17 +603,17 @@ void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
     }
 
     if (param_2 == 2) {
-        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
-        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
-        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+        tmpVec.vx = pos->matrix.m[0][0];
+        tmpVec.vy = pos->matrix.m[1][0];
+        tmpVec.vz = pos->matrix.m[2][0];
 
         pos->matrix.m[0][0] = -pos->matrix.m[0][1];
         pos->matrix.m[1][0] = -pos->matrix.m[1][1];
         pos->matrix.m[2][0] = -pos->matrix.m[2][1];
 
-        pos->matrix.m[0][1] = SVECTOR_000a4738.vx;
-        pos->matrix.m[1][1] = SVECTOR_000a4738.vy;
-        pos->matrix.m[2][1] = SVECTOR_000a4738.vz;
+        pos->matrix.m[0][1] = tmpVec.vx;
+        pos->matrix.m[1][1] = tmpVec.vy;
+        pos->matrix.m[2][1] = tmpVec.vz;
     }
     if (param_2 == 3) {
         pos->matrix.m[0][0] = -pos->matrix.m[0][0];
@@ -583,20 +624,23 @@ void SetEntityRotation(EntityPos* pos, int param_2, int param_3, int param_4) {
         pos->matrix.m[2][1] = -pos->matrix.m[2][1];
     }
     if (param_2 == 4) {
-        SVECTOR_000a4738.vx = pos->matrix.m[0][0];
-        SVECTOR_000a4738.vy = pos->matrix.m[1][0];
-        SVECTOR_000a4738.vz = pos->matrix.m[2][0];
+        tmpVec.vx = pos->matrix.m[0][0];
+        tmpVec.vy = pos->matrix.m[1][0];
+        tmpVec.vz = pos->matrix.m[2][0];
 
         pos->matrix.m[0][0] = pos->matrix.m[0][1];
         pos->matrix.m[1][0] = pos->matrix.m[1][1];
         pos->matrix.m[2][0] = pos->matrix.m[2][1];
 
-        pos->matrix.m[0][1] = -SVECTOR_000a4738.vx;
-        pos->matrix.m[1][1] = -SVECTOR_000a4738.vy;
-        pos->matrix.m[2][1] = -SVECTOR_000a4738.vz;
+        pos->matrix.m[0][1] = -tmpVec.vx;
+        pos->matrix.m[1][1] = -tmpVec.vy;
+        pos->matrix.m[2][1] = -tmpVec.vz;
     }
 }
+#undef tmpVec
 
+static SVECTOR MatrixFromDirectionIndex_tmpVec;
+#define tmpVec MatrixFromDirectionIndex_tmpVec
 void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, SVECTOR* param_5) {
     m->m[0][2] = 0;
     m->m[0][1] = 0;
@@ -646,17 +690,17 @@ void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, 
     }
 
     if (param_2 == 2) {
-        SVECTOR_000a4740.vx = m->m[0][0];
-        SVECTOR_000a4740.vy = m->m[1][0];
-        SVECTOR_000a4740.vz = m->m[2][0];
+        tmpVec.vx = m->m[0][0];
+        tmpVec.vy = m->m[1][0];
+        tmpVec.vz = m->m[2][0];
 
         m->m[0][0] = -m->m[0][1];
         m->m[1][0] = -m->m[1][1];
         m->m[2][0] = -m->m[2][1];
 
-        m->m[0][1] = SVECTOR_000a4740.vx;
-        m->m[1][1] = SVECTOR_000a4740.vy;
-        m->m[2][1] = SVECTOR_000a4740.vz;
+        m->m[0][1] = tmpVec.vx;
+        m->m[1][1] = tmpVec.vy;
+        m->m[2][1] = tmpVec.vz;
     }
     if (param_2 == 3) {
         m->m[0][0] = -m->m[0][0];
@@ -667,20 +711,29 @@ void MatrixFromDirectionIndex(MATRIX* m, int param_2, int param_3, short delta, 
         m->m[2][1] = -m->m[2][1];
     }
     if (param_2 == 4) {
-        SVECTOR_000a4740.vx = m->m[0][0];
-        SVECTOR_000a4740.vy = m->m[1][0];
-        SVECTOR_000a4740.vz = m->m[2][0];
+        tmpVec.vx = m->m[0][0];
+        tmpVec.vy = m->m[1][0];
+        tmpVec.vz = m->m[2][0];
 
         m->m[0][0] = m->m[0][1];
         m->m[1][0] = m->m[1][1];
         m->m[2][0] = m->m[2][1];
 
-        m->m[0][1] = -SVECTOR_000a4740.vx;
-        m->m[1][1] = -SVECTOR_000a4740.vy;
-        m->m[2][1] = -SVECTOR_000a4740.vz;
+        m->m[0][1] = -tmpVec.vx;
+        m->m[1][1] = -tmpVec.vy;
+        m->m[2][1] = -tmpVec.vz;
     }
 }
+#undef tmpVec
 
+static int CheckForButtonEntity_entityOffset;
+static int CheckForButtonEntity_targetEntity;
+static int CheckForButtonEntity_targetSide;
+static int CheckForButtonEntity_link;
+#define entityOffset CheckForButtonEntity_entityOffset
+#define targetEntity CheckForButtonEntity_targetEntity
+#define targetSide CheckForButtonEntity_targetSide
+#define link CheckForButtonEntity_link
 void CheckForButtonEntity(Player* player) {
     short* ptr;
     unsigned short* ptr0;
@@ -694,65 +747,77 @@ void CheckForButtonEntity(Player* player) {
         (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
         (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
         player->alreadyProcessedEntityAction = OBJ_BUTTON;
-        DAT_000a4748 = player->specialBlockSideOffsetPlayerIsStandingOn;
+        entityOffset = player->specialBlockSideOffsetPlayerIsStandingOn;
 
-        if (entityData[DAT_000a4748 + 4] == 1) {
+        if (entityData[entityOffset + 4] == 1) {
             SndPlaySfx(SFX_BUTTON_PRESS, 0, &SVECTOR_000a2df4, 7000);
         } else {
             SndPlaySfx(SFX_BUTTON_DEPRESS, 0, &SVECTOR_000a2df4, 7000);
         }
         Vibrate99(1, 0xff, 1);
 
-        ptr0 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
-        DAT_000a4754 = (short)ptr0[7];
-        DAT_000a474c = ((int)(ptr0[7] << 16)) >> 20;
-        DAT_000a4750 = ptr0[7] & 0xf;
+        ptr0 = (unsigned short*)(entityOffset * 2 + (int)entityData);
+        link = (short)ptr0[7];
+        targetEntity = ((int)(ptr0[7] << 16)) >> 20;
+        targetSide = ptr0[7] & 0xf;
 
-        while (DAT_000a4754 != -1) {
-            if (DAT_000a4750 == 6) {
-                ptr = (short*)(DAT_000a474c * 256 + (int)entityData);
+        while (link != -1) {
+            if (targetSide == 6) {
+                ptr = (short*)(targetEntity * 256 + (int)entityData);
                 ptr[3] = (ptr[3] + 1) % 2;
-                DAT_000a4748 = DAT_000a474c << 7;
-                DAT_000a4754 = ptr[23];
-                DAT_000a474c = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
-                DAT_000a4750 = ((unsigned short*)ptr)[23] & 0xf;
+                entityOffset = targetEntity << 7;
+                link = ptr[23];
+                targetEntity = ((int)(((unsigned short*)ptr)[23] << 16)) >> 20;
+                targetSide = ((unsigned short*)ptr)[23] & 0xf;
             } else {
-                DAT_000a4748 = DAT_000a474c * 128 + DAT_000a4750 * 16;
-                ptr2 = (unsigned short*)(DAT_000a4748 * 2 + (int)entityData);
+                entityOffset = targetEntity * 128 + targetSide * 16;
+                ptr2 = (unsigned short*)(entityOffset * 2 + (int)entityData);
                 ptr2[4] = ((short)ptr2[4] % 2) + 1;
-                DAT_000a4754 = (short)ptr2[6];
-                DAT_000a474c = ((int)(ptr2[6] << 16)) >> 20;
-                DAT_000a4750 = ptr2[6] & 0xf;
+                link = (short)ptr2[6];
+                targetEntity = ((int)(ptr2[6] << 16)) >> 20;
+                targetSide = ptr2[6] & 0xf;
             }
         }
     }
 }
+#undef entityOffset
+#undef targetEntity
+#undef targetSide
+#undef link
 
+static int HandleTransporter_destSide;
+static int HandleTransporter_destRot;
+static int HandleTransporter_destEntity;
+static int HandleTransporter_timer;
+#define destSide HandleTransporter_destSide
+#define destRot HandleTransporter_destRot
+#define destEntity HandleTransporter_destEntity
+#define timer HandleTransporter_timer
 int HandleTransporter(Player* player) {
     if (IsPlayerInAir(player)) {
         player->alreadyProcessedEntityAction = 0;
-        transporterTimer = -1;
+        timer = -1;
         return 0;
     }
     if (player->faceTypePlayerStandingOn != OBJ_TRANSPORTER || entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] != 1) {
-        transporterTimer = -1;
+        timer = -1;
         return 0;
     }
     if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
-        if (transporterTimer == -1) {
-            transporterTimer = 15;
+        if (timer == -1) {
+            timer = 15;
             AddParticles(3, &transporterParticlesPos, 0);
         }
 
-        if (transporterTimer > -1) {
-            transporterTimer--;
+        if (timer > -1) {
+            timer--;
             player->movementInhibitTimer = 15;
             player->rollingForward = 0;
             player->turnDirection = 0;
             player->jumping = 0;
         }
 
-        if (transporterTimer == -1) {
+        if (timer == -1) {
             int destEntityIdx;
             int destCubeSide;
 
@@ -766,15 +831,15 @@ int HandleTransporter(Player* player) {
             player->turnDirection = 0;
             player->jumping = 0;
 
-            transporterDestEntityIdx = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] >> 4;
-            transportDestCubeSide = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] & 15;
+            destEntity = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] >> 4;
+            destSide = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 7] & 15;
 
-            player->specialBlockSideOffsetPlayerIsStandingOn = transporterDestEntityIdx * 128 + transportDestCubeSide * 16;
-            player->specialBlockIndexPlayerIsStandingOn = transporterDestEntityIdx * 128;
+            player->specialBlockSideOffsetPlayerIsStandingOn = destEntity * 128 + destSide * 16;
+            player->specialBlockIndexPlayerIsStandingOn = destEntity * 128;
 
-            transportDestRotation = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2];
+            destRot = entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2];
 
-            SetPlayerRotation(transportDestCubeSide, transportDestRotation, player);
+            SetPlayerRotation(destSide, destRot, player);
 
             player->perspVec1 = player->rightVec;
             player->perspVec3 = player->facingDir;
@@ -803,14 +868,24 @@ int HandleTransporter(Player* player) {
     }
     return 0;
 }
+#undef destSide
+#undef destRot
+#undef destEntity
+#undef timer
 
+static short HandleSpecialCubeTypes_blockType;
+static SVECTOR HandleSpecialCubeTypes_cubePos;
+static SVECTOR HandleSpecialCubeTypes_arrowDir;
+#define blockType HandleSpecialCubeTypes_blockType
+#define cubePos HandleSpecialCubeTypes_cubePos
+#define arrowDir HandleSpecialCubeTypes_arrowDir
 void HandleSpecialCubeTypes(Player* player) {
     int whichSide;
     SVECTOR gravityDir;
     SVECTOR dummy;
 
-    DAT_000a4788 = player->surroundingBlocks[1][1][1];
-    if (DAT_000a4788 == -2) {
+    blockType = player->surroundingBlocks[1][1][1];
+    if (blockType == -2) {
         if (thePlayer.invulnerabilityTimer == -1) {
             if (player->movementInhibitTimer == 0) {
                 player->delayedLevelEndReason = LEVEL_END_LASER;
@@ -838,10 +913,10 @@ void HandleSpecialCubeTypes(Player* player) {
         } else {
             whichSide = -1;
         }
-        GetVectorBasedOnTwoDirs(whichSide, entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2], &SVECTOR_000a4778);
-        if (player->facingDir.vx != SVECTOR_000a4778.vx ||
-                player->facingDir.vy != SVECTOR_000a4778.vy ||
-                player->facingDir.vz != SVECTOR_000a4778.vz) {
+        GetVectorBasedOnTwoDirs(whichSide, entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 2], &arrowDir);
+        if (player->facingDir.vx != arrowDir.vx ||
+                player->facingDir.vy != arrowDir.vy ||
+                player->facingDir.vz != arrowDir.vz) {
             thePlayer.rollingForward = 0;
         }
     }
@@ -927,11 +1002,11 @@ void HandleSpecialCubeTypes(Player* player) {
             }
         }
         if (shouldMarkCubesVisited != 0) {
-            cubeBelowPlayerPos.vx = ((player->finePos.vx - (player->gravityDir.vx * 356)) + 256) >> 9;
-            cubeBelowPlayerPos.vy = ((player->finePos.vy - (player->gravityDir.vy * 356)) + 256) >> 9;
-            cubeBelowPlayerPos.vz = ((player->finePos.vz - (player->gravityDir.vz * 356)) + 256) >> 9;
-            if (cubeBelowPlayerPos.vx < 34 && cubeBelowPlayerPos.vy < 34 && cubeBelowPlayerPos.vz < 34 && cubeBelowPlayerPos.vx > 0 && cubeBelowPlayerPos.vy > 0 && cubeBelowPlayerPos.vz > 0) {
-                SetCubeVisited(cubeBelowPlayerPos.vx, cubeBelowPlayerPos.vy, cubeBelowPlayerPos.vz, 1);
+            cubePos.vx = ((player->finePos.vx - (player->gravityDir.vx * 356)) + 256) >> 9;
+            cubePos.vy = ((player->finePos.vy - (player->gravityDir.vy * 356)) + 256) >> 9;
+            cubePos.vz = ((player->finePos.vz - (player->gravityDir.vz * 356)) + 256) >> 9;
+            if (cubePos.vx < 34 && cubePos.vy < 34 && cubePos.vz < 34 && cubePos.vx > 0 && cubePos.vy > 0 && cubePos.vz > 0) {
+                SetCubeVisited(cubePos.vx, cubePos.vy, cubePos.vz, 1);
             }
             if (numCubesRemainingInLevel[0] == 0) {
                 if (player->onGround) {
@@ -1068,6 +1143,9 @@ skip_lethargy:
         player->svec54.vx = 0;
     }
 }
+#undef blockType
+#undef cubePos
+#undef arrowDir
 
 void SubtractLevelTimer(int param_1) {
     if (thePlayer.faceTypePlayerStandingOn != OBJ_TIMER_PAUSE && debugDisableTimer == 0 && gameMode != 1) {
