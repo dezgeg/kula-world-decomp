@@ -43,8 +43,6 @@ extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
 extern int turningMotionBlurTable[9 * 7];
-extern short DAT_00171314;
-extern short DAT_00171316[];
 extern short uncompLevelData[];
 extern short cubeIndexes[39304];
 extern void* cubeStates[256 * 16];

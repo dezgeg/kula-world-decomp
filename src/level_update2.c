@@ -980,76 +980,76 @@ int GetBlockAt(SVECTOR* coord) {
 #undef y
 #undef z
 
-static short UpdateSubpixelPositions_finePosMod512[4];
+static SVECTOR UpdateSubpixelPositions_finePosMod512;
 #define finePosMod512 UpdateSubpixelPositions_finePosMod512
 void UpdateSubpixelPositions(Player* player) {
-    finePosMod512[0] = (player->finePos.vx + 0x100) & 0x1FF;
-    finePosMod512[1] = (player->finePos.vy + 0x100) & 0x1FF;
-    finePosMod512[2] = (player->finePos.vz + 0x100) & 0x1FF;
+    finePosMod512.vx = (player->finePos.vx + 0x100) & 0x1FF;
+    finePosMod512.vy = (player->finePos.vy + 0x100) & 0x1FF;
+    finePosMod512.vz = (player->finePos.vz + 0x100) & 0x1FF;
 
     player->svec_154 = player->subpixelPositionOnCube;
 
     if (player->facingDir.vx == 1) {
-        player->subpixelPositionOnCube.vz = finePosMod512[0];
+        player->subpixelPositionOnCube.vz = finePosMod512.vx;
     }
     if (player->facingDir.vx == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[0];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512.vx;
     }
 
     if (player->facingDir.vy == 1) {
-        player->subpixelPositionOnCube.vz = finePosMod512[1];
+        player->subpixelPositionOnCube.vz = finePosMod512.vy;
     }
     if (player->facingDir.vy == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[1];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512.vy;
     }
 
     if (player->facingDir.vz == 1) {
-        player->subpixelPositionOnCube.vz = finePosMod512[2];
+        player->subpixelPositionOnCube.vz = finePosMod512.vz;
     }
     if (player->facingDir.vz == -1) {
-        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512[2];
+        player->subpixelPositionOnCube.vz = 0x200 - finePosMod512.vz;
     }
 
     if (player->gravityDir.vx == 1) {
-        player->subpixelPositionOnCube.vy = finePosMod512[0];
+        player->subpixelPositionOnCube.vy = finePosMod512.vx;
     }
     if (player->gravityDir.vx == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[0];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512.vx;
     }
 
     if (player->gravityDir.vy == 1) {
-        player->subpixelPositionOnCube.vy = finePosMod512[1];
+        player->subpixelPositionOnCube.vy = finePosMod512.vy;
     }
     if (player->gravityDir.vy == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[1];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512.vy;
     }
 
     if (player->gravityDir.vz == 1) {
-        player->subpixelPositionOnCube.vy = finePosMod512[2];
+        player->subpixelPositionOnCube.vy = finePosMod512.vz;
     }
     if (player->gravityDir.vz == -1) {
-        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512[2];
+        player->subpixelPositionOnCube.vy = 0x200 - finePosMod512.vz;
     }
 
     if (player->rightVec.vx == 1) {
-        player->subpixelPositionOnCube.vx = finePosMod512[0];
+        player->subpixelPositionOnCube.vx = finePosMod512.vx;
     }
     if (player->rightVec.vx == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[0];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512.vx;
     }
 
     if (player->rightVec.vy == 1) {
-        player->subpixelPositionOnCube.vx = finePosMod512[1];
+        player->subpixelPositionOnCube.vx = finePosMod512.vy;
     }
     if (player->rightVec.vy == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[1];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512.vy;
     }
 
     if (player->rightVec.vz == 1) {
-        player->subpixelPositionOnCube.vx = finePosMod512[2];
+        player->subpixelPositionOnCube.vx = finePosMod512.vz;
     }
     if (player->rightVec.vz == -1) {
-        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512[2];
+        player->subpixelPositionOnCube.vx = 0x200 - finePosMod512.vz;
     }
 
     player->svec_144.vx = player->subpixelPositionOnCube.vx - player->svec_154.vx;
