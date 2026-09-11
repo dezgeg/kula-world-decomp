@@ -15,21 +15,12 @@ options:
   gp_value: 0x000A29E0
 
   create_undefined_funcs_auto: False
-  find_file_boundaries: True
   o_as_suffix: True
-  use_legacy_include_asm: False
   migrate_rodata_to_functions: False
   auto_decompile_empty_functions: False
-  ld_generate_symbol_per_data_segment: False
   disassemble_all: True
 
-  asm_function_macro: glabel
-  asm_jtbl_label_macro: jlabel
-  asm_data_macro: dlabel
-
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
-  # ld_section_labels: [".rodata", ".text", ".data", ".sdata", ".bss"]
-  # auto_all_sections: [".data", ".rodata", ".bss"]
 
   symbol_addrs_path:
     - function_addrs.txt
@@ -38,17 +29,6 @@ options:
     - lib_symbol_addrs.txt
     - lib_common_symbol_addrs.txt
     - other_addrs.txt
-  reloc_addrs_path:
-    - reloc_addrs.txt
-
-  extensions_path: tools/splat_ext
-
-  subalign: 2
-
-  string_encoding: ASCII
-  data_string_encoding: ASCII
-  rodata_string_guesser_level: 2
-  data_string_guesser_level: 2
 segments:
   - name: header
     type: header
