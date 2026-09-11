@@ -28,7 +28,6 @@ options:
     - variable_addrs.txt
     - lib_symbol_addrs.txt
     - lib_common_symbol_addrs.txt
-    - other_addrs.txt
 segments:
   - name: header
     type: header

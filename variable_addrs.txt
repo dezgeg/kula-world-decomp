@@ -363,6 +363,7 @@ dispenvScreenY = 0x000a5a04; // type:s32
 displayHeight = 0x000a2e74; // type:s32
 displayModeHasBeenSet = 0x000a2eb8; // type:s32
 displayWidth = 0x000a2e6c; // type:s32
+divZeroCounter = 0x00052d4c; // type:u32
 doDrawGraph = 0x000a4078; // type:s32
 doublyLinkedOtPtrs = 0x00073844; // size:24
 drTpages1 = 0x000a4f40; // size:16
