@@ -430,8 +430,8 @@ S_INCA_INCA = 0x000a3500; // type:asciz
 S_HILLS_HILLS = 0x000a350c; // type:asciz
 // "\\HIRO\\HIRO"
 S_HIRO_HIRO = 0x000a351c; // type:asciz
-// ".PAK; // type:asciz1"
-S_PAK_1 = 0x000a352a; // type:asciz
+// "FI.PAK;1"
+S_FI_PAK_1 = 0x000a3528; // type:asciz
 // ".GGI; // type:asciz1"
 S_GGI_1 = 0x000a3534; // type:asciz
 // ".PAK; // type:asciz1"
@@ -532,6 +532,8 @@ S_data_error = 0x000a3c24; // type:asciz
 S_stream_error = 0x000a3c30; // type:asciz
 // "file error"
 S_file_error = 0x000a3c40; // type:asciz
+// ""
+S_empty = 0x000a3c4c; // type:asciz
 // "stream end"
 S_stream_end = 0x000a3c50; // type:asciz
 // "need dictionary"

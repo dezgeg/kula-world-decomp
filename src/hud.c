@@ -84,7 +84,7 @@ static short HOURGLASS_ANIM_DATA[29][2] = {
     {-3172, 3897}
 };
 
-static int pad = 0; // hack
+static int unusedA2C58 = 0;
 
 int TIME_STR_DIGIT_DIVISORS[9] = {
     360000, 36000, 3600, 0, 600, 60, 0, 10, 1

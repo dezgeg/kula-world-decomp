@@ -249,7 +249,7 @@ void UnusedDebugPrintMusicVariables(void) {
 
 // XXX: These variables have to be here in order to match
 static CdlLOC musicCurLoc = { 0, 0, 0, 0 };
-static char PAD[8] = { 0 }; // hack
+static char unusedA36F4[8] = { 0 };
 
 void MusicCheckForLoop(void) {
     musicCounter--;
