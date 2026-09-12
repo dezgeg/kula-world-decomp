@@ -1,3 +1,7 @@
+rom:0x3438 reloc:MIPS_HI16 symbol:COPYCAT_SPRITE_POSITIONS addend:-0x8
+rom:0x3440 reloc:MIPS_LO16 symbol:COPYCAT_SPRITE_POSITIONS addend:-0x8
+rom:0x344C reloc:MIPS_HI16 symbol:COPYCAT_SPRITE_POSITIONS addend:-0x6
+rom:0x3454 reloc:MIPS_LO16 symbol:COPYCAT_SPRITE_POSITIONS addend:-0x6
 rom:0x11388 reloc:MIPS_NONE symbol:null
 rom:0x11390 reloc:MIPS_NONE symbol:null
 rom:0x11394 reloc:MIPS_NONE symbol:null
@@ -112,3 +116,10 @@ rom:0x289D4 reloc:MIPS_HI16 symbol:KEY_SPRITE_POSITIONS addend:-0x20
 rom:0x289D8 reloc:MIPS_LO16 symbol:KEY_SPRITE_POSITIONS addend:-0x20
 rom:0x289F8 reloc:MIPS_HI16 symbol:KEY_SPRITE_POSITIONS2 addend:-0x20
 rom:0x289FC reloc:MIPS_LO16 symbol:KEY_SPRITE_POSITIONS2 addend:-0x20
+rom:0x304E8 reloc:MIPS_NONE symbol:null
+rom:0x59768 reloc:MIPS_NONE symbol:null
+rom:0x5976C reloc:MIPS_NONE symbol:null
+rom:0x59794 reloc:MIPS_NONE symbol:null
+rom:0x5979C reloc:MIPS_NONE symbol:null
+rom:0x597A0 reloc:MIPS_NONE symbol:null
+rom:0x597EC reloc:MIPS_NONE symbol:null
