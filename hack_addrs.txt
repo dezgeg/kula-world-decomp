@@ -1,0 +1,3 @@
+jtbl_00011044 = 0x00011044; // size:24 type:jtbl
+jtbl_0001105C = 0x0001105C; // size:20 type:jtbl
+jtbl_00011074 = 0x00011074; // size:96 type:jtbl

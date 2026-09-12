@@ -24,6 +24,7 @@ options:
 
   symbol_addrs_path:
     - function_addrs.txt
+    - hack_addrs.txt
     - string_addrs.txt
     - variable_addrs.txt
     - lib_symbol_addrs.txt
