@@ -1,5 +1,12 @@
 #include "common.h"
 
+#ifdef PLATFORM_PSYZ
+// Otherwise GCC is too smart and moves the _END symbol to bss
+#define TERMINATOR 1
+#else
+#define TERMINATOR 0
+#endif
+
 u8 LASER_INTENSITY_DATA[] = {
     0x1F, 0x1B, 0x17, 0x13, 0x0F, 0x0B, 0x19, 0x0B, 0x0F, 0x13, 0x17, 0x1B,
     0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
@@ -23,7 +30,9 @@ u8 LASER_INTENSITY_DATA[] = {
     0x1F, 0x0C, 0x1F, 0x0C, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
 };
 
-int LASER_INTENSITY_DATA_END[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int LASER_INTENSITY_DATA_END[] __attribute__((aligned(4))) = {
+    TERMINATOR, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
 
 // array hack to force this to .data
 int isDevkitBios[] = { -1 };
