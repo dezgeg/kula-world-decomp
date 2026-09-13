@@ -53,7 +53,6 @@ extern uint controllerButtons;
 extern int curController;
 extern int displayHeight;
 extern int displayWidth;
-extern long mcCmd;
 extern MemcardData memCardData;
 extern int musicShouldLoop;
 extern int numCameras;
@@ -74,6 +73,7 @@ struct DIRENTRY direntry;
 MemcardHdr memcardBuf;
 int memCardHasError;
 uint mcResult;
+long mcCmd;
 long tempMcResult;
 
 static inline int TestButton(int button) {

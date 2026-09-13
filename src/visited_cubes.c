@@ -4,9 +4,10 @@ extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern int cubeStates[16 * 256];
-extern RecentlyVisitedCube recentlyVisitedCubeFaces[32];
 extern int levelScore;
 extern int numCubesRemainingInLevel[5];
+
+RecentlyVisitedCube recentlyVisitedCubeFaces[32];
 
 static SVECTOR ZERO_SVECTOR_a2dd0 = {};
 

@@ -25,13 +25,14 @@ void MoveMovingPlatforms(SVECTOR vec);
 // non-gprel-used variables (extern)
 extern short* entityData;
 extern short numEntities;
-extern short playerSurroundingBlocksGrid[8][8][8];
 extern Player thePlayer;
 extern short* levelData;
 extern int cameraIndex;
 extern MATRIX perspMatrixes[];
 extern int specialLevelType;
 extern int gameMode;
+
+short playerSurroundingBlocksGrid[8][8][8];
 
 // gprel-used variables (defined in this file)
 static int unusedA43B0;

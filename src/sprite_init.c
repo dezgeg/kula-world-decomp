@@ -28,7 +28,6 @@ extern int displayWidth;
 extern int screenOffsetX;
 extern int screenOffsetY;
 extern int specialLevelType;
-extern POLY_FT4 hourglassSprites[2][3];
 extern POLY_FT4 lethargyEffectPoly[2];
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
 extern int numCubesRemainingInLevel[5];
@@ -58,6 +57,20 @@ TSprite keySprites[2][8];
 TSprite lethargyEffectSprite[2][2];
 TSprite timerPausedSprite[2];
 TSprite titleSprite[2];
+POLY_FT4 hourglassSprites[2][3];
+uint BONUS_WIDGET_COLOR_DATA[96];
+uint SIZE_OF_UNK_ENTRY;
+int drawBonusWidget;
+int firstBonusWidgetTexture;
+int drawTimerPausedWidget;
+int firstFruitTexture;
+int halfFps;
+int hourglassIsRotating;
+int lethargyMode;
+int levelTimeLeft;
+int screenFadeEnabled;
+uint firstGuiTexture;
+int numKeysInLevel;
 
 int KEY_SPRITE_POSITIONS[] = {
     16, 219,
@@ -138,33 +151,20 @@ int BONUS_WIDGET_POSITIONS[] = {
     21, 7,
 };
 
-uint BONUS_WIDGET_COLOR_DATA[96];
-uint SIZE_OF_UNK_ENTRY;
+STATIC_FOR_GP_ACCESS GgiFile* ggi;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr2;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr3;
-int drawBonusWidget;
-int firstBonusWidgetTexture;
-STATIC_FOR_GP_ACCESS int numBonusWidgetMsbs;
-STATIC_FOR_GP_ACCESS GgiFile* ggi;
-int drawTimerPausedWidget;
-int firstFruitTexture;
 STATIC_FOR_GP_ACCESS int fruitBonusTextIndex;
 STATIC_FOR_GP_ACCESS int fruitBonusTextTimer;
 STATIC_FOR_GP_ACCESS int fruitWidgetDisplayMode;
-int halfFps;
-int hourglassIsRotating;
 STATIC_FOR_GP_ACCESS int hourglassRotationTimer;
-int lethargyMode;
-int levelTimeLeft;
+STATIC_FOR_GP_ACCESS int numBonusWidgetMsbs;
 STATIC_FOR_GP_ACCESS int screenFadeColor;
-int screenFadeEnabled;
 STATIC_FOR_GP_ACCESS int screenFadeSpeed;
-STATIC_FOR_GP_ACCESS short* ggiPart1HourglassAnim;
 STATIC_FOR_GP_ACCESS RECT hourglassClutRect;
-uint firstGuiTexture;
-int numKeysInLevel;
+STATIC_FOR_GP_ACCESS short* ggiPart1HourglassAnim;
 
 void InitManySprites(void) {
     InitHourglassSprites();

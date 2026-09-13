@@ -65,7 +65,6 @@ extern P specularPrimPtrs[2][1][16];
 extern Texture textures[150];
 extern uint firstGuiTexture;
 extern int cubeStates[16 * 256];
-extern short flashingBlockEntityIndexes[64];
 extern byte FIRE_BLOCK_ANIM_FLAG_DATA_END[];
 extern byte INVIS_BLOCK_ANIM_FLAG_DATA_END[];
 extern uint INVIS_BLOCK_ANIM_COLOR_DATA_END[];
@@ -88,11 +87,13 @@ extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
 extern byte LASER_INTENSITY_DATA[];
 extern byte LASER_INTENSITY_DATA_END[];
-extern uint laserData0[4][1024];
-extern uint laserData1[4][1024];
-extern uint laserData2[4][1024];
-extern uint laserData3[4][1024];
 extern int laserDrawBuffer[];
+
+short flashingBlockEntityIndexes[64];
+uint laserData0[4][1024];
+uint laserData1[4][1024];
+uint laserData2[4][1024];
+uint laserData3[4][1024];
 
 short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
     {

@@ -12,7 +12,6 @@ extern int cubeStates[16 * 256];
 static int* curLightEffectDataPtr;
 int lightEffects[32 * 8];
 
-
 int AddLightEffect(int x, int y, int z, int whichSide) {
     int i;
 

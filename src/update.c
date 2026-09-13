@@ -71,10 +71,6 @@ extern int numMovingPlatforms;
 extern int numRetractableSpikes;
 extern int retractingSpikeData[64 * 2];
 extern int specialLevelType;
-extern int sunglassCounter1[];
-extern int sunglassCounter2[];
-extern int sunglassDisablingState[];
-extern int sunglassSeeEverything[];
 extern int turningMotionBlurEnabled;
 extern int turningMotionBlurPhase;
 extern int turningMotionBlurTable[70];
@@ -88,6 +84,11 @@ extern short flashingBlockEntityIndexes[64];
 extern short* levelData;
 extern short movingBlockEntityIndexes[16];
 extern TgiFile* tgi;
+
+int sunglassCounter1[64];
+int sunglassCounter2[64];
+int sunglassDisablingState[1];
+int sunglassSeeEverything[1];
 
 void ProcessMovingPlatforms2(void) {
     MovingPlatformEntity2* mpe;
