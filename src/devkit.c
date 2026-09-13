@@ -5,7 +5,6 @@ extern void Noop2(void);
 extern void SetDebugScreenshotFilenameSuffix(int param_1);
 
 extern byte saveReplayBuf[4076];
-extern char debugFilenameBuf[];
 extern int buttonSaveReplayMode;
 extern int curWorld;
 extern int devkitFileNumber;
@@ -19,6 +18,8 @@ extern volatile short saveReplayCurrentButtons;
 extern volatile byte saveReplayCurrentButtonsShuffled;
 extern volatile int saveReplayLength;
 extern volatile byte saveReplayRleButtonCount;
+
+char debugFilenameBuf[256];
 
 static int screenshotNumBytes;
 static RECT screenshotRect;

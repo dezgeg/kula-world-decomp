@@ -65,13 +65,13 @@ extern short turnDelayEnabled;
 extern uint curController;
 extern uint controllerButtons;
 extern uint prevControllerButtons;
-extern LINE_F3 screenAdjustLine1[2];
-extern LINE_F3 screenAdjustLine2[2];
 extern DrawDisp drawdisp[2];
 extern PrimList primLists[2];
 short qualifyScreenCursorX;
 short qualifyScreenCursorY;
 
+LINE_F3 screenAdjustLine1[2];
+LINE_F3 screenAdjustLine2[2];
 int cursorPosInMenu[8];
 int levelScoreSummaryConfirmed;
 int menuUnkAlwaysZero;

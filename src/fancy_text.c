@@ -1,12 +1,13 @@
 #include "common.h"
 
 extern PrimList primLists[2];
-extern TSprite textDrawSprites[2][300];
-extern TSprite textDrawTemplateSprites1[40];
-extern TSprite textDrawTemplateSprites2[40];
 extern int whichDrawDispEnv;
 
 int bigGuiSpriteFade;
+TSprite textDrawSprites[2][300];
+TSprite textDrawTemplateSprites1[40];
+TSprite textDrawTemplateSprites2[40];
+
 static int fancyTextColorB;
 static int fancyTextColorG;
 static int fancyTextColorR;

@@ -2,8 +2,9 @@
 
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
-extern TSprite fontSprites[96];
 extern Texture textures[150];
+
+TSprite fontSprites[96];
 
 void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y, int texIndex) {
     uchar idx = c - 0x20;

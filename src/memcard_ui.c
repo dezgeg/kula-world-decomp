@@ -1,7 +1,7 @@
 #include "common.h"
 #include <libmcrd.h>
 
-struct MemcardHdr {
+typedef struct MemcardHdr {
     char magic1;
     char magic2;
     byte iconFlags;
@@ -10,7 +10,7 @@ struct MemcardHdr {
     byte unused[28];
     byte clut[32];
     byte bitmap[128];
-};
+} MemcardHdr;
 
 // Prototypes
 extern int AskSaveOverwrite(void);
@@ -49,29 +49,29 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
 extern int sprintf(char* s, const char* format, ...);
 
-extern LINE_F3 memCardCursorBoxLines1[2];
-extern LINE_F3 memCardCursorBoxLines2[2];
 extern uint controllerButtons;
 extern int curController;
-extern struct DIRENTRY direntry;
 extern int displayHeight;
 extern int displayWidth;
 extern long mcCmd;
 extern MemcardData memCardData;
-extern struct MemcardHdr memcardBuf;
 extern int musicShouldLoop;
 extern int numCameras;
 extern OT_TYPE otag[2][1][1026];
 extern uint prevControllerButtons;
 extern PrimList primLists[2];
-extern char stringbuf[64];
 extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 
-// Variables
 int saveSlot = 0;
 int memCardDataValid = 0;
 SVECTOR ZERO_SVECTOR_a2fac = {0};
+
+LINE_F3 memCardCursorBoxLines1[2];
+LINE_F3 memCardCursorBoxLines2[2];
+char stringbuf[64];
+struct DIRENTRY direntry;
+MemcardHdr memcardBuf;
 int memCardHasError;
 uint mcResult;
 long tempMcResult;

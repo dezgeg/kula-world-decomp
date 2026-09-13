@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern short skyboxVertices[4][3];
 extern int firstUnk2Texture;
 extern Texture textures[150];
 extern int starfieldSinPhase1;
@@ -29,6 +28,8 @@ extern int Square(int val);
 extern void SetShadeTex(void* p, int disable);
 extern void SetSemiTrans(void* p, int enable);
 extern void* memcpy(void* dest, const void* src, size_t n);
+
+short skyboxVertices[4][3];
 
 static int RecalcSkyboxes01_angleMul1;
 static int RecalcSkyboxes01_angleMul2;

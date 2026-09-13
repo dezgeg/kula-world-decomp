@@ -5,13 +5,13 @@ typedef struct {
 } Col;
 
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
-extern uint BONUS_WIDGET_COLOR_DATA[];
+extern int numCubesRemainingInLevel[5];
+extern int whichDrawDispEnv;
+extern PrimList primLists[2];
 extern TSprite bonusWidgetSpritesMsbBackground[2][34];
 extern TSprite bonusWidgetSpritesMsbForeground[2][32];
 extern TSprite bonusWidgetSpritesPiechart[2][9];
-extern int numCubesRemainingInLevel[5];
-extern PrimList primLists[2];
-extern int whichDrawDispEnv;
+extern uint BONUS_WIDGET_COLOR_DATA[];
 
 STATIC_FOR_GP_ACCESS uint* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS uint* bonusWidgetDataEnd;

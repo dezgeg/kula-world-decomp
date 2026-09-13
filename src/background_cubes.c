@@ -13,8 +13,6 @@ typedef struct PmdCube {
 extern int displayHeight;
 extern int displayWidth;
 extern int whichDrawDispEnv;
-extern MATRIX highScoreCubesMatrix;
-extern SVECTOR hsCubeUnusedVec;
 extern OT_TYPE otag[2][1][1026];
 
 int hsCube1stSinPhaseIncrementX;
@@ -50,8 +48,10 @@ int hsCube3rdSinPhaseZ;
 int hsCube3rdSinValMulX;
 int hsCube3rdSinValMulY;
 int hsCube3rdSinValMulZ;
-SVECTOR hsCubeRotationVec;
+MATRIX highScoreCubesMatrix;
 PmdCube* pmdCubesPtr;
+SVECTOR hsCubeRotationVec;
+SVECTOR hsCubeUnusedVec;
 
 void InitHighscoreCubes(void) {
     u_char rgb;

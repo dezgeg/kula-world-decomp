@@ -1,16 +1,16 @@
 #include "common.h"
 
-extern DR_AREA drawAreas[2][1];
-extern DR_AREA hudDrawAreas[2];
-extern DR_OFFSET drawOffsets[2][1];
-extern DR_OFFSET hudDrawOffsets[2];
-extern DrawDisp drawdisp[2];
 extern int displayHeight;
 extern int displayWidth;
 extern int screenOffsetX;
 extern int screenOffsetY;
 extern int whichDrawDispEnv;
 
+DR_AREA drawAreas[2][1];
+DR_AREA hudDrawAreas[2];
+DR_OFFSET drawOffsets[2][1];
+DR_OFFSET hudDrawOffsets[2];
+DrawDisp drawdisp[2];
 int dispenvScreenX;
 int dispenvScreenY;
 

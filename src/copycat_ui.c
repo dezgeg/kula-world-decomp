@@ -1,11 +1,12 @@
 #include "common.h"
 
 extern PrimList primLists[2];
-extern TSprite copycatUiSprites[2][4];
 extern Texture textures[150];
 extern int gameMode;
 extern int whichDrawDispEnv;
 extern uint firstGuiTextTexture;
+
+TSprite copycatUiSprites[2][4];
 
 short COPYCAT_SPRITE_POSITIONS[] = {
     98, 20,

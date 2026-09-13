@@ -4,10 +4,11 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern uint firstGuiTexture;
 extern PrimList primLists[2];
-extern TSprite spinningSelectionSprite1[2];
-extern TSprite spinningSelectionSprite2[2];
 extern Texture textures[150];
 extern int whichDrawDispEnv;
+
+TSprite spinningSelectionSprite1[2];
+TSprite spinningSelectionSprite2[2];
 
 static int spinningSelectionPhase = 0; // .sdata
 

@@ -57,8 +57,9 @@ static int isFirstSlice;
 static int fmvEnded;
 
 // .bss
-extern DECDCTTAB vlc_table;
 extern int StCdIntrFlag;
+
+DECDCTTAB vlc_table;
 
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },

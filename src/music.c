@@ -8,10 +8,6 @@ extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void SndSetMusicVolume(void);
 
-extern CdlFILE musicCdlfile;
-extern CdlLOC musicBonusLoc;
-extern CdlLOC musicCdlLoc;
-extern CdlLOC savedMusicCdlLoc;
 extern Music BONUS_MUSICS[3];
 extern Music MUSICS[11];
 extern int musicCdMode;
@@ -21,11 +17,13 @@ short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
 
 CdlFILTER musicCdlFilter;
-static int bonusMusicSearchAttempt;
+CdlFILE musicCdlfile;
+CdlLOC musicBonusLoc;
+CdlLOC musicCdlLoc;
+CdlLOC savedMusicCdlLoc;
 int musicCounter;
 int musicCurSector;
 int musicEndSector;
-static int musicSearchAttempt;
 int musicStartSector;
 int musicUnkAlwaysZero1;
 int musicUnkAlwaysZero2;
@@ -33,6 +31,9 @@ int savedMusicCurSector;
 int savedMusicEndSector;
 int savedMusicStartSector;
 int savedMusicXaChan;
+
+static int bonusMusicSearchAttempt;
+static int musicSearchAttempt;
 
 void PlayMusic(int world) {
     extern char S_File_error[];

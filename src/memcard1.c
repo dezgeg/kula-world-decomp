@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern MemcardData memCardData;
+MemcardData memCardData;
 
 #ifndef SKIP_UNUSED_CODE
 void ClearMemcardData(void) {

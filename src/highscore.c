@@ -38,9 +38,9 @@ extern PrimList primLists[2];
 extern int totalPlayTime[2];
 extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
-extern int highscoreLevelScores[6][150];
 extern char S_FMTd_4[];
 
+int highscoreLevelScores[6][150];
 short highscoreEntryCursorX;
 short highscoreEntryCursorY;
 int idleTimer;

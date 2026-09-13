@@ -38,7 +38,6 @@ extern void ScanLevelDataForBlinkingEntities(void);
 extern void SetupDisplay(int isbg, int bgR, int bgG, int bgB, int useDithering, int use24Bit);
 extern void TweakSkyboxColors(uint param_1);
 
-extern CubeTextureMetadata cubeTextureMetadata[1300];
 extern DR_TPAGE drTpages1[2][1];
 extern DR_TPAGE drTpages2[2][1];
 extern DR_TPAGE hudDrTpages[2];
@@ -54,37 +53,38 @@ extern int sunglassSeeEverything[1];
 extern int toBeDisabledLightEffects[64];
 extern int unkOtagLengths[2][1];
 
-// gprel-used variables (defined in this file)
-static int numObjTextures;
+CubeTextureMetadata cubeTextureMetadata[1300];
 int itemsDispListIdx;
-STATIC_FOR_GP_ACCESS int numPlainTileTextureVariations;
 int playerEnemyDispListIdx;
-STATIC_FOR_GP_ACCESS int quadSomethingCount;
-STATIC_FOR_GP_ACCESS int quadSomethingStartIndex;
-STATIC_FOR_GP_ACCESS int recalcSkyboxes;
 TgiFile* tgi;
 int turningMotionBlurEnabled;
-static short* tgiEnd;
-static short* tgiPart0;
 short* tgiPart1;
 short* tgiPart2;
 short* tgiPart3;
 short* tgiPart4;
-STATIC_FOR_GP_ACCESS short* tgiPart5;
-static short* tgiPart6;
 short* tgiPart7;
 short* tgiPart8;
-STATIC_FOR_GP_ACCESS short* tgiPart9;
-static short* tgiPart10;
 short* entityData;
 short* levelData;
 short numEntities;
 int specialLevelType;
-STATIC_FOR_GP_ACCESS int wasSpecialLevel;
 
 int turningMotionBlurTargetLods[7] = { 28, 23, 22, 15, 40, 30, 20 };
 int LOD_THRESHOLDS[9] = { 0, 30, 43, 55, 66, 76, 85, 93, 100 }; // percentage
 int HIGHSCORE_CUBE_RANDOM_TEXTURES[16] = { 666, 666, 666, 666, 666, 666, 4, 4, 4, 4, 668, 668, 668, 6, 6, 0 };
+
+static short* tgiEnd;
+static short* tgiPart0;
+static short* tgiPart6;
+static int numObjTextures;
+STATIC_FOR_GP_ACCESS int numPlainTileTextureVariations;
+STATIC_FOR_GP_ACCESS int quadSomethingCount;
+STATIC_FOR_GP_ACCESS int quadSomethingStartIndex;
+STATIC_FOR_GP_ACCESS int recalcSkyboxes;
+STATIC_FOR_GP_ACCESS short* tgiPart5;
+STATIC_FOR_GP_ACCESS short* tgiPart9;
+static short* tgiPart10;
+STATIC_FOR_GP_ACCESS int wasSpecialLevel;
 
 void* ParseTGI(TgiFile* tgiBuf) {
     int i;

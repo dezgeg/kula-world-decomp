@@ -19,11 +19,9 @@ typedef struct GemSparkleEffect {
     Sparkle sparkles[16];
 } GemSparkleEffect;
 
-// non-gprel-used variables (extern)
-extern GemSparkleEffect gemRandomSparkleEffects[3][3];
-extern Texture textures[150];
-
 // gprel-used variables (defined in this file)
+Texture textures[150];
+GemSparkleEffect gemRandomSparkleEffects[3][3];
 int firstBonusWidgetTexture;
 int firstFruitTexture;
 int firstGuiTextTexture;

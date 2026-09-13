@@ -18,13 +18,12 @@ typedef struct SfxFile {
     SfxFileEntry entries[1];
 } SfxFile;
 
-extern SpuVoiceState spuVoiceState[];
-extern SpuVoiceAttr perSfxVoiceAttrs[];
 extern int lethargyMode;
 
-static char keyStatus[24];
 short playingBonusMusic;
 short bonusMusicIndex;
+SpuVoiceState spuVoiceState[64];
+SpuVoiceAttr perSfxVoiceAttrs[64];
 SpuCommonAttr spuCommonAttr;
 SpuReverbAttr spuReverbAttr;
 ulong spuWriteRetVal;
@@ -34,7 +33,7 @@ int loadingIsComplete;
 int numSfx;
 int sndSwapPanDir;
 
-
+static char keyStatus[24];
 static int curPlayingSfx;
 static VECTOR panFactor;
 static VECTOR panVectorSq;

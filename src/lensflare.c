@@ -20,12 +20,9 @@ typedef struct FramebufferFetch {
 
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
-extern FramebufferFetch framebufferFetches[16];
 extern MATRIX perspMatrixes[1];
-extern SPair lensFlareSpriteMidpoints[16];
 extern SinCos sinCosArr23[/*16*/];
 extern SinCos sinCosArr80[/*16*/];
-extern TSprite lensFlareSprites[2][16];
 extern Texture textures[150];
 extern int cameraIndex;
 extern int curWorld;
@@ -39,12 +36,14 @@ extern int screenOffsetX;
 extern int screenOffsetY;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
-extern short lensFlarePositionMultipliers[16];
 extern OT_TYPE otag[2][1][1026];
 
+FramebufferFetch framebufferFetches[16];
+SPair lensFlareSpriteMidpoints[16];
+TSprite lensFlareSprites[2][16];
+short lensFlarePositionMultipliers[16];
 int lensFlareScreenX;
 int lensFlareScreenY;
-static int numLensFlareSprites;
 int sunIntensityOnScreen;
 
 short LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[2][3] = {
@@ -88,6 +87,8 @@ SVECTOR SUN_POS_IN_WORLD[13] = {
     {0, 4096, 0, 0},
     {4096, 0, 0, 0},
 };
+
+static int numLensFlareSprites;
 
 void InitLensFlareSprite(short posMul, short textureIdx, int scaleHeight) {
     if (numLensFlareSprites < 16) {

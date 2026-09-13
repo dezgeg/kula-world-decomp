@@ -2,9 +2,9 @@
 
 extern OT_TYPE otag[2][1][1026];
 extern int cameraIndex;
-extern TPolyF4 screenFadePolys[2][1];
 extern int whichDrawDispEnv;
 
+TPolyF4 screenFadePolys[2][1];
 int halfFps;
 int screenFadeEnabled;
 STATIC_FOR_GP_ACCESS int screenFadeSpeed;

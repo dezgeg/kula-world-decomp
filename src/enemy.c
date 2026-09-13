@@ -16,12 +16,12 @@ extern void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan);
 int EnemyIsBlockWalkable(int blockType, int rotationIndex);
 int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy);
 
-extern Enemy enemies[];
 extern int cameraIndex;
-extern Enemy enemies[];
 extern MATRIX perspMatrixes[];
 extern short* entityData;
 extern short numEntities;
+
+Enemy enemies[64];
 
 static int numEnemies;
 static int enemiesProcessedOnce;

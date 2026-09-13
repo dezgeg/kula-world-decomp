@@ -35,8 +35,6 @@ extern int screenOffsetY;
 extern int whichDrawDispEnv;
 extern long projectionDistance;
 extern MATRIX perspMatrixes[2];
-extern Particle particles[2][16];
-extern POLY_FT4 particlePolyTemplates[7];
 extern PrimList primLists[2];
 extern Texture textures[150];
 extern OT_TYPE otag[2][1][1026];
@@ -49,6 +47,10 @@ extern short PARTICLE_TYPE_3[];
 extern short PARTICLE_TYPE_4_5_10[];
 extern short PARTICLE_TYPE_8[];
 extern short PARTICLE_TYPE_9[];
+
+Particle particles[2][16];
+POLY_FT4 particlePolyTemplates[7];
+
 static short* PARTICLE_TYPE_PTRS[12];
 static int numParticles[2];
 
