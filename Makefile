@@ -54,9 +54,8 @@ build/%.o: %.s build/subdirs
 
 psyq:
 	mkdir -p psyq
-	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz
-	rm -rf psyq/{INCLUDE,LIB,COFF,ELF}
-	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz --exclude={INCLUDE,LIB,COFF,ELF}
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz ./INCLUDE ./LIB ./ELF
 
 venv:
 	virtualenv venv
