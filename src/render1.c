@@ -55,7 +55,6 @@ extern int isPaused;
 extern int toBeDisabledLightEffects[64];
 extern int starfieldTransY;
 extern int starfieldTransZ;
-extern MATRIX starfieldMatrix;
 extern GemRandomSparkleEffect gemRandomSparkleEffects[3][3];
 extern int itemsDispList[2049];
 extern int itemsDispListIdx;
@@ -70,6 +69,7 @@ extern DR_AREA drawAreas[2][1];
 extern DR_OFFSET drawOffsets[2][1];
 
 int drawGeometryAndObjects;
+MATRIX starfieldMatrix;
 MATRIX levelGeometryRenderingMatrix;
 MATRIX backgroundRenderingMatrix;
 STATIC_FOR_GP_ACCESS int starfieldSinPhase1;

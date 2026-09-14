@@ -1,5 +1,7 @@
 #include "common.h"
 
+int gotVsync;
+
 #ifdef NON_MATCHING
 void WaitForVBlank() {}
 #else

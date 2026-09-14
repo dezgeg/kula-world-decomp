@@ -115,7 +115,6 @@ extern int sioCheatActivated;
 extern int specialLevelType;
 extern int timeTrialAtEndOfWorld;
 extern int TIME_TRIAL_PAR_TIMES[150];
-extern int unkOtagLengths[2][1];
 extern int unkUnused;
 extern int wasPausedPreviousFrame;
 extern PrimList primLists[2];
@@ -128,8 +127,9 @@ extern uint prevControllerButtons;
 extern OT_TYPE otag[2][1][1026];
 extern void* renderedPrimsBuf;
 extern void* REPLAY_INPUT_PTRS;
-extern OT_TYPE unkOtag[2][1][32][64];
 
+OT_TYPE unkOtag[2][1][32][64];
+int unkOtagLengths[2][1];
 int levelPlaytimesInThisWorld[15];
 char* sioWritePtr;
 int buttonSaveReplayMode;

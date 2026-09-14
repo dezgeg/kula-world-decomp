@@ -58,10 +58,6 @@ void ProcessCubesIntoFaces(void);
 void ScanLevelDataForMovingBlocks1(void);
 void SetFaceData(int index, void** pointerInsideCubeState, int texIdx, int flags, int dir, int xFine, int yFine, int zFine, int textureRotation, int color);
 
-extern POLY_FT4 shadowPrims[2][1][2][16];
-extern POLY_FT4 specularPrims[2][1][16];
-extern P shadowPrimPtrs[2][1][2][16];
-extern P specularPrimPtrs[2][1][16];
 extern Texture textures[150];
 extern uint firstGuiTexture;
 extern int cubeStates[16 * 256];
@@ -87,9 +83,13 @@ extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
 extern byte LASER_INTENSITY_DATA[];
 extern byte LASER_INTENSITY_DATA_END[];
-extern int laserDrawBuffer[];
 
+POLY_FT4 shadowPrims[2][1][2][16];
+POLY_FT4 specularPrims[2][1][16];
+P shadowPrimPtrs[2][1][2][16];
+P specularPrimPtrs[2][1][16];
 short flashingBlockEntityIndexes[64];
+int laserDrawBuffer[4096];
 uint laserData0[4][1024];
 uint laserData1[4][1024];
 uint laserData2[4][1024];
