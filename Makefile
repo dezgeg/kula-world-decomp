@@ -48,9 +48,8 @@ build/%.s: build/%.i psyq build/subdirs
 build/%.o: build/%.s build/subdirs
 	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/ -o $@ < $<
 
-# TODO: figure out how to avoid this duplicate rule
 build/%.o: %.s build/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm -Iasm/ -o $@ < $<
+	$(CROSS)-as -G128 -no-pad-sections -Iasm/ -o $@ $<
 
 psyq:
 	mkdir -p psyq
