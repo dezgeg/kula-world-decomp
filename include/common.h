@@ -5,6 +5,10 @@
 #include <libgte.h>
 #include <libgpu.h>
 
+#define VER_EU 1
+#define VER_US 0
+#define VID_NTSC 0
+
 typedef char undefined;
 
 typedef unsigned char uchar;
