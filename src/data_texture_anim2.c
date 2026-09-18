@@ -1,7 +1,6 @@
 #include "common.h"
 
-// array hack to force this to .data
-uint NUM_TEXTURE_ANIM_FRAMES[] = { 0x000000C0 };
+uint NUM_TEXTURE_ANIM_FRAMES __attribute__((section(".data"))) = 0x000000C0;
 
 uint TEXTURE_ANIM_DATA[] = {
     0x00A800A8, 0x00A800A7, 0x00A801A5, 0x00A802A3, 0x00A903A1, 0x00A9039F,
