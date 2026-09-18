@@ -208,7 +208,7 @@ void InitHourglassSprites(void) {
     }
     hourglassIsRotating = 0;
     hourglassRotationTimer = 0;
-    levelTimeLeft = 4999;
+    levelTimeLeft = 100 * FPS - 1;
     hourglassClutRect.x = (textures[firstGuiTexture + 1].clut << 4) & 0x3ff;
     hourglassClutRect.y = textures[firstGuiTexture + 1].clut >> 6;
     InitDigitSprites(&levelTimeLeftDigitSprites, 0, 152, 50, 0x80, 0x80, 0x80);

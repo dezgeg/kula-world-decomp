@@ -9,6 +9,8 @@
 #define VER_US 0
 #define VID_NTSC 0
 
+#define FPS 50
+
 typedef char undefined;
 
 typedef unsigned char uchar;

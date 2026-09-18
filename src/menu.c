@@ -567,7 +567,7 @@ void SinglePlayerMenu(void) {
                     }
 
                     for (i = 0; i < numTimeTrialPlayers; i++) {
-                        levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
+                        levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * FPS;
                         levelHasBeenCompletedByPlayer[i] = 0;
                     }
                     gameMode = 2;
@@ -684,7 +684,7 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
                 }
 
                 for (i = 0; i < numTimeTrialPlayers; i++) {
-                    levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
+                    levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * FPS;
                     levelHasBeenCompletedByPlayer[i] = 0;
                 }
                 gameMode = 2;
@@ -791,7 +791,7 @@ void TimeTrialDifficultySelectionMenu(void) {
             numTimeTrialPlayers = 1;
             twoPlayerWhichPlayer = 0;
             for (i = 0; i < numTimeTrialPlayers; i++) {
-                levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * 50;
+                levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * FPS;
                 totalPlayTime[i] = 0;
                 levelHasBeenCompletedByPlayer[i] = 0;
             }
@@ -871,7 +871,7 @@ void TwoPlayerLevelSelectMenu(void) {
         startingPlayerForThisLevel = 0;
         InitAllDigitSprites();
         curWorld = twoPlayerLevelSelectionCursorPos;
-        levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[twoPlayerLevelSelectionCursorPos * 15 + curLevel] * 50;
+        levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[twoPlayerLevelSelectionCursorPos * 15 + curLevel] * FPS;
         if (twoPlayerLevelSelectionCursorPos != curWorld2) {
             loadNewWorld = 1;
         } else {

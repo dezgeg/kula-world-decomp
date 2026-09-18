@@ -145,7 +145,7 @@ void DrawScore(void) {
 void DrawTimeAttackWidgets(void) {
     int curPlayerTimer;
 
-    curPlayerTimer = levelPlayTime[twoPlayerWhichPlayer] / 50;
+    curPlayerTimer = levelPlayTime[twoPlayerWhichPlayer] / FPS;
     if (levelPlayTime[twoPlayerWhichPlayer] < 0) {
         curPlayerTimer--;
     }
@@ -154,7 +154,7 @@ void DrawTimeAttackWidgets(void) {
         DrawTimeAttackTimer(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, totalPlayTime[1], 0);
         if (twoPlayerWhichPlayer == 0) {
             DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
-            curPlayerTimer = levelPlayTime[1] / 50;
+            curPlayerTimer = levelPlayTime[1] / FPS;
             if (levelPlayTime[1] < 0) {
                 curPlayerTimer--;
             }
@@ -165,7 +165,7 @@ void DrawTimeAttackWidgets(void) {
             }
         } else {
             DrawTimeAttackTimer(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
-            curPlayerTimer = levelPlayTime[0] / 50;
+            curPlayerTimer = levelPlayTime[0] / FPS;
             if (levelPlayTime[0] < 0) {
                 curPlayerTimer--;
             }
@@ -265,7 +265,7 @@ void DrawHourglassAndTimer(void) {
         UpdateStaticHourglassClut();
     }
 
-    secs = 1 + levelTimeLeft / 50;
+    secs = 1 + levelTimeLeft / FPS;
     if (secs <= 50) {
         w = textures[firstGuiTexture + 3].w / 13;
         if (secs >= 10) {
@@ -428,7 +428,7 @@ void UpdateStaticHourglassClut(void) {
     int mod28;
     int dummy[4];
 
-    amount = (levelTimeLeft * 420) / 5000;
+    amount = (levelTimeLeft * 420) / (100 * FPS);
     div28 = amount / 28;
     mod28 = amount % 28;
     for (i = 0; i < div28; i++) {
@@ -500,7 +500,7 @@ void DrawFruitWidgets(void) {
                 fruitBonusTextIndex++;
                 if (fruitBonusTextIndex == 5) {
                     fruitWidgetDisplayMode = 2;
-                    fruitBonusTextTimer = 100;
+                    fruitBonusTextTimer = 2 * FPS;
                 }
             }
             break;
@@ -533,7 +533,7 @@ void DrawFruitWidgets(void) {
                 fruitBonusTextIndex--;
                 if (fruitBonusTextIndex == -1) {
                     fruitWidgetDisplayMode = 4;
-                    fruitBonusTextTimer = 100;
+                    fruitBonusTextTimer = 2 * FPS;
                 } else {
                     AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
                 }

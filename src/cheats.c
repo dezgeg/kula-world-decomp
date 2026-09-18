@@ -155,7 +155,7 @@ void HandleCheats(void) {
         if (cheatState[7].preventActivation == 0) {
             cheatState[7].preventActivation = 1;
             cheated = 1;
-            levelPlayTime[0] -= 1500;
+            levelPlayTime[0] -= 30 * FPS;
         }
     }
     if (cheatState[8].activated == 1) {

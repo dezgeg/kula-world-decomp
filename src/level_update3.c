@@ -165,29 +165,29 @@ void HandleItemTouching(Player* player) {
 
                         case OBJ_LETHARGY_PILL:
                             AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            thePlayer.lethargyTimer = 300;
+                            thePlayer.lethargyTimer = 6 * FPS;
                             EnableLethargy(1);
                             Vibrate100(120, 120, 200, 1);
-                            Vibrate101(200);
+                            Vibrate101(4 * FPS);
                             SndPlaySfx(SFX_LETHARGY_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_INVINCIBILITY_PILL:
                             AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            thePlayer.invulnerabilityTimer = 700;
+                            thePlayer.invulnerabilityTimer = 14 * FPS;
                             SndPlaySfx(SFX_LETHARGY_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_BOUNCY_PILL:
                             AddParticles(9, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            thePlayer.bounceTimer = 700;
+                            thePlayer.bounceTimer = 14 * FPS;
                             SndPlaySfx(SFX_BOUNCE_PILL, 0, &ZERO_SVECTOR_a2df4, 7000);
                             break;
 
                         case OBJ_SUNGLASSES:
                             SndPlaySfx(SFX_SUNGLASSES_COLLECTION, 0, &ZERO_SVECTOR_a2df4, 7000);
                             AddParticles(8, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
-                            thePlayer.sunglassTimer = 700;
+                            thePlayer.sunglassTimer = 14 * FPS;
                             levelScore += 500;
                             SetSunglassMode(1);
                             break;
@@ -309,7 +309,7 @@ void HandleItemTouching(Player* player) {
 
                         case OBJ_HOURGLASS:
                             SndPlaySfx(SFX_HOURGLASS, 0, &ZERO_SVECTOR_a2df4, 7000);
-                            levelTimeLeft = 4999 - levelTimeLeft;
+                            levelTimeLeft = (100 * FPS - 1) - levelTimeLeft;
                             hourglassIsRotating = 1;
                             levelScore += (levelTimeLeft / 50) * 10;
                             AddParticles(1, &hourglassHudParticlePos, 0);

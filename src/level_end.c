@@ -89,7 +89,7 @@ void UpdateScoreAtEndOfLevel(void) {
     }
     if (gameMode == 2) {
         showingTimeTrialQualifyScreen = 0;
-        levelScoreSummaryScoreTicker = levelPlayTime[latestPlayerToFinish] / 50;
+        levelScoreSummaryScoreTicker = levelPlayTime[latestPlayerToFinish] / FPS;
         if (levelPlayTime[latestPlayerToFinish] < 0) {
             levelScoreSummaryScoreTicker--;
         }
@@ -244,7 +244,7 @@ void DrawLevelScoreSummary(void) {
             newScore--;
             levelScoreSummaryScoreTicker++;
         }
-        timeSecs = levelPlayTime[latestPlayerToFinish] / 50 - levelScoreSummaryScoreTicker;
+        timeSecs = levelPlayTime[latestPlayerToFinish] / FPS - levelScoreSummaryScoreTicker;
         if (levelPlayTime[latestPlayerToFinish] < 0) {
             timeSecs--;
         }
@@ -288,9 +288,9 @@ void DrawLevelScoreSummary(void) {
                                 FormatTime(newScore, buf, 1);
                                 DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0xcb);
                             } else {
-                                iVar2 = levelPlayTime[i] / 50;
+                                iVar2 = levelPlayTime[i] / FPS;
                                 if (levelPlayTime[i] < 0) {
-                                    iVar2 = iVar2 + -1;
+                                    iVar2--;
                                 }
                                 FormatTime(totalPlayTime[i] - iVar2, buf, 1);
                                 DrawTextFancyFont(buf, 0xc1 + 0x53 * i, 0x9e);
@@ -390,7 +390,7 @@ void DrawLevelScoreSummary(void) {
     } else {
         idleTimer = 0;
     }
-    if (idleTimer > 500 && isDemoMode == 1) {
+    if (idleTimer > 10 * FPS && isDemoMode == 1) {
         idleTimer = 0;
         levelScoreSummaryConfirmed = 1;
     }

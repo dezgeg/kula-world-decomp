@@ -422,9 +422,9 @@ int MainGameLoop(void) {
     }
     if (gameMode == 2) {
         if (numTimeTrialPlayers == 1) {
-            levelPlayTime[twoPlayerWhichPlayer] = (-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * 50;
+            levelPlayTime[twoPlayerWhichPlayer] = (-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * FPS;
         } else {
-            levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] * 50;
+            levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] * FPS;
         }
     } else {
         levelPlayTime[twoPlayerWhichPlayer] = 0;
@@ -593,13 +593,13 @@ int MainGameLoop(void) {
                 do {
                     if (_sio_control(0, 0, 0) & 2)
                         break;
-                } while (vsyncCounter < 51);
-                if (vsyncCounter < 51) {
+                } while (vsyncCounter <= FPS);
+                if (vsyncCounter <= FPS) {
                     byteCountToReceiveFromSio = _sio_control(0, 4, 0) & 0xff;
                     vsyncCounter = 0;
                     while ((_sio_control(0, 0, 0) & 2) == 0)
                         ;
-                    if (vsyncCounter > 50)
+                    if (vsyncCounter > FPS)
                         break;
                     byteCountToReceiveFromSio += (_sio_control(0, 4, 0) & 0xff) * 0x100;
                     ReceiveBufFromSio();
@@ -616,12 +616,12 @@ int MainGameLoop(void) {
         if (inGetReadyScreen == 1 && gameMode == 2 && gameState != 0) {
             inGetReadyScreen = GetReadyScreen();
         }
-        if (levelTimeLeft < 1000 && levelTimeLeft % 50 > 25 && prevLevelTimeLeft % 50 < 25 &&
+        if (levelTimeLeft < 20 * FPS && levelTimeLeft % FPS > 25 && prevLevelTimeLeft % FPS < 25 &&
                 levelTimeLeft > 0 && !isPaused && levelEndReason == 0) {
-            if (levelTimeLeft % 100 < 50) {
-                SndPlaySfx(SFX_HOURGLASS_TICK, 0, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 250));
+            if (levelTimeLeft % 100 < FPS) {
+                SndPlaySfx(SFX_HOURGLASS_TICK, 0, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 5 * FPS));
             } else {
-                SndPlaySfx(SFX_HOURGLASS_TICK, 37000, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 250));
+                SndPlaySfx(SFX_HOURGLASS_TICK, 37000, &ZERO_SVECTOR_a2f04, 8000 - 10 * (levelTimeLeft - 5 * FPS));
             }
         }
         prevLevelTimeLeft = levelTimeLeft;
@@ -824,7 +824,7 @@ int MainGameLoop(void) {
     }
     if (curWorld >= 10 && loadNewWorld == 1) {
         i = totalPlayTime[0];
-        if (gameMode == 2 && numTimeTrialPlayers == 1 && i + timeTrialDifficulty / 50 < 1) {
+        if (gameMode == 2 && numTimeTrialPlayers == 1 && i + timeTrialDifficulty / FPS < 1) {
             ShowEndingFmv(0);
             ResetCallback();
         }
@@ -895,7 +895,7 @@ void LevelCompletedOrDied(void) {
                 levelScores[curWorld2 * 15 + t - 1] = totalScore;
             }
         }
-        totalPlayTime[0] += levelPlayTime[0] / 50;
+        totalPlayTime[0] += levelPlayTime[0] / FPS;
     }
     if (gameMode != 2 || gotSioData || gameState == 4) {
         return;
@@ -918,7 +918,7 @@ void LevelCompletedOrDied(void) {
         savedFruitsCollectedBitmask = fruitsCollectedBitmask;
         levelHasBeenCompletedByPlayer[twoPlayerWhichPlayer] = 1;
         if (numTimeTrialPlayers == 1) {
-            j = levelPlayTime[0] / 50;
+            j = levelPlayTime[0] / FPS;
             if (levelPlayTime[0] < 0) {
                 j--;
             }
@@ -930,7 +930,7 @@ void LevelCompletedOrDied(void) {
                 totalPlayTime[twoPlayerWhichPlayer] += levelPlaytimesInThisWorld[i];
             }
         } else {
-            totalPlayTime[twoPlayerWhichPlayer] += levelPlayTime[twoPlayerWhichPlayer] / 50;
+            totalPlayTime[twoPlayerWhichPlayer] += levelPlayTime[twoPlayerWhichPlayer] / FPS;
             if (levelPlayTime[twoPlayerWhichPlayer] < 0) {
                 totalPlayTime[twoPlayerWhichPlayer] -= 1;
             }
@@ -1091,7 +1091,7 @@ void ReceiveBufFromSio(void) {
     for (i = 0; i < byteCountToReceiveFromSio; i++) {
         vsyncCounter = 0;
         while ((_sio_control(0, 0, 0) & 2) == 0) {
-            if (vsyncCounter > 50) {
+            if (vsyncCounter > FPS) {
                 gotSioData = 0;
                 SetupDisplay(0, 0, 0, 0, 0, 0);
                 return;

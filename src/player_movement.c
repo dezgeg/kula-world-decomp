@@ -1241,7 +1241,7 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
             landingSquishMagnitude = 0;
         }
     } else {
-        squishPhase = (squishPhase + (5000 - levelTimeLeft) / 40 + 40) % 4096;
+        squishPhase = (squishPhase + (100 * FPS - levelTimeLeft) / 40 + 40) % 4096;
         squishMagnitude = (rsin(squishPhase) * 200) / 4096;
     }
     player->ballMorphShape = squishMagnitude + landingSquishMagnitude;

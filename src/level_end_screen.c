@@ -81,11 +81,11 @@ void LoadLevelEndReasonGfx() {
     if (levelEndReason >= 0) {
         whichGfx = LEVEL_END_GFX_WELL_DONE;
         if (gameMode == 2) {
-            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * 50;
+            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * FPS;
             if (playTime < 1) {
                 whichGfx = LEVEL_END_GFX_VERY_WELL_DONE;
             }
-            if (playTime > 1000) {
+            if (playTime > 20 * FPS) {
                 whichGfx = LEVEL_END_GFX_LEVEL_CLEARED;
             }
         }

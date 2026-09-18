@@ -42,7 +42,7 @@ void PlayMusic(int world) {
 
     Noop2();
     SndSetMusicVolume();
-    musicCounter = 50;
+    musicCounter = FPS;
     musicSearchAttempt = 0;
     while (CdSearchFile(&musicCdlfile, MUSICS[world].filename) == NULL) {
         if (musicSearchAttempt >= 10)
@@ -111,7 +111,7 @@ void PlayBonusMusic(void) {
     if (bonusMusicIndex < 0) {
         bonusMusicIndex = 0;
     }
-    musicCounter = 50;
+    musicCounter = FPS;
     if (playingBonusMusic == 0) {
         savedMusicCdlLoc = musicCdlLoc;
         savedMusicStartSector = musicStartSector;
@@ -185,7 +185,7 @@ void MusicPause(void) {
 
     Noop2();
     savedMusicCdlLoc = musicCdlLoc;
-    musicCounter = 50;
+    musicCounter = FPS;
     savedMusicStartSector = musicStartSector;
     savedMusicEndSector = musicEndSector;
     savedMusicCurSector = musicCurSector;
@@ -206,7 +206,7 @@ void SwitchFromBonusToNormalMusic(void) {
     musicCdlLoc = savedMusicCdlLoc;
     // XXX: Why?
     *(volatile int*)&musicCurSector = savedMusicCurSector;
-    musicCounter = 50;
+    musicCounter = FPS;
     musicStartSector = savedMusicStartSector;
     musicEndSector = savedMusicEndSector;
     CdIntToPos(musicCurSector, &musicBonusLoc);

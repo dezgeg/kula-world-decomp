@@ -473,7 +473,7 @@ void HighScoreUi(int param_1) {
             idleTimer = 0;
         }
 
-        if (idleTimer > 30000) {
+        if (idleTimer > 600 * FPS) {
             break;
         }
 
