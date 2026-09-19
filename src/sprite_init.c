@@ -194,10 +194,10 @@ void InitHourglassSprites(void) {
                 textures[firstGuiTexture + i].u, textures[firstGuiTexture + i].v + h,
                 textures[firstGuiTexture + i].u + w, textures[firstGuiTexture + i].v + h);
         setXY4(&hourglassSprites[0][i],
-                ggiPart1HourglassAnim[320 * i + 0] + 160, ggiPart1HourglassAnim[320 * i + 1] + 26,
-                ggiPart1HourglassAnim[320 * i + 2] + 160, ggiPart1HourglassAnim[320 * i + 3] + 26,
-                ggiPart1HourglassAnim[320 * i + 4] + 160, ggiPart1HourglassAnim[320 * i + 5] + 26,
-                ggiPart1HourglassAnim[320 * i + 6] + 160, ggiPart1HourglassAnim[320 * i + 7] + 26);
+                ggiPart1HourglassAnim[320 * i + 0] + 160, ggiPart1HourglassAnim[320 * i + 1] + 26 + 2 * VID_NTSC,
+                ggiPart1HourglassAnim[320 * i + 2] + 160, ggiPart1HourglassAnim[320 * i + 3] + 26 + 2 * VID_NTSC,
+                ggiPart1HourglassAnim[320 * i + 4] + 160, ggiPart1HourglassAnim[320 * i + 5] + 26 + 2 * VID_NTSC,
+                ggiPart1HourglassAnim[320 * i + 6] + 160, ggiPart1HourglassAnim[320 * i + 7] + 26 + 2 * VID_NTSC);
         setRGB0(&hourglassSprites[0][i], 0x80, 0x80, 0x80);
         SetSemiTrans(&hourglassSprites[0][i], textures[firstGuiTexture + i].semitrans);
         SetShadeTex(&hourglassSprites[0][i], 0);
@@ -211,7 +211,7 @@ void InitHourglassSprites(void) {
     levelTimeLeft = 100 * FPS - 1;
     hourglassClutRect.x = (textures[firstGuiTexture + 1].clut << 4) & 0x3ff;
     hourglassClutRect.y = textures[firstGuiTexture + 1].clut >> 6;
-    InitDigitSprites(&levelTimeLeftDigitSprites, 0, 152, 50, 0x80, 0x80, 0x80);
+    InitDigitSprites(&levelTimeLeftDigitSprites, 0, 152, 50 + 2 * VID_NTSC, 0x80, 0x80, 0x80);
 }
 
 void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b) {
@@ -509,34 +509,34 @@ void InitAllDigitSprites(void) {
     isTwoPlayerTimeAttack = 0;
     switch (gameMode) {
         default:
-            InitDigitSprites(&totalScoreSprite, 2, 100, 0xec, 0x80, 0x80, 0x80);
-            InitDigitSprites(&levelScoreSprite, 1, 100, 0xda, 0x80, 0x80, 0x80);
+            InitDigitSprites(&totalScoreSprite, 2, 100, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
+            InitDigitSprites(&levelScoreSprite, 1, 100, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
             break;
         case 1:
             if (curController == 0) {
-                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, 0xda, 0x80, 0x80, 0x80);
-                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, 0xda, 0x50, 0x50, 0x50);
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
             } else {
-                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, 0xda, 0x50, 0x50, 0x50);
-                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, 0xda, 0x80, 0x80, 0x80);
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 0x1c, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 0xf6, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
             }
             break;
 
         case 2:
             if (numTimeTrialPlayers == 1) {
-                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0x40, 0xec, 0x80, 0x80, 0x80);
-                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0x40, 0xda, 0x80, 0x80, 0x80);
+                InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0x40, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
+                InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0x40, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
             } else {
                 if (twoPlayerWhichPlayer == 0) {
-                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, 0xec, 0x80, 0x80, 0x80);
-                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, 0xec, 0x50, 0x50, 0x50);
-                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, 0xda, 0x80, 0x80, 0x80);
-                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, 0xda, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, SCREEN_HEIGHT - 20, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
                 } else {
-                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, 0xec, 0x50, 0x50, 0x50);
-                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, 0xec, 0x80, 0x80, 0x80);
-                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, 0xda, 0x50, 0x50, 0x50);
-                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, 0xda, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, 0xffffffe0, SCREEN_HEIGHT - 20, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 0xae, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0xffffffe0, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 0xae, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
                 }
                 isTwoPlayerTimeAttack = 1;
             }

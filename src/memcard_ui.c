@@ -690,7 +690,7 @@ int MemCardUiPart(void) {
             TSpritePrim(&fileSprites[filecount][0], 0, 0, GetTPage(0, 1, 704, 118));
 
             setRGB0(&fileSprites[filecount][0].sprt, 0x60, 0x60, 0x60);
-            setXY0(&fileSprites[filecount][0].sprt, (filecount % 3) * 24 + 124, (filecount / 3) * 24 + 50);
+            setXY0(&fileSprites[filecount][0].sprt, (filecount % 3) * 24 + 124, (filecount / 3) * 24 + 50 - 6 * VID_NTSC);
 
             SetSemiTrans(&fileSprites[filecount][0].sprt, 0);
             SetShadeTex(&fileSprites[filecount][0].sprt, 0);
@@ -888,14 +888,14 @@ int MemCardUiPart(void) {
             SetLineF3(&memCardCursorBoxLines1[whichDrawDispEnv]);
             SetLineF3(&memCardCursorBoxLines2[whichDrawDispEnv]);
             setRGB0(&memCardCursorBoxLines1[whichDrawDispEnv], 255, 0, 0);
-            setXY3(&memCardCursorBoxLines1[whichDrawDispEnv], cursorX * 24 + 123, cursorY * 24 + 49,
-                          cursorX * 24 + 140, cursorY * 24 + 49,
-                          cursorX * 24 + 140, cursorY * 24 + 66);
+            setXY3(&memCardCursorBoxLines1[whichDrawDispEnv], cursorX * 24 + 123, cursorY * 24 + 49 - 6 * VID_NTSC,
+                          cursorX * 24 + 140, cursorY * 24 + 49 - 6 * VID_NTSC,
+                          cursorX * 24 + 140, cursorY * 24 + 66 - 6 * VID_NTSC);
 
             setRGB0(&memCardCursorBoxLines2[whichDrawDispEnv], 255, 0, 0);
-            setXY3(&memCardCursorBoxLines2[whichDrawDispEnv], cursorX * 24 + 140, cursorY * 24 + 66,
-                          cursorX * 24 + 123, cursorY * 24 + 66,
-                          cursorX * 24 + 123, cursorY * 24 + 49);
+            setXY3(&memCardCursorBoxLines2[whichDrawDispEnv], cursorX * 24 + 140, cursorY * 24 + 66 - 6 * VID_NTSC,
+                          cursorX * 24 + 123, cursorY * 24 + 66 - 6 * VID_NTSC,
+                          cursorX * 24 + 123, cursorY * 24 + 49 - 6 * VID_NTSC);
 
             addPrim(&primLists[whichDrawDispEnv].main, &memCardCursorBoxLines1[whichDrawDispEnv]);
             addPrim(&primLists[whichDrawDispEnv].main, &memCardCursorBoxLines2[whichDrawDispEnv]);

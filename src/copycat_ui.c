@@ -14,12 +14,12 @@ extern int gameState;
 TSprite copycatUiSprites[2][4];
 
 short COPYCAT_SPRITE_POSITIONS[] = {
-    98, 20,
-    98, 20,
-    28, 200,
-    246, 200,
-    40, 200,
-    246, 200
+    98, 20 - 4 * VID_NTSC,
+    98, 20 - 4 * VID_NTSC,
+    28, SCREEN_HEIGHT - 56,
+    246, SCREEN_HEIGHT - 56,
+    40, SCREEN_HEIGHT - 56,
+    246, SCREEN_HEIGHT - 56
 };
 
 void InitCopycatUiTextures(void) {

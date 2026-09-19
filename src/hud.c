@@ -91,11 +91,11 @@ int TIME_STR_DIGIT_DIVISORS[9] = {
 };
 
 SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5] = {
-    {208, 233, -1, 0},
-    {228, 232, -1, 0},
-    {253, 232, -1, 0},
-    {278, 232, -1, 0},
-    {299, 234, -1, 0}
+    {208, SCREEN_HEIGHT - 23, -1, 0},
+    {228, SCREEN_HEIGHT - 24, -1, 0},
+    {253, SCREEN_HEIGHT - 24, -1, 0},
+    {278, SCREEN_HEIGHT - 24, -1, 0},
+    {299, SCREEN_HEIGHT - 22, -1, 0}
 };
 
 void DrawHud(void) {
@@ -197,23 +197,23 @@ void DrawHourglassAndTimer(void) {
             p = &ggiPart1HourglassAnim[hourglassRotationTimer];
             for (j = 0; j < 3; j++) {
                 setXY4(&hourglassSprites[!whichDrawDispEnv][j],
-                        p[j * 320 + 0] + 160, p[j * 320 + 1] + 26,
-                        p[j * 320 + 2] + 160, p[j * 320 + 3] + 26,
-                        p[j * 320 + 4] + 160, p[j * 320 + 5] + 26,
-                        p[j * 320 + 6] + 160, p[j * 320 + 7] + 26);
+                        p[j * 320 + 0] + 160, p[j * 320 + 1] + 26 + 2 * VID_NTSC,
+                        p[j * 320 + 2] + 160, p[j * 320 + 3] + 26 + 2 * VID_NTSC,
+                        p[j * 320 + 4] + 160, p[j * 320 + 5] + 26 + 2 * VID_NTSC,
+                        p[j * 320 + 6] + 160, p[j * 320 + 7] + 26 + 2 * VID_NTSC);
             }
         }
 
         for (j = 0; j < 3; j++) {
             setXY4(&hourglassSprites[whichDrawDispEnv][j],
                    ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 0] + 160,
-                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 1] + 26,
+                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 1] + 26 + 2 * VID_NTSC,
                    ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 2] + 160,
-                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 3] + 26,
+                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 3] + 26 + 2 * VID_NTSC,
                    ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 4] + 160,
-                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 5] + 26,
+                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 5] + 26 + 2 * VID_NTSC,
                    ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 6] + 160,
-                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 7] + 26);
+                   ggiPart1HourglassAnim[hourglassRotationTimer + j * 320 + 7] + 26 + 2 * VID_NTSC);
         }
 
         switch (hourglassRotationTimer) {
