@@ -50,7 +50,7 @@ void DrawLethargyEffects(void) {
             lethargySinMagnitude = 0x30c;
             break;
         case 2:
-            lethargyUnusedCounter = (lethargyUnusedCounter + 0x80) % 0x1000;
+            lethargyUnusedCounter = (lethargyUnusedCounter + VELOCITY(0x80)) % 0x1000;
             rsin(lethargyUnusedCounter);
             setRGB0(&lethargyEffectSprite[whichDrawDispEnv][0].sprt, 96, 112, 96);
             AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][0]);
@@ -90,9 +90,9 @@ void DrawLethargyEffects(void) {
     }
 
     if (lethargyMode != 0) {
-        lethargySinMagnitude -= 6;
+        lethargySinMagnitude -= VELOCITY(6);
         if (lethargySinMagnitude > 0) {
-            lethargyAngleCounter = (lethargyAngleCounter + 0x100) % 0x1000;
+            lethargyAngleCounter = (lethargyAngleCounter + VELOCITY(0x100)) % 0x1000;
             delta = rsin(lethargyAngleCounter) * lethargySinMagnitude >> 12;
             gteXScale = 0x1000 + delta;
             gteYScale = 16 * SCREEN_HEIGHT - delta;

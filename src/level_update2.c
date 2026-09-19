@@ -511,7 +511,7 @@ void ProcessPlayer(void) {
     if (thePlayer.invulnerabilityTimer == -1) {
         if (IsCollidingWithEnemy(thePlayer.finePos) && thePlayer.delayedLevelEndReason != LEVEL_END_CAPTURED) {
             SndPlaySfx(SFX_CAPTURED, 0, &ZERO_SVECTOR_a2df4, 7000);
-            Vibrate99(1, 255, 10);
+            Vibrate99(1, 255, FRAMES(10));
             thePlayer.dying = 1;
             thePlayer.movementInhibitTimer = 10;
             thePlayer.movementVelocity = 0;

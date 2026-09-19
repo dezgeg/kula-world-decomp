@@ -32,13 +32,13 @@ void DrawScreenFade(void) {
     if (screenFadeEnabled == 1) {
         switch (screenFadeSpeed) {
             case 0:
-                screenFadeColor -= 24;
+                screenFadeColor -= VELOCITY(24);
                 break;
             case 1:
-                screenFadeColor -= 16;
+                screenFadeColor -= VELOCITY(16);
                 break;
             case 2:
-                screenFadeColor -= 8;
+                screenFadeColor -= VELOCITY(8);
                 break;
         }
         if (screenFadeColor >= 1) {

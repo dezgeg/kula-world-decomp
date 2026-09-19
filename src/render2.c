@@ -450,7 +450,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
             if (e[IE_STATE] == 1) {
                 e[IE_COUNTER]--;
                 if (e[IE_COUNTER] < 1) {
-                    e[IE_COUNTER] = 16;
+                    e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
                         ent = (EntityBlock*)(entityData + entityIndex * 128);
                         lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
@@ -481,7 +481,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
             if (e[IE_STATE] == 1) {
                 e[IE_COUNTER]--;
                 if (e[IE_COUNTER] < 1) {
-                    e[IE_COUNTER] = 16;
+                    e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
                         ent = (EntityBlock*)(entityData + entityIndex * 128);
                         lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
@@ -511,7 +511,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
             if (e[IE_STATE] == 1) {
                 e[IE_COUNTER]--;
                 if (e[IE_COUNTER] < 1) {
-                    e[IE_COUNTER] = 0x10;
+                    e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
                         ent = (EntityBlock*)(entityData + entityIndex * 128);
                         lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);

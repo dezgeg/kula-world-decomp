@@ -107,7 +107,7 @@ void ScanLevelDataForMovingBlocks2(void) {
         }
 
         entityData[i + 19] = 0;
-        entityData[i + 18] = entityData[i + 18];
+        entityData[i + 18] = VELOCITY(entityData[i + 18]);
     }
     MoveMovingPlatforms(ZERO_SVECTOR_a2de4);
 }
@@ -202,7 +202,7 @@ void MoveMovingPlatforms(SVECTOR vec) {
 
             if (reachedEnd) {
                 SndMuteVoiceByTag(entityOffset + 1);
-                EB->counter = 40;
+                EB->counter = FRAMES(40);
                 EB->flags ^= 1;
             }
         }
@@ -639,7 +639,7 @@ void CalcLevelBounds(Player* player) {
 
     cameraR2TurnAmount = 0;
     levelEntryAnimTimer = 0;
-    levelEntryAnimTimerIncrement = 16;
+    levelEntryAnimTimerIncrement = VELOCITY(16);
 
     xMin = yMin = zMin = 34;
     xMax = yMax = zMax = 0;
@@ -820,15 +820,15 @@ static VECTOR HandlePauseModeRotationEffect_transVec;
 void HandlePauseModeRotationEffect(Player* player) {
     player->playerHasControl = 0;
 
-    rotVec.vx = (rotVec.vx - 10) % 4096;
-    rotVec.vy = (rotVec.vy + 4) % 4096;
-    rotVec.vz = (rotVec.vz + 13) % 4096;
+    rotVec.vx = (rotVec.vx - VELOCITY(10)) % 4096;
+    rotVec.vy = (rotVec.vy + VELOCITY(4)) % 4096;
+    rotVec.vz = (rotVec.vz + VELOCITY(13)) % 4096;
 
     if (specialLevelType == 0) {
-        zoomInAndOutPhase = (zoomInAndOutPhase + 15) % 4096;
+        zoomInAndOutPhase = (zoomInAndOutPhase + VELOCITY(15)) % 4096;
     }
     if (specialLevelType == 1) {
-        zoomInAndOutPhase = (zoomInAndOutPhase + 70) % 4096;
+        zoomInAndOutPhase = (zoomInAndOutPhase + VELOCITY(70)) % 4096;
     }
 
     RotMatrix(&rotVec, &perspMatrixes[cameraIndex]);
@@ -973,7 +973,7 @@ void HandlePlayerMovementStuff(Player* player) {
     if (player->cameraR1R2TurnDirection.vx == -1) {
         if (player->howMoving198 != FALLING && cameraR2TurnAmount == 0) {
             r2TurnFlag = 1;
-            player->cameraR1TurnAmount.vx += 26;
+            player->cameraR1TurnAmount.vx += VELOCITY(26);
             if (player->cameraR1TurnAmount.vx > 650)
                 player->cameraR1TurnAmount.vx = 650;
         }
@@ -981,7 +981,7 @@ void HandlePlayerMovementStuff(Player* player) {
 
     if (player->cameraR1R2TurnDirection.vx == 1 && player->cameraR1TurnAmount.vx == 0) {
         r1TurnFlag = 1;
-        cameraR2TurnAmount += 26;
+        cameraR2TurnAmount += VELOCITY(26);
         if (cameraR2TurnAmount > 650)
             cameraR2TurnAmount = 650;
     }
@@ -1038,12 +1038,12 @@ void HandlePlayerMovementStuff(Player* player) {
 
     if (player->cameraR1R2TurnDirection.vy == 0) {
         if (player->cameraR1TurnAmount.vy > 0) {
-            player->cameraR1TurnAmount.vy -= 40;
+            player->cameraR1TurnAmount.vy -= VELOCITY(40);
             if (player->cameraR1TurnAmount.vy < 0)
                 player->cameraR1TurnAmount.vy = 0;
         }
         if (player->cameraR1TurnAmount.vy < 0) {
-            player->cameraR1TurnAmount.vy += 40;
+            player->cameraR1TurnAmount.vy += VELOCITY(40);
             if (player->cameraR1TurnAmount.vy > 0)
                 player->cameraR1TurnAmount.vy = 0;
         }

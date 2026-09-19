@@ -116,7 +116,7 @@ void UpdateEnemies(SVECTOR playerPos) {
         sumOfDeltas = diff;
 
         if (enemies[i].enemyType == OBJ_SLOW_STAR) {
-            if (blockProgress < 256 && blockProgress + 16 >= 256) {
+            if (blockProgress < 256 && blockProgress + VELOCITY(16) >= 256) {
                 if (EnemyCanTurnRight(&enemies[i])) {
                     EnemyTurnRight(&enemies[i]);
                 } else if (EnemyCanTurnLeft(&enemies[i])) {
@@ -125,12 +125,12 @@ void UpdateEnemies(SVECTOR playerPos) {
                     EnemyTurnAround(&enemies[i]);
                 }
             }
-            enemies[i].pos.vx += enemies[i].dir.vx * 16;
-            enemies[i].pos.vy += enemies[i].dir.vy * 16;
-            enemies[i].pos.vz += enemies[i].dir.vz * 16;
+            enemies[i].pos.vx += enemies[i].dir.vx * VELOCITY(16);
+            enemies[i].pos.vy += enemies[i].dir.vy * VELOCITY(16);
+            enemies[i].pos.vz += enemies[i].dir.vz * VELOCITY(16);
         }
         if (enemies[i].enemyType == OBJ_TIRE && enemies[i].state == 0) {
-            if (!(EnemyCanMoveForward(&enemies[i]) || blockProgress >= 256 || blockProgress + 15 < 256)) {
+            if (!(EnemyCanMoveForward(&enemies[i]) || blockProgress >= 256 || blockProgress + VELOCITY(15) < 256)) {
                 if (EnemyCanTurnLeft(&enemies[i])) {
                     enemies[i].state = 2;
                     enemies[i].timer = 0;
@@ -143,9 +143,9 @@ void UpdateEnemies(SVECTOR playerPos) {
                 }
             }
             if (enemies[i].state == 0) {
-                enemies[i].pos.vx += enemies[i].dir.vx * 15;
-                enemies[i].pos.vy += enemies[i].dir.vy * 15;
-                enemies[i].pos.vz += enemies[i].dir.vz * 15;
+                enemies[i].pos.vx += enemies[i].dir.vx * VELOCITY(15);
+                enemies[i].pos.vy += enemies[i].dir.vy * VELOCITY(15);
+                enemies[i].pos.vz += enemies[i].dir.vz * VELOCITY(15);
             }
         }
         if (enemies[i].enemyType == OBJ_FAST_STAR) {
@@ -153,7 +153,7 @@ void UpdateEnemies(SVECTOR playerPos) {
             enemies[i].pos.vy = enemies[i].initPos.vy + (rsin(enemies[i].timer) * 600) * enemies[i].dir.vy / 4096;
             enemies[i].pos.vz = enemies[i].initPos.vz + (rsin(enemies[i].timer) * 600) * enemies[i].dir.vz / 4096;
 
-            enemies[i].timer = (enemies[i].timer + 64) % 4096;
+            enemies[i].timer = (enemies[i].timer + VELOCITY(64)) % 4096;
 
             sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
             sfxDir.vy = enemies[i].pos.vy - playerPos.vy;
@@ -166,7 +166,7 @@ void UpdateEnemies(SVECTOR playerPos) {
             }
         }
         if (enemies[i].enemyType == OBJ_CAPTIVATOR) {
-            enemies[i].timer += 28;
+            enemies[i].timer += VELOCITY(28);
             if (enemies[i].timer >= 2048) {
                 sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
                 sfxDir.vy = enemies[i].pos.vy - playerPos.vy;
@@ -226,7 +226,7 @@ void UpdateEnemies(SVECTOR playerPos) {
                 enemies[i].pos.vy = enemies[i].initPos.vy + enemies[i].dir.vy * (rcos(enemies[i].timer) * -65 / 4096 + 65);
                 enemies[i].pos.vz = enemies[i].initPos.vz + enemies[i].dir.vz * (rcos(enemies[i].timer) * -65 / 4096 + 65);
                 enemies[i].counter++;
-                if (enemies[i].counter > 64) {
+                if (enemies[i].counter > FRAMES(64)) {
                     enemies[i].counter = -1;
                     enemies[i].pos = enemies[i].initPos;
                     sfxDir.vx = enemies[i].pos.vx - playerPos.vx;
@@ -236,16 +236,16 @@ void UpdateEnemies(SVECTOR playerPos) {
                 }
             }
             if (enemies[i].counter == -1 && enemiesProcessedOnce) {
-                enemies[i].pos.vx += enemies[i].dir.vx * 64;
-                enemies[i].pos.vy += enemies[i].dir.vy * 64;
-                enemies[i].pos.vz += enemies[i].dir.vz * 64;
+                enemies[i].pos.vx += enemies[i].dir.vx * VELOCITY(64);
+                enemies[i].pos.vy += enemies[i].dir.vy * VELOCITY(64);
+                enemies[i].pos.vz += enemies[i].dir.vz * VELOCITY(64);
             }
         }
         if (enemies[i].state) {
             switch (enemies[i].state) {
                 case 1:
-                    if (enemies[i].timer++ < 64) {
-                        enemies[i].rotationVec.vz -= 16;
+                    if (enemies[i].timer++ < FRAMES(64)) {
+                        enemies[i].rotationVec.vz -= VELOCITY(16);
                     } else {
                         enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
                         EnemyTurnRight(&enemies[i]);
@@ -253,8 +253,8 @@ void UpdateEnemies(SVECTOR playerPos) {
                     }
                     break;
                 case 2:
-                    if (enemies[i].timer++ < 64) {
-                        enemies[i].rotationVec.vz += 16;
+                    if (enemies[i].timer++ < FRAMES(64)) {
+                        enemies[i].rotationVec.vz += VELOCITY(16);
                     } else {
                         enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
                         EnemyTurnLeft(&enemies[i]);
@@ -262,8 +262,8 @@ void UpdateEnemies(SVECTOR playerPos) {
                     }
                     break;
                 case 3:
-                    if (enemies[i].timer++ < 64) {
-                        enemies[i].rotationVec.vz += 32;
+                    if (enemies[i].timer++ < FRAMES(64)) {
+                        enemies[i].rotationVec.vz += VELOCITY(32);
                     } else {
                         enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 256) & 0xfc00;
                         EnemyTurnAround(&enemies[i]);
@@ -447,9 +447,9 @@ static MATRIX RenderEnemies_dirMatrix;
 void RenderEnemies(void) {
     for (i = 0; i < numEnemies; i++) {
         if (enemies[i].enemyType == OBJ_SLOW_STAR) {
-            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + 14) % 4096;
-            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - 120) % 4096;
-            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 52) % 4096;
+            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + VELOCITY(14)) % 4096;
+            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - VELOCITY(120)) % 4096;
+            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + VELOCITY(52)) % 4096;
 
             RotMatrix(&enemies[i].rotationVec, &rotMatrix);
             MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
@@ -493,9 +493,9 @@ void RenderEnemies(void) {
         }
 
         if (enemies[i].enemyType == OBJ_CAPTURE_POD) {
-            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + 14) % 4096;
-            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - 120) % 4096;
-            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + 52) % 4096;
+            enemies[i].rotationVec.vx = (enemies[i].rotationVec.vx + VELOCITY(14)) % 4096;
+            enemies[i].rotationVec.vy = (enemies[i].rotationVec.vy - VELOCITY(120)) % 4096;
+            enemies[i].rotationVec.vz = (enemies[i].rotationVec.vz + VELOCITY(52)) % 4096;
 
             RotMatrix(&enemies[i].rotationVec, &rotMatrix);
             MulMatrix0(&perspMatrixes[cameraIndex], &rotMatrix, &rotMatrix);
@@ -593,7 +593,7 @@ void RenderEnemies(void) {
 
         if (enemies[i].enemyType == OBJ_TIRE) {
             if (enemies[i].state == 0) {
-                enemies[i].rotationVec.vx -= 64;
+                enemies[i].rotationVec.vx -= VELOCITY(64);
             }
             enemies[i].rotationVec.vx %= 4096;
             enemies[i].rotationVec.vy %= 4096;

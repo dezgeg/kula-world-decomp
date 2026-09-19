@@ -995,7 +995,7 @@ void ScanLevelDataForFlashingBlocks(void) {
                 for (dir = 0; dir < 6; dir++) {
                     *(u16*)cubeStates[16 * ci + dir] = 0x10e;
                 }
-                eb->counter = 76 - initState * 47;
+                eb->counter = FRAMES(76) - initState * FRAMES(47);
                 eb->state = 0;
                 levelData[x * 1156 + y * 34 + z] = -1;
             } else {
@@ -1005,7 +1005,7 @@ void ScanLevelDataForFlashingBlocks(void) {
                     quad->color = 0x808080;
                 }
                 eb->state = 3;
-                eb->counter = 164 - initState * 47;
+                eb->counter = FRAMES(164) - initState * FRAMES(47);
             }
         }
     }
@@ -1180,15 +1180,15 @@ void ScanLevelDataForBlinkingEntities(void) {
                 ent = (short*)((i * 128 + j * 16) * 2 + (int)entityData);
                 switch (ent[1]) {
                     case OBJ_EXIT:
-                        ent[15] = 16;
+                        ent[15] = FRAMES(16);
                         ent[16] = 255;
                         break;
                     case OBJ_TRANSPORTER: // xxx: can this trigger?
-                        ent[15] = 16;
+                        ent[15] = FRAMES(16);
                         ent[16] = 255;
                         break;
                     case OBJ_BUTTON:
-                        ent[15] = 16;
+                        ent[15] = FRAMES(16);
                         ent[16] = 255;
                         break;
                 }

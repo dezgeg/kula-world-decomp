@@ -200,8 +200,8 @@ void StartJumpingForward(Player* player) {
         player->jumpdataPtr = initJumpTimerPtr;
         player->jumpingOrViewportRotationTimer = initJumpTimerPtr[0];
         player->howMoving0 = 3;
-        player->movementVelocity = 40;
-        player->rotX = 40;
+        player->movementVelocity = VELOCITY(40);
+        player->rotX = VELOCITY(40);
         player->jumpdataPtr += 4;
         ClearJumpSquish(player);
     }
@@ -237,8 +237,8 @@ void TurnRight(Player* player) {
     if (player->startTurningTo == 0 && player->field119_0x1c8 == 0) {
         player->unusedTurningWhere = 1;
         player->startTurningTo = 1;
-        player->turningTimer = 16;
-        player->turningDelta = -64;
+        player->turningTimer = FRAMES(16);
+        player->turningDelta = VELOCITY(-64);
         player->onGround = 0;
         player->howMoving0 = 1;
         if (player->turningRightRelated >= 2) {
@@ -254,8 +254,8 @@ void TurnLeft(Player* player) {
     if (player->startTurningTo == 0 && player->field119_0x1c8 == 0) {
         player->unusedTurningWhere = 2;
         player->startTurningTo = 2;
-        player->turningTimer = 16;
-        player->turningDelta = 64;
+        player->turningTimer = FRAMES(16);
+        player->turningDelta = VELOCITY(64);
         player->onGround = 0;
         player->howMoving0 = 1;
         if (player->turningLeftRelated >= 2) {
@@ -399,7 +399,7 @@ void ProcessMovement(Player* player) {
                     player->howMoving198 = FALLING;
                     player->howMoving0 = 3;
                     player->movementVelocity = 0;
-                    player->gravityVelocity = -0x28;
+                    player->gravityVelocity = VELOCITY(-40);
                     player->gravityVelocity = player->svec_144.vy;
                     if (player->gravityVelocity >= 0) {
                         player->gravityVelocity = -player->svec_144.vy;
@@ -414,8 +414,8 @@ void ProcessMovement(Player* player) {
         case FALLING:
             if (player->rollingForward) {
                 player->rotX += 6;
-                if (player->rotX > 40) {
-                    player->rotX = 40;
+                if (player->rotX > VELOCITY(40)) {
+                    player->rotX = VELOCITY(40);
                 }
             } else {
                 player->rotX--;
@@ -779,9 +779,9 @@ int CheckIfPlayerLanded(Player* player) {
     if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->playerHasControl == 1 && !isPausedOrWaitingForRestart) {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2dd8, 7000);
     }
-    if (player->gravityVelocity == -80) {
+    if (player->gravityVelocity == VELOCITY(-80)) {
         Vibrate99(0, 200, 3);
-        EnableScreenShake(3, 20, 2);
+        EnableScreenShake(3, FRAMES(20), 2);
     }
 
     player->finePos.vx += player->gravityDir.vx * 100;
@@ -793,7 +793,7 @@ int CheckIfPlayerLanded(Player* player) {
     player->onGround = 1;
     player->howMoving0 = 0;
     if (player->rollingForward) {
-        player->movementVelocity = 0x28;
+        player->movementVelocity = VELOCITY(40);
     }
     landingSquishFrameCounter = 4;
     landingSquishMagnitudeIncrement = 0xbb;
@@ -806,7 +806,7 @@ int CheckIfPlayerLanded(Player* player) {
         player->rollingForward = 1;
         player->forcedRollForwardTimer = 1;
         player->turnDirection = 0;
-        player->movementVelocity = 0x28;
+        player->movementVelocity = VELOCITY(40);
     }
     return 1;
 }
@@ -1230,7 +1230,7 @@ void ClearJumpSquish(Player* player) {
 }
 
 void SetBallShapeAndRotationWhenJumping(Player* player) {
-    RotMatrixX(player->rotX * -6, &player->matrix_254);
+    RotMatrixX(player->rotX * VELOCITY(-6), &player->matrix_254);
 
     if (player->field_2bc > -750 && player->jumpingOrViewportRotationTimer > 12) {
         player->field_2bc += jumpSquishMagnitudeIncrement;
@@ -1252,7 +1252,7 @@ static short SetBallShapeAndRotationWhenRollingOrIdle_squishMagnitude;
 static short SetBallShapeAndRotationWhenRollingOrIdle_squishPhase;
 #define squishPhase SetBallShapeAndRotationWhenRollingOrIdle_squishPhase
 void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
-    RotMatrixX(player->rotX * -6, &player->matrix_254);
+    RotMatrixX(player->rotX * VELOCITY(-6), &player->matrix_254);
     if (landingSquishFrameCounter > 0) {
         landingSquishFrameCounter--;
         landingSquishDamping = 100;

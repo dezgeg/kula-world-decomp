@@ -157,12 +157,12 @@ void ProcessCrumblingBlocks(void) {
                     }
                 }
                 eb->state = 3;
-                EnableScreenShake(4, 30, 3);
+                EnableScreenShake(4, FRAMES(30), 3);
                 Vibrate100(200, 0, 0, 1);
-                Vibrate101(40);
+                Vibrate101(FRAMES(40));
                 /* fallthrough */
             case 3:
-                eb->counter -= 32;
+                eb->counter -= VELOCITY(32);
                 if (eb->counter >= 0) {
                     for (dir = 0; dir < 6; dir++) {
                         QUAD_FUNC_PTRS[dir](quads[cubeIndex * 16 + dir], eb->counter, x9, y9, z9, 0);
@@ -212,7 +212,7 @@ void ProcessFlashingBlocks(void) {
                         }
                         quad->color = 0;
                     }
-                    counter = 8;
+                    counter = FRAMES(8);
                     CUBE_TYPE_AT(x, y, z) = eb->cubeType;
                     eb->state = 1;
                 }
@@ -220,7 +220,7 @@ void ProcessFlashingBlocks(void) {
             case 1:
                 counter--;
                 if (counter > 0) {
-                    color = ((8 - counter) * 0xff) / 8;
+                    color = ((FRAMES(8) - counter) * 0xff) / FRAMES(8);
                     color = color << 16 | color << 8 | color;
                     for (j = 0; j < 6; j++) {
                         cubeStates[cubeIndex * 16 + j]->color = color;
@@ -248,14 +248,14 @@ void ProcessFlashingBlocks(void) {
                         quad->color = 0x808080;
                     }
                     eb->state = 3;
-                    counter = 76;
+                    counter = FRAMES(76);
                 }
                 break;
             case 3:
                 counter--;
                 if (counter <= 0) {
                     eb->state = 4;
-                    counter = 8;
+                    counter = FRAMES(8);
                     for (j = 0; j < 6; j++) {
                         quad = cubeStates[cubeIndex * 16 + j];
                         *(byte*)((int)&quad->flags + 1) = 1; // QF_INVISIBLE
@@ -266,7 +266,7 @@ void ProcessFlashingBlocks(void) {
             case 4:
                 counter--;
                 if (counter > 0) {
-                    color = 256 - counter * 28;
+                    color = 256 - counter * 224 / FRAMES(8);
                     color = color << 16 | color << 8 | color;
                     for (j = 0; j < 6; j++) {
                         cubeStates[cubeIndex * 16 + j]->color = color;
@@ -276,13 +276,13 @@ void ProcessFlashingBlocks(void) {
                         cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
                     }
                     eb->state = 5;
-                    counter = 16;
+                    counter = FRAMES(16);
                 }
                 break;
             case 5:
                 counter--;
                 if (counter > 0) {
-                    color = counter * 255 / 16;
+                    color = counter * 255 / FRAMES(16);
                     color = color << 16 | color << 8 | color;
                     for (j = 0; j < 6; j++) {
                         cubeStates[cubeIndex * 16 + j]->color = color;
@@ -291,7 +291,7 @@ void ProcessFlashingBlocks(void) {
                     for (j = 0; j < 6; j++) {
                         cubeStates[cubeIndex * 16 + j]->flags.u8 = 6; // QF_SEMITRANSPARENT | QF_BACKFACE_CULL
                     }
-                    counter = 76;
+                    counter = FRAMES(76);
                     CUBE_TYPE_AT(x, y, z) = -1;
                     eb->state = 0;
                 }
@@ -340,7 +340,7 @@ void ProcessRetractableSpikes(void) {
                     unkE = (3 - counter) * 8;
                 } else {
                     unkE = 0x1f;
-                    counter = 12;
+                    counter = FRAMES(12);
                     unk1E = 2;
                 }
                 break;
@@ -354,7 +354,7 @@ void ProcessRetractableSpikes(void) {
                     }
                 } else {
                     unkE = 0x1f;
-                    counter = 12;
+                    counter = FRAMES(12);
                     unk1E = 3;
                 }
                 break;
@@ -399,7 +399,7 @@ void SetSunglassMode(int on) {
     if (!on) {
         sunglassDisablingState[cameraIndex] = 1;
         sunglassCounter2[cameraIndex] = 0x15;
-        sunglassCounter1[cameraIndex] = 8;
+        sunglassCounter1[cameraIndex] = FRAMES(8);
         sunglassSeeEverything[cameraIndex] = 0;
     } else {
         sunglassDisablingState[cameraIndex] = 0;
@@ -417,7 +417,7 @@ void UpdateSunglassModeDisabling(void) {
                 sunglassDisablingState[cameraIndex] = 0;
                 return;
             }
-            sunglassCounter1[cameraIndex] = 8;
+            sunglassCounter1[cameraIndex] = FRAMES(8);
             sunglassDisablingState[cameraIndex] = 2;
             sunglassSeeEverything[cameraIndex] = 1;
             break;
@@ -429,7 +429,7 @@ void UpdateSunglassModeDisabling(void) {
                 sunglassDisablingState[cameraIndex] = 0;
                 return;
             }
-            sunglassCounter1[cameraIndex] = 8;
+            sunglassCounter1[cameraIndex] = FRAMES(8);
             sunglassDisablingState[cameraIndex] = 1;
             sunglassSeeEverything[cameraIndex] = 0;
             break;

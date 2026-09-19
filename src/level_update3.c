@@ -389,12 +389,12 @@ void CreateAllItemDispLists(void) {
 
             switch (entityData[entityOffset + itemOffset + 1]) {
                 case OBJ_SPIKE_TRAP:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 16) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(16)) % 4096;
                     if (entityData[entityOffset + itemOffset + 3] == 0) {
-                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + 100) % 4096;
+                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + VELOCITY(100)) % 4096;
                     }
                     if (entityData[entityOffset + itemOffset + 3] == 1) {
-                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + 8) % 4096;
+                        entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] + VELOCITY(8)) % 4096;
                     }
 
                     if (entityData[entityOffset + itemOffset + 11] > 2048) {
@@ -424,7 +424,7 @@ void CreateAllItemDispLists(void) {
 
                 case OBJ_TRANSPORTER:
                     if (entityData[entityOffset + itemOffset + 4] == 1 && cameraIndex == 0) {
-                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 30) % 4096;
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(30)) % 4096;
                     }
                     rotVec.vx = rotVec.vy = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 11];
@@ -434,9 +434,9 @@ void CreateAllItemDispLists(void) {
                 case OBJ_EXIT:
                 case OBJ_HIDDEN_EXIT:
                     if (entityData[entityOffset + itemOffset + 4] == 1) {
-                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 55) % 4096;
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - VELOCITY(55)) % 4096;
                     } else {
-                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 25) % 4096;
+                        entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - VELOCITY(25)) % 4096;
                     }
                     rotVec.vx = rotVec.vy = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 11];
@@ -448,9 +448,9 @@ void CreateAllItemDispLists(void) {
                 case OBJ_PUMPKIN:
                 case OBJ_BANANA:
                 case OBJ_STRAWBERRY:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 24) % 4096;
-                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - 80) % 4096;
-                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - 60) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(24)) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - VELOCITY(80)) % 4096;
+                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - VELOCITY(60)) % 4096;
                     offsetVec.vz = (rsin(entityData[entityOffset + itemOffset + 13]) * 20) / 4096 + 10;
                     rotVec.vy = 0;
                     rotVec.vx = (rsin(entityData[entityOffset + itemOffset + 12]) * 150) / 4096;
@@ -461,8 +461,8 @@ void CreateAllItemDispLists(void) {
                 case OBJ_KEY:
                 case OBJ_COIN:
                 case OBJ_SUNGLASSES:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 90) % 4096;
-                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - 70) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - VELOCITY(90)) % 4096;
+                    entityData[entityOffset + itemOffset + 13] = (entityData[entityOffset + itemOffset + 13] - VELOCITY(70)) % 4096;
                     offsetVec.vz = (rsin(entityData[entityOffset + itemOffset + 13]) * 20) / 4096 + 10;
                     rotVec.vy = 0;
                     rotVec.vx = 0;
@@ -471,7 +471,7 @@ void CreateAllItemDispLists(void) {
                     break;
 
                 case OBJ_GEM:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 35) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(35)) % 4096;
                     rotVec.vy = 0;
                     rotVec.vx = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 11];
@@ -479,8 +479,8 @@ void CreateAllItemDispLists(void) {
                     break;
 
                 case OBJ_HOURGLASS:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 32) % 4096;
-                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - 20) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(32)) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] - VELOCITY(20)) % 4096;
                     rotVec.vy = (rsin(entityData[entityOffset + itemOffset + 11]) / 2) + 30;
                     rotVec.vx = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 12];
@@ -490,8 +490,8 @@ void CreateAllItemDispLists(void) {
                 case OBJ_LETHARGY_PILL:
                 case OBJ_BOUNCY_PILL:
                 case OBJ_INVINCIBILITY_PILL:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + 80) % 4096;
-                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] + 25) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(80)) % 4096;
+                    entityData[entityOffset + itemOffset + 12] = (entityData[entityOffset + itemOffset + 12] + VELOCITY(25)) % 4096;
                     rotVec.vy = entityData[entityOffset + itemOffset + 11];
                     rotVec.vz = entityData[entityOffset + itemOffset + 12];
                     rotVec.vx = 0;
@@ -503,7 +503,7 @@ void CreateAllItemDispLists(void) {
                 case OBJ_YELLOW_PRESENT:
                 case OBJ_BLUE_PRESENT:
                 case OBJ_GREEN_PRESENT:
-                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - 17) % 4096;
+                    entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] - VELOCITY(17)) % 4096;
                     rotVec.vx = rotVec.vy = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 11];
                     RotMatrix(&rotVec, &rotMatrix);
@@ -1048,7 +1048,7 @@ void HandleSpecialCubeTypes(Player* player) {
         }
         if (player->faceTypePlayerStandingOn == OBJ_SPIKE && player->movementInhibitTimer == 0 && thePlayer.invulnerabilityTimer == -1) {
             SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
-            Vibrate99(1, 255, 5);
+            Vibrate99(1, 255, FRAMES(5));
             if (thePlayer.movementInhibitTimer == 0) {
                 thePlayer.dying = 1;
                 thePlayer.movementVelocity = 0;
@@ -1061,7 +1061,7 @@ void HandleSpecialCubeTypes(Player* player) {
         if (player->faceTypePlayerStandingOn == OBJ_MOVING_SPIKE) {
             if (entityData[player->specialBlockSideOffsetPlayerIsStandingOn + 4] == 1 && thePlayer.invulnerabilityTimer == -1) {
                 if (player->onGround == 1) {
-                    Vibrate99(1, 255, 5);
+                    Vibrate99(1, 255, FRAMES(5));
                     SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
                     if (thePlayer.movementInhibitTimer == 0) {
                         thePlayer.dying = 1;
@@ -1073,7 +1073,7 @@ void HandleSpecialCubeTypes(Player* player) {
                     }
                 } else if (player->movementInhibitTimer == 0) {
                     SndPlaySfx(11, 0, &ZERO_SVECTOR_a2df4, 7000);
-                    Vibrate99(1, 255, 5);
+                    Vibrate99(1, 255, FRAMES(5));
                     if (thePlayer.movementInhibitTimer == 0) {
                         thePlayer.dying = 1;
                         thePlayer.movementVelocity = 0;

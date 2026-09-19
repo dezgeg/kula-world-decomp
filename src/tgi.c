@@ -351,7 +351,7 @@ void ParseLevelDataFromTgi(void) {
                     RecalcSkyboxes01(3, 5, 16, 5, 40);
                     break;
                 case 1:
-                    RecalcSkyboxes01(4, 3, 16, 10, 36);
+                    RecalcSkyboxes01(4, 3, 16, VELOCITY(10), 36);
                     break;
                 case 2:
                     RecalcSkyboxes2();
