@@ -4,20 +4,12 @@ extern void Noop(void);
 extern void Noop2(void);
 extern void SetDebugScreenshotFilenameSuffix(int param_1);
 
-extern byte saveReplayBuf[4076];
 extern int buttonSaveReplayMode;
 extern int curWorld;
-extern int devkitFileNumber;
 extern int displayHeight;
 extern int displayWidth;
-extern int saveReplayIsFirstSequence;
 extern int specialLevelType;
 extern int whichDrawDispEnv;
-extern byte* saveReplayWritePtr;
-extern volatile short saveReplayCurrentButtons;
-extern volatile byte saveReplayCurrentButtonsShuffled;
-extern volatile int saveReplayLength;
-extern volatile byte saveReplayRleButtonCount;
 
 char debugFilenameBuf[256];
 
@@ -45,6 +37,19 @@ static int screenshotIndex[13] = {
 };
 
 static uint screenshotTimHeader[5] = {0x10, 0x2, 0x0, 0x0, 0x0};
+
+#define devkitFileNumber (*(int*)DEVKIT_REPLAY_BUF)
+#define saveReplayBuf (byte*)(DEVKIT_REPLAY_BUF + 0x14)
+#define saveReplayLength (*(s32*)(DEVKIT_REPLAY_BUF + 0x10))
+#define saveReplayIsFirstSequence *(s32*)(DEVKIT_REPLAY_BUF + 0x04)
+#define saveReplayWritePtr *(byte**)(DEVKIT_REPLAY_BUF + 0x08)
+#define saveReplayCurrentButtons *(short*)(DEVKIT_REPLAY_BUF + 0x0e)
+
+// XXX: still need to fix these
+extern volatile byte saveReplayCurrentButtonsShuffled;
+extern volatile byte saveReplayRleButtonCount;
+//#define saveReplayCurrentButtonsShuffled *(byte*)(DEVKIT_REPLAY_BUF + 0x0d)
+//#define saveReplayRleButtonCount *(byte*)(DEVKIT_REPLAY_BUF + 0x0c)
 
 #ifndef SKIP_UNUSED_CODE
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
@@ -130,7 +135,7 @@ void ResetDevkitFileNumber(void) {
 #endif
 
 void InitReplaySaving(void) {
-    saveReplayWritePtr = (byte*)((char*)DEVKIT_REPLAY_BUF + 0x14); // saveReplayBuf
+    saveReplayWritePtr = saveReplayBuf;
     saveReplayRleButtonCount = 0;
     saveReplayCurrentButtonsShuffled = 0;
     saveReplayCurrentButtons = 0;
@@ -147,19 +152,19 @@ void RecordButtonsToDevkit(s32 arg0) {
     u8* writePtr;
     u8 buttonCount;
 
-    writePtr = saveReplayWritePtr;
     buttonCount = saveReplayRleButtonCount;
+    writePtr = saveReplayWritePtr;
     currentButtonsShuffled = saveReplayCurrentButtonsShuffled;
     currentButtons = saveReplayCurrentButtons;
 
-    *(s32*)((char*)DEVKIT_REPLAY_BUF + 0x10) += 1; // saveReplayLength++
+    saveReplayLength++;
     origArg0 = arg0;
     arg0 <<= 16;
     if (arg0 >> 16 == currentButtons) {
         newCount = buttonCount + 1;
     } else {
-        if (*(s32*)((char*)DEVKIT_REPLAY_BUF + 0x04) == 1) { // saveReplayIsFirstSequence == 1
-            *(s32*)((char*)DEVKIT_REPLAY_BUF + 0x04) = 0;    // saveReplayIsFirstSequence = 0
+        if (saveReplayIsFirstSequence == 1) {
+            saveReplayIsFirstSequence = 0;
         } else {
             *writePtr++ = buttonCount;
             *writePtr++ = currentButtonsShuffled;
@@ -192,7 +197,7 @@ void WriteToDevkit(int param_1) {
         sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\rescue.pad");
     }
 
-    *(int*)DEVKIT_REPLAY_BUF += 1; // devkitFileNumber++;
+    devkitFileNumber++;
     p = saveReplayWritePtr;
     count = saveReplayRleButtonCount;
     buts = saveReplayCurrentButtonsShuffled;
