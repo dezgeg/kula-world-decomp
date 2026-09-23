@@ -9,8 +9,15 @@
 #define VER_US 0
 #define VID_NTSC 0
 
+// Scale PAL frame units to NTSC if necessary
+#define FRAMES(palFrames) (((palFrames) * FPS) / 50)
+#define VELOCITY(palUnitsPerFrame) (((palUnitsPerFrame) * 50) / FPS)
+
 #define FPS 50
 #define SCREEN_HEIGHT 256
+#define NUM_TEXT_SPRITES (VER_US ? 42 : 40)
+#define NUM_TEXTURES (VER_US ? 180 : 150)
+#define NUM_SPECULAR_PRIMS (VER_US ? 10 : 16)
 
 typedef char undefined;
 
