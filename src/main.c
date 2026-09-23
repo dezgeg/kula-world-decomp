@@ -169,11 +169,11 @@ int numCameras = 1;
 int cameraIndex = 0;
 int displayWidth = 320;
 int gteXScale = 4096;
-int displayHeight = 256;
-int gteYScale = 4096;
+int displayHeight = SCREEN_HEIGHT;
+int gteYScale = 16 * SCREEN_HEIGHT;
 long projectionDistance = 160;
 int screenOffsetX = 320;
-int screenOffsetY = 256;
+int screenOffsetY = SCREEN_HEIGHT;
 int devkitAltBoot = 0;
 int gotSioData = 0;
 int prevLevelTimeLeft = 0;
@@ -316,7 +316,7 @@ void main(void) {
             curFileLength = ReadDataFile(curWorld, 0, TGI_FILE_BUF);
             if (displayModeHasBeenSet == 0) {
                 displayWidth = 320;
-                displayHeight = 256;
+                displayHeight = SCREEN_HEIGHT;
                 SetupDisplay(1, 0, 0, 0, 0, 0);
                 displayModeHasBeenSet = 1;
                 VSync(0);

@@ -29,7 +29,7 @@ void EnableLethargy(int enable) {
 void ResetLethargyEffect() {
     lethargyMode = 0;
     gteXScale = 0x1000;
-    gteYScale = 0x1000;
+    gteYScale = 16 * SCREEN_HEIGHT;
 }
 
 void DrawLethargyEffects(void) {
@@ -94,8 +94,8 @@ void DrawLethargyEffects(void) {
         if (lethargySinMagnitude > 0) {
             lethargyAngleCounter = (lethargyAngleCounter + 0x100) % 0x1000;
             delta = rsin(lethargyAngleCounter) * lethargySinMagnitude >> 12;
-            gteXScale = delta + 0x1000;
-            gteYScale = 0x1000 - delta;
+            gteXScale = 0x1000 + delta;
+            gteYScale = 16 * SCREEN_HEIGHT - delta;
         }
     }
 }

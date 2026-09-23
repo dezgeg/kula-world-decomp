@@ -10,6 +10,7 @@
 #define VID_NTSC 0
 
 #define FPS 50
+#define SCREEN_HEIGHT 256
 
 typedef char undefined;
 

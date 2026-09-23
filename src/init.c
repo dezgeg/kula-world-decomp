@@ -40,7 +40,7 @@ void InitStuff(void) {
     rect.w = 640;
     rect.x = 0;
     rect.y = 0;
-    rect.h = 256;
+    rect.h = SCREEN_HEIGHT;
     ClearImage(&rect, 0, 0, 0);
     SetupDisplay(0, 0, 0, 0, 0, 0);
     FntLoad(576, 256);
