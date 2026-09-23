@@ -77,8 +77,7 @@ char S_File_error[] = "File error:\n\n";
 static z_stream zlibStream_a4b80;
 static z_stream unusedZlibStream;
 
-#ifndef SKIP_UNUSED_CODE
-void UnusedFileError(char* str1, char* str2) {
+void FileError(char* str1, char* str2) {
     VSyncCallback(NULL);
     SetupDisplay(1, 0x80, 0, 0, 0, 0);
     FntFlush(-1);
@@ -94,7 +93,6 @@ void UnusedFileError(char* str1, char* str2) {
     while (1)
         ;
 }
-#endif
 
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
@@ -117,52 +115,13 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     filenameBuf[i + j] = '\0';
 
     if (!CdSearchFile(&cdlfile, filenameBuf)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not find ");
-        FntPrint(filenameBuf);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("could not find ", filenameBuf);
     }
     if (!CdControl(CdlSeekL, &cdlfile, 0)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("seek error ");
-        FntPrint(filenameBuf);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("seek error ", filenameBuf);
     }
     if (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("read error ");
-        FntPrint(filenameBuf);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("read error ", filenameBuf);
     }
     CdReadSync(0, 0);
     if (filetype == 1) {
@@ -214,52 +173,13 @@ void LoadWarningTim(void) {
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
     if (!CdSearchFile(&cdlfile, filename)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not find ");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("could not find ", filename);
     }
     if (!CdControl(CdlSeekL, &cdlfile, 0)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("seek error ");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("seek error ", filename);
     }
     if (!CdRead((cdlfile.size >> 11) + 1, (u_long*)FILE_BUF, 0x80)) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("read error ");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FileError("read error ", filename);
     }
     CdReadSync(0, 0);
     zlibStream_a4b80.next_in = FILE_BUF;
