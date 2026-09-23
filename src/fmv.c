@@ -63,6 +63,13 @@ DECDCTTAB vlc_table;
 
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
+#if VER_US
+    { "\\XA\\FINAL.STR;1", 1, 1, 528, 0, 25, 320, 240 },
+    { "\\XA\\PSYGLOGO.STR;1", 1, 1, 417, 0, 20, 320, 240 },
+    { "\\XA\\150W3.IKI;1", 1, 1, 854, 0, 0, 320, 240 },
+    { "\\XA\\150C3.IKI;1", 1, 1, 989, 0, 0, 320, 240 },
+    { "\\XA\\170_3.IKI;1", 1, 1, 1619, 0, 4, 320, 240 },
+#endif
 };
 static void* fmvRing = FMV_RING_BUF;
 static void* pVlcbuf0 = FMV_VLC_BUF_0;
@@ -98,7 +105,9 @@ void ShowEndingFmv(int movieI) {
     int oldMusicVolume;
     MovieInfo* movie = &movieInfos[movieI];
 
+#if !VER_US
     MusicPause();
+#endif
     oldMusicVolume = musicVolume;
     musicVolume = 0xc;
     SndSetMusicVolume();
@@ -111,6 +120,16 @@ void ShowEndingFmv(int movieI) {
     rect.y = 0;
     StoreImage(&rect, (u_long*)FMV_VRAM_BACKUP_BUF);
     DrawSync(0);
+
+#if VER_US
+    rect.w = 960;
+    rect.x = 0;
+    rect.y = 0;
+    rect.h = 240;
+    VSync(0);
+    ClearImage(&rect, 0, 0, 0);
+    DrawSync(0);
+#endif
 
     FmvMainLoop(movieI);
     DrawSync(0);
@@ -140,13 +159,17 @@ void ShowEndingFmv(int movieI) {
 
     musicVolume = oldMusicVolume;
     SndSetMusicVolume();
+#if !VER_US
     SwitchFromBonusToNormalMusic();
+#endif
 }
 
 int FmvMainLoop(int movieI) {
     MovieInfo* movie = &movieInfos[movieI];
     DISPENV disp;
+#if !VER_US
     DRAWENV draw;
+#endif
     int id;
     CdlFILE file;
     RECT clearRect;
@@ -215,6 +238,13 @@ int FmvMainLoop(int movieI) {
         if (TestButton(PAD_START) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
             fmvEnded = 1;
         }
+#if VER_US
+        if (movieI == 2) {
+            if (controllerButtons & ~prevControllerButtons) {
+                fmvEnded = 1;
+            }
+        }
+#endif
 
         if (fmvEnded == 1)
             break;

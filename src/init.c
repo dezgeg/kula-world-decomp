@@ -35,7 +35,7 @@ void InitStuff(void) {
     latestControllerSlotPolled = 0;
     InitGeom();
     SetGeomScreen(projectionDistance);
-    SetVideoMode(1);
+    SetVideoMode(VID_NTSC ? 0 : 1);
     SetDispMask(1);
     rect.w = 640;
     rect.x = 0;

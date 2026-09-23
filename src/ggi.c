@@ -19,8 +19,10 @@ typedef struct GemSparkleEffect {
     Sparkle sparkles[16];
 } GemSparkleEffect;
 
+extern void InitPlayerSpecularSprite(void);
+
 // gprel-used variables (defined in this file)
-Texture textures[150];
+Texture textures[NUM_TEXTURES];
 GemSparkleEffect gemRandomSparkleEffects[3][3];
 int firstBonusWidgetTexture;
 int firstFruitTexture;
@@ -67,7 +69,7 @@ void* ParseGGI(GgiFile* ggi_ptr) {
     ggiPart6Textures = (void*)((int)ggiPart5JumpAnimData + ggi_ptr->part5Len * 2);
     ggiPart7Unused = (void*)((int)ggiPart6Textures + ggi_ptr->part6Len * 2);
 
-    ParseTextures(ggiPart6Textures, textures, 150);
+    ParseTextures(ggiPart6Textures, textures, NUM_TEXTURES);
 
     firstFruitTexture = 0;
     firstParticleTexture = ((int*)ggi)[0];
@@ -87,6 +89,10 @@ void* ParseGGI(GgiFile* ggi_ptr) {
             ParseGgiInner((int*)&gemRandomSparkleEffects[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
         }
     }
+
+#if VER_US
+    InitPlayerSpecularSprite();
+#endif
 
     return ggiPart6Textures;
 }

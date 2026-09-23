@@ -139,6 +139,9 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     SpuSetCommonAttr(&spuCommonAttr);
 
     SpuSetReverbModeParam(&spuReverbAttr);
+#if VER_US
+    VSync(2);
+#endif
     SpuSetReverbDepth(&spuReverbAttr);
     SpuSetReverb(1);
     spuReverbAttr.mask = 6;

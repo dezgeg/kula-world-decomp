@@ -50,9 +50,9 @@ struct {
 #define skipFirstLoadingScreen skipFirstLoadingScreen.hack
 
 Music BONUS_MUSICS[] = {
-    {"\\XA\\MUSIC_1.XA;1", 0, 3335},
-    {"\\XA\\MUSIC_2.XA;1", 1, 5474},
-    {"\\XA\\MUSIC_0.XA;1", 0, 3279},
+    {"\\XA\\MUSIC_1.XA;1", 0, VER_US ? 3197 : 3335},
+    {"\\XA\\MUSIC_2.XA;1", 1, VER_US ? 5379 : 5474},
+    {"\\XA\\MUSIC_0.XA;1", 0, VER_US ? 3239 : 3279},
 };
 
 int musicUnkAlwaysZero1 = 0;
@@ -60,16 +60,16 @@ int musicUnkAlwaysZero2 = 0;
 int musicCdMode = 0x78;
 
 Music MUSICS[] = {
-    {"\\XA\\MUSIC_1.XA;1", 1, 4533},
-    {"\\XA\\MUSIC_3.XA;1", 2, 6844},
-    {"\\XA\\MUSIC_2.XA;1", 2, 5646},
-    {"\\XA\\MUSIC_2.XA;1", 3, 5786},
-    {"\\XA\\MUSIC_3.XA;1", 3, 7151},
-    {"\\XA\\MUSIC_2.XA;1", 0, 5178},
-    {"\\XA\\MUSIC_3.XA;1", 1, 5979},
-    {"\\XA\\MUSIC_3.XA;1", 0, 5897},
-    {"\\XA\\MUSIC_1.XA;1", 2, 4705},
-    {"\\XA\\MUSIC_1.XA;1", 3, 4776},
+    {"\\XA\\MUSIC_1.XA;1", 1, VER_US ? 4441 : 4533},
+    {"\\XA\\MUSIC_3.XA;1", 2, VER_US ? 6751 : 6844},
+    {"\\XA\\MUSIC_2.XA;1", 2, VER_US ? 5556 : 5646},
+    {"\\XA\\MUSIC_2.XA;1", 3, VER_US ? 5683 : 5786},
+    {"\\XA\\MUSIC_3.XA;1", 3, VER_US ? 7057 : 7151},
+    {"\\XA\\MUSIC_2.XA;1", 0, VER_US ? 5084 : 5178},
+    {"\\XA\\MUSIC_3.XA;1", 1, VER_US ? 5885 : 5979},
+    {"\\XA\\MUSIC_3.XA;1", 0, VER_US ? 5803 : 5897},
+    {"\\XA\\MUSIC_1.XA;1", 2, VER_US ? 4612 : 4705},
+    {"\\XA\\MUSIC_1.XA;1", 3, VER_US ? 4674 : 4776},
     {"\\SAMPLE.XA;1", 0, 0},
 };
 
@@ -79,6 +79,11 @@ static z_stream zlibStream_a4b80;
 static z_stream unusedZlibStream;
 
 void FileError(char* str1, char* str2) {
+#if VER_US
+    int dummy;
+    (void)&dummy;
+    VSync(3);
+#else
     VSyncCallback(NULL);
     SetupDisplay(1, 0x80, 0, 0, 0, 0);
     FntFlush(-1);
@@ -93,11 +98,15 @@ void FileError(char* str1, char* str2) {
     PutDrawAndDispEnvs();
     while (1)
         ;
+#endif
 }
 
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
     int j;
+#if VER_US
+    int pad[2];
+#endif
     CdlFILE cdlfile;
 
     if (gameMode == 1 && filetype == 2) {
@@ -115,6 +124,17 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     }
     filenameBuf[i + j] = '\0';
 
+#if VER_US
+    while (!CdSearchFile(&cdlfile, filenameBuf)) {
+        VSync(3);
+    }
+    while (!CdControl(CdlSeekL, &cdlfile, 0)) {
+        VSync(3);
+    }
+    while (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
+        VSync(3);
+    }
+#else
     if (!CdSearchFile(&cdlfile, filenameBuf)) {
         FileError("could not find ", filenameBuf);
     }
@@ -124,6 +144,7 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     if (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
         FileError("read error ", filenameBuf);
     }
+#endif
     CdReadSync(0, 0);
     if (filetype == 1) {
         sizeOfSfxFile = cdlfile.size;
@@ -136,9 +157,15 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
     CdlFILE cdlfile;
 
     Noop2();
+#if VER_US
+    while (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
+        unusedReadErrorCode = 2;
+    }
+#else
     if (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
         unusedReadErrorCode = 2;
     }
+#endif
     while (CdControl(CdlSeekL, &cdlfile, 0) == 0) {
         unusedReadErrorCode = 3;
     }
@@ -151,6 +178,10 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
 }
 
 void UnusedInflateSomething(int idx, int* data) {
+#if VER_US
+    DrawSync(0);
+    VSync(0);
+#endif
     zlibStream_a4b80.avail_in = data[2 + 2 * idx];
     zlibStream_a4b80.next_in = (char*)data + data[1 + 2 * idx];
     zlibStream_a4b80.avail_out = 0x60000;
@@ -158,14 +189,22 @@ void UnusedInflateSomething(int idx, int* data) {
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
+#if VER_US
+    DrawSync(0);
+#endif
     VSync(0);
     UnusedLoadFullScreenPicture(FILE_BUF);
 }
 #endif
 
 void LoadWarningTim(void) {
+#if VER_US
+    RECT rect = {0, 0, 480, 240};
+    char filename[24] = "\\HIRO\\SCEI.TIM;1";
+#else
     RECT rect = {0, 0, 640, 256};
     char filename[24] = "\\HIRO\\WARNING.TIM;1";
+#endif
     CdlFILE cdlfile;
 
     displayWidth = 640;
@@ -216,3 +255,7 @@ void LoadingScreen(void) {
         skipFirstLoadingScreen = 0;
     }
 }
+
+#if VER_US
+int unusedLoading1 = 1;
+#endif

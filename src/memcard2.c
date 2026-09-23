@@ -2,6 +2,7 @@
 #include <libmcrd.h>
 
 extern void ShowMemCardFullScreenText(char* str);
+extern void SndSetMusicVolume(void);
 
 extern DrawDisp drawdisp[2];
 extern Highscore highscores[6];
@@ -128,7 +129,7 @@ int LoadSaveSlot(uint slot) {
 
     if (tempMcResult == McErrNewCard || (tempMcResult == 0 && memCardDataValid == 0)) {
         ClearMemCardData();
-        if (MemCardReadFile(0, SAVE_FILENAME, &memCardData, 0, 0x1000) == McErrCardNotExist) {
+        if (MemCardReadFile(0, SAVE_FILENAME, &memCardData, 0, VER_US ? 0x1800 : 0x1000) == McErrCardNotExist) {
             MemCardSync(0, &mcCmd, &tempMcResult);
             if (tempMcResult == 0) {
                 memCardDataValid = 1;
@@ -158,6 +159,9 @@ int LoadSaveSlot(uint slot) {
     if (slot < 4) {
         musicVolume = memCardData.musicVolume;
         sfxVolume = memCardData.sfxVolume;
+#if VER_US
+        SndSetMusicVolume();
+#endif
         dispenvScreenX = memCardData.screenX;
         dispenvScreenY = memCardData.screenY;
         turnDelayEnabled = memCardData.turnDelayEnabled;
@@ -172,8 +176,13 @@ int LoadSaveSlot(uint slot) {
         } else {
             totalPlayTime[0] = memCardData.saveslots[slot].score;
         }
+#if VER_US
+        timeTrialDifficulty = memCardData.saveslots[slot].timeTrialDifficulty;
+        curLevel = memCardData.saveslots[slot].curLevel;
+#else
         curLevel = memCardData.saveslots[slot].curLevel;
         timeTrialDifficulty = memCardData.saveslots[slot].timeTrialDifficulty;
+#endif
         curWorld = memCardData.saveslots[slot].curWorld;
         savedFruitsCollectedBitmask = memCardData.saveslots[slot].fruitBitmask;
         numFruits = memCardData.saveslots[slot].fruits;
@@ -195,7 +204,7 @@ int SaveMemCard(uint slot) {
         memCardData.header.magic[1] = 'C';
         memCardData.header.iconFlags = 0x11;
         memCardData.header.blockNumber = 1;
-        sprintf(buf, "KULA WORLD");
+        sprintf(buf, VER_US ? "ROLL AWAY" : "KULA WORLD");
         for (i = 0; i < 32; i++) {
             memCardData.header.title[i] = Ascii2Sjis(buf[i]);
         }
@@ -243,7 +252,7 @@ int SaveMemCard(uint slot) {
         }
         ret = MemCardCreateFile(0, SAVE_FILENAME, 1);
         if (ret == 0 || ret == McErrAlreadyExist) {
-            if (MemCardWriteFile(0, SAVE_FILENAME, (long*)&memCardData, 0, 0x1000) == McErrCardNotExist) {
+            if (MemCardWriteFile(0, SAVE_FILENAME, (long*)&memCardData, 0, VER_US ? 0x1800 : 0x1000) == McErrCardNotExist) {
                 MemCardSync(0, &mcCmd, &tempMcResult);
                 if (tempMcResult != 0) {
                     memCardHasError = 1;
@@ -272,7 +281,7 @@ void LoadSaveFromMemoryCard(void) {
     MemCardSync(0, &mcCmd, &tempMcResult);
     if (tempMcResult == 0 || tempMcResult == McErrNewCard) {
         tempMcResult = McErrCardNotExist;
-        if (MemCardReadFile(0, SAVE_FILENAME, (unsigned long*)&memCardData, 0, 0x1000)) {
+        if (MemCardReadFile(0, SAVE_FILENAME, (unsigned long*)&memCardData, 0, VER_US ? 0x1800 : 0x1000)) {
             MemCardSync(0, &mcCmd, &tempMcResult);
         }
         if (tempMcResult == 0) {
@@ -286,6 +295,9 @@ void LoadSaveFromMemoryCard(void) {
             vibrationEnabled = memCardData.vibrationEnabled;
             musicVolume = memCardData.musicVolume;
             sfxVolume = memCardData.sfxVolume;
+#if VER_US
+            SndSetMusicVolume();
+#endif
             dispenvScreenX = memCardData.screenX;
             dispenvScreenY = memCardData.screenY;
             LoadHighscoresFromMemcardData();

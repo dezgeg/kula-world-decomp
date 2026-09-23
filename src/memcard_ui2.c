@@ -1,7 +1,12 @@
 #include "common.h"
 
 // Prototypes
+#if VER_US
+extern void DrawPsxButtonBackground(int);
+#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
+#else
 extern void DrawPsxButtonBackground(void);
+#endif
 extern void DrawTextCrappyFont(char* str);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);

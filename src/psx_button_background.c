@@ -12,7 +12,7 @@ extern int displayHeight;
 extern int displayWidth;
 extern int firstLensFlareOrPsxButtonTexture;
 extern OT_TYPE otag[2][1][1026];
-extern Texture textures[150];
+extern Texture textures[NUM_TEXTURES];
 extern int whichDrawDispEnv;
 
 static int enableGuiBackgroundScroll;
@@ -25,6 +25,9 @@ void InitPsxButtonBackgroundSprites(int param_1) {
     int relativeTex;
     int i;
 
+#if VER_US
+    guiBackgroundAnimCounter = 424;
+#endif
     psxButtonBackgroundPtr = PSX_BUTTON_BG_BUF;
     for (i = 0; i < 200; i++) {
         rng = Rand(4);
@@ -61,7 +64,11 @@ void InitPsxButtonBackgroundSprites(int param_1) {
     }
 }
 
+#if VER_US
+void DrawPsxButtonBackground(int fadeIn) {
+#else
 void DrawPsxButtonBackground(void) {
+#endif
     int y;
     int x;
     int i;
@@ -75,8 +82,17 @@ void DrawPsxButtonBackground(void) {
             240 + displayHeight / 2;
         setXY0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, x, y);
 
+#if VER_US
+        if (fadeIn == 1) {
+            setRGB0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, guiBackgroundFadeIn,
+                    guiBackgroundFadeIn, guiBackgroundFadeIn);
+        } else {
+            setRGB0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, 128, 128, 128);
+        }
+#else
         setRGB0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, guiBackgroundFadeIn,
                 guiBackgroundFadeIn, guiBackgroundFadeIn);
+#endif
 
         if (x > -48 && x < displayWidth + 48 && y > -48 && y < displayHeight + 48) {
             addPrim(&otag[whichDrawDispEnv][0][1024] - (psxButtonBackgroundPtr->buttons[i] + 1),

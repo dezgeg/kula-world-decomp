@@ -218,9 +218,15 @@ void WriteToDevkit(int param_1) {
         if (len < 0) {
             len = 0x4000;
         }
+#if VER_US
+        if (len > 0x600000) {
+            len = 0x600000;
+        }
+#else
         if (len > 0x6cf000) {
             len = 0x6cf000;
         }
+#endif
         PCwrite(fd, DEVKIT_REPLAY_BUF, len);
         if (PCclose(fd) < 0) {
             FntPrint("error closing file:\n%s\n", debugFilenameBuf);

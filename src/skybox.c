@@ -224,8 +224,9 @@ int RecalcSkyboxes2(void) {
     int *u1, *u2;
     u32* p_u32;
     int clut;
-    int outer_i;
+#if !VER_US
     int dummy[16];
+#endif
 
     starfieldSinPhase1 = 0x200;
     starfieldSinPhase2 = 0;

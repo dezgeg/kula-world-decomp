@@ -1,7 +1,12 @@
 #include "common.h"
 
 extern void DrawBigGuiSprite(int param_1);
+#if VER_US
+extern void DrawPsxButtonBackground(int);
+#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
+#else
 extern void DrawPsxButtonBackground(void);
+#endif
 extern void FadeOutBigGuiSprite(void);
 extern void FadePsxButtonBackground(void);
 extern void PutDrawAndDispEnvs(void);
@@ -10,8 +15,8 @@ extern void SndFadeVoiceVolume(int tag);
 extern int gotVsync;
 extern int loadingIsComplete;
 extern int numCameras;
-extern int unkUnused;
-extern int unusedNumHblanks;
+extern uint unkUnused;
+extern int unusedNumHblanks[VER_US ? 8 : 1];
 extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
 
@@ -19,9 +24,15 @@ extern OT_TYPE otag[2][1][1026];
 // This is used as DrawSyncCallback in some of the demos
 void UnusedUpdateHblankCounter() {
     unkUnused++;
-    if (unkUnused == 15) {
-        unusedNumHblanks = VSync(1);
+#if VER_US
+    if (unkUnused < 8) {
+        unusedNumHblanks[unkUnused] = VSync(1);
     }
+#else
+    if (unkUnused == 15) {
+        unusedNumHblanks[0] = VSync(1);
+    }
+#endif
 }
 #endif
 

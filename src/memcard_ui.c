@@ -14,7 +14,12 @@ typedef struct MemcardHdr {
 
 // Prototypes
 extern int AskSaveOverwrite(void);
+#if VER_US
+extern void DrawPsxButtonBackground(int);
+#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
+#else
 extern void DrawPsxButtonBackground(void);
+#endif
 extern void DrawSaveSlotSprites(int isSave);
 extern void DrawScoreGraph(void);
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
@@ -80,7 +85,11 @@ static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
+#if VER_US
+char SAVE_FILENAME[32] = "BASLUS-00724ROLL";
+#else
 char SAVE_FILENAME[32] = "BESCES-01000KULA";
+#endif
 
 int LoadSaveMenu(void) {
     int i, j, k;
@@ -225,6 +234,7 @@ int LoadSaveMenu(void) {
                     }
                 }
 
+#if !VER_US
                 if (TestButton(PAD_CROSS)) {
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
                     ShowMemCardFullScreenText("LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n");
@@ -232,6 +242,7 @@ int LoadSaveMenu(void) {
                         return 1;
                     }
                 }
+#endif
 
                 UpdateMemcardMenuSaveSelectionSprites(saveSlot);
                 if (memCardData.saveslots[saveSlot].isFinal == 0 && memCardData.saveslots[saveSlot].gameMode == 0) {
@@ -260,6 +271,15 @@ int LoadSaveMenu(void) {
                     DrawStaticUiSprite(1, 130, 89, 0);
                     DrawStaticUiSprite(10, 100, 108, 0);
                 }
+#if VER_US
+                if (TestButton(PAD_CROSS)) {
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
+                    ShowMemCardFullScreenText("LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n");
+                    if (LoadSaveSlot(saveSlot) == 1) {
+                        return 1;
+                    }
+                }
+#endif
             } else {
                 ResetTextRenderState();
                 SetTextParams(displayWidth / 2, 100, 1, 128, 128, 128);

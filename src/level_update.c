@@ -33,6 +33,9 @@ extern int gameMode;
 
 Player thePlayer;
 short playerSurroundingBlocksGrid[8][8][8];
+#if VER_US
+DR_MOVE drMovePackets[2][16];
+#endif
 
 // gprel-used variables (defined in this file)
 static int unusedA43B0;

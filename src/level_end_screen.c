@@ -41,6 +41,7 @@ extern int timeTrialDifficulty;
 extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
+extern int latestPlayerToFinish;
 extern int whichDrawDispEnv;
 extern PrimList primLists[2];
 extern TSprite bigGuiSprite1[2];
@@ -81,7 +82,11 @@ void LoadLevelEndReasonGfx() {
     if (levelEndReason >= 0) {
         whichGfx = LEVEL_END_GFX_WELL_DONE;
         if (gameMode == 2) {
-            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * FPS;
+#if VER_US
+            playTime = levelPlayTime[latestPlayerToFinish] + timeTrialDifficulty * FPS;
+#else
+            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * 50;
+#endif
             if (playTime < 1) {
                 whichGfx = LEVEL_END_GFX_VERY_WELL_DONE;
             }

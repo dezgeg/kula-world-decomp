@@ -66,7 +66,11 @@ void UpdateScoreAtEndOfLevel(void) {
     int bonusScore;
 
     if (gameMode == 0) {
+#if VER_US
+        if (levelEndReason > 0 || specialLevelType > 0) {
+#else
         if (levelEndReason > 0 || specialLevelType == 1) {
+#endif
             oldScore = totalScore - levelScore;
         } else {
             if (!isFinal) {
@@ -152,7 +156,11 @@ void DrawLevelScoreSummary(void) {
             newScore = totalScore;
             DrawStaticUiSprite(6, 124, 225, 0);
         }
+#if VER_US
+        if (levelEndReason > 0 || specialLevelType > 0) {
+#else
         if (levelEndReason > 0 || specialLevelType == 1) {
+#endif
             y2off = 18;
             sprintf(scoreText, "%d \n%d \n", oldScore, levelScore - levelScoreSummaryScoreTicker);
         } else {

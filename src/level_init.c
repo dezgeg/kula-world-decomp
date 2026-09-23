@@ -85,9 +85,9 @@ extern byte LASER_INTENSITY_DATA[];
 extern byte LASER_INTENSITY_DATA_END[];
 
 POLY_FT4 shadowPrims[2][1][2][16];
-POLY_FT4 specularPrims[2][1][16];
+POLY_FT4 specularPrims[2][1][NUM_SPECULAR_PRIMS];
 P shadowPrimPtrs[2][1][2][16];
-P specularPrimPtrs[2][1][16];
+P specularPrimPtrs[2][1][NUM_SPECULAR_PRIMS];
 short flashingBlockEntityIndexes[64];
 int laserDrawBuffer[4096];
 uint laserData0[4][1024];
@@ -1152,7 +1152,7 @@ void InitPlayerSpecularSprite(void) {
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 1; j++) {
-            for (k = 0; k < 16; k++) {
+            for (k = 0; k < NUM_SPECULAR_PRIMS; k++) {
                 specularPrimPtrs[i][j][k].p0 = 0xffffffff;
                 setPolyFT4(&specularPrims[i][j][k]);
                 setUV4(&specularPrims[i][j][k],

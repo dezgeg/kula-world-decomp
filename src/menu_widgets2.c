@@ -3,9 +3,9 @@
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern uint firstGuiTextTexture;
-extern TSprite textDrawTemplateSprites1[40];
-extern TSprite textDrawTemplateSprites2[40];
-extern Texture textures[150];
+extern TSprite textDrawTemplateSprites1[NUM_TEXT_SPRITES];
+extern TSprite textDrawTemplateSprites2[NUM_TEXT_SPRITES];
+extern Texture textures[NUM_TEXTURES];
 
 STATIC_FOR_GP_ACCESS int textCharIdx;
 
@@ -13,7 +13,7 @@ void InitVariousUiSpriteTemplates(void) {
     int i;
 
     textCharIdx = 0;
-    for (i = 0; i < 40; i++) {
+    for (i = 0; i < NUM_TEXT_SPRITES; i++) {
         TSpritePrim(&textDrawTemplateSprites1[i], 0, 0, textures[firstGuiTextTexture].tpage);
         SetSemiTrans(&textDrawTemplateSprites1[i].sprt, textures[firstGuiTextTexture].semitrans);
         SetShadeTex(&textDrawTemplateSprites1[i].sprt, 0);
@@ -40,6 +40,12 @@ void InitVariousUiSpriteTemplates(void) {
     }
 
     for (i = 16; i < 19; i++) {
+#if VER_US
+        TSpritePrim(&textDrawTemplateSprites1[i], 0, 0,
+                    textures[firstGuiTextTexture + 2].tpage);
+        SetSemiTrans(&textDrawTemplateSprites1[i].sprt, textures[firstGuiTextTexture].semitrans);
+        SetShadeTex(&textDrawTemplateSprites1[i].sprt, 0);
+#endif
         setUV0(&textDrawTemplateSprites1[i].sprt,
                textures[firstGuiTextTexture + 2].u + 4 * (i - 16),
                textures[firstGuiTextTexture + 2].v);
@@ -47,6 +53,13 @@ void InitVariousUiSpriteTemplates(void) {
         textDrawTemplateSprites1[i].sprt.w = 16;
         textDrawTemplateSprites1[i].sprt.h = 8;
 
+#if VER_US
+        TSpritePrim(&textDrawTemplateSprites2[i], 0, 0,
+                    textures[firstGuiTextTexture + 3].tpage);
+        SetSemiTrans(&textDrawTemplateSprites2[i].sprt,
+                     textures[firstGuiTextTexture + 1].semitrans);
+        SetShadeTex(&textDrawTemplateSprites2[i].sprt, 0);
+#endif
         setUV0(&textDrawTemplateSprites2[i].sprt,
                textures[firstGuiTextTexture + 3].u + 4 * (i - 16),
                textures[firstGuiTextTexture + 3].v);
@@ -55,7 +68,7 @@ void InitVariousUiSpriteTemplates(void) {
         textDrawTemplateSprites2[i].sprt.h = 8;
     }
 
-    for (i = 19; i < 40; i++) {
+    for (i = 19; i < NUM_TEXT_SPRITES; i++) {
         TSpritePrim(&textDrawTemplateSprites1[i], 0, 0,
                     textures[firstGuiTextTexture + 4 + (i - 19) * 2].tpage);
         // bug, wrong texture idx used

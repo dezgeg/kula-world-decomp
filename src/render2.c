@@ -60,9 +60,9 @@ extern int specialLevelType;
 extern int whichDrawDispEnv;
 extern MATRIX perspMatrixes[2];
 extern POLY_FT4 shadowPrims[2][1][2][16];
-extern POLY_FT4 specularPrims[2][1][16];
+extern POLY_FT4 specularPrims[2][1][NUM_SPECULAR_PRIMS];
 extern P shadowPrimPtrs[2][1][2][16];
-extern P specularPrimPtrs[2][1][16];
+extern P specularPrimPtrs[2][1][NUM_SPECULAR_PRIMS];
 extern short* entityData;
 extern short* tgiPart1;
 extern short* tgiPart3;
@@ -110,13 +110,20 @@ int TRANSPORTER_COLORS[4][3] = {
 };
 
 #ifndef SKIP_UNUSED_CODE
+#if VER_US
+void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int modelVariant, int modelBase, int unk1, int colorR, int colorG, int colorB, int unk2) {
+#else
 void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, int colorG, int colorB, int unk2) {
+#endif
+    int i;
     int* p;
 
+#if !VER_US
     if (z < 400) {
         return;
     }
     z >>= 6;
+#endif
 
     itemsDispList[itemsDispListIdx++] = &otag[whichDrawDispEnv][cameraIndex][z + 1];
     itemsDispList[itemsDispListIdx++] = unk2;
@@ -130,6 +137,10 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
     itemsDispList[itemsDispListIdx++] = colorG;
     itemsDispList[itemsDispListIdx++] = colorB;
 
+#if VER_US
+    modelId = (modelId << 4) + (modelVariant << 2) + modelBase;
+    itemsDispList[itemsDispListIdx++] = &ggiPart0B[ggiPart0B[modelId] / 4];
+#else
     modelId *= 4;
     if (z > tgi->lodDistance[5]) {
         modelId += 2;
@@ -137,10 +148,15 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
         modelId += 1;
     }
     itemsDispList[itemsDispListIdx++] = &ggiPart0A[ggiPart0A[modelId] / 4];
+#endif
     itemsDispList[itemsDispListIdx++] = unk1;
 
     p = (int*)m;
+#if VER_US
+    for (i = 0; i < 8; i++) {
+#else
     for (z = 0; z < 8; z++) {
+#endif
         itemsDispList[itemsDispListIdx++] = *p++;
     }
 }

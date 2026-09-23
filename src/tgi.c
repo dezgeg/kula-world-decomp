@@ -330,7 +330,9 @@ void ParseLevelDataFromTgi(void) {
     }
 
     InitShadowSprites();
+#if !VER_US
     InitPlayerSpecularSprite();
+#endif
     ScanLevelDataForBlinkingEntities();
 
     for (i = 0; i < 64; i++) {

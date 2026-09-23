@@ -15,6 +15,7 @@ void UnusedSetDisplayModeChange(int param_1) {
 }
 #endif
 
+#if !VER_US
 void UnusedProcessDisplayModeChange(void) {
     switch (dispModeChangeState) {
         case 1:
@@ -35,3 +36,4 @@ void UnusedProcessDisplayModeChange(void) {
             break;
     }
 }
+#endif

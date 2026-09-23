@@ -29,6 +29,7 @@ extern void ProcessMovement(Player* player);
 extern void RecordButtonsToDevkit(int buttons);
 extern void RenderEnemies(void);
 extern void ResetPlayerVars(Player* player);
+extern void ResetVibration(void);
 extern void SetPlayerRotation(int cubeSide, int rotation, Player* player);
 extern void SetVec184ToVec54(Player* player);
 extern void SndMuteAllTaggedVoices(void);
@@ -80,6 +81,9 @@ int ballTextureIndex;
 int shouldMarkCubesVisited;
 short isPausedOrWaitingForRestart;
 short pauseForStartPress;
+#if VER_US
+short isAirborneOverBounceBlock;
+#endif
 uint controllerButtons;
 uint prevControllerButtons;
 
@@ -334,6 +338,9 @@ void LevelInit(void) {
 
     thePlayer.cameraR1R2TurnDirection = ZERO_SVECTOR_a2df4;
     thePlayer.cameraR1TurnAmount = ZERO_SVECTOR_a2df4;
+#if VER_US
+    isAirborneOverBounceBlock = 0;
+#endif
     thePlayer.svec54 = ZERO_SVECTOR_a2df4;
 
     pauseForStartPress = 0;
@@ -788,12 +795,17 @@ void HandlePlayerButtons(Player* player) {
     if ((controllerButtons & PAD_START) & ~prevControllerButtons) {
         pauseForStartPress = 1;
         SndMuteAllTaggedVoices();
+#if VER_US
+        ResetVibration();
+#endif
     }
 
     if (player->debugCameraMode) {
+#if !VER_US
         if ((controllerButtons & PAD_CIRCLE) & ~prevControllerButtons) {
             player->debugCameraMode = (player->debugCameraMode + 1) % 2;
         }
+#endif
         player->debugCamY = 0;
         player->debugCamX = 0;
         if (controllerButtons & PAD_D)

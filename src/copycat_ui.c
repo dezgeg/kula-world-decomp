@@ -5,6 +5,11 @@ extern Texture textures[150];
 extern int gameMode;
 extern int whichDrawDispEnv;
 extern uint firstGuiTextTexture;
+#if VER_US
+extern int controllerButtons;
+extern int isPaused;
+extern int gameState;
+#endif
 
 TSprite copycatUiSprites[2][4];
 
@@ -40,6 +45,13 @@ void InitCopycatUiTextures(void) {
 }
 
 void RenderPlayerOrCopycatLabels(int sprite, u_char color) {
+#if VER_US
+    if ((controllerButtons & PAD_SELECT) && isPaused == 1) {
+        if (gameState != 0) {
+            return;
+        }
+    }
+#endif
     if (sprite > 1) {
         setXY0(&copycatUiSprites[whichDrawDispEnv][sprite].sprt,
                COPYCAT_SPRITE_POSITIONS[sprite * 2 + gameMode * 4 - 4],

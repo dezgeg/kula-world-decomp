@@ -2,7 +2,12 @@
 #include <string.h>
 
 extern void DrawHighScoreCubes(void);
+#if VER_US
+extern void DrawPsxButtonBackground(int);
+#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
+#else
 extern void DrawPsxButtonBackground(void);
+#endif
 extern void DrawScoreGraph(void);
 extern void DrawTextCrappyFont(char* str);
 extern void DrawWidgets(int menuId, int cursorPos);

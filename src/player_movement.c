@@ -354,7 +354,11 @@ void ProcessMovement(Player* player) {
 
         case JUMPING_FORWARD:
             player->jumpingOrViewportRotationTimer--;
-
+#if VER_US
+            if (player->jumpingOrViewportRotationTimer == 2) {
+                player->jumpingOrViewportRotationTimer = 0;
+            }
+#endif
             if (player->jumpingOrViewportRotationTimer > 0) {
                 if (!player->dying) {
                     player->jumpVec.vz = player->jumpdataPtr[0];
@@ -443,7 +447,11 @@ void ProcessMovement(Player* player) {
 
         case JUMPING_INPLACE:
             player->jumpingOrViewportRotationTimer--;
-
+#if VER_US
+            if (player->jumpingOrViewportRotationTimer == 2) {
+                player->jumpingOrViewportRotationTimer = 0;
+            }
+#endif
             if (player->jumpingOrViewportRotationTimer > 0) {
                 player->rotX = 0;
                 player->jumpVec.vz = player->jumpdataPtr[3] - player->jumpdataPtr[0];
@@ -479,7 +487,11 @@ void ProcessMovement(Player* player) {
                 player->onGround = 0;
                 player->howMoving0 = 3;
                 player->movementVelocity = 0;
+#if VER_US
+                player->gravityVelocity = -30;
+#else
                 player->gravityVelocity = player->svec_144.vy;
+#endif
             } else {
                 SndPlaySfx(102, 0, &ZERO_SVECTOR_a2dd8, 7000);
                 landingSquishFrameCounter = 4;
@@ -653,6 +665,14 @@ int CheckForPlayerWallHit(Player* player) {
             blockIndex = player->surroundingBlocks[0][1][1];
             sideOffset = (blockIndex - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
 
+#if VER_US
+            if (isAirborneOverBounceBlock != 1 ||
+                (player->facingDir.vx == arrowVec.vx &&
+                 player->facingDir.vy == arrowVec.vy &&
+                 player->facingDir.vz == arrowVec.vz)) {
+                goto notHit;
+            }
+#else
             if (blockIndex < 5)
                 return 0;
 
@@ -668,6 +688,7 @@ int CheckForPlayerWallHit(Player* player) {
                 player->facingDir.vz == arrowVec.vz) {
                 return 0;
             }
+#endif
         }
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2dd8, 7000);
         Vibrate99(0, 200, 3);
@@ -690,6 +711,11 @@ int CheckForPlayerWallHit(Player* player) {
         return 1;
     }
     return 0;
+#if VER_US
+notHit:
+    isAirborneOverBounceBlock = 0;
+    return 0;
+#endif
 }
 #undef blockIndex
 #undef sideOffset
