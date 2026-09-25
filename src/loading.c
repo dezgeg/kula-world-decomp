@@ -47,6 +47,7 @@ char S_KULA_KULA_PIC_PAK_1[] = "\\KULA\\KULA_PIC.PAK;1";
 struct {
     short hack;
 } skipFirstLoadingScreen = {1}; // XXX: padding somehow wrong
+#define skipFirstLoadingScreen skipFirstLoadingScreen.hack
 
 Music BONUS_MUSICS[] = {
     {"\\XA\\MUSIC_1.XA;1", 0, 3335},
@@ -196,7 +197,7 @@ void LoadWarningTim(void) {
 void LoadingScreen(void) {
     int i;
 
-    if (!skipFirstLoadingScreen.hack) {
+    if (!skipFirstLoadingScreen) {
         DrawSync(0);
         DrawBigGuiSprite(2);
         for (i = 0; i < 1; i++) {
@@ -212,6 +213,6 @@ void LoadingScreen(void) {
         VSync(0);
         VSyncCallback(LoadingScreenVSyncCallback);
     } else {
-        skipFirstLoadingScreen.hack = 0;
+        skipFirstLoadingScreen = 0;
     }
 }
