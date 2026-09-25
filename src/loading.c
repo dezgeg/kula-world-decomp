@@ -43,7 +43,7 @@ char* EXTENSIONS[] = {
     "FI.PAK;1",
 };
 
-char S_KULA_KULA_PIC_PAK_1[] = "\\KULA\\KULA_PIC.PAK;1";
+char PIC_PAK_FILENAME[] = "\\KULA\\KULA_PIC.PAK;1";
 struct {
     short hack;
 } skipFirstLoadingScreen = {1}; // XXX: padding somehow wrong
@@ -136,7 +136,7 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
     CdlFILE cdlfile;
 
     Noop2();
-    if (CdSearchFile(&cdlfile, S_KULA_KULA_PIC_PAK_1) == 0) {
+    if (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
         unusedReadErrorCode = 2;
     }
     while (CdControl(CdlSeekL, &cdlfile, 0) == 0) {

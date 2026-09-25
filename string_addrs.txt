@@ -240,7 +240,7 @@ S_Access_Denied_system_busy = 0x000122c8; // type:asciz
 S_bu00 = 0x000122e8; // type:asciz
 // "libmcrd: event overflow\n"
 S_libmcrd_event_overflow = 0x000122f0; // type:asciz
-// " !\"#$%&'()*+,-./:; // type:asciz<=>?@[\\]^_`{|}-~"
+// " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}-~"
 S_SPECIAL_CHARS = 0x00073278; // type:asciz
 // "MAX_SORT_OBJ too small!"
 S_MAX_SORT_OBJ_too_small = 0x00099e84; // type:asciz
@@ -277,7 +277,7 @@ S_recived_FMTd = 0x000a2f88; // type:asciz
 // "of %d bytes\n"
 S_of_FMTd_bytes = 0x000a2f94; // type:asciz
 // "BESCES-01000KULA"
-S_BESCES_01000KULA = 0x000a2fb4; // type:asciz
+SAVE_FILENAME = 0x000a2fb4; // type:asciz
 // "LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n"
 S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD = 0x000a2fd4; // type:asciz
 // "%d \n"
@@ -432,25 +432,25 @@ S_HILLS_HILLS = 0x000a350c; // type:asciz
 S_HIRO_HIRO = 0x000a351c; // type:asciz
 // "FI.PAK;1"
 S_FI_PAK_1 = 0x000a3528; // type:asciz
-// ".GGI; // type:asciz1"
+// ".GGI;1"
 S_GGI_1 = 0x000a3534; // type:asciz
-// ".PAK; // type:asciz1"
+// ".PAK;1"
 S_PAK_1_2 = 0x000a353c; // type:asciz
-// ".SFX; // type:asciz1"
+// ".SFX;1"
 S_SFX_1 = 0x000a3544; // type:asciz
-// ".TGI; // type:asciz1"
+// ".TGI;1"
 S_TGI_1 = 0x000a354c; // type:asciz
-// "\\KULA\\KULA_PIC.PAK; // type:asciz1"
-S_KULA_KULA_PIC_PAK_1 = 0x000a3554; // type:asciz
-// "\\XA\\MUSIC_0.XA; // type:asciz1"
+// "\\KULA\\KULA_PIC.PAK;1"
+PIC_PAK_FILENAME = 0x000a3554; // type:asciz
+// "\\XA\\MUSIC_0.XA;1"
 S_XA_MUSIC_0_XA_1 = 0x000a3570; // type:asciz
-// "\\XA\\MUSIC_2.XA; // type:asciz1"
+// "\\XA\\MUSIC_2.XA;1"
 S_XA_MUSIC_2_XA_1 = 0x000a3584; // type:asciz
-// "\\XA\\MUSIC_1.XA; // type:asciz1"
+// "\\XA\\MUSIC_1.XA;1"
 S_XA_MUSIC_1_XA_1 = 0x000a3598; // type:asciz
-// "\\SAMPLE.XA; // type:asciz1"
+// "\\SAMPLE.XA;1"
 S_SAMPLE_XA_1 = 0x000a35b8; // type:asciz
-// "\\XA\\MUSIC_3.XA; // type:asciz1"
+// "\\XA\\MUSIC_3.XA;1"
 S_XA_MUSIC_3_XA_1 = 0x000a35c8; // type:asciz
 // "File error:\n\n"
 S_File_error = 0x000a35dc; // type:asciz
@@ -462,7 +462,7 @@ S_seek_error = 0x000a35fc; // type:asciz
 S_read_error = 0x000a3608; // type:asciz
 // "1.0.4"
 S_1_0_4_3 = 0x000a3614; // type:asciz
-// "\\HIRO\\WARNING.TIM; // type:asciz1"
+// "\\HIRO\\WARNING.TIM;1"
 S_HIRO_WARNING_TIM_1 = 0x000a3624; // type:asciz
 // "could not find music \n"
 S_could_not_find_music = 0x000a363c; // type:asciz
@@ -476,7 +476,7 @@ S_resumed_song_after_bonus = 0x000a367c; // type:asciz
 S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd = 0x000a3698; // type:asciz
 // "\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n"
 S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd = 0x000a36c4; // type:asciz
-// "\\XA\\FINAL.STR; // type:asciz1"
+// "\\XA\\FINAL.STR;1"
 S_XA_FINAL_STR_1 = 0x000a3710; // type:asciz
 // "file not found\n"
 S_file_not_found = 0x000a3734; // type:asciz

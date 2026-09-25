@@ -80,7 +80,7 @@ static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
-char S_BESCES_01000KULA[32] = "BESCES-01000KULA";
+char SAVE_FILENAME[32] = "BESCES-01000KULA";
 
 int LoadSaveMenu(void) {
     int i, j, k;

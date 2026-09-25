@@ -28,7 +28,7 @@ extern int vibrationEnabled;
 extern long mcCmd;
 extern short numFruits;
 extern short turnDelayEnabled;
-extern char S_BESCES_01000KULA[16];
+extern char SAVE_FILENAME[32];
 
 int memCardHasError;
 int memCardDataValid;
@@ -121,7 +121,6 @@ void FormatMemcard(void) {
 }
 
 int LoadSaveSlot(uint slot) {
-    extern char S_BESCES_01000KULA[];
     int i;
 
     MemCardAccept(0);
@@ -129,7 +128,7 @@ int LoadSaveSlot(uint slot) {
 
     if (tempMcResult == McErrNewCard || (tempMcResult == 0 && memCardDataValid == 0)) {
         ClearMemCardData();
-        if (MemCardReadFile(0, S_BESCES_01000KULA, &memCardData, 0, 0x1000) == McErrCardNotExist) {
+        if (MemCardReadFile(0, SAVE_FILENAME, &memCardData, 0, 0x1000) == McErrCardNotExist) {
             MemCardSync(0, &mcCmd, &tempMcResult);
             if (tempMcResult == 0) {
                 memCardDataValid = 1;
@@ -242,9 +241,9 @@ int SaveMemCard(uint slot) {
             memCardData.saveslots[slot].isFinal = isFinal;
             memCardData.saveslots[slot].gameMode = gameMode;
         }
-        ret = MemCardCreateFile(0, S_BESCES_01000KULA, 1);
+        ret = MemCardCreateFile(0, SAVE_FILENAME, 1);
         if (ret == 0 || ret == McErrAlreadyExist) {
-            if (MemCardWriteFile(0, S_BESCES_01000KULA, (long*)&memCardData, 0, 0x1000) == McErrCardNotExist) {
+            if (MemCardWriteFile(0, SAVE_FILENAME, (long*)&memCardData, 0, 0x1000) == McErrCardNotExist) {
                 MemCardSync(0, &mcCmd, &tempMcResult);
                 if (tempMcResult != 0) {
                     memCardHasError = 1;
@@ -268,14 +267,12 @@ int SaveMemCard(uint slot) {
 }
 
 void LoadSaveFromMemoryCard(void) {
-    extern char S_BESCES_01000KULA[];
-
     ClearMemCardData();
     MemCardAccept(0);
     MemCardSync(0, &mcCmd, &tempMcResult);
     if (tempMcResult == 0 || tempMcResult == McErrNewCard) {
         tempMcResult = McErrCardNotExist;
-        if (MemCardReadFile(0, S_BESCES_01000KULA, (unsigned long*)&memCardData, 0, 0x1000)) {
+        if (MemCardReadFile(0, SAVE_FILENAME, (unsigned long*)&memCardData, 0, 0x1000)) {
             MemCardSync(0, &mcCmd, &tempMcResult);
         }
         if (tempMcResult == 0) {
