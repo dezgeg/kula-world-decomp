@@ -11,7 +11,7 @@ extern PrimList primLists[2];
 extern TSprite bonusWidgetSpritesMsbBackground[2][34];
 extern TSprite bonusWidgetSpritesMsbForeground[2][32];
 extern TSprite bonusWidgetSpritesPiechart[2][9];
-extern uint BONUS_WIDGET_COLOR_DATA[];
+extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size to match
 
 STATIC_FOR_GP_ACCESS uint* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS uint* bonusWidgetDataEnd;
