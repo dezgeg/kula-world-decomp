@@ -86,7 +86,7 @@ int InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLev
             val >>= 1;
 
             *pDst++ = (y + graphHeight) << 12;
-            *pDst++ = ((-val) << 12) / 25;
+            *pDst++ = ((-val) << 12) / (FPS / 2);
             *pDst++ = (y + graphHeight - val) << 12;
 
             for (j = 0; j < 2; j++) {
@@ -258,7 +258,7 @@ int InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLev
 
             if (isHighscore == 0) {
                 if (j == 0) {
-                    setRGB0(&scoreGraphSprites[i][0].sprt, 64, 64, 64);
+                    setRGB0(&scoreGraphSprites[i][j].sprt, 64, 64, 64);
                 } else {
                     setRGB0(&scoreGraphSprites[i][j].sprt, 72, 72, 72);
                 }
