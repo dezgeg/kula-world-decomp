@@ -103,7 +103,7 @@ segments:
       - [0x102c8, c, lethargy]
       - [0x10838, c, screen_fade]
       - [0x10a2c, c, title_screen]
-      - [0x10b78, c, score_graph] # 2 nonmatching
+      - [0x10b78, c, score_graph]
       - [0x1250c, c, bonus_widget]
       - [0x128b8, c, screenshake]
       - [0x12a64, c, bios_font]

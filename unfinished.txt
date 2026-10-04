@@ -1,2 +1,0 @@
-DrawScoreGraph: https://decomp.me/scratch/KHxMt
-InitScoreGraph: https://decomp.me/scratch/cMAKo
