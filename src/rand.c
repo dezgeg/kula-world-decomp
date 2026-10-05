@@ -7,6 +7,7 @@ void Srand(int seed) {
 }
 
 int Rand(unsigned v) {
-    randomSeed = randomSeed * 0x41c64e6d + 12345;
-    return (v * (ushort)randomSeed) >> 16;
+    int seed = randomSeed * 0x41c64e6d + 12345;
+    randomSeed = seed;
+    return (v * (seed & 0xFFFF)) >> 16;
 }
