@@ -27,7 +27,7 @@ extern short* entityData;
 extern short numEntities;
 extern short* levelData;
 extern int cameraIndex;
-extern MATRIX perspMatrixes[];
+extern MATRIX perspMatrixes[2];
 extern int specialLevelType;
 extern int gameMode;
 
