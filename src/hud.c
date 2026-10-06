@@ -187,20 +187,22 @@ void DrawHourglassAndTimer(void) {
     int w;
     int dx;
     int secs;
-    short* p;
 
     if (hourglassIsRotating) {
         hourglassRotationTimer += 8;
         if (hourglassRotationTimer >= 320) {
             hourglassRotationTimer = 0;
             hourglassIsRotating = 0;
-            p = &ggiPart1HourglassAnim[hourglassRotationTimer];
             for (j = 0; j < 3; j++) {
                 setXY4(&hourglassSprites[!whichDrawDispEnv][j],
-                        p[j * 320 + 0] + 160, p[j * 320 + 1] + 26 + 2 * VID_NTSC,
-                        p[j * 320 + 2] + 160, p[j * 320 + 3] + 26 + 2 * VID_NTSC,
-                        p[j * 320 + 4] + 160, p[j * 320 + 5] + 26 + 2 * VID_NTSC,
-                        p[j * 320 + 6] + 160, p[j * 320 + 7] + 26 + 2 * VID_NTSC);
+                       ggiPart1HourglassAnim[j * 320 + 0] + 160,
+                       ggiPart1HourglassAnim[j * 320 + 1] + 26 + 2 * VID_NTSC,
+                       ggiPart1HourglassAnim[j * 320 + 2] + 160,
+                       ggiPart1HourglassAnim[j * 320 + 3] + 26 + 2 * VID_NTSC,
+                       ggiPart1HourglassAnim[j * 320 + 4] + 160,
+                       ggiPart1HourglassAnim[j * 320 + 5] + 26 + 2 * VID_NTSC,
+                       ggiPart1HourglassAnim[j * 320 + 6] + 160,
+                       ggiPart1HourglassAnim[j * 320 + 7] + 26 + 2 * VID_NTSC);
             }
         }
 
