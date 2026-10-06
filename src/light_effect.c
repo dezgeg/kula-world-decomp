@@ -152,24 +152,25 @@ int AddLightEffectToCubeFace(int x, int y, int z, int dir, int param_5, int para
 
     if (ci != -1) {
         quad = cubeStates[ci * 16 + dir];
-        if (quad != -1) {
-            switch (quad->textureRotation) {
-                case 0:
-                    msb = param_8 << 6 | param_7 << 4 | param_6 << 2 | param_5;
-                    break;
-                case 1:
-                    msb = param_7 << 6 | param_5 << 4 | param_8 << 2 | param_6;
-                    break;
-                case 2:
-                    msb = param_5 << 6 | param_6 << 4 | param_7 << 2 | param_8;
-                    break;
-                default:
-                    msb = param_6 << 6 | param_8 << 4 | param_5 << 2 | param_7;
-                    break;
-            }
-            *curLightEffectDataPtr++ = msb << 24 | (uint)quad & 0xffffff;
-            return 0;
+        if (quad == (Quad*)-1) {
+            return 1;
         }
+        switch (quad->textureRotation) {
+            case 0:
+                msb = param_8 << 6 | param_7 << 4 | param_6 << 2 | param_5;
+                break;
+            case 1:
+                msb = param_7 << 6 | param_5 << 4 | param_8 << 2 | param_6;
+                break;
+            case 2:
+                msb = param_5 << 6 | param_6 << 4 | param_7 << 2 | param_8;
+                break;
+            default:
+                msb = param_6 << 6 | param_8 << 4 | param_5 << 2 | param_7;
+                break;
+        }
+        *curLightEffectDataPtr++ = msb << 24 | (uint)quad & 0xffffff;
+        return 0;
     }
     return 1;
 }
