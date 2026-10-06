@@ -49,7 +49,7 @@ extern int musicVolume;
 #define DCT_MODE(is24bit) ((is24bit) ? 3 : 2)
 #define VRAMPIX(pixels, is24bit) ((is24bit) ? ((pixels) * 3) / 2 : (pixels))
 // Both the even-and-odd frame buffers
-#define VRAMPIX_BOTH(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) << 1)
+#define VRAMPIX_BOTH(pixels, is24bit) ((is24bit) ? (pixels) * 3 : (pixels) * 2)
 
 // .sbss
 static DECENV dec;
