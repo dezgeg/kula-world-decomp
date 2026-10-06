@@ -17,7 +17,7 @@ int EnemyIsBlockWalkable(int blockType, int rotationIndex);
 int EnemyGetBlockProgress(SVECTOR* enemyPos, Enemy* enemy);
 
 extern int cameraIndex;
-extern MATRIX perspMatrixes[];
+extern MATRIX perspMatrixes[2];
 extern short* entityData;
 extern short numEntities;
 
@@ -285,10 +285,6 @@ static SVECTOR EnemyCanMoveForward_groundPos;
 static SVECTOR EnemyCanMoveForward_fwdPos;
 #define fwdPos EnemyCanMoveForward_fwdPos
 int EnemyCanMoveForward(Enemy* e) {
-    int blockType;
-    int rotationIndex;
-    int res;
-
     groundPos.vx = e->pos.vx - e->normalVec.vx * 400 + e->dir.vx * 0x200;
     groundPos.vy = e->pos.vy - e->normalVec.vy * 400 + e->dir.vy * 0x200;
     groundPos.vz = e->pos.vz - e->normalVec.vz * 400 + e->dir.vz * 0x200;
@@ -297,21 +293,11 @@ int EnemyCanMoveForward(Enemy* e) {
     fwdPos.vy = e->pos.vy + e->dir.vy * 0x200;
     fwdPos.vz = e->pos.vz + e->dir.vz * 0x200;
 
-    blockType = GetBlockAt(&groundPos);
-    rotationIndex = GetRotationIndexFromVector(e->normalVec);
-
-    if (EnemyIsBlockWalkable(blockType, rotationIndex) != 1) {
-        return 0;
+    if (EnemyIsBlockWalkable(GetBlockAt(&groundPos), GetRotationIndexFromVector(e->normalVec)) == 1 &&
+        GetBlockAt(&fwdPos) == -1) {
+        return 1;
     }
-
-    res = GetBlockAt(&fwdPos);
-
-    if (res == -1) {
-        res = 1;
-    } else {
-        res = 0;
-    }
-    return res;
+    return 0;
 }
 #undef groundPos
 #undef fwdPos
@@ -321,7 +307,6 @@ static SVECTOR EnemyCanMoveBackward_groundPos;
 static SVECTOR EnemyCanMoveBackward_backPos;
 #define backPos EnemyCanMoveBackward_backPos
 int EnemyCanMoveBackward(Enemy* e) {
-    int res;
 
     groundPos.vx = e->pos.vx - e->normalVec.vx * 400 - e->dir.vx * 0x200;
     groundPos.vy = e->pos.vy - e->normalVec.vy * 400 - e->dir.vy * 0x200;
@@ -331,17 +316,11 @@ int EnemyCanMoveBackward(Enemy* e) {
     backPos.vy = e->pos.vy - e->dir.vy * 0x200;
     backPos.vz = e->pos.vz - e->dir.vz * 0x200;
 
-    if (EnemyIsBlockWalkable(GetBlockAt(&groundPos), GetRotationIndexFromVector(e->normalVec)) != 1) {
-        return 0;
+    if (EnemyIsBlockWalkable(GetBlockAt(&groundPos), GetRotationIndexFromVector(e->normalVec)) == 1 &&
+        GetBlockAt(&backPos) == -1) {
+        return 1;
     }
-
-    res = GetBlockAt(&backPos);
-    if (res == -1) {
-        res = 1;
-    } else {
-        res = 0;
-    }
-    return res;
+    return 0;
 }
 #undef groundPos
 #undef backPos
