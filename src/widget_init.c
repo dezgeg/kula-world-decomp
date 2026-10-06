@@ -17,12 +17,12 @@ void InitWidgetSprites(void) {
     SetSemiTrans(&musicVolumeWidgetSprite[0].sprt, textures[firstGuiTexture + 13].semitrans);
     SetShadeTex(&musicVolumeWidgetSprite[0].sprt, 0);
     musicVolumeWidgetSprite[0].sprt.clut = textures[firstGuiTexture + 13].clut;
-    setWH(&musicVolumeWidgetSprite[0].sprt, textures[firstGuiTexture + 13].w, textures[firstGuiTexture + 13].h);
+    musicVolumeWidgetSprite[0].sprt.w = textures[firstGuiTexture + 13].w;
+    musicVolumeWidgetSprite[0].sprt.h = textures[firstGuiTexture + 13].h;
 
     musicVolumeWidgetSprite[1] = musicVolumeWidgetSprite[0];
 
-    sfxVolumeWidgetSprite[0] = musicVolumeWidgetSprite[1];
-    sfxVolumeWidgetSprite[1] = sfxVolumeWidgetSprite[0];
+    sfxVolumeWidgetSprite[1] = sfxVolumeWidgetSprite[0] = musicVolumeWidgetSprite[1];
 
     TSpritePrim(&menuCursorSprite[0], 0, 0, textures[firstGuiTexture + 13].tpage);
     setXY0(&menuCursorSprite[0].sprt, 0, 0);
@@ -31,7 +31,8 @@ void InitWidgetSprites(void) {
     SetSemiTrans(&menuCursorSprite[0].sprt, textures[firstGuiTexture + 13].semitrans);
     SetShadeTex(&menuCursorSprite[0].sprt, 0);
     menuCursorSprite[0].sprt.clut = textures[firstGuiTexture + 13].clut;
-    setWH(&menuCursorSprite[0].sprt, textures[firstGuiTexture + 13].w, textures[firstGuiTexture + 13].h);
+    menuCursorSprite[0].sprt.w = textures[firstGuiTexture + 13].w;
+    menuCursorSprite[0].sprt.h = textures[firstGuiTexture + 13].h;
 
     menuCursorSprite[1] = menuCursorSprite[0];
 }
