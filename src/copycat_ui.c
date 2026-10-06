@@ -54,8 +54,8 @@ void RenderPlayerOrCopycatLabels(int sprite, u_char color) {
 #endif
     if (sprite > 1) {
         setXY0(&copycatUiSprites[whichDrawDispEnv][sprite].sprt,
-               COPYCAT_SPRITE_POSITIONS[sprite * 2 + gameMode * 4 - 4],
-               COPYCAT_SPRITE_POSITIONS[sprite * 2 + gameMode * 4 + 1 - 4]);
+               COPYCAT_SPRITE_POSITIONS[gameMode * 4 + (sprite - 2) * 2],
+               COPYCAT_SPRITE_POSITIONS[gameMode * 4 + (sprite - 2) * 2 + 1]);
     }
     setRGB0(&copycatUiSprites[whichDrawDispEnv][sprite].sprt, color, color, color);
     addPrim(&primLists[whichDrawDispEnv].gui2, &copycatUiSprites[whichDrawDispEnv][sprite]);
