@@ -1,15 +1,10 @@
 .SUFFIXES: # No built-in rules
 .SECONDARY: # Don't delete intermediates
 SHELL := bash -e -o pipefail
+CROSS := mipsel-linux-gnu
 
 UNPADDED_SIZE := $(shell printf %d 0x934b0)
 PADDED_SIZE := 0x93800
-
-ifeq (, $(shell which mipsel-linux-as 2>/dev/null))
-CROSS := mipsel-linux-gnu
-else
-CROSS := mipsel-linux
-endif
 
 C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)
 S_FILES := $(wildcard asm/*.s) $(wildcard asm/*/*.s) $(wildcard asm/data/*/*.s)
