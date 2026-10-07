@@ -5,7 +5,7 @@ options:
   platform: psx
   compiler: GCC
 
-  base_path: .
+  base_path: ../..
   build_path: build/eu-SCES_010.00/
   target_path: build/eu-SCES_010.00/truncated.bin
   ld_script_path: build/eu-SCES_010.00/kula_world.ld

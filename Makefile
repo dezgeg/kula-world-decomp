@@ -37,12 +37,12 @@ Makefile: build/eu-SCES_010.00/kula_world.ld
 build/eu-SCES_010.00/subdirs:
 	mkdir -p $(sort $(dir $(O_FILES))) build/eu-SCES_010.00/subdirs
 
-build/eu-SCES_010.00/kula_world.ld: kula_world.yaml psyq venv $(wildcard *_addrs.txt)
+build/eu-SCES_010.00/kula_world.ld: config/eu-SCES_010.00/splat.yaml psyq venv $(wildcard *_addrs.txt)
 	rm -rf src/nonmatched asm/ build/eu-SCES_010.00/
 	mkdir -p build
 	for f in $$(cd psyq/ELF; echo *.A); do mkdir -p build/eu-SCES_010.00/$$f; ar x psyq/ELF/$$f --output=build/eu-SCES_010.00/$$f; done
 	dd if=discs/eu/SCES_010.00 of=build/eu-SCES_010.00/truncated.bin count=1 bs=$(UNPADDED_SIZE)
-	source venv/bin/activate && splat split kula_world.yaml
+	source venv/bin/activate && splat split config/eu-SCES_010.00/splat.yaml
 
 build/eu-SCES_010.00/SCES_010.00: build/eu-SCES_010.00/main.elf
 	$(CROSS)-objcopy --pad-to=$(PADDED_SIZE) -O binary $< $@
