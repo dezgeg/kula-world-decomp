@@ -23,12 +23,12 @@ options:
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
 
   symbol_addrs_path:
-    - function_addrs.txt
-    - hack_addrs.txt
-    - string_addrs.txt
-    - variable_addrs.txt
-    - lib_symbol_addrs.txt
-    - lib_common_symbol_addrs.txt
+    - config/eu-SCES_010.00/function_addrs.txt
+    - config/eu-SCES_010.00/hack_addrs.txt
+    - config/eu-SCES_010.00/string_addrs.txt
+    - config/eu-SCES_010.00/variable_addrs.txt
+    - config/eu-SCES_010.00/lib_symbol_addrs.txt
+    - config/eu-SCES_010.00/lib_common_symbol_addrs.txt
 segments:
   - name: header
     type: header

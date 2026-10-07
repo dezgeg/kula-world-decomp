@@ -15,5 +15,6 @@ jobs:
             - run: pipx install virtualenv
             - run: git fetch origin refs/encrypted-exe
             - run: git checkout FETCH_HEAD -- SCES_010.00.enc
-            - run: openssl aes-256-cbc -pbkdf2 -d -k ${{ secrets.EXE_DECRYPTION_KEY }} < SCES_010.00.enc > SCES_010.00
+            - run: mkdir -p discs/eu
+            - run: openssl aes-256-cbc -pbkdf2 -d -k ${{ secrets.EXE_DECRYPTION_KEY }} < SCES_010.00.enc > discs/eu/SCES_010.00
             - run: make
