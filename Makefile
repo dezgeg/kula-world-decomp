@@ -1,7 +1,23 @@
+# Common stuff to each version
+
 .SUFFIXES: # No built-in rules
 .SECONDARY: # Don't delete intermediates
 SHELL := bash -e -o pipefail
 CROSS := mipsel-linux-gnu
+
+.PHONY: all
+all: check
+
+psyq:
+	mkdir -p psyq
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz --exclude={INCLUDE,LIB,COFF,ELF}
+	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz ./INCLUDE ./LIB ./ELF
+
+venv:
+	virtualenv venv
+	source venv/bin/activate && pip3 install -U splat64[mips] pycparser pynacl toml Levenshtein
+
+# Version-specific stuff
 
 UNPADDED_SIZE := $(shell printf %d 0x934b0)
 PADDED_SIZE := 0x93800
@@ -47,12 +63,3 @@ build/%.o: build/%.s build/subdirs
 build/%.o: %.s build/subdirs
 	$(CROSS)-as -G128 -no-pad-sections -Iasm/ -o $@ $<
 	$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $@
-
-psyq:
-	mkdir -p psyq
-	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz --exclude={INCLUDE,LIB,COFF,ELF}
-	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq -xz ./INCLUDE ./LIB ./ELF
-
-venv:
-	virtualenv venv
-	source venv/bin/activate && pip3 install -U splat64[mips] pycparser pynacl toml Levenshtein
