@@ -6,9 +6,9 @@ options:
   compiler: GCC
 
   base_path: .
-  target_path: build/truncated.bin
-  ld_script_path: build/kula_world.ld
-  undefined_syms_auto_path: build/undefined_syms_auto.txt
+  target_path: build/eu-SCES_010.00/truncated.bin
+  ld_script_path: build/eu-SCES_010.00/kula_world.ld
+  undefined_syms_auto_path: build/eu-SCES_010.00/undefined_syms_auto.txt
   generated_asm_macros_directory: asm/
 
   ld_bss_is_noload: True
