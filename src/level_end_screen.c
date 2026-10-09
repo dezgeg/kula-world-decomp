@@ -159,9 +159,9 @@ void LoadLevelEndReasonGfx() {
     h = *(short*)((char*)TIM_DECOMP_BUF + 0x3e);
     x0 = (displayWidth - 4 * w) / 2;
     if (whichGfx < LEVEL_END_GFX_GAME_OVER) {
-        y0 = 5;
+        y0 = 5 - 2 * VID_NTSC;
         if (gameMode == 1 || (gameMode == 2 && numTimeTrialPlayers == 1)) {
-            y0 = 20;
+            y0 = 20 - 2 * VID_NTSC;
         }
     } else {
         y0 = 50;
