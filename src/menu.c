@@ -837,13 +837,13 @@ void TwoPlayerLevelSelectMenu(void) {
     }
     DrawWidgets(MENU_SPRITE_SELECT_ENVIRONMENT, cursorPosInMenu[curMenu]);
     sprintf(scoreText, S_FMTd_4, twoPlayerLevelSelectionCursorPos * 15 + 1);
-    Update2PlayerLevelSelectionSprites(49 + (twoPlayerLevelSelectionCursorPos + 1) * 20 + (twoPlayerLevelSelectionCursorPos / 9) * 8, 187);
+    Update2PlayerLevelSelectionSprites(49 + (twoPlayerLevelSelectionCursorPos + 1) * 20 + (twoPlayerLevelSelectionCursorPos / 9) * 8, 187 - 14 * VID_NTSC);
     for (i = 1; i < 11; i++) {
         if (highestLevelReached / 15 + 1 < i) {
             SetFancyTextColor(0, 0x80, 0x80);
         }
         sprintf(scoreText, S_FMTd_4, i);
-        DrawTextFancyFont(scoreText, 54 + i * 20 + (i / 10) * 12, 178);
+        DrawTextFancyFont(scoreText, 54 + i * 20 + (i / 10) * 12, 178 - 14 * VID_NTSC);
     }
 
     if (TestButton(PAD_TRIANGLE)) {
@@ -973,22 +973,22 @@ void TimeTrialFailedToQualifyScreen(void) {
             loadNewWorld = 0;
             curLevel = qualifyScreenCursorX * 8 + qualifyScreenCursorY;
         }
-        DrawMenuCursorSprite(116 + qualifyScreenCursorX * 150, 85 + qualifyScreenCursorY * 18);
+        DrawMenuCursorSprite(116 + qualifyScreenCursorX * 150, 85 - 2 * VID_NTSC + qualifyScreenCursorY * 18);
     }
 
     for (i = 0; i < 2; i++) {
-        DrawStaticUiSprite(3, 25 + 150 * i, 67, 0);
-        DrawStaticUiSprite(1, 92 + 150 * i, 67, 0);
+        DrawStaticUiSprite(3, 25 + 150 * i, 67 - 2 * VID_NTSC, 0);
+        DrawStaticUiSprite(1, 92 + 150 * i, 67 - 2 * VID_NTSC, 0);
         for (j = 0; j < 8 && i * j < 7; j++) {
             sprintf(buf, S_FMTd_5, j + i * 8 + curWorld2 * 15 + 1);
-            DrawTextFancyFont(buf, 57 + 150 * i, 85 + 18 * j);
+            DrawTextFancyFont(buf, 57 + 150 * i, 85 - 2 * VID_NTSC + 18 * j);
             FormatTime(levelPlaytimesInThisWorld[i * 8 + j], buf, 1);
-            DrawTextFancyFont(buf, 140 + 150 * i, 85 + 18 * j);
+            DrawTextFancyFont(buf, 140 + 150 * i, 85 - 2 * VID_NTSC + 18 * j);
         }
     }
 
     FormatTime(time, buf, 1);
-    DrawStaticUiSprite(0, 170, 210, 7);
-    DrawStaticUiSprite(16, 175, 220, 0);
-    DrawTextFancyFont(buf, 290, 220);
+    DrawStaticUiSprite(0, 170, 210 - 2 * VID_NTSC, 7);
+    DrawStaticUiSprite(16, 175, 220 - 2 * VID_NTSC, 0);
+    DrawTextFancyFont(buf, 290, 220 - 2 * VID_NTSC);
 }
