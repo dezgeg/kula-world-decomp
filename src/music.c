@@ -8,6 +8,7 @@ extern void PutDrawAndDispEnvs(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void SndSetMusicVolume(void);
 
+extern char S_File_error[];
 extern Music BONUS_MUSICS[3];
 extern Music MUSICS[11];
 extern int musicCdMode;
@@ -36,7 +37,6 @@ static int bonusMusicSearchAttempt;
 static int musicSearchAttempt;
 
 void PlayMusic(int world) {
-    extern char S_File_error[];
     char dummy[8];
     char* filename;
 
@@ -102,7 +102,6 @@ void PlayMusic(int world) {
 }
 
 void PlayBonusMusic(void) {
-    extern char S_File_error[];
     char dummy[8];
     char* filename;
 
@@ -198,7 +197,6 @@ void MusicPause(void) {
 }
 
 void SwitchFromBonusToNormalMusic(void) {
-    extern char S_File_error[];
     char dummy[8];
 
     Noop2();
