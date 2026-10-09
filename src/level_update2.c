@@ -461,7 +461,7 @@ void ProcessPlayer(void) {
         thePlayer.jumping = 0;
     }
 
-    if (thePlayer.movementInhibitTimer < 1 && thePlayer.forcedRollForwardTimer < 1 && thePlayer.faceTypePlayerStandingOn != OBJ_BOUNCEPAD) {
+    if (thePlayer.movementInhibitTimer <= 0 && thePlayer.forcedRollForwardTimer <= 0 && thePlayer.faceTypePlayerStandingOn != OBJ_BOUNCEPAD) {
         HandlePlayerButtons(&thePlayer);
     }
 
