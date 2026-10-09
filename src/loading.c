@@ -207,9 +207,15 @@ void LoadWarningTim(void) {
 #endif
     CdlFILE cdlfile;
 
+#if VER_US
+    displayWidth = 320;
+    displayHeight = 240;
+    SetupDisplay(0, 0, 96, 0, 0, 1);
+#else
     displayWidth = 640;
     displayHeight = 256;
     SetupDisplay(0, 0, 96, 0, 0, 0);
+#endif
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
     if (!CdSearchFile(&cdlfile, filename)) {
