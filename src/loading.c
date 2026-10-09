@@ -74,6 +74,11 @@ Music MUSICS[] = {
 };
 
 char S_File_error[] = "File error:\n\n";
+#if VER_US
+char S_could_not_find[] = "could not find ";
+char S_seek_error[] = "seek error ";
+char S_read_error[] = "read error ";
+#endif
 
 static z_stream zlibStream_a4b80;
 static z_stream unusedZlibStream;
@@ -103,6 +108,7 @@ void FileError(char* str1, char* str2) {
 
 #if VER_US
 #define IF_WHILE while
+#define FileError(a,b) VSync(3)
 #else
 #define IF_WHILE if
 #endif
@@ -130,27 +136,15 @@ uint ReadDataFile(int world, int filetype, void* buf) {
     }
     filenameBuf[i + j] = '\0';
 
-#if VER_US
-    while (!CdSearchFile(&cdlfile, filenameBuf)) {
-        VSync(3);
-    }
-    while (!CdControl(CdlSeekL, &cdlfile, 0)) {
-        VSync(3);
-    }
-    while (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
-        VSync(3);
-    }
-#else
-    if (!CdSearchFile(&cdlfile, filenameBuf)) {
+    IF_WHILE (!CdSearchFile(&cdlfile, filenameBuf)) {
         FileError("could not find ", filenameBuf);
     }
-    if (!CdControl(CdlSeekL, &cdlfile, 0)) {
+    IF_WHILE (!CdControl(CdlSeekL, &cdlfile, 0)) {
         FileError("seek error ", filenameBuf);
     }
-    if (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
+    IF_WHILE (!CdRead((cdlfile.size >> 11) + 1, buf, 0x80)) {
         FileError("read error ", filenameBuf);
     }
-#endif
     CdReadSync(0, 0);
     if (filetype == 1) {
         sizeOfSfxFile = cdlfile.size;
@@ -218,13 +212,13 @@ void LoadWarningTim(void) {
 #endif
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
-    if (!CdSearchFile(&cdlfile, filename)) {
+    IF_WHILE (!CdSearchFile(&cdlfile, filename)) {
         FileError("could not find ", filename);
     }
-    if (!CdControl(CdlSeekL, &cdlfile, 0)) {
+    IF_WHILE (!CdControl(CdlSeekL, &cdlfile, 0)) {
         FileError("seek error ", filename);
     }
-    if (!CdRead((cdlfile.size >> 11) + 1, (u_long*)FILE_BUF, 0x80)) {
+    IF_WHILE (!CdRead((cdlfile.size >> 11) + 1, (u_long*)FILE_BUF, 0x80)) {
         FileError("read error ", filename);
     }
     CdReadSync(0, 0);
