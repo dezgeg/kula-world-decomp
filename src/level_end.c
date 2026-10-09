@@ -154,7 +154,7 @@ void DrawLevelScoreSummary(void) {
         } else {
             levelScoreSummaryScoreTicker = 0;
             newScore = totalScore;
-            DrawStaticUiSprite(6, 124, 225, 0);
+            DrawStaticUiSprite(6, 124, 225 - 12 * VID_NTSC, 0);
         }
 #if VER_US
         if (levelEndReason > 0 || specialLevelType > 0) {
@@ -355,7 +355,7 @@ void DrawLevelScoreSummary(void) {
         if (levelScoreSummaryScoreTicker == 0) {
             if (numTimeTrialPlayers == 1 || (numTimeTrialPlayers == 2 && curLevel == 14 && (levelHasBeenCompletedByPlayer[0] == 1 || levelHasBeenCompletedByPlayer[1] == 1))) {
                 if (levelEndReason > 0) {
-                    DrawStaticUiSprite(6, 124, 225, 0);
+                    DrawStaticUiSprite(6, 124, 225 - 12 * VID_NTSC, 0);
                 } else {
                     DrawStaticUiSprite(6, 124, SCREEN_HEIGHT / 2 + 48, 0);
                 }
@@ -363,7 +363,7 @@ void DrawLevelScoreSummary(void) {
                 if (GetControllerStatus(latestPlayerToFinish) != 0) {
                     controllerButtons = GetControllerButtons(latestPlayerToFinish);
                 }
-                DrawStaticUiSprite(6, 124, 225, 0);
+                DrawStaticUiSprite(6, 124, 225 - 12 * VID_NTSC, 0);
             }
         }
         if (controllerButtons & PAD_CROSS) {
