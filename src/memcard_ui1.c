@@ -191,7 +191,7 @@ void InitMemcardUi(void) {
         saveSelectButtonSprite2[0].sprt.u0 = 0xA8;
         saveSelectButtonSprite2[0].sprt.v0 = 0x77;
         saveSelectButtonSprite2[0].sprt.x0 = (displayWidth / 2) - 0x50;
-        saveSelectButtonSprite2[0].sprt.y0 = 0xE5;
+        saveSelectButtonSprite2[0].sprt.y0 = 0xE5 - 0x11 * VID_NTSC;
         saveSelectButtonSprite2[0].sprt.w = 0x46;
         saveSelectButtonSprite2[0].sprt.h = 0x16;
         saveSelectButtonSprite2[1] = saveSelectButtonSprite2[0];
@@ -200,7 +200,7 @@ void InitMemcardUi(void) {
         saveBackButtonSprite2[0].sprt.v0 = 0x8D;
         saveBackButtonSprite2[0].sprt.u0 = 0xA8;
         saveBackButtonSprite2[0].sprt.x0 = (displayWidth / 2) + 0x14;
-        saveBackButtonSprite2[0].sprt.y0 = 0xE5;
+        saveBackButtonSprite2[0].sprt.y0 = 0xE5 - 0x11 * VID_NTSC;
         saveBackButtonSprite2[0].sprt.w = 0x3E;
         saveBackButtonSprite2[0].sprt.h = 0x16;
         saveBackButtonSprite2[1] = saveBackButtonSprite2[0];
@@ -269,7 +269,7 @@ void InitMemcardUi(void) {
         saveSelectButtonSprite1[0].sprt.u0 = 0xA8;
         saveSelectButtonSprite1[0].sprt.v0 = 0xC8;
         saveSelectButtonSprite1[0].sprt.x0 = (displayWidth / 2) - 0x50;
-        saveSelectButtonSprite1[0].sprt.y0 = 0xE5;
+        saveSelectButtonSprite1[0].sprt.y0 = 0xE5 - 0x11 * VID_NTSC;
         saveSelectButtonSprite1[0].sprt.w = 0x46;
         saveSelectButtonSprite1[0].sprt.h = 0x16;
         saveSelectButtonSprite1[1] = saveSelectButtonSprite1[0];
@@ -278,7 +278,7 @@ void InitMemcardUi(void) {
         saveBackButtonSprite1[0].sprt.v0 = 0xDE;
         saveBackButtonSprite1[0].sprt.u0 = 0xA8;
         saveBackButtonSprite1[0].sprt.x0 = (displayWidth / 2) + 0x14;
-        saveBackButtonSprite1[0].sprt.y0 = 0xE5;
+        saveBackButtonSprite1[0].sprt.y0 = 0xE5 - 0x11 * VID_NTSC;
         saveBackButtonSprite1[0].sprt.w = 0x3E;
         saveBackButtonSprite1[0].sprt.h = 0x16;
         saveBackButtonSprite1[1] = saveBackButtonSprite1[0];
