@@ -1208,15 +1208,9 @@ void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR* res) {
 #undef vec2
 
 void SetPlayerRotation(int cubeSide, int rotation, Player* player) {
-    initPlayerRightVec.vz = 0;
-    initPlayerRightVec.vy = 0;
-    initPlayerRightVec.vx = 0;
-    initPlayerFacingVec.vz = 0;
-    initPlayerFacingVec.vy = 0;
-    initPlayerFacingVec.vx = 0;
-    initPlayerGravityVec.vz = 0;
-    initPlayerGravityVec.vy = 0;
-    initPlayerGravityVec.vx = 0;
+    initPlayerRightVec.vx = initPlayerRightVec.vy = initPlayerRightVec.vz = 0;
+    initPlayerFacingVec.vx = initPlayerFacingVec.vy = initPlayerFacingVec.vz = 0;
+    initPlayerGravityVec.vx = initPlayerGravityVec.vy = initPlayerGravityVec.vz = 0;
 
     if (cubeSide == 5) {
         initPlayerRightVec.vx = 1;
