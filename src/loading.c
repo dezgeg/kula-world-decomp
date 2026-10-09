@@ -101,6 +101,12 @@ void FileError(char* str1, char* str2) {
 #endif
 }
 
+#if VER_US
+#define IF_WHILE while
+#else
+#define IF_WHILE if
+#endif
+
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
     int j;
@@ -157,15 +163,9 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
     CdlFILE cdlfile;
 
     Noop2();
-#if VER_US
-    while (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
+    IF_WHILE (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
         unusedReadErrorCode = 2;
     }
-#else
-    if (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
-        unusedReadErrorCode = 2;
-    }
-#endif
     while (CdControl(CdlSeekL, &cdlfile, 0) == 0) {
         unusedReadErrorCode = 3;
     }
