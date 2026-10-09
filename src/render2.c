@@ -382,7 +382,7 @@ LAB_shadow:
         shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p1 = (ulong*)shadowPrim;
     }
 
-    for (nextVertexId = 0; nextVertexId < 4; nextVertexId++) {
+    for (nextVertexId = 0; nextVertexId < (VER_US ? 10 : 4); nextVertexId++) {
         if (specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 == (ulong*)-1)
             break;
     }
