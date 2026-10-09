@@ -483,7 +483,7 @@ void DrawFruitWidgets(void) {
             if (fruitsCollectedBitmask == 0x1f) {
                 fruitWidgetDisplayMode = 1;
                 fruitBonusTextIndex = 0;
-                fruitBonusTextTimer = 7;
+                fruitBonusTextTimer = VID_NTSC ? 9 : 7;
             }
             break;
         case 1:
@@ -497,7 +497,7 @@ void DrawFruitWidgets(void) {
             }
             fruitBonusTextTimer--;
             if (fruitBonusTextTimer < 0) {
-                fruitBonusTextTimer = 7;
+                fruitBonusTextTimer = VID_NTSC ? 9 : 7;
                 AddParticles(0, &FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[fruitBonusTextIndex], 0);
                 fruitBonusTextIndex++;
                 if (fruitBonusTextIndex == 5) {
@@ -516,7 +516,7 @@ void DrawFruitWidgets(void) {
                 if (fruitBonusTextTimer < 0) {
                     fruitWidgetDisplayMode = 3;
                     fruitBonusTextIndex = 5;
-                    fruitBonusTextTimer = 7;
+                    fruitBonusTextTimer = VID_NTSC ? 9 : 7;
                 }
             }
             break;
@@ -531,7 +531,7 @@ void DrawFruitWidgets(void) {
             }
             fruitBonusTextTimer--;
             if (fruitBonusTextTimer < 0) {
-                fruitBonusTextTimer = 7;
+                fruitBonusTextTimer = VID_NTSC ? 9 : 7;
                 fruitBonusTextIndex--;
                 if (fruitBonusTextIndex == -1) {
                     fruitWidgetDisplayMode = 4;
@@ -549,7 +549,7 @@ void DrawFruitWidgets(void) {
             if (fruitBonusTextTimer < 0) {
                 fruitWidgetDisplayMode = 1;
                 fruitBonusTextIndex = 0;
-                fruitBonusTextTimer = 7;
+                fruitBonusTextTimer = VID_NTSC ? 9 : 7;
             }
             break;
     }
