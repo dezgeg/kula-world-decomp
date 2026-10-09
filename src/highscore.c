@@ -312,14 +312,14 @@ void HighScoreUi(int param_1) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
 
-            SetTextParams(26, 45, 0, -1, -1, -1);
+            SetTextParams(26 - 6 * VID_NTSC, 45, 0, -1, -1, -1);
             DrawTextCrappyFont("\n");
             for (i = 0; i < 6; i++) {
                 waveX = 0;
                 if (local_50 + 50 * i >= 3072) {
                     waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
                 }
-                SetTextParams(waveX + 11, -1, -1, -1, -1, -1);
+                SetTextParams(waveX + (11 + 1 * VID_NTSC), -1, -1, -1, -1, -1);
                 DrawTextCrappyFont(i == cursorIndex ? "-           -\n" : "\n");
             }
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE) || TestButton(PAD_START)) {
@@ -349,8 +349,8 @@ void HighScoreUi(int param_1) {
         rainbowColorG &= 0x7f;
         rainbowColorB &= 0x7f;
 
-        v = 54;
-        SetTextParams(54, 45, 1, 128, 128, 128);
+        v = 54 - 6 * VID_NTSC;
+        SetTextParams(54 - 6 * VID_NTSC, 45, 1, 128, 128, 128);
         DrawTextCrappyFont("\n");
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
@@ -368,9 +368,9 @@ void HighScoreUi(int param_1) {
             DrawTextCrappyFont(buf);
         }
 
-        SetTextParams(152, 45, 2, 128, 128, 128);
+        SetTextParams(152 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
         DrawTextCrappyFont("SCORE\n");
-        v = 156;
+        v = 156 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
             if (local_50 + 50 * i >= 3072) {
@@ -392,9 +392,9 @@ void HighScoreUi(int param_1) {
             DrawTextCrappyFont(buf);
         }
 
-        SetTextParams(208, 45, 2, 128, 128, 128);
+        SetTextParams(208 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
         DrawTextCrappyFont("LEVEL\n");
-        v = 198;
+        v = 198 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
             sprintf(buf, S_FMTd_4, (int)highscores[i].level);
@@ -411,9 +411,9 @@ void HighScoreUi(int param_1) {
             DrawTextCrappyFont(buf);
         }
 
-        SetTextParams(268, 45, 2, 128, 128, 128);
+        SetTextParams(268 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
         DrawTextCrappyFont("FRUITS\n");
-        v = 255;
+        v = 255 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
             sprintf(buf, S_FMTd_4, (int)highscores[i].fruits);
@@ -430,9 +430,9 @@ void HighScoreUi(int param_1) {
             DrawTextCrappyFont(buf);
         }
 
-        SetTextParams(312, 45, 2, 128, 128, 128);
+        SetTextParams(312 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
         DrawTextCrappyFont("TIME\n");
-        v = 316;
+        v = 316 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             c = i == cursorIndex ? 32 : 0;
             FormatTime(highscores[i].time, buf, 0);
