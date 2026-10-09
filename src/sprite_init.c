@@ -73,63 +73,63 @@ uint firstGuiTexture;
 int numKeysInLevel;
 
 int KEY_SPRITE_POSITIONS[] = {
-    16, 219,
+    16, 219 - 14 * VID_NTSC,
     0, 0,
     0, 0,
     0, 0,
 
-    16, 219,
-    30, 219,
+    16, 219 - 14 * VID_NTSC,
+    30, 219 - 14 * VID_NTSC,
     0, 0,
     0, 0,
 
-    16, 219,
-    30, 219,
-    44, 219,
+    16, 219 - 14 * VID_NTSC,
+    30, 219 - 14 * VID_NTSC,
+    44, 219 - 14 * VID_NTSC,
     0, 0,
 
-    16, 219,
-    30, 219,
-    44, 219,
-    58, 219,
+    16, 219 - 14 * VID_NTSC,
+    30, 219 - 14 * VID_NTSC,
+    44, 219 - 14 * VID_NTSC,
+    58, 219 - 14 * VID_NTSC,
 };
 
 int KEY_SPRITE_POSITIONS2[] = {
-    153, 219,
+    153, 219 - 14 * VID_NTSC,
     0, 0,
     0, 0,
     0, 0,
 
-    146, 219,
-    160, 219,
+    146, 219 - 14 * VID_NTSC,
+    160, 219 - 14 * VID_NTSC,
     0, 0,
     0, 0,
 
-    139, 219,
-    153, 219,
-    167, 219,
+    139, 219 - 14 * VID_NTSC,
+    153, 219 - 14 * VID_NTSC,
+    167, 219 - 14 * VID_NTSC,
     0, 0,
 
-    132, 219,
-    146, 219,
-    160, 219,
-    174, 219,
+    132, 219 - 14 * VID_NTSC,
+    146, 219 - 14 * VID_NTSC,
+    160, 219 - 14 * VID_NTSC,
+    174, 219 - 14 * VID_NTSC,
 };
 
 int FRUIT_WIDGET_POSITIONS[] = {
-    200, 224,
-    221, 221,
-    241, 223,
-    268, 221,
-    291, 224,
+    200, SCREEN_HEIGHT - 32,
+    221, SCREEN_HEIGHT - 35,
+    241, SCREEN_HEIGHT - 33,
+    268, SCREEN_HEIGHT - 35,
+    291, SCREEN_HEIGHT - 32,
 };
 
 int FRUIT_BONUS_TEXT_POSITIONS1[] = {
-    200, 222,
-    221, 223,
-    243, 221,
-    267, 223,
-    289, 222,
+    200, SCREEN_HEIGHT - 34,
+    221, SCREEN_HEIGHT - 33,
+    243, SCREEN_HEIGHT - 35,
+    267, SCREEN_HEIGHT - 33,
+    289, SCREEN_HEIGHT - 34,
 };
 
 int FRUIT_BONUS_TEXT_POSITIONS2[] = {
@@ -287,7 +287,7 @@ void InitFruitSprites(void) {
     } else {
         fruitWidgetDisplayMode = 1;
         fruitBonusTextIndex = 0;
-        fruitBonusTextTimer = 7;
+        fruitBonusTextTimer = VID_NTSC ? 9 : 7;
     }
 
     for (i = 0; i < 10; i++) {
@@ -356,7 +356,7 @@ void InitScreenFadePolys(void) {
         screenFadeEnabled = 1;
         halfFps = 0;
         screenFadeSpeed = 2;
-        screenFadeColor = 0x100;
+        screenFadeColor = VID_NTSC ? 254 : 256;
     }
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 1; j++) {
