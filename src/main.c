@@ -439,6 +439,23 @@ int MainGameLoop(void) {
     for (i = 0; i < 2; i++) {
         controllerStatuses[i] = GetControllerStatus(i);
     }
+#if VER_US
+    rect.x = 0x230;
+    rect.y = 0x1C0;
+    rect.w = 0x10;
+    rect.h = 1;
+    ClearImage(&rect, 0, 0, 0);
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 1;
+    rect.h = 1;
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 16; j++) {
+            SetDrawMove(&drMovePackets[i][j], &rect, 0x230 + j, 0x1C0);
+            drMovePackets[i][j].tag = ((u_long)&drMovePackets[i][j + 1] & 0xFFFFFF) | 0x05000000;
+        }
+    }
+#endif
     whichDrawDispEnv = 0;
     for (i = 0; i < 1; i++) {
         ClearOTagR(otag[whichDrawDispEnv][i], 1026);
@@ -521,6 +538,10 @@ int MainGameLoop(void) {
             if (levelEndReason == 0) {
                 if (!isPaused && !isDemoMode && !inGetReadyScreen) {
                     isPaused = 1;
+#if VER_US
+                    SndMuteAllTaggedVoices();
+                    ResetVibration();
+#endif
                 }
             }
             for (i = 0; i < 2; i++) {
@@ -804,8 +825,15 @@ int MainGameLoop(void) {
             if (isDemoMode != 1) {
                 if (!isFinal) {
                     if (curWorld >= 10) {
+#if VER_US
+                        MusicPause();
+                        ShowEndingFmv(1);
+                        CdInit();
+                        SwitchFromBonusToNormalMusic();
+#else
                         ShowEndingFmv(0);
                         ResetCallback();
+#endif
                     }
                     HighScoreUi(1);
                 }
@@ -825,8 +853,15 @@ int MainGameLoop(void) {
     if (curWorld >= 10 && loadNewWorld == 1) {
         i = totalPlayTime[0];
         if (gameMode == 2 && numTimeTrialPlayers == 1 && i + timeTrialDifficulty / FPS < 1) {
+#if VER_US
+            MusicPause();
+            ShowEndingFmv(1);
+            CdInit();
+            SwitchFromBonusToNormalMusic();
+#else
             ShowEndingFmv(0);
             ResetCallback();
+#endif
         }
         finalUnlocked = 1;
         gameMode = 0;
@@ -851,10 +886,12 @@ int MainGameLoop(void) {
         savedFruitsCollectedBitmask = 0;
         isPaused = 1;
     }
+#if !VER_US
     if (gameState == 4) {
         gameState = 0;
         gameMode = 0;
     }
+#endif
     levelScore = 0;
     levelPlayTime[twoPlayerWhichPlayer] = 0;
     return levelEndReason;
@@ -963,6 +1000,16 @@ void LevelCompletedOrDied(void) {
 void DecideNextLevel(void) {
     int unfinished;
     int i;
+
+#if VER_US
+    if (specialLevelType == 0) {
+        if (!isFinal) {
+            overallLevel = curLevel + curWorld2 * 15 + 1;
+        } else {
+            overallLevel = curLevel + curWorld2 * 2 + 151;
+        }
+    }
+#endif
 
     if (gotSioData) {
         return;
