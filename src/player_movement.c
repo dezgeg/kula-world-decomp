@@ -308,9 +308,9 @@ void ProcessMovement(Player* player) {
                 player->isRotatingViewport = 0;
             }
 
-            player->movementVelocity += 7;
-            if (player->movementVelocity > 39) {
-                player->movementVelocity = 40;
+            player->movementVelocity += (VID_NTSC ? 6 : 7);
+            if (player->movementVelocity >= VELOCITY(40)) {
+                player->movementVelocity = VELOCITY(40);
             }
 
             player->rotX = player->movementVelocity;
@@ -429,15 +429,15 @@ void ProcessMovement(Player* player) {
             }
 
             if (player->movementVelocity < 0) {
-                player->movementVelocity += 7;
+                player->movementVelocity += (VID_NTSC ? 6 : 7);
                 if (player->movementVelocity > 0) {
                     player->movementVelocity = 0;
                 }
             }
 
-            player->gravityVelocity -= 6;
-            if (player->gravityVelocity < -79) {
-                player->gravityVelocity = -80;
+            player->gravityVelocity -= VELOCITY(6);
+            if (player->gravityVelocity <= VELOCITY(-80)) {
+                player->gravityVelocity = VELOCITY(-80);
             }
 
             player->finePos.vx += (ushort)player->gravityVelocity * (ushort)player->gravityDir.vx + (ushort)player->movementVelocity * (ushort)player->facingDir.vx;
@@ -551,8 +551,8 @@ void HandleViewportRotationStart(Player* player) {
         }
 
         player->field100_0x1ac = -1;
-        player->viewpointRotationTimer = 14;
-        player->viewpointRotationAngleIncrement = -73;
+        player->viewpointRotationTimer = VID_NTSC ? 16 : 14;
+        player->viewpointRotationAngleIncrement = VID_NTSC ? -64 : -73;
         MovePlayerForward(player, 412);
         player->turningWhereNextFrame = 2;
     }
@@ -572,10 +572,10 @@ void HandleViewportRotationStart(Player* player) {
         player->howMoving198 = ROTATING;
         player->howMoving0 = 3;
         player->field100_0x1ac = 1;
-        player->viewpointRotationTimer = 11;
+        player->viewpointRotationTimer = VID_NTSC ? 13 : 11;
         player->gravityVelocity = 0;
         player->jumpingOrViewportRotationTimer = 0;
-        player->viewpointRotationAngleIncrement = 93;
+        player->viewpointRotationAngleIncrement = VID_NTSC ? 78 : 93;
         MovePlayerForward(player, 0);
 
         playerFinePosWithSquish.vx = -player->gravityDir.vx;
