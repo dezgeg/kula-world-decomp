@@ -66,7 +66,7 @@ SVECTOR fruit2ScreenSpaceParticlesPos = { 228, SCREEN_HEIGHT - 24, -1, 0 };
 SVECTOR fruit3ScreenSpaceParticlesPos = { 253, SCREEN_HEIGHT - 24, -1, 0 };
 SVECTOR fruit4ScreenSpaceParticlesPos = { 278, SCREEN_HEIGHT - 24, -1, 0 };
 SVECTOR fruit5ScreenSpaceParticlesPos = { 299, SCREEN_HEIGHT - 22, -1, 0 };
-SVECTOR transporterParticlesPos = { 160, VID_NTSC ? 166 : 180, -1, 0 };
+SVECTOR transporterParticlesPos = { 160, 180 - 14 * VID_NTSC, -1, 0 };
 SVECTOR unusedParticlesPos1 = { 160, 112, -1, 0 };
 SVECTOR unusedParticlesPos2 = { 160, 240, -1, 0 };
 int curController = 0;
@@ -471,7 +471,7 @@ void ProcessPlayer(void) {
         thePlayer.jumping = 0;
     }
 
-    if (thePlayer.bounceTimer > 698 && thePlayer.howMoving198 == ROLLING) {
+    if (thePlayer.bounceTimer > (VID_NTSC ? 838 : 698) && thePlayer.howMoving198 == ROLLING) {
         thePlayer.jumping = 0;
         thePlayer.rollingForward = 0;
         thePlayer.bounceTimer++;
