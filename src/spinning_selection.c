@@ -25,9 +25,7 @@ void InitSpinningSelectionSprites(void) {
     spinningSelectionSprite1[0].sprt.w = textures[firstGuiTexture + 13].w;
     spinningSelectionSprite1[0].sprt.h = textures[firstGuiTexture + 13].h;
 
-    spinningSelectionSprite1[1] = spinningSelectionSprite1[0];
-    spinningSelectionSprite2[0] = spinningSelectionSprite1[1];
-    spinningSelectionSprite2[1] = spinningSelectionSprite2[0];
+    spinningSelectionSprite2[1] = spinningSelectionSprite2[0] = spinningSelectionSprite1[1] = spinningSelectionSprite1[0];
 }
 
 void UpdateMemcardMenuSaveSelectionSprites(int slot) {

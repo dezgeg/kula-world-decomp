@@ -494,7 +494,6 @@ static SVECTOR UpdatePlayerSurroundingBlocks_blockCheckPos;
 #define k UpdatePlayerSurroundingBlocks_k
 #define blockCheckPos UpdatePlayerSurroundingBlocks_blockCheckPos
 void UpdatePlayerSurroundingBlocks(Player* player) {
-    short (*grid)[8][8] = playerSurroundingBlocksGrid;
     short gx, gy, gz;
     short rx, ry, rz;
     short vx, vy, vz;
@@ -530,8 +529,7 @@ void UpdatePlayerSurroundingBlocks(Player* player) {
                 gridX = (startX + i * player->gravityDir.vx + j * player->facingDir.vx) - k * player->rightVec.vx;
                 gridY = (startY + i * player->gravityDir.vy + j * player->facingDir.vy) - k * player->rightVec.vy;
                 gridZ = (startZ + i * player->gravityDir.vz + j * player->facingDir.vz) - k * player->rightVec.vz;
-                player->surroundingBlocks[i][j][k] = grid[gridX][gridY][gridZ];
-                velSum = (short)player->surroundingBlocks[i][j][k];
+                velSum = player->surroundingBlocks[i][j][k] = playerSurroundingBlocksGrid[gridX][gridY][gridZ];
             }
         }
     }
@@ -872,8 +870,6 @@ static int HandlePlayerMovementStuff_r2TurnFlag;
 #define r1TurnFlag HandlePlayerMovementStuff_r1TurnFlag
 #define r2TurnFlag HandlePlayerMovementStuff_r2TurnFlag
 void HandlePlayerMovementStuff(Player* player) {
-    short turningTimer;
-
     player->playerHasControl = 1;
 
     if (player->startTurningTo == 1) {
@@ -898,8 +894,7 @@ void HandlePlayerMovementStuff(Player* player) {
         player->startTurningTo = -1;
     }
 
-    turningTimer = player->turningTimer;
-    if (turningTimer > 0) {
+    if (player->turningTimer > 0) {
         player->turningPhase += player->turningDelta;
         player->turningTimer--;
         if (player->movementVelocity > 10) {
