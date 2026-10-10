@@ -60,8 +60,6 @@ void DrawLethargyEffects(void) {
             }
             break;
         case 3:
-            lethargyMode = 4;
-            lethargyColorCounter = 0x50;
             setXY4(&lethargyEffectPoly[0],
                     0, 0,
                     displayWidth + 1, 0,
@@ -72,6 +70,8 @@ void DrawLethargyEffects(void) {
                     displayWidth + 1, 0,
                     0, displayHeight + 1,
                     displayWidth + 1, displayHeight + 1);
+            lethargyMode = 4;
+            lethargyColorCounter = 0x50;
 
             AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][0]);
             if (displayWidth > 256) {

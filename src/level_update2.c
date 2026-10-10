@@ -1157,12 +1157,8 @@ static SVECTOR GetVectorBasedOnTwoDirs_vec1;
 static SVECTOR GetVectorBasedOnTwoDirs_vec2;
 #define vec2 GetVectorBasedOnTwoDirs_vec2
 void GetVectorBasedOnTwoDirs(int dir1, int dir2, SVECTOR* res) {
-    vec1.vz = 0;
-    vec1.vy = 0;
-    vec1.vx = 0;
-    vec2.vz = 0;
-    vec2.vy = 0;
-    vec2.vx = 0;
+    vec1.vx = vec1.vy = vec1.vz = 0;
+    vec2.vx = vec2.vy = vec2.vz = 0;
 
     if (dir1 == 5) {
         vec1.vx = 1;
