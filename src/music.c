@@ -36,6 +36,30 @@ int savedMusicXaChan;
 static int bonusMusicSearchAttempt;
 static int musicSearchAttempt;
 
+// FIXME: this file should be merged with loading.c and use single definition
+static inline void FileError(char* str1, char* str2) {
+#if VER_US
+    int dummy;
+    (void)&dummy;
+    VSync(3);
+#else
+    VSyncCallback(NULL);
+    SetupDisplay(1, 0x80, 0, 0, 0, 0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    FntPrint(S_File_error);
+    FntPrint(str1);
+    FntPrint(str2);
+    FntFlush(-1);
+    whichDrawDispEnv = 1;
+    PutDrawAndDispEnvs();
+    while (1)
+        ;
+#endif
+}
+
 void PlayMusic(int world) {
     char dummy[8];
     char* filename;
@@ -51,21 +75,7 @@ void PlayMusic(int world) {
         musicSearchAttempt++;
     }
     if (musicSearchAttempt >= 10) {
-        filename = MUSICS[world].filename;
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not find music \n");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        do {
-        } while (1);
+        FileError("could not find music \n", MUSICS[world].filename);
     }
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + MUSICS[world].sectors * 4;
@@ -80,21 +90,7 @@ void PlayMusic(int world) {
     while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
         ;
     if (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
-        filename = MUSICS[world].filename;
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not start playing \n");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        do {
-        } while (1);
+        FileError("could not start playing \n", MUSICS[world].filename);
     }
     Noop();
     SpuSetReverb(1);
@@ -128,21 +124,7 @@ void PlayBonusMusic(void) {
     }
 
     if (bonusMusicSearchAttempt >= 10) {
-        filename = BONUS_MUSICS[bonusMusicIndex].filename;
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not find music \n");
-        FntPrint(filename);
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        do {
-        } while (1);
+        FileError("could not find music \n", BONUS_MUSICS[bonusMusicIndex].filename);
     }
 
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
@@ -158,20 +140,7 @@ void PlayBonusMusic(void) {
     while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
         ;
     if (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not start playing \n");
-        FntPrint("bonus song");
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        do {
-        } while (1);
+        FileError("could not start playing \n", "bonus song");
     }
     Noop();
     SpuSetReverb(1);
@@ -216,20 +185,7 @@ void SwitchFromBonusToNormalMusic(void) {
     while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
         ;
     if (CdControlB(CdlReadS, &musicBonusLoc, dummy) == 0) {
-        VSyncCallback(NULL);
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_File_error);
-        FntPrint("could not start playing \n");
-        FntPrint("resumed song after bonus");
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        do {
-        } while (1);
+        FileError("could not start playing \n", "resumed song after bonus");
     }
     SndSetMusicVolume();
     Noop();
