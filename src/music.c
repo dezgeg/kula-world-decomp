@@ -62,7 +62,6 @@ static inline void FileError(char* str1, char* str2) {
 
 void PlayMusic(int world) {
     char dummy[8];
-    char* filename;
 
     Noop2();
     SndSetMusicVolume();
@@ -99,7 +98,6 @@ void PlayMusic(int world) {
 
 void PlayBonusMusic(void) {
     char dummy[8];
-    char* filename;
 
     Noop2();
     SndSetMusicVolume();
