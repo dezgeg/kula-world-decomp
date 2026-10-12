@@ -111,17 +111,17 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
 }
 
 void SetDebugScreenshotFilenameSuffix(int num) {
-    char* p = debugFilenameBuf;
-    int y = num; // XXX: permuter mess
-    while (*p) {
-        p++;
+    char* p = debugFilenameBuf - 1;
+    while (*++p) {
     }
 
-    *p++ = '0' + y / 1000;
-    num = y = y % 1000;
-    *p++ = ((num / 100) + '0');
-    *p++ = ((num %= 100) / 10) + '0';
-    *p++ = '0' + (y = num % 10);
+    *p++ = '0' + num / 1000;
+    num %= 1000;
+    *p++ = '0' + num / 100;
+    num %= 100;
+    *p++ = '0' + num / 10;
+    num %= 10;
+    *p++ = '0' + num;
     *p++ = '.';
     *p++ = 't';
     *p++ = 'i';
