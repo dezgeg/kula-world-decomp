@@ -26,13 +26,9 @@ void InitCopycatUiTextures(void) {
     int i;
     int tex;
     for (i = 0; i < 4; i++) {
-        // XXX: ugly permuter mess
-        short (*arr1)[2] = &COPYCAT_SPRITE_POSITIONS[0];
-        short (*arr2)[2] = &COPYCAT_SPRITE_POSITIONS[0] + 1;
-
         tex = i + 40;
         TSpritePrim(&copycatUiSprites[0][i], 0, 0, textures[firstGuiTextTexture + tex].tpage);
-        setXY0(&copycatUiSprites[0][i].sprt, arr1[i][0], arr2[i][0]);
+        setXY0(&copycatUiSprites[0][i].sprt, COPYCAT_SPRITE_POSITIONS[i * 2], COPYCAT_SPRITE_POSITIONS[i * 2 + 1]);
         setRGB0(&copycatUiSprites[0][i].sprt, 0x80, 0x80, 0x80);
         SetSemiTrans(&copycatUiSprites[0][i].sprt, textures[firstGuiTextTexture + tex].semitrans);
         SetShadeTex(&copycatUiSprites[0][i].sprt, 0);

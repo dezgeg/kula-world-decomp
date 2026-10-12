@@ -228,7 +228,8 @@ void LoadLevelEndReasonGfx() {
             SetSemiTrans(&bigGuiSprite2[0].sprt, 2);
             SetShadeTex(&bigGuiSprite2[0].sprt, 0);
             bigGuiSprite2[0].sprt.clut = GetClut(704, 94);
-            setWH(&bigGuiSprite2[0].sprt, w * 4, h);
+            bigGuiSprite2[0].sprt.w = w * 4;
+            bigGuiSprite2[0].sprt.h = h;
             setUV0(&bigGuiSprite2[0].sprt, 0, 0x5f);
             bigGuiSprite2[1] = bigGuiSprite2[0];
 
@@ -237,7 +238,8 @@ void LoadLevelEndReasonGfx() {
             SetSemiTrans(&bigGuiSprite1[0].sprt, 1);
             SetShadeTex(&bigGuiSprite1[0].sprt, 0);
             bigGuiSprite1[0].sprt.clut = GetClut(720, 94);
-            setWH(&bigGuiSprite1[0].sprt, w * 4, h);
+            bigGuiSprite1[0].sprt.w = w * 4;
+            bigGuiSprite1[0].sprt.h = h;
             if (w * 4 < 129) {
                 setUV0(&bigGuiSprite1[0].sprt, 128, 94);
             } else {

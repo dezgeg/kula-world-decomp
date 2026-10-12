@@ -53,7 +53,6 @@ extern volatile byte saveReplayRleButtonCount;
 
 #ifndef SKIP_UNUSED_CODE
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
-    int num;
     int worldNum;
     int fd;
     char* file;
@@ -72,9 +71,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
 
     if (useWorldPrefix == 0) {
         sprintf(debugFilenameBuf, "%s", prefix);
-        num = screenshotIndex[0];
-        screenshotIndex[0]++;
-        SetDebugScreenshotFilenameSuffix(num);
+        SetDebugScreenshotFilenameSuffix(screenshotIndex[0]++);
     } else {
         worldNum = 10;
         if (curWorld < 10) {
@@ -87,9 +84,7 @@ void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
             worldNum = 12;
         }
         sprintf(debugFilenameBuf, "%s%s", prefix, DEBUG_SCREENSHOT_WORLD_NAMES[worldNum]);
-        num = screenshotIndex[worldNum];
-        screenshotIndex[worldNum]++;
-        SetDebugScreenshotFilenameSuffix(num);
+        SetDebugScreenshotFilenameSuffix(screenshotIndex[worldNum]++);
     }
     DrawSync(0);
     StoreImage(&screenshotRect, 0x600000); // TODO: use symbol for this
