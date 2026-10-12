@@ -33,21 +33,21 @@ void ScanLevelDataForRetractableSpikes(void) {
             numRetractableSpikes++;
             variant = entityData[offset + IE_VARIANT];
             entityData[offset + IE_VARIANT] = 0;
-            if (variant * 29 < 52) {
+            if (variant * (VID_NTSC ? 35 : 29) < (VID_NTSC ? 63 : 52)) {
                 entityData[offset + IE_STATE] = 2;
                 entityData[offset + IE_UNK8] = 0;
                 entityData[offset + IE_UNK16] = 0;
-                entityData[offset + IE_COUNTER] = 52 - 29 * variant;
-            } else if (variant * 29 < 80) {
+                entityData[offset + IE_COUNTER] = (VID_NTSC ? 63 : 52) - (VID_NTSC ? 35 : 29) * variant;
+            } else if (variant * (VID_NTSC ? 35 : 29) < (VID_NTSC ? 96 : 80)) {
                 entityData[offset + IE_STATE] = 1;
                 entityData[offset + IE_UNK8] = 31;
                 entityData[offset + IE_UNK16] = 3;
-                entityData[offset + IE_COUNTER] = 80 - variant * 29;
-            } else if (variant * 29 < 116) {
+                entityData[offset + IE_COUNTER] = (VID_NTSC ? 96 : 80) - variant * (VID_NTSC ? 35 : 29);
+            } else if (variant * (VID_NTSC ? 35 : 29) < (VID_NTSC ? 140 : 116)) {
                 entityData[offset + IE_STATE] = 1;
                 entityData[offset + IE_UNK8] = 31;
                 entityData[offset + IE_UNK16] = 4;
-                entityData[offset + IE_COUNTER] = 116 - variant * 29;
+                entityData[offset + IE_COUNTER] = (VID_NTSC ? 140 : 116) - variant * (VID_NTSC ? 35 : 29);
             }
         }
     }
