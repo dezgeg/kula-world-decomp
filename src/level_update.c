@@ -761,7 +761,7 @@ void ProcessCameraAndMovement(Player* player) {
 
     player->movementInhibitTimer = 2000;
 
-    if (levelEntryAnimTimer > 880) {
+    if (levelEntryAnimTimer > (VID_NTSC ? 928 : 880)) {
         levelEntryAnimTimer += levelEntryAnimTimerIncrement;
         levelEntryAnimTimerIncrement--;
         if (levelEntryAnimTimerIncrement <= 0) {
