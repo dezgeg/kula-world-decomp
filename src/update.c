@@ -300,6 +300,9 @@ void ProcessFlashingBlocks(void) {
     }
 }
 
+#define EXTEND_FRAMES (VID_NTSC ? 5 : 4)
+#define RETRACT_FRAMES (VID_NTSC ? 44 : 36)
+
 void ProcessRetractableSpikes(void) {
     int i;
     SVECTOR sndPos;
@@ -320,7 +323,7 @@ void ProcessRetractableSpikes(void) {
         switch (unk1E) {
             case 0:
                 if (--counter <= 0) {
-                    counter = 4;
+                    counter = EXTEND_FRAMES;
                     unk1E = 1;
                     eb[4] = 1;
 
@@ -337,7 +340,7 @@ void ProcessRetractableSpikes(void) {
 
             case 1:
                 if (--counter >= 0) {
-                    unkE = (3 - counter) * 8;
+                    unkE = ((EXTEND_FRAMES - 1 - counter) * 32) / EXTEND_FRAMES;
                 } else {
                     unkE = 0x1f;
                     counter = FRAMES(12);
@@ -350,7 +353,7 @@ void ProcessRetractableSpikes(void) {
                     if ((counter & 1) == 0) {
                         unkE = 0x1f;
                     } else {
-                        unkE = 0x1f - (counter * 32) / 48;
+                        unkE = 0x1f - (counter * 32) / (FRAMES(12) * 4);
                     }
                 } else {
                     unkE = 0x1f;
@@ -361,7 +364,7 @@ void ProcessRetractableSpikes(void) {
 
             case 3:
                 if (--counter <= 0) {
-                    counter = 36;
+                    counter = RETRACT_FRAMES;
                     unk1E = 4;
 
                     sndPos.vx = pos[0] * 512;
@@ -377,13 +380,13 @@ void ProcessRetractableSpikes(void) {
 
             case 4:
                 if (--counter >= 0) {
-                    unkE = (counter * 32) / 36;
-                    if (counter == 9) {
+                    unkE = (counter * 32) / RETRACT_FRAMES;
+                    if (counter == RETRACT_FRAMES / 4) {
                         eb[4] = 2;
                     }
                 } else {
                     unkE = 0;
-                    counter = 52;
+                    counter = VID_NTSC ? 63 : 52;
                     unk1E = 0;
                 }
                 break;
@@ -394,6 +397,8 @@ void ProcessRetractableSpikes(void) {
         eb[16] = unk1E;
     }
 }
+#undef EXTEND_FRAMES
+#undef RETRACT_FRAMES
 
 void SetSunglassMode(int on) {
     if (!on) {
