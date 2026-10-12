@@ -1072,7 +1072,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         player->facingDirBeforeStartingTurning = player->facingDir;
     }
 
-    if ((ushort)(player->subpixelPositionOnCube.vz - 100) >= 313 && player->startTurningTo != 0 && player->turningTimer <= 13) {
+    if ((ushort)(player->subpixelPositionOnCube.vz - 100) >= 313 && player->startTurningTo != 0 && player->turningTimer <= (VID_NTSC ? 16 : 13)) {
         blockPos.vx = (player->finePos.vx + 256 + player->facingDir.vx * 150 - player->gravityDir.vx * 400) >> 9;
         blockPos.vy = (player->finePos.vy + 256 + player->facingDir.vy * 150 - player->gravityDir.vy * 400) >> 9;
         blockPos.vz = (player->finePos.vz + 256 + player->facingDir.vz * 150 - player->gravityDir.vz * 400) >> 9;

@@ -279,7 +279,7 @@ void DrawHourglassAndTimer(void) {
         color = (50 - secs) * 128 / 50;
 
         for (j = 0; j < 10; j++) {
-            setXY0(&levelTimeLeftDigitSprites.sprites[whichDrawDispEnv][j].sprt, dx + 152 + w * j, 50);
+            setXY0(&levelTimeLeftDigitSprites.sprites[whichDrawDispEnv][j].sprt, dx + 152 + w * j, 50 + 2 * VID_NTSC);
             setRGB0(&levelTimeLeftDigitSprites.sprites[whichDrawDispEnv][j].sprt, color, color, color);
         }
 

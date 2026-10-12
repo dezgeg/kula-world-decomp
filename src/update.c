@@ -230,13 +230,13 @@ void ProcessFlashingBlocks(void) {
                         cubeStates[cubeIndex * 16 + j]->color = 0xffffff;
                     }
                     eb->state = 2;
-                    counter = 4;
+                    counter = VID_NTSC ? 5 : 4;
                 }
                 break;
             case 2:
                 counter--;
                 if (counter > 0) {
-                    color = counter * 56 + 32;
+                    color = counter * 224 / (VID_NTSC ? 5 : 4) + 32;
                     color = color << 16 | color << 8 | color;
                     for (j = 0; j < 6; j++) {
                         cubeStates[cubeIndex * 16 + j]->color = color;
