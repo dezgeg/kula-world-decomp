@@ -133,12 +133,12 @@ void ProcessAndRenderParticles(void) {
     long sxy;
     long dummy;
     int i;
+    int j;
     int lightFlag;
     char colorR;
     char colorG;
     char colorB;
     Frame* fd;
-    int j;
 
     int sx;
     int sy;

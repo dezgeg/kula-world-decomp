@@ -468,8 +468,7 @@ void CreateAllItemDispLists(void) {
 
                 case OBJ_GEM:
                     entityData[entityOffset + itemOffset + 11] = (entityData[entityOffset + itemOffset + 11] + VELOCITY(35)) % 4096;
-                    rotVec.vy = 0;
-                    rotVec.vx = 0;
+                    rotVec.vx = rotVec.vy = 0;
                     rotVec.vz = entityData[entityOffset + itemOffset + 11];
                     RotMatrix(&rotVec, &rotMatrix);
                     break;
@@ -506,9 +505,7 @@ void CreateAllItemDispLists(void) {
                     break;
 
                 case OBJ_BOUNCEPAD:
-                    rotVec.vz = 0;
-                    rotVec.vy = 0;
-                    rotVec.vx = 0;
+                    rotVec.vx = rotVec.vy = rotVec.vz = 0;
                     RotMatrix(&rotVec, &rotMatrix);
                     distSq = (calcPos.vx - thePlayer.finePos.vx) * (calcPos.vx - thePlayer.finePos.vx) +
                                                 (calcPos.vy - thePlayer.finePos.vy) * (calcPos.vy - thePlayer.finePos.vy) +
@@ -527,9 +524,9 @@ void CreateAllItemDispLists(void) {
 
             itemIdx = entityData[entityOffset + itemOffset + 5];
             ApplyMatrixSV(&itemState[itemIdx].matrix, &offsetVec, &offsetVec);
-            calcPos.vx = itemState[itemIdx].pos.vx = offsetVec.vx + itemState[itemIdx].matrix.t[0];
-            calcPos.vy = itemState[itemIdx].pos.vy = offsetVec.vy + itemState[itemIdx].matrix.t[1];
-            calcPos.vz = itemState[itemIdx].pos.vz = offsetVec.vz + itemState[itemIdx].matrix.t[2];
+            calcPos.vx = itemState[itemIdx].pos.vx = itemState[itemIdx].matrix.t[0] + offsetVec.vx;
+            calcPos.vy = itemState[itemIdx].pos.vy = itemState[itemIdx].matrix.t[1] + offsetVec.vy;
+            calcPos.vz = itemState[itemIdx].pos.vz = itemState[itemIdx].matrix.t[2] + offsetVec.vz;
             MulMatrix0(&itemState[itemIdx].matrix, &rotMatrix, &itemRotMatrix);
             MulMatrix0(&perspMatrixes[cameraIndex], &itemRotMatrix, &drawMatrix);
             ApplyMatrixSV(&perspMatrixes[cameraIndex], &calcPos, &camPos);
@@ -810,7 +807,7 @@ int HandleTransporter(Player* player) {
             AddParticles(3, &transporterParticlesPos, 0);
         }
 
-        if (timer > -1) {
+        if (timer >= 0) {
             timer--;
             player->movementInhibitTimer = 15;
             player->rollingForward = 0;
@@ -819,9 +816,6 @@ int HandleTransporter(Player* player) {
         }
 
         if (timer == -1) {
-            int destEntityIdx;
-            int destCubeSide;
-
             SetRenderScreenFade(0, 1);
             Vibrate98(0);
             player->alreadyProcessedEntityAction = OBJ_TRANSPORTER;

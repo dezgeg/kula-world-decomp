@@ -375,8 +375,8 @@ void InitTitleSprite(void) {
     int i;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&titleSprite[i], 0, 0, textures[firstGuiTexture + 16].tpage);
-        setRGB0(&titleSprite[i].sprt, 128, 128, 128);
         setXY0(&titleSprite[i].sprt, 38, VER_US ? 8 : 25);
+        setRGB0(&titleSprite[i].sprt, 128, 128, 128);
         SetSemiTrans(&titleSprite[i].sprt, textures[firstGuiTexture + 16].semitrans);
         SetShadeTex(&titleSprite[i].sprt, 0);
         titleSprite[i].sprt.clut = textures[firstGuiTexture + 16].clut;
@@ -391,8 +391,8 @@ void InitCopyrightSprite(void) {
     int i;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&copyrightSprite[i], 0, 0, textures[firstGuiTexture + 17].tpage);
-        setRGB0(&copyrightSprite[i].sprt, 128, 128, 128);
         setXY0(&copyrightSprite[i].sprt, 46, VER_US ? 197 : 218);
+        setRGB0(&copyrightSprite[i].sprt, 128, 128, 128);
         SetSemiTrans(&copyrightSprite[i].sprt, textures[firstGuiTexture + 17].semitrans);
         SetShadeTex(&copyrightSprite[i].sprt, 0);
         copyrightSprite[i].sprt.clut = textures[firstGuiTexture + 17].clut;
@@ -409,8 +409,8 @@ void InitTimerPausedSprite(void) {
     drawTimerPausedWidget = 0;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&timerPausedSprite[i], 0, 0, textures[firstGuiTexture + 19].tpage);
-        setRGB0(&timerPausedSprite[i].sprt, 128, 128, 128);
         setXY0(&timerPausedSprite[i].sprt, 140, 6 + 2 * VID_NTSC);
+        setRGB0(&timerPausedSprite[i].sprt, 128, 128, 128);
         SetSemiTrans(&timerPausedSprite[i].sprt, textures[firstGuiTexture + 19].semitrans);
         SetShadeTex(&timerPausedSprite[i].sprt, 0);
         timerPausedSprite[i].sprt.clut = textures[firstGuiTexture + 19].clut;
@@ -449,9 +449,7 @@ void InitBonusWidgetSprites(void) {
         }
 
         for (j = 0; j < 8; j++) {
-            int* arr1 = &BONUS_WIDGET_POSITIONS[0];
-            int* arr2 = &BONUS_WIDGET_POSITIONS[0] + 1;
-            setXY0(&bonusWidgetSpritesPiechart[i][j].sprt, arr1[j * 2] + 268, arr2[j * 2] + 7);
+            setXY0(&bonusWidgetSpritesPiechart[i][j].sprt, BONUS_WIDGET_POSITIONS[j * 2] + 268, BONUS_WIDGET_POSITIONS[j * 2 + 1] + 7);
         }
         setXY0(&bonusWidgetSpritesPiechart[i][8].sprt, 268, 7);
 

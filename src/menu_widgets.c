@@ -218,7 +218,8 @@ void LoadMenuGfx(int menuId) {
     SetSemiTrans(&bigGuiSprite2[0].sprt, 2);
     SetShadeTex(&bigGuiSprite2[0].sprt, 0);
     bigGuiSprite2[0].sprt.clut = GetClut(704, 94);
-    setWH(&bigGuiSprite2[0].sprt, width * 4, height);
+    bigGuiSprite2[0].sprt.w = width * 4;
+    bigGuiSprite2[0].sprt.h = height;
     setUV0(&bigGuiSprite2[0].sprt, 0, 95);
 
     TSpritePrim(&bigGuiSprite1[0], 0, 0, GetTPage(0, 1, 736, 94));
@@ -227,7 +228,8 @@ void LoadMenuGfx(int menuId) {
     SetSemiTrans(&bigGuiSprite1[0].sprt, 1);
     SetShadeTex(&bigGuiSprite1[0].sprt, 0);
     bigGuiSprite1[0].sprt.clut = GetClut(720, 94);
-    setWH(&bigGuiSprite1[0].sprt, width * 4, height);
+    bigGuiSprite1[0].sprt.w = width * 4;
+    bigGuiSprite1[0].sprt.h = height;
     if (width * 4 < 129) {
         setUV0(&bigGuiSprite1[0].sprt, 128, 94);
     } else {

@@ -750,10 +750,10 @@ int MainGameLoop(void) {
         if (!isDemoMode && menuIdleTimer >= 2000 && controllerButtons == 0 && gameState == 0) {
             wasPausedPreviousFrame = 0;
             gameMode = 0;
-            screenOffsetY = displayHeight;
             totalPlayTime[0] = 0;
             numCameras = 1;
             isPaused = 0;
+            screenOffsetY = displayHeight;
             cursorPosInMenu[curMenu] = 0;
             curMenu = 0;
             gameState = 1;
@@ -1077,7 +1077,7 @@ void DecideNextLevel(void) {
     }
     if (specialLevelType > 0) {
         if (curLevel < *(int*)LEVEL_PAK_BUF && debugBonusLevels == 0) {
-            if (((savedFruitsCollectedBitmask & 0x1f) == 0x1f)) {
+            if ((savedFruitsCollectedBitmask & 0x1f) == 0x1f) {
                 fruitsCollectedBitmask = 0;
                 savedFruitsCollectedBitmask = 0;
                 if (levelAfterBonusLevel > 5) {

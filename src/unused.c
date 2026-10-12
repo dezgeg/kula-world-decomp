@@ -21,7 +21,7 @@ void UnusedLoadFullScreenPicture(void* param_1) {
 
     rect.x = 0;
     rect.y = 0;
-    rect.w = displayWidth << 1;
+    rect.w = displayWidth * 2;
     rect.h = displayHeight;
     ClearImage(&rect, 0, 0, 0);
 
