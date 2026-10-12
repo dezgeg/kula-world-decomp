@@ -42,7 +42,7 @@ extern int cameraIndex;
 extern int debugDisableTimer;
 extern int drawTimerPausedWidget;
 extern int hourglassIsRotating;
-extern int KEY_SPRITE_POSITIONS[];
+extern int KEY_SPRITE_POSITIONS[2][4][8];
 extern int KEY_SPRITE_POSITIONS2[];
 extern int levelEndReason;
 extern int levelPlayTime[2];
@@ -196,17 +196,13 @@ void HandleItemTouching(Player* player) {
                             break;
 
                         case OBJ_KEY:
-                            ptr = (int*)((char*)KEY_SPRITE_POSITIONS - 0x20);
                             if (gameMode == 2 && numTimeTrialPlayers == 2) {
-                                ptr = (int*)((char*)KEY_SPRITE_POSITIONS2 - 0x20);
+                                keyParticlesPos.vx = KEY_SPRITE_POSITIONS[1][numKeysInLevel - 1][(numKeysInLevel - numKeysRemaining) * 2] + 6;
+                                keyParticlesPos.vy = KEY_SPRITE_POSITIONS[1][numKeysInLevel - 1][(numKeysInLevel - numKeysRemaining) * 2 + 1] + 11;
+                            } else {
+                                keyParticlesPos.vx = KEY_SPRITE_POSITIONS[0][numKeysInLevel - 1][(numKeysInLevel - numKeysRemaining) * 2] + 6;
+                                keyParticlesPos.vy = KEY_SPRITE_POSITIONS[0][numKeysInLevel - 1][(numKeysInLevel - numKeysRemaining) * 2 + 1] + 11;
                             }
-
-                            {
-                                int* p = (int*)(numKeysInLevel * 32 + (int)ptr);
-                                keyParticlesPos.vx = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8) + 6;
-                                keyParticlesPos.vy = *(int*)((char*)p + (numKeysInLevel - numKeysRemaining) * 8 + 4) + 11;
-                            }
-                            asm volatile("");
                             keyParticlesPos.vz = -1;
 
                             AddParticles(0, &keyParticlesPos, 0);
