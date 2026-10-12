@@ -400,7 +400,7 @@ void ScreenAdjustMenu(void) {
 
     if (TestButton(PAD_TRIANGLE)) {
         dispenvScreenX = 0;
-        dispenvScreenY = 18;
+        dispenvScreenY = VID_NTSC ? 0 : 18;
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 
