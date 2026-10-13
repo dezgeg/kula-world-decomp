@@ -73,9 +73,11 @@ void PlayMusic(int world) {
         CdInit();
         musicSearchAttempt++;
     }
+#if !VER_US
     if (musicSearchAttempt >= 10) {
         FileError("could not find music \n", MUSICS[world].filename);
     }
+#endif
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + MUSICS[world].sectors * 4;
     CdReadSync(0, 0);
@@ -161,11 +163,19 @@ void MusicPause(void) {
     CdReadSync(0, 0);
     Noop();
     SpuSetReverb(1);
+#if VER_US
+    playingBonusMusic = 1;
+#endif
 }
 
 void SwitchFromBonusToNormalMusic(void) {
     char dummy[8];
 
+#if VER_US
+    if (playingBonusMusic != 1) {
+        return;
+    }
+#endif
     Noop2();
     SndSetMusicVolume();
     musicCdlLoc = savedMusicCdlLoc;
