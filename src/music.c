@@ -60,6 +60,15 @@ static inline void FileError(char* str1, char* str2) {
 #endif
 }
 
+#if VER_US
+#define IF_WHILE while
+#define FileError(a,b) VSync(3)
+#define VSYNC_3() VSync(3)
+#else
+#define IF_WHILE if
+#define VSYNC_3() /* nop */
+#endif
+
 void PlayMusic(int world) {
     char dummy[8];
 
