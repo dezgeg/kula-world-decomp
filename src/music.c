@@ -111,6 +111,13 @@ void PlayMusic(int world) {
     IF_WHILE (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
         FileError("could not start playing \n", MUSICS[world].filename);
     }
+#if VER_US
+    savedMusicCdlLoc = musicCdlLoc;
+    savedMusicStartSector = musicStartSector;
+    savedMusicEndSector = musicEndSector;
+    savedMusicCurSector = musicStartSector;
+    savedMusicXaChan = musicCdlFilter.chan;
+#endif
     Noop();
     SpuSetReverb(1);
     playingBonusMusic = 0;
@@ -178,8 +185,9 @@ void MusicPause(void) {
     savedMusicEndSector = musicEndSector;
     savedMusicCurSector = musicCurSector;
     savedMusicXaChan = musicCdlFilter.chan;
-    while (CdControlB(CdlPause, 0, dummy) == 0)
-        ;
+    while (CdControlB(CdlPause, 0, dummy) == 0) {
+        VSYNC_3();
+    }
     CdReadSync(0, 0);
     Noop();
     SpuSetReverb(1);
