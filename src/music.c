@@ -90,9 +90,13 @@ void PlayMusic(int world) {
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + MUSICS[world].sectors * 4;
     CdReadSync(0, 0);
-    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
-        ;
+    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0) {
+        VSYNC_3();
+    }
+    VSYNC_3();
+#if !VER_US
     CdReadSync(0, 0);
+#endif
     CdIntToPos(musicStartSector, &musicCdlLoc);
     CdReadSync(0, 0);
     musicCdlFilter.file = 1;
