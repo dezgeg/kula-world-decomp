@@ -245,11 +245,16 @@ void main(void) {
     int i;
     int j;
 
+#if !VER_US
     isDemoMode = 0;
+#endif
     dispenvScreenX = 0;
-    dispenvScreenY = 18;
+    dispenvScreenY = VID_NTSC ? 0 : 18;
     InitStuff();
     Noop();
+#if VER_US
+    ClearScreen();
+#endif
     if (devkitAltBoot == 1) {
         WriteToDevkit(1);
         SetupDisplay(1, 0, 0x80, 0, 0, 0);
@@ -269,11 +274,18 @@ void main(void) {
     isPaused = 1;
     loadNewWorld = 1;
     CdInit();
+#if VER_US
+    ClearScreen();
+    ShowEndingFmv(2);
+    CdInit();
+#endif
     /* sfx */
     curFileLength = ReadDataFile(curWorld, 1, FILE_BUF);
     SndInitFromSfxFile(FILE_BUF, curFileLength);
+#if !VER_US
     LoadWarningTim();
     SndPlaySfx(SFX_LOADING, 888, &ZERO_SVECTOR_a2f04, 8000);
+#endif
     /* ggi */
     curFileLength = ReadDataFile(curWorld, 3, FILE_BUF);
     i = ParseGGI(FILE_BUF);
