@@ -132,9 +132,11 @@ void PlayBonusMusic(void) {
         bonusMusicSearchAttempt++;
     }
 
+#if !VER_US
     if (bonusMusicSearchAttempt >= 10) {
         FileError("could not find music \n", BONUS_MUSICS[bonusMusicIndex].filename);
     }
+#endif
 
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + BONUS_MUSICS[bonusMusicIndex].sectors * 4;
