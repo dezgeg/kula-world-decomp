@@ -16,6 +16,11 @@ extern int whichDrawDispEnv;
 
 short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
+#if VER_US
+char S_could_not_start_playing[] = "could not start playing \n";
+char S_bonus_song[] = "bonus song";
+char S_resumed_song_after_bonus[] = "resumed song after bonus";
+#endif
 
 CdlFILTER musicCdlFilter;
 CdlFILE musicCdlfile;
@@ -124,6 +129,10 @@ void PlayMusic(int world) {
 }
 
 void PlayBonusMusic(void) {
+#if VER_US
+    int pad[2];
+    int bonusMusicSearchAttempt;
+#endif
     char dummy[8];
 
     Noop2();
@@ -157,18 +166,30 @@ void PlayBonusMusic(void) {
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
     musicEndSector = musicStartSector + BONUS_MUSICS[bonusMusicIndex].sectors * 4;
     CdReadSync(0, 0);
-    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
-        ;
+    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0) {
+        VSYNC_3();
+    }
+    VSYNC_3();
+#if !VER_US
     CdReadSync(0, 0);
+#endif
+
     CdIntToPos(musicStartSector, &musicCdlLoc);
     CdReadSync(0, 0);
     musicCdlFilter.file = 1;
     musicCdlFilter.chan = BONUS_MUSICS[bonusMusicIndex].chan;
-    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
-        ;
+    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0) {
+        VSYNC_3();
+    }
+#if VER_US
+    while (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
+        VSYNC_3();
+    }
+#else
     if (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
         FileError("could not start playing \n", "bonus song");
     }
+#endif
     Noop();
     SpuSetReverb(1);
     playingBonusMusic = 1;
