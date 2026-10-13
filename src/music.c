@@ -197,6 +197,9 @@ void MusicPause(void) {
 }
 
 void SwitchFromBonusToNormalMusic(void) {
+#if VER_US
+    int pad[2];
+#endif
     char dummy[8];
 
 #if VER_US
@@ -214,13 +217,19 @@ void SwitchFromBonusToNormalMusic(void) {
     musicEndSector = savedMusicEndSector;
     CdIntToPos(musicCurSector, &musicBonusLoc);
     musicCdlFilter.chan = savedMusicXaChan;
+#if !VER_US
     CdReadSync(0, 0);
-    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0)
-        ;
+#endif
+    while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0) {
+        VSYNC_3();
+    }
+#if !VER_US
     CdReadSync(0, 0);
-    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
-        ;
-    if (CdControlB(CdlReadS, &musicBonusLoc, dummy) == 0) {
+#endif
+    do {
+        VSYNC_3();
+    } while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0);
+    IF_WHILE (CdControlB(CdlReadS, &musicBonusLoc, dummy) == 0) {
         FileError("could not start playing \n", "resumed song after bonus");
     }
     SndSetMusicVolume();
