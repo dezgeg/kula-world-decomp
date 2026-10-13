@@ -70,6 +70,10 @@ static inline void FileError(char* str1, char* str2) {
 #endif
 
 void PlayMusic(int world) {
+#if VER_US
+    int pad[2];
+    int musicSearchAttempt;
+#endif
     char dummy[8];
 
     Noop2();
@@ -101,9 +105,10 @@ void PlayMusic(int world) {
     CdReadSync(0, 0);
     musicCdlFilter.file = 1;
     musicCdlFilter.chan = MUSICS[world].chan;
-    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0)
-        ;
-    if (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
+    while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0) {
+        VSYNC_3();
+    }
+    IF_WHILE (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
         FileError("could not start playing \n", MUSICS[world].filename);
     }
     Noop();
