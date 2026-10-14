@@ -346,6 +346,9 @@ void main(void) {
             loadingIsComplete = -1;
         }
         skipNextLoad = 0;
+#if VER_US
+        loadNewWorld = 0;
+#endif
         if (curLevel >= *(int*)LEVEL_PAK_BUF) {
             curLevel = *(int*)LEVEL_PAK_BUF - 1;
         }
@@ -401,12 +404,20 @@ void main(void) {
         drawCopyright = 0;
         DrawSync(0);
         VSync(0);
+#if VER_US
+        if (gameState == 4) {
+            gameState = 0;
+            gameMode = 0;
+        }
+#endif
     } while (1);
 }
 
 // XXX: must be here to match
 int vsyncCounter = 0;
+#if !VER_US
 int unusedRenderPhase = 666;
+#endif
 
 void SioRecvVsyncCallback(void) {
     vsyncCounter++;
@@ -573,7 +584,7 @@ int MainGameLoop(void) {
             DrawTextCrappyFont("NO CONTROLLER!\n");
         }
         if (isDemoMode == 1) {
-            SetTextParams(displayWidth / 2, 116, 1, 0x80, 0x80, 0x80);
+            SetTextParams(displayWidth / 2, 116 - 3 * VID_NTSC, 1, 0x80, 0x80, 0x80);
             DrawTextCrappyFont("DEMO MODE\n");
         }
         if (gameMode != 2 || numTimeTrialPlayers != 2) {
@@ -780,6 +791,9 @@ int MainGameLoop(void) {
         }
         if (isDemoMode == 1 && (GetControllerButtons(0) != 0 || GetControllerButtons(1) != 0)) {
             QuitToMainMenu();
+#if VER_US
+            demoTimeout[0] = 0;
+#endif
         }
         if (levelEndReason != 0) {
             if ((TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) ||
