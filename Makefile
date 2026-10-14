@@ -37,7 +37,7 @@ Makefile: build/eu-SCES_010.00/kula_world.ld
 build/eu-SCES_010.00/subdirs:
 	mkdir -p $(sort $(dir $(O_FILES))) build/eu-SCES_010.00/subdirs
 
-build/eu-SCES_010.00/kula_world.ld: config/eu-SCES_010.00/splat.yaml psyq venv $(wildcard *_addrs.txt)
+build/eu-SCES_010.00/kula_world.ld: config/eu-SCES_010.00/splat.yaml psyq venv $(wildcard config/eu-SCES_010.00/*_addrs.txt)
 	rm -rf src/nonmatched asm/ build/eu-SCES_010.00/
 	mkdir -p build
 	for f in $$(cd psyq/ELF; echo *.A); do mkdir -p build/eu-SCES_010.00/$$f; ar x psyq/ELF/$$f --output=build/eu-SCES_010.00/$$f; done
