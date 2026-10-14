@@ -72,48 +72,63 @@ int screenFadeEnabled;
 uint firstGuiTexture;
 int numKeysInLevel;
 
-int KEY_SPRITE_POSITIONS[] = {
-    16, 219 - 14 * VID_NTSC,
-    0, 0,
-    0, 0,
-    0, 0,
+int KEY_SPRITE_POSITIONS[2][4][8] = {
+    {
+        {
+            16, 219 - 14 * VID_NTSC,
+            0, 0,
+            0, 0,
+            0, 0,
+        },
+        {
+            16, 219 - 14 * VID_NTSC,
+            30, 219 - 14 * VID_NTSC,
+            0, 0,
+            0, 0,
+        },
+        {
+            16, 219 - 14 * VID_NTSC,
+            30, 219 - 14 * VID_NTSC,
+            44, 219 - 14 * VID_NTSC,
+            0, 0,
+        },
+        {
+            16, 219 - 14 * VID_NTSC,
+            30, 219 - 14 * VID_NTSC,
+            44, 219 - 14 * VID_NTSC,
+            58, 219 - 14 * VID_NTSC,
+        },
+    },
 
-    16, 219 - 14 * VID_NTSC,
-    30, 219 - 14 * VID_NTSC,
-    0, 0,
-    0, 0,
+    {
+        {
+            153, 219 - 14 * VID_NTSC,
+            0, 0,
+            0, 0,
+            0, 0,
+        },
 
-    16, 219 - 14 * VID_NTSC,
-    30, 219 - 14 * VID_NTSC,
-    44, 219 - 14 * VID_NTSC,
-    0, 0,
+        {
+            146, 219 - 14 * VID_NTSC,
+            160, 219 - 14 * VID_NTSC,
+            0, 0,
+            0, 0,
+        },
 
-    16, 219 - 14 * VID_NTSC,
-    30, 219 - 14 * VID_NTSC,
-    44, 219 - 14 * VID_NTSC,
-    58, 219 - 14 * VID_NTSC,
-};
+        {
+            139, 219 - 14 * VID_NTSC,
+            153, 219 - 14 * VID_NTSC,
+            167, 219 - 14 * VID_NTSC,
+            0, 0,
+        },
 
-int KEY_SPRITE_POSITIONS2[] = {
-    153, 219 - 14 * VID_NTSC,
-    0, 0,
-    0, 0,
-    0, 0,
-
-    146, 219 - 14 * VID_NTSC,
-    160, 219 - 14 * VID_NTSC,
-    0, 0,
-    0, 0,
-
-    139, 219 - 14 * VID_NTSC,
-    153, 219 - 14 * VID_NTSC,
-    167, 219 - 14 * VID_NTSC,
-    0, 0,
-
-    132, 219 - 14 * VID_NTSC,
-    146, 219 - 14 * VID_NTSC,
-    160, 219 - 14 * VID_NTSC,
-    174, 219 - 14 * VID_NTSC,
+        {
+            132, 219 - 14 * VID_NTSC,
+            146, 219 - 14 * VID_NTSC,
+            160, 219 - 14 * VID_NTSC,
+            174, 219 - 14 * VID_NTSC,
+        },
+    },
 };
 
 int FRUIT_WIDGET_POSITIONS[] = {
@@ -498,10 +513,6 @@ void InitBonusWidgetSprites(void) {
 void InitAllDigitSprites(void) {
     int i;
     int isTwoPlayerTimeAttack;
-    Pair* p;
-    int base;
-    Pair* pBase;
-    Pair* k;
 
     Srand(1);
     isTwoPlayerTimeAttack = 0;
@@ -541,13 +552,12 @@ void InitAllDigitSprites(void) {
             break;
     }
 
-    // FIXME: extremely ugly
-    k = (Pair*)KEY_SPRITE_POSITIONS;
-    pBase = k + isTwoPlayerTimeAttack * 16;
-    base = numKeysInLevel * 32 + (int)pBase - 32;
     for (i = 0; i < 8; i++) {
-        p = (Pair*)((i / 2) * 8 + base);
-        setXY0(&keySprites[0][i].sprt, p->x, p->y);
-        setXY0(&keySprites[1][i].sprt, p->x, p->y);
+        setXY0(&keySprites[0][i].sprt,
+               KEY_SPRITE_POSITIONS[isTwoPlayerTimeAttack][numKeysInLevel - 1][(i / 2) * 2],
+               KEY_SPRITE_POSITIONS[isTwoPlayerTimeAttack][numKeysInLevel - 1][(i / 2) * 2 + 1]);
+        setXY0(&keySprites[1][i].sprt,
+               KEY_SPRITE_POSITIONS[isTwoPlayerTimeAttack][numKeysInLevel - 1][(i / 2) * 2],
+               KEY_SPRITE_POSITIONS[isTwoPlayerTimeAttack][numKeysInLevel - 1][(i / 2) * 2 + 1]);
     }
 }
