@@ -43,7 +43,6 @@ extern int debugDisableTimer;
 extern int drawTimerPausedWidget;
 extern int hourglassIsRotating;
 extern int KEY_SPRITE_POSITIONS[2][4][8];
-extern int KEY_SPRITE_POSITIONS2[];
 extern int levelEndReason;
 extern int levelPlayTime[2];
 extern int levelScore;
