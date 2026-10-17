@@ -43,11 +43,8 @@ char* EXTENSIONS[] = {
     "FI.PAK;1",
 };
 
-char PIC_PAK_FILENAME[] = "\\KULA\\KULA_PIC.PAK;1";
-struct {
-    short hack;
-} skipFirstLoadingScreen = {1}; // XXX: padding somehow wrong
-#define skipFirstLoadingScreen skipFirstLoadingScreen.hack
+char PIC_PAK_FILENAME[24] = "\\KULA\\KULA_PIC.PAK;1";
+short skipFirstLoadingScreen = 1;
 
 Music BONUS_MUSICS[] = {
     {"\\XA\\MUSIC_1.XA;1", 0, VER_US ? 3197 : 3335},
