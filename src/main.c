@@ -509,6 +509,14 @@ int MainGameLoop(void) {
     VSyncCallback(MainGameVSyncCallback);
     gotVsync = 0;
     while (!end) {
+#if VER_US
+        rect.x = 560;
+        rect.y = 448;
+        rect.w = 16;
+        rect.h = 1;
+        StoreImage(&rect, (u_long*)0x1F800000);
+        DrawSync(0);
+#else
         DrawSync(0);
         rect.w = 1;
         rect.h = 1;
@@ -519,6 +527,7 @@ int MainGameLoop(void) {
             DrawSync(0);
             framebufferFetches[i].texel = tex & 0x7fff;
         }
+#endif
         if (lethargyMode != 0 || halfFps == 1) {
             VSync(2);
         } else {
