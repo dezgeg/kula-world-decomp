@@ -41,20 +41,20 @@ void InitMemcardUi(void) {
     short w;
     int tex = LEVEL_END_GFX_MEMCARD_MENU;
     int len;
-    int len2;
     int offset;
     int offset2;
     char* buf;
-    char* buf2;
+    void* dest;
 
     if (whichLevelEndSpriteLoaded != LEVEL_END_GFX_MEMCARD_LOADED) {
         len = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
         offset = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];
         buf = (char*)MENU_DEFLATED_SPRITES2_PTR + offset;
+        dest = TIM_DECOMP_BUF;
         zlibStream_a4dd4.avail_in = len;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
-        zlibStream_a4dd4.next_out = TIM_DECOMP_BUF;
+        zlibStream_a4dd4.next_out = dest;
         inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
         inflateRetCode = inflate(&zlibStream_a4dd4, 4);
         inflateRetCode = inflateEnd(&zlibStream_a4dd4);
@@ -102,13 +102,14 @@ void InitMemcardUi(void) {
             for (;;)
                 ;
         }
-        len2 = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
+        len = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
         offset2 = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];
         buf = (char*)MENU_DEFLATED_SPRITES2_PTR + offset2;
-        zlibStream_a4dd4.avail_in = len2;
+        dest = TIM_DECOMP_BUF;
+        zlibStream_a4dd4.avail_in = len;
         zlibStream_a4dd4.next_in = buf;
         zlibStream_a4dd4.avail_out = 0x10000;
-        zlibStream_a4dd4.next_out = TIM_DECOMP_BUF;
+        zlibStream_a4dd4.next_out = dest;
         inflateRetCode = inflateInit_(&zlibStream_a4dd4, S_1_0_4, 0x38);
         inflateRetCode = inflate(&zlibStream_a4dd4, 4);
         inflateRetCode = inflateEnd(&zlibStream_a4dd4);

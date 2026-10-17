@@ -741,8 +741,8 @@ void CheckForButtonEntity(Player* player) {
     }
 
     if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
-        (u16)player->subpixelPositionOnCube.vz - 197U < 119U &&
-        (u16)player->subpixelPositionOnCube.vx - 197U < 119U) {
+        player->subpixelPositionOnCube.vz >= 197 && player->subpixelPositionOnCube.vz < 316 &&
+        player->subpixelPositionOnCube.vx >= 197 && player->subpixelPositionOnCube.vx < 316) {
         player->alreadyProcessedEntityAction = OBJ_BUTTON;
         entityOffset = player->specialBlockSideOffsetPlayerIsStandingOn;
 

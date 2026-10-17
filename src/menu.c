@@ -203,10 +203,10 @@ void PauseMenu(void) {
                 curMenu = 1;
                 cursorPosInMenu[1] = 0;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
-                return;
+                break;
             case 3:
                 curMenu = 3;
-                return;
+                break;
         }
     }
 }
@@ -221,7 +221,7 @@ void OptionsMenu(void) {
     int cross;
 
     if (TestButton(PAD_U)) {
-        if (cursorPosInMenu[curMenu] < 1) {
+        if (cursorPosInMenu[curMenu] <= 0) {
             cursorPosInMenu[curMenu] = 5;
         } else {
             cursorPosInMenu[curMenu]--;
@@ -328,7 +328,6 @@ void OptionsMenu(void) {
                 curMenu--;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
-
             break;
     }
 }
@@ -601,10 +600,10 @@ void SinglePlayerMenuWhenFinalUnlocked(void) {
     int i;
 
     if (TestButton(PAD_U)) {
-        if (cursorPosInMenu[curMenu] <= 0) {
-            cursorPosInMenu[curMenu] = 4;
-        } else {
+        if (cursorPosInMenu[curMenu] > 0) {
             cursorPosInMenu[curMenu]--;
+        } else {
+            cursorPosInMenu[curMenu] = 4;
         }
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
@@ -767,11 +766,12 @@ void TwoPlayerMenu(void) {
 
 void TimeTrialDifficultySelectionMenu(void) {
     int i;
+
     if (TestButton(PAD_U)) {
-        if (cursorPosInMenu[curMenu] <= 0) {
-            cursorPosInMenu[curMenu] = 3;
-        } else {
+        if (cursorPosInMenu[curMenu] > 0) {
             cursorPosInMenu[curMenu]--;
+        } else {
+            cursorPosInMenu[curMenu] = 3;
         }
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
@@ -787,11 +787,11 @@ void TimeTrialDifficultySelectionMenu(void) {
     }
     if (TestButton(PAD_CROSS)) {
         if (cursorPosInMenu[curMenu] < 3) {
-            timeTrialDifficulty = 20 - 10 * cursorPosInMenu[curMenu];
+            timeTrialDifficulty = 20 - cursorPosInMenu[curMenu] * 10;
             numTimeTrialPlayers = 1;
             twoPlayerWhichPlayer = 0;
             for (i = 0; i < numTimeTrialPlayers; i++) {
-                levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curWorld * 15 + curLevel] - timeTrialDifficulty) * FPS;
+                levelPlayTime[i] = (-TIME_TRIAL_PAR_TIMES[curLevel + curWorld * 15] - timeTrialDifficulty) * FPS;
                 totalPlayTime[i] = 0;
                 levelHasBeenCompletedByPlayer[i] = 0;
             }

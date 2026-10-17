@@ -98,7 +98,7 @@ void ShowMemCardFullScreenText(char* str) {
         DrawTextCrappyFont(str);
         DrawSync(0);
         VSync(0);
-        whichDrawDispEnv = whichDrawDispEnv == 0;
+        whichDrawDispEnv = !whichDrawDispEnv;
         PutDrawAndDispEnvs();
         for (i = 0; i < numCameras; i++) {
             ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
