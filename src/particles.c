@@ -115,16 +115,18 @@ void InitParticles(void) {
 
 void AddParticles(int type, SVECTOR* pos, int lightEffectId) {
     if (PARTICLE_TYPE_PTRS[type] != NULL) {
-        if (numParticles[cameraIndex] < 16 && (pos->vz < 0 || numCameras == 1)) {
-            particles[cameraIndex][numParticles[cameraIndex]].animData = (ParticleType*)PARTICLE_TYPE_PTRS[type];
-            particles[cameraIndex][numParticles[cameraIndex]].pos.vx = pos->vx;
-            particles[cameraIndex][numParticles[cameraIndex]].pos.vy = pos->vy;
-            particles[cameraIndex][numParticles[cameraIndex]].pos.vz = pos->vz;
-            particles[cameraIndex][numParticles[cameraIndex]].frame = 0;
-            particles[cameraIndex][numParticles[cameraIndex]].lightEffectId = lightEffectId;
-            particles[cameraIndex][numParticles[cameraIndex]].rotation[0] = 0;
-            particles[cameraIndex][numParticles[cameraIndex]].rotation[1] = 0;
-            numParticles[cameraIndex]++;
+        if (numParticles[cameraIndex] < 16) {
+            if (pos->vz < 0 || numCameras == 1) {
+                particles[cameraIndex][numParticles[cameraIndex]].animData = (ParticleType*)PARTICLE_TYPE_PTRS[type];
+                particles[cameraIndex][numParticles[cameraIndex]].pos.vx = pos->vx;
+                particles[cameraIndex][numParticles[cameraIndex]].pos.vy = pos->vy;
+                particles[cameraIndex][numParticles[cameraIndex]].pos.vz = pos->vz;
+                particles[cameraIndex][numParticles[cameraIndex]].frame = 0;
+                particles[cameraIndex][numParticles[cameraIndex]].lightEffectId = lightEffectId;
+                particles[cameraIndex][numParticles[cameraIndex]].rotation[0] = 0;
+                particles[cameraIndex][numParticles[cameraIndex]].rotation[1] = 0;
+                numParticles[cameraIndex]++;
+            }
         }
     }
 }

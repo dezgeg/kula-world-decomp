@@ -16,11 +16,11 @@ void SetRenderScreenFade(int speed, int enableHalfFps) {
     screenFadeSpeed = speed;
 
     switch (speed) {
-        case 1:
-            screenFadeColor = VID_NTSC ? 261 : 264;
-            break;
         case 0:
             screenFadeColor = VID_NTSC ? 268 : 272;
+            break;
+        case 1:
+            screenFadeColor = VID_NTSC ? 261 : 264;
             break;
         case 2:
             screenFadeColor = VID_NTSC ? 254 : 256;

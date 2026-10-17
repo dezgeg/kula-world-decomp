@@ -481,9 +481,9 @@ void TurnLevelExitQuadIntoGreen(void) {
 int DisableItemShadow(int entityIndex, int side, int const0) {
     Quad* quad;
     int cubeIndex;
-    short* ed = entityData + entityIndex * 128;
+    short* ed = entityData + entityIndex * 128 + 125;
 
-    cubeIndex = CUBE_INDEX_AT(ed[125], ed[126], ed[127]);
+    cubeIndex = CUBE_INDEX_AT(ed[0], ed[1], ed[2]);
 
     if ((int)cubeStates[cubeIndex * 16 + 15] == 0) {
         quad = (Quad*)cubeStates[cubeIndex * 16 + side];

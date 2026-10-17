@@ -2,23 +2,22 @@
 
 #include <libapi.h>
 
-extern uint* savedSp;
-extern uint* unusedInitStackParamEnd;
-extern uint* unusedInitStackParamStart;
+extern uint* savedSp[];
+extern uint* unusedInitStackParamEnd[];
+extern uint* unusedInitStackParamStart[];
 
 #ifndef SKIP_UNUSED_CODE
 void UnusedInitStack(uint end, uint start) {
-    uint* endMasked = end & 0xfffffff;
-    uint* startMasked = start & 0xfffffff;
+    uint* endMasked;
     uint* p;
     int val;
 
-    unusedInitStackParamEnd = endMasked;
-    unusedInitStackParamStart = startMasked;
+    unusedInitStackParamEnd[0] = endMasked = (uint*)(end & 0xfffffff);
+    unusedInitStackParamStart[0] = (uint*)(start & 0xfffffff);
 
     p = (int*)(GetSp() & 0xfffffff);
     val = 0x12345678;
-    savedSp = p;
+    savedSp[0] = p;
 
     while (endMasked <= --p) {
         *p = val++;
@@ -26,13 +25,15 @@ void UnusedInitStack(uint end, uint start) {
 }
 
 int UnusedValidateStack(void) {
-    uint val;
-    uint* p = unusedInitStackParamEnd;
+    uint* p = unusedInitStackParamEnd[0];
+    uint val = (savedSp[0] - unusedInitStackParamEnd[0]) + 0x12345678;
 
-    val = (savedSp - unusedInitStackParamEnd) + 0x12345678;
-    while (p <= unusedInitStackParamStart && *p++ == --val)
-        ;
+    while (p <= unusedInitStackParamStart[0]) {
+        if (*p++ != --val) {
+            break;
+        }
+    }
 
-    return unusedInitStackParamStart - p;
+    return unusedInitStackParamStart[0] - p;
 }
 #endif
