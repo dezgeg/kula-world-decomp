@@ -308,12 +308,17 @@ void main(void) {
     prevLevelEndReason = 0;
     do {
         if (isDemoMode == 1) {
+#if VER_US
+            demoIndex = (demoIndex + 1) % 3;
+#endif
             curLevel = DEMO_LEVELS[demoIndex] % 15;
             if (curWorld != DEMO_LEVELS[demoIndex] / 15) {
                 loadNewWorld = 1;
             }
             curWorld = DEMO_LEVELS[demoIndex] / 15;
+#if !VER_US
             demoIndex = (demoIndex + 1) % 3;
+#endif
         }
         if (loadNewWorld && !skipNextLoad) {
             LoadingScreen();
@@ -494,7 +499,11 @@ int MainGameLoop(void) {
             InitReplaySaving();
             break;
         case 2:
+#if VER_US
+            InitReplayPlayback((&REPLAY_INPUT_PTRS)[demoIndex]);
+#else
             InitReplayPlayback((&REPLAY_INPUT_PTRS)[(demoIndex + 2) % 3]);
+#endif
             break;
     }
     VSyncCallback(MainGameVSyncCallback);
