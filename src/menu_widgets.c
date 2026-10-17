@@ -115,13 +115,12 @@ void LoadMenuGfx(int menuId) {
     char* buf;
     int dest;
 
-    if (spriteId == whichLevelEndSpriteLoaded || menuId * 2 > MENU_DEFLATED_SPRITES1_PTR[0]) {
+    if (spriteId == whichLevelEndSpriteLoaded || MENU_DEFLATED_SPRITES1_PTR[0] < menuId * 2) {
         return;
     }
 
     len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - MENU_SPRITE_OFFSET) * 2];
-    offset = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
-    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset;
+    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
     dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
     zlibStream_a4dd4.next_in = buf;
@@ -182,8 +181,7 @@ void LoadMenuGfx(int menuId) {
             ;
     }
     len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - MENU_SPRITE_OFFSET) * 2];
-    offset2 = MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
-    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + offset2;
+    buf = (char*)MENU_DEFLATED_SPRITES1_PTR + MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
     dest = TIM_DECOMP_BUF;
     zlibStream_a4dd4.avail_in = len;
     zlibStream_a4dd4.next_in = buf;
