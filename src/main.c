@@ -973,8 +973,8 @@ void LevelCompletedOrDied(void) {
                 if (t >= 15) {
                     t = 15;
                 }
-                if (t < 0) {
-                    t = 0;
+                if (t <= (VER_US ? 0 : -1)) {
+                    t = VER_US ? 1 : 0;
                 }
                 levelScores[curWorld2 * 15 + t - 1] = totalScore;
             }
