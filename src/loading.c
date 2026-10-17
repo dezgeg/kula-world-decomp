@@ -43,7 +43,11 @@ char* EXTENSIONS[] = {
     "FI.PAK;1",
 };
 
+#if VER_US
+char PIC_PAK_FILENAME[] = {"\\KULA\\PIC.PAK;1"};
+#else
 char PIC_PAK_FILENAME[24] = "\\KULA\\KULA_PIC.PAK;1";
+#endif
 short skipFirstLoadingScreen = 1;
 
 Music BONUS_MUSICS[] = {
