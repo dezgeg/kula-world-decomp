@@ -868,11 +868,16 @@ int HandleTransporter(Player* player) {
 #undef timer
 
 static short HandleSpecialCubeTypes_blockType;
-static SVECTOR HandleSpecialCubeTypes_cubePos;
-static SVECTOR HandleSpecialCubeTypes_arrowDir;
 #define blockType HandleSpecialCubeTypes_blockType
+static SVECTOR HandleSpecialCubeTypes_cubePos;
 #define cubePos HandleSpecialCubeTypes_cubePos
+#if VER_US
+// shared with another function, static in EU
+SVECTOR arrowDir;
+#else
+static SVECTOR HandleSpecialCubeTypes_arrowDir;
 #define arrowDir HandleSpecialCubeTypes_arrowDir
+#endif
 void HandleSpecialCubeTypes(Player* player) {
     int whichSide;
     SVECTOR gravityDir;

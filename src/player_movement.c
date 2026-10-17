@@ -49,6 +49,7 @@ extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;
 extern short* levelData;
 
+extern short isAirborneOverBounceBlock;
 static short jumpSquishMagnitudeIncrement;
 static short* initJumpTimerPtr;
 static short landingSquishDamping;
@@ -657,8 +658,13 @@ static short CheckForPlayerWallHit_blockIndex;
 #define blockIndex CheckForPlayerWallHit_blockIndex
 static short CheckForPlayerWallHit_sideOffset;
 #define sideOffset CheckForPlayerWallHit_sideOffset
-static SVECTOR CheckForPlayerWallHit_arrowVec;
-#define arrowVec CheckForPlayerWallHit_arrowVec
+#if VER_US
+// shared with another function, static in EU
+extern SVECTOR arrowDir;
+#else
+static SVECTOR CheckForPlayerWallHit_arrowDir;
+#define arrowDir CheckForPlayerWallHit_arrowDir
+#endif
 int CheckForPlayerWallHit(Player* player) {
     if (player->subpixelPositionOnCube.vz >= 412 && player->svec_144.vz >= 0) {
         if (player->surroundingBlocks[1][2][1] < 0 && (player->subpixelPositionOnCube.vy < 412 || player->surroundingBlocks[2][2][1] < 0) && (player->subpixelPositionOnCube.vy >= 100 || player->surroundingBlocks[0][2][1] < 0)) {
@@ -667,9 +673,9 @@ int CheckForPlayerWallHit(Player* player) {
 
 #if VER_US
             if (isAirborneOverBounceBlock != 1 ||
-                (player->facingDir.vx == arrowVec.vx &&
-                 player->facingDir.vy == arrowVec.vy &&
-                 player->facingDir.vz == arrowVec.vz)) {
+                (player->facingDir.vx == arrowDir.vx &&
+                 player->facingDir.vy == arrowDir.vy &&
+                 player->facingDir.vz == arrowDir.vz)) {
                 goto notHit;
             }
 #else
@@ -681,11 +687,11 @@ int CheckForPlayerWallHit(Player* player) {
             if (entityData[sideOffset + 1] != OBJ_ARROW)
                 return 0;
 
-            GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[sideOffset + 2], &arrowVec);
+            GetVectorBasedOnTwoDirs(GetRotationIndexFromVector(player->gravityDir), entityData[sideOffset + 2], &arrowDir);
 
-            if (player->facingDir.vx == arrowVec.vx &&
-                player->facingDir.vy == arrowVec.vy &&
-                player->facingDir.vz == arrowVec.vz) {
+            if (player->facingDir.vx == arrowDir.vx &&
+                player->facingDir.vy == arrowDir.vy &&
+                player->facingDir.vz == arrowDir.vz) {
                 return 0;
             }
 #endif
@@ -719,7 +725,7 @@ notHit:
 }
 #undef blockIndex
 #undef sideOffset
-#undef arrowVec
+#undef arrowDir
 
 int CheckPlayerHitCeiling(Player* player) {
     if (player->subpixelPositionOnCube.vy < 412)
