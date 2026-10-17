@@ -74,6 +74,7 @@ void LoadLevelEndReasonGfx() {
     short h;
     int len;
     int off;
+    int off2;
     char* ptr;
     void* dest;
     int playTime;
@@ -192,8 +193,8 @@ void LoadLevelEndReasonGfx() {
         whichGfx++;
         if (whichGfx <= MENU_DEFLATED_SPRITES2_PTR[0] - 1) {
             len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
-            off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
-            ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off;
+            off2 = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];
+            ptr = (char*)MENU_DEFLATED_SPRITES2_PTR + off2;
             dest = TIM_DECOMP_BUF;
             zlibStream_a4dd4.avail_in = len;
             zlibStream_a4dd4.next_in = ptr;
@@ -271,10 +272,6 @@ void FullyFinishLevelEndScreenFades(void) {
 }
 
 void DrawBigGuiSprite(int param_1) {
-    TSprite* pTVar1;
-    TSprite* pTVar2;
-    PrimList* pPVar3;
-
     LoadLevelEndReasonGfx(0);
     if (param_1 == 2) {
         /* 2 at beginning of load screen */
