@@ -169,10 +169,10 @@ void DrawTimeAttackWidgets(void) {
             if (levelPlayTime[0] < 0) {
                 curPlayerTimer--;
             }
-            if (levelHasBeenCompletedByPlayer[0] != 1) {
-                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0, 1);
-            } else {
+            if (levelHasBeenCompletedByPlayer[0] == 1) {
                 DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, curPlayerTimer, 0);
+            } else {
+                DrawTimeAttackTimer(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, 0, 1);
             }
         }
     } else {
