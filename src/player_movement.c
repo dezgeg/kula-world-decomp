@@ -1190,7 +1190,15 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         subpixelY = (subpixelY * entityData[player->specialBlockIndexPlayerIsStandingOn + 2]) / 512;
     }
 
-    CreatePlayerDispList(&drawMatrix, 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
+#if VER_US
+    if (player->debugCameraMode) {
+        CalcPlayerMatrixesAndDrawPlayer_screenPos.vx = drawMatrix.t[2];
+    } else {
+        CalcPlayerMatrixesAndDrawPlayer_screenPos.vx = 256;
+    }
+#endif
+
+    CreatePlayerDispList(&drawMatrix, VER_US ? CalcPlayerMatrixesAndDrawPlayer_screenPos.vx : 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
                          blockPos.vx, blockPos.vy, blockPos.vz, rotIdx1,
                          otherBlockPos.vx, otherBlockPos.vy, otherBlockPos.vz, rotIdx2,
                          &dirMatrix, (subpixelY * 128) / 412, 0,
