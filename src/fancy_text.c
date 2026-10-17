@@ -108,21 +108,20 @@ void DrawTextFancyFont(char* str, short x, short y) {
     int endIdx;
     int finalX;
     int finalY;
-    int fade;
     int r;
     int g;
     int b;
     int col;
 
     startIdx = 0;
-    endIdx = 0;
     finalY = y;
-    for (; str[startIdx]; startIdx = endIdx + 1) {
+    while (str[startIdx] != '\0') {
+        int i;
         endIdx = startIdx;
         while (str[endIdx] != '\0' && str[endIdx] != '\n') {
             endIdx++;
         }
-        finalX = x + (endIdx - startIdx) * -12;
+        finalX = x - (endIdx - startIdx) * 12;
         r = bigGuiSpriteFade - finalY / 2 - fancyTextColorR;
         g = bigGuiSpriteFade - finalY / 2 - fancyTextColorG;
         b = bigGuiSpriteFade - finalY / 2 - fancyTextColorB;
@@ -155,24 +154,24 @@ void DrawTextFancyFont(char* str, short x, short y) {
             col = 0x80;
         }
 
-        while (startIdx < endIdx) {
-            if (str[startIdx] - 0x30 < 10u) {
+        for (i = startIdx; i < endIdx; i++) {
+            if (str[i] >= '0' && str[i] <= '9') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
-                textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites1[str[startIdx] - 0x30];
+                textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites1[str[i] - 0x30];
                 setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, col, col, col);
                 setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, finalX, finalY);
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
 
-                textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites2[str[startIdx] - 0x30];
+                textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites2[str[i] - 0x30];
                 setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, r, g, b);
                 setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, finalX, finalY);
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
             }
-            if (str[startIdx] == '+') {
+            if (str[i] == '+') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -189,7 +188,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
             }
-            if (str[startIdx] == '-') {
+            if (str[i] == '-') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -206,7 +205,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 textCharIdx++;
             }
 #if VER_US
-            if (str[startIdx] == '*') {
+            if (str[i] == '*') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -222,7 +221,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
             }
-            if (str[startIdx] == '=') {
+            if (str[i] == '=') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -239,7 +238,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 textCharIdx++;
             }
 #else
-            if (str[startIdx] == '=') {
+            if (str[i] == '=') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -256,7 +255,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 textCharIdx++;
             }
 #endif
-            if (str[startIdx] == ':') {
+            if (str[i] == ':') {
                 if (textCharIdx + 2 > 299) {
                     return;
                 }
@@ -272,14 +271,13 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
             }
-            startIdx++;
             finalX += 12;
         }
 
         finalY += 18;
-        startIdx = endIdx;
-        startIdx++;
-        if (!str[endIdx])
-            return;
+        if (!str[endIdx]) {
+            break;
+        }
+        startIdx = endIdx + 1;
     }
 }
