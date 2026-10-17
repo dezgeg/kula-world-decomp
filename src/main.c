@@ -593,6 +593,9 @@ int MainGameLoop(void) {
             if (levelEndReason == 0 && !isPaused && !isDemoMode && !inGetReadyScreen) {
                 isPaused = 1;
                 SndMuteAllTaggedVoices();
+#if VER_US
+                ResetVibration();
+#endif
             }
             if (isPaused == 1 && gameState != 0) {
                 SetTextParams(displayWidth / 2 + 10, 180, 1, 0x80, 0x80, 0x80);
