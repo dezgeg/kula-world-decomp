@@ -7,6 +7,7 @@
 
 #define VER_EU 1
 #define VER_US 0
+#define VID_PAL 1
 #define VID_NTSC 0
 
 // Scale PAL frame units to NTSC if necessary

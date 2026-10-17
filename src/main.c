@@ -598,9 +598,9 @@ int MainGameLoop(void) {
 #endif
             }
             if (isPaused == 1 && gameState != 0) {
-                SetTextParams(displayWidth / 2 + 10, 180, 1, 0x80, 0x80, 0x80);
+                SetTextParams(displayWidth / 2 + 10 * VID_PAL, 180, 1, 0x80, 0x80, 0x80);
             } else {
-                SetTextParams(displayWidth / 2 + 10, 127, 1, 0x80, 0x80, 0x80);
+                SetTextParams(displayWidth / 2 + 10 * VID_PAL, 127 - 34 * VID_NTSC, 1, 0x80, 0x80, 0x80);
             }
             DrawTextCrappyFont("NO CONTROLLER!\n");
         }
