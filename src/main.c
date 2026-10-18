@@ -801,7 +801,7 @@ int MainGameLoop(void) {
         }
         FntFlush(-1);
         unusedFrameCounter++;
-        if (!isDemoMode && menuIdleTimer >= 2000 && controllerButtons == 0 && gameState == 0) {
+        if (!isDemoMode && menuIdleTimer >= (VID_NTSC ? 1800 : 2000) && controllerButtons == 0 && gameState == 0) {
             wasPausedPreviousFrame = 0;
             gameMode = 0;
             totalPlayTime[0] = 0;
