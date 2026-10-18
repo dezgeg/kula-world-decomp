@@ -115,7 +115,7 @@ extern int sioCheatActivated;
 extern int specialLevelType;
 extern int timeTrialAtEndOfWorld;
 extern int TIME_TRIAL_PAR_TIMES[150];
-extern int unkUnused;
+extern int unkUnused[];
 extern int wasPausedPreviousFrame;
 extern DR_MOVE drMovePackets[2][16];
 extern PrimList primLists[2];
@@ -189,22 +189,33 @@ int loadNewWorld = 1;
 int skipNextLoad = 0;
 int loadedInitialSave = 0;
 int displayModeHasBeenSet = 0;
+#if VER_US
+int musicShouldLoop = 1;
+#endif
 int unusedFrameCounter = 0;
+#if VER_US
+int isDemoMode = 0;
+int demoTimeout[2] = { 15000, 15000 };
+#endif
 int gameState = 0;
 int demoTimer = 400;
-int demoIndex = 0;
+int demoIndex = VER_US ? 2 : 0;
 int unusedA2ECC = 0;
 int debugBonusLevels = 0;
 int debugDisableTimer = 0;
 int finalUnlocked = 0;
 int isFinal = 0;
+#if !VER_US
 int musicShouldLoop = 1;
-
 int unusedA2EE4[6] = { 0, 0, 0, 0, 0, 0 };
+#endif
 short copycatNewOrCopyMoves = 0;
 short unusedA2EFE = 0;
 int timeTrialDifficulty = 0;
 SVECTOR ZERO_SVECTOR_a2f04 = { 0, 0, 0, 0 };
+#if VER_US
+int unkUnused[] = {0};
+#endif
 int DEMO_LEVELS[] = { 4, 19, 41 };
 int TIME_TRIAL_PAR_TIMES[] = {
     1, 6, 5, 12, 3,
@@ -555,7 +566,7 @@ int MainGameLoop(void) {
         }
         ResetTextRenderState();
         ResetTextVars();
-        unkUnused = 0;
+        unkUnused[0] = 0;
         unusedRenderPhase = 0;
         for (i = 0; i < numCameras; i++) {
             DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
