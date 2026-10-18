@@ -889,11 +889,16 @@ int MainGameLoop(void) {
                     curWorld = 0;
                     totalScore = -1;
                 }
+                // very annoying
+#if VER_US
+#define k j
+#endif
                 for (i = 0; i < 10; i++) {
                     for (k = 0; k < 15; k++) {
                         levelScores[i * 15 + k] = -1;
                     }
                 }
+#undef k
             }
         }
     }
