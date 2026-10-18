@@ -101,7 +101,7 @@ void SetupBiosFontStr(ushort* str, int x, int y, int param_4, int fg, int bg, in
         biosStrSprites[0][i].sprt.h = 16;
         setUV0(&biosStrSprites[0][i].sprt, (i * 16 % 256), 0xf0);
 
-        biosStrSprites[1][i] = biosStrSprites[0][i];
+        *(biosStrSprites[1] + i) = biosStrSprites[0][i];
     }
 }
 

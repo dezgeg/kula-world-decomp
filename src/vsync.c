@@ -36,9 +36,11 @@ void UnusedUpdateHblankCounter() {
 }
 #endif
 
+#if !VER_JP
 void MainGameVSyncCallback() {
     gotVsync = 1;
 }
+#endif
 
 void LoadingScreenVSyncCallback(void) {
     int i;
