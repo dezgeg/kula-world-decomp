@@ -117,6 +117,7 @@ extern int timeTrialAtEndOfWorld;
 extern int TIME_TRIAL_PAR_TIMES[150];
 extern int unkUnused;
 extern int wasPausedPreviousFrame;
+extern DR_MOVE drMovePackets[2][16];
 extern PrimList primLists[2];
 extern short numEntities;
 extern short playerSurroundingBlocksGrid[8][8][8];
@@ -146,6 +147,7 @@ int levelPlayTime[2];
 int levelScore;
 int mainGameLoopRetVal;
 int numTimeTrialPlayers;
+int overallLevel;
 int prevLevelEndReason;
 int savedFruitsCollectedBitmask;
 int startingPlayerForThisLevel;
@@ -178,7 +180,7 @@ int devkitAltBoot = 0;
 int gotSioData = 0;
 int prevLevelTimeLeft = 0;
 int numKeysRemaining = 0;
-int unusedA2E98 = 0;
+int overallLevel = 0;
 int highestLevelReached = 30;
 int curLevel = 0;
 int curWorld = 0;
@@ -632,7 +634,15 @@ int MainGameLoop(void) {
         AddDrChangePrims();
         ProcessAndRenderParticles();
         DrawLensFlares(0);
-        if (prevControllerButtons == controllerButtons) {
+#if VER_US
+        for (i = 0; i < 16; i++) {
+            ((short*)&drMovePackets[whichDrawDispEnv][i])[6] = framebufferFetches[i].x + whichDrawDispEnv * displayWidth;
+            ((short*)&drMovePackets[whichDrawDispEnv][i])[7] = framebufferFetches[i].y;
+        }
+        drMovePackets[whichDrawDispEnv][15].tag = (u_long)primLists[whichDrawDispEnv].gui3 | 0x05000000;
+        primLists[whichDrawDispEnv].gui3 = (OT_TYPE)((u_long)&drMovePackets[whichDrawDispEnv][0] & 0x00FFFFFF);
+#endif
+        if (prevControllerButtons == controllerButtons || (VER_US ? isDemoMode == 1 : 0)) {
             menuIdleTimer++;
         } else {
             menuIdleTimer = 0;
