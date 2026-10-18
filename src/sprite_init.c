@@ -219,7 +219,7 @@ void InitHourglassSprites(void) {
         hourglassSprites[0][i].tpage = textures[firstGuiTexture + i].tpage;
         hourglassSprites[0][i].clut = textures[firstGuiTexture + i].clut;
 
-        hourglassSprites[1][i] = hourglassSprites[0][i];
+        *(hourglassSprites[1] + i) = hourglassSprites[0][i];
     }
     hourglassIsRotating = 0;
     hourglassRotationTimer = 0;
@@ -250,9 +250,8 @@ void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, in
         SetSemiTrans(&ds->sprites[0][i].sprt, textures[firstGuiTexture + textureIdx].semitrans);
         SetShadeTex(&ds->sprites[0][i].sprt, 0);
         ds->sprites[0][i].sprt.clut = textures[firstGuiTexture + textureIdx].clut;
-        setWH(&ds->sprites[0][i].sprt,
-                textures[firstGuiTexture + textureIdx].w / 13,
-                textures[firstGuiTexture + textureIdx].h);
+        ds->sprites[0][i].sprt.w = textures[firstGuiTexture + 3 + font].w / 13;
+        ds->sprites[0][i].sprt.h = textures[firstGuiTexture + 3 + font].h;
         ds->sprites[1][i] = ds->sprites[0][i];
     }
 }
@@ -274,7 +273,7 @@ void InitKeySprites(void) {
                 textures[firstGuiTexture + textureIdx].u,
                 textures[firstGuiTexture + textureIdx].v);
 
-        keySprites[1][i] = keySprites[0][i];
+        *(keySprites[1] + i) = keySprites[0][i];
     }
 }
 
@@ -294,7 +293,7 @@ void InitFruitSprites(void) {
         fruitSprites[0][i].sprt.w = textures[firstFruitTexture + i].w;
         fruitSprites[0][i].sprt.h = textures[firstFruitTexture + i].h;
         setUV0(&fruitSprites[0][i].sprt, textures[firstFruitTexture + i].u, textures[firstFruitTexture + i].v);
-        fruitSprites[1][i] = fruitSprites[0][i];
+        *(fruitSprites[1] + i) = fruitSprites[0][i];
     }
 
     if (specialLevelType == 0) {
@@ -310,19 +309,19 @@ void InitFruitSprites(void) {
         TSpritePrim(&fruitBonusTextSprites[0][i], 0, 0, textures[firstGuiTexture + tex].tpage);
         x = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2];
         y = FRUIT_BONUS_TEXT_POSITIONS1[(i / 2) * 2 + 1];
-        if ((i / 2) * 2 == i - 1) {
+        if (i - (i / 2) * 2 == 1) {
             x += FRUIT_BONUS_TEXT_POSITIONS2[(i / 2) * 2];
             y += FRUIT_BONUS_TEXT_POSITIONS2[(i / 2) * 2 + 1];
         }
-        setXY0(&fruitBonusTextSprites[0][i].sprt, x, y);
         setRGB0(&fruitBonusTextSprites[0][i].sprt, 0x80, 0x80, 0x80);
+        setXY0(&fruitBonusTextSprites[0][i].sprt, x, y);
         SetSemiTrans(&fruitBonusTextSprites[0][i].sprt, textures[firstGuiTexture + tex].semitrans);
         SetShadeTex(&fruitBonusTextSprites[0][i].sprt, 0);
         fruitBonusTextSprites[0][i].sprt.clut = textures[firstGuiTexture + tex].clut;
         fruitBonusTextSprites[0][i].sprt.w = textures[firstGuiTexture + tex].w;
         fruitBonusTextSprites[0][i].sprt.h = textures[firstGuiTexture + tex].h;
         setUV0(&fruitBonusTextSprites[0][i].sprt, textures[firstGuiTexture + tex].u, textures[firstGuiTexture + tex].v);
-        fruitBonusTextSprites[1][i] = fruitBonusTextSprites[0][i];
+        *(fruitBonusTextSprites[1] + i) = fruitBonusTextSprites[0][i];
     }
 }
 
