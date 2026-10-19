@@ -1,7 +1,7 @@
 # Common stuff to each version
 
 .SUFFIXES: # No built-in rules
-.SECONDARY: # Don't delete intermediates
+.NOTINTERMEDIATE: # Don't delete intermediates
 SHELL := bash -e -o pipefail
 CROSS := mipsel-linux-gnu
 
