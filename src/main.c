@@ -447,7 +447,9 @@ int MainGameLoop(void) {
     int k;
     int temp;
     int controllerStatuses[2];
+#if !VER_US
     int pad[16];
+#endif
     RECT rect;
     int tex;
     int end;
@@ -546,6 +548,27 @@ int MainGameLoop(void) {
         } else {
             WaitForVBlank();
         }
+#if VER_US
+        whichDrawDispEnv ^= 1;
+        PutDrawAndDispEnvs();
+        ClearOTagR(otag[whichDrawDispEnv][0], 1026);
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
+        for (i = unkOtagLengths[whichDrawDispEnv][0]; i > 0;) {
+            i--;
+            ClearOTagR(&unkOtag[whichDrawDispEnv][0][i][0], 64);
+        }
+        unkOtagLengths[whichDrawDispEnv][0] = 0;
+        DrawSync(0);
+        DrawOTag(&otag[whichDrawDispEnv ^ 1][0][tgi->skyboxFlag]);
+        DrawOTag(&primLists[whichDrawDispEnv ^ 1].gui3);
+        for (i = 0; i < 16; i++) {
+            framebufferFetches[i].texel = ((u_short*)0x1F800000)[i] & 0x7fff;
+        }
+        ResetTextRenderState();
+        ResetTextVars();
+        renderedPrimsBuf = (char*)RENDERED_PRIMS_BUF + whichDrawDispEnv * 0xc000;
+        SetGeomScreen(projectionDistance);
+#else
         whichDrawDispEnv = !whichDrawDispEnv;
         renderedPrimsBuf = (char*)RENDERED_PRIMS_BUF + whichDrawDispEnv * 0xc000;
         UnusedProcessDisplayModeChange();
@@ -574,6 +597,7 @@ int MainGameLoop(void) {
         unusedRenderPhase = 1;
         DrawOTag(&primLists[!whichDrawDispEnv].gui3);
         unusedRenderPhase = 2;
+#endif
         SndProcessSpuVoices();
         prevControllerButtons = controllerButtons;
         if (gameMode == 2) {
