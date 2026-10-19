@@ -8,9 +8,10 @@ options:
   base_path: ../..
   build_path: build/eu-SCES_010.00/
   target_path: build/eu-SCES_010.00/truncated.bin
+  asm_path: asm/eu-SCES_010.00/
   ld_script_path: build/eu-SCES_010.00/kula_world.ld
   undefined_syms_auto_path: build/eu-SCES_010.00/undefined_syms_auto.txt
-  generated_asm_macros_directory: asm/
+  generated_asm_macros_directory: asm/eu-SCES_010.00/
   o_path: .
 
   ld_bss_is_noload: True

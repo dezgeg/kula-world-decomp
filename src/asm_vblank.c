@@ -5,5 +5,5 @@ int gotVsync;
 #ifdef NON_MATCHING
 void WaitForVBlank() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_vblank", WaitForVBlank);
+INCLUDE_ASM("nonmatchings/asm_vblank", WaitForVBlank);
 #endif

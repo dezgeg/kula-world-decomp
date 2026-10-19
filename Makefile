@@ -23,7 +23,7 @@ UNPADDED_SIZE := $(shell printf %d 0x934b0)
 PADDED_SIZE := 0x93800
 
 C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)
-S_FILES := $(wildcard asm/*.s) $(wildcard asm/*/*.s) $(wildcard asm/data/*/*.s)
+S_FILES := $(wildcard asm/eu-SCES_010.00/*.s) $(wildcard asm/eu-SCES_010.00/*/*.s) $(wildcard asm/eu-SCES_010.00/data/*/*.s)
 O_FILES := $(patsubst %.c,build/eu-SCES_010.00/%.o,$(C_FILES)) $(patsubst %.s,build/eu-SCES_010.00/%.o,$(S_FILES))
 
 .PHONY: check
@@ -38,7 +38,7 @@ build/eu-SCES_010.00/subdirs:
 	mkdir -p $(sort $(dir $(O_FILES))) build/eu-SCES_010.00/subdirs
 
 build/eu-SCES_010.00/kula_world.ld: config/eu-SCES_010.00/splat.yaml psyq venv $(wildcard config/eu-SCES_010.00/*_addrs.txt)
-	rm -rf src/nonmatched asm/ build/eu-SCES_010.00/
+	rm -rf src/nonmatched asm/eu-SCES_010.00/ build/eu-SCES_010.00/
 	mkdir -p build
 	for f in $$(cd psyq/ELF; echo *.A); do mkdir -p build/eu-SCES_010.00/$$f; ar x psyq/ELF/$$f --output=build/eu-SCES_010.00/$$f; done
 	dd if=discs/eu/SCES_010.00 of=build/eu-SCES_010.00/truncated.bin count=1 bs=$(UNPADDED_SIZE)
@@ -57,9 +57,9 @@ build/eu-SCES_010.00/%.s: build/eu-SCES_010.00/%.i psyq build/eu-SCES_010.00/sub
 	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $< -o $@
 
 build/eu-SCES_010.00/%.o: build/eu-SCES_010.00/%.s build/eu-SCES_010.00/subdirs
-	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/ -o $@ < $<
+	 python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/eu-SCES_010.00/ -o $@ < $<
 	$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $@
 
 build/eu-SCES_010.00/%.o: %.s build/eu-SCES_010.00/subdirs
-	$(CROSS)-as -G128 -no-pad-sections -Iasm/ -o $@ $<
+	$(CROSS)-as -G128 -no-pad-sections -Iasm/eu-SCES_010.00/ -o $@ $<
 	$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $@

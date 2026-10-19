@@ -27,35 +27,35 @@ int SQUARE_ROOT_TABLE[] = {
 #ifdef NON_MATCHING
 void UpdateGemRandomSparkleEffect() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", UpdateGemRandomSparkleEffect);
+INCLUDE_ASM("nonmatchings/asm_light_effect", UpdateGemRandomSparkleEffect);
 #endif
 
 #ifdef NON_MATCHING
 void ProcessLightEffects() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessLightEffects);
+INCLUDE_ASM("nonmatchings/asm_light_effect", ProcessLightEffects);
 #endif
 
 #ifdef NON_MATCHING
 void UpdateQuadColor() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", UpdateQuadColor);
+INCLUDE_ASM("nonmatchings/asm_light_effect", UpdateQuadColor);
 #endif
 
 #ifdef NON_MATCHING
 void ProcessEnabledLightEffects() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessEnabledLightEffects);
+INCLUDE_ASM("nonmatchings/asm_light_effect", ProcessEnabledLightEffects);
 #endif
 
 #ifdef NON_MATCHING
 void ProcessDisabledLightEffects() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessDisabledLightEffects);
+INCLUDE_ASM("nonmatchings/asm_light_effect", ProcessDisabledLightEffects);
 #endif
 
 #ifdef NON_MATCHING
 void ProcessInvisibleBlockVisibility() {}
 #else
-INCLUDE_ASM("asm/nonmatchings/asm_light_effect", ProcessInvisibleBlockVisibility);
+INCLUDE_ASM("nonmatchings/asm_light_effect", ProcessInvisibleBlockVisibility);
 #endif
