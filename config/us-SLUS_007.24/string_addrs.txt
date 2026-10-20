@@ -1,0 +1,304 @@
+// " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}-~"
+S_SPECIAL_CHARS = 0x00073394; // type:asciz
+// "\\KULA\\PIC.PAK;1"
+S_KULA_PIC_PAK_1 = 0x00073518; // type:asciz
+// "MAX_SORT_OBJ too small!"
+S_MAX_SORT_OBJ_too_small = 0x0009a278; // type:asciz
+// "ot_obj overflow! MRLEN_OBJ too small!"
+S_ot_obj_overflow_MRLEN_OBJ_too_small = 0x0009a294; // type:asciz
+// "Fatal error in jens 2d-eng:\n\n"
+S_Fatal_error_in_jens_2d_eng = 0x000a3014; // type:asciz
+// "1.0.4"
+S_1_0_4 = 0x000a3040; // type:asciz
+// "menugfx too high"
+S_menugfx_too_high = 0x000a30a8; // type:asciz
+// "menugfx nr too big"
+S_menugfx_nr_too_big = 0x000a30bc; // type:asciz
+// "sign too high"
+S_sign_too_high = 0x000a30d0; // type:asciz
+// "sign nr too big"
+S_sign_nr_too_big = 0x000a30e0; // type:asciz
+// "rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n"
+S_rescue_session_saved_as_psx_cube_pad_rescue_pad = 0x000a3468; // type:asciz
+// "to replay:\n"
+S_to_replay = 0x000a349c; // type:asciz
+// "replay!\n\n"
+S_replay = 0x000a34a8; // type:asciz
+// "%x\n"
+S_FMTx = 0x000a34b4; // type:asciz
+// "1.0.4"
+S_1_0_4_2 = 0x000a34b8; // type:asciz
+// "NO CONTROLLER!\n"
+S_NO_CONTROLLER = 0x000a34c4; // type:asciz
+// "DEMO MODE\n"
+S_DEMO_MODE = 0x000a34d4; // type:asciz
+// "recived %d\n"
+S_recived_FMTd = 0x000a34e0; // type:asciz
+// "of %d bytes\n"
+S_of_FMTd_bytes = 0x000a34ec; // type:asciz
+// "BASLUS-00724ROLL"
+SAVE_FILENAME = 0x000a350c; // type:asciz
+// "%d \n"
+S_FMTd_2 = 0x000a352c; // type:asciz
+// "LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n"
+S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3534; // type:asciz
+// "READING DATA\n\nDO NOT REMOVE MEMORY CARD\n"
+S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3560; // type:asciz
+// "SAVING\n\nDO NOT REMOVE MEMORY CARD\n"
+S_SAVING_DO_NOT_REMOVE_MEMORY_CARD = 0x000a358c; // type:asciz
+// "CHECKING MEMORY CARD\n\nPLEASE WAIT\n"
+S_CHECKING_MEMORY_CARD_PLEASE_WAIT = 0x000a35b0; // type:asciz
+// "REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n"
+S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD = 0x000a35d4; // type:asciz
+// "*XYZ"
+S_XYZ = 0x000a3608; // type:asciz
+// "MEMORY CARD IS FULL.\nYOU MUST REPLACE ANOTHER FILE\n"
+S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE = 0x000a3610; // type:asciz
+// "NAME:\n"
+S_NAME = 0x000a3644; // type:asciz
+// "SIZE: %d BLOCK\n"
+S_SIZE_FMTd_BLOCK = 0x000a364c; // type:asciz
+// "SIZE: %d BLOCKS\n"
+S_SIZE_FMTd_BLOCKS = 0x000a365c; // type:asciz
+// "PLEASE SELECT FILE TO REPLACE\n"
+S_PLEASE_SELECT_FILE_TO_REPLACE = 0x000a3670; // type:asciz
+// "PRESS g TO CONTINUE, e TO CANCEL\n"
+S_PRESS_g_TO_CONTINUE_e_TO_CANCEL = 0x000a3690; // type:asciz
+// "OR h TO RE-READ ANOTHER MEMORY CARD.\n"
+S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD = 0x000a36b4; // type:asciz
+// "THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n"
+S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO = 0x000a36dc; // type:asciz
+// "FORMATTING MEMORY CARD\n\nPLEASE WAIT\n"
+S_FORMATTING_MEMORY_CARD_PLEASE_WAIT = 0x000a3720; // type:asciz
+// "ROLL AWAY"
+S_ROLL_AWAY = 0x000a3748; // type:asciz
+// "hid"
+S_hid = 0x000a3794; // type:asciz
+// "bon"
+S_bon = 0x000a3798; // type:asciz
+// "xxx"
+S_xxx = 0x000a379c; // type:asciz
+// "hel"
+S_hel = 0x000a37a0; // type:asciz
+// "mar"
+S_mar = 0x000a37a4; // type:asciz
+// "haz"
+S_haz = 0x000a37a8; // type:asciz
+// "atl"
+S_atl = 0x000a37ac; // type:asciz
+// "fie"
+S_fie = 0x000a37b0; // type:asciz
+// "cow"
+S_cow = 0x000a37b4; // type:asciz
+// "arc"
+S_arc = 0x000a37b8; // type:asciz
+// "inc"
+S_inc = 0x000a37bc; // type:asciz
+// "hil"
+S_hil = 0x000a37c0; // type:asciz
+// "hir"
+S_hir = 0x000a37c4; // type:asciz
+// "%s"
+S_FMTs_2 = 0x000a3810; // type:asciz
+// "%s%s"
+S_FMTsFMTs = 0x000a3814; // type:asciz
+// "can not create file:\n%s\n"
+S_can_not_create_file_FMTs = 0x000a381c; // type:asciz
+// "error closing file:\n%s\n"
+S_error_closing_file_FMTs = 0x000a3838; // type:asciz
+// "\\psx\\cube\\pad\\%d.pad"
+S_psx_cube_pad_FMTd_pad = 0x000a3850; // type:asciz
+// "\\psx\\cube\\pad\\rescue.pad"
+S_psx_cube_pad_rescue_pad = 0x000a3868; // type:asciz
+// "%d \n"
+S_FMTd_3 = 0x000a38b0; // type:asciz
+// "%d\n"
+S_FMTd_4 = 0x000a38b8; // type:asciz
+// "%d"
+S_FMTd_5 = 0x000a38c0; // type:asciz
+// "-"
+S_ = 0x000a38d0; // type:asciz
+// "+"
+S__2 = 0x000a38d4; // type:asciz
+// "%d:%d%d:%d%d\n"
+S_FMTd_FMTdFMTd_FMTdFMTd = 0x000a38d8; // type:asciz
+// "%d:%d%d\n"
+S_FMTd_FMTdFMTd = 0x000a38e8; // type:asciz
+// "%d \n%d \n"
+S_FMTd_FMTd = 0x000a38f4; // type:asciz
+// "-%d \n"
+S_FMTd_6 = 0x000a3900; // type:asciz
+// "-:--\n"
+S__3 = 0x000a3908; // type:asciz
+// "1\n"
+S_1 = 0x000a3910; // type:asciz
+// "2\n"
+S_2 = 0x000a3914; // type:asciz
+// "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-<>"
+S_ABCDEFGHIJKLMNOPQRSTUVWXYZ = 0x000a3918; // type:asciz
+// "LEIF"
+S_LEIF = 0x000a3938; // type:asciz
+// "SAVE 1"
+S_SAVE_1 = 0x000a3940; // type:asciz
+// "SAVE 2"
+S_SAVE_2 = 0x000a3948; // type:asciz
+// "SAVE 3"
+S_SAVE_3 = 0x000a3950; // type:asciz
+// "SAVE 4"
+S_SAVE_4 = 0x000a3958; // type:asciz
+// "PLAYER"
+S_PLAYER = 0x000a3960; // type:asciz
+// "\n"
+S__4 = 0x000a396c; // type:asciz
+// "-           -\n"
+S__5 = 0x000a3970; // type:asciz
+// "%s\n"
+S_FMTs_3 = 0x000a3980; // type:asciz
+// "SCORE\n"
+S_SCORE = 0x000a3984; // type:asciz
+// "TIMETRIAL\n"
+S_TIMETRIAL = 0x000a398c; // type:asciz
+// "LEVEL\n"
+S_LEVEL = 0x000a3998; // type:asciz
+// "FRUITS\n"
+S_FRUITS = 0x000a39a0; // type:asciz
+// "TIME\n"
+S_TIME = 0x000a39a8; // type:asciz
+// "\nCONGRATULATIONS,\nPLEASE WRITE YOUR SIGNATURE\n\n"
+S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE = 0x000a39b0; // type:asciz
+// "%c\n"
+S_FMTc = 0x000a39e0; // type:asciz
+// "\\HIRO\\COPYCAT"
+S_HIRO_COPYCAT = 0x000a39e4; // type:asciz
+// "\\HELL\\HELL"
+S_HELL_HELL = 0x000a39f4; // type:asciz
+// "\\MARS\\MARS"
+S_MARS_MARS = 0x000a3a00; // type:asciz
+// "\\HAZE\\HAZE"
+S_HAZE_HAZE = 0x000a3a0c; // type:asciz
+// "\\ATLANT\\ATLANT"
+S_ATLANT_ATLANT = 0x000a3a18; // type:asciz
+// "\\FIELD\\FIELD"
+S_FIELD_FIELD = 0x000a3a28; // type:asciz
+// "\\COWBOY\\COWBOY"
+S_COWBOY_COWBOY = 0x000a3a38; // type:asciz
+// "\\ARCTIC\\ARCTIC"
+S_ARCTIC_ARCTIC = 0x000a3a48; // type:asciz
+// "\\INCA\\INCA"
+S_INCA_INCA = 0x000a3a58; // type:asciz
+// "\\HILLS\\HILLS"
+S_HILLS_HILLS = 0x000a3a64; // type:asciz
+// "\\HIRO\\HIRO"
+S_HIRO_HIRO = 0x000a3a74; // type:asciz
+// "FI.PAK;1"
+S_FI_PAK_1 = 0x000a3a80; // type:asciz
+// ".GGI;1"
+S_GGI_1 = 0x000a3a8c; // type:asciz
+// ".PAK;1"
+S_PAK_1_2 = 0x000a3a94; // type:asciz
+// ".SFX;1"
+S_SFX_1 = 0x000a3a9c; // type:asciz
+// ".TGI;1"
+S_TGI_1 = 0x000a3aa4; // type:asciz
+// "\\XA\\MUSIC_0.XA;1"
+S_XA_MUSIC_0_XA_1 = 0x000a3ab0; // type:asciz
+// "\\XA\\MUSIC_2.XA;1"
+S_XA_MUSIC_2_XA_1 = 0x000a3ac4; // type:asciz
+// "\\XA\\MUSIC_1.XA;1"
+S_XA_MUSIC_1_XA_1 = 0x000a3ad8; // type:asciz
+// "\\SAMPLE.XA;1"
+S_SAMPLE_XA_1 = 0x000a3af8; // type:asciz
+// "\\XA\\MUSIC_3.XA;1"
+S_XA_MUSIC_3_XA_1 = 0x000a3b08; // type:asciz
+// "File error:\n\n"
+S_File_error = 0x000a3b1c; // type:asciz
+// "could not find "
+S_could_not_find = 0x000a3b2c; // type:asciz
+// "seek error "
+S_seek_error = 0x000a3b3c; // type:asciz
+// "read error "
+S_read_error = 0x000a3b48; // type:asciz
+// "1.0.4"
+S_1_0_4_3 = 0x000a3b54; // type:asciz
+// "\\HIRO\\SCEI.TIM;1"
+S_HIRO_SCEI_TIM_1 = 0x000a3b64; // type:asciz
+// "CD INFO\nSTARTPOS %d\nENDPOS %d\nCURPOS %d\n"
+S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd = 0x000a3bc4; // type:asciz
+// "\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n"
+S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd = 0x000a3bf0; // type:asciz
+// "\\XA\\170_3.IKI;1"
+S_XA_170_3_IKI_1 = 0x000a3c3c; // type:asciz
+// "\\XA\\150C3.IKI;1"
+S_XA_150C3_IKI_1 = 0x000a3c4c; // type:asciz
+// "\\XA\\150W3.IKI;1"
+S_XA_150W3_IKI_1 = 0x000a3c5c; // type:asciz
+// "\\XA\\PSYGLOGO.STR;1"
+S_XA_PSYGLOGO_STR_1 = 0x000a3c6c; // type:asciz
+// "\\XA\\FINAL.STR;1"
+S_XA_FINAL_STR_1 = 0x000a3c80; // type:asciz
+// "file not found\n"
+S_file_not_found = 0x000a3ca4; // type:asciz
+// "time out in strNext() %d\n"
+S_time_out_in_strNext_FMTd = 0x000a3cb4; // type:asciz
+// "time out in decoding !\n"
+S_time_out_in_decoding = 0x000a3cdc; // type:asciz
+// "invalid block type"
+S_invalid_block_type = 0x000a3cf4; // type:asciz
+// "invalid stored block lengths"
+S_invalid_stored_block_lengths = 0x000a3d08; // type:asciz
+// "too many length or distance symbols"
+S_too_many_length_or_distance_symbols = 0x000a3d28; // type:asciz
+// "invalid bit length repeat"
+S_invalid_bit_length_repeat = 0x000a3d4c; // type:asciz
+// "unknown compression method"
+S_unknown_compression_method = 0x000a3d68; // type:asciz
+// "invalid window size"
+S_invalid_window_size = 0x000a3d84; // type:asciz
+// "incorrect header check"
+S_incorrect_header_check = 0x000a3d98; // type:asciz
+// "need dictionary"
+S_need_dictionary = 0x000a3db0; // type:asciz
+// "incorrect data check"
+S_incorrect_data_check = 0x000a3dc0; // type:asciz
+// " inflate 1.0.4 Copyright 1995-1996 Mark Adler "
+S_inflate_1_0_4_Copyright_1995_1996_Mark_Adler = 0x000a3dd8; // type:asciz
+// "oversubscribed dynamic bit lengths tree"
+S_oversubscribed_dynamic_bit_lengths_tree = 0x000a3ff0; // type:asciz
+// "incomplete dynamic bit lengths tree"
+S_incomplete_dynamic_bit_lengths_tree = 0x000a4018; // type:asciz
+// "oversubscribed literal/length tree"
+S_oversubscribed_literal_length_tree = 0x000a403c; // type:asciz
+// "incomplete literal/length tree"
+S_incomplete_literal_length_tree = 0x000a4060; // type:asciz
+// "invalid literal/length code"
+S_invalid_literal_length_code = 0x000a4084; // type:asciz
+// "invalid distance code"
+S_invalid_distance_code = 0x000a40a0; // type:asciz
+// "invalid distance code"
+S_invalid_distance_code_2 = 0x000a40fc; // type:asciz
+// "invalid literal/length code"
+S_invalid_literal_length_code_2 = 0x000a4114; // type:asciz
+// "incompatible version"
+S_incompatible_version = 0x000a4158; // type:asciz
+// "buffer error"
+S_buffer_error = 0x000a4170; // type:asciz
+// "insufficient memory"
+S_insufficient_memory = 0x000a4180; // type:asciz
+// "data error"
+S_data_error = 0x000a4194; // type:asciz
+// "stream error"
+S_stream_error = 0x000a41a0; // type:asciz
+// "file error"
+S_file_error = 0x000a41b0; // type:asciz
+// ""
+S_empty = 0x000a41bc; // type:asciz
+// "stream end"
+S_stream_end = 0x000a41c0; // type:asciz
+// "need dictionary"
+S_need_dictionary_2 = 0x000a41cc; // type:asciz
+// "1.0.4"
+S_1_0_4_4 = 0x000a41dc; // type:asciz
+// "Alloc error:\n\n"
+S_Alloc_error = 0x000a41e4; // type:asciz
+// "error in alloc, SIZE_ALLOC too small!\n"
+S_error_in_alloc_SIZE_ALLOC_too_small = 0x000a41f8; // type:asciz

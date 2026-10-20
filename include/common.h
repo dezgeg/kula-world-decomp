@@ -5,17 +5,15 @@
 #include <libgte.h>
 #include <libgpu.h>
 
-#define VER_EU 1
-#define VER_US 0
-#define VID_PAL 1
-#define VID_NTSC 0
+#define FPS (VID_NTSC ? 60 : 50)
+#define SCREEN_HEIGHT (VID_NTSC ? 240 : 256)
 
-// Scale PAL frame units to NTSC if necessary
-#define FRAMES(palFrames) (((palFrames) * FPS) / 50)
-#define VELOCITY(palUnitsPerFrame) (((palUnitsPerFrame) * 50) / FPS)
+/* Scale PAL per-frame velocities/rates to current FPS */
+#define VELOCITY(x) (((x) * 50) / FPS)
 
-#define FPS 50
-#define SCREEN_HEIGHT 256
+/* Scale PAL frame durations/timer thresholds to current FPS */
+#define FRAMES(x) (((x) * FPS) / 50)
+
 #define NUM_TEXT_SPRITES (VER_US ? 42 : 40)
 #define NUM_TEXTURES (VER_US ? 180 : 150)
 #define NUM_SPECULAR_PRIMS (VER_US ? 10 : 16)
@@ -744,9 +742,21 @@ typedef struct GgiFile {
 /* Fixed Memory Buffer Addresses */
 #define FIXED_BUF(addr)          ((void*)(addr))
 
+#if VER_US
+#define FILE_BUF                 FIXED_BUF(0x00106000)
+#else
 #define FILE_BUF                 FIXED_BUF(0x000FD000)
+#endif
+#if VER_US
+#define DEVKIT_REPLAY_BUF        FIXED_BUF(0x00200000)
+#else
 #define DEVKIT_REPLAY_BUF        FIXED_BUF(0x00131000)
+#endif
+#if VER_US
+#define TGI_FILE_BUF             FIXED_BUF(0x0013A000)
+#else
 #define TGI_FILE_BUF             FIXED_BUF(0x00132000)
+#endif
 #define FMV_RING_BUF             FIXED_BUF(0x00140000)
 #define FMV_VLC_BUF_0            FIXED_BUF(0x00150000)
 #define LEVEL_PAK_BUF            FIXED_BUF(0x00156000)
@@ -761,13 +771,25 @@ typedef struct GgiFile {
 #define CUBE_GRID_BUF            FIXED_BUF(0x001AF000)
 #define FMV_VRAM_BACKUP_BUF      FIXED_BUF(0x001B6000)
 #define SKYBOX_BUF               FIXED_BUF(0x001C3000)
-#define TIM_DECOMP_BUF           FIXED_BUF(0x001EA000)
+#if VER_US
+#define PSX_BUTTON_BG_BUF        FIXED_BUF(0x001E7120)
+#else
 #define PSX_BUTTON_BG_BUF        FIXED_BUF(0x001EF120)
+#endif
 #define FMV_VLC_BUF_1            FIXED_BUF(0x001F0000)
+#if VER_US
+#define FACE_DATA_BUF            FIXED_BUF(0x001EA000)
+#define TIM_DECOMP_BUF           FIXED_BUF(0x001F6000)
+#define KULA_ZALLOCATOR_HEAP     FIXED_BUF(0x001EA000)
+#define KULA_ZALLOCATOR_HEAP_END FIXED_BUF(0x001FC000)
+#define HIGHSCORE_CUBES_BUF      FIXED_BUF(0x001F98F0)
+#else
 #define FACE_DATA_BUF            FIXED_BUF(0x001F2000)
+#define TIM_DECOMP_BUF           FIXED_BUF(0x001EA000)
 #define KULA_ZALLOCATOR_HEAP     FIXED_BUF(0x001F2000)
 #define KULA_ZALLOCATOR_HEAP_END FIXED_BUF(0x001FE000)
 #define HIGHSCORE_CUBES_BUF      FIXED_BUF(0x001FB8F0)
+#endif
 
 #define CUBE_INDEX_AT(x, y, z) (*(short*)((char*)CUBE_GRID_BUF + (x) * 34 * 34 * 2 + (y) * 34 * 2 + (z) * 2))
 
