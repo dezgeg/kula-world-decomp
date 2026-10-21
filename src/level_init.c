@@ -1182,7 +1182,7 @@ void ScanLevelDataForBlinkingEntities(void) {
                         ent[15] = FRAMES(16);
                         ent[16] = 255;
                         break;
-                    case OBJ_TRANSPORTER: // xxx: can this trigger?
+                    case OBJ_TRANSPORTER:
                         ent[15] = FRAMES(16);
                         ent[16] = 255;
                         break;
