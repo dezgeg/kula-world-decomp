@@ -16,7 +16,7 @@ extern int gotVsync;
 extern int loadingIsComplete;
 extern int numCameras;
 extern uint unkUnused;
-extern int unusedNumHblanks[VER_US ? 8 : 1];
+extern int unusedNumHblanks[];
 extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
 
