@@ -442,8 +442,7 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     colorB = colorPtr[2];
     depthOffset = 0;
     switch (e[IE_ID]) {
-        case 5:
-        // FIXME: is this transporter or something else?
+        case OBJ_TRANSPORTER:
             lightEffectId = e[IE_UNK16] & 0xff;
             blinkState = e[IE_UNK16] >> 8;
             depthOffset = 1;
