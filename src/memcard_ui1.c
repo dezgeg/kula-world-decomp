@@ -192,9 +192,7 @@ void InitMemcardUi(void) {
         SetSemiTrans(&loadGameSprite1->sprt, 1);
         SetShadeTex(&loadGameSprite1->sprt, 0);
         loadGameSprite1[0].sprt.clut = GetClut(0x2C0, 0xAF);
-        loadGameSprite1[0].sprt.r0 = 0x80;
-        loadGameSprite1[0].sprt.g0 = 0x80;
-        loadGameSprite1[0].sprt.b0 = 0x80;
+        setRGB0(&loadGameSprite1[0].sprt, 0x80, 0x80, 0x80);
         setUV0(&loadGameSprite1[0].sprt, 0, 176);
         setXY0(&loadGameSprite1[0].sprt, (displayWidth / 2) - 62, 13);
         loadGameSprite1[0].sprt.w = 124;

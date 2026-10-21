@@ -50,8 +50,7 @@ int GetControllerButtons(int slot) {
 
     latestControllerSlotPolled = slot;
 
-    status = GetControllerStatus(slot);
-    if (status != 0) {
+    if (GetControllerStatus(slot) != 0) {
         status = PadGetState(slot << 4);
         if (status == 1) {
             padVibrationModeEntered[slot] = 0;
@@ -74,10 +73,12 @@ int GetControllerButtons(int slot) {
 int GetControllerStatus(int slot) {
     unsigned typeMsb;
 
-    if (padData[slot][0] == 0) {
-        typeMsb = padData[slot][1] >> 4;
-        if (typeMsb == 4 || typeMsb == 5 || typeMsb == 7)
-            return 1;
+    if (padData[slot][0] != 0) {
+        return 0;
+    }
+    typeMsb = padData[slot][1] >> 4;
+    if (typeMsb == 4 || typeMsb == 5 || typeMsb == 7) {
+        return 1;
     }
     return 0;
 }
