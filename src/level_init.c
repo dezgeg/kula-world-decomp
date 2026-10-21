@@ -266,7 +266,7 @@ void ProcessCubesIntoFaces(void) {
                     switch (type) {
                         case OBJ_INVISIBLE_PATCH:
                             if (!((relType >= 0 && relType <= 1) || (relType >= 2 && relType <= 3) || relType == 4)) {
-                            // 6 == invisible
+                                // 6 == invisible
                                 SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), quadSomethingStartIndex + 6, 0x100,
                                             dir, xFine, yFine, zFine, 0, 0x808080);
                                 AddQuadToAnimatedTextureChain(&invisibleBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
@@ -289,7 +289,7 @@ void ProcessCubesIntoFaces(void) {
                             if (specialLevelType == 2) {
                                 flags |= 2; // QF_SEMITRANSPARENT
                             }
-                        // 4 == crumbling
+                            // 4 == crumbling
                             SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), quadSomethingStartIndex + 4, flags, dir,
                                         xFine, yFine, zFine, 0, 0x808080);
                             isNonempty = 1;
@@ -297,8 +297,7 @@ void ProcessCubesIntoFaces(void) {
                             ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
                             break;
 
-                        case -OBJ_EXIT:
-                        // FIXME: flashing or exit - which one is it?
+                        case -OBJ_FLASHING_BLOCK:
                             flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                             textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
                             textureRotation = GetRandomTextureRotation();
@@ -325,7 +324,7 @@ void ProcessCubesIntoFaces(void) {
                                 } else {
                                     textureIdx += numPlainTileTextureVariations + type;
                                     if (type > 19) {
-                                    // item or enemy
+                                        // item or enemy
                                         flags = 0x100000d; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD | QF_ITEM_SHADOW
                                     }
                                 }
