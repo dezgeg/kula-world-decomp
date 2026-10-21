@@ -84,10 +84,8 @@ static short HOURGLASS_ANIM_DATA[29][2] = {
     {-3172, 3897}
 };
 
-static int unusedA2C58 = 0;
-
-int TIME_STR_DIGIT_DIVISORS[9] = {
-    360000, 36000, 3600, 0, 600, 60, 0, 10, 1
+int TIME_STR_DIGIT_DIVISORS[10] = {
+    0, 360000, 36000, 3600, 0, 600, 60, 0, 10, 1
 };
 
 SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5] = {
@@ -341,34 +339,27 @@ void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes)
     int v;
     int charWidth;
     int shouldDraw;
-    int w;
-    // FIXME: complete mess
-    int texId;
-    int texId2;
-    int texId3;
-    int three = 3;
 
-    texId = style + 3;
-    charWidth = textures[firstGuiTexture + texId].w / 13;
+    charWidth = textures[firstGuiTexture + 3 + style].w / 13;
     if (onlyDashes == 1) {
         setUV0(&ds->sprites[whichDrawDispEnv][9].sprt,
-                textures[firstGuiTexture + texId].u + charWidth * 11,
-                textures[firstGuiTexture + texId].v);
+                textures[firstGuiTexture + 3 + style].u + charWidth * 11,
+                textures[firstGuiTexture + 3 + style].v);
         addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][9]);
 
         setUV0(&ds->sprites[whichDrawDispEnv][8].sprt,
-                textures[firstGuiTexture + texId].u + charWidth * 11,
-                textures[firstGuiTexture + texId].v);
+                textures[firstGuiTexture + 3 + style].u + charWidth * 11,
+                textures[firstGuiTexture + 3 + style].v);
         addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][8]);
 
         setUV0(&ds->sprites[whichDrawDispEnv][7].sprt,
-                textures[firstGuiTexture + texId].u + charWidth * 10,
-                textures[firstGuiTexture + texId].v);
+                textures[firstGuiTexture + 3 + style].u + charWidth * 10,
+                textures[firstGuiTexture + 3 + style].v);
         addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][7]);
 
         setUV0(&ds->sprites[whichDrawDispEnv][6].sprt,
-                textures[firstGuiTexture + texId].u + charWidth * 11,
-                textures[firstGuiTexture + texId].v);
+                textures[firstGuiTexture + 3 + style].u + charWidth * 11,
+                textures[firstGuiTexture + 3 + style].v);
         addPrim(&primLists[whichDrawDispEnv].gui1, &ds->sprites[whichDrawDispEnv][6]);
     } else {
         v = abs(value);
@@ -377,16 +368,14 @@ void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes)
         }
         smallestDrawnDigitIndex = 6;
         shouldDraw = 0;
-        i = 1;
-        texId3 = texId;
-        for (; i < 10; i++) {
+        for (i = 1; i < 10; i++) {
             if (i == 4 || i == 7) {
                 continue;
             }
             if (i > 5) {
                 shouldDraw = 1;
             }
-            divisor = TIME_STR_DIGIT_DIVISORS[i - 1];
+            divisor = TIME_STR_DIGIT_DIVISORS[i];
             digit = v / divisor;
             if (digit != 0 || shouldDraw == 1) {
                 if (i < smallestDrawnDigitIndex) {
@@ -394,27 +383,26 @@ void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes)
                 }
                 shouldDraw = 1;
                 setUV0(&ds->sprites[whichDrawDispEnv][i].sprt,
-                    textures[firstGuiTexture + texId3].u + digit * charWidth,
-                    textures[firstGuiTexture + texId3].v);
+                    textures[firstGuiTexture + 3 + style].u + digit * charWidth,
+                    textures[firstGuiTexture + 3 + style].v);
                 v -= digit * divisor;
             }
         }
-        texId2 = style + 3;
 
         setUV0(&ds->sprites[whichDrawDispEnv][7].sprt,
-            textures[firstGuiTexture + texId2].u + 10 * charWidth,
-            textures[firstGuiTexture + texId2].v);
+            textures[firstGuiTexture + 3 + style].u + 10 * charWidth,
+            textures[firstGuiTexture + 3 + style].v);
         if (smallestDrawnDigitIndex < 4) {
             setUV0(&ds->sprites[whichDrawDispEnv][4].sprt,
-                textures[firstGuiTexture + texId2].u + 10 * charWidth,
-                textures[firstGuiTexture + texId2].v);
+                textures[firstGuiTexture + 3 + style].u + 10 * charWidth,
+                textures[firstGuiTexture + 3 + style].v);
         }
 
         if (value != 0) {
             smallestDrawnDigitIndex--;
             setUV0(&ds->sprites[whichDrawDispEnv][smallestDrawnDigitIndex].sprt,
-                   textures[firstGuiTexture + texId2].u + (value < 0 ? charWidth * 11 : charWidth * 12),
-                   textures[firstGuiTexture + (style + three)].v);
+                   textures[firstGuiTexture + 3 + style].u + (value < 0 ? charWidth * 11 : charWidth * 12),
+                   textures[firstGuiTexture + 3 + style].v);
         }
 
         for (i = 9; i >= smallestDrawnDigitIndex; i--) {
