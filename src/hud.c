@@ -73,15 +73,15 @@ uint firstGuiTexture;
 
 RECT hourglassClutRect = {0, 0, 60, 1};
 
-static short HOURGLASS_ANIM_DATA[29][2] = {
-    {0, 0}, {-31711, -31711}, {-30654, -30654}, {-29597, -29597},
-    {-28540, -28540}, {-27483, -27483}, {-26426, -26426}, {-25369, -25369},
-    {-24312, -24312}, {-23255, -23255}, {-22198, -22198}, {-21141, -21141},
-    {-20084, -20084}, {-19027, -19027}, {-17970, -17970}, {-16913, -16913},
-    {-15856, -15856}, {-14799, -14799}, {-13742, -13742}, {-12685, -12685},
-    {-11628, -11628}, {-10571, -10571}, {-9514, -9514}, {-8457, -8457},
-    {-7400, -7400}, {-6343, -6343}, {-5286, -5286}, {-4229, -4229},
-    {-3172, 3897}
+static short HOURGLASS_ANIM_DATA[58] = {
+    0, 0, -31711, -31711, -30654, -30654, -29597, -29597,
+    -28540, -28540, -27483, -27483, -26426, -26426, -25369, -25369,
+    -24312, -24312, -23255, -23255, -22198, -22198, -21141, -21141,
+    -20084, -20084, -19027, -19027, -17970, -17970, -16913, -16913,
+    -15856, -15856, -14799, -14799, -13742, -13742, -12685, -12685,
+    -11628, -11628, -10571, -10571, -9514, -9514, -8457, -8457,
+    -7400, -7400, -6343, -6343, -5286, -5286, -4229, -4229,
+    -3172, 3897
 };
 
 int TIME_STR_DIGIT_DIVISORS[10] = {
@@ -412,31 +412,30 @@ void DrawTimeAttackTimer(DigitSprites* ds, int style, int value, int onlyDashes)
 }
 
 void UpdateStaticHourglassClut(void) {
-    int i;
     int amount;
     int div28;
     int mod28;
-    int dummy[4];
+    int i;
 
-    amount = (levelTimeLeft * 420) / (100 * FPS);
+    amount = (levelTimeLeft * 420) / ((VER_JP ? 120 : 100) * FPS);
     div28 = amount / 28;
     mod28 = amount % 28;
     for (i = 0; i < div28; i++) {
-        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[28][0];
-        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[28][1];
-        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[0][0];
-        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[0][1];
+        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[56];
+        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[57];
+        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[0];
+        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[1];
     }
     i += 1;
-    hourglassClut[div28 * 2] = HOURGLASS_ANIM_DATA[mod28][0];
-    hourglassClut[div28 * 2 + 1] = HOURGLASS_ANIM_DATA[mod28][1];
-    hourglassClut[div28 * 2 + 30] = HOURGLASS_ANIM_DATA[27 - mod28][0];
-    hourglassClut[div28 * 2 + 31] = HOURGLASS_ANIM_DATA[27 - mod28][1];
+    hourglassClut[div28 * 2] = HOURGLASS_ANIM_DATA[mod28 * 2];
+    hourglassClut[div28 * 2 + 1] = HOURGLASS_ANIM_DATA[mod28 * 2 + 1];
+    hourglassClut[div28 * 2 + 30] = HOURGLASS_ANIM_DATA[(27 - mod28) * 2];
+    hourglassClut[div28 * 2 + 31] = HOURGLASS_ANIM_DATA[(27 - mod28) * 2 + 1];
     for (; i < 15; i++) {
-        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[0][0];
-        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[0][1];
-        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[28][0];
-        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[28][1];
+        hourglassClut[i * 2] = HOURGLASS_ANIM_DATA[0];
+        hourglassClut[i * 2 + 1] = HOURGLASS_ANIM_DATA[1];
+        hourglassClut[i * 2 + 30] = HOURGLASS_ANIM_DATA[56];
+        hourglassClut[i * 2 + 31] = HOURGLASS_ANIM_DATA[57];
     }
     LoadImage(&hourglassClutRect, hourglassClut);
 }
