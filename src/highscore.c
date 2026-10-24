@@ -324,9 +324,7 @@ void HighScoreUi(int param_1) {
             }
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE) || TestButton(PAD_START)) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
-                DrawSync(0);
-                VSync(0);
-                return;
+                break;
             }
         }
 
@@ -479,6 +477,7 @@ void HighScoreUi(int param_1) {
         }
 
         if (idleTimer > 600 * FPS) {
+            idleTimer = 0;
             break;
         }
 
@@ -486,7 +485,6 @@ void HighScoreUi(int param_1) {
         DrawHighScoreCubes();
         DrawWidgets(MENU_SPRITE_SCORES, 0);
     }
-    idleTimer = 0;
     DrawSync(0);
     VSync(0);
 }
