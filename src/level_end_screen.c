@@ -44,10 +44,10 @@ extern int twoPlayerWhichPlayer;
 extern int latestPlayerToFinish;
 extern int whichDrawDispEnv;
 extern PrimList primLists[2];
-extern TSprite bigGuiSprite1[2];
-extern TSprite bigGuiSprite2[2];
 extern uint prevControllerButtons;
 
+TSprite bigGuiSprite1[2];
+TSprite bigGuiSprite2[2];
 int bigGuiSpriteFade;
 z_stream zlibStream_a4dd4;
 int inflateRetCode;
@@ -83,11 +83,7 @@ void LoadLevelEndReasonGfx() {
     if (levelEndReason >= 0) {
         whichGfx = LEVEL_END_GFX_WELL_DONE;
         if (gameMode == 2) {
-#if VER_US
-            playTime = levelPlayTime[latestPlayerToFinish] + timeTrialDifficulty * FPS;
-#else
-            playTime = levelPlayTime[twoPlayerWhichPlayer] + timeTrialDifficulty * 50;
-#endif
+            playTime = levelPlayTime[VER_US ? latestPlayerToFinish : twoPlayerWhichPlayer] + timeTrialDifficulty * FPS;
             if (playTime < 1) {
                 whichGfx = LEVEL_END_GFX_VERY_WELL_DONE;
             }

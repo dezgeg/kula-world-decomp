@@ -88,7 +88,7 @@ int Return1(void) {
     return 1;
 }
 
-void VibrateDirectlyToBuf(char value) {
+void VibrateDirectlyToBuf(int value) {
     if (vibrationEnabled) {
         vibrationBuf[latestControllerSlotPolled][0] = value;
     }

@@ -8,6 +8,7 @@ extern int displayWidth;
 extern char padData[2][34];
 extern u_char padVibrationModeEntered[2];
 extern long projectionDistance;
+extern DrawDisp drawdisp[2];
 
 STATIC_FOR_GP_ACCESS int latestControllerSlotPolled;
 

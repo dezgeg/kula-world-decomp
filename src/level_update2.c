@@ -310,6 +310,9 @@ void LevelInit(void) {
     thePlayer.lethargyTimer = -1;
     thePlayer.invulnerabilityTimer = -1;
     thePlayer.bounceTimer = -1;
+#if VER_US
+    isAirborneOverBounceBlock = 0;
+#endif
 
     thePlayer.debugCameraMode = 0;
     thePlayer.turnDelayTimer = 0;
@@ -338,9 +341,6 @@ void LevelInit(void) {
 
     thePlayer.cameraR1R2TurnDirection = ZERO_SVECTOR_a2df4;
     thePlayer.cameraR1TurnAmount = ZERO_SVECTOR_a2df4;
-#if VER_US
-    isAirborneOverBounceBlock = 0;
-#endif
     thePlayer.svec54 = ZERO_SVECTOR_a2df4;
 
     pauseForStartPress = 0;

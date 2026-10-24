@@ -465,9 +465,9 @@ int MainGameLoop(void) {
     }
     if (gameMode == 2) {
         if (numTimeTrialPlayers == 1) {
-            levelPlayTime[twoPlayerWhichPlayer] = (-TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] - timeTrialDifficulty) * FPS;
+            levelPlayTime[twoPlayerWhichPlayer] = (-TIME_TRIAL_PAR_TIMES[curLevel + curWorld2 * 15] - timeTrialDifficulty) * FPS;
         } else {
-            levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curWorld2 * 15 + curLevel] * FPS;
+            levelPlayTime[twoPlayerWhichPlayer] = -TIME_TRIAL_PAR_TIMES[curLevel + curWorld2 * 15] * FPS;
         }
     } else {
         levelPlayTime[twoPlayerWhichPlayer] = 0;
@@ -599,6 +599,7 @@ int MainGameLoop(void) {
         unusedRenderPhase = 2;
 #endif
         SndProcessSpuVoices();
+
         prevControllerButtons = controllerButtons;
         if (gameMode == 2) {
             curController = twoPlayerWhichPlayer;
@@ -677,7 +678,7 @@ int MainGameLoop(void) {
         drMovePackets[whichDrawDispEnv][15].tag = (u_long)primLists[whichDrawDispEnv].gui3 | 0x05000000;
         primLists[whichDrawDispEnv].gui3 = (OT_TYPE)((u_long)&drMovePackets[whichDrawDispEnv][0] & 0x00FFFFFF);
 #endif
-        if (prevControllerButtons == controllerButtons || (VER_US ? isDemoMode == 1 : 0)) {
+        if (prevControllerButtons == controllerButtons || (VER_EU ? 0 : isDemoMode == 1)) {
             menuIdleTimer++;
         } else {
             menuIdleTimer = 0;
@@ -863,7 +864,7 @@ int MainGameLoop(void) {
         }
         if (levelEndReason != 0) {
             if ((TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) ||
-                    TestButton(PAD_CIRCLE)|| TestButton(PAD_START)) && savePointMenuConfirmed == 1) {
+                    TestButton(PAD_CIRCLE) || TestButton(PAD_START)) && savePointMenuConfirmed == 1) {
                 end = 1;
             }
         }
@@ -1177,14 +1178,12 @@ void DecideNextLevel(void) {
             if ((savedFruitsCollectedBitmask & 0x1f) == 0x1f) {
                 fruitsCollectedBitmask = 0;
                 savedFruitsCollectedBitmask = 0;
-                if (levelAfterBonusLevel > 5) {
-                    if (levelAfterBonusLevel > 10) {
-                        curLevel = 17;
-                    } else {
-                        curLevel = 16;
-                    }
-                } else {
+                if (levelAfterBonusLevel < 6) {
                     curLevel = 15;
+                } else if (levelAfterBonusLevel < 11) {
+                    curLevel = 16;
+                } else {
+                    curLevel = 17;
                 }
             } else {
                 curLevel = levelAfterBonusLevel;
