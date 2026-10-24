@@ -201,7 +201,7 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
     result2 = -1;
 LAB_shadow:
     shadowDepth = (ushort)shadowDepth;
-    result2 &= 0xffff;
+    result2 = (ushort)result2;
     if (result2 < shadowDepth) {
         shadowDepth = result2;
     }
@@ -309,7 +309,7 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     shadowDepth = (ushort)shadowDepth;
 
 LAB_shadow:
-    result2 &= 0xffff;
+    result2 = (ushort)result2;
     if (result2 < shadowDepth) {
         shadowDepth = result2;
     }
