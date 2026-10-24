@@ -19,13 +19,9 @@ extern uint Rand(int param_1);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern int displayHeight;
-extern int displayHeight;
-extern int displayWidth;
 extern int displayWidth;
 extern int firstLensFlareOrPsxButtonTexture;
 extern int whichDrawDispEnv;
-extern int whichDrawDispEnv;
-extern OT_TYPE otag[2][1][1026];
 extern OT_TYPE otag[2][1][1026];
 extern Texture textures[NUM_TEXTURES];
 
