@@ -1,7 +1,7 @@
 #include "common.h"
 
 extern void DrawBigGuiSprite(int param_1);
-#if VER_US
+#if !VER_EU
 extern void DrawPsxButtonBackground(int);
 #define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
 #else
@@ -24,7 +24,7 @@ extern OT_TYPE otag[2][1][1026];
 // This is used as DrawSyncCallback in some of the demos
 void UnusedUpdateHblankCounter() {
     unkUnused++;
-#if VER_US
+#if !VER_EU
     if (unkUnused < 8) {
         unusedNumHblanks[unkUnused] = VSync(1);
     }

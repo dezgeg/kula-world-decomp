@@ -355,7 +355,7 @@ void ProcessMovement(Player* player) {
 
         case JUMPING_FORWARD:
             player->jumpingOrViewportRotationTimer--;
-#if VER_US
+#if !VER_EU
             if (player->jumpingOrViewportRotationTimer == 2) {
                 player->jumpingOrViewportRotationTimer = 0;
             }
@@ -448,7 +448,7 @@ void ProcessMovement(Player* player) {
 
         case JUMPING_INPLACE:
             player->jumpingOrViewportRotationTimer--;
-#if VER_US
+#if !VER_EU
             if (player->jumpingOrViewportRotationTimer == 2) {
                 player->jumpingOrViewportRotationTimer = 0;
             }
@@ -488,7 +488,7 @@ void ProcessMovement(Player* player) {
                 player->onGround = 0;
                 player->howMoving0 = 3;
                 player->movementVelocity = 0;
-#if VER_US
+#if !VER_EU
                 player->gravityVelocity = -30;
 #else
                 player->gravityVelocity = player->svec_144.vy;
@@ -717,7 +717,7 @@ int CheckForPlayerWallHit(Player* player) {
         return 1;
     }
     return 0;
-#if VER_US
+#if !VER_EU
 notHit:
     isAirborneOverBounceBlock = 0;
     return 0;

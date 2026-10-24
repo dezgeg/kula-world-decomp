@@ -63,7 +63,7 @@ DECDCTTAB vlc_table;
 
 static MovieInfo movieInfos[] = {
     { "\\XA\\FINAL.STR;1", 1, 1, 801, 0, 0, 320, 256 },
-#if VER_US
+#if !VER_EU
     { "\\XA\\FINAL.STR;1", 1, 1, 528, 0, 25, 320, 240 },
     { "\\XA\\PSYGLOGO.STR;1", 1, 1, 417, 0, 20, 320, 240 },
     { "\\XA\\150W3.IKI;1", 1, 1, 854, 0, 0, 320, 240 },
@@ -105,7 +105,7 @@ void ShowEndingFmv(int movieI) {
     int oldMusicVolume;
     MovieInfo* movie = &movieInfos[movieI];
 
-#if !VER_US
+#if VER_EU
     MusicPause();
 #endif
     oldMusicVolume = musicVolume;
@@ -121,7 +121,7 @@ void ShowEndingFmv(int movieI) {
     StoreImage(&rect, (u_long*)FMV_VRAM_BACKUP_BUF);
     DrawSync(0);
 
-#if VER_US
+#if !VER_EU
     rect.w = 960;
     rect.x = 0;
     rect.y = 0;
@@ -159,7 +159,7 @@ void ShowEndingFmv(int movieI) {
 
     musicVolume = oldMusicVolume;
     SndSetMusicVolume();
-#if !VER_US
+#if VER_EU
     SwitchFromBonusToNormalMusic();
 #endif
 }
@@ -167,7 +167,7 @@ void ShowEndingFmv(int movieI) {
 int FmvMainLoop(int movieI) {
     MovieInfo* movie = &movieInfos[movieI];
     DISPENV disp;
-#if !VER_US
+#if VER_EU
     DRAWENV draw;
 #endif
     int id;
@@ -238,7 +238,7 @@ int FmvMainLoop(int movieI) {
         if (TestButton(PAD_START) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
             fmvEnded = 1;
         }
-#if VER_US
+#if !VER_EU
         if (movieI == 2) {
             if (controllerButtons & ~prevControllerButtons) {
                 fmvEnded = 1;

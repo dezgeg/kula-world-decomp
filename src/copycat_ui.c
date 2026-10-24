@@ -5,7 +5,7 @@ extern Texture textures[150];
 extern int gameMode;
 extern int whichDrawDispEnv;
 extern uint firstGuiTextTexture;
-#if VER_US
+#if !VER_EU
 extern int controllerButtons;
 extern int isPaused;
 extern int gameState;
@@ -41,7 +41,7 @@ void InitCopycatUiTextures(void) {
 }
 
 void RenderPlayerOrCopycatLabels(int sprite, u_char color) {
-#if VER_US
+#if !VER_EU
     if ((controllerButtons & PAD_SELECT) && isPaused == 1) {
         if (gameState != 0) {
             return;

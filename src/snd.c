@@ -139,7 +139,7 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     SpuSetCommonAttr(&spuCommonAttr);
 
     SpuSetReverbModeParam(&spuReverbAttr);
-#if VER_US
+#if !VER_EU
     VSync(2);
 #endif
     SpuSetReverbDepth(&spuReverbAttr);

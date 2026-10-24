@@ -43,7 +43,7 @@ char* EXTENSIONS[] = {
     "FI.PAK;1",
 };
 
-#if VER_US
+#if !VER_EU
 char PIC_PAK_FILENAME[] = {"\\KULA\\PIC.PAK;1"};
 #else
 char PIC_PAK_FILENAME[24] = "\\KULA\\KULA_PIC.PAK;1";
@@ -75,7 +75,7 @@ Music MUSICS[] = {
 };
 
 char S_File_error[] = "File error:\n\n";
-#if VER_US
+#if !VER_EU
 char S_could_not_find[] = "could not find ";
 char S_seek_error[] = "seek error ";
 char S_read_error[] = "read error ";
@@ -85,7 +85,7 @@ static z_stream zlibStream_a4b80;
 static z_stream unusedZlibStream;
 
 void FileError(char* str1, char* str2) {
-#if VER_US
+#if !VER_EU
     int dummy;
     (void)&dummy;
     VSync(3);
@@ -107,7 +107,7 @@ void FileError(char* str1, char* str2) {
 #endif
 }
 
-#if VER_US
+#if !VER_EU
 #define IF_WHILE while
 #define FileError(a,b) VSync(3)
 #else
@@ -117,7 +117,7 @@ void FileError(char* str1, char* str2) {
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
     int j;
-#if VER_US
+#if !VER_EU
     int pad[2];
 #endif
     CdlFILE cdlfile;
@@ -173,7 +173,7 @@ uint UnusedReadKulaPicPak(void* unknown, char* buf) {
 }
 
 void UnusedInflateSomething(int idx, int* data) {
-#if VER_US
+#if !VER_EU
     DrawSync(0);
     VSync(0);
 #endif
@@ -184,7 +184,7 @@ void UnusedInflateSomething(int idx, int* data) {
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
-#if VER_US
+#if !VER_EU
     DrawSync(0);
 #endif
     VSync(0);
@@ -193,7 +193,7 @@ void UnusedInflateSomething(int idx, int* data) {
 #endif
 
 void LoadWarningTim(void) {
-#if VER_US
+#if !VER_EU
     RECT rect = {0, 0, 480, 240};
     char filename[24] = "\\HIRO\\SCEI.TIM;1";
 #else
@@ -202,7 +202,7 @@ void LoadWarningTim(void) {
 #endif
     CdlFILE cdlfile;
 
-#if VER_US
+#if !VER_EU
     displayWidth = 320;
     displayHeight = 240;
     SetupDisplay(0, 0, 96, 0, 0, 1);
@@ -257,6 +257,6 @@ void LoadingScreen(void) {
     }
 }
 
-#if VER_US
+#if !VER_EU
 int unusedLoading1 = 1;
 #endif

@@ -40,7 +40,7 @@ void InitVariousUiSpriteTemplates(void) {
     }
 
     for (i = 16; i < 19; i++) {
-#if VER_US
+#if !VER_EU
         TSpritePrim(&textDrawTemplateSprites1[i], 0, 0,
                     textures[firstGuiTextTexture + 2].tpage);
         SetSemiTrans(&textDrawTemplateSprites1[i].sprt, textures[firstGuiTextTexture].semitrans);
@@ -53,7 +53,7 @@ void InitVariousUiSpriteTemplates(void) {
         textDrawTemplateSprites1[i].sprt.w = 16;
         textDrawTemplateSprites1[i].sprt.h = 8;
 
-#if VER_US
+#if !VER_EU
         TSpritePrim(&textDrawTemplateSprites2[i], 0, 0,
                     textures[firstGuiTextTexture + 3].tpage);
         SetSemiTrans(&textDrawTemplateSprites2[i].sprt,

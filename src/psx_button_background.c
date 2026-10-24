@@ -25,7 +25,7 @@ void InitPsxButtonBackgroundSprites(int param_1) {
     int relativeTex;
     int i;
 
-#if VER_US
+#if !VER_EU
     guiBackgroundAnimCounter = 424;
 #endif
     psxButtonBackgroundPtr = PSX_BUTTON_BG_BUF;
@@ -64,7 +64,7 @@ void InitPsxButtonBackgroundSprites(int param_1) {
     }
 }
 
-#if VER_US
+#if !VER_EU
 void DrawPsxButtonBackground(int fadeIn) {
 #else
 void DrawPsxButtonBackground(void) {
@@ -82,7 +82,7 @@ void DrawPsxButtonBackground(void) {
             240 + displayHeight / 2;
         setXY0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, x, y);
 
-#if VER_US
+#if !VER_EU
         if (fadeIn == 1) {
             setRGB0(&psxButtonBackgroundPtr->sprites[whichDrawDispEnv][i].sprt, guiBackgroundFadeIn,
                     guiBackgroundFadeIn, guiBackgroundFadeIn);

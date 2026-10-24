@@ -189,7 +189,7 @@ int loadNewWorld = 1;
 int skipNextLoad = 0;
 int loadedInitialSave = 0;
 int displayModeHasBeenSet = 0;
-#if VER_US
+#if !VER_EU
 int musicShouldLoop = 1;
 #endif
 int unusedFrameCounter = 0;
@@ -213,7 +213,7 @@ short copycatNewOrCopyMoves = 0;
 short unusedA2EFE = 0;
 int timeTrialDifficulty = 0;
 SVECTOR ZERO_SVECTOR_a2f04 = { 0, 0, 0, 0 };
-#if VER_US
+#if !VER_EU
 int unkUnused[] = {0};
 #endif
 int DEMO_LEVELS[] = { 4, 19, 41 };

@@ -68,7 +68,7 @@ void DrawTextCrappyFont(char* str) {
     textPosYCur = textPosYEnd;
     lineStartIndex = 0;
     for (width = i = 0; str[i]; i++) {
-        if (!VER_US || str[i] - 0x20 >= 0)
+        if (VER_EU || str[i] - 0x20 >= 0)
             width += fontSprites[str[i] - 0x20].sprt.w + 1;
         if (str[i] == '\n' || str[i] == 0) {
             if (textAlignMode == 0) {

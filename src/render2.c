@@ -110,7 +110,7 @@ int TRANSPORTER_COLORS[4][3] = {
 };
 
 #ifndef SKIP_UNUSED_CODE
-#if VER_US
+#if !VER_EU
 void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int modelVariant, int modelBase, int unk1, int colorR, int colorG, int colorB, int unk2) {
 #else
 void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, int colorG, int colorB, int unk2) {

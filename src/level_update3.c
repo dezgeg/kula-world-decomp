@@ -57,7 +57,7 @@ extern MATRIX perspMatrixes[2];
 extern Player thePlayer;
 extern short* entityData;
 extern short numEntities;
-#if VER_US
+#if !VER_EU
 short isAirborneOverBounceBlock;
 #endif
 extern SVECTOR fruit1ScreenSpaceParticlesPos;
@@ -1163,14 +1163,14 @@ void SubtractLevelTimer(int param_1) {
 
 int IsPlayerInAir(Player* player) {
     if (player->howMoving198 == FALLING || (player->howMoving198 == JUMPING_INPLACE || player->howMoving198 == JUMPING_FORWARD) && player->jumpingOrViewportRotationTimer > 1) {
-#if VER_US
+#if !VER_EU
         if (player->faceTypePlayerStandingOn == OBJ_ARROW) {
             isAirborneOverBounceBlock = 1;
         }
 #endif
         return 1;
     }
-#if VER_US
+#if !VER_EU
     isAirborneOverBounceBlock = 0;
 #endif
     return 0;

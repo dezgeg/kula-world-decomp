@@ -204,7 +204,7 @@ void DrawTextFancyFont(char* str, short x, short y) {
                 addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
                 textCharIdx++;
             }
-#if VER_US
+#if !VER_EU
             if (str[i] == '*') {
                 if (textCharIdx + 2 > 299) {
                     return;

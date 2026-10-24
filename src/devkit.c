@@ -213,7 +213,7 @@ void WriteToDevkit(int param_1) {
         if (len < 0) {
             len = 0x4000;
         }
-#if VER_US
+#if !VER_EU
         if (len > 0x600000) {
             len = 0x600000;
         }

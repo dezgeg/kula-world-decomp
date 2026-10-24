@@ -14,7 +14,7 @@ void VariousInit(void) {
     InitLevelEndScreen();
 }
 
-#if VER_US
+#if !VER_EU
 void ClearScreen(void) {
     RECT rect;
 

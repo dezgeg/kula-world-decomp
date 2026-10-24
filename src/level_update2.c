@@ -81,7 +81,7 @@ int ballTextureIndex;
 int shouldMarkCubesVisited;
 short isPausedOrWaitingForRestart;
 short pauseForStartPress;
-#if VER_US
+#if !VER_EU
 short isAirborneOverBounceBlock;
 #endif
 uint controllerButtons;
@@ -310,7 +310,7 @@ void LevelInit(void) {
     thePlayer.lethargyTimer = -1;
     thePlayer.invulnerabilityTimer = -1;
     thePlayer.bounceTimer = -1;
-#if VER_US
+#if !VER_EU
     isAirborneOverBounceBlock = 0;
 #endif
 

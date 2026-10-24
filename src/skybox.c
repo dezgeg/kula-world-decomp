@@ -222,7 +222,7 @@ int RecalcSkyboxes2(void) {
     int *u1, *u2;
     u32* p_u32;
     int clut;
-#if !VER_US
+#if VER_EU
     int dummy[16];
 #endif
 

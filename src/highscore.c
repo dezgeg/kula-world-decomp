@@ -2,7 +2,7 @@
 #include <string.h>
 
 extern void DrawHighScoreCubes(void);
-#if VER_US
+#if !VER_EU
 extern void DrawPsxButtonBackground(int);
 #define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
 #else
