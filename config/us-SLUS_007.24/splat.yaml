@@ -91,7 +91,6 @@ segments:
       - [0x01cf4, c, particles]
       - [0x03370, c, copycat_ui]
       - [0x03740, c, font]
-      - [0x045e4, c, text1]
       - [0x04b7c, c, widget_init]
       - [0x04edc, c, lensflare]
       - [0x05ec8, c, level_end_screen]

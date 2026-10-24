@@ -6,10 +6,26 @@ extern void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uc
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern int displayWidth;
-extern uint firstGuiTexture;
+extern int whichDrawDispEnv;
+extern PrimList primLists[2];
 extern Texture textures[150];
+extern TSprite fontSprites[96];
+extern TSprite textDrawSprites[2][300];
+extern uint firstGuiTexture;
 
 TSprite fontSprites[96];
+
+STATIC_FOR_GP_ACCESS int textCharIdx;
+static byte textColorB;
+static byte textColorG;
+static byte textColorR;
+static int lastFrameIdWhenTextWasDrawn;
+static int textAlignMode;
+static int textPosXEnd;
+static int textPosXStart;
+static int textPosYCur;
+static int textPosYEnd;
+static int textPosYStart;
 
 void SetFontEntry(char c, uchar u, uchar v, uchar width, uchar height, uchar x, uchar y, int texIndex) {
     uchar idx = c - 0x20;
@@ -101,4 +117,94 @@ void InitFont(void) {
     SetFontEntry('<', 212, 12, 8, 10, 0, 2, firstGuiTexture + 9);
     SetFontEntry('|', 220, 12, 8, 10, 0, 2, firstGuiTexture + 9);
     SetFontEntry(' ', 0, 0, 4, 0, 0, 2, firstGuiTexture + 9);
+}
+
+void ResetTextRenderState(void) {
+    lastFrameIdWhenTextWasDrawn = -1;
+}
+
+void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB) {
+    if (-1 < align) {
+        textAlignMode = align;
+    }
+    if (posX != -1) {
+        textPosXStart = posX;
+    }
+    if (posY != -1) {
+        textPosYStart = posY;
+        textPosYEnd = posY;
+    }
+    if (colorR > 0x80) {
+        colorR = 0x80;
+    }
+    if (colorG > 0x80) {
+        colorG = 0x80;
+    }
+    if (colorB > 0x80) {
+        colorB = 0x80;
+    }
+    if (colorR >= 0) {
+        textColorR = (byte)colorR;
+    }
+    if (colorG >= 0) {
+        textColorG = (byte)colorG;
+    }
+    if (colorB >= 0) {
+        textColorB = (byte)colorB;
+    }
+}
+
+void DrawTextCrappyFont(char* str) {
+    int i;
+    int j;
+    int width;
+    int lineStartIndex;
+
+    if (whichDrawDispEnv != lastFrameIdWhenTextWasDrawn) {
+        lastFrameIdWhenTextWasDrawn = whichDrawDispEnv;
+        textPosXEnd = textPosXStart;
+        textPosYCur = textPosYStart;
+        textPosYEnd = textPosYStart;
+    }
+
+    textPosYCur = textPosYEnd;
+    lineStartIndex = 0;
+    for (width = i = 0; str[i]; i++) {
+        if (VER_EU || str[i] - 0x20 >= 0)
+            width += fontSprites[str[i] - 0x20].sprt.w + 1;
+        if (str[i] == '\n' || str[i] == 0) {
+            if (textAlignMode == 0) {
+                textPosXEnd = textPosXStart;
+            }
+            if (textAlignMode == 1) {
+                textPosXEnd = textPosXStart - width / 2;
+            }
+            if (textAlignMode == 2) {
+                textPosXEnd = textPosXStart - width;
+            }
+
+            for (j = lineStartIndex; str[j] != '\n' && str[j]; j++) {
+                if (fontSprites[str[j] - 0x20].sprt.h != 0 && str[j] - 0x20 >= 0) {
+                    if (textCharIdx + 1 >= 400) {
+                        return;
+                    }
+                    memcpy(&textDrawSprites[whichDrawDispEnv][textCharIdx], &fontSprites[str[j] - 0x20], sizeof(TSprite));
+                    if (str[j] != '|') {
+                        setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, textColorR, textColorG, textColorB);
+                    } else {
+                        setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, textColorR, 0, 0);
+                    }
+                    textDrawSprites[whichDrawDispEnv][textCharIdx].sprt.x0 += textPosXEnd;
+                    textDrawSprites[whichDrawDispEnv][textCharIdx].sprt.y0 += textPosYCur;
+                    addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
+                    textCharIdx++;
+                }
+                textPosXEnd += fontSprites[str[j] - 0x20].sprt.w + 1;
+            }
+            width = 0;
+            lineStartIndex = i + 1;
+            textPosYCur += 11;
+        }
+    }
+    textPosYEnd = textPosYCur;
 }
