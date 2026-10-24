@@ -53,8 +53,6 @@ extern InvisBlockVisibility invisBlockVisibility;
 extern AnimatedTextureChain invisibleBlockTextureChain;
 extern int isPaused;
 extern int toBeDisabledLightEffects[64];
-extern int starfieldTransY;
-extern int starfieldTransZ;
 extern GemRandomSparkleEffect gemRandomSparkleEffects[3][3];
 extern int itemsDispList[2049];
 extern int itemsDispListIdx;
@@ -82,7 +80,7 @@ STATIC_FOR_GP_ACCESS int starfieldTransPhaseY2;
 STATIC_FOR_GP_ACCESS int starfieldTransPhaseZ1;
 STATIC_FOR_GP_ACCESS int starfieldTransPhaseZ2;
 SVECTOR starfieldSinVec;
-int starfieldTransX;
+VECTOR starfieldTrans;
 
 void RenderBackground(void) {
     backgroundRenderingMatrix = perspMatrixes[cameraIndex];
@@ -307,19 +305,19 @@ void UpdateStarfield(void) {
 
     starfieldTransPhaseX1 = (starfieldTransPhaseX1 + 2) % 4096;
     starfieldTransPhaseX2 = (starfieldTransPhaseX2 + 7) % 4096;
-    starfieldTransX = (rsin(starfieldTransPhaseX1) * 50000 / 4096) + (rsin(starfieldTransPhaseX2) * 10000 / 4096);
+    starfieldTrans.vx = (rsin(starfieldTransPhaseX1) * 50000 / 4096) + (rsin(starfieldTransPhaseX2) * 10000 / 4096);
 
     starfieldTransPhaseY1 = (starfieldTransPhaseY1 + 3) % 4096;
     starfieldTransPhaseY2 = (starfieldTransPhaseY2 + 8) % 4096;
-    starfieldTransY = (rsin(starfieldTransPhaseY1) * 50000 / 4096) + (rsin(starfieldTransPhaseY2) * 10000 / 4096);
+    starfieldTrans.vy = (rsin(starfieldTransPhaseY1) * 50000 / 4096) + (rsin(starfieldTransPhaseY2) * 10000 / 4096);
 
     starfieldTransPhaseZ1 = (starfieldTransPhaseZ1 + 2) % 4096;
     starfieldTransPhaseZ2 = (starfieldTransPhaseZ2 + 6) % 4096;
-    starfieldTransZ = (rsin(starfieldTransPhaseZ1) * 60000 / 4096) + (rsin(starfieldTransPhaseZ2) * 10000 / 4096);
+    starfieldTrans.vz = (rsin(starfieldTransPhaseZ1) * 60000 / 4096) + (rsin(starfieldTransPhaseZ2) * 10000 / 4096);
 
-    vx = starfieldTransX;
-    vy = starfieldTransY;
-    vz = starfieldTransZ;
+    vx = starfieldTrans.vx;
+    vy = starfieldTrans.vy;
+    vz = starfieldTrans.vz;
     while (vx > 6552)
         vx -= 13106;
     while (vx < -6553)

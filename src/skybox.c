@@ -12,9 +12,7 @@ extern int starfieldTransPhaseY1;
 extern int starfieldTransPhaseY2;
 extern int starfieldTransPhaseZ1;
 extern int starfieldTransPhaseZ2;
-extern int starfieldTransX;
-extern int starfieldTransY;
-extern int starfieldTransZ;
+extern VECTOR starfieldTrans;
 
 STATIC_FOR_GP_ACCESS short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
 static int skyboxMaxAngle1;
@@ -241,9 +239,9 @@ int RecalcSkyboxes2(void) {
     starfieldTransPhaseY2 = 0x400;
     starfieldTransPhaseZ1 = 0;
     starfieldTransPhaseZ2 = 0;
-    starfieldTransX = 0;
-    starfieldTransY = 0;
-    starfieldTransZ = 0;
+    starfieldTrans.vx = 0;
+    starfieldTrans.vy = 0;
+    starfieldTrans.vz = 0;
 
     ptr = (short*)SKYBOX_BUF;
     for (z = 0; z < 0x3332; z += 0x3332) {
