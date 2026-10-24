@@ -90,7 +90,6 @@ segments:
       - [0x01b4c, c, particles]
       - [0x031c8, c, copycat_ui]
       - [0x0355c, c, font]
-      - [0x036c8, c, font2]
       - [0x04400, c, text1]
       - [0x04990, c, widget_init]
       - [0x04cf0, c, lensflare]
