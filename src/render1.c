@@ -175,10 +175,11 @@ void CalculateBlockLighting(void) {
     int col;
     int coord;
     int ret;
+    int dir;
     int* p;
-    int unk[3][2];
+    int unk[6];
 
-    p = &unk[0][0];
+    p = unk;
     col = 0;
     for (i = 0; i < 3; i++) {
         coord = perspMatrixes[cameraIndex].m[2][i];
@@ -197,34 +198,36 @@ void CalculateBlockLighting(void) {
     }
 
     for (i = 0; i < 3; i++) {
-        unk[i][0] = (unk[i][0] << 12) / col;
+        unk[i * 2] = (unk[i * 2] << 12) / col;
     }
 
     for (i = 0; i < 3; i++) {
         col = 0;
         if (specialLevelType == 1) {
             for (j = 0; j < 3; j++) {
-                col += tgi->specialBlockColors.arr[j * 6 + unk[j][1] + i] * unk[j][0];
+                dir = unk[j * 2 + 1];
+                col += *(j * 6 + dir + i + tgi->specialBlockColors.arr) * unk[j * 2];
             }
 
             farColor[i] = col + 0x800 >> 12;
             if (farColor[i] > 0xff) {
                 farColor[i] = 0xff;
             }
-            farColor2[i] = (farColor[i] * tgi->specialLevelFarColor2Mul[i]) + 0x40 >> 7;
+            farColor2[i] = (farColor[i] * *(i + tgi->specialLevelFarColor2Mul)) + 0x40 >> 7;
             if (farColor2[i] > 0xff) {
                 farColor2[i] = 0xff;
             }
         } else {
             for (j = 0; j < 3; j++) {
-                col += tgi->normalBlockColors.arr[j * 6 + unk[j][1] + i] * unk[j][0];
+                dir = unk[j * 2 + 1];
+                col += *(j * 6 + dir + i + tgi->normalBlockColors.arr) * unk[j * 2];
             }
 
             farColor[i] = col + 0x800 >> 12;
             if (farColor[i] > 0xff) {
                 farColor[i] = 0xff;
             }
-            farColor2[i] = (farColor[i] * tgi->normalLevelFarColor2Mul[i]) + 0x40 >> 7;
+            farColor2[i] = (farColor[i] * *(i + tgi->normalLevelFarColor2Mul)) + 0x40 >> 7;
             if (farColor2[i] > 0xff) {
                 farColor2[i] = 0xff;
             }
