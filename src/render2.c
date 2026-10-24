@@ -382,7 +382,7 @@ LAB_shadow:
         shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p1 = (ulong*)shadowPrim;
     }
 
-    for (nextVertexId = 0; nextVertexId < (VER_US ? 10 : 4); nextVertexId++) {
+    for (nextVertexId = 0; nextVertexId < (VER_EU ? 4 : 10); nextVertexId++) {
         if (specularPrimPtrs[whichDrawDispEnv][cameraIndex][nextVertexId].p0 == (ulong*)-1)
             break;
     }
@@ -451,8 +451,9 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
                 if (e[IE_COUNTER] < 1) {
                     e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
-                        ent = (EntityBlock*)(entityData + entityIndex * 128);
-                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        short* entBase = entityData + entityIndex * 128;
+                        short* pos = entBase + 125;
+                        lightEffectId = AddLightEffect(pos[0], pos[1], pos[2], dirIndexInBlock);
                         blinkState = 1;
                         e[IE_UNK16] = lightEffectId | 0x100;
                     } else {
@@ -482,8 +483,9 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
                 if (e[IE_COUNTER] < 1) {
                     e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
-                        ent = (EntityBlock*)(entityData + entityIndex * 128);
-                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        short* entBase = entityData + entityIndex * 128;
+                        short* pos = entBase + 125;
+                        lightEffectId = AddLightEffect(pos[0], pos[1], pos[2], dirIndexInBlock);
                         blinkState = 1;
                         e[IE_UNK16] = lightEffectId | 0x100;
                     } else {
@@ -512,8 +514,9 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
                 if (e[IE_COUNTER] < 1) {
                     e[IE_COUNTER] = FRAMES(16);
                     if (blinkState == 0) {
-                        ent = (EntityBlock*)(entityData + entityIndex * 128);
-                        lightEffectId = AddLightEffect(ent->x, ent->y, ent->z, dirIndexInBlock);
+                        short* entBase = entityData + entityIndex * 128;
+                        short* pos = entBase + 125;
+                        lightEffectId = AddLightEffect(pos[0], pos[1], pos[2], dirIndexInBlock);
                         blinkState = 1;
                         e[IE_UNK16] = lightEffectId | 0x100;
                     } else {

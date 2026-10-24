@@ -74,7 +74,7 @@ extern int specialLevelType;
 extern int turningMotionBlurEnabled;
 extern int turningMotionBlurPhase;
 extern int turningMotionBlurTable[70];
-extern MATRIX perspMatrixes[];
+extern MATRIX perspMatrixes[2];
 extern Quad* cubeStates[256];
 extern QuadFunc QUAD_FUNC_PTRS[6];
 extern Quad** levelExitQuadPPtr;
@@ -133,11 +133,9 @@ void ProcessCrumblingBlocks(void) {
     int dir;
     int faceType;
     CrumblingBlockEntity* eb;
-    int state;
     int cubeIndex;
 
     for (i = 0; i < numCrumblingBlocks; i++) {
-        Quad** quads = (Quad**)cubeStates;
         eb = (CrumblingBlockEntity*)&entityData[crumblingBlockEntityIndexes[i] * 128];
         x = eb->x;
         y = eb->y;
@@ -150,10 +148,10 @@ void ProcessCrumblingBlocks(void) {
         switch (eb->state) {
             case 2:
                 for (dir = 0; dir < 6; dir++) {
-                    quads[cubeIndex * 16 + dir]->flags.u8 |= 1; // QF_ACTIVE
+                    cubeStates[cubeIndex * 16 + dir]->flags.u8 |= 1; // QF_ACTIVE
                     faceType = GetFaceTypeAtRelativeToDir(x, y, z, dir);
                     if (faceType != -1 && faceType != -2 && faceType != 3 && faceType != 5) {
-                        quads[GetCubeIndexRelativeToDir(x, y, z, dir) * 16 + FlipDir(dir)]->flags.u8 |= 1; // QF_ACTIVE
+                        cubeStates[GetCubeIndexRelativeToDir(x, y, z, dir) * 16 + FlipDir(dir)]->flags.u8 |= 1; // QF_ACTIVE
                     }
                 }
                 eb->state = 3;
@@ -165,14 +163,14 @@ void ProcessCrumblingBlocks(void) {
                 eb->counter -= VELOCITY(32);
                 if (eb->counter >= 0) {
                     for (dir = 0; dir < 6; dir++) {
-                        QUAD_FUNC_PTRS[dir](quads[cubeIndex * 16 + dir], eb->counter, x9, y9, z9, 0);
+                        QUAD_FUNC_PTRS[dir](cubeStates[cubeIndex * 16 + dir], eb->counter, x9, y9, z9, 0);
                     }
                 } else {
                     for (dir = 0; dir < 6; dir++) {
-                        quads[cubeIndex * 16 + dir]->flags.i32 &= ~1; // QF_ACTIVE
+                        cubeStates[cubeIndex * 16 + dir]->flags.i32 &= ~1; // QF_ACTIVE
                     }
                     eb->state = 0;
-                    levelData[x * 1156 + y * 34 + z] = -1;
+                    CUBE_TYPE_AT(x, y, z) = -1;
                 }
                 break;
         }
@@ -397,8 +395,6 @@ void ProcessRetractableSpikes(void) {
         eb[16] = unk1E;
     }
 }
-#undef EXTEND_FRAMES
-#undef RETRACT_FRAMES
 
 void SetSunglassMode(int on) {
     if (!on) {

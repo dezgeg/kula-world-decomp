@@ -42,7 +42,7 @@ extern int cameraIndex;
 extern TgiFile* tgi;
 extern int whichDrawDispEnv;
 extern OT_TYPE otag[2][1][1026];
-extern MATRIX perspMatrixes[];
+extern MATRIX perspMatrixes[2];
 extern int specialLevelType;
 extern RGB farColor;
 extern RGB farColor2;
