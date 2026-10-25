@@ -15,7 +15,7 @@ void UnusedSetDisplayModeChange(int param_1) {
 }
 #endif
 
-#if !VER_US
+#if VER_EU
 void UnusedProcessDisplayModeChange(void) {
     switch (dispModeChangeState) {
         case 1:

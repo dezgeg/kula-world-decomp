@@ -68,7 +68,7 @@ int Sjis2Ascii(unsigned short sjis_code) {
     int i;
     Swapper swapper;
 
-    swapper.word = sjis_code;
+    swapper = (Swapper)sjis_code;
     temp = swapper.byte[1];
     swapper.byte[1] = swapper.byte[0];
     swapper.byte[0] = temp;
