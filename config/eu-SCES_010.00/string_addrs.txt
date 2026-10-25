@@ -1,546 +1,546 @@
 // "MDEC_rest:bad option(%d)\n"
-S_MDEC_rest_bad_option_FMTd = 0x00011418; // type:asciz
+S_MDEC_rest_bad_option_FMTd = 0x00011418; // type:asciz defined:True
 // "MDEC_in_sync"
-S_MDEC_in_sync = 0x00011434; // type:asciz
+S_MDEC_in_sync = 0x00011434; // type:asciz defined:True
 // "MDEC_out_sync"
-S_MDEC_out_sync = 0x00011444; // type:asciz
+S_MDEC_out_sync = 0x00011444; // type:asciz defined:True
 // "%s timeout:\n"
-S_FMTs_timeout = 0x00011454; // type:asciz
+S_FMTs_timeout = 0x00011454; // type:asciz defined:True
 // "0123456789ABCDEF"
-S_0123456789ABCDEF = 0x00011468; // type:asciz
+S_0123456789ABCDEF = 0x00011468; // type:asciz defined:True
 // "bad sjis code 0x%x\n"
-S_bad_sjis_code_0xFMTx = 0x00011508; // type:asciz
+S_bad_sjis_code_0xFMTx = 0x00011508; // type:asciz defined:True
 // "$Id: sys.c,v 1.140 1998/01/12 07:52:27 noda Exp $"
-S_Id_sys_c_v_1_140_1998_01_12_07_52_27_noda_Exp = 0x00011528; // type:asciz
+S_Id_sys_c_v_1_140_1998_01_12_07_52_27_noda_Exp = 0x00011528; // type:asciz defined:True
 // "ResetGraph:jtb=%08x,env=%08x\n"
-S_ResetGraph_jtb_FMT08x_env_FMT08x = 0x0001155c; // type:asciz
+S_ResetGraph_jtb_FMT08x_env_FMT08x = 0x0001155c; // type:asciz defined:True
 // "ResetGraph(%d)...\n"
-S_ResetGraph_FMTd = 0x0001157c; // type:asciz
+S_ResetGraph_FMTd = 0x0001157c; // type:asciz defined:True
 // "SetGraphDebug:level:%d,type:%d reverse:%d\n"
-S_SetGraphDebug_level_FMTd_type_FMTd_reverse_FMTd = 0x00011590; // type:asciz
+S_SetGraphDebug_level_FMTd_type_FMTd_reverse_FMTd = 0x00011590; // type:asciz defined:True
 // "DrawSyncCallback(%08x)...\n"
-S_DrawSyncCallback_FMT08x = 0x000115d0; // type:asciz
+S_DrawSyncCallback_FMT08x = 0x000115d0; // type:asciz defined:True
 // "SetDispMask(%d)...\n"
-S_SetDispMask_FMTd = 0x000115ec; // type:asciz
+S_SetDispMask_FMTd = 0x000115ec; // type:asciz defined:True
 // "DrawSync(%d)...\n"
-S_DrawSync_FMTd = 0x00011600; // type:asciz
+S_DrawSync_FMTd = 0x00011600; // type:asciz defined:True
 // "%s:bad RECT"
-S_FMTs_bad_RECT = 0x00011614; // type:asciz
+S_FMTs_bad_RECT = 0x00011614; // type:asciz defined:True
 // "(%d,%d)-(%d,%d)\n"
-S_FMTd_FMTd_FMTd_FMTd = 0x00011620; // type:asciz
+S_FMTd_FMTd_FMTd_FMTd = 0x00011620; // type:asciz defined:True
 // "ClearImage"
-S_ClearImage = 0x00011638; // type:asciz
+S_ClearImage = 0x00011638; // type:asciz defined:True
 // "ClearImage2"
-S_ClearImage2 = 0x00011644; // type:asciz
+S_ClearImage2 = 0x00011644; // type:asciz defined:True
 // "LoadImage"
-S_LoadImage = 0x00011650; // type:asciz
+S_LoadImage = 0x00011650; // type:asciz defined:True
 // "StoreImage"
-S_StoreImage = 0x0001165c; // type:asciz
+S_StoreImage = 0x0001165c; // type:asciz defined:True
 // "MoveImage"
-S_MoveImage = 0x00011668; // type:asciz
+S_MoveImage = 0x00011668; // type:asciz defined:True
 // "ClearOTag(%08x,%d)...\n"
-S_ClearOTag_FMT08x_FMTd = 0x00011674; // type:asciz
+S_ClearOTag_FMT08x_FMTd = 0x00011674; // type:asciz defined:True
 // "ClearOTagR(%08x,%d)...\n"
-S_ClearOTagR_FMT08x_FMTd = 0x0001168c; // type:asciz
+S_ClearOTagR_FMT08x_FMTd = 0x0001168c; // type:asciz defined:True
 // "DrawOTag(%08x)...\n"
-S_DrawOTag_FMT08x = 0x000116a4; // type:asciz
+S_DrawOTag_FMT08x = 0x000116a4; // type:asciz defined:True
 // "PutDrawEnv(%08x)...\n"
-S_PutDrawEnv_FMT08x = 0x000116b8; // type:asciz
+S_PutDrawEnv_FMT08x = 0x000116b8; // type:asciz defined:True
 // "DrawOTagEnv(%08x,&08x)...\n"
-S_DrawOTagEnv_FMT08x_08x = 0x000116d0; // type:asciz
+S_DrawOTagEnv_FMT08x_08x = 0x000116d0; // type:asciz defined:True
 // "PutDispEnv(%08x)...\n"
-S_PutDispEnv_FMT08x = 0x000116ec; // type:asciz
+S_PutDispEnv_FMT08x = 0x000116ec; // type:asciz defined:True
 // "GPU timeout:que=%d,stat=%08x,chcr=%08x,madr=%08x\n"
-S_GPU_timeout_que_FMTd_stat_FMT08x_chcr_FMT08x_madr_FMT08x = 0x00011704; // type:asciz
+S_GPU_timeout_que_FMTd_stat_FMT08x_chcr_FMT08x_madr_FMT08x = 0x00011704; // type:asciz defined:True
 // "LoadImage2"
-S_LoadImage2 = 0x00011738; // type:asciz
+S_LoadImage2 = 0x00011738; // type:asciz defined:True
 // "bad hankaku code 0x%x\n"
-S_bad_hankaku_code_0xFMTx = 0x00011764; // type:asciz
+S_bad_hankaku_code_0xFMTx = 0x00011764; // type:asciz defined:True
 // "CdInit: Init failed\n"
-S_CdInit_Init_failed = 0x00011788; // type:asciz
+S_CdInit_Init_failed = 0x00011788; // type:asciz defined:True
 // "none"
-S_none = 0x000117a8; // type:asciz
+S_none = 0x000117a8; // type:asciz defined:True
 // "CdlReadS"
-S_CdlReadS = 0x000117b8; // type:asciz
+S_CdlReadS = 0x000117b8; // type:asciz defined:True
 // "CdlSeekP"
-S_CdlSeekP = 0x000117c4; // type:asciz
+S_CdlSeekP = 0x000117c4; // type:asciz defined:True
 // "CdlSeekL"
-S_CdlSeekL = 0x000117d0; // type:asciz
+S_CdlSeekL = 0x000117d0; // type:asciz defined:True
 // "CdlGetTD"
-S_CdlGetTD = 0x000117dc; // type:asciz
+S_CdlGetTD = 0x000117dc; // type:asciz defined:True
 // "CdlGetTN"
-S_CdlGetTN = 0x000117e8; // type:asciz
+S_CdlGetTN = 0x000117e8; // type:asciz defined:True
 // "CdlGetlocP"
-S_CdlGetlocP = 0x000117f4; // type:asciz
+S_CdlGetlocP = 0x000117f4; // type:asciz defined:True
 // "CdlGetlocL"
-S_CdlGetlocL = 0x00011800; // type:asciz
+S_CdlGetlocL = 0x00011800; // type:asciz defined:True
 // "CdlSetmode"
-S_CdlSetmode = 0x00011810; // type:asciz
+S_CdlSetmode = 0x00011810; // type:asciz defined:True
 // "CdlSetfilter"
-S_CdlSetfilter = 0x0001181c; // type:asciz
+S_CdlSetfilter = 0x0001181c; // type:asciz defined:True
 // "CdlDemute"
-S_CdlDemute = 0x0001182c; // type:asciz
+S_CdlDemute = 0x0001182c; // type:asciz defined:True
 // "CdlMute"
-S_CdlMute = 0x00011838; // type:asciz
+S_CdlMute = 0x00011838; // type:asciz defined:True
 // "CdlReset"
-S_CdlReset = 0x00011840; // type:asciz
+S_CdlReset = 0x00011840; // type:asciz defined:True
 // "CdlPause"
-S_CdlPause = 0x0001184c; // type:asciz
+S_CdlPause = 0x0001184c; // type:asciz defined:True
 // "CdlStop"
-S_CdlStop = 0x00011858; // type:asciz
+S_CdlStop = 0x00011858; // type:asciz defined:True
 // "CdlStandby"
-S_CdlStandby = 0x00011860; // type:asciz
+S_CdlStandby = 0x00011860; // type:asciz defined:True
 // "CdlReadN"
-S_CdlReadN = 0x0001186c; // type:asciz
+S_CdlReadN = 0x0001186c; // type:asciz defined:True
 // "CdlBackward"
-S_CdlBackward = 0x00011878; // type:asciz
+S_CdlBackward = 0x00011878; // type:asciz defined:True
 // "CdlForward"
-S_CdlForward = 0x00011884; // type:asciz
+S_CdlForward = 0x00011884; // type:asciz defined:True
 // "CdlPlay"
-S_CdlPlay = 0x00011890; // type:asciz
+S_CdlPlay = 0x00011890; // type:asciz defined:True
 // "CdlSetloc"
-S_CdlSetloc = 0x00011898; // type:asciz
+S_CdlSetloc = 0x00011898; // type:asciz defined:True
 // "CdlNop"
-S_CdlNop = 0x000118a4; // type:asciz
+S_CdlNop = 0x000118a4; // type:asciz defined:True
 // "CdlSync"
-S_CdlSync = 0x000118ac; // type:asciz
+S_CdlSync = 0x000118ac; // type:asciz defined:True
 // "DiskError"
-S_DiskError = 0x000118b4; // type:asciz
+S_DiskError = 0x000118b4; // type:asciz defined:True
 // "DataEnd"
-S_DataEnd = 0x000118c0; // type:asciz
+S_DataEnd = 0x000118c0; // type:asciz defined:True
 // "Acknowledge"
-S_Acknowledge = 0x000118c8; // type:asciz
+S_Acknowledge = 0x000118c8; // type:asciz defined:True
 // "Complete"
-S_Complete = 0x000118d4; // type:asciz
+S_Complete = 0x000118d4; // type:asciz defined:True
 // "DataReady"
-S_DataReady = 0x000118e0; // type:asciz
+S_DataReady = 0x000118e0; // type:asciz defined:True
 // "NoIntr"
-S_NoIntr = 0x000118ec; // type:asciz
+S_NoIntr = 0x000118ec; // type:asciz defined:True
 // "CD timeout: "
-S_CD_timeout = 0x000118f4; // type:asciz
+S_CD_timeout = 0x000118f4; // type:asciz defined:True
 // "%s:(%s) Sync=%s, Ready=%s\n"
-S_FMTs_FMTs_Sync_FMTs_Ready_FMTs = 0x00011904; // type:asciz
+S_FMTs_FMTs_Sync_FMTs_Ready_FMTs = 0x00011904; // type:asciz defined:True
 // "DiskError: "
-S_DiskError_2 = 0x00011920; // type:asciz
+S_DiskError_2 = 0x00011920; // type:asciz defined:True
 // "com=%s,code=(%02x:%02x)\n"
-S_com_FMTs_code_FMT02x_FMT02x = 0x0001192c; // type:asciz
+S_com_FMTs_code_FMT02x_FMT02x = 0x0001192c; // type:asciz defined:True
 // "CDROM: unknown intr"
-S_CDROM_unknown_intr = 0x00011948; // type:asciz
+S_CDROM_unknown_intr = 0x00011948; // type:asciz defined:True
 // "(%d)\n"
-S_FMTd = 0x0001195c; // type:asciz
+S_FMTd = 0x0001195c; // type:asciz defined:True
 // "CD_sync"
-S_CD_sync = 0x0001197c; // type:asciz
+S_CD_sync = 0x0001197c; // type:asciz defined:True
 // "CD_ready"
-S_CD_ready = 0x00011984; // type:asciz
+S_CD_ready = 0x00011984; // type:asciz defined:True
 // "%s...\n"
-S_FMTs = 0x00011990; // type:asciz
+S_FMTs = 0x00011990; // type:asciz defined:True
 // "%s: no param\n"
-S_FMTs_no_param = 0x00011998; // type:asciz
+S_FMTs_no_param = 0x00011998; // type:asciz defined:True
 // "CD_cw"
-S_CD_cw = 0x000119a8; // type:asciz
+S_CD_cw = 0x000119a8; // type:asciz defined:True
 // "$Id: bios.c,v 1.86 1997/03/28 07:42:42 makoto Exp $"
-S_Id_bios_c_v_1_86_1997_03_28_07_42_42_makoto_Exp = 0x000119b0; // type:asciz
+S_Id_bios_c_v_1_86_1997_03_28_07_42_42_makoto_Exp = 0x000119b0; // type:asciz defined:True
 // "CD_init:"
-S_CD_init = 0x000119e4; // type:asciz
+S_CD_init = 0x000119e4; // type:asciz defined:True
 // "addr=%08x\n"
-S_addr_FMT08x = 0x000119f0; // type:asciz
+S_addr_FMT08x = 0x000119f0; // type:asciz defined:True
 // "CD_datasync"
-S_CD_datasync = 0x000119fc; // type:asciz
+S_CD_datasync = 0x000119fc; // type:asciz defined:True
 // "%s: path level (%d) error\n"
-S_FMTs_path_level_FMTd_error = 0x00011a08; // type:asciz
+S_FMTs_path_level_FMTd_error = 0x00011a08; // type:asciz defined:True
 // "%s: dir was not found\n"
-S_FMTs_dir_was_not_found = 0x00011a24; // type:asciz
+S_FMTs_dir_was_not_found = 0x00011a24; // type:asciz defined:True
 // "CdSearchFile: disc error\n"
-S_CdSearchFile_disc_error = 0x00011a3c; // type:asciz
+S_CdSearchFile_disc_error = 0x00011a3c; // type:asciz defined:True
 // "CdSearchFile: searching %s...\n"
-S_CdSearchFile_searching_FMTs = 0x00011a58; // type:asciz
+S_CdSearchFile_searching_FMTs = 0x00011a58; // type:asciz defined:True
 // "%s:  found\n"
-S_FMTs_found = 0x00011a78; // type:asciz
+S_FMTs_found = 0x00011a78; // type:asciz defined:True
 // "%s: not found\n"
-S_FMTs_not_found = 0x00011a84; // type:asciz
+S_FMTs_not_found = 0x00011a84; // type:asciz defined:True
 // "CD_newmedia: Read error in cd_read(PVD)\n"
-S_CD_newmedia_Read_error_in_cd_read_PVD = 0x00011a94; // type:asciz
+S_CD_newmedia_Read_error_in_cd_read_PVD = 0x00011a94; // type:asciz defined:True
 // "CD001"
-S_CD001 = 0x00011ac0; // type:asciz
+S_CD001 = 0x00011ac0; // type:asciz defined:True
 // "CD_newmedia: Disc format error in cd_read(PVD)\n"
-S_CD_newmedia_Disc_format_error_in_cd_read_PVD = 0x00011ac8; // type:asciz
+S_CD_newmedia_Disc_format_error_in_cd_read_PVD = 0x00011ac8; // type:asciz defined:True
 // "CD_newmedia: Read error (PT:%08x)\n"
-S_CD_newmedia_Read_error_PT_FMT08x = 0x00011af8; // type:asciz
+S_CD_newmedia_Read_error_PT_FMT08x = 0x00011af8; // type:asciz defined:True
 // "CD_newmedia: sarching dir..\n"
-S_CD_newmedia_sarching_dir = 0x00011b1c; // type:asciz
+S_CD_newmedia_sarching_dir = 0x00011b1c; // type:asciz defined:True
 // "\t%08x,%04x,%04x,%s\n"
-S_tFMT08x_FMT04x_FMT04x_FMTs = 0x00011b3c; // type:asciz
+S_tFMT08x_FMT04x_FMT04x_FMTs = 0x00011b3c; // type:asciz defined:True
 // "CD_newmedia: %d dir entries found\n"
-S_CD_newmedia_FMTd_dir_entries_found = 0x00011b50; // type:asciz
+S_CD_newmedia_FMTd_dir_entries_found = 0x00011b50; // type:asciz defined:True
 // "CD_cachefile: dir not found\n"
-S_CD_cachefile_dir_not_found = 0x00011b74; // type:asciz
+S_CD_cachefile_dir_not_found = 0x00011b74; // type:asciz defined:True
 // "CD_cachefile: searching...\n"
-S_CD_cachefile_searching = 0x00011b94; // type:asciz
+S_CD_cachefile_searching = 0x00011b94; // type:asciz defined:True
 // "\t(%02x:%02x:%02x) %8d %s\n"
-S_t_FMT02x_FMT02x_FMT02x_FMT8d_FMTs = 0x00011bb8; // type:asciz
+S_t_FMT02x_FMT02x_FMT02x_FMT8d_FMTs = 0x00011bb8; // type:asciz defined:True
 // "CD_cachefile: %d files found\n"
-S_CD_cachefile_FMTd_files_found = 0x00011bd4; // type:asciz
+S_CD_cachefile_FMTd_files_found = 0x00011bd4; // type:asciz defined:True
 // "CdRead: sector error\n"
-S_CdRead_sector_error = 0x00011bf8; // type:asciz
+S_CdRead_sector_error = 0x00011bf8; // type:asciz defined:True
 // "CdRead: Shell open...\n"
-S_CdRead_Shell_open = 0x00011c10; // type:asciz
+S_CdRead_Shell_open = 0x00011c10; // type:asciz defined:True
 // "CdRead: retry...\n"
-S_CdRead_retry = 0x00011c28; // type:asciz
+S_CdRead_retry = 0x00011c28; // type:asciz defined:True
 // "DMA STATUS ERROR %x\n"
-S_DMA_STATUS_ERROR_FMTx = 0x00011c48; // type:asciz
+S_DMA_STATUS_ERROR_FMTx = 0x00011c48; // type:asciz defined:True
 // "VSync: timeout\n"
-S_VSync_timeout = 0x00011c68; // type:asciz
+S_VSync_timeout = 0x00011c68; // type:asciz defined:True
 // "$Id: intr.c,v 1.76 1997/02/12 12:45:05 makoto Exp $"
-S_Id_intr_c_v_1_76_1997_02_12_12_45_05_makoto_Exp = 0x00011c78; // type:asciz
+S_Id_intr_c_v_1_76_1997_02_12_12_45_05_makoto_Exp = 0x00011c78; // type:asciz defined:True
 // "unexpected interrupt(%04x)\n"
-S_unexpected_interrupt_FMT04x = 0x00011cac; // type:asciz
+S_unexpected_interrupt_FMT04x = 0x00011cac; // type:asciz defined:True
 // "intr timeout(%04x:%04x)\n"
-S_intr_timeout_FMT04x_FMT04x = 0x00011cc8; // type:asciz
+S_intr_timeout_FMT04x_FMT04x = 0x00011cc8; // type:asciz defined:True
 // "DMA bus error: code=%08x\n"
-S_DMA_bus_error_code_FMT08x = 0x00011ce8; // type:asciz
+S_DMA_bus_error_code_FMT08x = 0x00011ce8; // type:asciz defined:True
 // "MADR[%d]=%08x\n"
-S_MADR_FMTd_FMT08x = 0x00011d04; // type:asciz
+S_MADR_FMTd_FMT08x = 0x00011d04; // type:asciz defined:True
 // "SPU:T/O [%s]\n"
-S_SPU_T_O_FMTs = 0x00011d38; // type:asciz
+S_SPU_T_O_FMTs = 0x00011d38; // type:asciz defined:True
 // "wait (reset)"
-S_wait_reset = 0x00011d48; // type:asciz
+S_wait_reset = 0x00011d48; // type:asciz defined:True
 // "wait (wrdy H -> L)"
-S_wait_wrdy_H_L = 0x00011d58; // type:asciz
+S_wait_wrdy_H_L = 0x00011d58; // type:asciz defined:True
 // "wait (dmaf clear/W)"
-S_wait_dmaf_clear_W = 0x00011d6c; // type:asciz
+S_wait_dmaf_clear_W = 0x00011d6c; // type:asciz defined:True
 // "0123456789abcdef"
-S_0123456789abcdef = 0x00011e08; // type:asciz
+S_0123456789abcdef = 0x00011e08; // type:asciz defined:True
 // "(null)"
-S_null = 0x00011e1c; // type:asciz
+S_null = 0x00011e1c; // type:asciz defined:True
 // "0123456789ABCDEF"
-S_0123456789ABCDEF_2 = 0x00011e24; // type:asciz
+S_0123456789ABCDEF_2 = 0x00011e24; // type:asciz defined:True
 // "0123456789ABCDEF"
-S_0123456789ABCDEF_3 = 0x00012028; // type:asciz
+S_0123456789ABCDEF_3 = 0x00012028; // type:asciz defined:True
 // "0123456789abcdef"
-S_0123456789abcdef_2 = 0x0001203c; // type:asciz
+S_0123456789abcdef_2 = 0x0001203c; // type:asciz defined:True
 // "<NULL>"
-S_NULL = 0x00012108; // type:asciz
+S_NULL = 0x00012108; // type:asciz defined:True
 // "SIO console"
-S_SIO_console = 0x0001213c; // type:asciz
+S_SIO_console = 0x0001213c; // type:asciz defined:True
 // "tty00:"
-S_tty00 = 0x0001214c; // type:asciz
+S_tty00 = 0x0001214c; // type:asciz defined:True
 // "Access Denied. : event multiple open\n"
-S_Access_Denied_event_multiple_open = 0x00012178; // type:asciz
+S_Access_Denied_event_multiple_open = 0x00012178; // type:asciz defined:True
 // "Access Denied. : file already open.\n"
-S_Access_Denied_file_already_open = 0x00012220; // type:asciz
+S_Access_Denied_file_already_open = 0x00012220; // type:asciz defined:True
 // "Access Denied. : file not open.\n"
-S_Access_Denied_file_not_open = 0x00012248; // type:asciz
+S_Access_Denied_file_not_open = 0x00012248; // type:asciz defined:True
 // "Access Denied. : invalid data size align\n"
-S_Access_Denied_invalid_data_size_align = 0x0001226c; // type:asciz
+S_Access_Denied_invalid_data_size_align = 0x0001226c; // type:asciz defined:True
 // "Access Denied. : invalid offset value align\n"
-S_Access_Denied_invalid_offset_value_align = 0x00012298; // type:asciz
+S_Access_Denied_invalid_offset_value_align = 0x00012298; // type:asciz defined:True
 // "Access Denied. : system busy\n"
-S_Access_Denied_system_busy = 0x000122c8; // type:asciz
+S_Access_Denied_system_busy = 0x000122c8; // type:asciz defined:True
 // "bu00:"
-S_bu00 = 0x000122e8; // type:asciz
+S_bu00 = 0x000122e8; // type:asciz defined:True
 // "libmcrd: event overflow\n"
-S_libmcrd_event_overflow = 0x000122f0; // type:asciz
+S_libmcrd_event_overflow = 0x000122f0; // type:asciz defined:True
 // " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}-~"
-S_SPECIAL_CHARS = 0x00073278; // type:asciz
+S_SPECIAL_CHARS = 0x00073278; // type:asciz defined:True
 // "MAX_SORT_OBJ too small!"
-S_MAX_SORT_OBJ_too_small = 0x00099e84; // type:asciz
+S_MAX_SORT_OBJ_too_small = 0x00099e84; // type:asciz defined:True
 // "ot_obj overflow! MRLEN_OBJ too small!"
-S_ot_obj_overflow_MRLEN_OBJ_too_small = 0x00099ea0; // type:asciz
+S_ot_obj_overflow_MRLEN_OBJ_too_small = 0x00099ea0; // type:asciz defined:True
 // "Fatal error in jens 2d-eng:\n\n"
-S_Fatal_error_in_jens_2d_eng = 0x000a2abc; // type:asciz
+S_Fatal_error_in_jens_2d_eng = 0x000a2abc; // type:asciz defined:True
 // "1.0.4"
-S_1_0_4 = 0x000a2ae8; // type:asciz
+S_1_0_4 = 0x000a2ae8; // type:asciz defined:True
 // "menugfx too high"
-S_menugfx_too_high = 0x000a2b40; // type:asciz
+S_menugfx_too_high = 0x000a2b40; // type:asciz defined:True
 // "menugfx nr too big"
-S_menugfx_nr_too_big = 0x000a2b54; // type:asciz
+S_menugfx_nr_too_big = 0x000a2b54; // type:asciz defined:True
 // "sign too high"
-S_sign_too_high = 0x000a2b68; // type:asciz
+S_sign_too_high = 0x000a2b68; // type:asciz defined:True
 // "sign nr too big"
-S_sign_nr_too_big = 0x000a2b78; // type:asciz
+S_sign_nr_too_big = 0x000a2b78; // type:asciz defined:True
 // "rescue session saved as:\n\\psx\\cube\\pad\\rescue.pad\n\n"
-S_rescue_session_saved_as_psx_cube_pad_rescue_pad = 0x000a2f0c; // type:asciz
+S_rescue_session_saved_as_psx_cube_pad_rescue_pad = 0x000a2f0c; // type:asciz defined:True
 // "to replay:\n"
-S_to_replay = 0x000a2f40; // type:asciz
+S_to_replay = 0x000a2f40; // type:asciz defined:True
 // "replay!\n\n"
-S_replay = 0x000a2f4c; // type:asciz
+S_replay = 0x000a2f4c; // type:asciz defined:True
 // "%x\n"
-S_FMTx = 0x000a2f58; // type:asciz
+S_FMTx = 0x000a2f58; // type:asciz defined:True
 // "1.0.4"
-S_1_0_4_2 = 0x000a2f5c; // type:asciz
+S_1_0_4_2 = 0x000a2f5c; // type:asciz defined:True
 // "NO CONTROLLER!\n"
-S_NO_CONTROLLER = 0x000a2f6c; // type:asciz
+S_NO_CONTROLLER = 0x000a2f6c; // type:asciz defined:True
 // "DEMO MODE\n"
-S_DEMO_MODE = 0x000a2f7c; // type:asciz
+S_DEMO_MODE = 0x000a2f7c; // type:asciz defined:True
 // "recived %d\n"
-S_recived_FMTd = 0x000a2f88; // type:asciz
+S_recived_FMTd = 0x000a2f88; // type:asciz defined:True
 // "of %d bytes\n"
-S_of_FMTd_bytes = 0x000a2f94; // type:asciz
+S_of_FMTd_bytes = 0x000a2f94; // type:asciz defined:True
 // "BESCES-01000KULA"
-SAVE_FILENAME = 0x000a2fb4; // type:asciz
+SAVE_FILENAME = 0x000a2fb4; // type:asciz defined:True
 // "LOADING GAME\n\nDO NOT REMOVE MEMORY CARD\n"
-S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD = 0x000a2fd4; // type:asciz
+S_LOADING_GAME_DO_NOT_REMOVE_MEMORY_CARD = 0x000a2fd4; // type:asciz defined:True
 // "%d \n"
-S_FMTd_2 = 0x000a3000; // type:asciz
+S_FMTd_2 = 0x000a3000; // type:asciz defined:True
 // "READING DATA\n\nDO NOT REMOVE MEMORY CARD\n"
-S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3008; // type:asciz
+S_READING_DATA_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3008; // type:asciz defined:True
 // "SAVING\n\nDO NOT REMOVE MEMORY CARD\n"
-S_SAVING_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3034; // type:asciz
+S_SAVING_DO_NOT_REMOVE_MEMORY_CARD = 0x000a3034; // type:asciz defined:True
 // "CHECKING MEMORY CARD\n\nPLEASE WAIT\n"
-S_CHECKING_MEMORY_CARD_PLEASE_WAIT = 0x000a3058; // type:asciz
+S_CHECKING_MEMORY_CARD_PLEASE_WAIT = 0x000a3058; // type:asciz defined:True
 // "REPLACING SELECTED FILE\n\nDO NOT REMOVE MEMORY CARD\n"
-S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD = 0x000a307c; // type:asciz
+S_REPLACING_SELECTED_FILE_DO_NOT_REMOVE_MEMORY_CARD = 0x000a307c; // type:asciz defined:True
 // "*XYZ"
-S_XYZ = 0x000a30b0; // type:asciz
+S_XYZ = 0x000a30b0; // type:asciz defined:True
 // "MEMORY CARD IS FULL.\nYOU MUST REPLACE ANOTHER FILE\n"
-S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE = 0x000a30b8; // type:asciz
+S_MEMORY_CARD_IS_FULL_YOU_MUST_REPLACE_ANOTHER_FILE = 0x000a30b8; // type:asciz defined:True
 // "NAME:\n"
-S_NAME = 0x000a30ec; // type:asciz
+S_NAME = 0x000a30ec; // type:asciz defined:True
 // "SIZE: %d BLOCK\n"
-S_SIZE_FMTd_BLOCK = 0x000a30f4; // type:asciz
+S_SIZE_FMTd_BLOCK = 0x000a30f4; // type:asciz defined:True
 // "SIZE: %d BLOCKS\n"
-S_SIZE_FMTd_BLOCKS = 0x000a3104; // type:asciz
+S_SIZE_FMTd_BLOCKS = 0x000a3104; // type:asciz defined:True
 // "PLEASE SELECT FILE TO REPLACE\n"
-S_PLEASE_SELECT_FILE_TO_REPLACE = 0x000a3118; // type:asciz
+S_PLEASE_SELECT_FILE_TO_REPLACE = 0x000a3118; // type:asciz defined:True
 // "PRESS g TO CONTINUE, e TO CANCEL\n"
-S_PRESS_g_TO_CONTINUE_e_TO_CANCEL = 0x000a3138; // type:asciz
+S_PRESS_g_TO_CONTINUE_e_TO_CANCEL = 0x000a3138; // type:asciz defined:True
 // "OR h TO RE-READ ANOTHER MEMORY CARD.\n"
-S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD = 0x000a315c; // type:asciz
+S_OR_h_TO_RE_READ_ANOTHER_MEMORY_CARD = 0x000a315c; // type:asciz defined:True
 // "THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n"
-S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO = 0x000a3184; // type:asciz
+S_THIS_WILL_OVERWRITE_ANOTHER_SAVED_GAME_CONTINUE_g_YES_e_NO = 0x000a3184; // type:asciz defined:True
 // "FORMATTING MEMORY CARD\n\nPLEASE WAIT\n"
-S_FORMATTING_MEMORY_CARD_PLEASE_WAIT = 0x000a31c8; // type:asciz
+S_FORMATTING_MEMORY_CARD_PLEASE_WAIT = 0x000a31c8; // type:asciz defined:True
 // "KULA WORLD"
-S_KULA_WORLD = 0x000a31f0; // type:asciz
+S_KULA_WORLD = 0x000a31f0; // type:asciz defined:True
 // "hid"
-S_hid = 0x000a323c; // type:asciz
+S_hid = 0x000a323c; // type:asciz defined:True
 // "bon"
-S_bon = 0x000a3240; // type:asciz
+S_bon = 0x000a3240; // type:asciz defined:True
 // "xxx"
-S_xxx = 0x000a3244; // type:asciz
+S_xxx = 0x000a3244; // type:asciz defined:True
 // "hel"
-S_hel = 0x000a3248; // type:asciz
+S_hel = 0x000a3248; // type:asciz defined:True
 // "mar"
-S_mar = 0x000a324c; // type:asciz
+S_mar = 0x000a324c; // type:asciz defined:True
 // "haz"
-S_haz = 0x000a3250; // type:asciz
+S_haz = 0x000a3250; // type:asciz defined:True
 // "atl"
-S_atl = 0x000a3254; // type:asciz
+S_atl = 0x000a3254; // type:asciz defined:True
 // "fie"
-S_fie = 0x000a3258; // type:asciz
+S_fie = 0x000a3258; // type:asciz defined:True
 // "cow"
-S_cow = 0x000a325c; // type:asciz
+S_cow = 0x000a325c; // type:asciz defined:True
 // "arc"
-S_arc = 0x000a3260; // type:asciz
+S_arc = 0x000a3260; // type:asciz defined:True
 // "inc"
-S_inc = 0x000a3264; // type:asciz
+S_inc = 0x000a3264; // type:asciz defined:True
 // "hil"
-S_hil = 0x000a3268; // type:asciz
+S_hil = 0x000a3268; // type:asciz defined:True
 // "hir"
-S_hir = 0x000a326c; // type:asciz
+S_hir = 0x000a326c; // type:asciz defined:True
 // "%s"
-S_FMTs_2 = 0x000a32b8; // type:asciz
+S_FMTs_2 = 0x000a32b8; // type:asciz defined:True
 // "%s%s"
-S_FMTsFMTs = 0x000a32bc; // type:asciz
+S_FMTsFMTs = 0x000a32bc; // type:asciz defined:True
 // "can not create file:\n%s\n"
-S_can_not_create_file_FMTs = 0x000a32c4; // type:asciz
+S_can_not_create_file_FMTs = 0x000a32c4; // type:asciz defined:True
 // "error closing file:\n%s\n"
-S_error_closing_file_FMTs = 0x000a32e0; // type:asciz
+S_error_closing_file_FMTs = 0x000a32e0; // type:asciz defined:True
 // "\\psx\\cube\\pad\\%d.pad"
-S_psx_cube_pad_FMTd_pad = 0x000a32f8; // type:asciz
+S_psx_cube_pad_FMTd_pad = 0x000a32f8; // type:asciz defined:True
 // "\\psx\\cube\\pad\\rescue.pad"
-S_psx_cube_pad_rescue_pad = 0x000a3310; // type:asciz
+S_psx_cube_pad_rescue_pad = 0x000a3310; // type:asciz defined:True
 // "%d \n"
-S_FMTd_3 = 0x000a3358; // type:asciz
+S_FMTd_3 = 0x000a3358; // type:asciz defined:True
 // "%d\n"
-S_FMTd_4 = 0x000a3360; // type:asciz
+S_FMTd_4 = 0x000a3360; // type:asciz defined:True
 // "%d"
-S_FMTd_5 = 0x000a3368; // type:asciz
+S_FMTd_5 = 0x000a3368; // type:asciz defined:True
 // "-"
-S_ = 0x000a3378; // type:asciz
+S_ = 0x000a3378; // type:asciz defined:True
 // "+"
-S__2 = 0x000a337c; // type:asciz
+S__2 = 0x000a337c; // type:asciz defined:True
 // "%d:%d%d:%d%d\n"
-S_FMTd_FMTdFMTd_FMTdFMTd = 0x000a3380; // type:asciz
+S_FMTd_FMTdFMTd_FMTdFMTd = 0x000a3380; // type:asciz defined:True
 // "%d:%d%d\n"
-S_FMTd_FMTdFMTd = 0x000a3390; // type:asciz
+S_FMTd_FMTdFMTd = 0x000a3390; // type:asciz defined:True
 // "%d \n%d \n"
-S_FMTd_FMTd = 0x000a339c; // type:asciz
+S_FMTd_FMTd = 0x000a339c; // type:asciz defined:True
 // "-%d \n"
-S_FMTd_6 = 0x000a33a8; // type:asciz
+S_FMTd_6 = 0x000a33a8; // type:asciz defined:True
 // "-:--\n"
-S__3 = 0x000a33b0; // type:asciz
+S__3 = 0x000a33b0; // type:asciz defined:True
 // "1\n"
-S_1 = 0x000a33b8; // type:asciz
+S_1 = 0x000a33b8; // type:asciz defined:True
 // "2\n"
-S_2 = 0x000a33bc; // type:asciz
+S_2 = 0x000a33bc; // type:asciz defined:True
 // "ABCDEFGHIJKLMNOPQRSTUVWXYZ.-<>"
-S_ABCDEFGHIJKLMNOPQRSTUVWXYZ = 0x000a33c0; // type:asciz
+S_ABCDEFGHIJKLMNOPQRSTUVWXYZ = 0x000a33c0; // type:asciz defined:True
 // "LEIF"
-S_LEIF = 0x000a33e0; // type:asciz
+S_LEIF = 0x000a33e0; // type:asciz defined:True
 // "SAVE 1"
-S_SAVE_1 = 0x000a33e8; // type:asciz
+S_SAVE_1 = 0x000a33e8; // type:asciz defined:True
 // "SAVE 2"
-S_SAVE_2 = 0x000a33f0; // type:asciz
+S_SAVE_2 = 0x000a33f0; // type:asciz defined:True
 // "SAVE 3"
-S_SAVE_3 = 0x000a33f8; // type:asciz
+S_SAVE_3 = 0x000a33f8; // type:asciz defined:True
 // "SAVE 4"
-S_SAVE_4 = 0x000a3400; // type:asciz
+S_SAVE_4 = 0x000a3400; // type:asciz defined:True
 // "PLAYER"
-S_PLAYER = 0x000a3408; // type:asciz
+S_PLAYER = 0x000a3408; // type:asciz defined:True
 // "\n"
-S__4 = 0x000a3414; // type:asciz
+S__4 = 0x000a3414; // type:asciz defined:True
 // "-           -\n"
-S__5 = 0x000a3418; // type:asciz
+S__5 = 0x000a3418; // type:asciz defined:True
 // "%s\n"
-S_FMTs_3 = 0x000a3428; // type:asciz
+S_FMTs_3 = 0x000a3428; // type:asciz defined:True
 // "SCORE\n"
-S_SCORE = 0x000a342c; // type:asciz
+S_SCORE = 0x000a342c; // type:asciz defined:True
 // "TIMETRIAL\n"
-S_TIMETRIAL = 0x000a3434; // type:asciz
+S_TIMETRIAL = 0x000a3434; // type:asciz defined:True
 // "LEVEL\n"
-S_LEVEL = 0x000a3440; // type:asciz
+S_LEVEL = 0x000a3440; // type:asciz defined:True
 // "FRUITS\n"
-S_FRUITS = 0x000a3448; // type:asciz
+S_FRUITS = 0x000a3448; // type:asciz defined:True
 // "TIME\n"
-S_TIME = 0x000a3450; // type:asciz
+S_TIME = 0x000a3450; // type:asciz defined:True
 // "\nCONGRATULATIONS,\nPLEASE WRITE YOUR SIGNATURE\n\n"
-S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE = 0x000a3458; // type:asciz
+S_CONGRATULATIONS_PLEASE_WRITE_YOUR_SIGNATURE = 0x000a3458; // type:asciz defined:True
 // "%c\n"
-S_FMTc = 0x000a3488; // type:asciz
+S_FMTc = 0x000a3488; // type:asciz defined:True
 // "\\HIRO\\COPYCAT"
-S_HIRO_COPYCAT = 0x000a348c; // type:asciz
+S_HIRO_COPYCAT = 0x000a348c; // type:asciz defined:True
 // "\\HELL\\HELL"
-S_HELL_HELL = 0x000a349c; // type:asciz
+S_HELL_HELL = 0x000a349c; // type:asciz defined:True
 // "\\MARS\\MARS"
-S_MARS_MARS = 0x000a34a8; // type:asciz
+S_MARS_MARS = 0x000a34a8; // type:asciz defined:True
 // "\\HAZE\\HAZE"
-S_HAZE_HAZE = 0x000a34b4; // type:asciz
+S_HAZE_HAZE = 0x000a34b4; // type:asciz defined:True
 // "\\ATLANT\\ATLANT"
-S_ATLANT_ATLANT = 0x000a34c0; // type:asciz
+S_ATLANT_ATLANT = 0x000a34c0; // type:asciz defined:True
 // "\\FIELD\\FIELD"
-S_FIELD_FIELD = 0x000a34d0; // type:asciz
+S_FIELD_FIELD = 0x000a34d0; // type:asciz defined:True
 // "\\COWBOY\\COWBOY"
-S_COWBOY_COWBOY = 0x000a34e0; // type:asciz
+S_COWBOY_COWBOY = 0x000a34e0; // type:asciz defined:True
 // "\\ARCTIC\\ARCTIC"
-S_ARCTIC_ARCTIC = 0x000a34f0; // type:asciz
+S_ARCTIC_ARCTIC = 0x000a34f0; // type:asciz defined:True
 // "\\INCA\\INCA"
-S_INCA_INCA = 0x000a3500; // type:asciz
+S_INCA_INCA = 0x000a3500; // type:asciz defined:True
 // "\\HILLS\\HILLS"
-S_HILLS_HILLS = 0x000a350c; // type:asciz
+S_HILLS_HILLS = 0x000a350c; // type:asciz defined:True
 // "\\HIRO\\HIRO"
-S_HIRO_HIRO = 0x000a351c; // type:asciz
+S_HIRO_HIRO = 0x000a351c; // type:asciz defined:True
 // "FI.PAK;1"
-S_FI_PAK_1 = 0x000a3528; // type:asciz
+S_FI_PAK_1 = 0x000a3528; // type:asciz defined:True
 // ".GGI;1"
-S_GGI_1 = 0x000a3534; // type:asciz
+S_GGI_1 = 0x000a3534; // type:asciz defined:True
 // ".PAK;1"
-S_PAK_1_2 = 0x000a353c; // type:asciz
+S_PAK_1_2 = 0x000a353c; // type:asciz defined:True
 // ".SFX;1"
-S_SFX_1 = 0x000a3544; // type:asciz
+S_SFX_1 = 0x000a3544; // type:asciz defined:True
 // ".TGI;1"
-S_TGI_1 = 0x000a354c; // type:asciz
+S_TGI_1 = 0x000a354c; // type:asciz defined:True
 // "\\KULA\\KULA_PIC.PAK;1"
-PIC_PAK_FILENAME = 0x000a3554; // type:asciz
+PIC_PAK_FILENAME = 0x000a3554; // type:asciz defined:True
 // "\\XA\\MUSIC_0.XA;1"
-S_XA_MUSIC_0_XA_1 = 0x000a3570; // type:asciz
+S_XA_MUSIC_0_XA_1 = 0x000a3570; // type:asciz defined:True
 // "\\XA\\MUSIC_2.XA;1"
-S_XA_MUSIC_2_XA_1 = 0x000a3584; // type:asciz
+S_XA_MUSIC_2_XA_1 = 0x000a3584; // type:asciz defined:True
 // "\\XA\\MUSIC_1.XA;1"
-S_XA_MUSIC_1_XA_1 = 0x000a3598; // type:asciz
+S_XA_MUSIC_1_XA_1 = 0x000a3598; // type:asciz defined:True
 // "\\SAMPLE.XA;1"
-S_SAMPLE_XA_1 = 0x000a35b8; // type:asciz
+S_SAMPLE_XA_1 = 0x000a35b8; // type:asciz defined:True
 // "\\XA\\MUSIC_3.XA;1"
-S_XA_MUSIC_3_XA_1 = 0x000a35c8; // type:asciz
+S_XA_MUSIC_3_XA_1 = 0x000a35c8; // type:asciz defined:True
 // "File error:\n\n"
-S_File_error = 0x000a35dc; // type:asciz
+S_File_error = 0x000a35dc; // type:asciz defined:True
 // "could not find "
-S_could_not_find = 0x000a35ec; // type:asciz
+S_could_not_find = 0x000a35ec; // type:asciz defined:True
 // "seek error "
-S_seek_error = 0x000a35fc; // type:asciz
+S_seek_error = 0x000a35fc; // type:asciz defined:True
 // "read error "
-S_read_error = 0x000a3608; // type:asciz
+S_read_error = 0x000a3608; // type:asciz defined:True
 // "1.0.4"
-S_1_0_4_3 = 0x000a3614; // type:asciz
+S_1_0_4_3 = 0x000a3614; // type:asciz defined:True
 // "\\HIRO\\WARNING.TIM;1"
-S_HIRO_WARNING_TIM_1 = 0x000a3624; // type:asciz
+S_HIRO_WARNING_TIM_1 = 0x000a3624; // type:asciz defined:True
 // "could not find music \n"
-S_could_not_find_music = 0x000a363c; // type:asciz
+S_could_not_find_music = 0x000a363c; // type:asciz defined:True
 // "could not start playing \n"
-S_could_not_start_playing = 0x000a3654; // type:asciz
+S_could_not_start_playing = 0x000a3654; // type:asciz defined:True
 // "bonus song"
-S_bonus_song = 0x000a3670; // type:asciz
+S_bonus_song = 0x000a3670; // type:asciz defined:True
 // "resumed song after bonus"
-S_resumed_song_after_bonus = 0x000a367c; // type:asciz
+S_resumed_song_after_bonus = 0x000a367c; // type:asciz defined:True
 // "CD INFO\nSTARTPOS %d\nENDPOS %d\nCURPOS %d\n"
-S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd = 0x000a3698; // type:asciz
+S_CD_INFO_STARTPOS_FMTd_ENDPOS_FMTd_CURPOS_FMTd = 0x000a3698; // type:asciz defined:True
 // "\nSTARTPOS_BU %d\nENDPOS_BU %d\nCURPOS_BU %d\n\n"
-S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd = 0x000a36c4; // type:asciz
+S_STARTPOS_BU_FMTd_ENDPOS_BU_FMTd_CURPOS_BU_FMTd = 0x000a36c4; // type:asciz defined:True
 // "\\XA\\FINAL.STR;1"
-S_XA_FINAL_STR_1 = 0x000a3710; // type:asciz
+S_XA_FINAL_STR_1 = 0x000a3710; // type:asciz defined:True
 // "file not found\n"
-S_file_not_found = 0x000a3734; // type:asciz
+S_file_not_found = 0x000a3734; // type:asciz defined:True
 // "time out in strNext() %d\n"
-S_time_out_in_strNext_FMTd = 0x000a3744; // type:asciz
+S_time_out_in_strNext_FMTd = 0x000a3744; // type:asciz defined:True
 // "time out in decoding !\n"
-S_time_out_in_decoding = 0x000a376c; // type:asciz
+S_time_out_in_decoding = 0x000a376c; // type:asciz defined:True
 // "invalid block type"
-S_invalid_block_type = 0x000a3784; // type:asciz
+S_invalid_block_type = 0x000a3784; // type:asciz defined:True
 // "invalid stored block lengths"
-S_invalid_stored_block_lengths = 0x000a3798; // type:asciz
+S_invalid_stored_block_lengths = 0x000a3798; // type:asciz defined:True
 // "too many length or distance symbols"
-S_too_many_length_or_distance_symbols = 0x000a37b8; // type:asciz
+S_too_many_length_or_distance_symbols = 0x000a37b8; // type:asciz defined:True
 // "invalid bit length repeat"
-S_invalid_bit_length_repeat = 0x000a37dc; // type:asciz
+S_invalid_bit_length_repeat = 0x000a37dc; // type:asciz defined:True
 // "unknown compression method"
-S_unknown_compression_method = 0x000a37f8; // type:asciz
+S_unknown_compression_method = 0x000a37f8; // type:asciz defined:True
 // "invalid window size"
-S_invalid_window_size = 0x000a3814; // type:asciz
+S_invalid_window_size = 0x000a3814; // type:asciz defined:True
 // "incorrect header check"
-S_incorrect_header_check = 0x000a3828; // type:asciz
+S_incorrect_header_check = 0x000a3828; // type:asciz defined:True
 // "need dictionary"
-S_need_dictionary = 0x000a3840; // type:asciz
+S_need_dictionary = 0x000a3840; // type:asciz defined:True
 // "incorrect data check"
-S_incorrect_data_check = 0x000a3850; // type:asciz
+S_incorrect_data_check = 0x000a3850; // type:asciz defined:True
 // " inflate 1.0.4 Copyright 1995-1996 Mark Adler "
-S_inflate_1_0_4_Copyright_1995_1996_Mark_Adler = 0x000a3868; // type:asciz
+S_inflate_1_0_4_Copyright_1995_1996_Mark_Adler = 0x000a3868; // type:asciz defined:True
 // "oversubscribed dynamic bit lengths tree"
-S_oversubscribed_dynamic_bit_lengths_tree = 0x000a3a80; // type:asciz
+S_oversubscribed_dynamic_bit_lengths_tree = 0x000a3a80; // type:asciz defined:True
 // "incomplete dynamic bit lengths tree"
-S_incomplete_dynamic_bit_lengths_tree = 0x000a3aa8; // type:asciz
+S_incomplete_dynamic_bit_lengths_tree = 0x000a3aa8; // type:asciz defined:True
 // "oversubscribed literal/length tree"
-S_oversubscribed_literal_length_tree = 0x000a3acc; // type:asciz
+S_oversubscribed_literal_length_tree = 0x000a3acc; // type:asciz defined:True
 // "incomplete literal/length tree"
-S_incomplete_literal_length_tree = 0x000a3af0; // type:asciz
+S_incomplete_literal_length_tree = 0x000a3af0; // type:asciz defined:True
 // "invalid literal/length code"
-S_invalid_literal_length_code = 0x000a3b14; // type:asciz
+S_invalid_literal_length_code = 0x000a3b14; // type:asciz defined:True
 // "invalid distance code"
-S_invalid_distance_code = 0x000a3b30; // type:asciz
+S_invalid_distance_code = 0x000a3b30; // type:asciz defined:True
 // "invalid distance code"
-S_invalid_distance_code_2 = 0x000a3b8c; // type:asciz
+S_invalid_distance_code_2 = 0x000a3b8c; // type:asciz defined:True
 // "invalid literal/length code"
-S_invalid_literal_length_code_2 = 0x000a3ba4; // type:asciz
+S_invalid_literal_length_code_2 = 0x000a3ba4; // type:asciz defined:True
 // "incompatible version"
-S_incompatible_version = 0x000a3be8; // type:asciz
+S_incompatible_version = 0x000a3be8; // type:asciz defined:True
 // "buffer error"
-S_buffer_error = 0x000a3c00; // type:asciz
+S_buffer_error = 0x000a3c00; // type:asciz defined:True
 // "insufficient memory"
-S_insufficient_memory = 0x000a3c10; // type:asciz
+S_insufficient_memory = 0x000a3c10; // type:asciz defined:True
 // "data error"
-S_data_error = 0x000a3c24; // type:asciz
+S_data_error = 0x000a3c24; // type:asciz defined:True
 // "stream error"
-S_stream_error = 0x000a3c30; // type:asciz
+S_stream_error = 0x000a3c30; // type:asciz defined:True
 // "file error"
-S_file_error = 0x000a3c40; // type:asciz
+S_file_error = 0x000a3c40; // type:asciz defined:True
 // ""
-S_empty = 0x000a3c4c; // type:asciz
+S_empty = 0x000a3c4c; // type:asciz defined:True
 // "stream end"
-S_stream_end = 0x000a3c50; // type:asciz
+S_stream_end = 0x000a3c50; // type:asciz defined:True
 // "need dictionary"
-S_need_dictionary_2 = 0x000a3c5c; // type:asciz
+S_need_dictionary_2 = 0x000a3c5c; // type:asciz defined:True
 // "1.0.4"
-S_1_0_4_4 = 0x000a3c6c; // type:asciz
+S_1_0_4_4 = 0x000a3c6c; // type:asciz defined:True
 // "Alloc error:\n\n"
-S_Alloc_error = 0x000a3c74; // type:asciz
+S_Alloc_error = 0x000a3c74; // type:asciz defined:True
 // "error in alloc, SIZE_ALLOC too small!\n"
-S_error_in_alloc_SIZE_ALLOC_too_small = 0x000a3c88; // type:asciz
+S_error_in_alloc_SIZE_ALLOC_too_small = 0x000a3c88; // type:asciz defined:True
