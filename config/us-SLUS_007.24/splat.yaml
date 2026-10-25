@@ -25,6 +25,9 @@ options:
 
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
 
+  reloc_addrs_path:
+    - config/us-SLUS_007.24/reloc_addrs.txt
+
   symbol_addrs_path:
     - config/us-SLUS_007.24/function_addrs.txt
     - config/us-SLUS_007.24/hack_addrs.txt
