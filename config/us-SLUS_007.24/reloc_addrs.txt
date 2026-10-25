@@ -114,6 +114,8 @@ rom:0x11E7C reloc:MIPS_NONE symbol:null
 rom:0x11E84 reloc:MIPS_NONE symbol:null
 rom:0x11E98 reloc:MIPS_NONE symbol:null
 rom:0x11EA0 reloc:MIPS_NONE symbol:null
+rom:0x30D0C reloc:MIPS_NONE symbol:null
+rom:0x31440 reloc:MIPS_NONE symbol:null
 rom:0x4C56C reloc:MIPS_NONE symbol:null
 rom:0x4C574 reloc:MIPS_NONE symbol:null
 rom:0x4C578 reloc:MIPS_NONE symbol:null
@@ -122,3 +124,9 @@ rom:0x4C598 reloc:MIPS_NONE symbol:null
 rom:0x4C5A0 reloc:MIPS_NONE symbol:null
 rom:0x4C5A4 reloc:MIPS_NONE symbol:null
 rom:0x4C5AC reloc:MIPS_NONE symbol:null
+rom:0x5A190 reloc:MIPS_NONE symbol:null
+rom:0x5A194 reloc:MIPS_NONE symbol:null
+rom:0x5A1BC reloc:MIPS_NONE symbol:null
+rom:0x5A1C4 reloc:MIPS_NONE symbol:null
+rom:0x5A1C8 reloc:MIPS_NONE symbol:null
+rom:0x5A214 reloc:MIPS_NONE symbol:null
