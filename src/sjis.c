@@ -1,6 +1,3 @@
-// hack
-#define _ctype_ LIBC2_CTYPE__ctype_
-
 #include "common.h"
 #include <ctype.h>
 
