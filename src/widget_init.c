@@ -5,13 +5,6 @@ typedef struct SPair {
     short second;
 } SPair;
 
-typedef struct SinCos {
-    short sin;
-    short cos;
-    short unk0;
-    short pad;
-} SinCos;
-
 typedef struct FramebufferFetch {
     short x;
     short y;
@@ -34,8 +27,7 @@ extern int specialLevelType;
 extern int whichDrawDispEnv;
 extern MATRIX perspMatrixes[1];
 extern OT_TYPE otag[2][1][1026];
-extern SinCos sinCosArr23[/*16*/];
-extern SinCos sinCosArr80[/*16*/];
+extern SVECTOR lensFlareSamplingPoints[2][16];
 extern Texture textures[150];
 extern Texture textures[150];
 extern TSprite sfxVolumeWidgetSprite[2];
@@ -176,18 +168,18 @@ void InitLensFlareSprites(void) {
     InitLensFlareSprite(0x1162, firstLensFlareOrPsxButtonTexture + 4, 1);
     InitLensFlareSprite(0x15a4, firstLensFlareOrPsxButtonTexture + 4, 1);
 
-    sinCosArr23[0].sin = 0;
-    sinCosArr23[0].cos = 0;
-    sinCosArr23[0].unk0 = 0;
-    sinCosArr80[0] = sinCosArr23[0];
+    lensFlareSamplingPoints[0][0].vx = 0;
+    lensFlareSamplingPoints[0][0].vy = 0;
+    lensFlareSamplingPoints[0][0].vz = 0;
+    lensFlareSamplingPoints[1][0] = lensFlareSamplingPoints[0][0];
     for (i = 1; i < 16; i++) {
         a = 300 + (i << 12) / 15;
-        sinCosArr23[i].sin = (m23 * rsin(a)) >> 12;
-        sinCosArr23[i].cos = (m23 * rcos(a)) >> 12;
-        sinCosArr23[i].unk0 = 0;
-        sinCosArr80[i].sin = (m80 * rsin(a)) >> 12;
-        sinCosArr80[i].cos = (m80 * rcos(a)) >> 12;
-        sinCosArr80[i].unk0 = 0;
+        lensFlareSamplingPoints[0][i].vx = (m23 * rsin(a)) >> 12;
+        lensFlareSamplingPoints[0][i].vy = (m23 * rcos(a)) >> 12;
+        lensFlareSamplingPoints[0][i].vz = 0;
+        lensFlareSamplingPoints[1][i].vx = (m80 * rsin(a)) >> 12;
+        lensFlareSamplingPoints[1][i].vy = (m80 * rcos(a)) >> 12;
+        lensFlareSamplingPoints[1][i].vz = 0;
     }
 }
 
@@ -226,10 +218,10 @@ void DrawLensFlares(void) {
             sx = screenCoords[0];
             sy = screenCoords[1];
             for (i = 0; i < 16; i++) {
-                framebufferFetches[i].x = sinCosArr23[i].sin + lensFlareScreenX;
-                framebufferFetches[i].y = sinCosArr23[i].cos + lensFlareScreenY;
-                if ((sx + sinCosArr80[i].sin & 0x7fff) < screenOffsetX &&
-                    (sy + sinCosArr80[i].cos & 0x7fff) < screenOffsetY) {
+                framebufferFetches[i].x = lensFlareSamplingPoints[0][i].vx + lensFlareScreenX;
+                framebufferFetches[i].y = lensFlareSamplingPoints[0][i].vy + lensFlareScreenY;
+                if ((sx + lensFlareSamplingPoints[1][i].vx & 0x7fff) < screenOffsetX &&
+                    (sy + lensFlareSamplingPoints[1][i].vy & 0x7fff) < screenOffsetY) {
                     texel = framebufferFetches[i].texel;
                     if ((texel & 0x7c00) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][0] &&
                         (texel & 0x3e0) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][1] &&
@@ -263,10 +255,10 @@ void DrawLensFlares(void) {
                 sx = screenCoords[0];
                 sy = screenCoords[1];
                 for (i = 0; i < 16; i++) {
-                    framebufferFetches[i].x = sinCosArr23[i].sin + lensFlareScreenX;
-                    framebufferFetches[i].y = sinCosArr23[i].cos + lensFlareScreenY;
-                    if ((sx + sinCosArr80[i].sin & 0x7fff) < screenOffsetX &&
-                        (sy + sinCosArr80[i].cos & 0x7fff) < screenOffsetY) {
+                    framebufferFetches[i].x = lensFlareSamplingPoints[0][i].vx + lensFlareScreenX;
+                    framebufferFetches[i].y = lensFlareSamplingPoints[0][i].vy + lensFlareScreenY;
+                    if ((sx + lensFlareSamplingPoints[1][i].vx & 0x7fff) < screenOffsetX &&
+                        (sy + lensFlareSamplingPoints[1][i].vy & 0x7fff) < screenOffsetY) {
                         texel = framebufferFetches[i].texel;
                         if ((texel & 0x7c00) >= LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[j][0] &&
                             (texel & 0x3e0) >= LENS_FLARE_COLOR_THRESHOLDS_IN_SPECIAL_LEVEL[j][1] &&
