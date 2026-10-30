@@ -43,13 +43,9 @@ static uint screenshotTimHeader[5] = {0x10, 0x2, 0x0, 0x0, 0x0};
 #define saveReplayLength (*(s32*)(DEVKIT_REPLAY_BUF + 0x10))
 #define saveReplayIsFirstSequence *(s32*)(DEVKIT_REPLAY_BUF + 0x04)
 #define saveReplayWritePtr *(byte**)(DEVKIT_REPLAY_BUF + 0x08)
-#define saveReplayCurrentButtons *(short*)(DEVKIT_REPLAY_BUF + 0x0e)
-
-// XXX: still need to fix these
-extern volatile byte saveReplayCurrentButtonsShuffled;
-extern volatile byte saveReplayRleButtonCount;
-//#define saveReplayCurrentButtonsShuffled *(byte*)(DEVKIT_REPLAY_BUF + 0x0d)
-//#define saveReplayRleButtonCount *(byte*)(DEVKIT_REPLAY_BUF + 0x0c)
+#define saveReplayCurrentButtons *(u16*)(DEVKIT_REPLAY_BUF + 0x0e)
+#define saveReplayRleButtonCount *(byte*)(DEVKIT_REPLAY_BUF + 0x0c)
+#define saveReplayCurrentButtonsShuffled *(byte*)(DEVKIT_REPLAY_BUF + 0x0d)
 
 #ifndef SKIP_UNUSED_CODE
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {
@@ -138,44 +134,48 @@ void InitReplaySaving(void) {
     saveReplayIsFirstSequence = 1;
 }
 
-// XXX: this is a mess
-void RecordButtonsToDevkit(s32 arg0) {
+void RecordButtonsToDevkit(int buttons) {
     s32 origArg0;
-    s16 currentButtons;
-    u8 currentButtonsShuffled;
-    u8 newCount;
     u8* writePtr;
-    u8 buttonCount;
+    s32 count;
+    u8 shuffled;
+    s16 current;
 
-    buttonCount = saveReplayRleButtonCount;
     writePtr = saveReplayWritePtr;
-    currentButtonsShuffled = saveReplayCurrentButtonsShuffled;
-    currentButtons = saveReplayCurrentButtons;
+    count = saveReplayRleButtonCount;
+    shuffled = saveReplayCurrentButtonsShuffled;
+    current = saveReplayCurrentButtons;
 
     saveReplayLength++;
-    origArg0 = arg0;
-    arg0 <<= 16;
-    if (arg0 >> 16 == currentButtons) {
-        newCount = buttonCount + 1;
+    origArg0 = buttons;
+    buttons <<= 16;
+    if (buttons >> 16 == current) {
+        count++;
     } else {
         if (saveReplayIsFirstSequence == 1) {
             saveReplayIsFirstSequence = 0;
         } else {
-            *writePtr++ = buttonCount;
-            *writePtr++ = currentButtonsShuffled;
+            *writePtr++ = count;
+            *writePtr++ = shuffled;
         }
-        newCount = 1;
-        currentButtons = origArg0;
-        currentButtonsShuffled = ((arg0 >> 20) & 0xF) | ((arg0 >> 21) & 0x10) |
-                                 ((arg0 >> 22) & 0x20) | ((arg0 >> 24) & 0x40);
+        count = 1;
+        current = origArg0;
+        do {
+            shuffled = ((buttons >> (16 + 4)) & 0xF) |
+                       ((buttons >> (16 + 5)) & 0x10) |
+                       ((buttons >> (16 + 6)) & 0x20) |
+                       ((buttons >> (16 + 8)) & 0x40);
+        } while(0);
     }
+
     if ((u32)writePtr > (u32)DEVKIT_REPLAY_BUF + 0xFFFU) {
         writePtr = (u8*)((char*)DEVKIT_REPLAY_BUF + 0xFFE);
     }
+
     saveReplayWritePtr = writePtr;
-    saveReplayRleButtonCount = newCount;
-    saveReplayCurrentButtonsShuffled = currentButtonsShuffled;
-    saveReplayCurrentButtons = currentButtons;
+    saveReplayRleButtonCount = count;
+    saveReplayCurrentButtonsShuffled = shuffled;
+    saveReplayCurrentButtons = current;
 }
 
 void WriteToDevkit(int param_1) {
@@ -185,6 +185,7 @@ void WriteToDevkit(int param_1) {
     byte* p;
     int buts;
     int count;
+    unsigned char new_var; // HACK
 
     if (param_1 == 0) {
         sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\%d.pad", devkitFileNumber);
@@ -195,8 +196,9 @@ void WriteToDevkit(int param_1) {
     devkitFileNumber++;
     p = saveReplayWritePtr;
     count = saveReplayRleButtonCount;
+    new_var = count;
     buts = saveReplayCurrentButtonsShuffled;
-    *p++ = count;
+    *p++ = new_var;
     *p++ = buts;
     *p++ = 0;
     *p++ = 0xff;

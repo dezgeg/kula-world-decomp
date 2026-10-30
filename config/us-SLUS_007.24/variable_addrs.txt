@@ -931,5 +931,3 @@ textures = 0x000fa5e8; // size:2160
 levelScores = 0x000fae58; // size:600
 unusedNumHblanks = 0x000fb0b8; // size:32
 toBeDisabledLightEffects = 0x000fb0e4; // size:256
-saveReplayRleButtonCount = 0x0020000c; // type:u8
-saveReplayCurrentButtonsShuffled = 0x0020000d; // type:u8
