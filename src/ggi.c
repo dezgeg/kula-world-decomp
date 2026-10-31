@@ -90,7 +90,7 @@ void* ParseGGI(GgiFile* ggi_ptr) {
         }
     }
 
-#if VER_US
+#if !VER_EU
     InitPlayerSpecularSprite();
 #endif
 

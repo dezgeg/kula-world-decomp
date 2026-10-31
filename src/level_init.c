@@ -75,25 +75,25 @@ extern AnimatedTextureChain bonusBlockTextureChain;
 extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
 extern AnimatedTextureChain fireBlockTextureChain;
 extern AnimatedTextureChain invisibleBlockTextureChain;
-extern uint TEXTURE_ANIM_DATA[];
+extern uint TEXTURE_ANIM_DATA[1]; // fake size
 extern int invisBlockVisibility[6];
 extern int curWorld;
 extern int gameMode;
 extern int numKeysInLevel;
 extern char cubeTextureMetadata[];
-extern byte LASER_INTENSITY_DATA[];
-extern byte LASER_INTENSITY_DATA_END[];
+extern byte LASER_INTENSITY_DATA[1]; // fake size
+extern byte LASER_INTENSITY_DATA_END[1]; // fake size
 
-POLY_FT4 shadowPrims[2][1][2][16];
-POLY_FT4 specularPrims[2][1][NUM_SPECULAR_PRIMS];
-P shadowPrimPtrs[2][1][2][16];
-P specularPrimPtrs[2][1][NUM_SPECULAR_PRIMS];
-short flashingBlockEntityIndexes[64];
-int laserDrawBuffer[4096];
-uint laserData0[4][1024];
-uint laserData1[4][1024];
-uint laserData2[4][1024];
-uint laserData3[4][1024];
+extern POLY_FT4 shadowPrims[2][1][2][16];
+extern POLY_FT4 specularPrims[2][1][NUM_SPECULAR_PRIMS];
+extern P shadowPrimPtrs[2][1][2][16];
+extern P specularPrimPtrs[2][1][NUM_SPECULAR_PRIMS];
+extern short flashingBlockEntityIndexes[64];
+extern int laserDrawBuffer[4096];
+extern uint laserData0[1]; // fake size
+extern uint laserData1[1]; // fake size
+extern uint laserData2[1]; // fake size
+extern uint laserData3[1]; // fake size
 
 short MOVING_BLOCK_TEXTURE_DATA[3][4][12] = {
     {
@@ -614,9 +614,9 @@ void InitLasers2(void) {
         x = pLaser[4];
         y = pLaser[5];
         z = pLaser[6];
-        dir = pLaser[2];
 
         cubeIdx = CUBE_INDEX_AT(x, y, z);
+        dir = pLaser[2];
         if (cubeIdx != -1) {
             Quad* quad = (Quad*)cubeStates[cubeIdx * 16 + dir];
             if (quad != -1) {
@@ -676,6 +676,8 @@ void InitLasers2(void) {
                 break;
             case 3:
                 dst[4] = laserData3;
+                break;
+            default:
                 break;
         }
 
