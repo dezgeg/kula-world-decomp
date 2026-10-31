@@ -341,19 +341,18 @@ void StrCallback() {
 }
 
 int StrNextVlc(DECENV* dec, MovieInfo* movie) {
-    int cnt;
+    int cnt = MOVIE_WAIT;
     u_long* next;
 
-    for (cnt = 2000; cnt != 0; cnt--) {
-        next = StrNext(dec, movie);
-        if (next) {
-            dec->vlcid = dec->vlcid ? 0 : 1;
-            DecDCTvlc2(next, dec->vlcbuf[dec->vlcid], vlc_table);
-            StFreeRing(next);
-            return 0;
-        }
+    while ((next = StrNext(dec, movie)) == 0) {
+        if (--cnt == 0)
+            return -1;
     }
-    return -1;
+
+    dec->vlcid = dec->vlcid ? 0 : 1;
+    DecDCTvlc2(next, dec->vlcbuf[dec->vlcid], vlc_table);
+    StFreeRing(next);
+    return 0;
 }
 
 u_long* StrNext(DECENV* dec, MovieInfo* movie) {
