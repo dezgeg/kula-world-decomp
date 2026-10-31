@@ -43,9 +43,9 @@ static uint screenshotTimHeader[5] = {0x10, 0x2, 0x0, 0x0, 0x0};
 #define saveReplayLength (*(s32*)(DEVKIT_REPLAY_BUF + 0x10))
 #define saveReplayIsFirstSequence *(s32*)(DEVKIT_REPLAY_BUF + 0x04)
 #define saveReplayWritePtr *(byte**)(DEVKIT_REPLAY_BUF + 0x08)
-#define saveReplayCurrentButtons *(u16*)(DEVKIT_REPLAY_BUF + 0x0e)
 #define saveReplayRleButtonCount *(byte*)(DEVKIT_REPLAY_BUF + 0x0c)
 #define saveReplayCurrentButtonsShuffled *(byte*)(DEVKIT_REPLAY_BUF + 0x0d)
+#define saveReplayCurrentButtons *(u16*)(DEVKIT_REPLAY_BUF + 0x0e)
 
 #ifndef SKIP_UNUSED_CODE
 void DebugSaveScreenshotToPc(char* prefix, int useWorldPrefix) {

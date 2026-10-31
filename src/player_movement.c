@@ -43,7 +43,7 @@ extern int gameMode;
 extern int levelTimeLeft;
 extern int shouldMarkCubesVisited;
 extern InvisBlockVisibility invisBlockVisibility;
-extern MATRIX perspMatrixes[];
+extern MATRIX perspMatrixes[2];
 extern short* entityData;
 extern short* ggiPart5JumpAnimData;
 extern short isPausedOrWaitingForRestart;

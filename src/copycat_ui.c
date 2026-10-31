@@ -5,11 +5,9 @@ extern Texture textures[150];
 extern int gameMode;
 extern int whichDrawDispEnv;
 extern uint firstGuiTextTexture;
-#if !VER_EU
 extern int controllerButtons;
 extern int isPaused;
 extern int gameState;
-#endif
 
 TSprite copycatUiSprites[2][4];
 
