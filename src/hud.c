@@ -15,7 +15,7 @@ extern void DrawTimeAttackWidgets(void);
 extern void UpdateStaticHourglassClut(void);
 
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
-extern uint BONUS_WIDGET_COLOR_DATA[96];
+extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
 extern TSprite fruitBonusTextSprites[2][5][2];
 extern TSprite fruitSprites[2][5][2];
 extern int fruitsCollectedBitmask;

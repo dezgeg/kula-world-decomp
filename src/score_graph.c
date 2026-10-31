@@ -44,7 +44,7 @@ int InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLev
 
     if (maxScore == -1) {
         maxScore = 0;
-        for (i = 0; i < graphWidth; i++) {
+        for (i = 0; i < (VER_JP ? numLevels : graphWidth); i++) {
             if (levelScores != (int*)-1 && levelScores[i] > maxScore) {
                 maxScore = levelScores[i];
             }
@@ -105,9 +105,9 @@ int InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLev
                     !isOddSection ? 0x00802020 : 0x006c1b1b;
 
                 (drawScoreGraphPrims->polys[j] + i)->x0 = x + i;
-                (drawScoreGraphPrims->polys[j] + i)->y0 = y + graphHeight + 1;
+                (drawScoreGraphPrims->polys[j] + i)->y0 = y + graphHeight + (VER_JP ? 2 : 1);
                 (drawScoreGraphPrims->polys[j] + i)->x1 = x + i + 9;
-                (drawScoreGraphPrims->polys[j] + i)->y1 = y + graphHeight - 7;
+                (drawScoreGraphPrims->polys[j] + i)->y1 = y + graphHeight - (VER_JP ? 6 : 7);
                 (drawScoreGraphPrims->polys[j] + i)->x2 = x + i;
                 (drawScoreGraphPrims->polys[j] + i)->y2 = 0;
                 (drawScoreGraphPrims->polys[j] + i)->x3 = x + i + 9;
@@ -267,9 +267,9 @@ int InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLev
             }
 
             if (j == 0) {
-                setXY0(&scoreGraphSprites[i][0].sprt, x + 2, y + 1);
+                setXY0(&scoreGraphSprites[i][0].sprt, x + (VER_JP ? 0 : 2), y + 1);
             } else {
-                setXY0(&scoreGraphSprites[i][1].sprt, x + graphWidth - 50, y + graphHeight - 6);
+                setXY0(&scoreGraphSprites[i][1].sprt, x + graphWidth - (VER_JP ? 46 : 50), y + graphHeight - (VER_JP ? 7 : 6));
             }
 
             SetSemiTrans(&scoreGraphSprites[i][j].sprt,

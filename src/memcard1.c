@@ -24,6 +24,9 @@ int GetMaxSaveSlotScore(void) {
             }
         }
     }
+#if VER_JP
+    CalcMemCardChecksum();
+#endif
     return maxScore;
 }
 #endif

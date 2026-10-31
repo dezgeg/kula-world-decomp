@@ -53,6 +53,7 @@ POLY_FT4 particlePolyTemplates[7];
 
 static short* PARTICLE_TYPE_PTRS[12];
 static int numParticles[2];
+STATIC_FOR_GP_ACCESS short hasParticleType3Active;
 
 void InitParticles(void) {
     int i;
@@ -127,6 +128,9 @@ void AddParticles(int type, SVECTOR* pos, int lightEffectId) {
                 particles[cameraIndex][numParticles[cameraIndex]].rotation[1] = 0;
                 numParticles[cameraIndex]++;
             }
+            if (VER_JP && type == 3) {
+                hasParticleType3Active = 1;
+            }
         }
     }
 }
@@ -153,6 +157,9 @@ void ProcessAndRenderParticles(void) {
     int off;
     int t;
 
+#if VER_JP
+    hasParticleType3Active = 0;
+#endif
     for (i = 0; i < numParticles[cameraIndex]; i++) {
         colorB = 0;
         colorG = 0;
@@ -176,6 +183,10 @@ void ProcessAndRenderParticles(void) {
         }
         if (i >= numParticles[cameraIndex]) {
             return;
+        }
+
+        if (VER_JP && particles[cameraIndex][i].animData == (ParticleType*)PARTICLE_TYPE_PTRS[3]) {
+            hasParticleType3Active = 1;
         }
 
         // pArr[0] - template idx

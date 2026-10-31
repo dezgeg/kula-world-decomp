@@ -34,6 +34,7 @@ void InitStuff(void) {
 
     ResetVibration();
     latestControllerSlotPolled = 0;
+#if !VER_JP
     InitGeom();
     SetGeomScreen(projectionDistance);
     SetVideoMode(VID_NTSC ? 0 : 1);
@@ -44,6 +45,7 @@ void InitStuff(void) {
     rect.h = SCREEN_HEIGHT;
     ClearImage(&rect, 0, 0, 0);
     SetupDisplay(0, 0, 0, 0, 0, 0);
+#endif
     FntLoad(576, 256);
     SetDumpFnt(FntOpen(16, 8, displayWidth - 16, displayHeight - 8, 0,
                        (displayWidth / 8 - 2) * (displayHeight / 8 - 1)));

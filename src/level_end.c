@@ -19,6 +19,7 @@ extern int curWorld;
 extern int curWorld2;
 extern int debugBonusLevels;
 extern int debugDisableTimer;
+extern int displayWidth;
 extern int gameMode;
 extern int gameState;
 extern int gotSioData;
@@ -66,7 +67,7 @@ void UpdateScoreAtEndOfLevel(void) {
     int bonusScore;
 
     if (gameMode == 0) {
-#if VER_US
+#if !VER_EU
         if (levelEndReason > 0 || specialLevelType > 0) {
 #else
         if (levelEndReason > 0 || specialLevelType == 1) {
@@ -90,8 +91,16 @@ void UpdateScoreAtEndOfLevel(void) {
     }
     if (gameMode == 1) {
         prevControllerButtons = 0xffffffff;
+#if VER_JP
+        ResetVibration();
+#endif
     }
     if (gameMode == 2) {
+#if VER_JP
+        if (numTimeTrialPlayers == 2) {
+            ResetVibration();
+        }
+#endif
         showingTimeTrialQualifyScreen = 0;
         levelScoreSummaryScoreTicker = levelPlayTime[latestPlayerToFinish] / FPS;
         if (levelPlayTime[latestPlayerToFinish] < 0) {

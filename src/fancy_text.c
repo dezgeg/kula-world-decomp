@@ -89,11 +89,13 @@ void DrawStaticUiSprite(short id, short x, short y, short count) {
             return;
         }
 
-        textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites1[18 + id];
-        setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, color, color, color);
-        setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, x, y);
-        addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
-        textCharIdx++;
+        if (VER_JP ? (id < 6 || id > 9) : 1) {
+            textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites1[18 + id];
+            setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, color, color, color);
+            setXY0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, x, y);
+            addPrim(&primLists[whichDrawDispEnv].main, &textDrawSprites[whichDrawDispEnv][textCharIdx]);
+            textCharIdx++;
+        }
 
         textDrawSprites[whichDrawDispEnv][textCharIdx] = textDrawTemplateSprites2[18 + id];
         setRGB0(&textDrawSprites[whichDrawDispEnv][textCharIdx].sprt, color, color, color);

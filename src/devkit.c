@@ -126,12 +126,17 @@ void ResetDevkitFileNumber(void) {
 #endif
 
 void InitReplaySaving(void) {
+#if VER_JP
+    saveReplayIsFirstSequence = 0;
+#endif
     saveReplayWritePtr = saveReplayBuf;
     saveReplayRleButtonCount = 0;
     saveReplayCurrentButtonsShuffled = 0;
     saveReplayCurrentButtons = 0;
     saveReplayLength = 0;
+#if !VER_JP
     saveReplayIsFirstSequence = 1;
+#endif
 }
 
 void RecordButtonsToDevkit(int buttons) {

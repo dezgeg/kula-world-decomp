@@ -118,6 +118,9 @@ void FormatMemcard(void) {
         ShowMemCardFullScreenText("FORMATTING MEMORY CARD\n\nPLEASE WAIT\n");
         tempMcResult = MemCardFormat(0);
     }
+#if VER_JP
+    ClearMemCardData();
+#endif
     mcResult = tempMcResult;
 }
 

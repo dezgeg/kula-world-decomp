@@ -355,8 +355,10 @@ void SndMuteVoiceByTag(int tag) {
 
     /* Bug: this will read past the buffer if not found */
     if (spuVoiceState[i].tag == tag) {
+#if !VER_JP
         spuVoiceState[i].sfxIndex = -1;
         spuVoiceState[i].tag = 0;
+#endif
         SpuSetKey(0, 1 << i);
     }
 }
@@ -368,8 +370,10 @@ void SndMuteAllTaggedVoices(void) {
     SpuGetAllKeysStatus(&keyStatus[0]);
     for (i = 0; i < 24; i++) {
         if (keyStatus[i] && spuVoiceState[i].tag) {
+#if !VER_JP
             spuVoiceState[i].sfxIndex = -1;
             spuVoiceState[i].tag = 0;
+#endif
             SpuSetKey(0, 1 << i);
         }
     }
@@ -382,12 +386,33 @@ void SndMuteAllVoices(void) {
     SpuGetAllKeysStatus(&keyStatus[0]);
     for (i = 0; i < 24; i++) {
         if (keyStatus[i]) {
+#if !VER_JP
             spuVoiceState[i].sfxIndex = -1;
             spuVoiceState[i].tag = 0;
+#endif
             SpuSetKey(0, 1 << i);
         }
     }
 }
+
+#if VER_JP
+void SndInitSpu(void) {
+    int i;
+
+    SpuInit();
+    SpuSetReverb(0);
+    spuReverbAttr.mask = 0;
+    spuReverbAttr.mode = 5;
+    spuReverbAttr.depth.left = 0x7fff;
+    spuReverbAttr.depth.right = 0x7fff;
+    spuReverbAttr.delay = 0x7fff;
+    spuReverbAttr.feedback = 0x2fff;
+    SpuSetReverbModeParam(&spuReverbAttr);
+    for (i = 0; i < 24; i++) {
+        SpuSetKey(0, 1 << i);
+    }
+}
+#endif
 
 void SndSetMusicVolume(void) {
     int vol;

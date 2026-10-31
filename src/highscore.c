@@ -157,6 +157,9 @@ void HighScoreUi(int param_1) {
 
         if (maxScore > highscores[0].score) {
             placement = 0;
+#if VER_JP
+            cursorIndex = 0;
+#endif
             highscores[0].fruits = numFruits;
             highscores[0].time = totalPlayTime[0];
             highscores[0].score = maxScore;
@@ -221,11 +224,12 @@ void HighScoreUi(int param_1) {
             repeatRateTimer = 0;
         }
 
+#if !VER_JP
         if (repeatRateTimer > 20) {
             repeatRateTimer -= 5;
             prevControllerButtons = 0;
         }
-
+#endif
         if (musicShouldLoop == 1) {
             MusicCheckForLoop();
         }

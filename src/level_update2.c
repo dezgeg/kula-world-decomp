@@ -795,7 +795,7 @@ void HandlePlayerButtons(Player* player) {
     if ((controllerButtons & PAD_START) & ~prevControllerButtons) {
         pauseForStartPress = 1;
         SndMuteAllTaggedVoices();
-#if VER_US
+#if !VER_EU
         ResetVibration();
 #endif
     }
@@ -1067,6 +1067,11 @@ void UpdateSubpixelPositions(Player* player) {
     player->svec_144.vx = player->subpixelPositionOnCube.vx - player->svec_154.vx;
     player->svec_144.vy = player->subpixelPositionOnCube.vy - player->svec_154.vy;
     player->svec_144.vz = player->subpixelPositionOnCube.vz - player->svec_154.vz;
+#if VER_JP
+    if (player->svec_144.vy == 492) {
+        player->svec_144.vy = 0;
+    }
+#endif
 }
 #undef finePosMod512
 

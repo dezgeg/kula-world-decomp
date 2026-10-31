@@ -212,7 +212,7 @@ void MusicPause(void) {
     CdReadSync(0, 0);
     Noop();
     SpuSetReverb(1);
-#if VER_US
+#if !VER_EU
     playingBonusMusic = 1;
 #endif
 }
@@ -223,7 +223,7 @@ void SwitchFromBonusToNormalMusic(void) {
 #endif
     char dummy[8];
 
-#if VER_US
+#if !VER_EU
     if (playingBonusMusic != 1) {
         return;
     }

@@ -926,6 +926,7 @@ void HandleSpecialCubeTypes(Player* player) {
         thePlayer.startedIceSfx = 0;
         SndMuteVoiceByTag(2);
     }
+#if !VER_JP
     if (player->faceTypePlayerStandingOn == OBJ_FAST_STAR) {
         if (player->rollingForward == 0) {
             if (player->jumping == 1 && player->howMoving198 != JUMPING_INPLACE) {
@@ -933,6 +934,7 @@ void HandleSpecialCubeTypes(Player* player) {
             }
         }
     }
+#endif
     if (player->faceTypePlayerStandingOn == OBJ_FIRE_PATCH) {
         if (!IsPlayerInAir(player)) {
             if (thePlayer.invulnerabilityTimer == -1) {

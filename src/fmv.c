@@ -107,6 +107,9 @@ void ShowEndingFmv(int movieI) {
 
 #if VER_EU
     MusicPause();
+#elif VER_JP
+    controllerButtons = -1;
+    prevControllerButtons = -1;
 #endif
     oldMusicVolume = musicVolume;
     musicVolume = 0xc;
@@ -235,7 +238,7 @@ int FmvMainLoop(int movieI) {
 
         prevControllerButtons = controllerButtons;
         GetButtonsFromAnyController();
-        if (TestButton(PAD_START) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
+        if (TestButton(PAD_START) || TestButton(VER_JP ? PAD_CROSS : PAD_TRIANGLE) || TestButton(PAD_SELECT)) {
             fmvEnded = 1;
         }
 #if !VER_EU
@@ -350,7 +353,11 @@ int StrNextVlc(DECENV* dec, MovieInfo* movie) {
     }
 
     dec->vlcid = dec->vlcid ? 0 : 1;
+#if VER_JP
+    DecDCTvlc2_asm(next, dec->vlcbuf[dec->vlcid]);
+#else
     DecDCTvlc2(next, dec->vlcbuf[dec->vlcid], vlc_table);
+#endif
     StFreeRing(next);
     return 0;
 }

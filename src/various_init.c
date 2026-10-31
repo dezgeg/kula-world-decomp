@@ -6,12 +6,17 @@ extern void InitParticles(void);
 extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
 
+int copycatLabelAnimTimer;
+
 void VariousInit(void) {
     InitParticles();
     InitLensFlareSprites();
     ResetTextRenderState();
     ResetTextVars();
     InitLevelEndScreen();
+#if VER_JP
+    copycatLabelAnimTimer = 0;
+#endif
 }
 
 #if !VER_EU

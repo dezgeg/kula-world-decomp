@@ -72,7 +72,7 @@ void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visitType) {
         cs = (CubeState*)&cubeStates[cubeIndex * 16];
         if (*(cs->sideVisited + whichSide) != visitType) {
             *(cs->sideVisited + whichSide) = visitType;
-            quad = cs->quadPtrs[whichSide];
+            quad = *(cs->quadPtrs + whichSide);
             if (quad != (Quad*)0xffffffff) {
                 quad->flags.b[2] = quad->flags.b[2] & 0xf9 | (visitType * 2) & 6;
                 pSideFlag = &cs->visitList[whichSide];

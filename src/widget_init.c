@@ -15,6 +15,7 @@ extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 
 extern int cameraIndex;
 extern int curWorld;
+extern int curWorld2;
 extern int displayHeight;
 extern int displayWidth;
 extern int firstLensFlareOrPsxButtonTexture;
@@ -213,7 +214,7 @@ void DrawLensFlares(void) {
     SetTransMatrix(&matrix);
 
     if (specialLevelType == 0) {
-        sz = RotTransPers(&SUN_POS_IN_WORLD[curWorld], (long*)&screenCoords[0], (long*)&screenCoords[2], (long*)&screenCoords[2]);
+        sz = RotTransPers(&SUN_POS_IN_WORLD[VER_JP ? curWorld2 : curWorld], (long*)&screenCoords[0], (long*)&screenCoords[2], (long*)&screenCoords[2]);
         if (sz << 2 > 0) {
             sx = screenCoords[0];
             sy = screenCoords[1];
@@ -223,9 +224,9 @@ void DrawLensFlares(void) {
                 if ((sx + lensFlareSamplingPoints[1][i].vx & 0x7fff) < screenOffsetX &&
                     (sy + lensFlareSamplingPoints[1][i].vy & 0x7fff) < screenOffsetY) {
                     texel = framebufferFetches[i].texel;
-                    if ((texel & 0x7c00) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][0] &&
-                        (texel & 0x3e0) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][1] &&
-                        (texel & 0x1f) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[curWorld][2]) {
+                    if ((texel & 0x7c00) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[VER_JP ? curWorld2 : curWorld][0] &&
+                        (texel & 0x3e0) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[VER_JP ? curWorld2 : curWorld][1] &&
+                        (texel & 0x1f) >= LENS_FLARE_COLOR_THRESHOLDS_IN_WORLD[VER_JP ? curWorld2 : curWorld][2]) {
                         sunIntensityOnScreen += 5;
                     }
                 }
