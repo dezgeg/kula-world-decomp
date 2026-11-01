@@ -985,19 +985,20 @@ void ScanLevelDataForFlashingBlocks(void) {
     for (i = 0; i < numEntities; i++) {
         eb = (FlashingEntity*)(entityData + i * 128);
         if (eb->entityType == OBJ_FLASHING_BLOCK) {
-            flashingBlockEntityIndexes[numFlashingBlocks++] = i;
+            flashingBlockEntityIndexes[numFlashingBlocks] = i;
             x = eb->x;
             y = eb->y;
             z = eb->z;
             eb->cubeType = levelData[x * 1156 + y * 34 + z];
+            numFlashingBlocks++;
             ci = CUBE_INDEX_AT(x, y, z);
             initState = eb->initState;
             if (initState < 2) {
                 for (dir = 0; dir < 6; dir++) {
                     *(u16*)cubeStates[16 * ci + dir] = 0x10e;
                 }
-                eb->counter = FRAMES(76) - initState * FRAMES(47);
                 eb->state = 0;
+                eb->counter = FRAMES(76) - initState * FRAMES(47);
                 levelData[x * 1156 + y * 34 + z] = -1;
             } else {
                 for (dir = 0; dir < 6; dir++) {
