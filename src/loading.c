@@ -201,15 +201,9 @@ void LoadWarningTim(void) {
 #endif
     CdlFILE cdlfile;
 
-#if !VER_EU
-    displayWidth = 320;
-    displayHeight = 240;
-    SetupDisplay(0, 0, 96, 0, 0, 1);
-#else
-    displayWidth = 640;
-    displayHeight = 256;
-    SetupDisplay(0, 0, 96, 0, 0, 0);
-#endif
+    displayWidth = VER_US ? 320 : 640;
+    displayHeight = VER_US ? 240 : 256;
+    SetupDisplay(0, 0, 96, 0, 0, VID_NTSC);
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
     IF_WHILE (!CdSearchFile(&cdlfile, filename)) {
@@ -226,6 +220,7 @@ void LoadWarningTim(void) {
     zlibStream_a4b80.avail_out = 0x60000;
     zlibStream_a4b80.next_out = TGI_FILE_BUF;
     zlibStream_a4b80.avail_in = cdlfile.size;
+
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
