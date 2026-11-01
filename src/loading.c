@@ -52,9 +52,9 @@ char PIC_PAK_FILENAME[24] = "\\KULA\\KULA_PIC.PAK;1";
 short skipFirstLoadingScreen = 1;
 
 Music BONUS_MUSICS[] = {
-    {"\\XA\\MUSIC_1.XA;1", 0, VER_US ? 3197 : 3335},
-    {"\\XA\\MUSIC_2.XA;1", 1, VER_US ? 5379 : 5474},
-    {"\\XA\\MUSIC_0.XA;1", 0, VER_US ? 3239 : 3279},
+    {"\\XA\\MUSIC_1.XA;1", 0, VER_EU ? 3335 : 3197},
+    {"\\XA\\MUSIC_2.XA;1", 1, VER_EU ? 5474 : 5379},
+    {"\\XA\\MUSIC_0.XA;1", 0, VER_EU ? 3279 : 3239},
 };
 
 int musicUnkAlwaysZero1 = 0;
@@ -62,16 +62,16 @@ int musicUnkAlwaysZero2 = 0;
 int musicCdMode = 0x78;
 
 Music MUSICS[] = {
-    {"\\XA\\MUSIC_1.XA;1", 1, VER_US ? 4441 : 4533},
-    {"\\XA\\MUSIC_3.XA;1", 2, VER_US ? 6751 : 6844},
-    {"\\XA\\MUSIC_2.XA;1", 2, VER_US ? 5556 : 5646},
-    {"\\XA\\MUSIC_2.XA;1", 3, VER_US ? 5683 : 5786},
-    {"\\XA\\MUSIC_3.XA;1", 3, VER_US ? 7057 : 7151},
-    {"\\XA\\MUSIC_2.XA;1", 0, VER_US ? 5084 : 5178},
-    {"\\XA\\MUSIC_3.XA;1", 1, VER_US ? 5885 : 5979},
-    {"\\XA\\MUSIC_3.XA;1", 0, VER_US ? 5803 : 5897},
-    {"\\XA\\MUSIC_1.XA;1", 2, VER_US ? 4612 : 4705},
-    {"\\XA\\MUSIC_1.XA;1", 3, VER_US ? 4674 : 4776},
+    {"\\XA\\MUSIC_1.XA;1", 1, VER_EU ? 4533 : 4441},
+    {"\\XA\\MUSIC_3.XA;1", 2, VER_EU ? 6844 : 6751},
+    {"\\XA\\MUSIC_2.XA;1", 2, VER_EU ? 5646 : 5556},
+    {"\\XA\\MUSIC_2.XA;1", 3, VER_EU ? 5786 : 5683},
+    {"\\XA\\MUSIC_3.XA;1", 3, VER_EU ? 7151 : 7057},
+    {"\\XA\\MUSIC_2.XA;1", 0, VER_EU ? 5178 : 5084},
+    {"\\XA\\MUSIC_3.XA;1", 1, VER_EU ? 5979 : 5885},
+    {"\\XA\\MUSIC_3.XA;1", 0, VER_EU ? 5897 : 5803},
+    {"\\XA\\MUSIC_1.XA;1", 2, VER_EU ? 4705 : 4612},
+    {"\\XA\\MUSIC_1.XA;1", 3, VER_EU ? 4776 : 4674},
     {"\\SAMPLE.XA;1", 0, 0},
 };
 
