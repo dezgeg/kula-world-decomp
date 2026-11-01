@@ -86,8 +86,7 @@ static z_stream unusedZlibStream;
 
 void FileError(char* str1, char* str2) {
 #if !VER_EU
-    int dummy;
-    (void)&dummy;
+    int pad[2];
     VSync(3);
 #else
     VSyncCallback(NULL);
