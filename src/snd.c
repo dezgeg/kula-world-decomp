@@ -159,7 +159,7 @@ void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
     do {
     } while (0);
 
-    if (curPlayingSfx < 120) {
+    if (curPlayingSfx < (VER_JP ? 130 : 120)) {
         curPlayingSfx = SFX_REMAP_TABLE[sfx];
     }
     if (curPlayingSfx >= 0) {
@@ -260,7 +260,7 @@ void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan) {
     long* panVecPtr = &panVec.vx;
     long* panSqrVecPtr = &panSqrVec.vx;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < (VER_JP ? 23 : 24); i++) {
         if (spuVoiceState[i].tag == tag) {
             break;
         }
@@ -315,7 +315,7 @@ void SndFadeVoiceVolume(int tag) {
     int sfxIndex;
     short volumeL, volumeR;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < (VER_JP ? 23 : 24); i++) {
         if (spuVoiceState[i].tag == tag) {
             break;
         }
@@ -347,7 +347,7 @@ void SndFadeVoiceVolume(int tag) {
 void SndMuteVoiceByTag(int tag) {
     int i;
 
-    for (i = 0; i < 24; i++) {
+    for (i = 0; i < (VER_JP ? 23 : 24); i++) {
         if (spuVoiceState[i].tag == tag) {
             break;
         }
