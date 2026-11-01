@@ -585,7 +585,7 @@ void InitLasers2(void) {
 
     entI = LASER_INTENSITY_DATA_END - LASER_INTENSITY_DATA;
     for (i = 0, intensityData = LASER_INTENSITY_DATA; i < 4; i++) {
-        uint* ptr = (uint*)laserData0 + i * entI;
+        ptr = (uint*)laserData0 + i * entI;
         for (j = 0; j < entI; j++) {
             switch (i) {
                 case 0:

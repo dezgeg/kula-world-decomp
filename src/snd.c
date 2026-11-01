@@ -242,7 +242,7 @@ void SndProcessSpuVoices(void) {
             perSfxVoiceAttrs[sfxIndex].volume.left = 0;
             perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
             perSfxVoiceAttrs[sfxIndex].mask = 3;
-            SpuSetVoiceAttr(perSfxVoiceAttrs + sfxIndex);
+            SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
         }
     }
 }
