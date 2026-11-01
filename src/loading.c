@@ -157,18 +157,41 @@ uint ReadDataFile(int world, int filetype, void* buf) {
 uint UnusedReadKulaPicPak(void* unknown, char* buf) {
     CdlFILE cdlfile;
 
+#if VER_JP
+    printf("LOAD PIC!!!!!!!!!!!!\n");
+#else
     Noop2();
+#endif
     IF_WHILE (CdSearchFile(&cdlfile, PIC_PAK_FILENAME) == 0) {
+#if VER_JP
+        VSync(3);
+        printf("error 2\n");
+#else
         unusedReadErrorCode = 2;
+#endif
     }
     while (CdControl(CdlSeekL, &cdlfile, 0) == 0) {
+#if VER_JP
+        VSync(3);
+        printf("error 3\n");
+#else
         unusedReadErrorCode = 3;
+#endif
     }
     while (CdRead((cdlfile.size >> 11) + 1, buf, 0x80) == 0) {
+#if VER_JP
+        VSync(3);
+        printf("error 4\n");
+#else
         unusedReadErrorCode = 4;
+#endif
     }
     CdReadSync(0, 0);
+#if VER_JP
+    printf("Loaded Pic\n");
+#else
     Noop();
+#endif
     return cdlfile.size;
 }
 
