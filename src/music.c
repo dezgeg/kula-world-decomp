@@ -16,7 +16,7 @@ extern int whichDrawDispEnv;
 
 short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
-#if VER_US
+#if !VER_EU
 char S_could_not_start_playing[] = "could not start playing \n";
 char S_bonus_song[] = "bonus song";
 char S_resumed_song_after_bonus[] = "resumed song after bonus";
@@ -65,7 +65,7 @@ static inline void FileError(char* str1, char* str2) {
 #endif
 }
 
-#if VER_US
+#if !VER_EU
 #define IF_WHILE while
 #define FileError(a,b) VSync(3)
 #define VSYNC_3() VSync(3)
@@ -103,7 +103,7 @@ void PlayMusic(int world) {
         VSYNC_3();
     }
     VSYNC_3();
-#if !VER_US
+#if VER_EU
     CdReadSync(0, 0);
 #endif
     CdIntToPos(musicStartSector, &musicCdlLoc);
@@ -116,7 +116,7 @@ void PlayMusic(int world) {
     IF_WHILE (CdControl(CdlReadS, &musicCdlLoc, dummy) == 0) {
         FileError("could not start playing \n", MUSICS[world].filename);
     }
-#if VER_US
+#if !VER_EU
     savedMusicCdlLoc = musicCdlLoc;
     savedMusicStartSector = musicStartSector;
     savedMusicEndSector = musicEndSector;
@@ -129,7 +129,7 @@ void PlayMusic(int world) {
 }
 
 void PlayBonusMusic(void) {
-#if VER_US
+#if !VER_EU
     int pad[2];
     int bonusMusicSearchAttempt;
 #endif
@@ -181,15 +181,9 @@ void PlayBonusMusic(void) {
     while (CdControlB(CdlSetfilter, &musicCdlFilter, dummy) == 0) {
         VSYNC_3();
     }
-#if VER_US
-    while (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
-        VSYNC_3();
-    }
-#else
-    if (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
+    IF_WHILE (CdControlB(CdlReadS, &musicCdlLoc, dummy) == 0) {
         FileError("could not start playing \n", "bonus song");
     }
-#endif
     Noop();
     SpuSetReverb(1);
     playingBonusMusic = 1;
@@ -200,12 +194,12 @@ void MusicPause(void) {
     char dummy[8];
 
     Noop2();
-    savedMusicCdlLoc = musicCdlLoc;
     musicCounter = FPS;
     savedMusicStartSector = musicStartSector;
     savedMusicEndSector = musicEndSector;
     savedMusicCurSector = musicCurSector;
     savedMusicXaChan = musicCdlFilter.chan;
+    savedMusicCdlLoc = musicCdlLoc;
     while (CdControlB(CdlPause, 0, dummy) == 0) {
         VSYNC_3();
     }
@@ -218,7 +212,7 @@ void MusicPause(void) {
 }
 
 void SwitchFromBonusToNormalMusic(void) {
-#if VER_US
+#if !VER_EU
     int pad[2];
 #endif
     char dummy[8];
@@ -230,21 +224,20 @@ void SwitchFromBonusToNormalMusic(void) {
 #endif
     Noop2();
     SndSetMusicVolume();
-    musicCdlLoc = savedMusicCdlLoc;
-    // XXX: Why?
-    *(volatile int*)&musicCurSector = savedMusicCurSector;
-    musicCounter = FPS;
+    musicCurSector = savedMusicCurSector;
     musicStartSector = savedMusicStartSector;
     musicEndSector = savedMusicEndSector;
+    musicCdlLoc = savedMusicCdlLoc;
+    musicCounter = FPS;
     CdIntToPos(musicCurSector, &musicBonusLoc);
     musicCdlFilter.chan = savedMusicXaChan;
-#if !VER_US
+#if VER_EU
     CdReadSync(0, 0);
 #endif
     while (CdControlB(CdlSetmode, &musicCdMode, 0) == 0) {
         VSYNC_3();
     }
-#if !VER_US
+#if VER_EU
     CdReadSync(0, 0);
 #endif
     do {
