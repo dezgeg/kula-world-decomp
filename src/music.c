@@ -9,8 +9,8 @@ extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char
 extern void SndSetMusicVolume(void);
 
 extern char S_File_error[];
-extern Music BONUS_MUSICS[3];
-extern Music MUSICS[11];
+Music BONUS_MUSICS[];
+Music MUSICS[];
 extern int musicCdMode;
 extern int whichDrawDispEnv;
 
@@ -71,11 +71,11 @@ static inline void FileError(char* str1, char* str2) {
 #define VSYNC_3() VSync(3)
 #else
 #define IF_WHILE if
-#define VSYNC_3() /* nop */
+#define VSYNC_3() (void)0
 #endif
 
 void PlayMusic(int world) {
-#if VER_US
+#if !VER_EU
     int pad[2];
     int musicSearchAttempt;
 #endif
@@ -86,14 +86,21 @@ void PlayMusic(int world) {
     musicCounter = FPS;
     musicSearchAttempt = 0;
     while (CdSearchFile(&musicCdlfile, MUSICS[world].filename) == NULL) {
-        if (musicSearchAttempt >= 10)
+        if (musicSearchAttempt >= (VER_JP ? 20 : 10))
             break;
         CdInit();
         musicSearchAttempt++;
+        if (VER_JP) {
+            VSync(2);
+        }
     }
-#if !VER_US
+#if VER_EU
     if (musicSearchAttempt >= 10) {
         FileError("could not find music \n", MUSICS[world].filename);
+    }
+#elif VER_JP
+    if (musicSearchAttempt >= 20) {
+        printf("could not find music %s \n", MUSICS[world].filename);
     }
 #endif
     musicStartSector = CdPosToInt(&musicCdlfile.pos);
@@ -150,16 +157,22 @@ void PlayBonusMusic(void) {
     }
     bonusMusicSearchAttempt = 0;
     while (CdSearchFile(&musicCdlfile, BONUS_MUSICS[bonusMusicIndex].filename) == NULL) {
-        if (bonusMusicSearchAttempt >= 10) {
+        if (bonusMusicSearchAttempt >= (VER_JP ? 20 : 10)) {
             break;
         }
         CdInit();
         bonusMusicSearchAttempt++;
+        if (VER_JP) {
+            VSync(2);
+        }
     }
-
-#if !VER_US
+#if VER_EU
     if (bonusMusicSearchAttempt >= 10) {
         FileError("could not find music \n", BONUS_MUSICS[bonusMusicIndex].filename);
+    }
+#elif VER_JP
+    if (VER_JP && bonusMusicSearchAttempt >= 20) {
+        printf("could not find music %s \n", BONUS_MUSICS[bonusMusicIndex].filename);
     }
 #endif
 
@@ -170,7 +183,7 @@ void PlayBonusMusic(void) {
         VSYNC_3();
     }
     VSYNC_3();
-#if !VER_US
+#if VER_EU
     CdReadSync(0, 0);
 #endif
 
@@ -201,7 +214,7 @@ void MusicPause(void) {
     savedMusicXaChan = musicCdlFilter.chan;
     savedMusicCdlLoc = musicCdlLoc;
     while (CdControlB(CdlPause, 0, dummy) == 0) {
-        VSYNC_3();
+        VER_JP ? CdInit() : VSYNC_3();
     }
     CdReadSync(0, 0);
     Noop();
