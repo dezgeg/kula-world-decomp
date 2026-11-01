@@ -146,7 +146,6 @@ segments:
       - [0x3db54, c, music]
       - [0x3e25c, c, snd]
       - [0x3f148, c, init]
-      - [0x3f2cc, c, disp]
       - [0x3f6cc, c, pad]
       - [0x3fbb8, c, asm_texture_anim]
       - [0x3fd50, c, asm_noops]
