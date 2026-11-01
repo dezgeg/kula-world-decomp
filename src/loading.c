@@ -16,6 +16,7 @@ extern int gameMode;
 extern int isFinal;
 extern int levelEndReason;
 extern int whichDrawDispEnv;
+extern void* warningImageCompressedPtr;
 extern OT_TYPE otag[2][1][1026];
 
 int sizeOfSfxFile;
@@ -192,7 +193,20 @@ void UnusedInflateSomething(int idx, int* data) {
 #endif
 
 void LoadWarningTim(void) {
-#if !VER_EU
+#if VER_JP
+    // embedded in binary
+    RECT rect = {0, 0, 320, 240};
+    RECT rect2 = {320, 0, 320, 240};
+
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    zlibStream_a4b80.avail_in = 0x91d;
+    zlibStream_a4b80.next_in = warningImageCompressedPtr;
+    zlibStream_a4b80.avail_out = 0x60000;
+    zlibStream_a4b80.next_out = TGI_FILE_BUF;
+#else
+    // load from disc (also do SetupDisplay)
+#if VER_US
     RECT rect = {0, 0, 480, 240};
     char filename[24] = "\\HIRO\\SCEI.TIM;1";
 #else
@@ -220,12 +234,17 @@ void LoadWarningTim(void) {
     zlibStream_a4b80.avail_out = 0x60000;
     zlibStream_a4b80.next_out = TGI_FILE_BUF;
     zlibStream_a4b80.avail_in = cdlfile.size;
+#endif
 
     inflateInit_(&zlibStream_a4b80, "1.0.4", 0x38);
     inflate(&zlibStream_a4b80, 4);
     inflateEnd(&zlibStream_a4b80);
     LoadImage(&rect, (u_long*)((char*)TGI_FILE_BUF + 0x14));
     DrawSync(0);
+#if VER_JP
+    LoadImage(&rect2, (u_long*)((char*)TGI_FILE_BUF + 0x14));
+    DrawSync(0);
+#endif
 }
 
 void LoadingScreen(void) {
