@@ -235,10 +235,8 @@ void ProcessCubesIntoFaces(void) {
             for (x = 1; x < 33; x++) {
                 blockType = levelData[x * 34 * 34 + y * 34 + z];
                 style = GetFaceTypeOfBlockType(blockType);
-                if ((style >= 0 && style <= 1) || (style >= 2 && style <= 3) || style == 4 || (style >= 6 && style <= 7)) {
-                    isNonempty = 0;
-                    newCube = 0;
-                    dir = 0;
+                if (style == 0 || style == 1 || style == 2 || style == 3 || style == 4 || style == 6 || style == 7) {
+                    dir = newCube = isNonempty = 0;
                     csptr = (int)cubeStates;
                     xFine = x << 9;
                     yFine = y << 9;
