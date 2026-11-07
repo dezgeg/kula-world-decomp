@@ -77,7 +77,15 @@ short MENU_CURSOR_X_POS[][6] = {
     {0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0},
 };
-#if VER_US
+#if VER_JP
+short MENU_CURSOR_START_Y_PAUSE_MENU[13] = {
+    120, 90, 90, 90, 100, 100, 100, 100, 100, 100, 100, 14, 70,
+};
+
+short MENU_CURSOR_START_Y_MAIN_MENU[13] = {
+    85, 85, 85, 85, 101, 101, 83, 85, 85, 85, 127, 14, 70,
+};
+#elif VER_US
 short MENU_CURSOR_START_Y_PAUSE_MENU[24] = {
     120, 90, 74, 74, 90, 90, 90, 90, 90, 90,
     90, 14, 90, 90, 70, 90, 80, 75, 110, 60,
@@ -100,6 +108,21 @@ short MENU_CURSOR_START_Y_MAIN_MENU[20] = {
     143, 14, 100, 100, 80, 100, 90, 85, 100, 70,
 };
 #endif
+
+static inline void FatalError(char* msg) {
+    SetupDisplay(1, 128, 0, 0, 0, 0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    FntPrint(S_Fatal_error_in_jens_2d_eng);
+    FntPrint(msg);
+    FntFlush(-1);
+    whichDrawDispEnv = 1;
+    PutDrawAndDispEnvs();
+    while (1)
+        ;
+}
 
 void LoadMenuGfx(int menuId) {
     RECT rect;
@@ -139,18 +162,7 @@ void LoadMenuGfx(int menuId) {
         y = MENU_CURSOR_START_Y_PAUSE_MENU[menuId];
     }
     if (height + 94 > 0xff) {
-        SetupDisplay(1, 128, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_Fatal_error_in_jens_2d_eng);
-        FntPrint("menugfx too high");
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FatalError("menugfx too high");
     }
     rect.x = 704;
     rect.y = 94;
@@ -167,18 +179,7 @@ void LoadMenuGfx(int menuId) {
     DrawSync(0);
     spriteId++;
     if (spriteId - MENU_SPRITE_OFFSET > MENU_DEFLATED_SPRITES1_PTR[0]) {
-        SetupDisplay(1, 0x80, 0, 0, 0, 0);
-        FntFlush(-1);
-        DrawSync(0);
-        whichDrawDispEnv = 0;
-        PutDrawAndDispEnvs();
-        FntPrint(S_Fatal_error_in_jens_2d_eng);
-        FntPrint("menugfx nr too big");
-        FntFlush(-1);
-        whichDrawDispEnv = 1;
-        PutDrawAndDispEnvs();
-        while (1)
-            ;
+        FatalError("menugfx nr too big");
     }
     len = MENU_DEFLATED_SPRITES1_PTR[2 + (spriteId - MENU_SPRITE_OFFSET) * 2];
     buf = (char*)MENU_DEFLATED_SPRITES1_PTR + MENU_DEFLATED_SPRITES1_PTR[1 + (spriteId - MENU_SPRITE_OFFSET) * 2];
