@@ -159,7 +159,7 @@ void DrawLevelScoreSummary(void) {
     if (gameMode == 0) {
         levelScoreSummaryScoreTicker -= 100;
         if (levelScoreSummaryScoreTicker > 0) {
-            newScore = newScore + 100;
+            newScore += 100;
         } else {
             levelScoreSummaryScoreTicker = 0;
             newScore = totalScore;

@@ -1021,12 +1021,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         player->flatteningTimer = 4096;
     }
 
-    animMatrix.m[2][1] = 0;
-    animMatrix.m[2][0] = 0;
-    animMatrix.m[1][2] = 0;
-    animMatrix.m[1][0] = 0;
-    animMatrix.m[0][2] = 0;
-    animMatrix.m[0][1] = 0;
+    animMatrix.m[0][1] = animMatrix.m[0][2] = animMatrix.m[1][0] = animMatrix.m[1][2] = animMatrix.m[2][0] = animMatrix.m[2][1] = 0;
     animMatrix.m[1][1] = (short)flattenFactor + 4096;
     animMatrix.m[0][0] = (short)flattenFactor + 4096;
     animMatrix.m[2][2] = 4096 - (short)flattenFactor;
@@ -1199,7 +1194,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
         subpixelY = (subpixelY * entityData[player->specialBlockIndexPlayerIsStandingOn + 2]) / 512;
     }
 
-#if VER_US
+#if !VER_EU
     if (player->debugCameraMode) {
         unk = drawMatrix.t[2];
     } else {
@@ -1207,7 +1202,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     }
 #endif
 
-    CreatePlayerDispList(&drawMatrix, VER_US ? unk : 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
+    CreatePlayerDispList(&drawMatrix, !VER_EU ? unk : 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
                          blockPos.vx, blockPos.vy, blockPos.vz, rotIdx1,
                          otherBlockPos.vx, otherBlockPos.vy, otherBlockPos.vz, rotIdx2,
                          &dirMatrix, (subpixelY * 128) / 412, 0,
@@ -1283,7 +1278,7 @@ void SetBallShapeAndRotationWhenRollingOrIdle(Player* player) {
             landingSquishMagnitude = 0;
         }
     } else {
-        squishPhase = (squishPhase + (100 * FPS - levelTimeLeft) / 40 + 40) % 4096;
+        squishPhase = (squishPhase + ((VER_JP ? 120 : 100) * FPS - levelTimeLeft) / (VER_JP ? 50 : 40) + 40) % 4096;
         squishMagnitude = (rsin(squishPhase) * 200) / 4096;
     }
     player->ballMorphShape = squishMagnitude + landingSquishMagnitude;

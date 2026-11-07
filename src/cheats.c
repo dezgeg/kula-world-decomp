@@ -98,6 +98,7 @@ void HandleCheats(void) {
             }
         }
     }
+
     if (cheatState[0].activated == 1) {
         cheatState[0].activated = 0;
         if (cheatState[0].toggled == 1) {
