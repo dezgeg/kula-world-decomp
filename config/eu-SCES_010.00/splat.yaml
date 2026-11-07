@@ -90,7 +90,6 @@ segments:
       - [0x01978, o, LIBMCRD.A/LIBMCRD, .rdata]
       - [0x01af0, o, LIBMCRD.A/USERFUNC, .rdata]
       - [0x01b0c, c, various_init]
-      - [0x0355c, c, font]
       - [0x04990, c, widget_init]
       - [0x05cdc, c, level_end_screen]
       - [0x06ad8, c, menu_widgets]
