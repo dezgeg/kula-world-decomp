@@ -14,12 +14,6 @@ extern void DrawScore(void);
 extern void DrawTimeAttackWidgets(void);
 extern void UpdateStaticHourglassClut(void);
 
-extern int BONUS_WIDGET_COLOR_DATA_LEN;
-extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
-extern TSprite fruitBonusTextSprites[2][5][2];
-extern TSprite fruitSprites[2][5][2];
-extern int fruitsCollectedBitmask;
-extern int specialLevelType;
 extern DigitSprites copycatPlayer1ScoreDigitSprites;
 extern DigitSprites copycatPlayer2ScoreDigitSprites;
 extern DigitSprites levelScoreSprite;
@@ -32,25 +26,37 @@ extern DigitSprites totalScoreSprite;
 extern DR_AREA hudDrawAreas[2];
 extern DR_OFFSET hudDrawOffsets[2];
 extern DR_TPAGE hudDrTpages[2];
+extern int BONUS_WIDGET_COLOR_DATA_LEN;
+extern int cameraIndex;
 extern int copycatPlayerScores[2];
+extern int displayHeight;
+extern int displayWidth;
+extern int fruitsCollectedBitmask;
+extern int gteXScale;
+extern int gteYScale;
 extern int levelHasBeenCompletedByPlayer[2];
 extern int levelPlayTime[2];
 extern int levelScore;
+extern int numCameras;
 extern int numKeysRemaining;
 extern int numTimeTrialPlayers;
+extern int specialLevelType;
 extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
 extern int whichDrawDispEnv;
+extern OT_TYPE otag[2][1][1026];
 extern POLY_FT4 hourglassSprites[2][3];
 extern PrimList primLists[2];
 extern short hourglassClut[60];
 extern Texture textures[150];
+extern TSprite fruitBonusTextSprites[2][5][2];
+extern TSprite fruitSprites[2][5][2];
 extern TSprite keySprites[2][4][2];
+extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
+extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
 
-STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
-STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr3;
 int drawBonusWidget;
 int drawCopycatWidgets;
 int drawFruitWidgets;
@@ -59,17 +65,31 @@ int drawKeyWidget;
 int drawScoreWidget;
 int drawTimeAttackWidgets;
 int drawTimerPausedWidget;
+int halfFps;
+int hourglassIsRotating;
+int levelTimeLeft;
+int numKeysInLevel;
+int screenFadeEnabled;
+TPolyF4 screenFadePolys[2][1];
+uint firstGuiTexture;
+
+STATIC_FOR_GP_ACCESS GgiFile* ggi;
+STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
+STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr3;
 STATIC_FOR_GP_ACCESS int fruitBonusTextIndex;
 STATIC_FOR_GP_ACCESS int fruitBonusTextTimer;
 STATIC_FOR_GP_ACCESS int fruitWidgetDisplayMode;
-int hourglassIsRotating;
 STATIC_FOR_GP_ACCESS int hourglassRotationTimer;
-int levelTimeLeft;
-int numKeysInLevel;
-static int smoothIncrementingScore;
-STATIC_FOR_GP_ACCESS GgiFile* ggi;
+STATIC_FOR_GP_ACCESS int lethargyMode;
+STATIC_FOR_GP_ACCESS int screenFadeColor;
+STATIC_FOR_GP_ACCESS int screenFadeSpeed;
+STATIC_FOR_GP_ACCESS POLY_FT4 lethargyEffectPoly[2];
 STATIC_FOR_GP_ACCESS short* ggiPart1HourglassAnim;
-uint firstGuiTexture;
+static int lethargyAngleCounter;
+static int lethargyColorCounter;
+static int lethargySinMagnitude;
+static int lethargyUnusedCounter;
+static int smoothIncrementingScore;
 
 RECT hourglassClutRect = {0, 0, 60, 1};
 
@@ -551,6 +571,133 @@ void DrawFruitWidgets(void) {
             if (p < BONUS_WIDGET_COLOR_DATA) {
                 p += len;
             }
+        }
+    }
+}
+
+void EnableLethargy(int enable) {
+    if (numCameras < 2) {
+        if (enable == 1) {
+            lethargyMode = enable;
+        } else if (lethargyMode) {
+            lethargyMode = 3;
+        }
+    }
+}
+
+void ResetLethargyEffect() {
+    lethargyMode = 0;
+    gteXScale = 0x1000;
+    gteYScale = 16 * SCREEN_HEIGHT;
+}
+
+void DrawLethargyEffects(void) {
+    int delta;
+
+    switch (lethargyMode) {
+        case 1:
+            lethargyMode = 2;
+            setXY4(&lethargyEffectPoly[whichDrawDispEnv],
+                    0, 0,
+                    displayWidth + 1, 0,
+                    0, displayHeight + 1,
+                    displayWidth + 1, displayHeight + 1);
+            setRGB0(&lethargyEffectPoly[whichDrawDispEnv], 0x80, 0x80, 0x80);
+            AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectPoly[whichDrawDispEnv]);
+            lethargyUnusedCounter = 0x400;
+            lethargyAngleCounter = 0x400;
+            lethargySinMagnitude = 0x30c;
+            break;
+        case 2:
+            lethargyUnusedCounter = (lethargyUnusedCounter + VELOCITY(0x80)) % 0x1000;
+            rsin(lethargyUnusedCounter);
+            setRGB0(&lethargyEffectSprite[whichDrawDispEnv][0].sprt, 96, 112, 96);
+            AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][0]);
+            if (displayWidth > 256) {
+                setRGB0(&lethargyEffectSprite[whichDrawDispEnv][1].sprt, 96, 112, 96);
+                AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][1]);
+            }
+            break;
+        case 3:
+            setXY4(&lethargyEffectPoly[0],
+                    0, 0,
+                    displayWidth + 1, 0,
+                    0, displayHeight + 1,
+                    displayWidth + 1, displayHeight + 1);
+            setXY4(&lethargyEffectPoly[1],
+                    0, 0,
+                    displayWidth + 1, 0,
+                    0, displayHeight + 1,
+                    displayWidth + 1, displayHeight + 1);
+            lethargyMode = 4;
+            lethargyColorCounter = 0x50;
+
+            AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][0]);
+            if (displayWidth > 256) {
+                AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectSprite[whichDrawDispEnv][1]);
+            }
+            break;
+        case 4:
+            lethargyColorCounter -= 8;
+            if (lethargyColorCounter >= 0) {
+                setRGB0(&lethargyEffectPoly[whichDrawDispEnv], lethargyColorCounter, lethargyColorCounter, lethargyColorCounter);
+                AddPrim(&primLists[whichDrawDispEnv].main, &lethargyEffectPoly[whichDrawDispEnv]);
+            } else {
+                lethargyMode = 0;
+            }
+            break;
+    }
+
+    if (lethargyMode != 0) {
+        lethargySinMagnitude -= VELOCITY(6);
+        if (lethargySinMagnitude > 0) {
+            lethargyAngleCounter = (lethargyAngleCounter + VELOCITY(0x100)) % 0x1000;
+            delta = rsin(lethargyAngleCounter) * lethargySinMagnitude >> 12;
+            gteXScale = 0x1000 + delta;
+            gteYScale = 16 * SCREEN_HEIGHT - delta;
+        }
+    }
+}
+
+void SetRenderScreenFade(int speed, int enableHalfFps) {
+    screenFadeEnabled = 1;
+    halfFps = enableHalfFps;
+    screenFadeSpeed = speed;
+
+    switch (speed) {
+        case 0:
+            screenFadeColor = VID_NTSC ? 268 : 272;
+            break;
+        case 1:
+            screenFadeColor = VID_NTSC ? 261 : 264;
+            break;
+        case 2:
+            screenFadeColor = VID_NTSC ? 254 : 256;
+            break;
+    }
+}
+
+void DrawScreenFade(void) {
+    if (screenFadeEnabled == 1) {
+        switch (screenFadeSpeed) {
+            case 0:
+                screenFadeColor -= VELOCITY(24);
+                break;
+            case 1:
+                screenFadeColor -= VELOCITY(16);
+                break;
+            case 2:
+                screenFadeColor -= VELOCITY(8);
+                break;
+        }
+        if (screenFadeColor >= 1) {
+            setRGB0(&screenFadePolys[whichDrawDispEnv][cameraIndex].poly, screenFadeColor,
+                    screenFadeColor, screenFadeColor);
+            addPrim(&otag[whichDrawDispEnv][cameraIndex],
+                    &screenFadePolys[whichDrawDispEnv][cameraIndex]);
+        } else {
+            screenFadeEnabled = 0;
+            halfFps = 0;
         }
     }
 }
