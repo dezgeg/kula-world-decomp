@@ -97,7 +97,9 @@ void VibrateDirectlyToBuf(int value) {
 
 void Vibrate100(int constant, int magnitude, int angleIncrement, int max) {
     if (vibrationEnabled) {
+#if !VER_JP
         vibrationBuf[latestControllerSlotPolled][0] = 0;
+#endif
         vibrationMode = 100;
         vibrationSinConst = constant;
         vibrationSinMagnitude = magnitude;

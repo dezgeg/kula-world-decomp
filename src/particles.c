@@ -40,13 +40,13 @@ extern Texture textures[150];
 extern OT_TYPE otag[2][1][1026];
 
 static byte PARTICLE_COLOR_DATA[7][3];
-extern short PARTICLE_TYPE_0[];
-extern short PARTICLE_TYPE_1[];
-extern short PARTICLE_TYPE_2_6_7[];
-extern short PARTICLE_TYPE_3[];
-extern short PARTICLE_TYPE_4_5_10[];
-extern short PARTICLE_TYPE_8[];
-extern short PARTICLE_TYPE_9[];
+extern short PARTICLE_TYPE_0[1]; // fake size
+extern short PARTICLE_TYPE_1[1]; // fake size
+extern short PARTICLE_TYPE_2_6_7[1]; // fake size
+extern short PARTICLE_TYPE_3[1]; // fake size
+extern short PARTICLE_TYPE_4_5_10[1]; // fake size
+extern short PARTICLE_TYPE_8[1]; // fake size
+extern short PARTICLE_TYPE_9[1]; // fake size
 
 Particle particles[2][16];
 POLY_FT4 particlePolyTemplates[7];
