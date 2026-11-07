@@ -207,7 +207,7 @@ int SaveMemCard(uint slot) {
         memCardData.header.magic[1] = 'C';
         memCardData.header.iconFlags = 0x11;
         memCardData.header.blockNumber = 1;
-        sprintf(buf, VER_US ? "ROLL AWAY" : "KULA WORLD");
+        sprintf(buf, VER_JP ? "KULA QUEST" : VER_US ? "ROLL AWAY" : "KULA WORLD");
         for (i = 0; i < 32; i++) {
             memCardData.header.title[i] = Ascii2Sjis(buf[i]);
         }
@@ -255,7 +255,7 @@ int SaveMemCard(uint slot) {
         }
         ret = MemCardCreateFile(0, SAVE_FILENAME, 1);
         if (ret == 0 || ret == McErrAlreadyExist) {
-            if (MemCardWriteFile(0, SAVE_FILENAME, (long*)&memCardData, 0, VER_US ? 0x1800 : 0x1000) == McErrCardNotExist) {
+            if (MemCardWriteFile(0, SAVE_FILENAME, (long*)&memCardData, 0, !VER_EU ? 0x1800 : 0x1000) == McErrCardNotExist) {
                 MemCardSync(0, &mcCmd, &tempMcResult);
                 if (tempMcResult != 0) {
                     memCardHasError = 1;
@@ -284,7 +284,7 @@ void LoadSaveFromMemoryCard(void) {
     MemCardSync(0, &mcCmd, &tempMcResult);
     if (tempMcResult == 0 || tempMcResult == McErrNewCard) {
         tempMcResult = McErrCardNotExist;
-        if (MemCardReadFile(0, SAVE_FILENAME, (unsigned long*)&memCardData, 0, VER_US ? 0x1800 : 0x1000)) {
+        if (MemCardReadFile(0, SAVE_FILENAME, (unsigned long*)&memCardData, 0, !VER_EU ? 0x1800 : 0x1000)) {
             MemCardSync(0, &mcCmd, &tempMcResult);
         }
         if (tempMcResult == 0) {
