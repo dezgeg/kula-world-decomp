@@ -230,7 +230,6 @@ void InitHourglassSprites(void) {
 }
 
 void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, int b) {
-    int textureIdx;
     int tmp;
     int w;
     int i;
@@ -243,13 +242,12 @@ void InitDigitSprites(DigitSprites* ds, int font, int x, int y, int r, int g, in
     }
 
     for (i = 0; i < 10; i++) {
-        textureIdx = font + 3;
-        TSpritePrim(&ds->sprites[0][i], 0, 0, textures[firstGuiTexture + textureIdx].tpage);
+        TSpritePrim(&ds->sprites[0][i], 0, 0, textures[firstGuiTexture + 3 + font].tpage);
         setRGB0(&ds->sprites[0][i].sprt, r, g, b);
         setXY0(&ds->sprites[0][i].sprt, x + i * w, y);
-        SetSemiTrans(&ds->sprites[0][i].sprt, textures[firstGuiTexture + textureIdx].semitrans);
+        SetSemiTrans(&ds->sprites[0][i].sprt, textures[firstGuiTexture + 3 + font].semitrans);
         SetShadeTex(&ds->sprites[0][i].sprt, 0);
-        ds->sprites[0][i].sprt.clut = textures[firstGuiTexture + textureIdx].clut;
+        ds->sprites[0][i].sprt.clut = textures[firstGuiTexture + 3 + font].clut;
         ds->sprites[0][i].sprt.w = textures[firstGuiTexture + 3 + font].w / 13;
         ds->sprites[0][i].sprt.h = textures[firstGuiTexture + 3 + font].h;
         ds->sprites[1][i] = ds->sprites[0][i];
