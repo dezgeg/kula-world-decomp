@@ -520,11 +520,11 @@ void InitAllDigitSprites(void) {
             break;
         case 1:
             if (curController == 0) {
-                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 28, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
-                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 246, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, VER_JP ? 41 : 28, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, VER_JP ? 239 : 246, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
             } else {
-                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, 28, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
-                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, 246, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
+                InitDigitSprites(&copycatPlayer1ScoreDigitSprites, 1, VER_JP ? 41 : 28, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
+                InitDigitSprites(&copycatPlayer2ScoreDigitSprites, 1, VER_JP ? 239 : 246, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
             }
             break;
 
@@ -535,14 +535,14 @@ void InitAllDigitSprites(void) {
             } else {
                 if (twoPlayerWhichPlayer == 0) {
                     InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, -32, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
-                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 174, SCREEN_HEIGHT - 20, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, VER_JP ? 166 : 174, SCREEN_HEIGHT - 20, 0x50, 0x50, 0x50);
                     InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, -32, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
-                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 174, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, VER_JP ? 166 : 174, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
                 } else {
                     InitDigitSprites(&timeAttackPlayer1TotalPlaytimeDigitSprites, 2, -32, SCREEN_HEIGHT - 20, 0x50, 0x50, 0x50);
-                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, 174, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2TotalPlaytimeDigitSprites, 2, VER_JP ? 166 : 174, SCREEN_HEIGHT - 20, 0x80, 0x80, 0x80);
                     InitDigitSprites(&timeAttackPlayer1CurLevelTimeDigitSprites, 1, -32, SCREEN_HEIGHT - 38, 0x50, 0x50, 0x50);
-                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, 174, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
+                    InitDigitSprites(&timeAttackPlayer2CurLevelTimeDigitSprites, 1, VER_JP ? 166 : 174, SCREEN_HEIGHT - 38, 0x80, 0x80, 0x80);
                 }
                 isTwoPlayerTimeAttack = 1;
             }
