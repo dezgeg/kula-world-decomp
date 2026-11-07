@@ -17,6 +17,7 @@ typedef struct {
     uint c;
 } Col;
 
+extern uint Rand(int param_1);
 extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern void DrawBonusWidget(void);
 extern void DrawHourglassAndTimer(void);
@@ -38,11 +39,14 @@ extern DigitSprites timeAttackPlayer2CurLevelTimeDigitSprites;
 extern DigitSprites timeAttackPlayer2TotalPlaytimeDigitSprites;
 extern DigitSprites totalScoreSprite;
 extern DR_AREA hudDrawAreas[2];
+extern DrawDisp drawdisp[2];
 extern DR_OFFSET hudDrawOffsets[2];
 extern DR_TPAGE hudDrTpages[2];
 extern int BONUS_WIDGET_COLOR_DATA_LEN;
 extern int cameraIndex;
 extern int copycatPlayerScores[2];
+extern int dispenvScreenX;
+extern int dispenvScreenY;
 extern int displayHeight;
 extern int displayWidth;
 extern int fruitsCollectedBitmask;
@@ -122,6 +126,11 @@ static int lethargyAngleCounter;
 static int lethargyColorCounter;
 static int lethargySinMagnitude;
 static int lethargyUnusedCounter;
+static int screenShakeDirectionMask;
+static int screenShakeDivisor;
+static int screenShakeEnabled;
+static int screenShakeMagnitude;
+static int screenShakeTimer;
 static int smoothIncrementingScore;
 
 RECT hourglassClutRect = {0, 0, 60, 1};
@@ -150,6 +159,11 @@ SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5] = {
 };
 
 int drawCopyright = 1;
+
+static inline void SetDispScreen(ushort x, ushort y) {
+    drawdisp[0].disp.screen.x = drawdisp[1].disp.screen.x = x;
+    drawdisp[0].disp.screen.y = drawdisp[1].disp.screen.y = y;
+}
 
 void DrawHud(void) {
     addPrim(&primLists[whichDrawDispEnv].gui3, &hudDrTpages[whichDrawDispEnv]);
@@ -1195,4 +1209,46 @@ void DrawBonusWidget(void) {
     }
 
     addPrim(&primLists[whichDrawDispEnv].gui1, &bonusWidgetSpritesPiechart[whichDrawDispEnv][8].tpage);
+}
+
+void DisableScreenShake(void) {
+    screenShakeEnabled = 0;
+}
+
+void EnableScreenShake(int param_1, int param_2, int param_3) {
+    screenShakeMagnitude = param_1;
+    screenShakeTimer = param_2;
+    screenShakeDivisor = param_2;
+    screenShakeDirectionMask = param_3;
+    screenShakeEnabled = 1;
+}
+
+void ProcessScreenShake(void) {
+    int rng;
+    int v;
+
+    if (screenShakeEnabled == 1) {
+        screenShakeTimer--;
+        if (screenShakeTimer < 0) {
+            screenShakeEnabled = 0;
+            SetDispScreen(dispenvScreenX, dispenvScreenY);
+        } else {
+            if (screenShakeDirectionMask & 1) {
+                rng = Rand(screenShakeMagnitude << 1);
+                v = dispenvScreenX + ((rng - screenShakeMagnitude) * screenShakeTimer) / screenShakeDivisor;
+                if (v < 0) {
+                    v = 0;
+                }
+                drawdisp[whichDrawDispEnv].disp.screen.x = v;
+            }
+            if (screenShakeDirectionMask & 2) {
+                rng = Rand(screenShakeMagnitude << 1);
+                v = dispenvScreenY + ((rng - screenShakeMagnitude) * screenShakeTimer) / screenShakeDivisor;
+                if (v < 0) {
+                    v = 0;
+                }
+                drawdisp[whichDrawDispEnv].disp.screen.y = v;
+            }
+        }
+    }
 }
