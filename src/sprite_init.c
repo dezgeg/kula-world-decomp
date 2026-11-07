@@ -58,7 +58,7 @@ TSprite lethargyEffectSprite[2][2];
 TSprite timerPausedSprite[2];
 TSprite titleSprite[2];
 POLY_FT4 hourglassSprites[2][3];
-uint BONUS_WIDGET_COLOR_DATA[96];
+uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
 uint SIZE_OF_UNK_ENTRY;
 int drawBonusWidget;
 int firstBonusWidgetTexture;
@@ -223,7 +223,7 @@ void InitHourglassSprites(void) {
     }
     hourglassIsRotating = 0;
     hourglassRotationTimer = 0;
-    levelTimeLeft = 100 * FPS - 1;
+    levelTimeLeft = (VER_JP ? 120 : 100) * FPS - 1;
     hourglassClutRect.x = (textures[firstGuiTexture + 1].clut << 4) & 0x3ff;
     hourglassClutRect.y = textures[firstGuiTexture + 1].clut >> 6;
     InitDigitSprites(&levelTimeLeftDigitSprites, 0, 152, 50 + 2 * VID_NTSC, 0x80, 0x80, 0x80);
@@ -387,7 +387,7 @@ void InitTitleSprite(void) {
     int i;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&titleSprite[i], 0, 0, textures[firstGuiTexture + 16].tpage);
-        setXY0(&titleSprite[i].sprt, 38, VER_US ? 8 : 25);
+        setXY0(&titleSprite[i].sprt, 38, VER_JP ? 26 : VER_US ? 8 : 25);
         setRGB0(&titleSprite[i].sprt, 128, 128, 128);
         SetSemiTrans(&titleSprite[i].sprt, textures[firstGuiTexture + 16].semitrans);
         SetShadeTex(&titleSprite[i].sprt, 0);
@@ -403,7 +403,7 @@ void InitCopyrightSprite(void) {
     int i;
     for (i = 0; i < 2; i++) {
         TSpritePrim(&copyrightSprite[i], 0, 0, textures[firstGuiTexture + 17].tpage);
-        setXY0(&copyrightSprite[i].sprt, 46, VER_US ? 197 : 218);
+        setXY0(&copyrightSprite[i].sprt, VER_JP ? 56 : 46, VER_JP ? 196 : VER_US ? 197 : 218);
         setRGB0(&copyrightSprite[i].sprt, 128, 128, 128);
         SetSemiTrans(&copyrightSprite[i].sprt, textures[firstGuiTexture + 17].semitrans);
         SetShadeTex(&copyrightSprite[i].sprt, 0);
