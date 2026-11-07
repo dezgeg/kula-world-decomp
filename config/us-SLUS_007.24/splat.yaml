@@ -91,7 +91,6 @@ segments:
       - [0x01c18, o, LIBCARD.A/FORMAT, .rdata]
       - [0x01c38, o, LIBMCRD.A/USERFUNC, .rdata]
       - [0x01c58, c, various_init]
-      - [0x01cf4, c, particles]
       - [0x03370, c, copycat_ui]
       - [0x03740, c, font]
       - [0x04b7c, c, widget_init]
