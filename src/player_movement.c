@@ -917,8 +917,8 @@ static SVECTOR CalcPlayerMatrixesAndDrawPlayer_camTargetPos;
 #define camTargetPos CalcPlayerMatrixesAndDrawPlayer_camTargetPos
 static SVECTOR CalcPlayerMatrixesAndDrawPlayer_blockPos;
 #define blockPos CalcPlayerMatrixesAndDrawPlayer_blockPos
-static short CalcPlayerMatrixesAndDrawPlayer_unk;
-#define unk CalcPlayerMatrixesAndDrawPlayer_unk
+static short CalcPlayerMatrixesAndDrawPlayer_ballScreenSpaceZ;
+#define ballScreenSpaceZ CalcPlayerMatrixesAndDrawPlayer_ballScreenSpaceZ
 
 void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
     int turningWhere;
@@ -1196,13 +1196,13 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
 
 #if !VER_EU
     if (player->debugCameraMode) {
-        unk = drawMatrix.t[2];
+        ballScreenSpaceZ = drawMatrix.t[2];
     } else {
-        unk = 256;
+        ballScreenSpaceZ = 256;
     }
 #endif
 
-    CreatePlayerDispList(&drawMatrix, !VER_EU ? unk : 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
+    CreatePlayerDispList(&drawMatrix, !VER_EU ? ballScreenSpaceZ : 256, ballTextureIndex, 0, ballColorR, ballColorG, ballColorB, 0,
                          blockPos.vx, blockPos.vy, blockPos.vz, rotIdx1,
                          otherBlockPos.vx, otherBlockPos.vy, otherBlockPos.vz, rotIdx2,
                          &dirMatrix, (subpixelY * 128) / 412, 0,
@@ -1234,7 +1234,7 @@ void CalcPlayerMatrixesAndDrawPlayer(Player* player) {
 #undef scaledShadowVec
 #undef camTargetPos
 #undef blockPos
-#undef unk
+#undef ballScreenSpaceZ
 
 void ClearJumpSquish(Player* player) {
     jumpSquishMagnitudeIncrement = 0;
