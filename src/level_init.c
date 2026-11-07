@@ -52,7 +52,7 @@ extern void ScanLevelDataForRetractableSpikes(void);
 int CoordHash(int x, int y, int z, int dir, int div, int mod);
 int GetRandomTextureRotation(void);
 void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, int initAnimFrame1, int initAnimFrame2);
-void FUN_000298e0(AnimatedTextureChain* textureChain);
+void ResolveAnimatedTextureChain(AnimatedTextureChain* textureChain);
 void InitLasers2(void);
 void ProcessCubesIntoFaces(void);
 void ScanLevelDataForMovingBlocks1(void);
@@ -191,11 +191,11 @@ void ProcessLevelData(void) {
     ScanLevelDataForFlashingBlocks();
     ProcessMovingPlatforms2();
 
-    FUN_000298e0(fbtc);
-    FUN_000298e0(ibtc);
+    ResolveAnimatedTextureChain(fbtc);
+    ResolveAnimatedTextureChain(ibtc);
     if (specialLevelType == 1) {
-        FUN_000298e0(&crumblingSpecialBlockTextureChain);
-        FUN_000298e0(&bonusBlockTextureChain);
+        ResolveAnimatedTextureChain(&crumblingSpecialBlockTextureChain);
+        ResolveAnimatedTextureChain(&bonusBlockTextureChain);
     }
 
     ScanLevelDataForRetractableSpikes();
@@ -1105,7 +1105,7 @@ void AddQuadToAnimatedTextureChain(AnimatedTextureChain* chain, Quad** quadPtr, 
     chain->entries = (TextureChainEntry*)tce;
 }
 
-void FUN_000298e0(AnimatedTextureChain* tc) {
+void ResolveAnimatedTextureChain(AnimatedTextureChain* tc) {
     u32* ptr = tc + 1;
     u32* end = tc->entries;
     while (ptr < end) {

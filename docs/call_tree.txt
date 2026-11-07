@@ -154,7 +154,7 @@ main() {
       }
       ProcessMovingPlatforms2() {
       }
-      FUN_000298e0() {
+      ResolveAnimatedTextureChain() {
       }
       ScanLevelDataForRetractableSpikes() {
       }
