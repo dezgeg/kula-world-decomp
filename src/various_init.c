@@ -6,7 +6,7 @@ extern void InitParticles(void);
 extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
 
-int copycatLabelAnimTimer;
+int jpDemoHintAnimTimer;
 
 void VariousInit(void) {
     InitParticles();
@@ -15,7 +15,7 @@ void VariousInit(void) {
     ResetTextVars();
     InitLevelEndScreen();
 #if VER_JP
-    copycatLabelAnimTimer = 0;
+    jpDemoHintAnimTimer = 0;
 #endif
 }
 
