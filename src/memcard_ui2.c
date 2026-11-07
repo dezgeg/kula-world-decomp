@@ -46,6 +46,7 @@ static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
 }
 
+#if !VER_JP
 int AskSaveOverwrite(void) {
     int i;
 
@@ -86,6 +87,7 @@ int AskSaveOverwrite(void) {
         }
     }
 }
+#endif
 
 void ShowMemCardFullScreenText(char* str) {
     int i;

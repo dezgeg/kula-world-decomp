@@ -623,6 +623,7 @@ int MemCardUi(void) {
     return 0;
 }
 
+#if !VER_JP
 int MemCardUiPart(void) {
     short filecount;
     int cursorX;
@@ -907,3 +908,4 @@ int MemCardUiPart(void) {
     prevControllerButtons = -1;
     return 0;
 }
+#endif

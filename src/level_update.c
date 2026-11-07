@@ -106,7 +106,7 @@ void ScanLevelDataForMovingBlocks2(void) {
                 break;
         }
 
-        entityData[i + 19] = 0;
+        entityData[i + 19] = VER_JP ? 2 : 0;
         entityData[i + 18] = VELOCITY(entityData[i + 18]);
     }
     MoveMovingPlatforms(ZERO_SVECTOR_a2de4);

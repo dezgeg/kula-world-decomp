@@ -35,6 +35,21 @@ TSprite saveSlot3Sprite1[2];
 TSprite saveSlot3Sprite2[2];
 z_stream zlibStream_a4dd4;
 
+static inline void FatalError(char* msg) {
+    SetupDisplay(1, 0x80, 0, 0, 0, 0);
+    FntFlush(-1);
+    DrawSync(0);
+    whichDrawDispEnv = 0;
+    PutDrawAndDispEnvs();
+    FntPrint(S_Fatal_error_in_jens_2d_eng);
+    FntPrint(msg);
+    FntFlush(-1);
+    whichDrawDispEnv = 1;
+    PutDrawAndDispEnvs();
+    for (;;)
+        ;
+}
+
 void InitMemcardUi(void) {
     RECT rect;
     short h;
@@ -61,18 +76,7 @@ void InitMemcardUi(void) {
         w = *(short*)((char*)TIM_DECOMP_BUF + 0x3C);
         h = *(short*)((char*)TIM_DECOMP_BUF + 0x3E);
         if (h + 94 > 0xff) {
-            SetupDisplay(1, 0x80, 0, 0, 0, 0);
-            FntFlush(-1);
-            DrawSync(0);
-            whichDrawDispEnv = 0;
-            PutDrawAndDispEnvs();
-            FntPrint(S_Fatal_error_in_jens_2d_eng);
-            FntPrint("sign too high");
-            FntFlush(-1);
-            whichDrawDispEnv = 1;
-            PutDrawAndDispEnvs();
-            for (;;)
-                ;
+            FatalError("sign too high");
         }
         rect.x = 704;
         rect.y = 94;
@@ -89,18 +93,7 @@ void InitMemcardUi(void) {
         DrawSync(0);
         tex++;
         if (tex > MENU_DEFLATED_SPRITES2_PTR[0]) {
-            SetupDisplay(1, 0x80, 0, 0, 0, 0);
-            FntFlush(-1);
-            DrawSync(0);
-            whichDrawDispEnv = 0;
-            PutDrawAndDispEnvs();
-            FntPrint(S_Fatal_error_in_jens_2d_eng);
-            FntPrint("sign nr too big");
-            FntFlush(-1);
-            whichDrawDispEnv = 1;
-            PutDrawAndDispEnvs();
-            for (;;)
-                ;
+            FatalError("sign nr too big");
         }
         len = MENU_DEFLATED_SPRITES2_PTR[2 + tex * 2];
         offset2 = MENU_DEFLATED_SPRITES2_PTR[1 + tex * 2];

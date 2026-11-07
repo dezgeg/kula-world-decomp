@@ -321,7 +321,7 @@ void main(void) {
     prevLevelEndReason = 0;
     do {
         if (isDemoMode == 1) {
-#if VER_US
+#if !VER_EU
             demoIndex = (demoIndex + 1) % 3;
 #endif
             curLevel = DEMO_LEVELS[demoIndex] % 15;
@@ -329,7 +329,7 @@ void main(void) {
                 loadNewWorld = 1;
             }
             curWorld = DEMO_LEVELS[demoIndex] / 15;
-#if !VER_US
+#if VER_EU
             demoIndex = (demoIndex + 1) % 3;
 #endif
         }
@@ -364,7 +364,7 @@ void main(void) {
             loadingIsComplete = -1;
         }
         skipNextLoad = 0;
-#if VER_US
+#if !VER_EU
         loadNewWorld = 0;
 #endif
         if (curLevel >= *(int*)LEVEL_PAK_BUF) {
@@ -422,7 +422,7 @@ void main(void) {
         drawCopyright = 0;
         DrawSync(0);
         VSync(0);
-#if VER_US
+#if !VER_EU
         if (gameState == 4) {
             gameState = 0;
             gameMode = 0;
@@ -433,7 +433,7 @@ void main(void) {
 
 // XXX: must be here to match
 int vsyncCounter = 0;
-#if !VER_US
+#if VER_EU
 int unusedRenderPhase = 666;
 #endif
 
@@ -514,7 +514,7 @@ int MainGameLoop(void) {
             InitReplaySaving();
             break;
         case 2:
-#if VER_US
+#if !VER_EU
             InitReplayPlayback((&REPLAY_INPUT_PTRS)[demoIndex]);
 #else
             InitReplayPlayback((&REPLAY_INPUT_PTRS)[(demoIndex + 2) % 3]);
@@ -524,7 +524,7 @@ int MainGameLoop(void) {
     VSyncCallback(MainGameVSyncCallback);
     gotVsync = 0;
     while (!end) {
-#if VER_US
+#if !VER_EU
         rect.x = 560;
         rect.y = 448;
         rect.w = 16;
@@ -617,7 +617,7 @@ int MainGameLoop(void) {
             if (levelEndReason == 0) {
                 if (!isPaused && !isDemoMode && !inGetReadyScreen) {
                     isPaused = 1;
-#if VER_US
+#if !VER_EU
                     SndMuteAllTaggedVoices();
                     ResetVibration();
 #endif
@@ -631,7 +631,7 @@ int MainGameLoop(void) {
             if (levelEndReason == 0 && !isPaused && !isDemoMode && !inGetReadyScreen) {
                 isPaused = 1;
                 SndMuteAllTaggedVoices();
-#if VER_US
+#if !VER_EU
                 ResetVibration();
 #endif
             }
@@ -670,7 +670,7 @@ int MainGameLoop(void) {
         AddDrChangePrims();
         ProcessAndRenderParticles();
         DrawLensFlares(0);
-#if VER_US
+#if !VER_EU
         for (i = 0; i < 16; i++) {
             ((short*)&drMovePackets[whichDrawDispEnv][i])[6] = framebufferFetches[i].x + whichDrawDispEnv * displayWidth;
             ((short*)&drMovePackets[whichDrawDispEnv][i])[7] = framebufferFetches[i].y;
@@ -696,6 +696,7 @@ int MainGameLoop(void) {
         if (isPaused == 1 && drawGeometryAndObjects == 1) {
             PauseOrMainMenu();
         }
+#if !VER_JP
         if (sioCheatActivated == 1 && _sio_control(0, 0, 0) & 2) {
             gotSioData = 0;
             VSyncCallback(SioRecvVsyncCallback);
@@ -724,6 +725,7 @@ int MainGameLoop(void) {
             VSyncCallback(MainGameVSyncCallback);
             gotVsync = 0;
         }
+#endif
         if (inGetReadyScreen == 1 && gameMode == 2 && gameState != 0) {
             inGetReadyScreen = GetReadyScreen();
         }
@@ -743,7 +745,7 @@ int MainGameLoop(void) {
                         (gameMode == 0 || (gameMode == 2 && numTimeTrialPlayers == 1)) &&
                         curLevel == (curLevel / 5) * 5 &&
                         (gameMode != 2 || (curLevel == 0 && !timeTrialAtEndOfWorld)) &&
-                        curLevel <= 14 &&
+                        curLevel < 15 &&
                         levelEndReason != LEVEL_END_HIDDEN_EXIT && !cheated && !debugBonusLevels &&
                         (!isFinal || curWorld2 == 4)) {
                     SavePointMenu();
@@ -907,7 +909,7 @@ int MainGameLoop(void) {
     skip:
         prevLevelEndReason = levelEndReason;
     }
-    VSyncCallback(0);
+    VSyncCallback(NULL);
     if (levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
         for (i = 0; i < numTimeTrialPlayers; i++) {
             levelHasBeenCompletedByPlayer[i] = 0;
@@ -1099,7 +1101,7 @@ void DecideNextLevel(void) {
     int unfinished;
     int i;
 
-#if VER_US
+#if !VER_EU
     if (specialLevelType == 0) {
         if (!isFinal) {
             overallLevel = curLevel + curWorld2 * 15 + 1;
