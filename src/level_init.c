@@ -1119,24 +1119,22 @@ void InitShadowSprites(void) {
     int j;
     int k;
     int l;
-    int tex;
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 1; j++) {
             for (k = 0; k < 2; k++) {
                 for (l = 0; l < 16; l++) {
-                    tex = k + 14;
                     shadowPrimPtrs[i][j][k][l].p0 = 0xffffffff;
                     setPolyFT4(&shadowPrims[i][j][k][l]);
                     setUV4(&shadowPrims[i][j][k][l],
-                            textures[firstGuiTexture + tex].u, textures[firstGuiTexture + tex].v,
-                            textures[firstGuiTexture + tex].u + textures[firstGuiTexture + tex].w - 1, textures[firstGuiTexture + tex].v,
-                            textures[firstGuiTexture + tex].u, textures[firstGuiTexture + tex].v + textures[firstGuiTexture + tex].h - 1,
-                            textures[firstGuiTexture + tex].u + textures[firstGuiTexture + tex].w - 1, textures[firstGuiTexture + tex].v + textures[firstGuiTexture + tex].h - 1);
-                    SetSemiTrans(&shadowPrims[i][j][k][l], textures[firstGuiTexture + tex].semitrans);
+                            textures[firstGuiTexture + 14 + k].u, textures[firstGuiTexture + 14 + k].v,
+                            textures[firstGuiTexture + 14 + k].u + textures[firstGuiTexture + 14 + k].w - 1, textures[firstGuiTexture + 14 + k].v,
+                            textures[firstGuiTexture + 14 + k].u, textures[firstGuiTexture + 14 + k].v + textures[firstGuiTexture + 14 + k].h - 1,
+                            textures[firstGuiTexture + 14 + k].u + textures[firstGuiTexture + 14 + k].w - 1, textures[firstGuiTexture + 14 + k].v + textures[firstGuiTexture + 14 + k].h - 1);
+                    SetSemiTrans(&shadowPrims[i][j][k][l], textures[firstGuiTexture + 14 + k].semitrans);
                     SetShadeTex(&shadowPrims[i][j][k][l], 0);
-                    shadowPrims[i][j][k][l].tpage = textures[firstGuiTexture + tex].tpage;
-                    shadowPrims[i][j][k][l].clut = textures[firstGuiTexture + tex].clut;
+                    shadowPrims[i][j][k][l].tpage = textures[firstGuiTexture + 14 + k].tpage;
+                    shadowPrims[i][j][k][l].clut = textures[firstGuiTexture + 14 + k].clut;
                 }
             }
         }
