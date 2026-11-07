@@ -186,7 +186,7 @@ void InitLensFlareSprites(void) {
 
 void DrawLensFlares(void) {
     MATRIX matrix;
-    short screenCoords[10];
+    short screenCoords[VER_JP ? 4 : 10]; // probably fake
     long sz;
     int i;
     int j;
