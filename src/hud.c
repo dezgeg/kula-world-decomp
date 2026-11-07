@@ -296,31 +296,27 @@ void DrawInt(DigitSprites* ds, int style, int numDigits, int max, int value) {
     int digitWidth;
     int pow10;
     int shouldDraw;
-    int tex;
 
     if (value > max - 1) {
         value = max - 1;
     }
+    digitWidth = textures[firstGuiTexture + 3 + style].w / 13;
     pow10 = max / 10;
-    tex = style + 3;
-    digitWidth = textures[firstGuiTexture + tex].w / 13;
     shouldDraw = 0;
     smallestDrawnDigitIndex = numDigits;
     for (i = 0; i < numDigits; i++) {
         if (i == numDigits - 1) {
             shouldDraw = 1;
         }
-        // XXX permuter ugliness
-        digit = value;
-        digit /= pow10;
+        digit = value / pow10;
         if (digit != 0 || shouldDraw == 1) {
             if (i < smallestDrawnDigitIndex) {
                 smallestDrawnDigitIndex = i;
             }
             shouldDraw = 1;
             setUV0(&ds->sprites[whichDrawDispEnv][i].sprt,
-                   textures[firstGuiTexture + tex].u + digit * digitWidth,
-                   textures[firstGuiTexture + tex].v);
+                   textures[firstGuiTexture + 3 + style].u + digit * digitWidth,
+                   textures[firstGuiTexture + 3 + style].v);
             value -= digit * pow10;
         }
         pow10 = pow10 / 10;
