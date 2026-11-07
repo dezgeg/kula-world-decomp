@@ -90,7 +90,6 @@ segments:
       - [0x01978, o, LIBMCRD.A/LIBMCRD, .rdata]
       - [0x01af0, o, LIBMCRD.A/USERFUNC, .rdata]
       - [0x01b0c, c, various_init]
-      - [0x031c8, c, copycat_ui]
       - [0x0355c, c, font]
       - [0x04990, c, widget_init]
       - [0x05cdc, c, level_end_screen]
@@ -358,7 +357,7 @@ segments:
       - [0x62088, o, LIBCARD.A/PATCH, .text]
 # func_00072AD0() is false positive (just NOPs)
       - [0x62258, o, LIBCARD.A/END, .text]
-      - [0x622d8, .data, copycat_ui]
+      - [0x622d8, .data, various_init]
       - [0x622f0, .data, menu_widgets]
       - [0x62458, .data, sprite_init]
       - [0x62610, .data, level_init]
