@@ -41,6 +41,7 @@ extern int numCameras;
 extern int numKeysRemaining;
 extern int numTimeTrialPlayers;
 extern int specialLevelType;
+extern int sunIntensityOnScreen;
 extern int totalPlayTime[2];
 extern int totalScore;
 extern int twoPlayerWhichPlayer;
@@ -50,11 +51,13 @@ extern POLY_FT4 hourglassSprites[2][3];
 extern PrimList primLists[2];
 extern short hourglassClut[60];
 extern Texture textures[150];
+extern TSprite copyrightSprite[2];
 extern TSprite fruitBonusTextSprites[2][5][2];
 extern TSprite fruitSprites[2][5][2];
 extern TSprite keySprites[2][4][2];
 extern TSprite lethargyEffectSprite[2][2];
 extern TSprite timerPausedSprite[2];
+extern TSprite titleSprite[2];
 extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
 
 int drawBonusWidget;
@@ -115,6 +118,8 @@ SVECTOR FRUIT_BONUS_TEXT_PARTICLE_POSITIONS[5] = {
     {278, SCREEN_HEIGHT - 24, -1, 0},
     {299, SCREEN_HEIGHT - 22, -1, 0}
 };
+
+int drawCopyright = 1;
 
 void DrawHud(void) {
     addPrim(&primLists[whichDrawDispEnv].gui3, &hudDrTpages[whichDrawDispEnv]);
@@ -699,5 +704,16 @@ void DrawScreenFade(void) {
             screenFadeEnabled = 0;
             halfFps = 0;
         }
+    }
+}
+
+void DrawTitleAndCopyrightSprites(void) {
+    int color;
+
+    color = (sunIntensityOnScreen * 30) / 100 + 0x80;
+    setRGB0(&titleSprite[whichDrawDispEnv].sprt, color, color, color);
+    addPrim(&primLists[whichDrawDispEnv].gui1, &titleSprite[whichDrawDispEnv]);
+    if (drawCopyright == 1) {
+        addPrim(&primLists[whichDrawDispEnv].gui1, &copyrightSprite[whichDrawDispEnv]);
     }
 }
