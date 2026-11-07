@@ -1,11 +1,15 @@
 #include "common.h"
 
+#define CUBE_TYPE_AT(x, y, z) levelData[(x) * 34 * 34 + (y) * 34 + (z)]
+
 extern void SetCubeFaceVisited(int x, int y, int z, int whichSide, int visited);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 
 extern int cubeStates[16 * 256];
 extern int levelScore;
 extern int numCubesRemainingInLevel[5];
+extern short* entityData;
+extern short* levelData;
 
 RecentlyVisitedCube recentlyVisitedCubeFaces[32];
 
@@ -126,5 +130,68 @@ void ProcessRecentlyVisitedCubes(void) {
             }
         }
         p++;
+    }
+}
+
+int GetFaceTypeOfBlockType(int blockType) {
+    if (blockType >= 5) {
+        return entityData[(blockType - 5) * 128];
+    }
+    return blockType;
+}
+
+int GetFaceTypeAtRelativeToDir(int x, int y, int z, int dir) {
+    int type;
+    switch (dir) {
+        case 0:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y, z - 1)); // Z-
+        case 1:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x + 1, y, z)); // X+
+        case 2:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y + 1, z)); // Y+
+        case 3:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y - 1, z)); // Y-
+        case 4:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x - 1, y, z)); // X-
+        default:
+            return GetFaceTypeOfBlockType(CUBE_TYPE_AT(x, y, z + 1)); // Z+
+    }
+}
+
+int GetCubeIndexRelativeToDir(int x, int y, int z, int dir) {
+    switch (dir) {
+        case 0:
+            return CUBE_INDEX_AT(x, y, z - 1); // Z-
+        case 1:
+            return CUBE_INDEX_AT(x + 1, y, z); // X+
+        case 2:
+            return CUBE_INDEX_AT(x, y + 1, z); // Y+
+        case 3:
+            return CUBE_INDEX_AT(x, y - 1, z); // Y-
+        case 4:
+            return CUBE_INDEX_AT(x - 1, y, z); // X-
+        case 5:
+            return CUBE_INDEX_AT(x, y, z + 1); // Z+
+        default:
+            return -1;
+    }
+}
+
+int FlipDir(int dir) {
+    switch (dir) {
+        case 0:
+            return 5; // Z- -> Z+
+        case 1:
+            return 4; // X+ -> X-
+        case 2:
+            return 3; // Y+ -> Y-
+        case 3:
+            return 2; // Y- -> Y+
+        case 4:
+            return 1; // X- -> X+
+        case 5:
+            return 0; // Z+ -> Z-
+        default:
+            return -1;
     }
 }
