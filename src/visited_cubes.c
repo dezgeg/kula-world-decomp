@@ -9,8 +9,6 @@ extern int numCubesRemainingInLevel[5];
 
 RecentlyVisitedCube recentlyVisitedCubeFaces[32];
 
-static SVECTOR ZERO_SVECTOR_a2dd0 = {};
-
 #define CS_SIZE 16
 #define CS_SIDES_VISITED 12
 #define CS_VISITED 14
@@ -38,9 +36,8 @@ void SetCubeVisited(int x, int y, int z, int visitType) {
     int cubeIndex;
     int prevVisitType;
     int i;
-    SVECTOR sndPos;
+    SVECTOR sndPos = {};
 
-    sndPos = ZERO_SVECTOR_a2dd0;
     cubeIndex = CUBE_INDEX_AT(x, y, z);
     if (cubeIndex != -1) {
         prevVisitType = cubeStates[cubeIndex * CS_SIZE + CS_VISITED];
