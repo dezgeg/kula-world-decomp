@@ -69,12 +69,12 @@ extern byte FIRE_BLOCK_ANIM_FLAG_DATA[52];
 extern byte INVIS_BLOCK_ANIM_FLAG_DATA[124];
 extern byte BONUS_BLOCK_ANIM_FLAG_DATA0[60];
 extern uint NUM_TEXTURE_ANIM_FRAMES;
-extern uint INVIS_BLOCK_ANIM_COLOR_DATA[89];
+extern uint INVIS_BLOCK_ANIM_COLOR_DATA[1]; // fake size
 extern byte BONUS_BLOCK_ANIM_FLAG_DATA1[56];
-extern AnimatedTextureChain bonusBlockTextureChain;
-extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
-extern AnimatedTextureChain fireBlockTextureChain;
-extern AnimatedTextureChain invisibleBlockTextureChain;
+extern int bonusBlockTextureChain[];
+extern int crumblingSpecialBlockTextureChain[];
+extern int fireBlockTextureChain[];
+extern int invisibleBlockTextureChain[];
 extern uint TEXTURE_ANIM_DATA[1]; // fake size
 extern int invisBlockVisibility[6];
 extern int curWorld;
@@ -155,32 +155,30 @@ short movingBlockEntityIndexes[16];
 
 void ProcessLevelData(void) {
     int i;
-    AnimatedTextureChain* fbtc = &fireBlockTextureChain;
-    AnimatedTextureChain* ibtc = &invisibleBlockTextureChain;
 
     numberOfCubeFaces = 0;
     numCubesInLevelTmp = 0;
     cubeCounter = 0;
 
-    InitAnimatedTextureChain(fbtc, 0x80,
+    InitAnimatedTextureChain(fireBlockTextureChain, 0x80,
             FIRE_BLOCK_ANIM_FLAG_DATA_END - FIRE_BLOCK_ANIM_FLAG_DATA, 0,
             FIRE_BLOCK_ANIM_FLAG_DATA, NULL,
             NULL, NULL, NULL, NULL);
-    InitAnimatedTextureChain(ibtc, 0x200,
+    InitAnimatedTextureChain(invisibleBlockTextureChain, 0x200,
             INVIS_BLOCK_ANIM_FLAG_DATA_END - INVIS_BLOCK_ANIM_FLAG_DATA, INVIS_BLOCK_ANIM_COLOR_DATA_END - INVIS_BLOCK_ANIM_COLOR_DATA,
             INVIS_BLOCK_ANIM_FLAG_DATA, NULL,
             INVIS_BLOCK_ANIM_COLOR_DATA, NULL, NULL, NULL);
 
     if (specialLevelType == 1) {
         uint* animData = TEXTURE_ANIM_DATA;
-        InitAnimatedTextureChain(&crumblingSpecialBlockTextureChain, 0x300,
+        InitAnimatedTextureChain(crumblingSpecialBlockTextureChain, 0x300,
                 0, NUM_TEXTURE_ANIM_FRAMES,
                 NULL, NULL,
-                animData + (curWorld % 2) * (NUM_TEXTURE_ANIM_FRAMES << 1), animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
-        InitAnimatedTextureChain(&bonusBlockTextureChain, 0x300,
+                animData + ((curWorld % 2) * 2) * NUM_TEXTURE_ANIM_FRAMES, animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
+        InitAnimatedTextureChain(bonusBlockTextureChain, 0x300,
                 BONUS_BLOCK_ANIM_FLAG_DATA0_END - BONUS_BLOCK_ANIM_FLAG_DATA0, NUM_TEXTURE_ANIM_FRAMES,
                 BONUS_BLOCK_ANIM_FLAG_DATA0, BONUS_BLOCK_ANIM_FLAG_DATA1,
-                animData + (curWorld % 2) * (NUM_TEXTURE_ANIM_FRAMES << 1), animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
+                animData + ((curWorld % 2) * 2) * NUM_TEXTURE_ANIM_FRAMES, animData + ((curWorld % 2) * 2 + 1) * NUM_TEXTURE_ANIM_FRAMES, NULL, NULL);
     }
 
     ProcessCubesIntoFaces();
@@ -191,11 +189,11 @@ void ProcessLevelData(void) {
     ScanLevelDataForFlashingBlocks();
     ProcessMovingPlatforms2();
 
-    ResolveAnimatedTextureChain(fbtc);
-    ResolveAnimatedTextureChain(ibtc);
+    ResolveAnimatedTextureChain(fireBlockTextureChain);
+    ResolveAnimatedTextureChain(invisibleBlockTextureChain);
     if (specialLevelType == 1) {
-        ResolveAnimatedTextureChain(&crumblingSpecialBlockTextureChain);
-        ResolveAnimatedTextureChain(&bonusBlockTextureChain);
+        ResolveAnimatedTextureChain(crumblingSpecialBlockTextureChain);
+        ResolveAnimatedTextureChain(bonusBlockTextureChain);
     }
 
     ScanLevelDataForRetractableSpikes();
@@ -264,7 +262,7 @@ void ProcessCubesIntoFaces(void) {
                                     // 6 == invisible
                                     SetFaceData(numberOfCubeFaces++, (void**)(cubeCounter * 64 + csptr), quadSomethingStartIndex + 6, 0x100,
                                                 dir, xFine, yFine, zFine, 0, 0x808080);
-                                    AddQuadToAnimatedTextureChain(&invisibleBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                    AddQuadToAnimatedTextureChain(invisibleBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
                                                                   CoordHash(xFine, yFine, zFine, dir, 0x40,
                                                                             INVIS_BLOCK_ANIM_COLOR_DATA_END - INVIS_BLOCK_ANIM_COLOR_DATA));
                                     isNonempty = 1;
@@ -277,7 +275,7 @@ void ProcessCubesIntoFaces(void) {
                                     flags = 0xd; // QF_ACTIVE | QF_BACKFACE_CULL | QF_GOURAUD
                                 }
                                 if (specialLevelType == 1) {
-                                    AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                    AddQuadToAnimatedTextureChain(crumblingSpecialBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
                                                                   CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
                                     flags &= ~8; // QF_BACKFACE_CULL
                                 }
@@ -297,7 +295,7 @@ void ProcessCubesIntoFaces(void) {
                                 textureIdx = quadSomethingStartIndex + tgi->numFixedTextures;
                                 textureRotation = GetRandomTextureRotation();
                                 if (specialLevelType == 1) {
-                                    AddQuadToAnimatedTextureChain(&bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                    AddQuadToAnimatedTextureChain(bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
                                                                   CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
                                     flags = 5; // QF_ACTIVE | QF_BACKFACE_CULL
                                 }
@@ -327,14 +325,14 @@ void ProcessCubesIntoFaces(void) {
                                         flags &= ~8; // QF_GOURAUD
                                         if (type == 0 || type > 19) {
                                             textureRotation = Rand(4);
-                                            AddQuadToAnimatedTextureChain(&bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
+                                            AddQuadToAnimatedTextureChain(bonusBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1,
                                                                           CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
                                             flags &= 0xffffff;
                                             if (type > 19) {
                                                 flags |= 0x10000; // QF_BONUS_ITEM_SHADOW
                                             }
                                         } else {
-                                            AddQuadToAnimatedTextureChain(&crumblingSpecialBlockTextureChain,
+                                            AddQuadToAnimatedTextureChain(crumblingSpecialBlockTextureChain,
                                                                           (Quad**)(cubeCounter * 64 + csptr), -1,
                                                                           CoordHash(xFine, yFine, zFine, dir, 0x40, NUM_TEXTURE_ANIM_FRAMES));
                                         }
@@ -361,7 +359,7 @@ void ProcessCubesIntoFaces(void) {
                                     newCube = 1;
                                     ((char*)&cubeStates[cubeCounter * 16 + 12])[dir] = 0;
                                     if (type == OBJ_FIRE_PATCH) {
-                                        AddQuadToAnimatedTextureChain(&fireBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1, 0);
+                                        AddQuadToAnimatedTextureChain(fireBlockTextureChain, (Quad**)(cubeCounter * 64 + csptr), -1, 0);
                                     }
                                 }
                         }
@@ -547,7 +545,7 @@ void ScanLevelDataForMovingBlocks1(void) {
 
                     if (specialLevelType == 1) {
                         AddQuadToAnimatedTextureChain(
-                            &crumblingSpecialBlockTextureChain, &((Quad**)(entity + 71 + j * 12))[dir], -1,
+                            crumblingSpecialBlockTextureChain, &((Quad**)(entity + 71 + j * 12))[dir], -1,
                             CoordHash(j * x_inc + 512, j * y_inc + 512, j * z_inc + 512, dir, 64, NUM_TEXTURE_ANIM_FRAMES));
                     }
                     numberOfCubeFaces++;
