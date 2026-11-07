@@ -54,7 +54,6 @@ segments:
       - [0x00870, pad, rodata_00870] # hack
       - [0x00874, .rodata, render2]
       - [0x008d4, .rodata, visited_cubes]
-      - [0x0091c, .rodata, light_effect]
       - [0x00934, .rodata, player_movement]
       - [0x00958, .rodata, level_update]
       - [0x00988, .rodata, level_update2]
@@ -107,7 +106,6 @@ segments:
       - [0x1ca94, c, render2]
       - [0x1e194, c, render3]
       - [0x1e364, c, visited_cubes]
-      - [0x1ebd8, c, light_effect]
       - [0x1fae8, c, player_movement]
       - [0x22f8c, c, level_update]
       - [0x25d80, c, level_update2]
