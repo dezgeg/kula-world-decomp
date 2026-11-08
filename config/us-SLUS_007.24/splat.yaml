@@ -94,7 +94,6 @@ segments:
       - [0x06cbc, c, menu_widgets]
       - [0x07c18, c, menu_widgets2]
       - [0x0e3ec, c, hud]
-      - [0x135e0, c, ggi]
       - [0x13b74, c, sprite_init]
       - [0x15be0, c, tgi]
       - [0x167c4, c, skybox]

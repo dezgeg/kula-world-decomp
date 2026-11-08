@@ -38,6 +38,25 @@ typedef struct BiosTextWriter {
     Tim tim;
 } BiosTextWriter;
 
+typedef struct Sparkle {
+    uint ptrAndFlags;
+    uint color;
+    uint unk2;
+    uint unk3;
+    uint unk4;
+} Sparkle;
+
+typedef struct GemSparkleEffect {
+    uint* vertexColors;
+    int numColors;
+    int probability;
+    int addRgb;
+    int maxRgb;
+    int subRgb;
+    int numSparkles;
+    Sparkle sparkles[16];
+} GemSparkleEffect;
+
 extern uint Rand(int param_1);
 extern void AddParticles(int type, SVECTOR* pos, int lightEffectId);
 extern void DrawBonusWidget(void);
@@ -47,8 +66,12 @@ extern void DrawKeyWidgets(void);
 extern void DrawLethargyEffects(void);
 extern void DrawScore(void);
 extern void DrawTimeAttackWidgets(void);
+extern void InitPlayerSpecularSprite(void);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateStaticHourglassClut(void);
+
+void ParseTextures(int* headerPtr, Texture* out, int count);
+void ParseGgiInner(int* eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
 extern DigitSprites copycatPlayer1ScoreDigitSprites;
 extern DigitSprites copycatPlayer2ScoreDigitSprites;
@@ -90,7 +113,6 @@ extern OT_TYPE otag[2][1][1026];
 extern POLY_FT4 hourglassSprites[2][3];
 extern PrimList primLists[2];
 extern short hourglassClut[60];
-extern Texture textures[150];
 extern TSprite biosStrSprites[2][32];
 extern TSprite bonusWidgetSpritesMsbBackground[2][34];
 extern TSprite bonusWidgetSpritesMsbForeground[2][32];
@@ -105,6 +127,7 @@ extern TSprite timerPausedSprite[2];
 extern TSprite titleSprite[2];
 extern uint BONUS_WIDGET_COLOR_DATA[1]; // fake size
 
+GemSparkleEffect gemRandomSparkleEffects[3][3];
 int doDrawGraph;
 int drawBonusWidget;
 int drawCopycatWidgets;
@@ -120,16 +143,35 @@ int drawScoreGraphY;
 int drawScoreWidget;
 int drawTimeAttackWidgets;
 int drawTimerPausedWidget;
+int firstBonusWidgetTexture;
+int firstFruitTexture;
+int firstGuiTextTexture;
+int firstLensFlareOrPsxButtonTexture;
+int firstParticleTexture;
+int firstUnk2Texture;
 int halfFps;
 int hourglassIsRotating;
 int levelTimeLeft;
+int numBonusWidgetTextures;
+int numGuiTextTextures;
 int numKeysInLevel;
+int numParticleTextures;
+int numUnk1Textures;
+int numUnk2Textures;
 int screenFadeEnabled;
 ScoreGraph* drawScoreGraphPrims;
+static void* ggiPart3;
+static void* ggiPart4Dummy;
+static void* ggiPart6Textures;
+static void* ggiPart7Unused;
+Texture textures[NUM_TEXTURES];
 TPolyF4 screenFadePolys[2][1];
 uint firstGuiTexture;
+void* ggiPart0A;
+void* ggiPart0B;
+void* ggiPart2DepthCueingLookup;
+void* ggiPart5JumpAnimData;
 
-STATIC_FOR_GP_ACCESS int* ggi;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr2;
@@ -137,6 +179,8 @@ STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr3;
 STATIC_FOR_GP_ACCESS int fruitBonusTextIndex;
 STATIC_FOR_GP_ACCESS int fruitBonusTextTimer;
 STATIC_FOR_GP_ACCESS int fruitWidgetDisplayMode;
+STATIC_FOR_GP_ACCESS int* ggi;
+STATIC_FOR_GP_ACCESS int* ggi;
 STATIC_FOR_GP_ACCESS int hourglassRotationTimer;
 STATIC_FOR_GP_ACCESS int lethargyMode;
 STATIC_FOR_GP_ACCESS int numBonusWidgetMsbs;
@@ -1358,3 +1402,145 @@ void DrawBiosFontString(void) {
     }
 }
 #endif
+
+void* ParseGGI(int* ggi_ptr) {
+    int* pOff;
+    int i, j;
+
+    ggi = ggi_ptr;
+
+    pOff = ggi_ptr + GGI_PART0A_OFF;
+    ggiPart0A = (void*)((int)pOff + pOff[0] / 4 * 4);
+    ggiPart0B = (void*)((int)pOff + pOff[1] / 4 * 4);
+
+    ggiPart1HourglassAnim = (void*)((int)pOff + ggi_ptr[GGI_PART0_LEN] * 2);
+    ggiPart2DepthCueingLookup = (void*)((int)ggiPart1HourglassAnim + ggi_ptr[GGI_PART1_LEN] * 2);
+    ggiPart3 = (void*)((int)ggiPart2DepthCueingLookup + ggi_ptr[GGI_PART2_LEN] * 2);
+    ggiPart4Dummy = (void*)((int)ggiPart3 + ggi_ptr[GGI_PART3_LEN] * 2);
+    ggiPart5JumpAnimData = (void*)((int)ggiPart4Dummy + ggi_ptr[GGI_PART4_LEN] * 2);
+    ggiPart6Textures = (void*)((int)ggiPart5JumpAnimData + ggi_ptr[GGI_PART5_LEN] * 2);
+    ggiPart7Unused = (void*)((int)ggiPart6Textures + ggi_ptr[GGI_PART6_LEN] * 2);
+
+    ParseTextures(ggiPart6Textures, textures, NUM_TEXTURES);
+
+    firstFruitTexture = 0;
+    firstParticleTexture = ggi[GGI_NUM_FRUIT_TEXTURES];
+    numParticleTextures = ggi[GGI_NUM_PARTICLE_TEXTURES];
+    firstLensFlareOrPsxButtonTexture = firstParticleTexture + numParticleTextures;
+    numUnk1Textures = ggi[GGI_NUM_UNK1_TEXTURES];
+    firstGuiTextTexture = firstLensFlareOrPsxButtonTexture + numUnk1Textures;
+    numGuiTextTextures = ggi[GGI_NUM_GUI_TEXT_TEXTURES];
+    firstUnk2Texture = firstGuiTextTexture + numGuiTextTextures;
+    numUnk2Textures = ggi[GGI_NUM_UNK2_TEXTURES];
+    firstBonusWidgetTexture = firstUnk2Texture + numUnk2Textures;
+    numBonusWidgetTextures = ggi[GGI_NUM_BONUS_WIDGET_TEXTURES];
+    firstGuiTexture = firstBonusWidgetTexture + numBonusWidgetTextures;
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            ParseGgiInner((int*)&gemRandomSparkleEffects[i][j], 1, 36, i, j, 3, 0x808080, 0xfefefe, 0x101010, 0x10);
+        }
+    }
+
+#if !VER_EU
+    InitPlayerSpecularSprite();
+#endif
+
+    return ggiPart6Textures;
+}
+
+void ParseTextures(int* headerPtr, Texture* out, int unused_count) {
+    int count = *headerPtr;
+    short* p;
+    int i;
+    int blendMode;
+    int bpp;
+    int alreadyLoaded;
+    RECT rect;
+
+    DrawSync(0);
+    p = (short*)(headerPtr + 1);
+    for (i = 0; i < count; i++) {
+        bpp = *p++;
+        if (bpp == -1) {
+            // padding word
+            p++;
+            continue;
+        }
+
+        out[i].bitsPerPixel = bpp;
+        blendMode = *p++;
+        out[i].semitrans = (blendMode != -1);
+        if (blendMode == -1)
+            blendMode = 0;
+
+        alreadyLoaded = p[3];
+
+        if (bpp != 16) {
+            rect.x = *p++;
+            rect.y = *p++;
+            out[i].clut = GetClut(rect.x, rect.y);
+            if (p[0] == 0) {
+                rect.w = 1 << bpp;
+                rect.h = 1;
+                LoadImage(&rect, p + 2);
+                DrawSync(0);
+                p += rect.w + 2;
+            } else {
+                // CLUT already loaded by some other texture
+                p += 2;
+            }
+        } else {
+            p += 4;
+        }
+
+        rect.x = *p++;
+        rect.y = *p++;
+        out[i].w = *p++;
+        rect.w = (out[i].w * bpp) / 16;
+        out[i].h = *p++;
+        rect.h = out[i].h;
+
+        if (alreadyLoaded == 0) {
+            LoadImage(&rect, p);
+            DrawSync(0);
+            p += rect.w * rect.h;
+            if ((rect.w * rect.h) & 1) {
+                p++;
+            }
+        }
+
+        out[i].tpage = GetTPage(bpp >> 3, blendMode, rect.x, rect.y);
+        out[i].u = (rect.x % 64) * (16 / bpp);
+        out[i].v = rect.y % 256;
+    }
+}
+
+void ParseGgiInner(int* eff, int modelType, int modelIdx, int lodIdx, int variantIdx,
+                   int probability, int addRgb, int maxRgb, int subRgb, int numSparkles) {
+    int* p;
+    int k;
+
+    // Calculate pointer to ModelData
+    if (modelType == 0) {
+        p = (int*)((char*)ggiPart0A + (*(int*)((char*)ggiPart0A + modelIdx * 16 + lodIdx * 4) / 4) * 4);
+    } else {
+        p = (int*)((char*)ggiPart0B + (*(int*)((char*)ggiPart0B + modelIdx * 64 + lodIdx * 16 + variantIdx * 4) / 4) * 4);
+    }
+
+    // Advance to VertexColors structure
+    p = (int*)((char*)p + (p[5] / 4) * 4);
+
+    eff[0] = (uint*)((char*)p + 8); // pointer to colors array
+    eff[1] = p[1] / 16;             // number of vertex colors
+    eff[2] = probability;
+    eff[3] = addRgb;
+    eff[4] = maxRgb;
+    eff[5] = subRgb;
+    eff[6] = numSparkles;
+    eff += 7;
+
+    for (k = 0; k < numSparkles; k++, eff += 5) {
+        eff[0] = 0;
+    }
+}
