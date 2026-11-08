@@ -127,7 +127,7 @@ extern uint controllerButtons;
 extern uint prevControllerButtons;
 extern OT_TYPE otag[2][1][1026];
 extern void* renderedPrimsBuf;
-extern void* REPLAY_INPUT_PTRS;
+extern void* REPLAY_INPUT_PTRS[];
 
 OT_TYPE unkOtag[2][1][32][64];
 int unkOtagLengths[2][1];
@@ -515,9 +515,9 @@ int MainGameLoop(void) {
             break;
         case 2:
 #if !VER_EU
-            InitReplayPlayback((&REPLAY_INPUT_PTRS)[demoIndex]);
+            InitReplayPlayback(REPLAY_INPUT_PTRS[demoIndex]);
 #else
-            InitReplayPlayback((&REPLAY_INPUT_PTRS)[(demoIndex + 2) % 3]);
+            InitReplayPlayback(REPLAY_INPUT_PTRS[(demoIndex + 2) % 3]);
 #endif
             break;
     }

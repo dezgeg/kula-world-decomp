@@ -180,7 +180,6 @@ STATIC_FOR_GP_ACCESS int fruitBonusTextIndex;
 STATIC_FOR_GP_ACCESS int fruitBonusTextTimer;
 STATIC_FOR_GP_ACCESS int fruitWidgetDisplayMode;
 STATIC_FOR_GP_ACCESS int* ggi;
-STATIC_FOR_GP_ACCESS int* ggi;
 STATIC_FOR_GP_ACCESS int hourglassRotationTimer;
 STATIC_FOR_GP_ACCESS int lethargyMode;
 STATIC_FOR_GP_ACCESS int numBonusWidgetMsbs;
