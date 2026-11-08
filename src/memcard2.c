@@ -111,6 +111,32 @@ void LoadHighscoresFromMemcardData(void) {
     }
 }
 
+#if VER_JP
+void CalcMemCardChecksum(void) {
+    int* p = (int*)&memCardData;
+    int sum = 0;
+
+    while (p < &memCardData.checksum) {
+        sum += *p++ + 42;
+    }
+    memCardData.checksum = sum;
+}
+
+int VerifyMemCardChecksum(void) {
+    int* p = (int*)&memCardData;
+    int sum = 0;
+
+    while (p < &memCardData.checksum) {
+        sum += *p++ + 42;
+    }
+    if (sum == memCardData.checksum) {
+        return 1;
+    }
+    tempMcResult = 669;
+    return 0;
+}
+#endif
+
 void FormatMemcard(void) {
     MemCardAccept(0);
     MemCardSync(0, &mcCmd, &tempMcResult);
@@ -160,6 +186,7 @@ int LoadSaveSlot(uint slot) {
         highestLevelReached = memCardData.highestLevelReached;
     }
     if (slot < 4) {
+#if !VER_JP
         musicVolume = memCardData.musicVolume;
         sfxVolume = memCardData.sfxVolume;
 #if VER_US
@@ -169,6 +196,7 @@ int LoadSaveSlot(uint slot) {
         dispenvScreenY = memCardData.screenY;
         turnDelayEnabled = memCardData.turnDelayEnabled;
         vibrationEnabled = memCardData.vibrationEnabled;
+#endif
         for (i = 0; i < 150; i++) {
             levelScores[i] = memCardData.saveslots[slot].levelScores[i];
         }
@@ -179,7 +207,7 @@ int LoadSaveSlot(uint slot) {
         } else {
             totalPlayTime[0] = memCardData.saveslots[slot].score;
         }
-#if VER_US
+#if !VER_EU
         timeTrialDifficulty = memCardData.saveslots[slot].timeTrialDifficulty;
         curLevel = memCardData.saveslots[slot].curLevel;
 #else
@@ -221,6 +249,7 @@ int SaveMemCard(uint slot) {
             memCardData.header.iconBitmap[i] = (SAVE_ICON_TIM_PTR + 64)[i];
         }
 
+#if !VER_JP
         if (finalUnlocked == 1 || (curWorld == 10 && curLevel == 0)) {
             memCardData.arcadeModeDone = 1;
         }
@@ -231,9 +260,12 @@ int SaveMemCard(uint slot) {
         memCardData.vibrationEnabled = vibrationEnabled;
         memCardData.musicVolume = musicVolume;
         memCardData.sfxVolume = sfxVolume;
+#endif
         if (slot < 4) {
+#if !VER_JP
             memCardData.screenX = dispenvScreenX;
             memCardData.screenY = dispenvScreenY;
+#endif
             for (i = 0; i < 150; i++) {
                 memCardData.saveslots[slot].levelScores[i] = levelScores[i];
             }

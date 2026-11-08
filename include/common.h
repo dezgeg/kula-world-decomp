@@ -293,22 +293,34 @@ typedef struct SaveSlot {
     short gameMode;
     short timeTrialDifficulty;
     short isFinal;
+#if VER_JP
+    short finalUnlocked;
+    short highestLevelReached;
+    int selectedBallIndex;
+    int unlockedBallCount;
+    u32 customBallColors[10][8];
+#endif
 } SaveSlot;
 
 typedef struct MemcardData {
     PsxSaveHeader header;
+#if !VER_JP
     short arcadeModeDone;
     short highestLevelReached;
     short musicVolume;
     short sfxVolume;
     short screenX;
     short screenY;
+#endif
     Highscore highscore0;
     int highscore0LevelScores[150];
     SaveSlot saveslots[4];
     int turnDelayEnabled;
     int vibrationEnabled;
-    byte pad[4804];
+#if VER_JP
+    int checksum;
+#endif
+    byte pad[VER_JP ? 3484 : 4804];
 } MemcardData;
 
 typedef struct Music {
