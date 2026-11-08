@@ -127,58 +127,58 @@ void InitMemcardUi(void) {
         loadGameSprite2[0].sprt.clut = GetClut(0x2C0, 0x5E);
         setRGB0(&loadGameSprite2[0].sprt, 0x80, 0x80, 0x80);
         setUV0(&loadGameSprite2[0].sprt, 0, 95);
-        setXY0(&loadGameSprite2[0].sprt, (displayWidth / 2) - 62, 13);
+        setXY0(&loadGameSprite2[0].sprt, (displayWidth / 2) - (VER_JP ? 60 : 62), 13);
         loadGameSprite2[0].sprt.w = 124;
-        loadGameSprite2[0].sprt.h = 24;
+        loadGameSprite2[0].sprt.h = VER_JP ? 30 : 24;
         loadGameSprite2[1] = loadGameSprite2[0];
 
         saveGameSprite2[0] = loadGameSprite2[1];
-        setUV0(&saveGameSprite2[0].sprt, 124, 95);
-        setXY0(&saveGameSprite2[0].sprt, (displayWidth / 2) - 63, 13);
-        saveGameSprite2[0].sprt.w = 126;
-        saveGameSprite2[0].sprt.h = 24;
+        setUV0(&saveGameSprite2[0].sprt, VER_JP ? 136 : 124, 95);
+        setXY0(&saveGameSprite2[0].sprt, (displayWidth / 2) - (VER_JP ? 58 : 63), 13);
+        saveGameSprite2[0].sprt.w = VER_JP ? 120 : 126;
+        saveGameSprite2[0].sprt.h = VER_JP ? 30 : 24;
         saveGameSprite2[1] = saveGameSprite2[0];
 
         saveSlot0Sprite2[0] = saveGameSprite2[1];
-        setUV0(&saveSlot0Sprite2[0].sprt, 0, 124);
+        setUV0(&saveSlot0Sprite2[0].sprt, 0, VER_JP ? 126 : 124);
         setXY0(&saveSlot0Sprite2[0].sprt, 34, 45);
-        saveSlot0Sprite2[0].sprt.w = 42;
+        saveSlot0Sprite2[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot0Sprite2[0].sprt.h = 39;
         saveSlot0Sprite2[1] = saveSlot0Sprite2[0];
 
         saveSlot1Sprite2[0] = saveSlot0Sprite2[1];
-        setUV0(&saveSlot1Sprite2[0].sprt, 42, 124);
+        setUV0(&saveSlot1Sprite2[0].sprt, VER_JP ? 44 : 42, VER_JP ? 126 : 124);
         setXY0(&saveSlot1Sprite2[0].sprt, 104, 45);
-        saveSlot1Sprite2[0].sprt.w = 42;
+        saveSlot1Sprite2[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot1Sprite2[0].sprt.h = 39;
         saveSlot1Sprite2[1] = saveSlot1Sprite2[0];
 
         saveSlot2Sprite2[0] = saveSlot1Sprite2[1];
-        setUV0(&saveSlot2Sprite2[0].sprt, 84, 124);
+        setUV0(&saveSlot2Sprite2[0].sprt, VER_JP ? 88 : 84, VER_JP ? 126 : 124);
         setXY0(&saveSlot2Sprite2[0].sprt, 174, 45);
-        saveSlot2Sprite2[0].sprt.w = 42;
+        saveSlot2Sprite2[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot2Sprite2[0].sprt.h = 39;
         saveSlot2Sprite2[1] = saveSlot2Sprite2[0];
 
         saveSlot3Sprite2[0] = saveSlot2Sprite2[1];
-        setUV0(&saveSlot3Sprite2[0].sprt, 126, 124);
+        setUV0(&saveSlot3Sprite2[0].sprt, VER_JP ? 132 : 126, VER_JP ? 126 : 124);
         setXY0(&saveSlot3Sprite2[0].sprt, 244, 45);
-        saveSlot3Sprite2[0].sprt.w = 42;
+        saveSlot3Sprite2[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot3Sprite2[0].sprt.h = 39;
         saveSlot3Sprite2[1] = saveSlot3Sprite2[0];
 
         saveSelectButtonSprite2[0] = saveSlot3Sprite2[1];
-        setUV0(&saveSelectButtonSprite2[0].sprt, 168, 119);
-        setXY0(&saveSelectButtonSprite2[0].sprt, (displayWidth / 2) - 80, 229 - 17 * VID_NTSC);
-        saveSelectButtonSprite2[0].sprt.w = 70;
-        saveSelectButtonSprite2[0].sprt.h = 22;
+        setUV0(&saveSelectButtonSprite2[0].sprt, VER_JP ? 176 : 168, VER_JP ? 125 : 119);
+        setXY0(&saveSelectButtonSprite2[0].sprt, (displayWidth / 2) - 80, VER_JP ? 214 : 229 - 17 * VID_NTSC);
+        saveSelectButtonSprite2[0].sprt.w = VER_JP ? 48 : 70;
+        saveSelectButtonSprite2[0].sprt.h = VER_JP ? 20 : 22;
         saveSelectButtonSprite2[1] = saveSelectButtonSprite2[0];
 
         saveBackButtonSprite2[0] = saveSelectButtonSprite2[1];
-        setUV0(&saveBackButtonSprite2[0].sprt, 168, 141);
-        setXY0(&saveBackButtonSprite2[0].sprt, (displayWidth / 2) + 20, 229 - 17 * VID_NTSC);
-        saveBackButtonSprite2[0].sprt.w = 62;
-        saveBackButtonSprite2[0].sprt.h = 22;
+        setUV0(&saveBackButtonSprite2[0].sprt, VER_JP ? 176 : 168, VER_JP ? 145 : 141);
+        setXY0(&saveBackButtonSprite2[0].sprt, (displayWidth / 2) + 20, VER_JP ? 214 : 229 - 17 * VID_NTSC);
+        saveBackButtonSprite2[0].sprt.w = VER_JP ? 56 : 62;
+        saveBackButtonSprite2[0].sprt.h = VER_JP ? 20 : 22;
         saveBackButtonSprite2[1] = saveBackButtonSprite2[0];
 
         TSpritePrim(loadGameSprite1, 0, 0, GetTPage(0, 1, 0x2C0, 0xAF));
@@ -189,56 +189,56 @@ void InitMemcardUi(void) {
         setUV0(&loadGameSprite1[0].sprt, 0, 176);
         setXY0(&loadGameSprite1[0].sprt, (displayWidth / 2) - 62, 13);
         loadGameSprite1[0].sprt.w = 124;
-        loadGameSprite1[0].sprt.h = 24;
+        loadGameSprite1[0].sprt.h = VER_JP ? 30 : 24;
         loadGameSprite1[1] = loadGameSprite1[0];
 
         saveGameSprite1[0] = loadGameSprite1[1];
-        setUV0(&saveGameSprite1[0].sprt, 124, 176);
-        setXY0(&saveGameSprite1[0].sprt, (displayWidth / 2) - 63, 13);
-        saveGameSprite1[0].sprt.w = 126;
-        saveGameSprite1[0].sprt.h = 24;
+        setUV0(&saveGameSprite1[0].sprt, VER_JP ? 136 : 124, 176);
+        setXY0(&saveGameSprite1[0].sprt, (displayWidth / 2) - (VER_JP ? 58 : 63), 13);
+        saveGameSprite1[0].sprt.w = VER_JP ? 116 : 126;
+        saveGameSprite1[0].sprt.h = VER_JP ? 30 : 24;
         saveGameSprite1[1] = saveGameSprite1[0];
 
         saveSlot0Sprite1[0] = saveGameSprite1[1];
-        setUV0(&saveSlot0Sprite1[0].sprt, 0, 205);
+        setUV0(&saveSlot0Sprite1[0].sprt, 0, VER_JP ? 207 : 205);
         setXY0(&saveSlot0Sprite1[0].sprt, 34, 45);
-        saveSlot0Sprite1[0].sprt.w = 42;
+        saveSlot0Sprite1[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot0Sprite1[0].sprt.h = 39;
         saveSlot0Sprite1[1] = saveSlot0Sprite1[0];
 
         saveSlot1Sprite1[0] = saveSlot0Sprite1[1];
-        setUV0(&saveSlot1Sprite1[0].sprt, 42, 205);
+        setUV0(&saveSlot1Sprite1[0].sprt, VER_JP ? 44 : 42, VER_JP ? 207 : 205);
         setXY0(&saveSlot1Sprite1[0].sprt, 104, 45);
-        saveSlot1Sprite1[0].sprt.w = 42;
+        saveSlot1Sprite1[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot1Sprite1[0].sprt.h = 39;
         saveSlot1Sprite1[1] = saveSlot1Sprite1[0];
 
         saveSlot2Sprite1[0] = saveSlot1Sprite1[1];
-        setUV0(&saveSlot2Sprite1[0].sprt, 84, 205);
+        setUV0(&saveSlot2Sprite1[0].sprt, VER_JP ? 88 : 84, VER_JP ? 207 : 205);
         setXY0(&saveSlot2Sprite1[0].sprt, 174, 45);
-        saveSlot2Sprite1[0].sprt.w = 42;
+        saveSlot2Sprite1[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot2Sprite1[0].sprt.h = 39;
         saveSlot2Sprite1[1] = saveSlot2Sprite1[0];
 
         saveSlot3Sprite1[0] = saveSlot2Sprite1[1];
-        setUV0(&saveSlot3Sprite1[0].sprt, 126, 205);
+        setUV0(&saveSlot3Sprite1[0].sprt, VER_JP ? 132 : 126, VER_JP ? 207 : 205);
         setXY0(&saveSlot3Sprite1[0].sprt, 244, 45);
-        saveSlot3Sprite1[0].sprt.w = 42;
+        saveSlot3Sprite1[0].sprt.w = VER_JP ? 44 : 42;
         saveSlot3Sprite1[0].sprt.h = 39;
         saveSlot3Sprite1[1] = saveSlot3Sprite1[0];
 
         saveSelectButtonSprite1[0] = saveSlot3Sprite1[1];
-        setUV0(&saveSelectButtonSprite1[0].sprt, 168, 200);
-        setXY0(&saveSelectButtonSprite1[0].sprt, (displayWidth / 2) - 80, 229 - 17 * VID_NTSC);
-        saveSelectButtonSprite1[0].sprt.w = 70;
-        saveSelectButtonSprite1[0].sprt.h = 22;
+        setUV0(&saveSelectButtonSprite1[0].sprt, VER_JP ? 176 : 168, VER_JP ? 206 : 200);
+        setXY0(&saveSelectButtonSprite1[0].sprt, (displayWidth / 2) - (VER_JP ? 88 : 80), VER_JP ? 214 : 229 - 17 * VID_NTSC);
+        saveSelectButtonSprite1[0].sprt.w = VER_JP ? 73 : 70;
+        saveSelectButtonSprite1[0].sprt.h = VER_JP ? 10 : 22;
         saveSelectButtonSprite1[1] = saveSelectButtonSprite1[0];
 
         saveBackButtonSprite1[0] = saveSelectButtonSprite1[1];
-        setUV0(&saveBackButtonSprite1[0].sprt, 168, 222);
-        setXY0(&saveBackButtonSprite1[0].sprt, (displayWidth / 2) + 20, 229 - 17 * VID_NTSC);
-        saveBackButtonSprite1[0].sprt.w = 62;
-        saveBackButtonSprite1[0].sprt.h = 22;
+        setUV0(&saveBackButtonSprite1[0].sprt, VER_JP ? 176 : 168, VER_JP ? 216 : 222);
+        setXY0(&saveBackButtonSprite1[0].sprt, (displayWidth / 2) + (VER_JP ? 9 : 20), VER_JP ? 214 : 229 - 17 * VID_NTSC);
+        saveBackButtonSprite1[0].sprt.w = VER_JP ? 79 : 62;
+        saveBackButtonSprite1[0].sprt.h = VER_JP ? 10 : 22;
         whichLevelEndSpriteLoaded = LEVEL_END_GFX_MEMCARD_LOADED;
         saveBackButtonSprite1[1] = saveBackButtonSprite1[0];
     }
