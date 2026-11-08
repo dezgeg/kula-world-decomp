@@ -111,7 +111,6 @@ segments:
       - [0x28c68, c, level_update3]
       - [0x2bddc, c, enemy]
       - [0x30558, c, vsync]
-      - [0x30710, c, stack_hacks]
       - [0x30804, c, main]
       - [0x33320, c, disp_mode]
       - [0x33334, c, memcard1]
