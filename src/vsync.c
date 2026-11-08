@@ -12,13 +12,27 @@ extern void FadePsxButtonBackground(void);
 extern void PutDrawAndDispEnvs(void);
 extern void SndFadeVoiceVolume(int tag);
 
+extern int unusedNumHblanks[];
+extern OT_TYPE otag[2][1][1026];
+#if VER_JP
+// XXX probably this file needs to be compiled with -G0
+extern int gotVsync[];
+extern int loadingIsComplete[];
+extern int numCameras[];
+extern uint unkUnused[];
+extern int whichDrawDispEnv[];
+#define gotVsync (gotVsync[0])
+#define loadingIsComplete (loadingIsComplete[0])
+#define numCameras (numCameras[0])
+#define unkUnused (unkUnused[0])
+#define whichDrawDispEnv (whichDrawDispEnv[0])
+#else
 extern int gotVsync;
 extern int loadingIsComplete;
 extern int numCameras;
 extern uint unkUnused;
-extern int unusedNumHblanks[];
 extern int whichDrawDispEnv;
-extern OT_TYPE otag[2][1][1026];
+#endif
 
 #ifndef SKIP_UNUSED_CODE
 // This is used as DrawSyncCallback in some of the demos
