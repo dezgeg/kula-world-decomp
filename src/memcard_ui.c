@@ -1,5 +1,6 @@
 #include "common.h"
 #include <libmcrd.h>
+#include <string.h>
 
 typedef struct MemcardHdr {
     char magic1;
@@ -13,13 +14,21 @@ typedef struct MemcardHdr {
 } MemcardHdr;
 
 // Prototypes
-extern int AskSaveOverwrite(void);
 #if !VER_EU
 extern void DrawPsxButtonBackground(int);
 #define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
 #else
 extern void DrawPsxButtonBackground(void);
 #endif
+extern char Sjis2Ascii(int sjis);
+extern int GetControllerButtons(int slot);
+extern int GetControllerStatus(int slot);
+extern int LoadSaveSlot(int slot);
+extern int LooksLikeAscii(char* param_1);
+extern int MemCardUiPart(void);
+extern int SaveMemCard(int slot);
+extern void DrawJpMemCardMenuGfx(int);
+extern void DrawJpUiLabels(int, int);
 extern void DrawSaveSlotSprites(int isSave);
 extern void DrawScoreGraph(void);
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
@@ -28,44 +37,40 @@ extern void DrawTextFancyFont(char* str, short x, short y);
 extern void DrawWidgets(int menuId, int cursorPos);
 extern void FormatMemcard(void);
 extern void FormatTime(int time, char* s, int showPlus);
-extern int GetControllerButtons(int slot);
-extern int GetControllerStatus(int slot);
 extern void InitMemcardUi(void);
 extern void InitPsxButtonBackgroundSprites(int);
 extern void InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
 extern void InitSpinningSelectionSprites(void);
-extern int LoadSaveSlot(int slot);
-extern int LooksLikeAscii(char* param_1);
-extern int MemCardUiPart(void);
 extern void MusicCheckForLoop(void);
 extern void PutDrawAndDispEnvs(void);
 extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
-extern int SaveMemCard(int slot);
 extern void SetBigGuiSpriteVisible(void);
+extern void SetPsxButtonBackgroundVisible(void);
 extern void SetSemiTrans(void* p, int enable);
 extern void SetShadeTex(void* p, int disable);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
 extern void ShowMemCardFullScreenText(char* str);
-extern char Sjis2Ascii(int sjis);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
-extern int sprintf(char* s, const char* format, ...);
 
-extern uint controllerButtons;
+int AskSaveOverwrite(void);
+
 extern int curController;
 extern int displayHeight;
 extern int displayWidth;
-extern MemcardData memCardData;
 extern int musicShouldLoop;
 extern int numCameras;
-extern OT_TYPE otag[2][1][1026];
-extern uint prevControllerButtons;
-extern PrimList primLists[2];
-extern TgiFile* tgi;
 extern int whichDrawDispEnv;
+extern MemcardData memCardData;
+extern OT_TYPE otag[2][1][1026];
+extern PrimList primLists[2];
+extern SVECTOR ZERO_SVECTOR_a2fac;
+extern TgiFile* tgi;
+extern uint controllerButtons;
+extern uint prevControllerButtons;
 
 int saveSlot = 0;
 int memCardDataValid = 0;
@@ -80,6 +85,15 @@ int memCardHasError;
 uint mcResult;
 long mcCmd;
 long tempMcResult;
+
+static inline int GetButtonsFromAnyController() {
+    if (GetControllerStatus(curController) != 0) {
+        controllerButtons = GetControllerButtons(curController);
+    } else {
+        controllerButtons = GetControllerButtons((curController + 1) % 2);
+    }
+    return controllerButtons;
+}
 
 static inline int TestButton(int button) {
     return controllerButtons & (button & ~prevControllerButtons);
@@ -860,4 +874,89 @@ int MemCardUiPart(void) {
     prevControllerButtons = -1;
     return 0;
 }
+
+int AskSaveOverwrite(void) {
+    int i;
+
+    while (1) {
+        DrawSync(0);
+        VSync(0);
+        whichDrawDispEnv = !whichDrawDispEnv;
+        PutDrawAndDispEnvs();
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
+        }
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
+        ResetTextRenderState();
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
+        }
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+        SndProcessSpuVoices();
+        prevControllerButtons = controllerButtons;
+        GetButtonsFromAnyController();
+        if (musicShouldLoop == 1) {
+            MusicCheckForLoop();
+        }
+        SetBigGuiSpriteVisible();
+        ResetTextVars();
+        DrawPsxButtonBackground();
+        SetTextParams(displayWidth / 2, displayHeight / 2 - 50, 1, 0x80, 0x80, 0x80);
+        DrawTextCrappyFont("THIS WILL OVERWRITE\nANOTHER SAVED GAME\n\nCONTINUE?\n\ng YES   e NO\n");
+        if (TestButton(PAD_CROSS)) {
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
+            prevControllerButtons = 0xffffffff;
+            return 1;
+        }
+        if (TestButton(PAD_TRIANGLE)) {
+            SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a2fac, 8000);
+            prevControllerButtons = 0xffffffff;
+            return 0;
+        }
+    }
+}
 #endif
+
+#if VER_JP
+void ShowMemCardFullScreenText(int str) {
+#else
+void ShowMemCardFullScreenText(char* str) {
+#endif
+    int i;
+    int iter;
+
+#if VER_JP
+    SetBigGuiSpriteVisible();
+    SetPsxButtonBackgroundVisible();
+#endif
+
+    for (iter = 0; iter < 3; iter++) {
+#if !VER_JP
+        SetTextParams(displayWidth / 2, displayHeight / 2 - 25, 1, 0x80, 0x80, 0x80);
+        DrawTextCrappyFont(str);
+#endif
+        DrawSync(0);
+        VSync(0);
+        whichDrawDispEnv = !whichDrawDispEnv;
+        PutDrawAndDispEnvs();
+        for (i = 0; i < numCameras; i++) {
+            ClearOTagR(&otag[whichDrawDispEnv][i][0], 1026);
+        }
+        ClearOTagR(&primLists[whichDrawDispEnv].main, 4);
+        ResetTextRenderState();
+        for (i = 0; i < numCameras; i++) {
+            DrawOTag(&otag[!whichDrawDispEnv][i][tgi->skyboxFlag]);
+        }
+        DrawOTag(&primLists[!whichDrawDispEnv].gui3);
+        SndProcessSpuVoices();
+#if VER_JP
+        DrawJpMemCardMenuGfx(str);
+#endif
+        DrawPsxButtonBackground();
+#if VER_JP
+        if (GetControllerStatus(0) == 0 && GetControllerStatus(1) == 0) {
+            DrawJpUiLabels(1, 60);
+        }
+#endif
+    }
+}
