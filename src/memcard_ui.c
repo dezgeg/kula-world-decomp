@@ -91,6 +91,33 @@ char SAVE_FILENAME[32] = "BASLUS-00724ROLL";
 char SAVE_FILENAME[32] = "BESCES-01000KULA";
 #endif
 
+void ClearMemcardData(void) {
+    int i;
+    char* p = &memCardData;
+    for (i = 0; i < sizeof(memCardData); i++) {
+        *p++ = 0;
+    }
+}
+
+int GetMaxSaveSlotScore(void) {
+    int i, j;
+    int maxScore = 0;
+
+    for (i = 0; i < 4; i++) {
+        if (memCardData.saveslots[i].valid == 1) {
+            for (j = 0; j < 150; j++) {
+                if (memCardData.saveslots[i].levelScores[j] > maxScore) {
+                    maxScore = memCardData.saveslots[i].levelScores[j];
+                }
+            }
+        }
+    }
+#if VER_JP
+    CalcMemCardChecksum();
+#endif
+    return maxScore;
+}
+
 int LoadSaveMenu(void) {
     int i, j, k;
     int j2, k2;
