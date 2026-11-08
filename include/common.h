@@ -774,17 +774,17 @@ typedef enum GgiField {
 /* Fixed Memory Buffer Addresses */
 #define FIXED_BUF(addr)          ((void*)(addr))
 
-#if VER_US
+#if !VER_EU
 #define FILE_BUF                 FIXED_BUF(0x00106000)
 #else
 #define FILE_BUF                 FIXED_BUF(0x000FD000)
 #endif
-#if VER_US
+#if !VER_EU
 #define DEVKIT_REPLAY_BUF        FIXED_BUF(0x00200000)
 #else
 #define DEVKIT_REPLAY_BUF        FIXED_BUF(0x00131000)
 #endif
-#if VER_US
+#if !VER_EU
 #define TGI_FILE_BUF             FIXED_BUF(0x0013A000)
 #else
 #define TGI_FILE_BUF             FIXED_BUF(0x00132000)
@@ -803,13 +803,13 @@ typedef enum GgiField {
 #define CUBE_GRID_BUF            FIXED_BUF(0x001AF000)
 #define FMV_VRAM_BACKUP_BUF      FIXED_BUF(0x001B6000)
 #define SKYBOX_BUF               FIXED_BUF(0x001C3000)
-#if VER_US
+#if !VER_EU
 #define PSX_BUTTON_BG_BUF        FIXED_BUF(0x001E7120)
 #else
 #define PSX_BUTTON_BG_BUF        FIXED_BUF(0x001EF120)
 #endif
 #define FMV_VLC_BUF_1            FIXED_BUF(0x001F0000)
-#if VER_US
+#if !VER_EU
 #define FACE_DATA_BUF            FIXED_BUF(0x001EA000)
 #define TIM_DECOMP_BUF           FIXED_BUF(0x001F6000)
 #define KULA_ZALLOCATOR_HEAP     FIXED_BUF(0x001EA000)
