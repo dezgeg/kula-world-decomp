@@ -150,7 +150,7 @@ void FormatMemcard(void) {
     mcResult = tempMcResult;
 }
 
-int LoadSaveSlot(uint slot) {
+int LoadSaveSlot(int slot) {
     int i;
 
     MemCardAccept(0);
@@ -158,7 +158,7 @@ int LoadSaveSlot(uint slot) {
 
     if (tempMcResult == McErrNewCard || (tempMcResult == 0 && memCardDataValid == 0)) {
         ClearMemCardData();
-        if (MemCardReadFile(0, SAVE_FILENAME, &memCardData, 0, VER_US ? 0x1800 : 0x1000) == McErrCardNotExist) {
+        if (MemCardReadFile(0, SAVE_FILENAME, &memCardData, 0, !VER_EU ? 0x1800 : 0x1000) == McErrCardNotExist) {
             MemCardSync(0, &mcCmd, &tempMcResult);
             if (tempMcResult == 0) {
                 memCardDataValid = 1;
@@ -185,7 +185,7 @@ int LoadSaveSlot(uint slot) {
     if (memCardData.highestLevelReached > highestLevelReached) {
         highestLevelReached = memCardData.highestLevelReached;
     }
-    if (slot < 4) {
+    if (slot >= 0 && slot < 4) {
 #if !VER_JP
         musicVolume = memCardData.musicVolume;
         sfxVolume = memCardData.sfxVolume;
