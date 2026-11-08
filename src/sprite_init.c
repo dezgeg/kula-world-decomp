@@ -66,7 +66,7 @@ int drawTimerPausedWidget;
 int firstFruitTexture;
 int halfFps;
 int hourglassIsRotating;
-int lethargyMode;
+STATIC_FOR_GP_ACCESS int lethargyMode;
 int levelTimeLeft;
 int screenFadeEnabled;
 uint firstGuiTexture;
