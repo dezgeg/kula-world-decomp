@@ -129,7 +129,7 @@ ScoreGraph* drawScoreGraphPrims;
 TPolyF4 screenFadePolys[2][1];
 uint firstGuiTexture;
 
-STATIC_FOR_GP_ACCESS GgiFile* ggi;
+STATIC_FOR_GP_ACCESS int* ggi;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr2;
@@ -548,7 +548,7 @@ void DrawFruitWidgets(void) {
 
     switch (fruitWidgetDisplayMode) {
         case 0:
-            for (i = 0; i < ggi->numFruitTextures / 2; i++) {
+            for (i = 0; i < ggi[GGI_NUM_FRUIT_TEXTURES] / 2; i++) {
                 if (((fruitsCollectedBitmask >> i) & 1) == 0) {
                     addPrim(&primLists[whichDrawDispEnv].gui1, &fruitSprites[whichDrawDispEnv][i][0]);
                 } else {

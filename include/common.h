@@ -732,6 +732,8 @@ typedef struct TgiFile {
 // 7-10: Plain tile variations
 // 11-: based on object type
 
+// For documentation only. Game accesses using int arrays instead
+// and doesn't match otherwise (aliasing issues).
 typedef struct GgiFile {
     int numFruitTextures;
     int numParticleTextures;
@@ -750,6 +752,24 @@ typedef struct GgiFile {
     int part0Boff;
     int pad[5];
 } GgiFile;
+
+typedef enum GgiField {
+    GGI_NUM_FRUIT_TEXTURES,
+    GGI_NUM_PARTICLE_TEXTURES,
+    GGI_NUM_UNK1_TEXTURES,
+    GGI_NUM_GUI_TEXT_TEXTURES,
+    GGI_NUM_UNK2_TEXTURES,
+    GGI_NUM_BONUS_WIDGET_TEXTURES,
+    GGI_PART0_LEN,
+    GGI_PART1_LEN,
+    GGI_PART2_LEN,
+    GGI_PART3_LEN,
+    GGI_PART4_LEN,
+    GGI_PART5_LEN,
+    GGI_PART6_LEN,
+    GGI_PART0A_OFF,
+    GGI_PART0B_OFF,
+} GgiField;
 
 /* Fixed Memory Buffer Addresses */
 #define FIXED_BUF(addr)          ((void*)(addr))

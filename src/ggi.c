@@ -31,7 +31,7 @@ uint firstGuiTexture;
 int firstLensFlareOrPsxButtonTexture;
 int firstParticleTexture;
 int firstUnk2Texture;
-STATIC_FOR_GP_ACCESS GgiFile* ggi;
+STATIC_FOR_GP_ACCESS int* ggi;
 void* ggiPart0A;
 void* ggiPart0B;
 STATIC_FOR_GP_ACCESS void* ggiPart1HourglassAnim;
@@ -51,37 +51,37 @@ int numUnk2Textures;
 void ParseTextures(int* headerPtr, Texture* out, int count);
 void ParseGgiInner(int* eff, int modelType, int modelIdx, int i, int j, int probability, int addRgb, int maxRgb, int subRgb, int numSparkles);
 
-void* ParseGGI(GgiFile* ggi_ptr) {
-    int i, j;
+void* ParseGGI(int* ggi_ptr) {
     int* pOff;
+    int i, j;
 
     ggi = ggi_ptr;
 
-    pOff = (int*)&ggi_ptr->part0Aoff;
+    pOff = ggi_ptr + GGI_PART0A_OFF;
     ggiPart0A = (void*)((int)pOff + pOff[0] / 4 * 4);
     ggiPart0B = (void*)((int)pOff + pOff[1] / 4 * 4);
 
-    ggiPart1HourglassAnim = (void*)((int)pOff + ggi_ptr->part0Len * 2);
-    ggiPart2DepthCueingLookup = (void*)((int)ggiPart1HourglassAnim + ggi_ptr->part1Len * 2);
-    ggiPart3 = (void*)((int)ggiPart2DepthCueingLookup + ggi_ptr->part2Len * 2);
-    ggiPart4Dummy = (void*)((int)ggiPart3 + ggi_ptr->part3Len * 2);
-    ggiPart5JumpAnimData = (void*)((int)ggiPart4Dummy + ggi_ptr->part4Len * 2);
-    ggiPart6Textures = (void*)((int)ggiPart5JumpAnimData + ggi_ptr->part5Len * 2);
-    ggiPart7Unused = (void*)((int)ggiPart6Textures + ggi_ptr->part6Len * 2);
+    ggiPart1HourglassAnim = (void*)((int)pOff + ggi_ptr[GGI_PART0_LEN] * 2);
+    ggiPart2DepthCueingLookup = (void*)((int)ggiPart1HourglassAnim + ggi_ptr[GGI_PART1_LEN] * 2);
+    ggiPart3 = (void*)((int)ggiPart2DepthCueingLookup + ggi_ptr[GGI_PART2_LEN] * 2);
+    ggiPart4Dummy = (void*)((int)ggiPart3 + ggi_ptr[GGI_PART3_LEN] * 2);
+    ggiPart5JumpAnimData = (void*)((int)ggiPart4Dummy + ggi_ptr[GGI_PART4_LEN] * 2);
+    ggiPart6Textures = (void*)((int)ggiPart5JumpAnimData + ggi_ptr[GGI_PART5_LEN] * 2);
+    ggiPart7Unused = (void*)((int)ggiPart6Textures + ggi_ptr[GGI_PART6_LEN] * 2);
 
     ParseTextures(ggiPart6Textures, textures, NUM_TEXTURES);
 
     firstFruitTexture = 0;
-    firstParticleTexture = ((int*)ggi)[0];
-    numParticleTextures = ((int*)ggi)[1];
+    firstParticleTexture = ggi[GGI_NUM_FRUIT_TEXTURES];
+    numParticleTextures = ggi[GGI_NUM_PARTICLE_TEXTURES];
     firstLensFlareOrPsxButtonTexture = firstParticleTexture + numParticleTextures;
-    numUnk1Textures = ((int*)ggi)[2];
+    numUnk1Textures = ggi[GGI_NUM_UNK1_TEXTURES];
     firstGuiTextTexture = firstLensFlareOrPsxButtonTexture + numUnk1Textures;
-    numGuiTextTextures = ((int*)ggi)[3];
+    numGuiTextTextures = ggi[GGI_NUM_GUI_TEXT_TEXTURES];
     firstUnk2Texture = firstGuiTextTexture + numGuiTextTextures;
-    numUnk2Textures = ((int*)ggi)[4];
+    numUnk2Textures = ggi[GGI_NUM_UNK2_TEXTURES];
     firstBonusWidgetTexture = firstUnk2Texture + numUnk2Textures;
-    numBonusWidgetTextures = ((int*)ggi)[5];
+    numBonusWidgetTextures = ggi[GGI_NUM_BONUS_WIDGET_TEXTURES];
     firstGuiTexture = firstBonusWidgetTexture + numBonusWidgetTextures;
 
     for (i = 0; i < 3; i++) {

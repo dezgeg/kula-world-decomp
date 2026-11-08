@@ -166,7 +166,7 @@ int BONUS_WIDGET_POSITIONS[] = {
     21, 7,
 };
 
-STATIC_FOR_GP_ACCESS GgiFile* ggi;
+STATIC_FOR_GP_ACCESS int* ggi;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataEnd;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr;
 STATIC_FOR_GP_ACCESS int* bonusWidgetDataPtr2;
@@ -281,7 +281,7 @@ void InitFruitSprites(void) {
     int y;
     int tex;
 
-    for (i = 0; i < ggi->numFruitTextures; i++) {
+    for (i = 0; i < ggi[GGI_NUM_FRUIT_TEXTURES]; i++) {
         TSpritePrim(&fruitSprites[0][i], 0, 0, textures[firstFruitTexture + i].tpage);
         setXY0(&fruitSprites[0][i].sprt, FRUIT_WIDGET_POSITIONS[(i / 2) * 2], FRUIT_WIDGET_POSITIONS[(i / 2) * 2 + 1]);
         setRGB0(&fruitSprites[0][i].sprt, 0x80, 0x80, 0x80);
