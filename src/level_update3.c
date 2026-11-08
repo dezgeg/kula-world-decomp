@@ -110,8 +110,6 @@ static SVECTOR HandleItemTouching_playerPos;
 #define keyParticlesPos HandleItemTouching_keyParticlesPos
 #define playerPos HandleItemTouching_playerPos
 void HandleItemTouching(Player* player) {
-    int* ptr;
-
     playerPos = player->finePos;
     playerRadius = 10000;
 
@@ -871,7 +869,7 @@ static short HandleSpecialCubeTypes_blockType;
 #define blockType HandleSpecialCubeTypes_blockType
 static SVECTOR HandleSpecialCubeTypes_cubePos;
 #define cubePos HandleSpecialCubeTypes_cubePos
-#if VER_US
+#if !VER_EU
 // shared with another function, static in EU
 SVECTOR arrowDir;
 #else

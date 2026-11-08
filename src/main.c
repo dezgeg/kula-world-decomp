@@ -258,7 +258,7 @@ void main(void) {
     int i;
     int j;
 
-#if !VER_US
+#if VER_EU
     isDemoMode = 0;
 #endif
     dispenvScreenX = 0;
@@ -482,7 +482,7 @@ int MainGameLoop(void) {
     for (i = 0; i < 2; i++) {
         controllerStatuses[i] = GetControllerStatus(i);
     }
-#if VER_US
+#if !VER_EU
     rect.x = 0x230;
     rect.y = 0x1C0;
     rect.w = 0x10;
@@ -548,7 +548,7 @@ int MainGameLoop(void) {
         } else {
             WaitForVBlank();
         }
-#if VER_US
+#if !VER_EU
         whichDrawDispEnv ^= 1;
         PutDrawAndDispEnvs();
         ClearOTagR(otag[whichDrawDispEnv][0], 1026);
@@ -613,6 +613,7 @@ int MainGameLoop(void) {
         HandleCheats();
         UpdateVibration();
         ProcessScreenShake();
+
         if (controllerStatuses[0] != GetControllerStatus(0) || controllerStatuses[1] != GetControllerStatus(1)) {
             if (levelEndReason == 0) {
                 if (!isPaused && !isDemoMode && !inGetReadyScreen) {
@@ -986,7 +987,7 @@ int MainGameLoop(void) {
         savedFruitsCollectedBitmask = 0;
         isPaused = 1;
     }
-#if !VER_US
+#if VER_EU
     if (gameState == 4) {
         gameState = 0;
         gameMode = 0;
@@ -1197,8 +1198,9 @@ void DecideNextLevel(void) {
             if (debugBonusLevels == 2) {
                 if (levelEndReason > 0) {
                     curLevel++;
-                    if (curLevel > 17)
+                    if (curLevel >= 18) {
                         curLevel = *(int*)LEVEL_PAK_BUF;
+                    }
                 }
             }
         }

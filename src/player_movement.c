@@ -658,7 +658,7 @@ static short CheckForPlayerWallHit_blockIndex;
 #define blockIndex CheckForPlayerWallHit_blockIndex
 static short CheckForPlayerWallHit_sideOffset;
 #define sideOffset CheckForPlayerWallHit_sideOffset
-#if VER_US
+#if !VER_EU
 // shared with another function, static in EU
 extern SVECTOR arrowDir;
 #else
@@ -671,7 +671,7 @@ int CheckForPlayerWallHit(Player* player) {
             blockIndex = player->surroundingBlocks[0][1][1];
             sideOffset = (blockIndex - 5) * 128 + GetRotationIndexFromVector(player->gravityDir) * 16;
 
-#if VER_US
+#if !VER_EU
             if (isAirborneOverBounceBlock != 1 ||
                 (player->facingDir.vx == arrowDir.vx &&
                  player->facingDir.vy == arrowDir.vy &&
@@ -743,7 +743,7 @@ int CheckPlayerHitCeiling(Player* player) {
         (player->subpixelPositionOnCube.vz < 101 && player->surroundingBlocks[2][0][1] >= 0))
     {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2dd8, 7000);
-        Vibrate99(0, 200, 3);
+        Vibrate99(0, VER_JP ? 250 : 200, VER_JP ? 4 : 3);
 
         player->finePos.vx -= player->svec_144.vy * (player->gravityDir.vx + player->gravityDir.vx);
         player->finePos.vy -= player->svec_144.vy * (player->gravityDir.vy + player->gravityDir.vy);
