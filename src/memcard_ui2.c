@@ -14,6 +14,8 @@ extern void MusicCheckForLoop(void);
 extern void PutDrawAndDispEnvs(void);
 extern void ResetTextRenderState(void);
 extern void ResetTextVars(void);
+extern void DrawJpMemCardMenuGfx(int);
+extern void DrawJpUiLabels(int, int);
 extern void SetBigGuiSpriteVisible(void);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
@@ -96,8 +98,10 @@ void ShowMemCardFullScreenText(char* str) {
     int l;
 
     for (iter = 0; iter < 3; iter++) {
+#if !VER_JP
         SetTextParams(displayWidth / 2, displayHeight / 2 - 25, 1, 0x80, 0x80, 0x80);
         DrawTextCrappyFont(str);
+#endif
         DrawSync(0);
         VSync(0);
         whichDrawDispEnv = !whichDrawDispEnv;
@@ -112,6 +116,14 @@ void ShowMemCardFullScreenText(char* str) {
         }
         DrawOTag(&primLists[!whichDrawDispEnv].gui3);
         SndProcessSpuVoices();
+#if VER_JP
+        DrawJpMemCardMenuGfx(str);
+#endif
         DrawPsxButtonBackground();
+#if VER_JP
+        if (GetControllerStatus(0) == 0 && GetControllerStatus(1) == 0) {
+            DrawJpUiLabels(1, 60);
+        }
+#endif
     }
 }

@@ -320,6 +320,7 @@ void LoadSaveFromMemoryCard(void) {
             MemCardSync(0, &mcCmd, &tempMcResult);
         }
         if (tempMcResult == 0) {
+#if !VER_JP
             if (memCardData.arcadeModeDone == McErrCardNotExist) {
                 finalUnlocked = McErrCardNotExist;
             }
@@ -335,10 +336,15 @@ void LoadSaveFromMemoryCard(void) {
 #endif
             dispenvScreenX = memCardData.screenX;
             dispenvScreenY = memCardData.screenY;
-            LoadHighscoresFromMemcardData();
-            memCardDataValid = 1;
-            SetDispScreen(dispenvScreenX, dispenvScreenY);
-            mcResult = tempMcResult;
+#else
+            VerifyMemCardChecksum();
+#endif
+            if (!VER_JP || tempMcResult == 0) {
+                LoadHighscoresFromMemcardData();
+                memCardDataValid = 1;
+                SetDispScreen(dispenvScreenX, dispenvScreenY);
+                mcResult = tempMcResult;
+            }
         }
     }
 }
