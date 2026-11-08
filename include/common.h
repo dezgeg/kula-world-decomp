@@ -14,9 +14,9 @@
 /* Scale PAL frame durations/timer thresholds to current FPS */
 #define FRAMES(x) (((x) * FPS) / 50)
 
-#define NUM_TEXT_SPRITES (VER_US ? 42 : 40)
-#define NUM_TEXTURES (VER_US ? 180 : 150)
-#define NUM_SPECULAR_PRIMS (VER_US ? 10 : 16)
+#define NUM_TEXT_SPRITES (!VER_EU ? 42 : 40)
+#define NUM_TEXTURES (VER_JP ? 181 : !VER_EU ? 180 : 150)
+#define NUM_SPECULAR_PRIMS (!VER_EU ? 10 : 16)
 
 typedef char undefined;
 
