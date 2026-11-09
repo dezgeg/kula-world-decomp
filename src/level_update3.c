@@ -149,8 +149,8 @@ void HandleItemTouching(Player* player) {
                         case OBJ_SPIKE_TRAP:
                             if (entityData[entityBlockOffset + itemOffset + 3] == 0) {
                                 if (thePlayer.invulnerabilityTimer == -1 && thePlayer.movementInhibitTimer == 0) {
-                                    thePlayer.delayedLevelEndReason = LEVEL_END_CAPTURED;
                                     thePlayer.dying = 1;
+                                    thePlayer.delayedLevelEndReason = LEVEL_END_CAPTURED;
                                     thePlayer.movementVelocity = 0;
                                     thePlayer.rotX = 0;
                                     thePlayer.movementInhibitTimer = 10;
@@ -306,8 +306,8 @@ void HandleItemTouching(Player* player) {
                         case OBJ_HOURGLASS:
                             SndPlaySfx(SFX_HOURGLASS, 0, &ZERO_SVECTOR_a2df4, 7000);
                             levelTimeLeft = (100 * FPS - 1) - levelTimeLeft;
-                            hourglassIsRotating = 1;
                             levelScore += (levelTimeLeft / 50) * 10;
+                            hourglassIsRotating = 1;
                             AddParticles(1, &hourglassHudParticlePos, 0);
                             AddParticles(10, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));
                             break;
@@ -739,7 +739,7 @@ void CheckForButtonEntity(Player* player) {
     }
 
     if (player->alreadyProcessedEntityAction != OBJ_BUTTON && player->faceTypePlayerStandingOn == OBJ_BUTTON &&
-        player->subpixelPositionOnCube.vz >= 197 && player->subpixelPositionOnCube.vz < 316 &&
+        (player->subpixelPositionOnCube.vz >= 197 && player->subpixelPositionOnCube.vz < 316) &&
         player->subpixelPositionOnCube.vx >= 197 && player->subpixelPositionOnCube.vx < 316) {
         player->alreadyProcessedEntityAction = OBJ_BUTTON;
         entityOffset = player->specialBlockSideOffsetPlayerIsStandingOn;
@@ -798,7 +798,10 @@ int HandleTransporter(Player* player) {
         timer = -1;
         return 0;
     }
-    if (player->alreadyProcessedEntityAction != OBJ_TRANSPORTER && player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
+    if (player->alreadyProcessedEntityAction == OBJ_TRANSPORTER) {
+        return 0;
+    }
+    if (player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
         if (timer == -1) {
             timer = 15;
             AddParticles(3, &transporterParticlesPos, 0);

@@ -288,7 +288,7 @@ void HighScoreUi(int param_1) {
                 }
             }
         LABEL_SKIP_ENTRY:
-            if (!(highscoreEntryCursorY == 2 && highscoreEntryCursorX >= 8 && highscoreEntryCursorX <= 9)) {
+            if (!(highscoreEntryCursorY == 2 && (highscoreEntryCursorX >= 8 && highscoreEntryCursorX <= 9))) {
                 if (highscoreEntryCharIndex < 6) {
                     highscores[placement].name[highscoreEntryCharIndex] = S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[highscoreEntryCursorY][highscoreEntryCursorX];
                 }
