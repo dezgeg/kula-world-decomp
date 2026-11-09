@@ -279,27 +279,34 @@ void SndUpdateVolumeBasedOnDirVec(int tag, SVECTOR* pan) {
 
     /* Bug: this will read past the buffer if not found */
     if (spuVoiceState[i].tag == tag) {
-        curVolume = spuVoiceState[i].volume;
-        sfxIndex = spuVoiceState[i].sfxIndex;
-        panVec.vx = pan->vx;
-        panVec.vy = pan->vy;
-        panVec.vz = pan->vz;
-        Square0(panVecPtr, panSqrVecPtr);
-        newVolume = SquareRoot0(panSqrVecPtr[0] + panSqrVecPtr[1] + panSqrVecPtr[2]) * 3;
-        if (newVolume > curVolume) {
-            newVolume = curVolume;
+        if (VER_JP ? (spuVoiceState[i].sfxIndex != -1) : 1) {
+            curVolume = spuVoiceState[i].volume;
+            sfxIndex = spuVoiceState[i].sfxIndex;
+            panVec.vx = pan->vx;
+            panVec.vy = pan->vy;
+            panVec.vz = pan->vz;
+            Square0(panVecPtr, panSqrVecPtr);
+            newVolume = SquareRoot0(panSqrVecPtr[0] + panSqrVecPtr[1] + panSqrVecPtr[2]) * 3;
+            if (newVolume > curVolume) {
+                newVolume = curVolume;
+            }
+            if (newVolume == 0) {
+                perSfxVoiceAttrs[sfxIndex].volume.right = curVolume >> 1;
+                perSfxVoiceAttrs[sfxIndex].volume.left = curVolume >> 1;
+            } else {
+                delta = curVolume - newVolume;
+                perSfxVoiceAttrs[sfxIndex].volume.right = delta + (*panVecPtr * delta) / newVolume >> 1;
+                perSfxVoiceAttrs[sfxIndex].volume.left = delta - (*panVecPtr * delta) / newVolume >> 1;
+            }
+#if !VER_JP
         }
-        if (newVolume == 0) {
-            perSfxVoiceAttrs[sfxIndex].volume.right = curVolume >> 1;
-            perSfxVoiceAttrs[sfxIndex].volume.left = curVolume >> 1;
-        } else {
-            delta = curVolume - newVolume;
-            perSfxVoiceAttrs[sfxIndex].volume.right = delta + (*panVecPtr * delta) / newVolume >> 1;
-            perSfxVoiceAttrs[sfxIndex].volume.left = delta - (*panVecPtr * delta) / newVolume >> 1;
-        }
+#endif
         perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
         perSfxVoiceAttrs[sfxIndex].mask = 3;
         SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+#if VER_JP
+        }
+#endif
     }
 }
 
