@@ -57,11 +57,10 @@ short SFX_REMAP_TABLE[120] = {
 };
 
 void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
+    int vol = 0x2aaa;
     uchar* addr;
     int i;
-    int note;
-    int vol = 0x2aaa;
-    int off0;
+    int j;
 
     loadingIsComplete = -1;
     musicVolume = 8;
@@ -100,13 +99,13 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
     for (i = 0; i < sfxFile->count; i++) {
         int off0 = sfxFile->entries[0].offset - 0x1010;
         perSfxVoiceAttrs[i].addr = sfxFile->entries[i].offset - off0;
-        note = sfxFile->entries[i].note;
-        if ((note & 0x8000U) == 0) {
-            perSfxVoiceAttrs[i].note = note;
+        j = sfxFile->entries[i].note;
+        if ((j & 0x8000U) == 0) {
+            perSfxVoiceAttrs[i].note = j;
             perSfxVoiceAttrs[i].sample_note = 0x2400;
         } else {
             perSfxVoiceAttrs[i].note = 0x2400;
-            perSfxVoiceAttrs[i].sample_note = note & 0x7fff;
+            perSfxVoiceAttrs[i].sample_note = j & 0x7fff;
         }
         perSfxVoiceAttrs[i].voice = 1 << i;
         perSfxVoiceAttrs[i].mask = 0;
@@ -130,8 +129,11 @@ void SndInitFromSfxFile(SfxFile* sfxFile, int length) {
         perSfxVoiceAttrs[i].adsr1 = 0;
         perSfxVoiceAttrs[i].adsr2 = 0;
     }
-    for (i = 0; i < 24; i++) {
-        spuVoiceState[i].sfxIndex = -1;
+    for (j = 0; j < 24; j++) {
+        spuVoiceState[j].sfxIndex = -1;
+#if VER_JP
+        spuVoiceState[j].tag = 0;
+#endif
     }
 
     spuCommonAttr.mvol.left = 0x3fff;
