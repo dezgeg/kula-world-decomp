@@ -130,8 +130,9 @@ Music MUSICS[] = {
     {"\\SAMPLE.XA;1", 0, 0},
 };
 
-char S_File_error[] = "File error:\n\n";
 #if !VER_EU
+// TODO: get these strings to appear "naturally"
+char S_File_error[] = "File error:\n\n";
 char S_could_not_find[] = "could not find ";
 char S_seek_error[] = "seek error ";
 char S_read_error[] = "read error ";
@@ -151,7 +152,7 @@ void FileError(char* str1, char* str2) {
     DrawSync(0);
     whichDrawDispEnv = 0;
     PutDrawAndDispEnvs();
-    FntPrint(S_File_error);
+    FntPrint("File error:\n\n");
     FntPrint(str1);
     FntPrint(str2);
     FntFlush(-1);
