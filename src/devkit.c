@@ -140,7 +140,7 @@ void InitReplaySaving(void) {
 }
 
 void RecordButtonsToDevkit(int buttons) {
-    s32 origArg0;
+    s32 maskedButtons;
     u8* writePtr;
     s32 count;
     u8 shuffled;
@@ -152,8 +152,8 @@ void RecordButtonsToDevkit(int buttons) {
     current = saveReplayCurrentButtons;
 
     saveReplayLength++;
-    origArg0 = buttons;
-    buttons <<= 16;
+    maskedButtons = buttons;
+    buttons = maskedButtons << 16;
     if (buttons >> 16 == current) {
         count++;
     } else {
@@ -164,7 +164,7 @@ void RecordButtonsToDevkit(int buttons) {
             *writePtr++ = shuffled;
         }
         count = 1;
-        current = origArg0;
+        current = maskedButtons;
         do {
             shuffled = ((buttons >> (16 + 4)) & 0xF) |
                        ((buttons >> (16 + 5)) & 0x10) |
