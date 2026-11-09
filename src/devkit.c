@@ -186,11 +186,9 @@ void RecordButtonsToDevkit(int buttons) {
 void WriteToDevkit(int param_1) {
     int fd;
     int len;
-    byte* nextP;
     byte* p;
-    int buts;
-    int count;
-    unsigned char new_var; // HACK
+    byte count;
+    byte buts;
 
     if (param_1 == 0) {
         sprintf(debugFilenameBuf, "\\psx\\cube\\pad\\%d.pad", devkitFileNumber);
@@ -201,9 +199,8 @@ void WriteToDevkit(int param_1) {
     devkitFileNumber++;
     p = saveReplayWritePtr;
     count = saveReplayRleButtonCount;
-    new_var = count;
     buts = saveReplayCurrentButtonsShuffled;
-    *p++ = new_var;
+    *p++ = count;
     *p++ = buts;
     *p++ = 0;
     *p++ = 0xff;
