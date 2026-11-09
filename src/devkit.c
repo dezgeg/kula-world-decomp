@@ -145,6 +145,7 @@ void RecordButtonsToDevkit(int buttons) {
     s32 count;
     u8 shuffled;
     s16 current;
+    s32 rawButtons;
 
     writePtr = saveReplayWritePtr;
     count = saveReplayRleButtonCount;
@@ -152,10 +153,24 @@ void RecordButtonsToDevkit(int buttons) {
     current = saveReplayCurrentButtons;
 
     saveReplayLength++;
-    maskedButtons = buttons;
+    rawButtons = buttons;
+#if VER_JP
+    if (buttons & 0xf000) {
+        rawButtons = buttons | 0x4000;
+    }
+#endif
+    maskedButtons = VER_JP ? (rawButtons & 0x4af0) : rawButtons;
     buttons = maskedButtons << 16;
-    if (buttons >> 16 == current) {
+
+    if (VER_JP ? maskedButtons == current : buttons >> 16 == current) {
         count++;
+#if VER_JP
+        if (count >= 0x100) {
+            *writePtr++ = 0xff;
+            *writePtr++ = rawButtons = shuffled;
+            count = 1;
+        }
+#endif
     } else {
         if (saveReplayIsFirstSequence == 1) {
             saveReplayIsFirstSequence = 0;
