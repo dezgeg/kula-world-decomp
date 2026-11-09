@@ -809,8 +809,8 @@ int CheckIfPlayerLanded(Player* player) {
     landingSquishDamping = 100;
     UpdateSubpixelPositions(player);
     if (player->subpixelPositionOnCube.vz < 0xb4 && !player->jumping) {
-        player->rollingForward = 1;
         player->forcedRollForwardTimer = 1;
+        player->rollingForward = 1;
         player->turnDirection = 0;
         player->movementVelocity = VELOCITY(40);
     }

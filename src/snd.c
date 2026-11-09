@@ -153,11 +153,12 @@ static int SndPlaySfx_i;
 static int SndPlaySfx_panning;
 #define panning SndPlaySfx_panning
 void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume) {
-    int pan;
     curPlayingSfx = sfx;
 
+#if !VER_JP
     do {
     } while (0);
+#endif
 
     if (curPlayingSfx < (VER_JP ? 130 : 120)) {
         curPlayingSfx = SFX_REMAP_TABLE[sfx];
@@ -234,15 +235,25 @@ void SndProcessSpuVoices(void) {
             SpuSetKey(0, 1 << i);
         }
         if (keyStatus[i] == SPU_OFF_ENV_ON) {
+#if !VER_JP
+            // This is buggy and underflows the array every time
             spuVoiceState[i].sfxIndex = -1;
             spuVoiceState[i].tag = 0;
-            /* ?!? This will underflow the array every time... */
+#endif
             sfxIndex = spuVoiceState[i].sfxIndex;
-            perSfxVoiceAttrs[sfxIndex].volume.right = 0;
-            perSfxVoiceAttrs[sfxIndex].volume.left = 0;
-            perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
-            perSfxVoiceAttrs[sfxIndex].mask = 3;
-            SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+            if (VER_JP ? (sfxIndex != -1) : 1) {
+                perSfxVoiceAttrs[sfxIndex].volume.right = 0;
+                perSfxVoiceAttrs[sfxIndex].volume.left = 0;
+                perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
+                perSfxVoiceAttrs[sfxIndex].mask = 3;
+                SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+#if VER_JP
+                spuVoiceState[i].sfxIndex = -1;
+#endif
+            }
+#if VER_JP
+            spuVoiceState[i].tag = 0;
+#endif
         }
     }
 }
@@ -335,12 +346,14 @@ void SndFadeVoiceVolume(int tag) {
         }
 
         sfxIndex = spuVoiceState[i].sfxIndex;
-        perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
-        /* Bug: Yes, they really swapped left and right here! */
-        perSfxVoiceAttrs[sfxIndex].volume.right = volumeL;
-        perSfxVoiceAttrs[sfxIndex].volume.left = volumeR;
-        perSfxVoiceAttrs[sfxIndex].mask = 3;
-        SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+        if (!VER_JP || sfxIndex != -1) {
+            perSfxVoiceAttrs[sfxIndex].voice = 1 << i;
+            /* Bug: Yes, they really swapped left and right here! */
+            perSfxVoiceAttrs[sfxIndex].volume.right = volumeL;
+            perSfxVoiceAttrs[sfxIndex].volume.left = volumeR;
+            perSfxVoiceAttrs[sfxIndex].mask = 3;
+            SpuSetVoiceAttr(&perSfxVoiceAttrs[sfxIndex]);
+        }
     }
 }
 
