@@ -9,18 +9,23 @@ static unsigned char VIBRATION_ACT_ALIGN[6] = { 0x00, 0x01, 0xff, 0xff, 0xff, 0x
 int vibrationEnabled = 1;
 
 // sbss offset 0x94420..0x94490
+static char* vibrationSeqPtr;
 STATIC_FOR_GP_ACCESS int latestControllerSlotPolled;
 STATIC_FOR_GP_ACCESS u_char padData[2][34];
-static u_char vibrationBuf[2][2];
-STATIC_FOR_GP_ACCESS u_char padVibrationModeEntered[];
+STATIC_FOR_GP_ACCESS u_char padVibrationModeEntered[2];
+static int vibrationAngleIncrement;
+static int vibrationCounter;
+static int vibrationCounterMax;
+static int vibrationDecayIntensity;
+static int vibrationDecayTimer;
+static int vibrationDirectSmallMotor;
+static int vibrationLargeMotor;
 static int vibrationMode;
 static int vibrationSinConst;
 static int vibrationSinMagnitude;
 static int vibrationSinPhase;
-static int vibrationAngleIncrement;
-static int vibrationCounterMax;
-static int vibrationCounter;
-static char* vibrationSeqPtr;
+static int vibrationSmallMotor;
+static u_char vibrationBuf[2][2];
 
 static char VIBRATION_SEQ_DATA[];
 

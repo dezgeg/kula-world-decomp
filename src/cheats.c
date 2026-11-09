@@ -7,20 +7,24 @@ typedef struct CheatState {
     int unused;
 } CheatState;
 
+extern int GetControllerButtons(int slot);
 extern void EnableLethargy(int enable);
 extern void SetInvulnerable(void);
 extern void SetupDisplay(u_char isbg, u_char bgR, u_char bgG, u_char bgB, u_char useDithering, u_char use24Bit);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TweakSkyboxColors(uint param_1);
 
-extern uint controllerButtons;
+extern int debugDisableTimer;
 extern int finalUnlocked;
+extern int gameMode;
 extern int gameState;
 extern int isPaused;
 extern int levelEndReason;
 extern int levelPlayTime[2];
 extern int levelScore;
+extern int numTimeTrialPlayers;
 extern int specialLevelType;
+extern uint controllerButtons;
 extern uint prevControllerButtons;
 
 static uint CHEAT_BUTTONS[][8] = {
@@ -40,8 +44,8 @@ static uint buttonBuf[8];
 static uint* buttonsPtr;
 
 // .comm
-int cheated;
 CheatState cheatState[9];
+int cheated;
 
 int sioCheatActivated = 0; // .sdata
 SVECTOR ZERO_SVECTOR_a3334 = { 0, 0, 0, 0 }; // .sdata
