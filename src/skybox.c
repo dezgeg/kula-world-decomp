@@ -14,7 +14,6 @@ extern int starfieldTransPhaseZ1;
 extern int starfieldTransPhaseZ2;
 extern VECTOR starfieldTrans;
 
-STATIC_FOR_GP_ACCESS short recalcSkyboxes[3]; // XXX: these accesses overlap some other variables
 static int skyboxMaxAngle1;
 static int skyboxMaxAngle2;
 STATIC_FOR_GP_ACCESS short* tgiPart9;
@@ -27,7 +26,7 @@ extern void SetShadeTex(void* p, int disable);
 extern void SetSemiTrans(void* p, int enable);
 extern void* memcpy(void* dest, const void* src, size_t n);
 
-short skyboxVertices[4][3];
+STATIC_FOR_GP_ACCESS short skyboxVertices[3][3];
 
 static int RecalcSkyboxes01_angleMul1;
 static int RecalcSkyboxes01_angleMul2;
@@ -105,15 +104,16 @@ void RecalcSkyboxes01(int angleOfSomethingI, int angleOfSomethingJ, int countI, 
             SkyboxSinCos(j * angleMul1 - 1, (i + 1) * angleMul2, &skyboxVertices[2][0], &skyboxVertices[2][1], &skyboxVertices[2][2]);
             SkyboxSinCos((j + 1) * angleMul1, (i + 1) * angleMul2, &skyboxVertices[3][0], &skyboxVertices[3][1], &skyboxVertices[3][2]);
 
+            // this overruns the array
             for (k = 0; k < 3; k++) {
-                *ptr++ = recalcSkyboxes[k] = (((skyboxVertices[0][k] + skyboxVertices[1][k]) + skyboxVertices[2][k]) + skyboxVertices[3][k]) / 4;
+                *ptr++ = skyboxVertices[4][k] = (((skyboxVertices[0][k] + skyboxVertices[1][k]) + skyboxVertices[2][k]) + skyboxVertices[3][k]) / 4;
             }
 
             maxDist = 0;
             for (k = 0; k < 4; k++) {
-                s = SquareRoot0(Square(recalcSkyboxes[0] - skyboxVertices[k][0]) +
-                                Square(recalcSkyboxes[1] - skyboxVertices[k][1]) +
-                                Square(recalcSkyboxes[2] - skyboxVertices[k][2]));
+                s = SquareRoot0(Square(skyboxVertices[4][0] - skyboxVertices[k][0]) +
+                                Square(skyboxVertices[4][1] - skyboxVertices[k][1]) +
+                                Square(skyboxVertices[4][2] - skyboxVertices[k][2]));
                 if (maxDist < s)
                     maxDist = s;
             }
