@@ -42,6 +42,7 @@ extern short uncompLevelData[];
 extern short cubeIndexes[39304];
 extern void* cubeStates[256 * 16];
 extern int isFinal;
+extern int isInCredits;
 extern int lightEffects[32 * 8];
 extern int recentlyVisitedCubeFaces[4 * 32];
 extern int sunglassDisablingState[1];
@@ -264,7 +265,12 @@ void InitTurningMotionBlur(void) {
     }
 }
 
+#if VER_JP
+void ParseLevelDataFromTgi(int isCredits) {
+#else
 void ParseLevelDataFromTgi(void) {
+    const int isCredits = 0;
+#endif
     int i;
     int j;
     int* ptr;
@@ -344,6 +350,10 @@ void ParseLevelDataFromTgi(void) {
         tgi->lodDistance[i] = turningMotionBlurTable[0 * 7 + i];
     }
 
+#if VER_JP
+    isInCredits = 0;
+#endif
+
     if (tgi->skyboxFlag == 1025) {
         if (specialLevelType != wasSpecialLevel || recalcSkyboxes == 1) {
             switch (specialLevelType) {
@@ -362,7 +372,9 @@ void ParseLevelDataFromTgi(void) {
     }
 
     if (isFinal == 1) {
-        TweakSkyboxColors(0x787878);
+        if (!isCredits) {
+            TweakSkyboxColors(0x787878);
+        }
     }
 
     if (tgi->skyboxFlag == 1025) {

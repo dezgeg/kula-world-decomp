@@ -1441,6 +1441,9 @@ void* ParseGGI(int* ggi_ptr) {
         }
     }
 
+#if VER_JP
+    CustomBallInitAllModels();
+#endif
 #if !VER_EU
     InitPlayerSpecularSprite();
 #endif

@@ -36,6 +36,7 @@ extern void RenderNonSpecialBackground(void* ot);
 extern void RenderStarfield(void* ot);
 extern void RenderBonusBackgroundPart2(void);
 extern void UpdateStarfield(void);
+extern void CreditsRenderModels(void);
 
 extern short* ggiPart2DepthCueingLookup;
 extern int cameraIndex;
@@ -51,6 +52,7 @@ extern AnimatedTextureChain crumblingSpecialBlockTextureChain;
 extern AnimatedTextureChain fireBlockTextureChain;
 extern InvisBlockVisibility invisBlockVisibility;
 extern AnimatedTextureChain invisibleBlockTextureChain;
+extern int isInCredits;
 extern int isPaused;
 extern int toBeDisabledLightEffects[64];
 extern GemRandomSparkleEffect gemRandomSparkleEffects[3][3];
@@ -144,7 +146,10 @@ void RenderEverythingElseAndProcessSomeStuff(void) {
         MakeOtagDoublyLinked(otag[whichDrawDispEnv][cameraIndex]);
         UnusedAsmNoop();
 
-        if (isPaused == 0) {
+        if (VER_JP && isInCredits == 1) {
+            ProcessEnemiesRenderItemsAndCheckFellOff();
+            CreditsRenderModels();
+        } else if (isPaused == 0) {
             ProcessEnemiesRenderItemsAndCheckFellOff();
         } else {
             RenderItems_();
