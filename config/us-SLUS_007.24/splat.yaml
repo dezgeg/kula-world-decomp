@@ -96,7 +96,6 @@ segments:
       - [0x0e3ec, c, hud]
       - [0x13b74, c, sprite_init]
       - [0x15be0, c, tgi]
-      - [0x167c4, c, skybox]
       - [0x1772c, c, level_init]
       - [0x1a9b4, c, render1]
       - [0x1ba6c, c, update]
