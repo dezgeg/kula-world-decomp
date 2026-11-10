@@ -163,8 +163,8 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
 #endif
 
 void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, void* colorR, void* colorG, void* colorB, void* const0_arg8,
-                        uint blockX, uint blockY, uint blockZ, int dir,
-                        uint otherBlockX, uint otherBlockY, uint otherBlockZ, int otherDir,
+                        int blockX, int blockY, int blockZ, int dir,
+                        int otherBlockX, int otherBlockY, int otherBlockZ, int otherDir,
                         MATRIX *gteMatrix, int shadowColor, int shadowFlag) {
     int nextVertexId;
     POLY_FT4* shadowPrim;
@@ -179,7 +179,7 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
         return;
     z >>= 6;
 
-    if (blockX < 34 && blockY < 34 && blockZ < 34 &&
+    if (blockX >= 0 && blockX < 34 && blockY >= 0 && blockY < 34 && blockZ >= 0 && blockZ < 34 &&
             CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
             (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
         shadowDepth = q->otagIndex;
@@ -187,7 +187,7 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
         shadowDepth = -1;
     }
 
-    if (otherBlockX < 34 && otherBlockY < 34 && otherBlockZ < 34) {
+    if (otherBlockX >= 0 && otherBlockX < 34 && otherBlockY >= 0 && otherBlockY < 34 && otherBlockZ >= 0 && otherBlockZ < 34) {
         int cubeIndex = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ);
         if (cubeIndex != -1) {
             Quad* q = (Quad*)cubeStates[cubeIndex * 16 + otherDir];
