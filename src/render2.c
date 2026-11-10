@@ -102,11 +102,11 @@ int EXIT_LIGHT_COLORS_PER_WORLD[10] = {
     0x00104010,
 };
 
-int TRANSPORTER_COLORS[4][3] = {
-    { 6144, 6144, 5120 },
-    { 5120, 5120, 6144 },
-    { 5120, 6144, 5120 },
-    { 6144, 5120, 5120 },
+int TRANSPORTER_COLORS[12] = {
+    6144, 6144, 5120,
+    5120, 5120, 6144,
+    5120, 6144, 5120,
+    6144, 5120, 5120,
 };
 
 #ifndef SKIP_UNUSED_CODE
@@ -118,7 +118,7 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
     int i;
     int* p;
 
-#if !VER_US
+#if VER_EU
     if (z < 400) {
         return;
     }
@@ -137,7 +137,7 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
     itemsDispList[itemsDispListIdx++] = colorG;
     itemsDispList[itemsDispListIdx++] = colorB;
 
-#if VER_US
+#if !VER_EU
     modelId = (modelId << 4) + (modelVariant << 2) + modelBase;
     itemsDispList[itemsDispListIdx++] = &ggiPart0B[ggiPart0B[modelId] / 4];
 #else
@@ -152,7 +152,7 @@ void Unused_FUN_0002caec(MATRIX* m, int z, int modelId, int unk1, int colorR, in
     itemsDispList[itemsDispListIdx++] = unk1;
 
     p = (int*)m;
-#if VER_US
+#if !VER_EU
     for (i = 0; i < 8; i++) {
 #else
     for (z = 0; z < 8; z++) {
@@ -280,8 +280,9 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     Quad* q;
     int shift;
 
-    if (z < 256)
+    if (z < 256) {
         return;
+    }
     z >>= 6;
     shift = 16; // permuter hack
 
@@ -351,11 +352,9 @@ LAB_shadow:
         for (z = 0; z < 8; z++) {
             playerEnemyDispList[playerEnemyDispListIdx++] = (void*)*mPtr++;
         }
-    }
-    {
-        int* p20 = (int*)param_20;
+        mPtr = (int*)param_20;
         for (z = 0; z < 5; z++) {
-            playerEnemyDispList[playerEnemyDispListIdx++] = (void*)*p20++;
+            playerEnemyDispList[playerEnemyDispListIdx++] = (void*)*mPtr++;
         }
     }
 
@@ -463,9 +462,9 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
                     }
                 }
                 if (blinkState == 1) {
-                    colorR = colorR * TRANSPORTER_COLORS[e[IE_VARIANT]][0] >> 12;
-                    colorG = colorG * TRANSPORTER_COLORS[e[IE_VARIANT]][1] >> 12;
-                    colorB = colorB * TRANSPORTER_COLORS[e[IE_VARIANT]][2] >> 12;
+                    colorR = colorR * TRANSPORTER_COLORS[e[IE_VARIANT] * 3 + 0] >> 12;
+                    colorG = colorG * TRANSPORTER_COLORS[e[IE_VARIANT] * 3 + 1] >> 12;
+                    colorB = colorB * TRANSPORTER_COLORS[e[IE_VARIANT] * 3 + 2] >> 12;
                     SetLightEffectColor(lightEffectId, BUTTON_COLORS[curWorld * 4 + e[IE_VARIANT]]);
                 }
                 break;
