@@ -50,7 +50,7 @@ segments:
     subsegments:
       - [0x00800, .rodata, hud]
       - [0x00814, .rodata, level_init]
-      - [0x00844, .rodata, update]
+      - [0x00844, .rodata, render1]
       - [0x00870, pad, rodata_00870] # hack
       - [0x00874, .rodata, render2]
       - [0x008d4, .rodata, render3]
@@ -96,7 +96,6 @@ segments:
       - [0x1343c, c, sprite_init]
       - [0x154a8, c, level_init]
       - [0x1a27c, c, render1]
-      - [0x1b334, c, update]
       - [0x1c2ec, c, render2]
       - [0x1d9ec, c, render3]
       - [0x1f330, c, player_movement]
