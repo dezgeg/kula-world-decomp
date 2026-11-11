@@ -179,8 +179,10 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
         return;
     z >>= 6;
 
-    if (blockX >= 0 && blockX < 34 && blockY >= 0 && blockY < 34 && blockZ >= 0 && blockZ < 34 &&
-            CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
+    if (blockX >= 0 && blockX < 34 &&
+        blockY >= 0 && blockY < 34 &&
+        blockZ >= 0 && blockZ < 34 &&
+        CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
             (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
         shadowDepth = q->otagIndex;
     } else {
@@ -266,8 +268,8 @@ LAB_shadow:
 }
 
 void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, int colorR, int colorG, int colorB, int const0_arg8,
-                          uint blockX, uint blockY, uint blockZ, int dir,
-                          uint otherBlockX, uint otherBlockY, uint otherBlockZ, int otherDir,
+                          int blockX, int blockY, int blockZ, int dir,
+                          int otherBlockX, int otherBlockY, int otherBlockZ, int otherDir,
                           MATRIX *gteMatrix, int shadowColor, int shadowFlag, MATRIX *param_20, int *const0_2048,
                           uint const4000, int const0_arg23, int const0_arg24, int const178, SVECTOR *param_26) {
     int nextVertexId;
@@ -286,15 +288,19 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     z >>= 6;
     shift = 16; // permuter hack
 
-    if (blockX < 34 && blockY < 34 && blockZ < 34 &&
-            CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
+    if (blockX >= 0 && blockX < 34 &&
+        blockY >= 0 && blockY < 34 &&
+        blockZ >= 0 && blockZ < 34 &&
+        CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
             (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
         shadowDepth = q->otagIndex;
     } else {
         shadowDepth = -1;
     }
 
-    if (otherBlockX < 34 && otherBlockY < 34 && otherBlockZ < 34) {
+    if (otherBlockX >= 0 && otherBlockX < 34 &&
+        otherBlockY >= 0 && otherBlockY < 34 &&
+        otherBlockZ >= 0 && otherBlockZ < 34) {
         int cubeIndex = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ);
         if (cubeIndex != (short)-1) {
             Quad* q = (Quad*)cubeStates[cubeIndex * 16 + otherDir];
@@ -345,6 +351,11 @@ LAB_shadow:
     }
 
     playerEnemyDispList[playerEnemyDispListIdx++] = &ggiPart0A[ggiPart0A[modelId] / 4];
+#if VER_JP
+    if ((gameMode == 1 || (gameMode == 2 && numTimeTrialPlayers == 2)) && twoPlayerWhichPlayer == 0) {
+        playerEnemyDispList[playerEnemyDispListIdx - 1] = twoPlayer1BallModel;
+    }
+#endif
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg4;
 
     {
@@ -362,7 +373,7 @@ LAB_shadow:
     playerEnemyDispList[playerEnemyDispListIdx++] = (const0_arg23 << shift) | const4000;
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg24;
     playerEnemyDispList[playerEnemyDispListIdx++] = const178;
-    playerEnemyDispListIdx = playerEnemyDispListIdx + 7;
+    playerEnemyDispListIdx += 7;
 
     for (nextVertexId = 0; nextVertexId < 16; nextVertexId++) {
         if (shadowPrimPtrs[whichDrawDispEnv][cameraIndex][shadowFlag][nextVertexId].p0 == (ulong*)-1) break;
