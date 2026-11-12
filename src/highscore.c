@@ -1,19 +1,16 @@
 #include "common.h"
 #include <string.h>
 
+extern int GetControllerButtons(int slot);
+extern int GetControllerStatus(int slot);
+extern uint Rand(int param_1);
 extern void DrawHighScoreCubes(void);
-#if !VER_EU
-extern void DrawPsxButtonBackground(int);
-#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
-#else
-extern void DrawPsxButtonBackground(void);
-#endif
+extern void DrawJpLabelBackground(int, int);
+extern void DrawJpUiLabels(int, int);
 extern void DrawScoreGraph(void);
 extern void DrawTextCrappyFont(char* str);
 extern void DrawWidgets(int menuId, int cursorPos);
 extern void FormatTime(int time, char* s, int showPlus);
-extern int GetControllerButtons(int slot);
-extern int GetControllerStatus(int slot);
 extern void InitHighscoreCubes(void);
 extern void InitPsxButtonBackgroundSprites(int);
 extern void InitScoreGraph(void* pBuf, int* levelScores, int* unusedScorePtr, int numLevels, int maxScore, int x, int y, int graphWidth, int graphHeight, int isHighscore);
@@ -25,7 +22,13 @@ extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG,
 extern void SndMuteAllVoices(void);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
-extern uint Rand(int param_1);
+
+#if !VER_EU
+extern void DrawPsxButtonBackground(int);
+#define DrawPsxButtonBackground() DrawPsxButtonBackground(1)
+#else
+extern void DrawPsxButtonBackground(void);
+#endif
 
 extern SVECTOR ZERO_SVECTOR_a3340;
 extern int curController;
