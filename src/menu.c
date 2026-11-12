@@ -218,7 +218,7 @@ void OptionsMenu(void) {
 
     int decrement;
     int increment;
-    int cross;
+    int accept;
 
     if (TestButton(PAD_U)) {
         if (cursorPosInMenu[curMenu] <= 0) {
@@ -257,7 +257,7 @@ void OptionsMenu(void) {
     }
     DrawStaticUiSprite(onOffSprite, x, y + 79, 0);
 
-    cross = TestButton(PAD_CROSS);
+    accept = TestButton(PAD_CROSS);
     decrement = TestButton(PAD_L);
     increment = TestButton(PAD_R);
 
@@ -288,7 +288,7 @@ void OptionsMenu(void) {
             SndSetMusicVolume();
             break;
         case 2:
-            if (cross) {
+            if (accept) {
                 /* adjust screen */
                 curMenu = 2;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
@@ -304,7 +304,7 @@ void OptionsMenu(void) {
                 turnDelayEnabled = 0;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
-            if (cross) {
+            if (accept) {
                 turnDelayEnabled = turnDelayEnabled ^ 1;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
@@ -318,13 +318,18 @@ void OptionsMenu(void) {
                 vibrationEnabled = 0;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
-            if (cross) {
-                vibrationEnabled = vibrationEnabled ^ 1;
+            if (accept) {
+                vibrationEnabled ^= 1;
+#if VER_JP
+                if (!vibrationEnabled) {
+                    ResetVibration();
+                }
+#endif
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             break;
         case 5:
-            if (cross) {
+            if (accept) {
                 curMenu--;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
@@ -343,6 +348,13 @@ void QuitAreYouSureMenu(void) {
 }
 
 void QuitToMainMenu(void) {
+#if VER_JP
+    loadNewWorld = 0;
+    curWorld = 0;
+    ResetLethargyEffect();
+    ResetVibration();
+    SndMuteAllVoices();
+#endif
     gameState = 4;
     curMenu = 0;
     cursorPosInMenu[0] = 0;
@@ -358,6 +370,9 @@ void QuitToMainMenu(void) {
     timeTrialAtEndOfWorld = 0;
     byteCountToReceiveFromSio = 0;
     gotSioData = 0;
+#if VER_JP
+    CustomBallReset();
+#endif
     if (gameMode == 1 || isFinal == 1) {
         loadNewWorld = 1;
     }

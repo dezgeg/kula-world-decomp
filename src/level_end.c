@@ -141,6 +141,37 @@ void FormatTime(int time, char* s, int showPlus) {
     }
 }
 
+// FIXME: part of menu.c
+static inline void QuitToMainMenu(void) {
+#if VER_JP
+    loadNewWorld = 0;
+    curWorld = 0;
+    ResetLethargyEffect();
+    ResetVibration();
+    SndMuteAllVoices();
+#endif
+    gameState = 4;
+    curMenu = 0;
+    cursorPosInMenu[0] = 0;
+    isPaused = 1;
+    debugDisableTimer = 0;
+    debugBonusLevels = 0;
+    totalScore = -1;
+    levelScore = 0;
+    wasPausedPreviousFrame = 0;
+    curController = 0;
+    twoPlayerWhichPlayer = 0;
+    curWorld = 0;
+    timeTrialAtEndOfWorld = 0;
+    byteCountToReceiveFromSio = 0;
+    gotSioData = 0;
+#if VER_JP
+    CustomBallReset();
+#endif
+    if (gameMode == 1 || isFinal == 1) {
+        loadNewWorld = 1;
+    }
+}
 void DrawLevelScoreSummary(void) {
     int x;
     int penalty;
@@ -227,24 +258,7 @@ void DrawLevelScoreSummary(void) {
         if (TestButton(PAD_CROSS)) {
             levelScoreSummaryConfirmed = 1;
             if (curLevel == 0 && (copycatPlayerScores[0] > 5 || copycatPlayerScores[1] > 5)) {
-                gameState = 4;
-                curMenu = 0;
-                cursorPosInMenu[0] = 0;
-                isPaused = 1;
-                debugDisableTimer = 0;
-                debugBonusLevels = 0;
-                totalScore = -1;
-                levelScore = 0;
-                wasPausedPreviousFrame = 0;
-                curController = 0;
-                twoPlayerWhichPlayer = 0;
-                curWorld = 0;
-                timeTrialAtEndOfWorld = 0;
-                byteCountToReceiveFromSio = 0;
-                gotSioData = 0;
-                if (gameMode == 1 || isFinal == 1) {
-                    loadNewWorld = 1;
-                }
+                QuitToMainMenu();
             }
         }
     }
@@ -385,24 +399,7 @@ void DrawLevelScoreSummary(void) {
             } else {
                 if (TestButton(PAD_CROSS)) {
                     if (numTimeTrialPlayers == 2 && curLevel == 14 && levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
-                        gameState = 4;
-                        curMenu = 0;
-                        cursorPosInMenu[0] = 0;
-                        isPaused = 1;
-                        debugDisableTimer = 0;
-                        debugBonusLevels = 0;
-                        totalScore = -1;
-                        levelScore = 0;
-                        wasPausedPreviousFrame = 0;
-                        curController = 0;
-                        twoPlayerWhichPlayer = 0;
-                        curWorld = 0;
-                        timeTrialAtEndOfWorld = 0;
-                        byteCountToReceiveFromSio = 0;
-                        gotSioData = 0;
-                        if (gameMode == 1 || isFinal == 1) {
-                            loadNewWorld = 1;
-                        }
+                        QuitToMainMenu();
                     }
                     if ((curLevel == 0 || timeTrialAtEndOfWorld == 1) && numTimeTrialPlayers == 1 && levelEndReason > 0) {
                         showingTimeTrialQualifyScreen = 1;

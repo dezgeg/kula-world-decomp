@@ -818,9 +818,9 @@ static VECTOR HandlePauseModeRotationEffect_transVec;
 void HandlePauseModeRotationEffect(Player* player) {
     player->playerHasControl = 0;
 
-    rotVec.vx = (rotVec.vx - VELOCITY(10)) % 4096;
-    rotVec.vy = (rotVec.vy + VELOCITY(4)) % 4096;
-    rotVec.vz = (rotVec.vz + VELOCITY(13)) % 4096;
+    rotVec.vx = (rotVec.vx - (VER_JP ? 5 : VELOCITY(10))) % 4096;
+    rotVec.vy = (rotVec.vy + (VER_JP ? 2 : VELOCITY(4))) % 4096;
+    rotVec.vz = (rotVec.vz + (VER_JP ? 7 : VELOCITY(13))) % 4096;
 
     if (specialLevelType == 0) {
         zoomInAndOutPhase = (zoomInAndOutPhase + VELOCITY(15)) % 4096;

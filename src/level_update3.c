@@ -804,7 +804,9 @@ int HandleTransporter(Player* player) {
     if (player->subpixelPositionOnCube.vz >= 167 && player->subpixelPositionOnCube.vz <= 345) {
         if (timer == -1) {
             timer = 15;
-            AddParticles(3, &transporterParticlesPos, 0);
+            if (VER_JP ? player->debugCameraMode == 0 : 1) {
+                AddParticles(3, &transporterParticlesPos, 0);
+            }
         }
 
         if (timer >= 0) {
