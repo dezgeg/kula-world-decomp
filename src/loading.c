@@ -130,22 +130,14 @@ Music MUSICS[] = {
     {"\\SAMPLE.XA;1", 0, 0},
 };
 
-#if !VER_EU
-// TODO: get these strings to appear "naturally"
-char S_File_error[] = "File error:\n\n";
-char S_could_not_find[] = "could not find ";
-char S_seek_error[] = "seek error ";
-char S_read_error[] = "read error ";
-#endif
-
 static z_stream zlibStream_a4b80;
 static z_stream unusedZlibStream;
 
 void FileError(char* str1, char* str2) {
 #if !VER_EU
-    int pad[2];
     VSync(3);
-#else
+    return;
+#endif
     VSyncCallback(NULL);
     SetupDisplay(1, 0x80, 0, 0, 0, 0);
     FntFlush(-1);
@@ -160,12 +152,10 @@ void FileError(char* str1, char* str2) {
     PutDrawAndDispEnvs();
     while (1)
         ;
-#endif
 }
 
 #if !VER_EU
 #define IF_WHILE while
-#define FileError(a,b) VSync(3)
 #define VSYNC_3() VSync(3)
 #else
 #define IF_WHILE if
@@ -175,9 +165,6 @@ void FileError(char* str1, char* str2) {
 uint ReadDataFile(int world, int filetype, void* buf) {
     int i;
     int j;
-#if !VER_EU
-    int pad[2];
-#endif
     CdlFILE cdlfile;
 
     if (gameMode == 1 && filetype == 2) {
@@ -356,15 +343,9 @@ int unusedLoading1 = 1;
 #endif
 short playingBonusMusic = 0;
 short bonusMusicIndex = 0;
-#if !VER_EU
-char S_could_not_start_playing[] = "could not start playing \n";
-char S_bonus_song[] = "bonus song";
-char S_resumed_song_after_bonus[] = "resumed song after bonus";
-#endif
 
 void PlayMusic(int world) {
 #if !VER_EU
-    int pad[2];
     int musicSearchAttempt;
 #endif
     char dummy[8];
@@ -425,7 +406,6 @@ void PlayMusic(int world) {
 
 void PlayBonusMusic(void) {
 #if !VER_EU
-    int pad[2];
     int bonusMusicSearchAttempt;
 #endif
     char dummy[8];
@@ -513,9 +493,6 @@ void MusicPause(void) {
 }
 
 void SwitchFromBonusToNormalMusic(void) {
-#if !VER_EU
-    int pad[2];
-#endif
     char dummy[8];
 
 #if !VER_EU
