@@ -305,7 +305,7 @@ void OptionsMenu(void) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             if (accept) {
-                turnDelayEnabled = turnDelayEnabled ^ 1;
+                turnDelayEnabled ^= 1;
                 SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
             }
             break;
@@ -378,6 +378,7 @@ void QuitToMainMenu(void) {
     }
 }
 
+#if !VER_JP
 void ScreenAdjustMenu(void) {
     DrawWidgets(MENU_SPRITE_SCREEN_ADJUST_MENU, 0);
 
@@ -425,6 +426,27 @@ void ScreenAdjustMenu(void) {
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }
 }
+#endif
+
+#if VER_JP
+void DrawCopycatMoveCounter(void) {
+    short textX = 108;
+    int moves = (numCopycatMoves - 1) / 2 + copycatNewOrCopyMoves;
+
+    SetBigGuiSpriteVisible();
+    DrawStaticUiSprite(15, 20, 20, 0);
+    if (moves < 100) {
+        textX -= 12;
+    }
+    if (moves < 10) {
+        textX -= 12;
+    }
+    sprintf(scoreText, S_FMTd_3, moves);
+    if (!isLessonMode) {
+        DrawTextFancyFont(scoreText, textX, 19);
+    }
+}
+#endif
 
 void HandleMenus0To6(void) {
     if (isPaused == -1) {
@@ -730,10 +752,10 @@ void TwoPlayerMenu(void) {
     int i;
 
     if (TestButton(PAD_U)) {
-        if (cursorPosInMenu[curMenu] <= 0) {
-            cursorPosInMenu[curMenu] = 2;
-        } else {
+        if (cursorPosInMenu[curMenu] > 0) {
             cursorPosInMenu[curMenu]--;
+        } else {
+            cursorPosInMenu[curMenu] = 2;
         }
         SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
     }

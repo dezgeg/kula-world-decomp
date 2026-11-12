@@ -211,4 +211,23 @@ void ResetVibration(void) {
         }
     }
     vibrationMode = -1;
+#if VER_JP
+    vibrationDirectSmallMotor = 0;
+    vibrationSmallMotor = 0;
+    vibrationLargeMotor = 0;
+    vibrationDecayTimer = -1;
+#endif
 }
+
+#if VER_JP
+void VibrateDecay(int intensity) {
+    vibrationDecayTimer = 24;
+    vibrationDecayIntensity = intensity;
+    if (intensity < 0) {
+        vibrationDecayIntensity = 0;
+    }
+    if (vibrationDecayIntensity > 100) {
+        vibrationDecayIntensity = 100;
+    }
+}
+#endif
