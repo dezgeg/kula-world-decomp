@@ -305,8 +305,10 @@ void HandleItemTouching(Player* player) {
 
                         case OBJ_HOURGLASS:
                             SndPlaySfx(SFX_HOURGLASS, 0, &ZERO_SVECTOR_a2df4, 7000);
-                            levelTimeLeft = (100 * FPS - 1) - levelTimeLeft;
+                            levelTimeLeft = ((VER_JP ? 120 : 100) * FPS - 1) - levelTimeLeft;
+#if !VER_JP
                             levelScore += (levelTimeLeft / 50) * 10;
+#endif
                             hourglassIsRotating = 1;
                             AddParticles(1, &hourglassHudParticlePos, 0);
                             AddParticles(10, &itemState[itemIdx].pos, AddLightEffect(cubeX, cubeY, cubeZ, side));

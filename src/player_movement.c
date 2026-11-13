@@ -697,7 +697,7 @@ int CheckForPlayerWallHit(Player* player) {
 #endif
         }
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2dd8, 7000);
-        Vibrate99(0, 200, 3);
+        Vibrate99(0, VER_JP ? 250 : 200, VER_JP ? 4 : 3);
 
         player->howMoving198 = FALLING;
         player->howMoving0 = 3;
@@ -769,9 +769,9 @@ static SVECTOR CheckIfPlayerLanded_newPlayerPos;
 #define newPlayerPos CheckIfPlayerLanded_newPlayerPos
 int CheckIfPlayerLanded(Player* player) {
     int dummy[2];
-    newPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * 100);
-    newPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * 100);
-    newPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * 100);
+    newPlayerPos.vx = player->finePos.vx - (short)(player->gravityDir.vx * (VER_JP ? 101 : 100));
+    newPlayerPos.vy = player->finePos.vy - (short)(player->gravityDir.vy * (VER_JP ? 101 : 100));
+    newPlayerPos.vz = player->finePos.vz - (short)(player->gravityDir.vz * (VER_JP ? 101 : 100));
 
     newBlock = GetBlockAt(&newPlayerPos);
 
@@ -786,7 +786,7 @@ int CheckIfPlayerLanded(Player* player) {
         SndPlaySfx(SFX_BALL_BOUNCE, 0, &ZERO_SVECTOR_a2dd8, 7000);
     }
     if (player->gravityVelocity == VELOCITY(-80)) {
-        Vibrate99(0, 200, 3);
+        Vibrate99(0, VER_JP ? 250 : 200, VER_JP ? 4 : 3);
         EnableScreenShake(3, FRAMES(20), 2);
     }
 
@@ -795,6 +795,9 @@ int CheckIfPlayerLanded(Player* player) {
     player->finePos.vz += player->gravityDir.vz * 100;
 
     MovePlayerDownwards(player, 100);
+    if (VER_JP && player->bounceTimer >= 0) {
+        MovePlayerForward(player, 256);
+    }
     player->howMoving198 = -1;
     player->onGround = 1;
     player->howMoving0 = 0;
