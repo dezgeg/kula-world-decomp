@@ -322,12 +322,17 @@ void HighScoreUi(int param_1) {
             SetTextParams(26 - 6 * VID_NTSC, 45, 0, -1, -1, -1);
             DrawTextCrappyFont("\n");
             for (i = 0; i < 6; i++) {
-                waveX = 0;
                 if (local_50 + 50 * i >= 3072) {
                     waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
+                } else {
+                    waveX = 0;
                 }
                 SetTextParams(waveX + (11 + 1 * VID_NTSC), -1, -1, -1, -1, -1);
-                DrawTextCrappyFont(i == cursorIndex ? "-           -\n" : "\n");
+                if (i == cursorIndex) {
+                    DrawTextCrappyFont("-           -\n");
+                } else {
+                    DrawTextCrappyFont("\n");
+                }
             }
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE) || TestButton(PAD_START)) {
                 SndPlaySfx(SFX_MENU_SELECTION_2, 37000, &ZERO_SVECTOR_a3340, 8000);
