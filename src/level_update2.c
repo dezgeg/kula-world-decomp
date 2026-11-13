@@ -581,10 +581,10 @@ void RenderItems_() {
 }
 
 static int HandlePlayerButtons_prevButtons;
-static short HandlePlayerButtons_copycatMove;
-static short HandlePlayerButtons_turnDelayFrames;
 #define prevButtons HandlePlayerButtons_prevButtons
+static short HandlePlayerButtons_copycatMove;
 #define copycatMove HandlePlayerButtons_copycatMove
+static short HandlePlayerButtons_turnDelayFrames;
 #define turnDelayFrames HandlePlayerButtons_turnDelayFrames
 void HandlePlayerButtons(Player* player) {
     if (turnDelayEnabled) {
