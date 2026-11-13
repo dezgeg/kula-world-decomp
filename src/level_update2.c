@@ -626,68 +626,70 @@ void HandlePlayerButtons(Player* player) {
     switch (gameMode) {
         case 0:
         case 2:
-            if (player->playerHasControl) {
-                if (player->startTurningTo == 0) {
-                    if (++player->turnDelayTimer > turnDelayFrames) {
-                        prevButtons = 0;
-                    }
-                    if (player->startTurningLeftNextFrame == 1) {
-                        player->startTurningLeftNextFrame = 0;
-                        player->turnDelayTimer = 0;
-                        player->turnDirection = 1;
-                    }
-                    if (player->startTurningRightNextFrame == 1) {
-                        player->startTurningRightNextFrame = 0;
-                        player->turnDelayTimer = 0;
-                        player->turnDirection = -1;
-                    }
-                    if ((controllerButtons & PAD_L) & ~prevButtons) {
-                        player->startTurningLeftNextFrame = 0;
-                        player->turnDelayTimer = 0;
-                        player->turnDirection = 1;
-                    }
-                    if ((controllerButtons & PAD_R) & ~prevButtons) {
-                        player->startTurningRightNextFrame = 0;
-                        player->turnDelayTimer = 0;
-                        player->turnDirection = -1;
-                    }
-                } else {
-                    player->turnDelayTimer = 0;
-                    if ((controllerButtons & PAD_L) & ~prevButtons) {
-                        player->startTurningLeftNextFrame = 1;
-                    }
-                    if ((controllerButtons & PAD_R) & ~prevButtons) {
-                        player->startTurningRightNextFrame = 1;
-                    }
-                }
+            if (!player->playerHasControl) {
+                break;
+            }
 
-                if (thePlayer.bounceTimer >= 0) {
-                    if (controllerButtons & PAD_U) {
-                        padUp = 1;
-                    }
-                    if (controllerButtons & PAD_CROSS) {
-                        padCross = 1;
-                    }
-                    if (padUp == 1 || padCross == 1) {
-                        timerBeforeJumpOrRoll++;
-                    } else {
-                        timerBeforeJumpOrRoll = 0;
-                    }
-                    if (timerBeforeJumpOrRoll > 3) {
-                        player->rollingForward = padUp;
-                        if (padCross == 1 && padUp == 1 && player->longJump == 0 && player->howMoving198 != JUMPING_FORWARD) {
-                            player->longJump = 1;
-                        }
-                        padCross = 0;
-                        padUp = 0;
-                    }
+            if (player->startTurningTo == 0) {
+                if (++player->turnDelayTimer > turnDelayFrames) {
+                    prevButtons = 0;
+                }
+                if (player->startTurningLeftNextFrame == 1) {
+                    player->startTurningLeftNextFrame = 0;
+                    player->turnDelayTimer = 0;
+                    player->turnDirection = 1;
+                }
+                if (player->startTurningRightNextFrame == 1) {
+                    player->startTurningRightNextFrame = 0;
+                    player->turnDelayTimer = 0;
+                    player->turnDirection = -1;
+                }
+                if ((controllerButtons & PAD_L) & ~prevButtons) {
+                    player->startTurningLeftNextFrame = 0;
+                    player->turnDelayTimer = 0;
+                    player->turnDirection = 1;
+                }
+                if ((controllerButtons & PAD_R) & ~prevButtons) {
+                    player->startTurningRightNextFrame = 0;
+                    player->turnDelayTimer = 0;
+                    player->turnDirection = -1;
+                }
+            } else {
+                player->turnDelayTimer = 0;
+                if ((controllerButtons & PAD_L) & ~prevButtons) {
+                    player->startTurningLeftNextFrame = 1;
+                }
+                if ((controllerButtons & PAD_R) & ~prevButtons) {
+                    player->startTurningRightNextFrame = 1;
+                }
+            }
+
+            if (thePlayer.bounceTimer >= 0) {
+                if (controllerButtons & PAD_U) {
+                    padUp = 1;
+                }
+                if (controllerButtons & PAD_CROSS) {
+                    padCross = 1;
+                }
+                if (padUp == 1 || padCross == 1) {
+                    timerBeforeJumpOrRoll++;
                 } else {
-                    if (controllerButtons & PAD_U) {
-                        player->rollingForward = 1;
+                    timerBeforeJumpOrRoll = 0;
+                }
+                if (timerBeforeJumpOrRoll > 3) {
+                    player->rollingForward = padUp;
+                    if (padCross == 1 && padUp == 1 && player->longJump == 0 && player->howMoving198 != JUMPING_FORWARD) {
+                        player->longJump = 1;
                     }
-                    if (controllerButtons & PAD_CROSS) {
-                        player->jumping = 1;
-                    }
+                    padCross = 0;
+                    padUp = 0;
+                }
+            } else {
+                if (controllerButtons & PAD_U) {
+                    player->rollingForward = 1;
+                }
+                if (controllerButtons & PAD_CROSS) {
+                    player->jumping = 1;
                 }
             }
             break;
