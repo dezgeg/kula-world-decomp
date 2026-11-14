@@ -23,6 +23,7 @@ extern int curWorld;
 extern int displayWidth;
 extern int gameMode;
 extern int isFinal;
+extern int isNewRecord;
 extern int latestPlayerToFinish;
 extern int levelEndReason;
 extern int levelHasBeenCompletedByPlayer[2];
@@ -40,9 +41,13 @@ extern PrimList primLists[2];
 extern uint prevControllerButtons;
 
 int bigGuiSpriteFade;
+int guiBackgroundFadeIn;
 int inflateRetCode;
+int perfectBlinkTimer;
 TSprite bigGuiSprite1[2];
 TSprite bigGuiSprite2[2];
+TSprite buttonHelpSprite1[2];
+TSprite buttonHelpSprite2[2];
 z_stream zlibStream_a4dd4;
 
 SVECTOR ZERO_SVECTOR_a2ab4 = { 0, 0, 0, 0 };
@@ -75,6 +80,9 @@ void LoadLevelEndReasonGfx() {
     whichGfx = -levelEndReason * 2;
     if (levelEndReason >= 0) {
         whichGfx = LEVEL_END_GFX_WELL_DONE;
+        if (VER_JP && gameMode == 0 && isNewRecord == 1) {
+            whichGfx = 38;
+        }
         if (gameMode == 2) {
             playTime = levelPlayTime[VER_EU ? twoPlayerWhichPlayer : latestPlayerToFinish] + timeTrialDifficulty * FPS;
             if (playTime < 1) {
@@ -132,6 +140,9 @@ void LoadLevelEndReasonGfx() {
     }
     if (whichGfx == LEVEL_END_GFX_LOADING) {
         bigGuiSpriteFade = 0;
+    }
+    if (VER_JP && whichGfx == 38) {
+        perfectBlinkTimer = 0;
     }
     len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];
     off = MENU_DEFLATED_SPRITES2_PTR[1 + whichGfx * 2];

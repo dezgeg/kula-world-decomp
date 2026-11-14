@@ -1,20 +1,31 @@
 #include "common.h"
 
+extern void ClearScreen(void);
+extern void CustomBallMenu(void);
+extern void CustomBallReset(void);
 extern void DrawStaticUiSprite(short id, short x, short y, short count);
 extern void DrawTextFancyFont(char* str, short x, short y);
 extern void DrawTitleAndCopyrightSprites(void);
+extern void EnableLethargy(int enable);
 extern void HandleMenus0To6(void);
+extern void HighScoreUi(int unk);
+extern void InitCopycatMatch(void);
 extern void MainMenu(void);
 extern void OptionsMenu(void);
 extern void PauseMenu(void);
 extern void QuitAreYouSureMenu(void);
+extern void ResetLethargyEffect(void);
+extern void ResetVibration(void);
 extern void ScreenAdjustMenu(void);
 extern void SetBigGuiSpriteVisible(void);
 extern void SinglePlayerMenu(void);
+extern void SinglePlayerMenuWhenFinalUnlocked(void);
+extern void SndMuteAllVoices(void);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TimeTrialDifficultySelectionMenu(void);
 extern void TwoPlayerLevelSelectMenu(void);
 extern void TwoPlayerMenu(void);
+extern void UnpauseGame(void);
 
 extern char scoreText[128];
 extern int TIME_TRIAL_PAR_TIMES[150];

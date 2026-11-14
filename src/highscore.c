@@ -118,8 +118,13 @@ void HighScoreUi(int param_1) {
     int highscoreEntryCharIndex;
     int local_50;
     int i, j;
-    int v, c, waveX;
+    int v, waveX;
     char buf[64];
+#if !VER_JP
+    int c;
+#else
+#define c 0
+#endif
 
     placement = 5;
     highscoreEntryCharIndex = 0;
@@ -329,8 +334,10 @@ void HighScoreUi(int param_1) {
                 }
                 SetTextParams(waveX + (11 + 1 * VID_NTSC), -1, -1, -1, -1, -1);
                 if (i == cursorIndex) {
+                    if (VER_JP) SetTextParams(-1, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
                     DrawTextCrappyFont("-           -\n");
                 } else {
+                    if (VER_JP) SetTextParams(-1, -1, -1, 96, 96, 96);
                     DrawTextCrappyFont("\n");
                 }
             }
@@ -363,7 +370,7 @@ void HighScoreUi(int param_1) {
         SetTextParams(54 - 6 * VID_NTSC, 45, 1, 128, 128, 128);
         DrawTextCrappyFont("\n");
         for (i = 0; i < 6; i++) {
-            c = i == cursorIndex ? 32 : 0;
+            if (!VER_JP) c = i == cursorIndex ? 32 : 0;
             sprintf(buf, "%s\n", highscores[i].name);
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
@@ -382,7 +389,7 @@ void HighScoreUi(int param_1) {
         DrawTextCrappyFont("SCORE\n");
         v = 156 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
-            c = i == cursorIndex ? 32 : 0;
+            if (!VER_JP) c = i == cursorIndex ? 32 : 0;
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
             } else {
@@ -406,7 +413,7 @@ void HighScoreUi(int param_1) {
         DrawTextCrappyFont("LEVEL\n");
         v = 198 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
-            c = i == cursorIndex ? 32 : 0;
+            if (!VER_JP) c = i == cursorIndex ? 32 : 0;
             sprintf(buf, S_FMTd_4, (int)highscores[i].level);
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
@@ -425,7 +432,7 @@ void HighScoreUi(int param_1) {
         DrawTextCrappyFont("FRUITS\n");
         v = 255 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
-            c = i == cursorIndex ? 32 : 0;
+            if (!VER_JP) c = i == cursorIndex ? 32 : 0;
             sprintf(buf, S_FMTd_4, (int)highscores[i].fruits);
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
@@ -444,7 +451,7 @@ void HighScoreUi(int param_1) {
         DrawTextCrappyFont("TIME\n");
         v = 316 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
-            c = i == cursorIndex ? 32 : 0;
+            if (!VER_JP) c = i == cursorIndex ? 32 : 0;
             FormatTime(highscores[i].time, buf, 0);
             if (local_50 + 50 * i >= 3072) {
                 waveX = (rsin(local_50 + 50 * i) * 250 >> 12) + 250;
@@ -463,6 +470,13 @@ void HighScoreUi(int param_1) {
         if (local_50 < 2048) {
             local_50 = 2048;
         }
+
+#if VER_JP
+        if (!GetControllerStatus(0) && !GetControllerStatus(1)) {
+            DrawJpUiLabels(1, 180);
+            DrawJpLabelBackground(1, 180);
+        }
+#endif
 
         if (placement > 0) {
             DrawScoreGraph();

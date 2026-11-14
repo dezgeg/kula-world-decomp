@@ -4,10 +4,10 @@
 extern void ShowMemCardFullScreenText(char* str);
 extern void SndSetMusicVolume(void);
 
+extern char SAVE_FILENAME[32];
+extern char* SAVE_ICON_TIM_PTR;
 extern DrawDisp drawdisp[2];
 extern Highscore highscores[6];
-extern MemcardData memCardData;
-extern char* SAVE_ICON_TIM_PTR;
 extern int curLevel;
 extern int curWorld;
 extern int dispenvScreenX;
@@ -21,15 +21,17 @@ extern int isFinal;
 extern int levelScores[150];
 extern int musicVolume;
 extern int savedFruitsCollectedBitmask;
+extern int selectedBallIndex;
 extern int sfxVolume;
 extern int timeTrialDifficulty;
 extern int totalPlayTime[2];
 extern int totalScore;
+extern int unlockedBallCount;
 extern int vibrationEnabled;
 extern long mcCmd;
+extern MemcardData memCardData;
 extern short numFruits;
 extern short turnDelayEnabled;
-extern char SAVE_FILENAME[32];
 
 int memCardHasError;
 int memCardDataValid;
