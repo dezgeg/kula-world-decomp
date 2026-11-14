@@ -55,6 +55,7 @@ extern InvisBlockVisibility invisBlockVisibility;
 extern Player thePlayer;
 extern short copycatNewOrCopyMoves;
 extern short* entityData;
+extern short hasParticleType3Active;
 extern short* levelData;
 extern short numEntities;
 extern uint fruitsCollectedBitmask;

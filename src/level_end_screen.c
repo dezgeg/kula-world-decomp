@@ -14,6 +14,8 @@ typedef struct X {
     char data[1];
 } X;
 
+extern int HasCopycatPlayedMinRounds(void);
+extern void LoadJpMemCardMenuGfx(int menuId);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 

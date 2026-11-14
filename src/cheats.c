@@ -45,7 +45,10 @@ static uint* buttonsPtr;
 
 // .comm
 CheatState cheatState[9];
+int cheatButtons;
 int cheated;
+int cheatPendingAction;
+int cheatPrevButtons;
 
 int sioCheatActivated = 0; // .sdata
 SVECTOR ZERO_SVECTOR_a3334 = { 0, 0, 0, 0 }; // .sdata

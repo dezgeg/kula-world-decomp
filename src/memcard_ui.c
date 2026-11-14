@@ -26,6 +26,7 @@ extern int GetControllerStatus(int slot);
 extern int LoadSaveSlot(int slot);
 extern int LooksLikeAscii(char* param_1);
 extern int MemCardUiPart(void);
+extern int PollMemCardStatus(int);
 extern int SaveMemCard(int slot);
 extern void DrawJpMemCardMenuGfx(int);
 extern void DrawJpUiLabels(int, int);
@@ -50,11 +51,15 @@ extern void SetPsxButtonBackgroundVisible(void);
 extern void SetSemiTrans(void* p, int enable);
 extern void SetShadeTex(void* p, int disable);
 extern void SetTextParams(int posX, int posY, int align, int colorR, int colorG, int colorB);
-extern void ShowMemCardFullScreenText(char* str);
 extern void SndPlaySfx(int sfx, int tag, SVECTOR* dir, int volume);
 extern void SndProcessSpuVoices(void);
 extern void TSpritePrim(TSprite* ts, int dfe, int dtd, int tpage);
 extern void UpdateMemcardMenuSaveSelectionSprites(int index);
+#if VER_JP
+extern void ShowMemCardFullScreenText(int idx);
+#else
+extern void ShowMemCardFullScreenText(char* str);
+#endif
 
 int AskSaveOverwrite(void);
 
