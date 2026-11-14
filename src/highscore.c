@@ -377,7 +377,7 @@ void HighScoreUi(int param_1) {
             } else {
                 waveX = 0;
             }
-            if (i == 0) {
+            if (i == (VER_JP ? cursorIndex : 0)) {
                 SetTextParams(v + waveX, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
             } else {
                 SetTextParams(v + waveX, -1, -1, 96 + c, 96 + c, 96 + c);
@@ -401,7 +401,7 @@ void HighScoreUi(int param_1) {
                 sprintf(buf, "TIMETRIAL\n");
                 waveX += 16;
             }
-            if (i == 0) {
+            if (i == (VER_JP ? cursorIndex : 0)) {
                 SetTextParams(v + waveX, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
             } else {
                 SetTextParams(v + waveX, -1, -1, 96 + c, 96 + c, 96 + c);
@@ -420,7 +420,7 @@ void HighScoreUi(int param_1) {
             } else {
                 waveX = 0;
             }
-            if (i == 0) {
+            if (i == (VER_JP ? cursorIndex : 0)) {
                 SetTextParams(v + waveX, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
             } else {
                 SetTextParams(v + waveX, -1, -1, 96 + c, 96 + c, 96 + c);
@@ -439,7 +439,7 @@ void HighScoreUi(int param_1) {
             } else {
                 waveX = 0;
             }
-            if (i == 0) {
+            if (i == (VER_JP ? cursorIndex : 0)) {
                 SetTextParams(v + waveX, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
             } else {
                 SetTextParams(v + waveX, -1, -1, 96 + c, 96 + c, 96 + c);
@@ -458,7 +458,7 @@ void HighScoreUi(int param_1) {
             } else {
                 waveX = 0;
             }
-            if (i == 0) {
+            if (i == (VER_JP ? cursorIndex : 0)) {
                 SetTextParams(v + waveX, -1, -1, rainbowColorR + 20, rainbowColorG + 20, rainbowColorB + 20);
             } else {
                 SetTextParams(v + waveX, -1, -1, 96 + c, 96 + c, 96 + c);

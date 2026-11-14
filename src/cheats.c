@@ -89,7 +89,7 @@ void HandleCheats(void) {
                 }
             }
             if (j < 0) {
-                if (!isPaused && gameState != 0) {
+                if (VER_JP ? 1 : !isPaused && gameState != 0) {
                     cheatState[i].activated = 1;
                     cheatState[i].toggled ^= 1;
                     SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3334, 8000);
