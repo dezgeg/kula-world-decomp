@@ -1828,20 +1828,34 @@ void CopyQuadData(void) {
                 continue;
             }
             // Sets cubeState->quadPtr[dir] to final Quad
+#if VER_JP
+            q = &QUAD_BASE[j];
+            *fd->pointerInsideCubeState = q;
+            *(int*)&q->flags.u8 = fd->flags;
+#else
             *fd->pointerInsideCubeState = q = &QUAD_BASE[j];
             q->flags.i32 = fd->flags;
+#endif
             *(int*)&q->otagIndex = 0xffff;
             dir = fd->dir;
+#if VER_JP
+            idx = (tgiPart5[i * 2] * 3 + tgiPart5[i * 2 + 1] * *(dir + tgi->sideBrightness)) * 32;
+#else
             idx = (tgiPart5[i * 2] * 3 + tgiPart5[i * 2 + 1] * tgi->sideBrightness[dir]) * 32;
+#endif
             q->metadata = (char*)cubeTextureMetadata + idx;
             q->color = fd->color;
             j++;
             QUAD_FUNC_PTRS[dir](q, 512, fd->x, fd->y, fd->z, fd->textureRotation);
         }
     }
+#if VER_JP
+    numTotalQuads = j;
+#else
     // permuter hack
     idx = j;
     numTotalQuads = idx;
+#endif
 }
 
 
