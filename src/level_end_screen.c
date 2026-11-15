@@ -1050,7 +1050,11 @@ void LoadLevelEndReasonGfx() {
             }
         }
     }
+#if VER_JP
+    if (gameMode == 1 && HasCopycatPlayedMinRounds() == 1 && (copycatPlayerScores[0] >= 3 || copycatPlayerScores[1] >= 3) && levelEndReason < 0) {
+#else
     if (gameMode == 1 && curLevel == 0 && (copycatPlayerScores[0] > 5 || copycatPlayerScores[1] > 5) && levelEndReason < 0) {
+#endif
         whichGfx = LEVEL_END_GFX_PLAYER_2_WON;
         if (copycatPlayerScores[1] < copycatPlayerScores[0]) {
             whichGfx = LEVEL_END_GFX_PLAYER_1_WON;

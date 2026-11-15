@@ -1000,11 +1000,18 @@ void ProcessCubesIntoFaces(void) {
     for (z = 1; z < 33; z++) {
         for (y = 1; y < 33; y++) {
             for (x = 1; x < 33; x++) {
+#if VER_JP
+                int permuter_hack = (int) cubeStates; // permuter hack
+#endif
                 blockType = levelData[x * 34 * 34 + y * 34 + z];
                 style = GetFaceTypeOfBlockType(blockType);
                 if (style == 0 || style == 1 || style == 2 || style == 3 || style == 4 || style == 6 || style == 7) {
                     dir = newCube = isNonempty = 0;
+#if VER_JP
+                    csptr = permuter_hack; // permuter hack
+#else
                     csptr = (int)cubeStates;
+#endif
                     xFine = x << 9;
                     yFine = y << 9;
                     zFine = z << 9;
@@ -1134,8 +1141,12 @@ void ProcessCubesIntoFaces(void) {
                         }
                     }
                     if (isNonempty == 1) {
-                        int t = cubeCounter;
+                        int t = cubeCounter;// permuter hack
+#if VER_JP
                         CUBE_INDEX_AT(x, y, z) = t;
+#else
+                        CUBE_INDEX_AT(x, y, z) = cubeCounter;
+#endif
                         cubeStates[t * 16 + 14] = 0;
                         cubeStates[t * 16 + 15] = style;
                         cubeCounter = t + 1;
