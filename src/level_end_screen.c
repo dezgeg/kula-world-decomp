@@ -1353,3 +1353,16 @@ void DrawBigGuiSprite(int param_1) {
     }
 #endif
 }
+
+#if VER_JP
+void SetPsxButtonBackgroundVisible() {
+    guiBackgroundFadeIn = 0x80;
+}
+
+void DrawJpMemCardMenuGfx(int menuId) {
+    LoadJpMemCardMenuGfx(menuId);
+    if (whichLevelEndSpriteLoaded >= 1000) {
+        addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite2[whichDrawDispEnv]);
+    }
+}
+#endif
