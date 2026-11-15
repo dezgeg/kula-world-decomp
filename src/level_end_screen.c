@@ -1028,7 +1028,7 @@ void LoadLevelEndReasonGfx() {
     if (levelEndReason >= 0) {
         whichGfx = LEVEL_END_GFX_WELL_DONE;
         if (VER_JP && gameMode == 0 && isNewRecord == 1) {
-            whichGfx = 38;
+            whichGfx = LEVEL_END_GFX_PERFECT;
         }
         if (gameMode == 2) {
             playTime = levelPlayTime[VER_EU ? twoPlayerWhichPlayer : latestPlayerToFinish] + timeTrialDifficulty * FPS;
@@ -1088,7 +1088,7 @@ void LoadLevelEndReasonGfx() {
     if (whichGfx == LEVEL_END_GFX_LOADING) {
         bigGuiSpriteFade = 0;
     }
-    if (VER_JP && whichGfx == 38) {
+    if (VER_JP && whichGfx == LEVEL_END_GFX_PERFECT) {
         perfectBlinkTimer = 0;
     }
     len = MENU_DEFLATED_SPRITES2_PTR[2 + whichGfx * 2];

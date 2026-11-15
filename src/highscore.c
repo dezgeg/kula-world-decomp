@@ -386,7 +386,7 @@ void HighScoreUi(int param_1) {
         }
 
         SetTextParams(152 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont("SCORE\n");
+        DrawTextCrappyFont(VER_JP ? "\n" : "SCORE\n");
         v = 156 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             if (!VER_JP) c = i == cursorIndex ? 32 : 0;
@@ -410,7 +410,7 @@ void HighScoreUi(int param_1) {
         }
 
         SetTextParams(208 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont("LEVEL\n");
+        DrawTextCrappyFont(VER_JP ? "\n" : "LEVEL\n");
         v = 198 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             if (!VER_JP) c = i == cursorIndex ? 32 : 0;
@@ -429,7 +429,7 @@ void HighScoreUi(int param_1) {
         }
 
         SetTextParams(268 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont("FRUITS\n");
+        DrawTextCrappyFont(VER_JP ? "\n" : "FRUITS\n");
         v = 255 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             if (!VER_JP) c = i == cursorIndex ? 32 : 0;
@@ -448,7 +448,7 @@ void HighScoreUi(int param_1) {
         }
 
         SetTextParams(312 - 6 * VID_NTSC, 45, 2, 128, 128, 128);
-        DrawTextCrappyFont("TIME\n");
+        DrawTextCrappyFont(VER_JP ? "\n" : "TIME\n");
         v = 316 - 6 * VID_NTSC;
         for (i = 0; i < 6; i++) {
             if (!VER_JP) c = i == cursorIndex ? 32 : 0;

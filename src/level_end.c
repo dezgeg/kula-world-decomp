@@ -7,7 +7,12 @@ extern void FormatTime(int time, char* s, int showPlus);
 extern void FullyFinishLevelEndScreenFades(void);
 extern int GetControllerButtons(int slot);
 extern int GetControllerStatus(int slot);
+extern void ResetVibration(void);
 extern void TimeTrialFailedToQualifyScreen(void);
+extern void ResetLethargyEffect(void);
+extern void SndMuteAllVoices(void);
+extern void CustomBallReset(void);
+extern int HasCopycatPlayedMinRounds(void);
 
 extern char scoreText[128];
 extern int byteCountToReceiveFromSio;

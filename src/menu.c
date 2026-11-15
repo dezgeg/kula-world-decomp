@@ -161,10 +161,12 @@ void PauseOrMainMenu(void) {
     } else {
         repeatRateTimer = 0;
     }
+#if !VER_JP
     if (repeatRateTimer > 20) {
         repeatRateTimer -= 5;
         prevControllerButtons = 0;
     }
+#endif
     switch (curMenu) {
         case 3:
             QuitAreYouSureMenu();
