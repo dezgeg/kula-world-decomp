@@ -1023,6 +1023,7 @@ void LoadLevelEndReasonGfx() {
     char* ptr;
     void* dest;
     int playTime;
+    int splitY;
 
     whichGfx = -levelEndReason * 2;
     if (levelEndReason >= 0) {
@@ -1193,6 +1194,56 @@ void LoadLevelEndReasonGfx() {
             } else {
                 setUV0(&bigGuiSprite1[0].sprt, 0, 175);
             }
+#if VER_JP
+            if (whichGfx == LEVEL_END_GFX_QUALIFIED + 1 || whichGfx == LEVEL_END_GFX_FAILED_TO_QUALIFY + 1) {
+                splitY = 0;
+                if (whichGfx == LEVEL_END_GFX_QUALIFIED + 1) {
+                    splitY = 37;
+                }
+                if (whichGfx == LEVEL_END_GFX_FAILED_TO_QUALIFY + 1) {
+                    splitY = 38;
+                }
+                buttonHelpSprite2[0] = bigGuiSprite2[0];
+                bigGuiSprite2[0].sprt.h -= 11;
+                setUV0(&buttonHelpSprite2[0].sprt, 0, (splitY + 95) % 256);
+                buttonHelpSprite2[0].sprt.h = 10;
+                setXY0(&buttonHelpSprite2[0].sprt, x0, 214);
+                buttonHelpSprite1[0] = bigGuiSprite1[0];
+                bigGuiSprite1[0].sprt.h -= 11;
+                if (w * 4 < 129) {
+                    setUV0(&buttonHelpSprite1[0].sprt, 128, (splitY + 94) % 256);
+                } else {
+                    setUV0(&buttonHelpSprite1[0].sprt, 0, (splitY + 175) % 256);
+                }
+                buttonHelpSprite1[0].sprt.h = 10;
+                setXY0(&buttonHelpSprite1[0].sprt, x0, 214);
+                buttonHelpSprite2[1] = buttonHelpSprite2[0];
+                buttonHelpSprite1[1] = buttonHelpSprite1[0];
+            }
+            if (whichGfx == LEVEL_END_GFX_PERFECT + 1) {
+                splitY = 41;
+                buttonHelpSprite2[0] = bigGuiSprite2[0];
+                bigGuiSprite2[0].sprt.h = splitY;
+                setUV0(&buttonHelpSprite2[0].sprt, 0, 136);
+                buttonHelpSprite1[0] = bigGuiSprite1[0];
+                bigGuiSprite1[0].sprt.h = splitY;
+                buttonHelpSprite2[0].sprt.h -= 42;
+                if (w * 4 < 129) {
+                    setUV0(&buttonHelpSprite1[0].sprt, 128, 135);
+                } else {
+                    setUV0(&buttonHelpSprite1[0].sprt, 0, 216);
+                }
+                setXY0(&bigGuiSprite2[0].sprt, x0, 30);
+                setXY0(&bigGuiSprite1[0].sprt, x0, 30);
+                setXY0(&buttonHelpSprite2[0].sprt, x0, 60);
+                buttonHelpSprite1[0].sprt.h -= splitY;
+                buttonHelpSprite1[0].sprt.h--;
+                setXY0(&buttonHelpSprite1[0].sprt, x0, 60);
+                buttonHelpSprite2[1] = buttonHelpSprite2[0];
+                bigGuiSprite2[1] = bigGuiSprite2[0];
+                buttonHelpSprite1[1] = buttonHelpSprite1[0];
+            }
+#endif
             bigGuiSprite1[1] = bigGuiSprite1[0];
             whichLevelEndSpriteLoaded = whichGfx - 1;
         }
@@ -1261,6 +1312,24 @@ void DrawBigGuiSprite(int param_1) {
     if (param_1 == 0 && (levelEndReason > LEVEL_END_GAME_OVER || gameOverScreenState == 3)) {
         setRGB0(&bigGuiSprite1[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
         setRGB0(&bigGuiSprite2[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
+#if VER_JP
+        setRGB0(&buttonHelpSprite1[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
+        setRGB0(&buttonHelpSprite2[whichDrawDispEnv].sprt, gameOverScreenFade, gameOverScreenFade, gameOverScreenFade);
+        if (whichLevelEndSpriteLoaded == LEVEL_END_GFX_PERFECT) {
+            if (perfectBlinkTimer++ >= 30) {
+                if (perfectBlinkTimer >= 60) {
+                    perfectBlinkTimer = 0;
+                }
+            } else {
+                int color = gameOverScreenFade - 0x80;
+                if (color < 0) {
+                    color = 0;
+                }
+                setRGB0(&buttonHelpSprite1[whichDrawDispEnv].sprt, color, color, color);
+                setRGB0(&buttonHelpSprite2[whichDrawDispEnv].sprt, color, color, color);
+            }
+        }
+#endif
         addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite1[whichDrawDispEnv]);
         addPrim(&primLists[whichDrawDispEnv].main, &bigGuiSprite2[whichDrawDispEnv]);
     }
@@ -1273,4 +1342,14 @@ void DrawBigGuiSprite(int param_1) {
         DrawPrim(&bigGuiSprite1[whichDrawDispEnv]);
         DrawPrim(&bigGuiSprite2[whichDrawDispEnv]);
     }
+#if VER_JP
+    if (whichLevelEndSpriteLoaded == LEVEL_END_GFX_QUALIFIED || whichLevelEndSpriteLoaded == LEVEL_END_GFX_FAILED_TO_QUALIFY) {
+        setRGB0(&buttonHelpSprite1[whichDrawDispEnv].sprt, 0x80, 0x80, 0x80);
+        addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite1[whichDrawDispEnv]);
+    }
+    if (whichLevelEndSpriteLoaded == LEVEL_END_GFX_PERFECT) {
+        addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite1[whichDrawDispEnv]);
+        addPrim(&primLists[whichDrawDispEnv].main, &buttonHelpSprite2[whichDrawDispEnv]);
+    }
+#endif
 }
