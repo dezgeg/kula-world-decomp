@@ -193,19 +193,16 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
         shadowDepth = -1;
     }
 
-    if (otherBlockX >= 0 && otherBlockX < 34 && otherBlockY >= 0 && otherBlockY < 34 && otherBlockZ >= 0 && otherBlockZ < 34) {
-        int cubeIndex = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ);
-        if (cubeIndex != -1) {
-            Quad* q = (Quad*)cubeStates[cubeIndex * 16 + otherDir];
-            if (q != (Quad*)-1) {
-                result2 = q->otagIndex;
-                goto LAB_shadow;
-            }
-        }
+    if (otherBlockX >= 0 && otherBlockX < 34 &&
+        otherBlockY >= 0 && otherBlockY < 34 &&
+        otherBlockZ >= 0 && otherBlockZ < 34 &&
+        CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ) != -1 &&
+        (q = (Quad*)cubeStates[CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ) * 16 + otherDir]) != (Quad*)-1) {
+        result2 = q->otagIndex;
+    } else {
+        result2 = -1;
     }
 
-    result2 = -1;
-LAB_shadow:
     shadowDepth = (ushort)shadowDepth;
     result2 = (ushort)result2;
     if (result2 < shadowDepth) {
