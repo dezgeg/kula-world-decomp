@@ -286,6 +286,15 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     Quad* q;
     int shift;
 
+#if VER_JP
+    if (modelId < 10) {
+        modelId = selectedBallIndex;
+    }
+    if (isInCredits == 1) {
+        return;
+    }
+#endif
+
     if (z < 256) {
         return;
     }
@@ -443,9 +452,12 @@ void CreateItemDispList(MATRIX* m, int z, int entityIndex, int dirIndexInBlock) 
     short* e;
     int two = 2;
 
+    int cubeIndex;
     short* entBase = entityData + entityIndex * 128;
-    quad = cubeStates[16 * CUBE_INDEX_AT(*(entBase + 125), *(entBase + 126), *(entBase + 127)) + dirIndexInBlock];
+    e = entBase + 125;
+    cubeIndex = CUBE_INDEX_AT(e[0], e[1], e[2]);
     e = entBase + dirIndexInBlock * 16;
+    quad = cubeStates[cubeIndex * 16 + dirIndexInBlock];
     if (specialLevelType == 1) {
         colorPtr = (int*)((char*)tgi + (tgi->sideBrightness[dirIndexInBlock] * 12 + 156));
     } else {
