@@ -93,6 +93,7 @@ STATIC_FOR_GP_ACCESS int levelHiddenExitEntityOffset;
 STATIC_FOR_GP_ACCESS int levelWon[2];
 STATIC_FOR_GP_ACCESS int unusedLevelWon;
 STATIC_FOR_GP_ACCESS short fireSoundTimer;
+static int prevButtons;
 static short copycatIdleTimer;
 static short copycatStateVar;
 static short numCopycatMoves;
@@ -583,8 +584,6 @@ void RenderItems_() {
     CreateAllItemDispLists();
 }
 
-static int HandlePlayerButtons_prevButtons;
-#define prevButtons HandlePlayerButtons_prevButtons
 static short HandlePlayerButtons_copycatMove;
 #define copycatMove HandlePlayerButtons_copycatMove
 static short HandlePlayerButtons_turnDelayFrames;
@@ -853,7 +852,6 @@ void HandlePlayerButtons(Player* player) {
         player->movementVelocity = 0;
     }
 }
-#undef prevButtons
 #undef copycatMove
 #undef turnDelayFrames
 

@@ -55,6 +55,7 @@ static VECTOR levelEntryBezierP1;
 static VECTOR levelEntryBezierP2;
 static VECTOR levelEntryBezierP3;
 static VECTOR levelEntryCamPos;
+static SVECTOR tempTurnVec;
 
 static int cameraR2TurnAmount;
 static int levelEntryAnimTimer;
@@ -784,11 +785,9 @@ void ProcessCameraAndMovement(Player* player) {
 static VECTOR HandleDebugCamera_transVec;
 static short HandleDebugCamera_camX;
 static short HandleDebugCamera_camY;
-static SVECTOR HandlePlayerMovementStuff_tempTurnVec;
 #define transVec HandleDebugCamera_transVec
 #define camX HandleDebugCamera_camX
 #define camY HandleDebugCamera_camY
-#define tempTurnVec HandlePlayerMovementStuff_tempTurnVec
 void HandleDebugCamera(Player* player) {
     player->playerHasControl = 1;
 
@@ -842,7 +841,6 @@ void HandleDebugCamera(Player* player) {
 #undef transVec
 #undef camX
 #undef camY
-#undef tempTurnVec
 
 static SVECTOR HandlePauseModeRotationEffect_rotVec;
 static VECTOR HandlePauseModeRotationEffect_transVec;
@@ -887,7 +885,6 @@ void HandlePauseModeRotationEffect(Player* player) {
 static MATRIX HandlePlayerMovementStuff_camRotMatrix;
 static SVECTOR HandlePlayerMovementStuff_groundCheckPos;
 static SVECTOR HandlePlayerMovementStuff_camRotVec;
-static SVECTOR HandlePlayerMovementStuff_tempTurnVec;
 static VECTOR HandlePlayerMovementStuff_camOffsetVec;
 static VECTOR HandlePlayerMovementStuff_camTransVec;
 static int HandlePlayerMovementStuff_blockType;
@@ -896,7 +893,6 @@ static int HandlePlayerMovementStuff_r2TurnFlag;
 #define camRotMatrix HandlePlayerMovementStuff_camRotMatrix
 #define groundCheckPos HandlePlayerMovementStuff_groundCheckPos
 #define camRotVec HandlePlayerMovementStuff_camRotVec
-#define tempTurnVec HandlePlayerMovementStuff_tempTurnVec
 #define camOffsetVec HandlePlayerMovementStuff_camOffsetVec
 #define camTransVec HandlePlayerMovementStuff_camTransVec
 #define blockType HandlePlayerMovementStuff_blockType
@@ -1120,7 +1116,6 @@ void HandlePlayerMovementStuff(Player* player) {
 #undef camRotMatrix
 #undef groundCheckPos
 #undef camRotVec
-#undef tempTurnVec
 #undef camOffsetVec
 #undef camTransVec
 #undef blockType
