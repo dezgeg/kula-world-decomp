@@ -1099,11 +1099,11 @@ void HandlePlayerMovementStuff(Player* player) {
         RotMatrixX(-cameraR2TurnAmount, &perspMatrixes[cameraIndex]);
         ApplyMatrixLV(&perspMatrixes[cameraIndex], &camOffsetVec, &camOffsetVec);
         camTransVec.vx = 0;
-        camRotVec.vy = 0;
-        camRotVec.vz = 0;
+        camTransVec.vy = 250 - cameraR2TurnAmount / 3;
         camTransVec.vz = 800 - cameraR2TurnAmount / 2;
         camRotVec.vx = -cameraR2TurnAmount;
-        camTransVec.vy = 250 - cameraR2TurnAmount / 3;
+        camRotVec.vy = 0;
+        camRotVec.vz = 0;
         RotMatrix(&camRotVec, &camRotMatrix);
         ApplyMatrixLV(&camRotMatrix, &camTransVec, &camTransVec);
         perspMatrixes[cameraIndex].t[0] = -camOffsetVec.vx + camTransVec.vx;
