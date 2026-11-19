@@ -1142,11 +1142,7 @@ void ProcessCubesIntoFaces(void) {
                     }
                     if (isNonempty == 1) {
                         int t = cubeCounter;// permuter hack
-#if VER_JP
-                        CUBE_INDEX_AT(x, y, z) = t;
-#else
                         CUBE_INDEX_AT(x, y, z) = cubeCounter;
-#endif
                         cubeStates[t * 16 + 14] = 0;
                         cubeStates[t * 16 + 15] = style;
                         cubeCounter = t + 1;
