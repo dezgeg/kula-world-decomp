@@ -276,12 +276,12 @@ void DrawLevelScoreSummary(void) {
             return;
         }
         if (levelScoreSummaryScoreTicker > 0) {
-            newScore++;
             levelScoreSummaryScoreTicker--;
+            newScore++;
         }
         if (levelScoreSummaryScoreTicker < 0) {
-            newScore--;
             levelScoreSummaryScoreTicker++;
+            newScore--;
         }
         timeSecs = levelPlayTime[latestPlayerToFinish] / FPS - levelScoreSummaryScoreTicker;
         if (levelPlayTime[latestPlayerToFinish] < 0) {

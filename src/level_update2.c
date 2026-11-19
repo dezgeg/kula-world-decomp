@@ -415,24 +415,26 @@ void ProcessPlayer(void) {
     int fireVibration;
 
     SubtractLevelTimer(1);
-    if (isPausedOrWaitingForRestart != 0) {
-        isPausedOrWaitingForRestart++;
-    }
-    if (isPausedOrWaitingForRestart == 20) {
-        isPausedOrWaitingForRestart = 0;
-    }
+    if (VER_JP ? (gameMode == 1) : 1) {
+        if (isPausedOrWaitingForRestart != 0) {
+            isPausedOrWaitingForRestart++;
+        }
+        if (isPausedOrWaitingForRestart == 20) {
+            isPausedOrWaitingForRestart = 0;
+        }
 
-    if (copycatStateVar == 1 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
-        thePlayer.delayedLevelEndReason = LEVEL_END_EXIT;
-        thePlayer.movementInhibitTimer = 25;
-        copycatStateVar = 0;
-        curController = (curController + 1) % 2;
-    }
+        if (copycatStateVar == 1 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
+            thePlayer.delayedLevelEndReason = LEVEL_END_EXIT;
+            thePlayer.movementInhibitTimer = 25;
+            copycatStateVar = 0;
+            curController = (curController + 1) % 2;
+        }
 
-    if (copycatStateVar == 2 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
-        thePlayer.delayedLevelEndReason = LEVEL_END_WRONG_MOVE;
-        thePlayer.movementInhibitTimer = 25;
-        copycatStateVar = 0;
+        if (copycatStateVar == 2 && thePlayer.startTurningTo == 0 && thePlayer.howMoving198 == NOT_MOVING) {
+            thePlayer.delayedLevelEndReason = LEVEL_END_WRONG_MOVE;
+            thePlayer.movementInhibitTimer = 25;
+            copycatStateVar = 0;
+        }
     }
 
     if (thePlayer.movementInhibitTimer != 0) {

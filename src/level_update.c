@@ -784,9 +784,11 @@ void ProcessCameraAndMovement(Player* player) {
 static VECTOR HandleDebugCamera_transVec;
 static short HandleDebugCamera_camX;
 static short HandleDebugCamera_camY;
+static SVECTOR HandlePlayerMovementStuff_tempTurnVec;
 #define transVec HandleDebugCamera_transVec
 #define camX HandleDebugCamera_camX
 #define camY HandleDebugCamera_camY
+#define tempTurnVec HandlePlayerMovementStuff_tempTurnVec
 void HandleDebugCamera(Player* player) {
     player->playerHasControl = 1;
 
@@ -794,8 +796,13 @@ void HandleDebugCamera(Player* player) {
     do {} while(0); // HACK
     camX = player->debugCamX % 4096;
 
+#if VER_JP
+    RotMatrixY(camX, &perspMatrixes[cameraIndex]);
+    RotMatrixX(-camY, &perspMatrixes[cameraIndex]);
+#else
     RotMatrixZ(camX, &perspMatrixes[cameraIndex]);
     RotMatrixX(camY, &perspMatrixes[cameraIndex]);
+#endif
 
     transVec.vx = -xMinPlusMax;
     transVec.vy = -yMinPlusMax;
@@ -806,10 +813,36 @@ void HandleDebugCamera(Player* player) {
     perspMatrixes[cameraIndex].t[0] = transVec.vx;
     perspMatrixes[cameraIndex].t[1] = transVec.vy;
     perspMatrixes[cameraIndex].t[2] = transVec.vz + maxDistSquared;
+
+#if VER_JP
+    if (player->field100_0x1ac == -1 && player->field119_0x1c8 != 2) {
+        tempTurnVec = player->perspVec2;
+        player->gravityDir.vx = -player->facingDir.vx;
+        player->gravityDir.vy = -player->facingDir.vy;
+        player->gravityDir.vz = -player->facingDir.vz;
+        player->facingDir = tempTurnVec;
+        player->field100_0x1ac = 0;
+        player->field119_0x1c8 = 1;
+    }
+
+    if (player->viewpointRotationTimer > 0 && player->field119_0x1c8 != 2) {
+        player->viewportRotationAngle += player->viewpointRotationAngleIncrement;
+        player->viewpointRotationTimer--;
+    }
+
+    if (player->viewpointRotationTimer == 0 && player->field119_0x1c8 != 2) {
+        player->viewpointRotationTimer--;
+        player->viewportRotationAngle = 0;
+        player->perspVec2 = player->gravityDir;
+        player->perspVec3 = player->facingDir;
+        player->field119_0x1c8 = 0;
+    }
+#endif
 }
 #undef transVec
 #undef camX
 #undef camY
+#undef tempTurnVec
 
 static SVECTOR HandlePauseModeRotationEffect_rotVec;
 static VECTOR HandlePauseModeRotationEffect_transVec;
