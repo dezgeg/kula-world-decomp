@@ -282,7 +282,6 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     int nextVertexId;
     POLY_FT4* shadowPrim;
     long scratch[4];
-    int i, j;
     int shadowDepth;
     int result2;
     int off;
