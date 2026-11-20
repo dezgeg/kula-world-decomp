@@ -388,10 +388,8 @@ void main(void) {
             } else {
                 memcpy(LEVEL_DATA_BUF, 0x650000, 0x66b000 - 0x650000);
             }
-            if (gotSioData == 0)
-                goto loadFromPak;
-        } else {
-        loadFromPak:
+        }
+        if (gotSioData == 0) {
             levelLoadZlibStream.avail_in = *(uint*)((char*)LEVEL_PAK_BUF + 8 + curLevel * 8);
             levelLoadZlibStream.next_in = (char*)LEVEL_PAK_BUF + *(int*)((char*)LEVEL_PAK_BUF + 4 + curLevel * 8);
             levelLoadZlibStream.avail_out = 0x60000;
