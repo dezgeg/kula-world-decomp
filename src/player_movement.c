@@ -297,7 +297,11 @@ void ProcessMovement(Player* player) {
         case ROLLING:
             AutoCenterSubpixelPosition(player, 8);
             if (player->surroundingBlocks[0][1][1] < 0) {
+#if VER_JP
+                if (player->subpixelPositionOnCube.vz > 100) if (player->subpixelPositionOnCube.vz < 428) {
+#else
                 if (player->subpixelPositionOnCube.vz > 100 && player->subpixelPositionOnCube.vz < 428) {
+#endif
                     if (player->onMovingPlatform == 0) {
                         player->howMoving198 = FALLING;
                         player->howMoving0 = 3;
