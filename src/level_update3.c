@@ -1119,8 +1119,6 @@ void HandleSpecialCubeTypes(Player* player) {
         }
         if (thePlayer.lethargyTimer >= 0) {
             thePlayer.lethargyTimer = 0;
-        } else {
-            goto skip_lethargy;
         }
     }
     if (thePlayer.lethargyTimer == 0) {
@@ -1130,7 +1128,6 @@ void HandleSpecialCubeTypes(Player* player) {
         thePlayer.lethargyTimer -= 2;
         SubtractLevelTimer(4);
     }
-skip_lethargy:
     CheckForButtonEntity(player);
     if (HandleTransporter(player)) {
         CalcWhatPlayerIsStandingOn(player);
