@@ -272,30 +272,27 @@ void HighScoreUi(int param_1) {
             }
 
             if (TestButton(PAD_CROSS) || TestButton(PAD_TRIANGLE) || TestButton(PAD_SQUARE) || TestButton(PAD_CIRCLE)) {
-                if (highscoreEntryCursorY == 2) {
-                    if (highscoreEntryCursorX == 9) {
-                        placement = 6;
-                    }
-                    if (highscoreEntryCursorX == 8) {
-                        if (highscoreEntryCharIndex > 0) {
-                            highscoreEntryCharIndex--;
-                        }
-                        SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
-                        goto LABEL_SKIP_ENTRY;
-                    }
+                if (highscoreEntryCursorY == 2 && highscoreEntryCursorX == 9) {
+                    placement = 6;
                 }
-                SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
-                if (highscoreEntryCharIndex < 6) {
-                    highscoreEntryCharIndex++;
+                if (highscoreEntryCursorY == 2 && highscoreEntryCursorX == 8) {
+                    if (highscoreEntryCharIndex > 0) {
+                        highscoreEntryCharIndex--;
+                    }
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
                 } else {
-                    highscores[placement].name[5] = S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[highscoreEntryCursorY][highscoreEntryCursorX];
-                }
-                if (highscoreEntryCharIndex > 5) {
-                    highscoreEntryCursorY = 2;
-                    highscoreEntryCursorX = 9;
+                    SndPlaySfx(SFX_MENU_SELECTION_2, 0, &ZERO_SVECTOR_a3340, 8000);
+                    if (highscoreEntryCharIndex < 6) {
+                        highscoreEntryCharIndex++;
+                    } else {
+                        highscores[placement].name[5] = S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[highscoreEntryCursorY][highscoreEntryCursorX];
+                    }
+                    if (highscoreEntryCharIndex > 5) {
+                        highscoreEntryCursorY = 2;
+                        highscoreEntryCursorX = 9;
+                    }
                 }
             }
-        LABEL_SKIP_ENTRY:
             if (!(highscoreEntryCursorY == 2 && (highscoreEntryCursorX >= 8 && highscoreEntryCursorX <= 9))) {
                 if (highscoreEntryCharIndex < 6) {
                     highscores[placement].name[highscoreEntryCharIndex] = S_ABCDEFGHIJKLMNOPQRSTUVWXYZ[highscoreEntryCursorY][highscoreEntryCursorX];
