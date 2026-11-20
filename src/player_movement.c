@@ -223,6 +223,8 @@ void StartJumpingInplace(Player* player) {
     if (player->onMovingPlatform) {
         JumpingOnMovingPlatform(player);
         player->jumpingInplaceOnTopOfMovingPlatform = 1;
+    } else if (VER_JP) {
+        MovePlayerDownwards(player, 100);
     }
     player->jumpStartPos = player->finePos;
     player->jumpdataPtr = initJumpTimerPtr;
@@ -509,7 +511,7 @@ static int HandleViewportRotationStart_blockType;
 static SVECTOR HandleViewportRotationStart_cubePos;
 #define cubePos HandleViewportRotationStart_cubePos
 void HandleViewportRotationStart(Player* player) {
-    int pad[3];
+    int pad[VER_JP ? 2 : 3];
     if (player->dying)
         return;
     if (player->howMoving198 != ROLLING)
