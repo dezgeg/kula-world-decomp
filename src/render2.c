@@ -186,8 +186,8 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
     if (blockX >= 0 && blockX < 34 &&
         blockY >= 0 && blockY < 34 &&
         blockZ >= 0 && blockZ < 34 &&
-        CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
-            (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
+        (off = CUBE_INDEX_AT(blockX, blockY, blockZ)) != -1 &&
+        (q = (Quad*)cubeStates[off * 16 + dir]) != (Quad*)-1) {
         shadowDepth = q->otagIndex;
     } else {
         shadowDepth = -1;
@@ -195,10 +195,16 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
 
     if (otherBlockX >= 0 && otherBlockX < 34 &&
         otherBlockY >= 0 && otherBlockY < 34 &&
-        otherBlockZ >= 0 && otherBlockZ < 34 &&
-        CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ) != -1 &&
-        (q = (Quad*)cubeStates[CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ) * 16 + otherDir]) != (Quad*)-1) {
-        result2 = q->otagIndex;
+        otherBlockZ >= 0 && otherBlockZ < 34) {
+        if ((off = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ)) != -1) {
+            if ((q = (Quad*)cubeStates[off * 16 + otherDir]) != (Quad*)-1) {
+                result2 = q->otagIndex;
+            } else {
+                result2 = -1;
+            }
+        } else {
+            result2 = -1;
+        }
     } else {
         result2 = -1;
     }
