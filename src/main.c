@@ -521,7 +521,7 @@ int MainGameLoop(void) {
     }
     VSyncCallback(MainGameVSyncCallback);
     gotVsync = 0;
-    while (!end) {
+    for (; !end; prevLevelEndReason = levelEndReason) {
 #if !VER_EU
         rect.x = 560;
         rect.y = 448;
@@ -899,14 +899,12 @@ int MainGameLoop(void) {
                 DrawBigGuiSprite(0);
                 DrawLevelScoreSummary();
             }
-            goto skip;
+            continue;
         }
         if (end) {
             LevelCompletedOrDied();
             DecideNextLevel();
         }
-    skip:
-        prevLevelEndReason = levelEndReason;
     }
     VSyncCallback(NULL);
     if (levelHasBeenCompletedByPlayer[0] == 1 && levelHasBeenCompletedByPlayer[1] == 1) {
