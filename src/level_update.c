@@ -389,25 +389,22 @@ int GetMovingPlatformAt(Player* player, SVECTOR* checkPos) {
 
     entityOffset = (GetBlockAt(&targetPos) - 5) * 128;
 
-    if (entityOffset >= 0) {
-        if (entityData[entityOffset] != OBJ_TRANSPORTER) {
-            return -1;
-        }
-
-        if (AreDirectionsOnSameAxis(entityData[entityOffset + 2], GetRotationIndexFromVector(player->gravityDir))) {
-            return -1;
-        }
-
-        if (player->subpixelPositionOnCube.vy < 101) {
-            if (IsVecWithinPlatformBounds(&player->finePos, entityOffset, 0)) {
-                goto ret_D;
-            }
-            return -1;
-        }
+    if (entityOffset < 0) {
+        return -1;
     }
 
-    return -1;
-ret_D:
+    if (entityData[entityOffset] != OBJ_TRANSPORTER) {
+        return -1;
+    }
+
+    if (AreDirectionsOnSameAxis(entityData[entityOffset + 2], GetRotationIndexFromVector(player->gravityDir))) {
+        return -1;
+    }
+
+    if (player->subpixelPositionOnCube.vy >= 101 || !IsVecWithinPlatformBounds(&player->finePos, entityOffset, 0)) {
+        return -1;
+    }
+
     return entityOffset;
 }
 #undef entityOffset
