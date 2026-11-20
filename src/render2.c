@@ -173,7 +173,6 @@ void CreateEnemyDispList(MATRIX *matrix, int z, int modelId, void* const0_arg4, 
     int nextVertexId;
     POLY_FT4* shadowPrim;
     int screenCoords[3];
-    int i;
     int shadowDepth;
     int result2;
     int off;
