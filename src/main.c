@@ -1172,54 +1172,46 @@ void DecideNextLevel(void) {
             }
         }
     }
-    if (specialLevelType > 0) {
-        if (curLevel < *(int*)LEVEL_PAK_BUF && debugBonusLevels == 0) {
-            if ((savedFruitsCollectedBitmask & 0x1f) == 0x1f) {
-                fruitsCollectedBitmask = 0;
-                savedFruitsCollectedBitmask = 0;
-                if (levelAfterBonusLevel < 6) {
-                    curLevel = 15;
-                } else if (levelAfterBonusLevel < 11) {
-                    curLevel = 16;
-                } else {
-                    curLevel = 17;
-                }
+    if (specialLevelType > 0 && curLevel < *(int*)LEVEL_PAK_BUF && debugBonusLevels == 0) {
+        if ((savedFruitsCollectedBitmask & 0x1f) == 0x1f) {
+            fruitsCollectedBitmask = 0;
+            savedFruitsCollectedBitmask = 0;
+            if (levelAfterBonusLevel < 6) {
+                curLevel = 15;
+            } else if (levelAfterBonusLevel < 11) {
+                curLevel = 16;
             } else {
-                curLevel = levelAfterBonusLevel;
+                curLevel = 17;
             }
-        }
-        if (specialLevelType > 0) {
-            if (curLevel >= *(int*)LEVEL_PAK_BUF)
-                goto LAB_00042f60;
-            if (debugBonusLevels == 2) {
-                if (levelEndReason > 0) {
-                    curLevel++;
-                    if (curLevel >= 18) {
-                        curLevel = *(int*)LEVEL_PAK_BUF;
-                    }
-                }
-            }
+        } else {
+            curLevel = levelAfterBonusLevel;
         }
     }
-    if (curLevel < *(int*)LEVEL_PAK_BUF) {
-        return;
+    if (specialLevelType > 0 && curLevel < *(int*)LEVEL_PAK_BUF && debugBonusLevels == 2) {
+        if (levelEndReason > 0) {
+            curLevel++;
+            if (curLevel >= 18) {
+                curLevel = *(int*)LEVEL_PAK_BUF;
+            }
+        }
     }
-LAB_00042f60:
-    switch (debugBonusLevels) {
-        case 0:
-            curLevel = 0;
-            break;
-        case 1:
-            curLevel = *(int*)LEVEL_PAK_BUF - 1;
-            break;
-        case 2:
-            curLevel = 15;
-            break;
+    if (curLevel >= *(int*)LEVEL_PAK_BUF) {
+        switch (debugBonusLevels) {
+            case 0:
+                curLevel = 0;
+                break;
+            case 1:
+                curLevel = *(int*)LEVEL_PAK_BUF - 1;
+                break;
+            case 2:
+                curLevel = 15;
+                break;
+        }
+        if (!timeTrialAtEndOfWorld || gameMode != 2) {
+            curWorld++;
+        }
+        loadNewWorld = 1;
     }
-    if (!timeTrialAtEndOfWorld || gameMode != 2) {
-        curWorld++;
-    }
-    loadNewWorld = 1;
 }
 
 void ReceiveBufFromSio(void) {
