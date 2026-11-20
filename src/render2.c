@@ -281,7 +281,6 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     int result2;
     int off;
     Quad* q;
-    int shift;
 
 #if VER_JP
     if (modelId < 10) {
@@ -296,13 +295,12 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
         return;
     }
     z >>= 6;
-    shift = 16; // permuter hack
 
     if (blockX >= 0 && blockX < 34 &&
         blockY >= 0 && blockY < 34 &&
         blockZ >= 0 && blockZ < 34 &&
-        CUBE_INDEX_AT(blockX, blockY, blockZ) != -1 &&
-            (q = (Quad*)cubeStates[CUBE_INDEX_AT(blockX, blockY, blockZ) * 16 + dir]) != -1) {
+        (off = CUBE_INDEX_AT(blockX, blockY, blockZ)) != -1 &&
+        (q = (Quad*)cubeStates[off * 16 + dir]) != (Quad*)-1) {
         shadowDepth = q->otagIndex;
     } else {
         shadowDepth = -1;
@@ -311,21 +309,20 @@ void CreatePlayerDispList(MATRIX *matrix, int z, int modelId, int const0_arg4, i
     if (otherBlockX >= 0 && otherBlockX < 34 &&
         otherBlockY >= 0 && otherBlockY < 34 &&
         otherBlockZ >= 0 && otherBlockZ < 34) {
-        int cubeIndex = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ);
-        if (cubeIndex != (short)-1) {
-            Quad* q = (Quad*)cubeStates[cubeIndex * 16 + otherDir];
-            if (q != (Quad*)-1) {
+        if ((off = CUBE_INDEX_AT(otherBlockX, otherBlockY, otherBlockZ)) != -1) {
+            if ((q = (Quad*)cubeStates[off * 16 + otherDir]) != (Quad*)-1) {
                 result2 = q->otagIndex;
-                shadowDepth = (ushort)shadowDepth;
-                goto LAB_shadow;
+            } else {
+                result2 = -1;
             }
+        } else {
+            result2 = -1;
         }
+    } else {
+        result2 = -1;
     }
 
-    result2 = -1;
     shadowDepth = (ushort)shadowDepth;
-
-LAB_shadow:
     result2 = (ushort)result2;
     if (result2 < shadowDepth) {
         shadowDepth = result2;
@@ -380,7 +377,7 @@ LAB_shadow:
     }
 
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_2048;
-    playerEnemyDispList[playerEnemyDispListIdx++] = (const0_arg23 << shift) | const4000;
+    playerEnemyDispList[playerEnemyDispListIdx++] = (const0_arg23 << 16) | const4000;
     playerEnemyDispList[playerEnemyDispListIdx++] = const0_arg24;
     playerEnemyDispList[playerEnemyDispListIdx++] = const178;
     playerEnemyDispListIdx += 7;
