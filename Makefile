@@ -67,7 +67,7 @@ build/$(1)/main.elf: $$(O_FILES_$(1))
 	$$(CROSS)-ld -nostdlib --no-check-sections -o $$@ -T build/$(1)/kula_world.ld -T build/$(1)/undefined_syms_auto.txt -Map build/$(1)/symbols.map
 
 build/$(1)/%.o: %.c psyq build/$(1)/subdirs
-	$$(CPP) -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
+	$$(CPP) -MMD -MP -MF $$(@:.o=.d) -MT $$@ -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
 	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $$(@:.o=.i) -o $$(@:.o=.s)
 	python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/$(1)/ -o $$@ < $$(@:.o=.s)
 	$$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $$@
@@ -78,3 +78,6 @@ build/$(1)/%.o: %.s build/$(1)/subdirs
 endef
 
 $(foreach ver,$(VERSIONS),$(eval $(call VERSION_RULES,$(ver))))
+
+DEP_FILES := $(foreach ver,$(VERSIONS),$(patsubst %.c,build/$(ver)/%.d,$(C_FILES)))
+-include $(DEP_FILES)
