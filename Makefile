@@ -4,6 +4,7 @@
 .NOTINTERMEDIATE: # Don't delete intermediates
 SHELL := bash -e -o pipefail
 CROSS := mipsel-linux-gnu
+CPP ?= cpp
 
 VERSIONS ?= eu-main us-main
 
@@ -19,6 +20,7 @@ psyq:
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz --exclude={INCLUDE,LIB,COFF,ELF}
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq/4.2 -xz ./INCLUDE ./LIB ./ELF
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-44.tar.gz' | tar -C psyq/4.4 -xz ./INCLUDE ./LIB ./ELF
+	find psyq/4.2/INCLUDE psyq/4.4/INCLUDE -execdir bash -c 'for f; do [ "$$$$f" = "$$$${f,,}" ] || ln -snf "$$$$f" "$$$${f,,}"; done' _ {} +
 
 venv:
 	virtualenv venv
@@ -65,7 +67,7 @@ build/$(1)/main.elf: $$(O_FILES_$(1))
 	$$(CROSS)-ld -nostdlib --no-check-sections -o $$@ -T build/$(1)/kula_world.ld -T build/$(1)/undefined_syms_auto.txt -Map build/$(1)/symbols.map
 
 build/$(1)/%.o: %.c psyq build/$(1)/subdirs
-	psyq/cpppsx -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
+	$$(CPP) -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
 	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $$(@:.o=.i) -o $$(@:.o=.s)
 	python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/$(1)/ -o $$@ < $$(@:.o=.s)
 	$$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $$@
