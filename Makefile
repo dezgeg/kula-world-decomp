@@ -64,14 +64,10 @@ build/$(1)/$$(TARGET_NAME_$(1)): build/$(1)/main.elf
 build/$(1)/main.elf: $$(O_FILES_$(1))
 	$$(CROSS)-ld -nostdlib --no-check-sections -o $$@ -T build/$(1)/kula_world.ld -T build/$(1)/undefined_syms_auto.txt -Map build/$(1)/symbols.map
 
-build/$(1)/%.i: %.c psyq build/$(1)/subdirs
-	psyq/cpppsx -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$@
-
-build/$(1)/%.s: build/$(1)/%.i psyq build/$(1)/subdirs
-	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $$< -o $$@
-
-build/$(1)/%.o: build/$(1)/%.s build/$(1)/subdirs
-	python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/$(1)/ -o $$@ < $$<
+build/$(1)/%.o: %.c psyq build/$(1)/subdirs
+	psyq/cpppsx -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
+	psyq/cc1psx -gcoff -G128 -w -O3 -quiet $$(@:.o=.i) -o $$(@:.o=.s)
+	python3 tools/maspsx/maspsx.py --aspsx-version=2.56 -G128 --run-assembler --gnu-as-path=$$(CROSS)-as --no-pad-sections --use-comm-section --use-comm-for-lcomm --macro-inc -Iasm/$(1)/ -o $$@ < $$(@:.o=.s)
 	$$(CROSS)-objcopy --set-section-alignment .bss=4 --set-section-alignment .data=4 $$@
 
 build/$(1)/%.o: %.s build/$(1)/subdirs
