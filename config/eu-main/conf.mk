@@ -1,4 +1,4 @@
-TARGET_NAME := SCES_010.00
+TARGET_NAME := main.exe
 DISC_BIN := discs/eu/SCES_010.00
 UNPADDED_SIZE := $(shell printf %d 0x934b0)
 PADDED_SIZE := 0x93800

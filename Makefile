@@ -5,7 +5,7 @@
 SHELL := bash -e -o pipefail
 CROSS := mipsel-linux-gnu
 
-VERSIONS ?= eu-SCES_010.00 us-SLUS_007.24
+VERSIONS ?= eu-main us-main
 
 SYS_DEFINES := -D__GNUC__=2 -D__OPTIMIZE__ -lang-c -Dmips -D__mips__ -D__mips -Dpsx -D__psx__ -D__psx -D_PSYQ -D__EXTENSIONS__ -D_MIPSEL -D__CHAR_UNSIGNED__ -D_LANGUAGE_C -DLANGUAGE_C
 C_FILES := $(wildcard src/*.c) $(wildcard src/*/*.c)

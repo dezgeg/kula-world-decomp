@@ -6,12 +6,12 @@ options:
   compiler: GCC
 
   base_path: ../..
-  build_path: build/eu-SCES_010.00/
-  target_path: build/eu-SCES_010.00/truncated.bin
-  asm_path: asm/eu-SCES_010.00/
-  ld_script_path: build/eu-SCES_010.00/kula_world.ld
-  undefined_syms_auto_path: build/eu-SCES_010.00/undefined_syms_auto.txt
-  generated_asm_macros_directory: asm/eu-SCES_010.00/
+  build_path: build/eu-main/
+  target_path: build/eu-main/truncated.bin
+  asm_path: asm/eu-main/
+  ld_script_path: build/eu-main/kula_world.ld
+  undefined_syms_auto_path: build/eu-main/undefined_syms_auto.txt
+  generated_asm_macros_directory: asm/eu-main/
   o_path: .
 
   ld_bss_is_noload: True
@@ -26,15 +26,15 @@ options:
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
 
   reloc_addrs_path:
-    - config/eu-SCES_010.00/reloc_addrs.txt
+    - config/eu-main/reloc_addrs.txt
 
   symbol_addrs_path:
-    - config/eu-SCES_010.00/function_addrs.txt
-    - config/eu-SCES_010.00/hack_addrs.txt
-    - config/eu-SCES_010.00/string_addrs.txt
-    - config/eu-SCES_010.00/variable_addrs.txt
-    - config/eu-SCES_010.00/lib_symbol_addrs.txt
-    - config/eu-SCES_010.00/lib_common_symbol_addrs.txt
+    - config/eu-main/function_addrs.txt
+    - config/eu-main/hack_addrs.txt
+    - config/eu-main/string_addrs.txt
+    - config/eu-main/variable_addrs.txt
+    - config/eu-main/lib_symbol_addrs.txt
+    - config/eu-main/lib_common_symbol_addrs.txt
 segments:
   - name: header
     type: header

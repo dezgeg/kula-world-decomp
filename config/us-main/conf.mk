@@ -1,4 +1,4 @@
-TARGET_NAME := SLUS_007.24
+TARGET_NAME := main.exe
 DISC_BIN := discs/us/SLUS_007.24
 UNPADDED_SIZE := $(shell printf %d 0x94a20)
 PADDED_SIZE := 0x95000

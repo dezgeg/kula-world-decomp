@@ -6,12 +6,12 @@ options:
   compiler: GCC
 
   base_path: ../..
-  build_path: build/us-SLUS_007.24/
-  target_path: build/us-SLUS_007.24/truncated.bin
-  asm_path: asm/us-SLUS_007.24/
-  ld_script_path: build/us-SLUS_007.24/kula_world.ld
-  undefined_syms_auto_path: build/us-SLUS_007.24/undefined_syms_auto.txt
-  generated_asm_macros_directory: asm/us-SLUS_007.24/
+  build_path: build/us-main/
+  target_path: build/us-main/truncated.bin
+  asm_path: asm/us-main/
+  ld_script_path: build/us-main/kula_world.ld
+  undefined_syms_auto_path: build/us-main/undefined_syms_auto.txt
+  generated_asm_macros_directory: asm/us-main/
   o_path: .
 
   ld_bss_is_noload: True
@@ -26,15 +26,15 @@ options:
   section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
 
   reloc_addrs_path:
-    - config/us-SLUS_007.24/reloc_addrs.txt
+    - config/us-main/reloc_addrs.txt
 
   symbol_addrs_path:
-    - config/us-SLUS_007.24/function_addrs.txt
-    - config/us-SLUS_007.24/hack_addrs.txt
-    - config/us-SLUS_007.24/string_addrs.txt
-    - config/us-SLUS_007.24/variable_addrs.txt
-    - config/us-SLUS_007.24/lib_symbol_addrs.txt
-    - config/us-SLUS_007.24/lib_common_symbol_addrs.txt
+    - config/us-main/function_addrs.txt
+    - config/us-main/hack_addrs.txt
+    - config/us-main/string_addrs.txt
+    - config/us-main/variable_addrs.txt
+    - config/us-main/lib_symbol_addrs.txt
+    - config/us-main/lib_common_symbol_addrs.txt
 segments:
   - name: header
     type: header
