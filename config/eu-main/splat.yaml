@@ -1,7 +1,7 @@
 name: Kula World (EU)
 sha1: 03323d796ebc02749b381cdd337e7002a67edf6f
 options:
-  basename: kula_world
+  basename: main
   platform: psx
   compiler: GCC
 
@@ -9,7 +9,7 @@ options:
   build_path: build/eu-main/
   target_path: build/eu-main/truncated.bin
   asm_path: asm/eu-main/
-  ld_script_path: build/eu-main/kula_world.ld
+  ld_script_path: build/eu-main/main.ld
   undefined_syms_auto_path: build/eu-main/undefined_syms_auto.txt
   generated_asm_macros_directory: asm/eu-main/
   o_path: .

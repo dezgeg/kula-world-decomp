@@ -26,10 +26,6 @@ venv:
 	virtualenv venv
 	source venv/bin/activate && pip3 install -U splat64[mips] pycparser pynacl toml Levenshtein
 
-# This rule causes the $(wildcard) for C_FILES etc. to be re-evaluated if splat split needs re-running
-Makefile: $(foreach ver,$(VERSIONS),build/$(ver)/kula_world.ld)
-	touch Makefile
-
 # Version-specific rules template
 
 define VERSION_RULES
@@ -37,6 +33,9 @@ ver := $(1)
 include config/$(1)/conf.mk
 
 TARGET_NAME_$(1) := $$(TARGET_NAME)
+TARGET_BASE_$(1) := $$(patsubst %.exe,%,$$(TARGET_NAME_$(1)))
+TARGET_ELF_$(1) := $$(TARGET_BASE_$(1)).elf
+TARGET_LD_$(1) := $$(TARGET_BASE_$(1)).ld
 DISC_BIN_$(1) := $$(DISC_BIN)
 UNPADDED_SIZE_$(1) := $$(UNPADDED_SIZE)
 PADDED_SIZE_$(1) := $$(PADDED_SIZE)
@@ -53,18 +52,18 @@ check-$(1): build/$(1)/$$(TARGET_NAME_$(1))
 build/$(1)/subdirs:
 	mkdir -p $$(sort $$(dir $$(O_FILES_$(1)))) build/$(1)/subdirs
 
-build/$(1)/kula_world.ld: config/$(1)/splat.yaml psyq venv $$(wildcard config/$(1)/*_addrs.txt)
+build/$(1)/$$(TARGET_LD_$(1)): config/$(1)/splat.yaml psyq venv $$(wildcard config/$(1)/*_addrs.txt)
 	rm -rf src/nonmatched asm/$(1)/ build/$(1)/
 	mkdir -p build/$(1)
 	for f in $$$$(cd psyq/$$(PSYQ_VER_$(1))/ELF; echo *.A); do mkdir -p build/$(1)/$$$$f; ar x psyq/$$(PSYQ_VER_$(1))/ELF/$$$$f --output=build/$(1)/$$$$f; done
 	dd if=$$(DISC_BIN_$(1)) of=build/$(1)/truncated.bin count=1 bs=$$(UNPADDED_SIZE_$(1))
 	source venv/bin/activate && splat split config/$(1)/splat.yaml
 
-build/$(1)/$$(TARGET_NAME_$(1)): build/$(1)/main.elf
+build/$(1)/$$(TARGET_NAME_$(1)): build/$(1)/$$(TARGET_ELF_$(1))
 	$$(CROSS)-objcopy --pad-to=$$(PADDED_SIZE_$(1)) -O binary $$< $$@
 
-build/$(1)/main.elf: $$(O_FILES_$(1))
-	$$(CROSS)-ld -nostdlib --no-check-sections -o $$@ -T build/$(1)/kula_world.ld -T build/$(1)/undefined_syms_auto.txt -Map build/$(1)/symbols.map
+build/$(1)/$$(TARGET_ELF_$(1)): $$(O_FILES_$(1))
+	$$(CROSS)-ld -nostdlib --no-check-sections -o $$@ -T build/$(1)/$$(TARGET_LD_$(1)) -T build/$(1)/undefined_syms_auto.txt -Map build/$(1)/symbols.map
 
 build/$(1)/%.o: %.c psyq build/$(1)/subdirs
 	$$(CPP) -MMD -MP -MF $$(@:.o=.d) -MT $$@ -isystem psyq/$$(PSYQ_VER_$(1))/INCLUDE/ -I include/ -undef $$(SYS_DEFINES) $$(DEFINES_$(1)) $$< -o $$(@:.o=.i)
@@ -78,6 +77,10 @@ build/$(1)/%.o: %.s build/$(1)/subdirs
 endef
 
 $(foreach ver,$(VERSIONS),$(eval $(call VERSION_RULES,$(ver))))
+
+# This rule causes the $(wildcard) for C_FILES etc. to be re-evaluated if splat split needs re-running
+Makefile: $(foreach ver,$(VERSIONS),build/$(ver)/$(TARGET_LD_$(ver)))
+	touch Makefile
 
 DEP_FILES := $(foreach ver,$(VERSIONS),$(patsubst %.c,build/$(ver)/%.d,$(C_FILES)))
 -include $(DEP_FILES)
