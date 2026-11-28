@@ -20,7 +20,7 @@ psyq:
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-40.tar.gz' | tar -C psyq -xz --exclude={INCLUDE,LIB,COFF,ELF}
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-42.tar.gz' | tar -C psyq/4.2 -xz ./INCLUDE ./LIB ./ELF
 	curl -L 'https://github.com/dezgeg/psyq-sdk-builder/releases/latest/download/psyq-44.tar.gz' | tar -C psyq/4.4 -xz ./INCLUDE ./LIB ./ELF
-	find psyq/4.2/INCLUDE psyq/4.4/INCLUDE -execdir bash -c 'for f; do [ "$$$$f" = "$$$${f,,}" ] || ln -snf "$$$$f" "$$$${f,,}"; done' _ {} +
+	find psyq/4.2/INCLUDE psyq/4.4/INCLUDE -execdir bash -c 'for f; do [ "$$f" = "$${f,,}" ] || ln -snf "$$f" "$${f,,}"; done' _ {} +
 
 venv:
 	virtualenv venv
